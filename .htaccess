@@ -1,0 +1,11 @@
+#Options +FollowSymLinks
+#RewriteEngine on
+#RewriteRule ^auth$ views/login/loginDoubleFactor.php
+
+RewriteEngine On
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_URI}  !(\.png|\.jpg|\.webp|\.gif|\.jpeg|\.zip|\.css|\.svg|\.js)$
+RewriteRule (.*) routes.php [QSA,L]
+
+Header set Access-Control-Allow-Origin "*"

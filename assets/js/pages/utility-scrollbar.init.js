@@ -1,0 +1,1 @@
+!function(t){"use strict";document.getElementById("scrollbarcontent")&&Scrollbar.init(document.getElementById("scrollbarcontent")),document.getElementById("scrollbarcontainer")&&Scrollbar.init(document.getElementById("scrollbarcontainer"))}(jQuery);

@@ -1,0 +1,45 @@
+.pageBreak {
+    page-break-after: always;
+}
+
+@media print {
+    .noImprimir {
+        display: none;
+    }
+    header,
+    footer,
+    nav,
+    aside {
+        display: none;
+    }
+    switcher-btn {
+        display: none;
+    }
+    #btnImprimirQuote {
+        display: none;
+    }
+    .page-wrapper {
+        margin: 0px;
+        padding: 0px;
+    }
+    body {
+        background-color: #ffff;
+        margin: 0px;
+        padding: 0px;
+    }
+    img {
+        width: 30%;
+    }
+    #logo-proyecformas {
+        width: 70%;
+    }
+    .card {
+        box-shadow: none;
+    }
+    .page-content {
+        padding: 0px;
+    }
+    .card-body {
+        padding: 20px;
+    }
+}

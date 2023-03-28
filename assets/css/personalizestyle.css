@@ -1,0 +1,186 @@
+.uniqueClassName {
+    text-align: center;
+}
+
+.classCenter {
+    text-align: center;
+}
+
+.classRight {
+    text-align: right;
+}
+
+.classLeft {
+    text-align: left;
+}
+
+.drag-area {
+    border: 2px dashed #ddd;
+    height: 50px;
+    width: 500px;
+    border-radius: 5px;
+    -webkit-border-radius: 5px;
+    -moz-border-radius: 5px;
+    -ms-border-radius: 5px;
+    -o-border-radius: 5px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+}
+
+.drag-area button {
+    padding: auto;
+    font-size: auto;
+    border: 0;
+    outline: none;
+    /* background-color: bisque; */
+    color: gray;
+    border-radius: 5px;
+    -webkit-border-radius: 5px;
+    -moz-border-radius: 5px;
+    -ms-border-radius: 5px;
+    -o-border-radius: 5px;
+    cursor: pointer;
+}
+
+.gridx2 {
+    display: grid;
+    grid-template-columns: 200px 1fr;
+    grid-column-gap: 1em;
+}
+
+.gridx2M {
+    display: grid;
+    grid-template-columns: 350px 200px;
+    grid-column-gap: 1em;
+}
+
+.gridx2p {
+    display: grid;
+    grid-template-columns: 1fr 140px;
+    grid-column-gap: 1em;
+}
+
+.gridx3 {
+    display: grid;
+    grid-template-columns: 110px 1fr 100px;
+    grid-column-gap: 1em;
+}
+
+.gridx3estandar {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    grid-column-gap: 1em;
+}
+
+.gridx3 {
+    display: grid;
+    grid-template-columns: 1fr 200px 150px;
+    grid-column-gap: 1em;
+}
+
+.gridx4standar {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr) 150px;
+    grid-column-gap: 1em;
+}
+
+.gridx4 {
+    display: grid;
+    grid-template-columns: 110px 1fr 110px 150px;
+    grid-column-gap: 1em;
+}
+
+.gridx4rp {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr 1fr;
+    grid-column-gap: 1em;
+}
+
+.gridx4ip {
+    display: grid;
+    grid-template-columns: 1fr 80px 1fr 1fr;
+    grid-column-gap: 1em;
+}
+
+.gridx4pm {
+    display: grid;
+    grid-template-columns: 1fr 200px 100px 200px;
+    grid-column-gap: 1em;
+}
+
+.gridx4cm {
+    display: grid;
+    grid-template-columns: 1fr repeat(3, 200px);
+    grid-column-gap: 1em;
+}
+
+.gridx4m {
+    display: grid;
+    grid-template-columns: repeat(6, 200px);
+    grid-column-gap: 1em;
+}
+
+.gridx5 {
+    display: grid;
+    grid-template-columns: 140px 1fr 120px 120px 150px;
+    grid-column-gap: 1em;
+}
+
+.gridx5fl {
+    display: grid;
+    grid-template-columns: 1fr 1fr 120px 120px 150px;
+    grid-column-gap: 1em;
+}
+
+.gridx5M {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr 1fr 1fr;
+    grid-column-gap: 1em;
+    text-align: center;
+}
+
+.gridx6 {
+    display: grid;
+    grid-template-columns: 1fr 140px 120px 120px 150px 120px;
+    grid-column-gap: 1em;
+}
+
+.gridx6pp {
+    display: grid;
+    grid-template-columns: 1fr 1fr 140px 120px 120px 100px;
+    grid-column-gap: 1em;
+}
+
+.gridx8 {
+    display: grid;
+    grid-template-columns: 1fr 120px 120px 140px 140px 120px 150px 120px;
+    grid-column-gap: 1em;
+}
+
+.titlePayroll {
+    background: antiquewhite;
+    margin-bottom: 20px!important
+}
+
+.gridx13 {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr 1fr;
+    grid-column-gap: 1em;
+}
+
+.namesUserAccess {
+    display: grid;
+    grid-column-start: 1;
+    grid-column-end: 5;
+}
+
+.btnCreateAccessUser {
+    display: grid;
+    grid-column-start: 4;
+    grid-column-end: 5;
+    margin-bottom: 0px;
+    margin-top: 15px;
+    width: fit-content;
+}
