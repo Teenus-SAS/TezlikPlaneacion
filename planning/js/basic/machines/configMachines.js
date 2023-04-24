@@ -10,7 +10,7 @@ $(document).ready(function () {
 
   $.ajax({
     type: 'GET',
-    url: '/api/planMachines',
+    url: '/api/machines',
     success: function (r) {
       machinesData = JSON.stringify(r);
       sessionStorage.setItem('machinesData', machinesData);

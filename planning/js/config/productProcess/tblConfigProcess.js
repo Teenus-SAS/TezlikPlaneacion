@@ -24,7 +24,7 @@ $(document).ready(function () {
       destroy: true,
       pageLength: 50,
       ajax: {
-        url: `/api/planProductsProcess/${idProduct}`,
+        url: `/api/productsProcess/${idProduct}`,
         dataSrc: '',
       },
       language: {

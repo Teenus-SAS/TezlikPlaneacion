@@ -80,7 +80,7 @@ $(document).ready(function () {
 
       productProcess = productProcess + '&idProduct=' + idProduct;
       $.post(
-        '/api/addPlanProductsProcess',
+        '/api/addProductsProcess',
         productProcess,
         function (data, textStatus, jqXHR) {
           message(data);

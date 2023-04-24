@@ -47,7 +47,7 @@ $(document).ready(function () {
   checkRawMaterial = (data) => {
     $.ajax({
       type: 'POST',
-      url: '/api/planMaterialsDataValidation',
+      url: '/api/materialsDataValidation',
       data: { importMaterials: data },
       success: function (resp) {
         if (resp.error == true) {
@@ -81,7 +81,7 @@ $(document).ready(function () {
   saveMaterialTable = (data) => {
     $.ajax({
       type: 'POST',
-      url: '../api/addPlanMaterials',
+      url: '../api/addMaterials',
       data: { importMaterials: data },
       success: function (r) {
         /* Mensaje de exito */

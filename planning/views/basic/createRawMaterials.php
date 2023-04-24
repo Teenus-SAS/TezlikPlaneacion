@@ -47,10 +47,12 @@ if (sizeof($_SESSION) == 0)
                                     </ol>
                                 </div>
                             </div>
-                            <div class="col-sm-7 col-xl-6">
-                                <div class="form-inline justify-content-sm-end">
+                            <div class="col-sm-7 col-xl-6 form-inline justify-content-sm-end">
+                                <div class="col-xs-2 mr-2">
                                     <button class="btn btn-warning" id="btnNewMaterial" name="btnNewMaterial">Nueva Materia Prima</button>
-                                    <button class="btn btn-info ml-3" id="btnImportNewMaterials" name="btnNewImportMaterials">Importar Materias Primas</button>
+                                </div>
+                                <div class="col-xs-2 py-2 mr-2">
+                                    <button class="btn btn-info" id="btnImportNewMaterials" name="btnNewImportMaterials">Importar Materias Primas</button>
                                 </div>
                             </div>
                         </div>
@@ -65,15 +67,15 @@ if (sizeof($_SESSION) == 0)
                                     <div class="card-body">
                                         <form id="formCreateMaterial">
                                             <div class="form-row">
-                                                <div class="col-md-3 mb-3">
+                                                <div class="col-md-3 floating-label enable-floating-label show-label">
                                                     <label for="refRawMaterial">Referencia</label>
                                                     <input type="text" class="form-control" id="refRawMaterial" name="refRawMaterial">
                                                 </div>
-                                                <div class="col-md-6 mb-3">
+                                                <div class="col-md-6 floating-label enable-floating-label show-label">
                                                     <label for="nameRawMaterial">Nombre Materia Prima</label>
                                                     <input type="text" class="form-control" id="nameRawMaterial" name="nameRawMaterial">
                                                 </div>
-                                                <div class="col-md-3 mb-3">
+                                                <div class="col-md-3 floating-label enable-floating-label show-label">
                                                     <label for="validationCustom02">Categorias</label>
                                                     <select class="form-control" id="category" name="category">
                                                         <option value="" selected disabled>Seleccionar</option>
@@ -83,16 +85,23 @@ if (sizeof($_SESSION) == 0)
                                                 </div>
                                             </div>
                                             <div class="form-row">
-                                                <div class="col-sm-2">
-                                                    <label for="unityRawMaterial">Unidad</label>
-                                                    <input type="text" class="form-control text-center" id="unityRawMaterial" name="unityRawMaterial">
+                                                <div class="col-sm-3 floating-label enable-floating-label show-label" style="margin-bottom:20px">
+                                                    <select class="form-control" id="magnitudes" name="magnitude"></select>
+                                                    <label for="">Magnitud</label>
                                                 </div>
-                                                <div class="col-sm-2">
+                                                <div class="col-sm-3 floating-label enable-floating-label show-label" style="margin-bottom:20px">
+                                                    <select class="form-control" id="units" name="unit">
+                                                        <option disabled selected>Seleccionar</option>
+                                                    </select>
+                                                    <label for="">Unidad</label>
+                                                </div>
+                                                <div class="col-sm-2 floating-label enable-floating-label show-label">
                                                     <label for="validationCustom05">Cantidad En Inventario</label>
                                                     <input type="text" class="form-control text-center number" id="quantity" name="quantity">
                                                 </div>
-
-                                                <button class="btn btn-info" type="submit" id="btnCreateMaterial" name="btnCreateMaterial" style="width: 100px;height:50%; margin-top: 34px; margin-left: 20px">Crear</button>
+                                                <div class="col-sm mt-1">
+                                                    <button class="btn btn-info" type="submit" id="btnCreateMaterial" name="btnCreateMaterial">Crear</button>
+                                                </div>
                                             </div>
                                         </form>
                                     </div>
@@ -105,21 +114,19 @@ if (sizeof($_SESSION) == 0)
                 <div class="page-content-wrapper mt--45 mb-5 cardImportMaterials">
                     <div class="container-fluid">
                         <div class="row">
-                            <form id="formImportMaterials" enctype="multipart/form-data">
-                                <div class="col-12">
-                                    <div class="card">
-                                        <div class="card-body pt-3 pb-0">
-                                            <div class="gridx4ip">
-                                                <div class="form-group floating-label enable-floating-label show-label mt-3 drag-area" style="margin-top:0px!important">
-                                                    <input class="form-control" type="file" id="fileMaterials" accept=".xls,.xlsx">
-                                                    <label for="formFile" class="form-label">Importar Materia Prima</label>
-                                                </div>
-                                                <div class="form-group floating-label enable-floating-label show-label" style="margin-bottom:0px;margin-top:7px">
-                                                    <button type="text" class="btn btn-success" id="btnImportMaterials">Importar</button>
-                                                </div>
-                                                <div class="form-group floating-label enable-floating-label show-label" style="margin-bottom:0px;margin-top:7px">
-                                                    <button type="text" class="btn btn-info" id="btnDownloadImportsMaterials">Descarga Formato</button>
-                                                </div>
+                            <form class="col-12" id="formImportMaterials" enctype="multipart/form-data">
+                                <div class="card">
+                                    <div class="card-body pt-3">
+                                        <div class="form-row">
+                                            <div class="col-sm-6 floating-label enable-floating-label show-label drag-area" style="margin-bottom:10px!important">
+                                                <input class="form-control" type="file" id="fileMaterials" accept=".xls,.xlsx">
+                                                <label for="formFile" class="form-label">Importar Materia Prima</label>
+                                            </div>
+                                            <div class="col-xs-2" style="margin-top:7px">
+                                                <button type="text" class="btn btn-success" id="btnImportMaterials">Importar</button>
+                                            </div>
+                                            <div class="col-xs-2" style="margin-top:7px">
+                                                <button type="text" class="btn btn-info" id="btnDownloadImportsMaterials">Descarga Formato</button>
                                             </div>
                                         </div>
                                     </div>
@@ -164,7 +171,8 @@ if (sizeof($_SESSION) == 0)
     <?php include_once dirname(dirname(dirname(__DIR__))) . '/global/partials/scriptsJS.php'; ?>
     <script src="/planning/js/users/usersAccess.js"></script>
 
-    <!-- <script src="/global/js/global/number.js"></script> -->
+    <script src="/global/js/global/configMagnitudes.js"></script>
+    <script src="/global/js/global/configUnits.js"></script>
     <script src="/planning/js/basic/rawMaterials/tblRawMaterials.js"></script>
     <script src="/planning/js/basic/rawMaterials/rawMaterials.js"></script>
     <script src="../global/js/import/import.js"></script>

@@ -100,7 +100,7 @@ if (sizeof($_SESSION) == 0)
                             <form id="formImportConsolidated" enctype="multipart/form-data">
                                 <div class="col-12">
                                     <div class="card">
-                                        <div class="card-body pt-3 pb-0">
+                                        <div class="card-body pt-3">
                                             <div class="gridx4ip">
                                                 <div class="form-group floating-label enable-floating-label show-label mt-3 drag-area" style="margin-top:0px!important">
                                                     <input class="form-control" type="file" id="fileConsolidated" accept=".xls,.xlsx">
@@ -129,15 +129,15 @@ if (sizeof($_SESSION) == 0)
                             <div class="col-12">
                                 <div class="card">
                                     <div class="row card-header">
-                                        <div class="col">
+                                        <div class="col-sm-9">
                                             <h5 class="card-title">Consolidado</h5>
                                         </div>
-                                        <div class="col-lg-2 form-group floating-label enable-floating-label show-label">
+                                        <div class="col-sm-2 form-group floating-label enable-floating-label show-label">
                                             <label for="">Numero De Semanas</label>
                                             <input type="number" class="form-control text-center" id="numWeek" name="numWeek">
                                         </div>
-                                        <div class="col-lg-2 form-group floating-label enable-floating-label show-label">
-                                            <button class="btn btn-info" type="submit" id="btnCalcConsolidated" name="btnCalcConsolidated" style="margin-top: 6px;">Calcular</button>
+                                        <div class="col-sm mt-1">
+                                            <button class="btn btn-info" type="submit" id="btnCalcConsolidated" name="btnCalcConsolidated">Calcular</button>
                                         </div>
                                     </div>
                                     <div class="card-body">

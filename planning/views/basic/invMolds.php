@@ -49,10 +49,12 @@ if (sizeof($_SESSION) == 0)
                                     </ol>
                                 </div>
                             </div>
-                            <div class="col-sm-7 col-xl-6">
-                                <div class="form-inline justify-content-sm-end">
+                            <div class="col-sm-7 col-xl-6 form-inline justify-content-sm-end">
+                                <div class="col-xs-2 mr-2">
                                     <button class="btn btn-warning" id="btnNewInvMold" name="btnNewInvMold">Nuevo Molde</button>
-                                    <button class="btn btn-info ml-3" id="btnImportNewInvMold">Importar Moldes</button>
+                                </div>
+                                <div class="col-xs-2 py-2 mr-2">
+                                    <button class="btn btn-info" id="btnImportNewInvMold">Importar Moldes</button>
                                 </div>
                             </div>
                         </div>
@@ -66,35 +68,35 @@ if (sizeof($_SESSION) == 0)
                                 <div class="card">
                                     <form id="formCreateInvMold">
                                         <div class="card-body">
-                                            <div class="row mb-4">
-                                                <div class="col">
+                                            <div class="form-row">
+                                                <div class="col-sm floating-label enable-floating-label show-label">
                                                     <label for="">Referencia</label>
                                                     <input type="text" class="form-control" id="referenceMold" name="referenceMold">
                                                 </div>
-                                                <div class="col-6">
+                                                <div class="col-sm-7 floating-label enable-floating-label show-label">
                                                     <label for="">Nombre Molde</label>
                                                     <input type="text" class="form-control" id="mold" name="mold">
                                                 </div>
-                                                <div class="col">
+                                                <div class="col-sm floating-label enable-floating-label show-label">
                                                     <label for="">T. Montaje Producción (min)</label>
                                                     <input type="text" class="form-control number text-center" id="assemblyProduction" name="assemblyProduction">
                                                 </div>
                                             </div>
-                                            <div class="row">
-                                                <div class="col-sm-2">
+                                            <div class="form-row">
+                                                <div class="col-sm-2 floating-label enable-floating-label show-label">
                                                     <label for="">T. Montaje (hrs)</label>
                                                     <input type="text" class="form-control number text-center" id="assemblyTime" name="assemblyTime">
                                                 </div>
-                                                <div class="col-sm-2">
+                                                <div class="col-sm-2 floating-label enable-floating-label show-label">
                                                     <label for="">N° Cavidades</label>
                                                     <input type="text" class="form-control number text-center" id="cavity" name="cavity">
                                                 </div>
-                                                <div class="col-sm-2">
+                                                <div class="col-sm-2 floating-label enable-floating-label show-label">
                                                     <label for="">N° Cavidades Disponibles</label>
                                                     <input type="text" class="form-control number text-center" id="cavityAvailable" name="cavityAvailable">
                                                 </div>
-                                                <div class="col">
-                                                    <button class="btn btn-success" id="btnCreateInvMold" style="width: 100px;height:50%; margin-top: 32px; margin-left: 9px; margin-right: 9px">Crear</button>
+                                                <div class="col-sm mt-1">
+                                                    <button class="btn btn-success" id="btnCreateInvMold">Crear</button>
                                                 </div>
                                             </div>
                                         </div>
@@ -108,27 +110,27 @@ if (sizeof($_SESSION) == 0)
                 <div class="page-content-wrapper mt--45 mb-5 cardImportInvMold">
                     <div class="container-fluid">
                         <div class="row">
-                            <form id="formImportInvMold" enctype="multipart/form-data">
-                                <div class="col-12">
+                            <div class="col-12">
+                                <form id="formImportInvMold" enctype="multipart/form-data">
                                     <div class="card">
-                                        <div class="card-body pt-3 pb-0">
-                                            <div class="gridx4ip">
-                                                <div class="form-group floating-label enable-floating-label show-label mt-3 drag-area" style="margin-top:0px!important">
+                                        <div class="card-body pt-3">
+                                            <div class="form-row">
+                                                <div class="col-sm-6 floating-label enable-floating-label show-label drag-area" style="margin-bottom:10px!important">
                                                     <input class="form-control" type="file" id="fileInvMold" accept=".xls,.xlsx">
                                                     <label for="formFile" class="form-label"> Importar Molde</label>
                                                 </div>
-                                                <div class="form-group floating-label enable-floating-label show-label" style="margin-bottom:0px;margin-top:7px">
+                                                <div class="col-xs-2" style="margin-top:7px">
                                                     <button type="text" class="btn btn-success" id="btnImportInvMold">Importar</button>
                                                 </div>
-                                                <div class="form-group floating-label enable-floating-label show-label" style="margin-bottom:0px;margin-top:7px">
+                                                <div class="col-xs-2" style="margin-top:7px">
                                                     <button type="text" class="btn btn-info" id="btnDownloadImportsInvMold">Descarga Formato</button>
                                                 </div>
                                             </div>
                                         </div>
                                     </div>
-                                </div>
-                            </form>
+                            </div>
                         </div>
+                        </form>
                     </div>
                 </div>
 

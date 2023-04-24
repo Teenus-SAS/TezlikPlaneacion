@@ -23,9 +23,8 @@ $(document).ready(function () {
       let license_end = $('#license_end').val();
       let quantityUsers = $('#quantityUsers').val();
       let plan = $('#plan').val();
-      let pricesUSD = $('#pricesUSD').val();
 
-      data = company * quantityUsers * plan * pricesUSD;
+      data = company * quantityUsers * plan;
 
       if (license_start == '' || license_end == '' || !data || data == null) {
         toastr.error('Ingrese todos los campos');
@@ -37,11 +36,7 @@ $(document).ready(function () {
         return false;
       }
 
-      pricesUSD == 1 ? (pricesUSD = 1) : (pricesUSD = 0);
-
       license = $('#formAddLicense').serialize();
-
-      license = `${license}&pricesUSD=${pricesUSD}`;
 
       $.post('/api/addLicense', license, function (data, textStatus, jqXHR) {
         message(data);
@@ -66,9 +61,6 @@ $(document).ready(function () {
     $('#quantityUsers').val(data.quantity_user);
     $(`#plan option[value=${data.plan}]`).prop('selected', true);
 
-    data.cost_price_usd == 1 ? (pricesUSD = 1) : (pricesUSD = 2);
-
-    $(`#pricesUSD option[value=${pricesUSD}]`).prop('selected', true);
     $('#company').prop('disabled', true);
     $('html, body').animate({ scrollTop: 0 }, 1000);
   });
@@ -78,11 +70,7 @@ $(document).ready(function () {
 
     $('#company').prop('disabled', false);
 
-    $('#pricesUSD').val() == 1 ? (pricesUSD = 1) : (pricesUSD = 0);
-
     dataCompany = $('#formAddLicense').serialize();
-
-    dataCompany = `${dataCompany}&pricesUSD=${pricesUSD}`;
 
     $.post('/api/updateLicense', dataCompany, function (data) {
       message(data);
@@ -105,7 +93,6 @@ $(document).ready(function () {
           return false;
         } else if (resp.error == true) toastr.error(resp.message);
         else if (resp.info == true) toastr.info(resp.message);
-        // message(resp);
       },
     });
   });

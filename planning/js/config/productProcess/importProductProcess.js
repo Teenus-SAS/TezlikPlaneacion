@@ -46,7 +46,7 @@ $(document).ready(function () {
   checkProductProcess = (data) => {
     $.ajax({
       type: 'POST',
-      url: '/api/planProductsProcessDataValidation',
+      url: '/api/productsProcessDataValidation',
       data: { importProductsProcess: data },
       success: function (resp) {
         if (resp.error == true) {
@@ -81,7 +81,7 @@ $(document).ready(function () {
   saveProductProcessTable = (data) => {
     $.ajax({
       type: 'POST',
-      url: '/api/addPlanProductsProcess',
+      url: '/api/addProductsProcess',
       data: { importProductsProcess: data },
       success: function (r) {
         /* Mensaje de exito */

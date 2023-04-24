@@ -42,7 +42,7 @@ $(document).ready(function () {
   checkMachine = (data) => {
     $.ajax({
       type: 'POST',
-      url: '/api/planMachinesDataValidation',
+      url: '/api/machinesDataValidation',
       data: { importMachines: data },
       success: function (resp) {
         if (resp.error == true) {

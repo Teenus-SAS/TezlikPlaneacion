@@ -4,7 +4,7 @@ $(document).ready(function () {
   tblMachines = $('#tblMachines').dataTable({
     pageLength: 50,
     ajax: {
-      url: '../../api/planMachines',
+      url: '../../api/machines',
       dataSrc: '',
     },
     language: {

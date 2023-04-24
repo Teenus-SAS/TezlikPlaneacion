@@ -35,7 +35,7 @@
                             <i class="bx bx-chevron-down"></i>
                         </a>
                     </li>
-                    <li class="nav-item dropdown puc">
+                    <!-- <li class="nav-item dropdown puc">
                         <a class="nav-link dropdown-toggle" href="javascript:void(0)" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                             <i class="bx bxs-book-alt mr-1"></i> PUC
                             <i class="bx bx-chevron-down"></i>
@@ -45,7 +45,7 @@
                                 <span> Cuentas</span>
                             </a>
                         </div>
-                    </li>
+                    </li> -->
                     <li class="nav-item notification">
                         <a class="nav-link" href="/admin/notifications">
                             <i class="bx bx-bell mr-1"></i> Notificaciones

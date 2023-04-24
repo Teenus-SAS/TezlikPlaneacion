@@ -3,7 +3,6 @@
         <div class="modal-content">
             <div class="modal-header">
                 <h5 class="modal-title" id="staticBackdropLabel">Crear Empresa</h5>
-                <!-- <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button> -->
             </div>
             <div class="modal-body">
                 <div class="page-content-wrapper mt--45">
@@ -86,69 +85,17 @@
                                                 <div class="validation-error d-none font-size-13">Requerido</div>
                                             </div>
                                         </div>
-
-                                        <!-- <div id="license" class="row">
-                                            <div class="col-12 col-lg-12 titlePayroll pt-2 bg-info text-white">
-                                                <label for=""><b>Licencia</b></label>
-                                            </div>
-
-                                            <div class="col-12 col-lg-4">
-                                                <div class="form-group floating-label enable-floating-label show-label">
-                                                    <input id="companyLic_start" name="companyLic_start" type="date" class="form-control">
-                                                    <label for="companyLic_start">Inicio Licencia<span class="text-danger">*</span></label>
-                                                    <div class="validation-error d-none font-size-13">Requerido</div>
-                                                </div>
-                                            </div>
-
-                                            <div class="col-12 col-lg-4">
-                                                <div class="form-group floating-label enable-floating-label show-label">
-                                                    <input id="companyLic_end" name="companyLic_end" type="date" class="form-control">
-                                                    <label for="companyLic_end">Final Licencia<span class="text-danger">*</span></label>
-                                                    <div class="validation-error d-none font-size-13">Requerido</div>
-                                                </div>
-                                            </div>
-
-                                            <div class="col-12 col-lg-2">
-                                                <div class="form-group floating-label enable-floating-label show-label">
-                                                    <input id="companyUsers" name="companyUsers" type="number" class="form-control">
-                                                    <label for="companyUsers">Usuarios<span class="text-danger">*</span></label>
-                                                    <div class="validation-error d-none font-size-13">Requerido</div>
-                                                </div>
-                                            </div>
-
-                                            <div class="col-12 col-lg-2">
-                                                <div class="form-group floating-label enable-floating-label show-label">
-                                                    <label for="companyStatus">Estado<span class="text-danger">*</span></label>
-                                                    <select class="form-control" id="companyStatus">
-                                                        <option value="1" selected>Activa</option>
-                                                        <option value="0">Inactiva</option>
-                                                    </select>
-                                                    <div class="validation-error d-none font-size-13">Requerido</div>
-                                                </div>
-                                            </div>
-                                        </div> -->
-
-
-
                                     </div>
                                     <div class="row justify-content-md-end">
                                         <button type="button" class="col-6 col-sm-2 btn btn-secondary m-2" data-bs-dismiss="modal" id="btnCloseCompany">Cerrar</button>
                                         <button type="submit" class="col-6 col-sm-2 btn btn-primary m-2" id="btnCreateCompany">Crear</button>
                                     </div>
-                                    <!-- This button link with id-sw-default-step-1 if you change it change in serial number like below
-                                    <div class="d-none">
-                                        <button class="btn btn-primary" id="btn">submit</button>
-                                    </div> -->
                                 </form>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
-            <!-- <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" id="btnCloseCardPayroll">Cerrar</button>
-                <button type="button" class="btn btn-primary" id="btnCreatePayroll">Crear</button>
-            </div> -->
         </div>
     </div>
 </div>

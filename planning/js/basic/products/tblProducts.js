@@ -4,7 +4,7 @@ $(document).ready(function () {
   tblProducts = $('#tblProducts').dataTable({
     pageLength: 50,
     ajax: {
-      url: '/api/planProducts',
+      url: '/api/products',
       dataSrc: '',
     },
     language: {

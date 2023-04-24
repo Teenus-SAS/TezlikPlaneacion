@@ -42,7 +42,7 @@ $(document).ready(function () {
   checkProcess = (data) => {
     $.ajax({
       type: 'POST',
-      url: '/api/planProcessDataValidation',
+      url: '/api/processDataValidation',
       data: { importProcess: data },
       success: function (resp) {
         if (resp.error == true) {

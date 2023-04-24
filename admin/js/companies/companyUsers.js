@@ -18,8 +18,6 @@ $(document).ready(function () {
 
   const message = (data) => {
     if (data.success == true) {
-      // $('#createCompany').hide(800);
-      // $('#formCreateCompany').trigger('reset')
       updateTable();
       toastr.success(data.message);
       return false;

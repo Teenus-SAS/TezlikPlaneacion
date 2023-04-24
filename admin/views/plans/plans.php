@@ -52,12 +52,7 @@ if (sizeof($_SESSION) == 0)
                             </div>
                             <div class="col-sm-7 col-xl-6">
                                 <div class="form-inline justify-content-sm-end">
-                                    <select class="form-control" name="rol" id="rol" style="margin-right: 15px;">
-                                        <option value="" selected disabled>Roles</option>
-                                        <option value="1">Costos</option>
-                                        <option value="2">Planeación</option>
-                                    </select>
-                                    <!-- <button class="btn btn-warning" id="btnNewUser">Nuevo Acceso</button> -->
+                                    <button class="btn btn-warning" id="NewPlanAccess">Nuevo Acceso</button>
                                 </div>
                             </div>
                         </div>

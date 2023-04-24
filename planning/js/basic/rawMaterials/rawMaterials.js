@@ -10,6 +10,7 @@ $(document).ready(function () {
     $('.cardImportMaterials').hide(800);
     $('.cardRawMaterials').toggle(800);
     $('#btnCreateMaterial').html('Crear');
+    $('#units').empty();
 
     sessionStorage.removeItem('id_material');
 
@@ -23,43 +24,15 @@ $(document).ready(function () {
     let idMaterial = sessionStorage.getItem('id_material');
 
     if (idMaterial == '' || idMaterial == null) {
-      ref = $('#refRawMaterial').val();
-      material = $('#nameRawMaterial').val();
-      unity = $('#unityRawMaterial').val();
-      quantity = $('#quantity').val();
-      category = $('#category').val();
-
-      if (
-        ref == '' ||
-        ref == 0 ||
-        material == '' ||
-        material == 0 ||
-        unity == '' ||
-        unity == 0 ||
-        quantity == '' ||
-        quantity == 0
-      ) {
-        toastr.error('Ingrese todos los campos');
-        return false;
-      }
-
-      material = $('#formCreateMaterial').serialize();
-
-      $.post(
-        '../../api/addPlanMaterials',
-        material,
-        function (data, textStatus, jqXHR) {
-          message(data);
-        }
-      );
+      checkDataMaterial('/api/addMaterials', idMaterial);
     } else {
-      updateMaterial();
+      checkDataMaterial('/api/updateMaterials', idMaterial);
     }
   });
 
   /* Actualizar productos */
 
-  $(document).on('click', '.updateRawMaterials', function (e) {
+  $(document).on('click', '.updateRawMaterials', async function (e) {
     $('.cardImportMaterials').hide(800);
     $('.cardRawMaterials').show(800);
     $('#btnCreateMaterial').html('Actualizar');
@@ -72,7 +45,9 @@ $(document).ready(function () {
 
     $('#refRawMaterial').val(data.reference);
     $('#nameRawMaterial').val(data.material);
-    $('#unityRawMaterial').val(data.unit);
+    $(`#magnitudes option[value=${data.id_magnitude}]`).prop('selected', true);
+    await loadUnitsByMagnitude(data.id_magnitude);
+    $(`#units option[value=${data.id_unit}]`).prop('selected', true);
 
     quantity = data.quantity;
 
@@ -93,18 +68,36 @@ $(document).ready(function () {
     );
   });
 
-  updateMaterial = () => {
-    let data = $('#formCreateMaterial').serialize();
-    idMaterial = sessionStorage.getItem('id_material');
-    data = data + '&idMaterial=' + idMaterial;
+  /* Revision data materia prima */
+  checkDataMaterial = async (url, idMaterial) => {
+    let ref = $('#refRawMaterial').val();
+    let material = $('#nameRawMaterial').val();
+    let unity = $('#unit').val();
+    let quantity = $('#quantity').val();
+    let category = $('#category').val();
 
-    $.post(
-      '../../api/updatePlanMaterials',
-      data,
-      function (data, textStatus, jqXHR) {
-        message(data);
-      }
-    );
+    if (ref == '' || material == '' || unity == '' || category == '') {
+      toastr.error('Ingrese todos los campos');
+      return false;
+    }
+
+    quantity = parseFloat(strReplaceNumber(quantity));
+
+    quantity = 1 * quantity;
+
+    if (quantity <= 0 || isNaN(quantity)) {
+      toastr.error('La cantidad debe ser mayor a cero (0)');
+      return false;
+    }
+
+    let dataMaterial = new FormData(formCreateMaterial);
+
+    if (idMaterial != '' || idMaterial != null)
+      dataMaterial.append('idMaterial', idMaterial);
+
+    let resp = await sendDataPOST(url, dataMaterial);
+
+    message(resp);
   };
 
   /* Eliminar productos */
@@ -132,7 +125,7 @@ $(document).ready(function () {
       callback: function (result) {
         if (result == true) {
           $.get(
-            `../../api/deletePlanMaterial/${idMaterial}`,
+            `../../api/deleteMaterial/${idMaterial}`,
             function (data, textStatus, jqXHR) {
               message(data);
             }

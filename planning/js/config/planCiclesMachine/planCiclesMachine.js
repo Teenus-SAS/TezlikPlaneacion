@@ -5,6 +5,7 @@ $(document).ready(function () {
   $('#btnNewPlanCiclesMachine').click(function (e) {
     e.preventDefault();
 
+    $('.cardImportPlanCiclesMachine').hide(800);
     $('.cardCreatePlanCiclesMachine').toggle(800);
     $('#btnCreatePlanCiclesMachine').html('Crear');
 

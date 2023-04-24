@@ -95,16 +95,6 @@ if (sizeof($_SESSION) == 0)
                                                         <select name="plan" id="plan" class="form-control"></select>
                                                     </div>
                                                 </div>
-                                                <div class="col-sm">
-                                                    <div class="form-group m-0">
-                                                        <label for="">Precios USD</label>
-                                                        <select name="pricesUSD" id="pricesUSD" class="form-control">
-                                                            <option selected disabled value="0">Seleccionar</option>
-                                                            <option value="1">Si</option>
-                                                            <option value="2">No</option>
-                                                        </select>
-                                                    </div>
-                                                </div>
                                                 <div class="col-xs">
                                                     <button class="btn btn-primary" id="btnAddLicense" style="margin-top: 25px">Crear</button>
                                                 </div>

@@ -47,10 +47,12 @@ if (sizeof($_SESSION) == 0)
                                     </ol>
                                 </div>
                             </div>
-                            <div class="col-sm-7 col-xl-6">
-                                <div class="form-inline justify-content-sm-end">
+                            <div class="col-sm-7 col-xl-6 form-inline justify-content-sm-end">
+                                <div class="col-xs-2 mr-2">
                                     <button class="btn btn-warning" id="btnNewOrderType" name="btnNewOrderType">Nuevo Tipo Pedido</button>
-                                    <button class="btn btn-info ml-3" id="btnImportNewOrderTypes" name="btnImportNewOrderTypes">Importar Tipos de Pedidos</button>
+                                </div>
+                                <div class="col-xs-2 py-2 mr-2">
+                                    <button class="btn btn-info" id="btnImportNewOrderTypes" name="btnImportNewOrderTypes">Importar Tipos de Pedidos</button>
                                 </div>
                             </div>
                         </div>
@@ -64,12 +66,12 @@ if (sizeof($_SESSION) == 0)
                                 <div class="card">
                                     <div class="card-body">
                                         <form id="formCreateOrderType">
-                                            <div class="gridx2p">
-                                                <div class="form-group floating-label enable-floating-label show-label" style="margin-bottom:0px">
+                                            <div class="form-row">
+                                                <div class="col-sm-10 floating-label enable-floating-label show-label" style="margin-bottom:0px">
                                                     <label for="">Tipo de Pedido</label>
                                                     <input type="text" class="form-control" name="orderType" id="orderType">
                                                 </div>
-                                                <div class="form-group floating-label enable-floating-label show-label" style="margin-bottom:0px;margin-top:4px">
+                                                <div class="col-sm mt-1">
                                                     <button class="btn btn-success" id="btnCreateOrderType">Crear Tipo Pedido</button>
                                                 </div>
                                             </div>
@@ -84,26 +86,26 @@ if (sizeof($_SESSION) == 0)
                 <div class="page-content-wrapper mt--45 mb-5 cardImportOrderTypes">
                     <div class="container-fluid">
                         <div class="row">
-                            <form id="formImportOrderTypes" enctype="multipart/form-data">
-                                <div class="col-12">
+                            <div class="col-12">
+                                <form id="formImportOrderTypes" enctype="multipart/form-data">
                                     <div class="card">
-                                        <div class="card-body pt-3 pb-0">
-                                            <div class="gridx4ip">
-                                                <div class="form-group floating-label enable-floating-label show-label mt-3 drag-area" style="margin-top:0px!important">
+                                        <div class="card-body pt-3">
+                                            <div class="form-row">
+                                                <div class="col-sm-6 floating-label enable-floating-label show-label drag-area" style="margin-bottom:10px!important">
                                                     <input class="form-control" type="file" id="fileOrderTypes" accept=".xls,.xlsx">
                                                     <label for="formFile" class="form-label"> Importar Tipos de Pedidos</label>
                                                 </div>
-                                                <div class="form-group floating-label enable-floating-label show-label" style="margin-bottom:0px;margin-top:7px">
+                                                <div class="col-xs-2" style="margin-top:7px">
                                                     <button type="text" class="btn btn-success" id="btnImportOrderTypes">Importar</button>
                                                 </div>
-                                                <div class="form-group floating-label enable-floating-label show-label" style="margin-bottom:0px;margin-top:7px">
+                                                <div class="col-xs-2" style="margin-top:7px">
                                                     <button type="text" class="btn btn-info" id="btnDownloadImportsOrderTypes">Descarga Formato</button>
                                                 </div>
                                             </div>
                                         </div>
                                     </div>
-                                </div>
-                            </form>
+                                </form>
+                            </div>
                         </div>
                     </div>
                 </div>

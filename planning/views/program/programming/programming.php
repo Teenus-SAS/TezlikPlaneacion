@@ -47,8 +47,8 @@ if (sizeof($_SESSION) == 0)
                                     </ol>
                                 </div>
                             </div>
-                            <div class="col-sm-7 col-xl-6">
-                                <div class="form-inline justify-content-sm-end">
+                            <div class="col-sm-7 col-xl-6 form-inline justify-content-sm-end">
+                                <div class="col-xs-2 mr-2">
                                     <button class="btn btn-warning" id="btnNewProgramming" name="btnNewProgramming">Programar</button>
                                 </div>
                             </div>
@@ -64,28 +64,29 @@ if (sizeof($_SESSION) == 0)
                                     <div class="card-body">
                                         <form id="formCreateProgramming">
                                             <div class="form-row">
-                                                <div class="col-md-3 mb-3 programmingSelect" id="machines">
+                                                <div class="col-sm-3 programmingSelect floating-label enable-floating-label show-label" id="machines">
                                                     <label for="">Maquina</label>
                                                     <select class="form-control" id="idMachine" name="idMachine">
                                                     </select>
                                                 </div>
-                                                <div class="col-md-2 mb-3 programmingSelect" id="orders">
+                                                <div class="col-sm-2 programmingSelect floating-label enable-floating-label show-label" id="orders">
                                                     <label for="">Pedido</label>
                                                     <select class="form-control" id="order" name="order">
                                                     </select>
                                                 </div>
 
-                                                <div class="col-md-3 mb-3 programmingSelect" id="products">
+                                                <div class="col-sm-3 programmingSelect floating-label enable-floating-label show-label" id="products">
                                                     <label for="">Producto</label>
                                                     <select class="form-control" id="selectNameProduct" name="idProduct"></select>
                                                     <select class="form-control" id="refProduct" style="display:none"></select>
                                                 </div>
-                                                <div class="col-md-2 mb-3">
+                                                <div class="col-sm-2 floating-label enable-floating-label show-label">
                                                     <label for="">Cantidad</label>
                                                     <input type="text" class="form-control text-center numberCalc" id="quantity" name="quantity">
                                                 </div>
-
-                                                <button class="btn btn-info" type="submit" id="btnCreateProgramming" name="btnCreateProgramming" style="width: 100px;height:50%; margin-top: 34px; margin-left: 20px">Crear</button>
+                                                <div class="col-sm mt-1">
+                                                    <button class="btn btn-info" type="submit" id="btnCreateProgramming" name="btnCreateProgramming">Crear</button>
+                                                </div>
                                             </div>
                                         </form>
                                     </div>

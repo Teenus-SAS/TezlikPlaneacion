@@ -47,11 +47,13 @@ if (sizeof($_SESSION) == 0)
                                     </ol>
                                 </div>
                             </div>
-                            <div class="col-sm-7 col-xl-6">
-                                <div class="form-inline justify-content-sm-end">
+                            <div class="col-sm-7 col-xl-6 form-inline justify-content-sm-end">
+                                <div class="col-xs-2 mr-2">
                                     <select class="form-control" name="category" id="category">
                                     </select>
-                                    <button class="btn btn-info ml-3" id="btnImportNewInventory">Importar Inventarios</button>
+                                </div>
+                                <div class="col-xs-2 py-2 mr-2">
+                                    <button class="btn btn-info" id="btnImportNewInventory">Importar Inventarios</button>
                                 </div>
                             </div>
                         </div>
@@ -66,11 +68,11 @@ if (sizeof($_SESSION) == 0)
                                     <form id="formAddMonths">
                                         <div class="card-body">
                                             <div class="form-row">
-                                                <div class="col-md-3" style="margin-bottom:0px">
+                                                <div class="col-sm-3 floating-label enable-floating-label show-label" style="margin-bottom:0px">
                                                     <label for="">Meses a Analizar:</label>
                                                     <input type="number" class="form-control text-center" id="cantMonths" name="cantMonths" style="width:200px">
                                                 </div>
-                                                <div class="col" style="margin-bottom:0px;margin-top:33px">
+                                                <div class="col-sm mt-1">
                                                     <button class="btn btn-success" id="btnAddMonths">Calcular</button>
                                                 </div>
                                             </div>
@@ -85,26 +87,26 @@ if (sizeof($_SESSION) == 0)
                 <div class=" page-content-wrapper mt--45 mb-5 cardImportInventory">
                     <div class="container-fluid">
                         <div class="row">
-                            <form id="formImportInventory" enctype=" multipart/form-data">
-                                <div class="col-12">
+                            <div class="col-12">
+                                <form id="formImportInventory" enctype=" multipart/form-data">
                                     <div class="card">
-                                        <div class="card-body pt-3 pb-0">
-                                            <div class="gridx4ip">
-                                                <div class="form-group floating-label enable-floating-label show-label mt-3 drag-area" style="margin-top:0px!important">
+                                        <div class="card-body pt-3">
+                                            <div class="form-row">
+                                                <div class="col-sm-6 floating-label enable-floating-label show-label drag-area" style="margin-bottom:10px!important">
                                                     <input class="form-control" type="file" id="fileInventory" accept=" .xls,.xlsx">
                                                     <label for="formFile" class="form-label"> Importar Inventario</label>
                                                 </div>
-                                                <div class="form-group floating-label enable-floating-label show-label" style="margin-bottom:0px;margin-top:7px">
+                                                <div class="col-xs-2" style="margin-top:7px">
                                                     <button type="text" class="btn btn-success" id="btnImportInventory">Importar</button>
                                                 </div>
-                                                <div class="form-group floating-label enable-floating-label show-label" style="margin-bottom:0px;margin-top:7px">
+                                                <div class="col-xs-2" style="margin-top:7px">
                                                     <button type="text" class="btn btn-info" id="btnDownloadImportsInventory">Descarga Formato</button>
                                                 </div>
                                             </div>
                                         </div>
                                     </div>
-                                </div>
-                            </form>
+                                </form>
+                            </div>
                         </div>
                     </div>
                 </div>

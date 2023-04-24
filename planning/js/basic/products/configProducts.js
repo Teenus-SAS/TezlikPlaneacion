@@ -7,7 +7,7 @@ $(document).ready(function () {
   });
 
   $.ajax({
-    url: '/api/planProducts',
+    url: '/api/products',
     success: function (r) {
       let $select = $(`#refProduct`);
       $select.empty();

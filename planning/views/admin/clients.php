@@ -47,10 +47,12 @@ if (sizeof($_SESSION) == 0)
                                     </ol>
                                 </div>
                             </div>
-                            <div class="col-sm-7 col-xl-6">
-                                <div class="form-inline justify-content-sm-end">
+                            <div class="col-sm-7 col-xl-6 form-inline justify-content-sm-end">
+                                <div class="col-xs-2 mr-2">
                                     <button class="btn btn-warning" id="btnNewClient" name="btnNewClient">Nuevo Cliente</button>
-                                    <button class="btn btn-info ml-3" id="btnImportNewClient">Importar Clientes</button>
+                                </div>
+                                <div class="col-xs-2 py-2 mr-2">
+                                    <button class="btn btn-info" id="btnImportNewClient">Importar Clientes</button>
                                 </div>
                             </div>
                         </div>
@@ -64,20 +66,20 @@ if (sizeof($_SESSION) == 0)
                                 <div class="card">
                                     <div class="card-body">
                                         <form id="formCreateClient">
-                                            <div class="row">
-                                                <div class="form-group floating-label enable-floating-label show-label col" style="margin-bottom:0px">
+                                            <div class="form-row">
+                                                <div class="col-sm floating-label enable-floating-label show-label" style="margin-bottom:0px">
                                                     <label for="">Ean Cliente</label>
                                                     <input type="text" class="form-control text-center number" id="ean" name="ean">
                                                 </div>
-                                                <div class="form-group floating-label enable-floating-label show-label col" style="margin-bottom:0px">
+                                                <div class="col-sm floating-label enable-floating-label show-label" style="margin-bottom:0px">
                                                     <label for="">Nit Cliente</label>
                                                     <input type="text" class="form-control text-center number" id="nit" name="nit">
                                                 </div>
-                                                <div class="form-group floating-label enable-floating-label show-label col-lg-6" style="margin-bottom:0px">
+                                                <div class="col-sm-6 floating-label enable-floating-label show-label" style="margin-bottom:0px">
                                                     <label for="">Nombre Cliente</label>
                                                     <input type="text" class="form-control text-center" id="client" name="client">
                                                 </div>
-                                                <div style="margin-bottom:0px;margin-top:5px;" class="col">
+                                                <div class="col-sm mt-1">
                                                     <button class="btn btn-success" id="btnCreateClient">Crear</button>
                                                 </div>
                                             </div>
@@ -92,26 +94,26 @@ if (sizeof($_SESSION) == 0)
                 <div class="page-content-wrapper mt--45 mb-5 cardImportClients">
                     <div class="container-fluid">
                         <div class="row">
-                            <form id="formImportClients" enctype="multipart/form-data">
-                                <div class="col-12">
+                            <div class="col-12">
+                                <form id="formImportClients" enctype="multipart/form-data">
                                     <div class="card">
-                                        <div class="card-body pt-3 pb-0">
-                                            <div class="gridx4ip">
-                                                <div class="form-group floating-label enable-floating-label show-label mt-3 drag-area" style="margin-top:0px!important">
+                                        <div class="card-body pt-3">
+                                            <div class="form-row">
+                                                <div class="col-sm-6 floating-label enable-floating-label show-label drag-area" style="margin-bottom:10px!important">
                                                     <input class="form-control" type="file" id="fileClients" accept=".xls,.xlsx">
                                                     <label for="formFile" class="form-label">Importar Clientes</label>
                                                 </div>
-                                                <div class="form-group floating-label enable-floating-label show-label" style="margin-bottom:0px;margin-top:7px">
+                                                <div class="col-xs-2" style="margin-top:7px">
                                                     <button type="text" class="btn btn-success" id="btnImportClients">Importar</button>
                                                 </div>
-                                                <div class="form-group floating-label enable-floating-label show-label" style="margin-bottom:0px;margin-top:7px">
+                                                <div class="col-xs-2" style="margin-top:7px">
                                                     <button type="text" class="btn btn-info" id="btnDownloadImportsClients">Descarga Formato</button>
                                                 </div>
                                             </div>
                                         </div>
                                     </div>
-                                </div>
-                            </form>
+                                </form>
+                            </div>
                         </div>
                     </div>
                 </div>

@@ -110,7 +110,6 @@
     </div>
     <!-- end container -->
   </div>
-  <script src="/cost/js/trm/trm.js"></script>
   <!-- ================== BEGIN BASE JS ================== -->
   <script src="https://code.jquery.com/jquery-3.5.1.js"></script>
   <script src="assets/js/vendor.min.js"></script>

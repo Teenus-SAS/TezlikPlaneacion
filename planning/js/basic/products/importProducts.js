@@ -47,7 +47,7 @@ $(document).ready(function () {
   checkProduct = (data) => {
     $.ajax({
       type: 'POST',
-      url: '/api/planProductsDataValidation',
+      url: '/api/productsDataValidation',
       data: { importProducts: data },
       success: function (resp) {
         if (resp.error == true) {
@@ -82,7 +82,7 @@ $(document).ready(function () {
   saveProductTable = (data) => {
     $.ajax({
       type: 'POST',
-      url: '/api/addPlanProduct',
+      url: '/api/addProduct',
       //data: data,
       data: { importProducts: data },
       success: function (r) {

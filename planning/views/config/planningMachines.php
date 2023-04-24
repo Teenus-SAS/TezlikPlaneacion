@@ -50,10 +50,12 @@ if (sizeof($_SESSION) == 0)
                                     </ol>
                                 </div>
                             </div>
-                            <div class="col-sm-7 col-xl-6">
-                                <div class="form-inline justify-content-sm-end">
+                            <div class="col-sm-7 col-xl-6 form-inline justify-content-sm-end">
+                                <div class="col-xs-2 mr-2">
                                     <button class="btn btn-warning" id="btnNewPlanMachine" name="btnNewPlanMachine">Adicionar Plan Máquina</button>
-                                    <button class="btn btn-info ml-3" id="btnImportNewPlanMachines" name="btnNewImportPlanMachines">Importar Máquinas</button>
+                                </div>
+                                <div class="col-xs-2 py-2 mr-2">
+                                    <button class="btn btn-info" id="btnImportNewPlanMachines" name="btnNewImportPlanMachines">Importar Máquinas</button>
                                 </div>
                             </div>
                         </div>
@@ -63,26 +65,26 @@ if (sizeof($_SESSION) == 0)
                 <div class="page-content-wrapper mt--45 mb-5 cardImportPlanMachines">
                     <div class="container-fluid">
                         <div class="row">
-                            <form id="formImportPlanMachines" enctype="multipart/form-data">
-                                <div class="col-12">
+                            <div class="col-12">
+                                <form id="formImportPlanMachines" enctype="multipart/form-data">
                                     <div class="card">
-                                        <div class="card-body pt-3 pb-0">
-                                            <div class="gridx4ip">
-                                                <div class="form-group floating-label enable-floating-label show-label mt-3 drag-area" style="margin-top:0px!important">
+                                        <div class="card-body pt-3">
+                                            <div class="form-row">
+                                                <div class="col-sm-6 floating-label enable-floating-label show-label drag-area" style="margin-bottom:10px!important">
                                                     <input class="form-control" type="file" id="filePlanMachines" accept=".xls,.xlsx">
                                                     <label for="formFile" class="form-label"> Importar Máquinas</label>
                                                 </div>
-                                                <div class="form-group floating-label enable-floating-label show-label" style="margin-bottom:0px;margin-top:7px">
+                                                <div class="col-xs-2" style="margin-top:7px">
                                                     <button type="text" class="btn btn-success" id="btnImportPlanMachines">Importar</button>
                                                 </div>
-                                                <div class="form-group floating-label enable-floating-label show-label" style="margin-bottom:0px;margin-top:7px">
+                                                <div class="col-xs-2" style="margin-top:7px">
                                                     <button type="text" class="btn btn-info" id="btnDownloadImportsPlanMachines">Descarga Formato</button>
                                                 </div>
                                             </div>
                                         </div>
                                     </div>
-                                </div>
-                            </form>
+                                </form>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -123,9 +125,9 @@ if (sizeof($_SESSION) == 0)
     <script src="/planning/js/config/planningMachines/tblPlanningMachines.js"></script>
     <script src="/planning/js/config/planningMachines/planningMachines.js"></script>
     <script src="/planning/js/basic/machines/configMachines.js"></script>
-    <script src="../global/js/import/import.js"></script>
+    <script src="/global/js/import/import.js"></script>
     <script src="/planning/js/config/planningMachines/importPlanningMachines.js"></script>
-    <script src="../global/js/import/file.js"></script>
+    <script src="/global/js/import/file.js"></script>
     <script src="/global/js/global/validateExt.js"></script>
 </body>
 

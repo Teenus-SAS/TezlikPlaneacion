@@ -36,11 +36,6 @@ $(document).ready(function () {
       companyCountry = $('#companyCountry').val();
       companyAddress = $('#companyAddress').val();
       companyTel = $('#companyTel').val();
-      // // Licencia
-      // companyLicStart = $('#companyLic_start').val();
-      // companyLicEnd = $('#companyLic_end').val();
-      // companyUsers = $('#companyUsers').val();
-      // companyStatus = $('#companyStatus').val();
 
       if (
         company === '' ||
@@ -74,59 +69,6 @@ $(document).ready(function () {
       });
     } else updateCompany();
   });
-  /*
-  $(document).on('click', '.crtCompany', function (e) {
-    e.preventDefault();
-    company = $('#company').val();
-    companyNIT = $('#companyNIT').val();
-    companyCity = $('#companyCity').val();
-    companyState = $('#companyState').val();
-    companyCountry = $('#companyCountry').val();
-    companyAddress = $('#companyAddress').val();
-    companyTel = $('#companyTel').val();
-    // Licencia
-    companyLicStart = $('#companyLic_start').val();
-    companyLicEnd = $('#companyLic_end').val();
-    companyUsers = $('#companyUsers').val();
-    companyStatus = $('#companyStatus').val();
-
-    dataCompany = new = new FormData(document.getElementById('formCreateCompany'));
-    dataCompany = new.append('companyStatus', companyStatus);
-    let logo = $('#formFile')[0].files[0];
-    dataCompany = new.append('logo', logo);
-
-    if (
-      company === '' ||
-      companyNIT === '' ||
-      companyCity === '' ||
-      companyState === '' ||
-      companyCountry === '' ||
-      companyAddress === '' ||
-      companyTel === '' ||
-      companyLicStart == '' ||
-      companyLicEnd == '' ||
-      companyUsers == ''
-    ) {
-      toastr.error('Ingrese todos los campos');
-      return false;
-    } else {
-      $.ajax({
-        type: 'POST',
-        url: '/api/addNewCompany',
-        data: dataCompany = new,
-        contentType: false,
-        cache: false,
-        processData: false,
-
-        success: function (resp) {
-          // $('#createCompany').modal('hide');
-          // $('#formCreateCompany').val('');
-          message(resp);
-          // updateTable();
-        },
-      });
-    }
-  }); */
 
   /* Cargar datos en el modal Empresa */
   $(document).on('click', '.updateCompany', function (e) {
@@ -152,42 +94,6 @@ $(document).ready(function () {
     $('#companyTel').val(data.telephone);
     $('html, body').animate({ scrollTop: 0 }, 1000);
   });
-
-  /* Actualizar Empresa 
-  $(document).on('click', '.updCompany', function (e) {
-    e.preventDefault();
-
-    company = $('#company').val();
-    companyNIT = $('#companyNIT').val();
-    companyCreator = $('#companyCreator').val();
-    companyCreatedAt = $('#companyCreated_at').val();
-    companyLogo = $('#companyLogo').val();
-    companyCity = $('#companyCity').val();
-    companyState = $('#companyState').val();
-    companyCountry = $('#companyCountry').val();
-    companyAddress = $('#companyAddress').val();
-    companyTel = $('#companyTel').val();
-
-    dataCompany = new = new FormData(document.getElementById('formCreateCompany'));
-    dataCompany = new.append('id_company', id);
-
-    $.ajax({
-      type: 'POST',
-      url: '/api/updatedataCompanyy',
-      data: dataCompany = new,
-      contentType: false,
-      cache: false,
-      processData: false,
-
-      success: function (resp) {
-        // $('#createCompany').modal('hide');
-        // $('#formCreateCompany').val('');
-        message(resp);
-        // updateTable();
-      },
-    });
-  }); 
-  */
 
   updateCompany = () => {
     idCompany = sessionStorage.getItem('id_company');

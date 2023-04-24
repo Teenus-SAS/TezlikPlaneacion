@@ -1,4 +1,4 @@
-var editor;
+// var editor;
 
 $(document).ready(function () {
   /* Cargue tabla de Moldes */

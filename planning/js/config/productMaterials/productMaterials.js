@@ -72,7 +72,7 @@ $(document).ready(function () {
       productMaterial = productMaterial + '&idProduct=' + idProduct;
 
       $.post(
-        '/api/addPlanProductsMaterials',
+        '/api/addProductsMaterials',
         productMaterial,
         function (data, textStatus, jqXHR) {
           message(data);

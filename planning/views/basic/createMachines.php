@@ -47,10 +47,12 @@ if (sizeof($_SESSION) == 0)
                                     </ol>
                                 </div>
                             </div>
-                            <div class="col-sm-7 col-xl-6">
-                                <div class="form-inline justify-content-sm-end">
+                            <div class="col-sm-7 col-xl-6 form-inline justify-content-sm-end">
+                                <div class="col-xs-2 mr-2">
                                     <button class="btn btn-warning" id="btnNewMachine" name="btnNewMachine">Nueva Máquina</button>
-                                    <button class="btn btn-info ml-3" id="btnImportNewMachines" name="btnNewImportMachines">Importar Máquinas</button>
+                                </div>
+                                <div class="col-xs-2 py-2 mr-2">
+                                    <button class="btn btn-info" id="btnImportNewMachines" name="btnNewImportMachines">Importar Máquinas</button>
                                 </div>
                             </div>
                         </div>
@@ -64,13 +66,12 @@ if (sizeof($_SESSION) == 0)
                                 <div class="card">
                                     <div class="card-body">
                                         <form id="formCreateMachine">
-                                            <div class="gridx2p">
-                                                <div class="form-group floating-label enable-floating-label show-label" style="margin-bottom:0px">
+                                            <div class="form-row">
+                                                <div class="col-sm-10 floating-label enable-floating-label show-label">
                                                     <input type="text" class="form-control" name="machine" id="machine">
                                                     <label for="">Nombre</label>
                                                 </div>
-
-                                                <div class="form-group floating-label enable-floating-label show-label" style="margin-bottom:0px;margin-top:5px">
+                                                <div class="col-sm mt-1">
                                                     <button class="btn btn-success" id="btnCreateMachine">Crear</button>
                                                 </div>
                                             </div>
@@ -85,21 +86,19 @@ if (sizeof($_SESSION) == 0)
                 <div class="page-content-wrapper mt--45 mb-5 cardImportMachines">
                     <div class="container-fluid">
                         <div class="row">
-                            <form id="formImportMachines" enctype="multipart/form-data">
-                                <div class="col-12">
-                                    <div class="card">
-                                        <div class="card-body pt-3 pb-0">
-                                            <div class="gridx4ip">
-                                                <div class="form-group floating-label enable-floating-label show-label mt-3 drag-area" style="margin-top:0px!important">
-                                                    <input class="form-control" type="file" id="fileMachines" accept=".xls,.xlsx">
-                                                    <label for="formFile" class="form-label"> Importar Máquinas</label>
-                                                </div>
-                                                <div class="form-group floating-label enable-floating-label show-label" style="margin-bottom:0px;margin-top:7px">
-                                                    <button type="text" class="btn btn-success" id="btnImportMachines">Importar</button>
-                                                </div>
-                                                <div class="form-group floating-label enable-floating-label show-label" style="margin-bottom:0px;margin-top:7px">
-                                                    <button type="text" class="btn btn-info" id="btnDownloadImportsMachines">Descarga Formato</button>
-                                                </div>
+                            <form class="col-12" id="formImportMachines" enctype="multipart/form-data">
+                                <div class="card">
+                                    <div class="card-body pt-3">
+                                        <div class="form-row">
+                                            <div class="col-sm-6 floating-label enable-floating-label show-label drag-area" style="margin-bottom:10px!important">
+                                                <input class="form-control" type="file" id="fileMachines" accept=".xls,.xlsx">
+                                                <label for="formFile" class="form-label"> Importar Máquinas</label>
+                                            </div>
+                                            <div class="col-xs-2" style="margin-top:7px">
+                                                <button type="text" class="btn btn-success" id="btnImportMachines">Importar</button>
+                                            </div>
+                                            <div class="col-xs-2" style="margin-top:7px">
+                                                <button type="text" class="btn btn-info" id="btnDownloadImportsMachines">Descarga Formato</button>
                                             </div>
                                         </div>
                                     </div>

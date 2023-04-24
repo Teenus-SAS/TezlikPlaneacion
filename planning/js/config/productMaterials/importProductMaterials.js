@@ -62,8 +62,8 @@ $(document).ready(function () {
 
         if (id == 1)
           url = {
-            validation: '/api/planProductsMaterialsDataValidation',
-            save: '/api/addPlanProductsMaterials',
+            validation: '/api/productsMaterialsDataValidation',
+            save: '/api/addProductsMaterials',
           };
         if (id == 2)
           url = {

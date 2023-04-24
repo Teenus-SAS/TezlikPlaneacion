@@ -37,8 +37,8 @@
                         <div class="col-sm-9">
                             <div class="row" id="nav">
                                 <?php if (
-                                    $_SESSION['create_mold'] != 0 && $_SESSION['planning_product'] != 0 && $_SESSION['planning_material'] != 0 &&
-                                    $_SESSION['planning_machine'] != 0 && $_SESSION['planning_process'] != 0
+                                    $_SESSION['create_mold'] != 0 || $_SESSION['planning_product'] != 0 || $_SESSION['planning_material'] != 0 ||
+                                    $_SESSION['planning_machine'] != 0 || $_SESSION['planning_process'] != 0
                                 ) { ?>
                                     <div class="col-md-3" id="navPlanBasics">
                                         <h5 class="font-size-14 font-weight-600">Básico</h5>
@@ -62,8 +62,8 @@
                                     </div>
                                 <?php } ?>
                                 <?php if (
-                                    $_SESSION['planning_products_material'] != 0 && $_SESSION['planning_products_process'] != 0 &&
-                                    $_SESSION['programs_machine'] != 0 && $_SESSION['cicles_machine'] != 0
+                                    $_SESSION['planning_products_material'] != 0 || $_SESSION['planning_products_process'] != 0 ||
+                                    $_SESSION['programs_machine'] != 0 || $_SESSION['cicles_machine'] != 0
                                 ) { ?>
                                     <div class="col-md-3" id="navPlanSetting">
                                         <h5 class="font-size-14 font-weight-600">Configuración</h5>
@@ -83,7 +83,7 @@
                                         </ul>
                                     </div>
                                 <?php } ?>
-                                <?php if ($_SESSION['inv_category'] != 0 && $_SESSION['sale'] != 0) { ?>
+                                <?php if ($_SESSION['inv_category'] != 0 || $_SESSION['sale'] != 0) { ?>
                                     <div class="col-md-3" id="navPlanGeneral">
                                         <h5 class="font-size-14 font-weight-600">General</h5>
                                         <ul class="list-unstyled megamenu-list">
@@ -96,7 +96,7 @@
                                         </ul>
                                     </div>
                                 <?php } ?>
-                                <?php if ($_SESSION['planning_user'] != 0 && $_SESSION['client'] != 0 && $_SESSION['orders_type'] != 0) { ?>
+                                <?php if ($_SESSION['planning_user'] != 0 || $_SESSION['client'] != 0 || $_SESSION['orders_type'] != 0) { ?>
                                     <div class="col-md-3" id="navPlanAdmin">
                                         <h5 class="font-size-14 font-weight-600">Administrador</h5>
                                         <ul class="list-unstyled megamenu-list">
@@ -132,7 +132,7 @@
                     </form>
                 </div>
             </div>
-            <div class="d-none d-lg-inline-flex ml-2 dropdown">
+            <!-- <div class="d-none d-lg-inline-flex ml-2 dropdown">
                 <button data-toggle="dropdown" aria-haspopup="true" type="button" id="page-header-app-dropdown" aria-expanded="false" class="btn header-item notify-icon">
                     <i class="bx bx-customize"></i>
                 </button>
@@ -154,7 +154,7 @@
                         </div>
                     </div>
                 </div>
-            </div>
+            </div> -->
             <div class="d-none d-lg-inline-flex ml-2">
                 <button type="button" data-toggle="fullscreen" class="btn header-item notify-icon" id="full-screen">
                     <i class="bx bx-fullscreen"></i>

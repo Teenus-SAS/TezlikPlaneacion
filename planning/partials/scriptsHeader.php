@@ -1,1 +1,0 @@
-<script src="/app/global/js/users/usersAccess.js"></script>

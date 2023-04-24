@@ -48,10 +48,12 @@ if (sizeof($_SESSION) == 0)
                                     </ol>
                                 </div>
                             </div>
-                            <div class="col-sm-7 col-xl-6">
-                                <div class="form-inline justify-content-sm-end">
+                            <div class="col-sm-7 col-xl-6 form-inline justify-content-sm-end">
+                                <div class="col-xs-2 mr-2">
                                     <button class="btn btn-warning" id="btnNewPlanCiclesMachine" name="btnNewPlanCiclesMachine">Nuevo Ciclo Máquina</button>
-                                    <button class="btn btn-info ml-3" id="btnImportNewPlanCiclesMachine" name="btnImportNewPlanCiclesMachine">Importar Ciclos Máquina</button>
+                                </div>
+                                <div class="col-xs-2 py-2 mr-2">
+                                    <button class="btn btn-info" id="btnImportNewPlanCiclesMachine" name="btnImportNewPlanCiclesMachine">Importar Ciclos Máquina</button>
                                 </div>
                             </div>
                         </div>
@@ -65,21 +67,21 @@ if (sizeof($_SESSION) == 0)
                                 <div class="card">
                                     <div class="card-body">
                                         <form id="formCreatePlanCiclesMachine">
-                                            <div class="gridx4cm">
-                                                <div class="form-group floating-label enable-floating-label show-label" style="margin-bottom:0px">
+                                            <div class="form-row">
+                                                <div class="col-sm-5 floating-label enable-floating-label show-label" style="margin-bottom:0px">
                                                     <select class="form-control" name="selectNameProduct" id="selectNameProduct"></select>
                                                     <label for="">Producto</label>
                                                 </div>
-                                                <div class="form-group floating-label enable-floating-label show-label" style="margin-bottom:0px">
+                                                <div class="col-sm-4 floating-label enable-floating-label show-label" style="margin-bottom:0px">
                                                     <select class="form-control" name="idMachine" id="idMachine"></select>
                                                     <label for="">Maquina</label>
                                                 </div>
-                                                <div class="form-group floating-label enable-floating-label show-label" style="margin-bottom:0px">
+                                                <div class="col-sm-2 floating-label enable-floating-label show-label" style="margin-bottom:0px">
                                                     <input type="text" class="form-control text-center number" name="ciclesHour" id="ciclesHour">
                                                     <label for="">Ciclo x Hora</label>
                                                 </div>
-                                                <div style="margin-bottom:0px;margin-top:5px;">
-                                                    <button class="btn btn-success" id="btnCreatePlanCiclesMachine">Crear Ciclo Máquina</button>
+                                                <div class="col-sm mt-1">
+                                                    <button class="btn btn-success" id="btnCreatePlanCiclesMachine">Crear</button>
                                                 </div>
                                             </div>
                                         </form>
@@ -93,26 +95,26 @@ if (sizeof($_SESSION) == 0)
                 <div class="page-content-wrapper mt--45 mb-5 cardImportPlanCiclesMachine">
                     <div class="container-fluid">
                         <div class="row">
-                            <form id="formImportPlanCiclesMachine" enctype="multipart/form-data">
-                                <div class="col-12">
+                            <div class="col-12">
+                                <form id="formImportPlanCiclesMachine" enctype="multipart/form-data">
                                     <div class="card">
-                                        <div class="card-body pt-3 pb-0">
-                                            <div class="gridx4ip">
-                                                <div class="form-group floating-label enable-floating-label show-label mt-3 drag-area" style="margin-top:0px!important">
+                                        <div class="card-body pt-3">
+                                            <div class="form-row">
+                                                <div class="col-sm-6 floating-label enable-floating-label show-label drag-area" style="margin-bottom:10px!important">
                                                     <input class="form-control" type="file" id="filePlanCiclesMachine" accept=".xls,.xlsx">
                                                     <label for="formFile" class="form-label"> Importar Máquinas</label>
                                                 </div>
-                                                <div class="form-group floating-label enable-floating-label show-label" style="margin-bottom:0px;margin-top:7px">
+                                                <div class="col-xs-2" style="margin-top:7px">
                                                     <button type="text" class="btn btn-success" id="btnImportPlanCiclesMachine">Importar</button>
                                                 </div>
-                                                <div class="form-group floating-label enable-floating-label show-label" style="margin-bottom:0px;margin-top:7px">
+                                                <div class="col-xs-2" style="margin-top:7px">
                                                     <button type="text" class="btn btn-info" id="btnDownloadImportsPlanCiclesMachine">Descarga Formato</button>
                                                 </div>
                                             </div>
                                         </div>
                                     </div>
-                                </div>
-                            </form>
+                                </form>
+                            </div>
                         </div>
                     </div>
                 </div>

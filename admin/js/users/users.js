@@ -40,7 +40,13 @@ $(document).ready(function () {
         return false;
       }
 
-      dataUser = $('#formCreateUser').serialize();
+      dataUser = {};
+      dataUser['nameUser'] = firstname;
+      dataUser['lastnameUser'] = lastname;
+      dataUser['emailUser'] = email;
+      dataUser['company'] = company;
+
+      dataUser = setDataUserAccess(dataUser);
 
       $.post('/api/addUser', dataUser, function (data, textStatus, jqXHR) {
         message(data);
@@ -100,6 +106,8 @@ $(document).ready(function () {
     dataUser['idUser'] = data.id_user;
     dataUser['email'] = data.email;
 
+    dataUser = setDataUserAccess(dataUser);
+
     bootbox.confirm({
       title: 'Eliminar',
       message:
@@ -126,6 +134,31 @@ $(document).ready(function () {
         }
       },
     });
+  };
+
+  setDataUserAccess = (dataUser) => {
+    dataUser['createMold'] = 1;
+    dataUser['planningCreateProduct'] = 1;
+    dataUser['planningCreateMaterial'] = 1;
+    dataUser['planningCreateMachine'] = 1;
+    dataUser['planningCreateProcess'] = 1;
+    dataUser['planningProductsMaterial'] = 1;
+    dataUser['planningProductsProcess'] = 1;
+    dataUser['programsMachine'] = 1;
+    dataUser['ciclesMachine'] = 1;
+    dataUser['invCategory'] = 1;
+    dataUser['sale'] = 1;
+    dataUser['plannigUser'] = 1;
+    dataUser['client'] = 1;
+    dataUser['ordersType'] = 1;
+    dataUser['inventory'] = 1;
+    dataUser['order'] = 1;
+    dataUser['program'] = 1;
+    dataUser['load'] = 1;
+    dataUser['explosionOfMaterial'] = 1;
+    dataUser['office'] = 1;
+
+    return dataUser;
   };
 
   /* Mensaje de exito */

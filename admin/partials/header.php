@@ -40,7 +40,7 @@
                                     <ul class="list-unstyled megamenu-list">
                                         <li class="users"><a href="/admin/users-admins">Usuarios</a></li>
                                         <li class="plans"><a href="/admin/plans">Planes</a></li>
-                                        <li class="binnacle"><a href="/admin/binnacle">Bitacora</a></li>
+                                        <!-- <li class="binnacle"><a href="/admin/binnacle">Bitacora</a></li> -->
                                     </ul>
                                 </div>
                                 <div class="col-md-3" id="navConversion">

@@ -48,10 +48,12 @@ if (sizeof($_SESSION) == 0)
                                     </ol>
                                 </div>
                             </div>
-                            <div class="col-sm-4 col-xl-6">
-                                <div class="form-inline justify-content-sm-end">
+                            <div class="col-sm-7 col-xl-6 form-inline justify-content-sm-end">
+                                <div class="col-xs-2 mr-2">
                                     <button class="btn btn-warning" id="btnNewProduct">Nuevo Producto</button>
-                                    <button class="btn btn-info ml-3" id="btnImportNewProducts">Importar Productos</button>
+                                </div>
+                                <div class="col-xs-2 py-2 mr-2">
+                                    <button class="btn btn-info" id="btnImportNewProducts">Importar Productos</button>
                                 </div>
                             </div>
                         </div>
@@ -66,42 +68,42 @@ if (sizeof($_SESSION) == 0)
                                     <div class="card-body">
                                         <form id="formCreateProduct">
                                             <div class="form-row">
-                                                <div class="col-md-3">
+                                                <div class="col-sm-3 floating-label enable-floating-label show-label">
                                                     <label for="">Referencia</label>
                                                     <input type="text" class="form-control" name="referenceProduct" id="referenceProduct">
                                                 </div>
-                                                <div class="col-md-6">
+                                                <div class="col-sm-6 floating-label enable-floating-label show-label">
                                                     <label for="">Nombre Producto</label>
                                                     <input type="text" class="form-control" name="product" id="product">
                                                 </div>
-                                                <div class="col-md-3">
+                                                <div class="col-sm-3 floating-label enable-floating-label show-label">
                                                     <label for="">Molde</label>
                                                     <select class="form-control" name="idMold" id="idMold"></select>
                                                 </div>
                                             </div>
                                             <div class="row">
-                                                <div class="col-md-8">
-                                                    <div class="form-row py-4">
-                                                        <div class="col-xs">
+                                                <div class="col-sm-8">
+                                                    <div class="form-row">
+                                                        <div class="col-xs floating-label enable-floating-label show-label">
                                                             <label for="">Cantidad en inventario</label>
                                                             <input type="text" class="form-control text-center number" id="quantity" name="quantity">
                                                         </div>
-                                                        <div class="col-4">
-                                                            <label for="productsCategories">Categoría</label>
-                                                            <select id="productsCategories" name="productsCategories" type="number" class="form-control"></select>
+                                                        <div class="col-sm-4 floating-label enable-floating-label show-label">
+                                                            <label for="category">Categoría</label>
+                                                            <select id="productsCategories" name="category" type="number" class="form-control"></select>
                                                         </div>
                                                     </div>
                                                     <div class="form-row">
-                                                        <div class="col-6">
+                                                        <div class="col-sm-6 floating-label enable-floating-label show-label">
                                                             <label for="formFile" class="form-label"> Cargar imagen producto</label>
                                                             <input class="form-control" type="file" id="formFile">
                                                         </div>
-                                                        <div class="col-sm-2">
-                                                            <button type="text" class="btn btn-success" id="btnCreateProduct" style="width: 150px;height:50%; margin-top: 32px; margin-left: 20px">Crear Producto</button>
+                                                        <div class="col-sm-2 mt-1">
+                                                            <button type="text" class="btn btn-success" id="btnCreateProduct">Crear Producto</button>
                                                         </div>
                                                     </div>
                                                 </div>
-                                                <div class="col-md-4 mt-5" id="preview"></div>
+                                                <div class="col-sm-4 mt-5" id="preview"></div>
                                             </div>
                                         </form>
                                     </div>
@@ -114,21 +116,19 @@ if (sizeof($_SESSION) == 0)
                 <div class="page-content-wrapper mt--45 mb-5 cardImportProducts">
                     <div class="container-fluid">
                         <div class="row">
-                            <form id="formImportProduct" enctype="multipart/form-data">
-                                <div class="col-12">
-                                    <div class="card">
-                                        <div class="card-body pt-3 pb-0">
-                                            <div class="gridx4ip">
-                                                <div class="form-group floating-label enable-floating-label show-label mt-3 drag-area" style="margin-top:0px!important">
-                                                    <input class="form-control" type="file" id="fileProducts" accept=".xls,.xlsx">
-                                                    <label for="formFile" class="form-label"> Importar Productos</label>
-                                                </div>
-                                                <div class="form-group floating-label enable-floating-label show-label" style="margin-bottom:0px;margin-top:7px">
-                                                    <button type="text" class="btn btn-success" id="btnImportProducts">Importar</button>
-                                                </div>
-                                                <div class="form-group floating-label enable-floating-label show-label" style="margin-bottom:0px;margin-top:7px">
-                                                    <button type="text" class="btn btn-info" id="btnDownloadImportsProducts">Descarga Formato</button>
-                                                </div>
+                            <form class="col-12" id="formImportProduct" enctype="multipart/form-data">
+                                <div class="card">
+                                    <div class="card-body pt-3">
+                                        <div class="form-row">
+                                            <div class="col-sm-6 floating-label enable-floating-label show-label drag-area" style="margin-bottom:10px!important">
+                                                <input class="form-control" type="file" id="fileProducts" accept=".xls,.xlsx">
+                                                <label for="formFile" class="form-label"> Importar Productos</label>
+                                            </div>
+                                            <div class="col-xs-2" style="margin-top:7px">
+                                                <button type="text" class="btn btn-success" id="btnImportProducts">Importar</button>
+                                            </div>
+                                            <div class="col-xs-2" style="margin-top:7px">
+                                                <button type="text" class="btn btn-info" id="btnDownloadImportsProducts">Descarga Formato</button>
                                             </div>
                                         </div>
                                     </div>
