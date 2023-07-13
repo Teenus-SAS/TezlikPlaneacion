@@ -18,11 +18,20 @@ use function is_string;
 
 class Header
 {
-    private string $originalName;
+    /**
+     * @var string
+     */
+    private $originalName;
 
-    private string $normalizedName;
+    /**
+     * @var string
+     */
+    private $normalizedName;
 
-    private array $values;
+    /**
+     * @var array
+     */
+    private $values;
 
     /**
      * Header constructor.

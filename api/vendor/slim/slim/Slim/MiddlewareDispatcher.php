@@ -32,13 +32,26 @@ class MiddlewareDispatcher implements MiddlewareDispatcherInterface
 {
     /**
      * Tip of the middleware call stack
+     *
+     * @var RequestHandlerInterface
      */
-    protected RequestHandlerInterface $tip;
+    protected $tip;
 
-    protected ?CallableResolverInterface $callableResolver;
+    /**
+     * @var CallableResolverInterface|null
+     */
+    protected $callableResolver;
 
-    protected ?ContainerInterface $container;
+    /**
+     * @var ContainerInterface|null
+     */
+    protected $container;
 
+    /**
+     * @param RequestHandlerInterface        $kernel
+     * @param CallableResolverInterface|null $callableResolver
+     * @param ContainerInterface|null        $container
+     */
     public function __construct(
         RequestHandlerInterface $kernel,
         ?CallableResolverInterface $callableResolver = null,
@@ -59,6 +72,9 @@ class MiddlewareDispatcher implements MiddlewareDispatcherInterface
 
     /**
      * Invoke the middleware stack
+     *
+     * @param ServerRequestInterface $request
+     * @return ResponseInterface
      */
     public function handle(ServerRequestInterface $request): ResponseInterface
     {
@@ -73,6 +89,7 @@ class MiddlewareDispatcher implements MiddlewareDispatcherInterface
      * added one (last in, first out).
      *
      * @param MiddlewareInterface|string|callable $middleware
+     * @return MiddlewareDispatcherInterface
      */
     public function add($middleware): MiddlewareDispatcherInterface
     {
@@ -101,14 +118,23 @@ class MiddlewareDispatcher implements MiddlewareDispatcherInterface
      * Middleware are organized as a stack. That means middleware
      * that have been added before will be executed after the newly
      * added one (last in, first out).
+     *
+     * @param MiddlewareInterface $middleware
+     * @return MiddlewareDispatcherInterface
      */
     public function addMiddleware(MiddlewareInterface $middleware): MiddlewareDispatcherInterface
     {
         $next = $this->tip;
         $this->tip = new class ($middleware, $next) implements RequestHandlerInterface {
-            private MiddlewareInterface $middleware;
+            /**
+             * @var MiddlewareInterface
+             */
+            private $middleware;
 
-            private RequestHandlerInterface $next;
+            /**
+             * @var RequestHandlerInterface
+             */
+            private $next;
 
             public function __construct(MiddlewareInterface $middleware, RequestHandlerInterface $next)
             {
@@ -131,6 +157,9 @@ class MiddlewareDispatcher implements MiddlewareDispatcherInterface
      * Middleware are organized as a stack. That means middleware
      * that have been added before will be executed after the newly
      * added one (last in, first out).
+     *
+     * @param string $middleware
+     * @return self
      */
     public function addDeferred(string $middleware): self
     {
@@ -141,13 +170,25 @@ class MiddlewareDispatcher implements MiddlewareDispatcherInterface
             $this->container,
             $this->callableResolver
         ) implements RequestHandlerInterface {
-            private string $middleware;
+            /**
+             * @var string
+             */
+            private $middleware;
 
-            private RequestHandlerInterface $next;
+            /**
+             * @var RequestHandlerInterface
+             */
+            private $next;
 
-            private ?ContainerInterface $container;
+            /**
+             * @var ContainerInterface|null
+             */
+            private $container;
 
-            private ?CallableResolverInterface $callableResolver;
+            /**
+             * @var CallableResolverInterface|null
+             */
+            private $callableResolver;
 
             public function __construct(
                 string $middleware,
@@ -232,11 +273,14 @@ class MiddlewareDispatcher implements MiddlewareDispatcherInterface
     }
 
     /**
-     * Add a (non-standard) callable middleware to the stack
+     * Add a (non standard) callable middleware to the stack
      *
      * Middleware are organized as a stack. That means middleware
      * that have been added before will be executed after the newly
      * added one (last in, first out).
+     *
+     * @param callable $middleware
+     * @return self
      */
     public function addCallable(callable $middleware): self
     {

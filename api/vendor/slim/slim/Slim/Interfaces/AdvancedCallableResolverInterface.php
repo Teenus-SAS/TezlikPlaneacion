@@ -16,6 +16,8 @@ interface AdvancedCallableResolverInterface extends CallableResolverInterface
      * Resolve $toResolve into a callable
      *
      * @param string|callable $toResolve
+     *
+     * @return callable
      */
     public function resolveRoute($toResolve): callable;
 
@@ -23,6 +25,8 @@ interface AdvancedCallableResolverInterface extends CallableResolverInterface
      * Resolve $toResolve into a callable
      *
      * @param string|callable $toResolve
+     *
+     * @return callable
      */
     public function resolveMiddleware($toResolve): callable;
 }

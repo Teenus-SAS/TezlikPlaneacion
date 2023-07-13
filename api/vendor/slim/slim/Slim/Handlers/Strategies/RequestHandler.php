@@ -19,8 +19,14 @@ use Slim\Interfaces\RequestHandlerInvocationStrategyInterface;
  */
 class RequestHandler implements RequestHandlerInvocationStrategyInterface
 {
-    protected bool $appendRouteArgumentsToRequestAttributes;
+    /**
+     * @var bool
+     */
+    protected $appendRouteArgumentsToRequestAttributes;
 
+    /**
+     * @param bool $appendRouteArgumentsToRequestAttributes
+     */
     public function __construct(bool $appendRouteArgumentsToRequestAttributes = false)
     {
         $this->appendRouteArgumentsToRequestAttributes = $appendRouteArgumentsToRequestAttributes;
@@ -29,7 +35,12 @@ class RequestHandler implements RequestHandlerInvocationStrategyInterface
     /**
      * Invoke a route callable that implements RequestHandlerInterface
      *
-     * @param array<string, string>  $routeArguments
+     * @param callable               $callable
+     * @param ServerRequestInterface $request
+     * @param ResponseInterface      $response
+     * @param array<mixed>           $routeArguments
+     *
+     * @return ResponseInterface
      */
     public function __invoke(
         callable $callable,

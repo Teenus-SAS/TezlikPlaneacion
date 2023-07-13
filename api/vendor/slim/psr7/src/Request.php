@@ -51,11 +51,20 @@ class Request extends Message implements ServerRequestInterface
      */
     protected $queryParams;
 
-    protected array $cookies;
+    /**
+     * @var array
+     */
+    protected $cookies;
 
-    protected array $serverParams;
+    /**
+     * @var array
+     */
+    protected $serverParams;
 
-    protected array $attributes;
+    /**
+     * @var array
+     */
+    protected $attributes;
 
     /**
      * @var null|array|object
@@ -65,7 +74,7 @@ class Request extends Message implements ServerRequestInterface
     /**
      * @var UploadedFileInterface[]
      */
-    protected array $uploadedFiles;
+    protected $uploadedFiles;
 
     /**
      * @param string           $method        The request method
@@ -124,7 +133,6 @@ class Request extends Message implements ServerRequestInterface
 
     /**
      * {@inheritdoc}
-     * @return static
      */
     public function withMethod($method)
     {
@@ -190,11 +198,10 @@ class Request extends Message implements ServerRequestInterface
 
     /**
      * {@inheritdoc}
-     * @return static
      */
     public function withRequestTarget($requestTarget)
     {
-        if (!is_string($requestTarget) || preg_match('#\s#', $requestTarget)) {
+        if (preg_match('#\s#', $requestTarget)) {
             throw new InvalidArgumentException(
                 'Invalid request target provided; must be a string and cannot contain whitespace'
             );
@@ -216,7 +223,6 @@ class Request extends Message implements ServerRequestInterface
 
     /**
      * {@inheritdoc}
-     * @return static
      */
     public function withUri(UriInterface $uri, $preserveHost = false)
     {
@@ -246,7 +252,6 @@ class Request extends Message implements ServerRequestInterface
 
     /**
      * {@inheritdoc}
-     * @return static
      */
     public function withCookieParams(array $cookies)
     {
@@ -277,7 +282,6 @@ class Request extends Message implements ServerRequestInterface
 
     /**
      * {@inheritdoc}
-     * @return static
      */
     public function withQueryParams(array $query)
     {
@@ -297,7 +301,6 @@ class Request extends Message implements ServerRequestInterface
 
     /**
      * {@inheritdoc}
-     * @return static
      */
     public function withUploadedFiles(array $uploadedFiles)
     {
@@ -325,16 +328,14 @@ class Request extends Message implements ServerRequestInterface
 
     /**
      * {@inheritdoc}
-     * @return mixed
      */
     public function getAttribute($name, $default = null)
     {
-        return $this->attributes[$name] ?? $default;
+        return isset($this->attributes[$name]) ? $this->attributes[$name] : $default;
     }
 
     /**
      * {@inheritdoc}
-     * @return static
      */
     public function withAttribute($name, $value)
     {
@@ -346,7 +347,6 @@ class Request extends Message implements ServerRequestInterface
 
     /**
      * {@inheritdoc}
-     * @return static
      */
     public function withoutAttribute($name)
     {
@@ -367,7 +367,6 @@ class Request extends Message implements ServerRequestInterface
 
     /**
      * {@inheritdoc}
-     * @return static
      */
     public function withParsedBody($data)
     {

@@ -21,27 +21,36 @@ use function get_called_class;
 
 abstract class Psr17Factory implements Psr17FactoryInterface
 {
-    protected static string $responseFactoryClass;
+    /**
+     * @var string
+     */
+    protected static $responseFactoryClass;
 
-    protected static string $streamFactoryClass;
+    /**
+     * @var string
+     */
+    protected static $streamFactoryClass;
 
-    protected static string $serverRequestCreatorClass;
+    /**
+     * @var string
+     */
+    protected static $serverRequestCreatorClass;
 
-    protected static string $serverRequestCreatorMethod;
+    /**
+     * @var string
+     */
+    protected static $serverRequestCreatorMethod;
 
     /**
      * {@inheritdoc}
      */
     public static function getResponseFactory(): ResponseFactoryInterface
     {
-        if (
-            !static::isResponseFactoryAvailable()
-            || !(($responseFactory = new static::$responseFactoryClass()) instanceof ResponseFactoryInterface)
-        ) {
+        if (!static::isResponseFactoryAvailable()) {
             throw new RuntimeException(get_called_class() . ' could not instantiate a response factory.');
         }
 
-        return $responseFactory;
+        return new static::$responseFactoryClass();
     }
 
     /**
@@ -49,14 +58,11 @@ abstract class Psr17Factory implements Psr17FactoryInterface
      */
     public static function getStreamFactory(): StreamFactoryInterface
     {
-        if (
-            !static::isStreamFactoryAvailable()
-            || !(($streamFactory = new static::$streamFactoryClass()) instanceof StreamFactoryInterface)
-        ) {
+        if (!static::isStreamFactoryAvailable()) {
             throw new RuntimeException(get_called_class() . ' could not instantiate a stream factory.');
         }
 
-        return $streamFactory;
+        return new static::$streamFactoryClass();
     }
 
     /**

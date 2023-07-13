@@ -38,38 +38,59 @@ class Uri implements UriInterface
 
     /**
      * Uri scheme (without "://" suffix)
+     *
+     * @var string
      */
-    protected string $scheme = '';
+    protected $scheme = '';
 
-    protected string $user = '';
+    /**
+     * @var string
+     */
+    protected $user = '';
 
-    protected string $password = '';
+    /**
+     * @var string
+     */
+    protected $password = '';
 
-    protected string $host = '';
+    /**
+     * @var string
+     */
+    protected $host = '';
 
-    protected ?int $port;
+    /**
+     * @var null|int
+     */
+    protected $port;
 
-    protected string $path = '';
+    /**
+     * @var string
+     */
+    protected $path = '';
 
     /**
      * Uri query string (without "?" prefix)
+     *
+     * @var string
      */
-    protected string $query = '';
+    protected $query = '';
 
     /**
      * Uri fragment string (without "#" prefix)
+     *
+     * @var string
      */
-    protected string $fragment = '';
+    protected $fragment = '';
 
     /**
-     * @param string   $scheme   Uri scheme.
-     * @param string   $host     Uri host.
-     * @param int|null $port     Uri port number.
-     * @param string   $path     Uri path.
-     * @param string   $query    Uri query string.
-     * @param string   $fragment Uri fragment.
-     * @param string   $user     Uri user.
-     * @param string   $password Uri password.
+     * @param string $scheme   Uri scheme.
+     * @param string $host     Uri host.
+     * @param int    $port     Uri port number.
+     * @param string $path     Uri path.
+     * @param string $query    Uri query string.
+     * @param string $fragment Uri fragment.
+     * @param string $user     Uri user.
+     * @param string $password Uri password.
      */
     public function __construct(
         string $scheme,
@@ -87,8 +108,8 @@ class Uri implements UriInterface
         $this->path = $this->filterPath($path);
         $this->query = $this->filterQuery($query);
         $this->fragment = $this->filterFragment($fragment);
-        $this->user = $this->filterUserInfo($user);
-        $this->password = $this->filterUserInfo($password);
+        $this->user = $user;
+        $this->password = $password;
     }
 
     /**
@@ -101,7 +122,6 @@ class Uri implements UriInterface
 
     /**
      * {@inheritdoc}
-     * @return static
      */
     public function withScheme($scheme)
     {
@@ -157,7 +177,7 @@ class Uri implements UriInterface
     {
         $info = $this->user;
 
-        if ($this->password !== '') {
+        if (isset($this->password) && $this->password !== '') {
             $info .= ':' . $this->password;
         }
 
@@ -166,7 +186,6 @@ class Uri implements UriInterface
 
     /**
      * {@inheritdoc}
-     * @return static
      */
     public function withUserInfo($user, $password = null)
     {
@@ -218,7 +237,6 @@ class Uri implements UriInterface
 
     /**
      * {@inheritdoc}
-     * @return static
      */
     public function withHost($host)
     {
@@ -267,7 +285,6 @@ class Uri implements UriInterface
 
     /**
      * {@inheritdoc}
-     * @return static
      */
     public function withPort($port)
     {
@@ -291,9 +308,9 @@ class Uri implements UriInterface
     /**
      * Filter Uri port.
      *
-     * @param  int|null $port The Uri port number.
+     * @param  null|int $port The Uri port number.
      *
-     * @return int|null
+     * @return null|int
      *
      * @throws InvalidArgumentException If the port is invalid.
      */
@@ -316,7 +333,6 @@ class Uri implements UriInterface
 
     /**
      * {@inheritdoc}
-     * @return static
      */
     public function withPath($path)
     {
@@ -365,7 +381,6 @@ class Uri implements UriInterface
 
     /**
      * {@inheritdoc}
-     * @return static
      */
     public function withQuery($query)
     {
@@ -416,7 +431,6 @@ class Uri implements UriInterface
 
     /**
      * {@inheritdoc}
-     * @return static
      */
     public function withFragment($fragment)
     {

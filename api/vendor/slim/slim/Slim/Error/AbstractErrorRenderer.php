@@ -22,10 +22,20 @@ use Throwable;
  */
 abstract class AbstractErrorRenderer implements ErrorRendererInterface
 {
-    protected string $defaultErrorTitle = 'Slim Application Error';
+    /**
+     * @var string
+     */
+    protected $defaultErrorTitle = 'Slim Application Error';
 
-    protected string $defaultErrorDescription = 'A website error has occurred. Sorry for the temporary inconvenience.';
+    /**
+     * @var string
+     */
+    protected $defaultErrorDescription = 'A website error has occurred. Sorry for the temporary inconvenience.';
 
+    /**
+     * @param Throwable $exception
+     * @return string
+     */
     protected function getErrorTitle(Throwable $exception): string
     {
         if ($exception instanceof HttpException) {
@@ -35,6 +45,10 @@ abstract class AbstractErrorRenderer implements ErrorRendererInterface
         return $this->defaultErrorTitle;
     }
 
+    /**
+     * @param Throwable $exception
+     * @return string
+     */
     protected function getErrorDescription(Throwable $exception): string
     {
         if ($exception instanceof HttpException) {

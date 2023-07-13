@@ -14,5 +14,8 @@ use Psr\Http\Message\ServerRequestInterface;
 
 interface ServerRequestCreatorInterface
 {
+    /**
+     * @return ServerRequestInterface
+     */
     public function createServerRequestFromGlobals(): ServerRequestInterface;
 }

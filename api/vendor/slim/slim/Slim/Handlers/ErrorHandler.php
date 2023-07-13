@@ -46,7 +46,10 @@ use function preg_match;
  */
 class ErrorHandler implements ErrorHandlerInterface
 {
-    protected string $defaultErrorRendererContentType = 'text/html';
+    /**
+     * @var string
+     */
+    protected $defaultErrorRendererContentType = 'text/html';
 
     /**
      * @var ErrorRendererInterface|string|callable
@@ -61,7 +64,7 @@ class ErrorHandler implements ErrorHandlerInterface
     /**
      * @var array<string|callable>
      */
-    protected array $errorRenderers = [
+    protected $errorRenderers = [
         'application/json' => JsonErrorRenderer::class,
         'application/xml' => XmlErrorRenderer::class,
         'text/xml' => XmlErrorRenderer::class,
@@ -69,28 +72,66 @@ class ErrorHandler implements ErrorHandlerInterface
         'text/plain' => PlainTextErrorRenderer::class,
     ];
 
-    protected bool $displayErrorDetails = false;
+    /**
+     * @var bool
+     */
+    protected $displayErrorDetails;
 
-    protected bool $logErrors;
+    /**
+     * @var bool
+     */
+    protected $logErrors;
 
-    protected bool $logErrorDetails = false;
+    /**
+     * @var bool
+     */
+    protected $logErrorDetails;
 
-    protected ?string $contentType = null;
+    /**
+     * @var string|null
+     */
+    protected $contentType;
 
-    protected ?string $method = null;
+    /**
+     * @var string
+     */
+    protected $method;
 
-    protected ServerRequestInterface $request;
+    /**
+     * @var ServerRequestInterface
+     */
+    protected $request;
 
-    protected Throwable $exception;
+    /**
+     * @var Throwable
+     */
+    protected $exception;
 
-    protected int $statusCode;
+    /**
+     * @var int
+     */
+    protected $statusCode;
 
-    protected CallableResolverInterface $callableResolver;
+    /**
+     * @var CallableResolverInterface
+     */
+    protected $callableResolver;
 
-    protected ResponseFactoryInterface $responseFactory;
+    /**
+     * @var ResponseFactoryInterface
+     */
+    protected $responseFactory;
 
-    protected LoggerInterface $logger;
+    /**
+     * @var LoggerInterface
+     */
+    protected $logger;
 
+    /**
+     * @param CallableResolverInterface $callableResolver
+     * @param ResponseFactoryInterface  $responseFactory
+     * @param LoggerInterface|null      $logger
+     */
     public function __construct(
         CallableResolverInterface $callableResolver,
         ResponseFactoryInterface $responseFactory,
@@ -109,6 +150,8 @@ class ErrorHandler implements ErrorHandlerInterface
      * @param bool                   $displayErrorDetails Whether or not to display the error details
      * @param bool                   $logErrors           Whether or not to log errors
      * @param bool                   $logErrorDetails     Whether or not to log error details
+     *
+     * @return ResponseInterface
      */
     public function __invoke(
         ServerRequestInterface $request,
@@ -145,6 +188,9 @@ class ErrorHandler implements ErrorHandlerInterface
         $this->contentType = $contentType;
     }
 
+    /**
+     * @return int
+     */
     protected function determineStatusCode(): int
     {
         if ($this->method === 'OPTIONS') {
@@ -164,6 +210,9 @@ class ErrorHandler implements ErrorHandlerInterface
      * Note: This method is a bare-bones implementation designed specifically for
      * Slim's error handling requirements. Consider a fully-feature solution such
      * as willdurand/negotiation for any other situation.
+     *
+     * @param ServerRequestInterface $request
+     * @return string|null
      */
     protected function determineContentType(ServerRequestInterface $request): ?string
     {
@@ -205,6 +254,8 @@ class ErrorHandler implements ErrorHandlerInterface
 
     /**
      * Determine which renderer to use based on content type
+     *
+     * @return callable
      *
      * @throws RuntimeException
      */
@@ -254,6 +305,8 @@ class ErrorHandler implements ErrorHandlerInterface
 
     /**
      * Write to the error log if $logErrors has been set to true
+     *
+     * @return void
      */
     protected function writeToErrorLog(): void
     {
@@ -268,6 +321,9 @@ class ErrorHandler implements ErrorHandlerInterface
 
     /**
      * Wraps the error_log function so that this can be easily tested
+     *
+     * @param string $error
+     * @return void
      */
     protected function logError(string $error): void
     {
@@ -276,12 +332,17 @@ class ErrorHandler implements ErrorHandlerInterface
 
     /**
      * Returns a default logger implementation.
+     *
+     * @return LoggerInterface
      */
     protected function getDefaultLogger(): LoggerInterface
     {
         return new Logger();
     }
 
+    /**
+     * @return ResponseInterface
+     */
     protected function respond(): ResponseInterface
     {
         $response = $this->responseFactory->createResponse($this->statusCode);
@@ -298,10 +359,7 @@ class ErrorHandler implements ErrorHandlerInterface
 
         $renderer = $this->determineRenderer();
         $body = call_user_func($renderer, $this->exception, $this->displayErrorDetails);
-        if ($body !== false) {
-            /** @var string $body */
-            $response->getBody()->write($body);
-        }
+        $response->getBody()->write($body);
 
         return $response;
     }

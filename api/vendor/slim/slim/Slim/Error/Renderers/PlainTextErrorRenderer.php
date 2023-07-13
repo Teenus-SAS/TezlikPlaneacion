@@ -22,6 +22,11 @@ use function sprintf;
  */
 class PlainTextErrorRenderer extends AbstractErrorRenderer
 {
+    /**
+     * @param Throwable $exception
+     * @param bool      $displayErrorDetails
+     * @return string
+     */
     public function __invoke(Throwable $exception, bool $displayErrorDetails): string
     {
         $text = "{$this->getErrorTitle($exception)}\n";
@@ -38,21 +43,38 @@ class PlainTextErrorRenderer extends AbstractErrorRenderer
         return $text;
     }
 
+    /**
+     * @param Throwable $exception
+     * @return string
+     */
     private function formatExceptionFragment(Throwable $exception): string
     {
         $text = sprintf("Type: %s\n", get_class($exception));
 
         $code = $exception->getCode();
-        /** @var int|string $code */
-        $text .= sprintf("Code: %s\n", $code);
+        if ($code !== null) {
+            $text .= sprintf("Code: %s\n", $code);
+        }
 
-        $text .= sprintf("Message: %s\n", htmlentities($exception->getMessage()));
+        $message = $exception->getMessage();
+        if ($message !== null) {
+            $text .= sprintf("Message: %s\n", htmlentities($message));
+        }
 
-        $text .= sprintf("File: %s\n", $exception->getFile());
+        $file = $exception->getFile();
+        if ($file !== null) {
+            $text .= sprintf("File: %s\n", $file);
+        }
 
-        $text .= sprintf("Line: %s\n", $exception->getLine());
+        $line = $exception->getLine();
+        if ($line !== null) {
+            $text .= sprintf("Line: %s\n", $line);
+        }
 
-        $text .= sprintf('Trace: %s', $exception->getTraceAsString());
+        $trace = $exception->getTraceAsString();
+        if ($trace !== null) {
+            $text .= sprintf('Trace: %s', $trace);
+        }
 
         return $text;
     }

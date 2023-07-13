@@ -40,47 +40,59 @@ class Route implements RouteInterface, RequestHandlerInterface
      *
      * @var string[]
      */
-    protected array $methods = [];
+    protected $methods = [];
 
     /**
      * Route identifier
+     *
+     * @var string
      */
-    protected string $identifier;
+    protected $identifier;
 
     /**
      * Route name
+     *
+     * @var null|string
      */
-    protected ?string $name = null;
+    protected $name;
 
     /**
      * Parent route groups
      *
      * @var RouteGroupInterface[]
      */
-    protected array $groups;
+    protected $groups;
 
-    protected InvocationStrategyInterface $invocationStrategy;
+    /**
+     * @var InvocationStrategyInterface
+     */
+    protected $invocationStrategy;
 
     /**
      * Route parameters
      *
-     * @var array<string, string>
+     * @var string[]
      */
-    protected array $arguments = [];
+    protected $arguments = [];
 
     /**
      * Route arguments parameters
      *
      * @var string[]
      */
-    protected array $savedArguments = [];
+    protected $savedArguments = [];
 
     /**
      * Container
+     *
+     * @var ContainerInterface|null
      */
-    protected ?ContainerInterface $container = null;
+    protected $container;
 
-    protected MiddlewareDispatcher $middlewareDispatcher;
+    /**
+     * @var MiddlewareDispatcher
+     */
+    protected $middlewareDispatcher;
 
     /**
      * Route callable
@@ -89,16 +101,27 @@ class Route implements RouteInterface, RequestHandlerInterface
      */
     protected $callable;
 
-    protected CallableResolverInterface $callableResolver;
+    /**
+     * @var CallableResolverInterface
+     */
+    protected $callableResolver;
 
-    protected ResponseFactoryInterface $responseFactory;
+    /**
+     * @var ResponseFactoryInterface
+     */
+    protected $responseFactory;
 
     /**
      * Route pattern
+     *
+     * @var string
      */
-    protected string $pattern;
+    protected $pattern;
 
-    protected bool $groupMiddlewareAppended = false;
+    /**
+     * @var bool
+     */
+    protected $groupMiddlewareAppended = false;
 
     /**
      * @param string[]                         $methods    The route HTTP methods
@@ -134,6 +157,9 @@ class Route implements RouteInterface, RequestHandlerInterface
         $this->middlewareDispatcher = new MiddlewareDispatcher($this, $callableResolver, $container);
     }
 
+    /**
+     * @return CallableResolverInterface
+     */
     public function getCallableResolver(): CallableResolverInterface
     {
         return $this->callableResolver;
@@ -286,7 +312,7 @@ class Route implements RouteInterface, RequestHandlerInterface
      */
     public function prepare(array $arguments): RouteInterface
     {
-        $this->arguments = array_replace($this->savedArguments, $arguments);
+        $this->arguments = array_replace($this->savedArguments, $arguments) ?? [];
         return $this;
     }
 

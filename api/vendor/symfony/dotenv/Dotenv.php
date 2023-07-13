@@ -29,19 +29,28 @@ final class Dotenv
     public const STATE_VARNAME = 0;
     public const STATE_VALUE = 1;
 
-    private string $path;
-    private int $cursor;
-    private int $lineno;
-    private string $data;
-    private int $end;
-    private array $values = [];
-    private string $envKey;
-    private string $debugKey;
-    private array $prodEnvs = ['prod'];
-    private bool $usePutenv = false;
+    private $path;
+    private $cursor;
+    private $lineno;
+    private $data;
+    private $end;
+    private $values;
+    private $envKey;
+    private $debugKey;
+    private $prodEnvs = ['prod'];
+    private $usePutenv = false;
 
-    public function __construct(string $envKey = 'APP_ENV', string $debugKey = 'APP_DEBUG')
+    /**
+     * @param string $envKey
+     */
+    public function __construct($envKey = 'APP_ENV', string $debugKey = 'APP_DEBUG')
     {
+        if (\in_array($envKey = (string) $envKey, ['1', ''], true)) {
+            trigger_deprecation('symfony/dotenv', '5.1', 'Passing a boolean to the constructor of "%s" is deprecated, use "Dotenv::usePutenv()".', __CLASS__);
+            $this->usePutenv = (bool) $envKey;
+            $envKey = 'APP_ENV';
+        }
+
         $this->envKey = $envKey;
         $this->debugKey = $debugKey;
     }
@@ -49,7 +58,7 @@ final class Dotenv
     /**
      * @return $this
      */
-    public function setProdEnvs(array $prodEnvs): static
+    public function setProdEnvs(array $prodEnvs): self
     {
         $this->prodEnvs = $prodEnvs;
 
@@ -62,7 +71,7 @@ final class Dotenv
      *
      * @return $this
      */
-    public function usePutenv(bool $usePutenv = true): static
+    public function usePutenv(bool $usePutenv = true): self
     {
         $this->usePutenv = $usePutenv;
 
@@ -72,8 +81,8 @@ final class Dotenv
     /**
      * Loads one or several .env files.
      *
-     * @param string $path          A file to load
-     * @param string ...$extraPaths A list of additional files to load
+     * @param string    $path       A file to load
+     * @param ...string $extraPaths A list of additional files to load
      *
      * @throws FormatException when a file has a syntax error
      * @throws PathException   when a file does not exist or is not readable
@@ -89,30 +98,30 @@ final class Dotenv
      * .env.local is always ignored in test env because tests should produce the same results for everyone.
      * .env.dist is loaded when it exists and .env is not found.
      *
-     * @param string      $path       A file to load
-     * @param string|null $envKey     The name of the env vars that defines the app env
-     * @param string      $defaultEnv The app env to use when none is defined
-     * @param array       $testEnvs   A list of app envs for which .env.local should be ignored
+     * @param string $path        A file to load
+     * @param string $envKey|null The name of the env vars that defines the app env
+     * @param string $defaultEnv  The app env to use when none is defined
+     * @param array  $testEnvs    A list of app envs for which .env.local should be ignored
      *
      * @throws FormatException when a file has a syntax error
      * @throws PathException   when a file does not exist or is not readable
      */
-    public function loadEnv(string $path, string $envKey = null, string $defaultEnv = 'dev', array $testEnvs = ['test'], bool $overrideExistingVars = false): void
+    public function loadEnv(string $path, string $envKey = null, string $defaultEnv = 'dev', array $testEnvs = ['test']): void
     {
         $k = $envKey ?? $this->envKey;
 
         if (is_file($path) || !is_file($p = "$path.dist")) {
-            $this->doLoad($overrideExistingVars, [$path]);
+            $this->load($path);
         } else {
-            $this->doLoad($overrideExistingVars, [$p]);
+            $this->load($p);
         }
 
         if (null === $env = $_SERVER[$k] ?? $_ENV[$k] ?? null) {
-            $this->populate([$k => $env = $defaultEnv], $overrideExistingVars);
+            $this->populate([$k => $env = $defaultEnv]);
         }
 
         if (!\in_array($env, $testEnvs, true) && is_file($p = "$path.local")) {
-            $this->doLoad($overrideExistingVars, [$p]);
+            $this->load($p);
             $env = $_SERVER[$k] ?? $_ENV[$k] ?? $env;
         }
 
@@ -121,11 +130,11 @@ final class Dotenv
         }
 
         if (is_file($p = "$path.$env")) {
-            $this->doLoad($overrideExistingVars, [$p]);
+            $this->load($p);
         }
 
         if (is_file($p = "$path.$env.local")) {
-            $this->doLoad($overrideExistingVars, [$p]);
+            $this->load($p);
         }
     }
 
@@ -136,30 +145,30 @@ final class Dotenv
      *
      * See method loadEnv() for rules related to .env files.
      */
-    public function bootEnv(string $path, string $defaultEnv = 'dev', array $testEnvs = ['test'], bool $overrideExistingVars = false): void
+    public function bootEnv(string $path, string $defaultEnv = 'dev', array $testEnvs = ['test']): void
     {
-        $p = $path.'.local.php';
+        $p = $path . '.local.php';
         $env = is_file($p) ? include $p : null;
         $k = $this->envKey;
 
-        if (\is_array($env) && ($overrideExistingVars || !isset($env[$k]) || ($_SERVER[$k] ?? $_ENV[$k] ?? $env[$k]) === $env[$k])) {
-            $this->populate($env, $overrideExistingVars);
+        if (\is_array($env) && (!isset($env[$k]) || ($_SERVER[$k] ?? $_ENV[$k] ?? $env[$k]) === $env[$k])) {
+            $this->populate($env);
         } else {
-            $this->loadEnv($path, $k, $defaultEnv, $testEnvs, $overrideExistingVars);
+            $this->loadEnv($path, $k, $defaultEnv, $testEnvs);
         }
 
         $_SERVER += $_ENV;
 
         $k = $this->debugKey;
         $debug = $_SERVER[$k] ?? !\in_array($_SERVER[$this->envKey], $this->prodEnvs, true);
-        $_SERVER[$k] = $_ENV[$k] = (int) $debug || (!\is_bool($debug) && filter_var($debug, \FILTER_VALIDATE_BOOL)) ? '1' : '0';
+        $_SERVER[$k] = $_ENV[$k] = (int) $debug || (!\is_bool($debug) && filter_var($debug, \FILTER_VALIDATE_BOOLEAN)) ? '1' : '0';
     }
 
     /**
      * Loads one or several .env files and enables override existing vars.
      *
-     * @param string $path          A file to load
-     * @param string ...$extraPaths A list of additional files to load
+     * @param string    $path       A file to load
+     * @param ...string $extraPaths A list of additional files to load
      *
      * @throws FormatException when a file has a syntax error
      * @throws PathException   when a file does not exist or is not readable
@@ -181,7 +190,7 @@ final class Dotenv
         $loadedVars = array_flip(explode(',', $_SERVER['SYMFONY_DOTENV_VARS'] ?? $_ENV['SYMFONY_DOTENV_VARS'] ?? ''));
 
         foreach ($values as $name => $value) {
-            $notHttpName = !str_starts_with($name, 'HTTP_');
+            $notHttpName = 0 !== strpos($name, 'HTTP_');
             if (isset($_SERVER[$name]) && $notHttpName && !isset($_ENV[$name])) {
                 $_ENV[$name] = $_SERVER[$name];
             }
@@ -211,7 +220,7 @@ final class Dotenv
             $_ENV['SYMFONY_DOTENV_VARS'] = $_SERVER['SYMFONY_DOTENV_VARS'] = $loadedVars;
 
             if ($this->usePutenv) {
-                putenv('SYMFONY_DOTENV_VARS='.$loadedVars);
+                putenv('SYMFONY_DOTENV_VARS=' . $loadedVars);
             }
         }
     }
@@ -221,6 +230,8 @@ final class Dotenv
      *
      * @param string $data The data to be parsed
      * @param string $path The original file name where data where stored (used for more meaningful error messages)
+     *
+     * @return array An array of env variables
      *
      * @throws FormatException when a file has a syntax error
      */
@@ -259,14 +270,15 @@ final class Dotenv
             return $this->values;
         } finally {
             $this->values = [];
-            unset($this->path, $this->cursor, $this->lineno, $this->data, $this->end);
+            $this->data = null;
+            $this->path = null;
         }
     }
 
     private function lexVarname(): string
     {
         // var name + optional export
-        if (!preg_match('/(export[ \t]++)?('.self::VARNAME_REGEX.')/A', $this->data, $matches, 0, $this->cursor)) {
+        if (!preg_match('/(export[ \t]++)?(' . self::VARNAME_REGEX . ')/A', $this->data, $matches, 0, $this->cursor)) {
             throw $this->createFormatException('Invalid character in variable name');
         }
         $this->moveCursor($matches[0]);
@@ -304,7 +316,7 @@ final class Dotenv
             throw $this->createFormatException('Whitespace are not supported before the value');
         }
 
-        $loadedVars = array_flip(explode(',', $_SERVER['SYMFONY_DOTENV_VARS'] ?? $_ENV['SYMFONY_DOTENV_VARS'] ?? ''));
+        $loadedVars = array_flip(explode(',', $_SERVER['SYMFONY_DOTENV_VARS'] ?? ($_ENV['SYMFONY_DOTENV_VARS'] ?? '')));
         unset($loadedVars['']);
         $v = '';
 
@@ -356,7 +368,7 @@ final class Dotenv
 
                     if ('$' === $this->data[$this->cursor] && isset($this->data[$this->cursor + 1]) && '(' === $this->data[$this->cursor + 1]) {
                         ++$this->cursor;
-                        $value .= '('.$this->lexNestedExpression().')';
+                        $value .= '(' . $this->lexNestedExpression() . ')';
                     }
 
                     ++$this->cursor;
@@ -393,7 +405,7 @@ final class Dotenv
             $value .= $this->data[$this->cursor];
 
             if ('(' === $this->data[$this->cursor]) {
-                $value .= $this->lexNestedExpression().')';
+                $value .= $this->lexNestedExpression() . ')';
             }
 
             ++$this->cursor;
@@ -419,7 +431,7 @@ final class Dotenv
 
     private function resolveCommands(string $value, array $loadedVars): string
     {
-        if (!str_contains($value, '$')) {
+        if (false === strpos($value, '$')) {
             return $value;
         }
 
@@ -446,11 +458,16 @@ final class Dotenv
                 throw new \LogicException('Resolving commands requires the Symfony Process component.');
             }
 
-            $process = Process::fromShellCommandline('echo '.$matches[0]);
+            $process = method_exists(Process::class, 'fromShellCommandline') ? Process::fromShellCommandline('echo ' . $matches[0]) : new Process('echo ' . $matches[0]);
+
+            if (!method_exists(Process::class, 'fromShellCommandline') && method_exists(Process::class, 'inheritEnvironmentVariables')) {
+                // Symfony 3.4 does not inherit env vars by default:
+                $process->inheritEnvironmentVariables();
+            }
 
             $env = [];
             foreach ($this->values as $name => $value) {
-                if (isset($loadedVars[$name]) || (!isset($_ENV[$name]) && !(isset($_SERVER[$name]) && !str_starts_with($name, 'HTTP_')))) {
+                if (isset($loadedVars[$name]) || (!isset($_ENV[$name]) && !(isset($_SERVER[$name]) && 0 !== strpos($name, 'HTTP_')))) {
                     $env[$name] = $value;
                 }
             }
@@ -458,7 +475,7 @@ final class Dotenv
 
             try {
                 $process->mustRun();
-            } catch (ProcessException) {
+            } catch (ProcessException $e) {
                 throw $this->createFormatException(sprintf('Issue expanding a command (%s)', $process->getErrorOutput()));
             }
 
@@ -468,7 +485,7 @@ final class Dotenv
 
     private function resolveVariables(string $value, array $loadedVars): string
     {
-        if (!str_contains($value, '$')) {
+        if (false === strpos($value, '$')) {
             return $value;
         }
 
@@ -478,7 +495,7 @@ final class Dotenv
             \$
             (?!\()                             # no opening parenthesis
             (?P<opening_brace>\{)?             # optional brace
-            (?P<name>'.self::VARNAME_REGEX.')? # var name
+            (?P<name>' . self::VARNAME_REGEX . ')? # var name
             (?P<default_value>:[-=][^\}]++)?   # optional default value
             (?P<closing_brace>\})?             # optional closing brace
         /x';
@@ -503,7 +520,7 @@ final class Dotenv
                 $value = $this->values[$name];
             } elseif (isset($_ENV[$name])) {
                 $value = $_ENV[$name];
-            } elseif (isset($_SERVER[$name]) && !str_starts_with($name, 'HTTP_')) {
+            } elseif (isset($_SERVER[$name]) && 0 !== strpos($name, 'HTTP_')) {
                 $value = $_SERVER[$name];
             } elseif (isset($this->values[$name])) {
                 $value = $this->values[$name];
@@ -528,7 +545,7 @@ final class Dotenv
                 $value .= '}';
             }
 
-            return $matches['backslashes'].$value;
+            return $matches['backslashes'] . $value;
         }, $value);
 
         return $value;

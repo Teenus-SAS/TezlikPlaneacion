@@ -27,33 +27,59 @@ use function is_subclass_of;
 
 class ErrorMiddleware implements MiddlewareInterface
 {
-    protected CallableResolverInterface $callableResolver;
+    /**
+     * @var CallableResolverInterface
+     */
+    protected $callableResolver;
 
-    protected ResponseFactoryInterface $responseFactory;
+    /**
+     * @var ResponseFactoryInterface
+     */
+    protected $responseFactory;
 
-    protected bool $displayErrorDetails;
+    /**
+     * @var bool
+     */
+    protected $displayErrorDetails;
 
-    protected bool $logErrors;
+    /**
+     * @var bool
+     */
+    protected $logErrors;
 
-    protected bool $logErrorDetails;
+    /**
+     * @var bool
+     */
+    protected $logErrorDetails;
 
-    protected ?LoggerInterface $logger = null;
+    /**
+     * @var LoggerInterface|null
+     */
+    protected $logger;
 
     /**
      * @var ErrorHandlerInterface[]|callable[]|string[]
      */
-    protected array $handlers = [];
+    protected $handlers = [];
 
     /**
      * @var ErrorHandlerInterface[]|callable[]|string[]
      */
-    protected array $subClassHandlers = [];
+    protected $subClassHandlers = [];
 
     /**
      * @var ErrorHandlerInterface|callable|string|null
      */
     protected $defaultErrorHandler;
 
+    /**
+     * @param CallableResolverInterface $callableResolver
+     * @param ResponseFactoryInterface  $responseFactory
+     * @param bool                      $displayErrorDetails
+     * @param bool                      $logErrors
+     * @param bool                      $logErrorDetails
+     * @param LoggerInterface|null      $logger
+     */
     public function __construct(
         CallableResolverInterface $callableResolver,
         ResponseFactoryInterface $responseFactory,
@@ -70,6 +96,11 @@ class ErrorMiddleware implements MiddlewareInterface
         $this->logger = $logger;
     }
 
+    /**
+     * @param ServerRequestInterface  $request
+     * @param RequestHandlerInterface $handler
+     * @return ResponseInterface
+     */
     public function process(ServerRequestInterface $request, RequestHandlerInterface $handler): ResponseInterface
     {
         try {
@@ -79,6 +110,11 @@ class ErrorMiddleware implements MiddlewareInterface
         }
     }
 
+    /**
+     * @param ServerRequestInterface $request
+     * @param Throwable              $exception
+     * @return ResponseInterface
+     */
     public function handleException(ServerRequestInterface $request, Throwable $exception): ResponseInterface
     {
         if ($exception instanceof HttpException) {
@@ -152,6 +188,7 @@ class ErrorMiddleware implements MiddlewareInterface
      * \Psr\Http\Message\ResponseInterface.
      *
      * @param string|callable|ErrorHandler $handler
+     * @return self
      */
     public function setDefaultErrorHandler($handler): self
     {
@@ -183,6 +220,8 @@ class ErrorMiddleware implements MiddlewareInterface
      * ie: RuntimeException::class or an array of classes
      * ie: [HttpNotFoundException::class, HttpMethodNotAllowedException::class]
      * @param string|callable|ErrorHandlerInterface $handler
+     * @param bool $handleSubclasses
+     * @return self
      */
     public function setErrorHandler($typeOrTypes, $handler, bool $handleSubclasses = false): self
     {
@@ -199,7 +238,10 @@ class ErrorMiddleware implements MiddlewareInterface
 
     /**
      * Used internally to avoid code repetition when passing multiple exceptions to setErrorHandler().
+     * @param string $type
      * @param string|callable|ErrorHandlerInterface $handler
+     * @param bool   $handleSubclasses
+     * @return void
      */
     private function addErrorHandler(string $type, $handler, bool $handleSubclasses): void
     {

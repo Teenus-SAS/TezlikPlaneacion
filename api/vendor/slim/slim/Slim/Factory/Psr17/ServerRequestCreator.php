@@ -21,10 +21,14 @@ class ServerRequestCreator implements ServerRequestCreatorInterface
      */
     protected $serverRequestCreator;
 
-    protected string $serverRequestCreatorMethod;
+    /**
+     * @var string
+     */
+    protected $serverRequestCreatorMethod;
 
     /**
      * @param object|string $serverRequestCreator
+     * @param string        $serverRequestCreatorMethod
      */
     public function __construct($serverRequestCreator, string $serverRequestCreatorMethod)
     {

@@ -12,22 +12,34 @@ use Slim\Interfaces\RouteCollectorInterface;
 
 class Dispatcher implements DispatcherInterface
 {
-    private RouteCollectorInterface $routeCollector;
+    /**
+     * @var RouteCollectorInterface
+     */
+    private $routeCollector;
 
-    private ?FastRouteDispatcher $dispatcher = null;
+    /**
+     * @var FastRouteDispatcher|null
+     */
+    private $dispatcher;
 
+    /**
+     * @param RouteCollectorInterface $routeCollector
+     */
     public function __construct(RouteCollectorInterface $routeCollector)
     {
         $this->routeCollector = $routeCollector;
     }
 
+    /**
+     * @return FastRouteDispatcher
+     */
     protected function createDispatcher(): FastRouteDispatcher
     {
         if ($this->dispatcher) {
             return $this->dispatcher;
         }
 
-        $routeDefinitionCallback = function (FastRouteCollector $r): void {
+        $routeDefinitionCallback = function (FastRouteCollector $r) {
             $basePath = $this->routeCollector->getBasePath();
 
             foreach ($this->routeCollector->getRoutes() as $route) {

@@ -25,6 +25,10 @@ final class RouteContext
 
     public const BASE_PATH = '__basePath__';
 
+    /**
+     * @param ServerRequestInterface $serverRequest
+     * @return RouteContext
+     */
     public static function fromRequest(ServerRequestInterface $serverRequest): self
     {
         $route = $serverRequest->getAttribute(self::ROUTE);
@@ -36,21 +40,35 @@ final class RouteContext
             throw new RuntimeException('Cannot create RouteContext before routing has been completed');
         }
 
-        /** @var RouteInterface|null $route */
-        /** @var RouteParserInterface $routeParser */
-        /** @var RoutingResults $routingResults */
-        /** @var string|null $basePath */
         return new self($route, $routeParser, $routingResults, $basePath);
     }
 
-    private ?RouteInterface $route;
+    /**
+     * @var RouteInterface|null
+     */
+    private $route;
 
-    private RouteParserInterface $routeParser;
+    /**
+     * @var RouteParserInterface
+     */
+    private $routeParser;
 
-    private RoutingResults $routingResults;
+    /**
+     * @var RoutingResults
+     */
+    private $routingResults;
 
-    private ?string $basePath;
+    /**
+     * @var string|null
+     */
+    private $basePath;
 
+    /**
+     * @param RouteInterface|null  $route
+     * @param RouteParserInterface $routeParser
+     * @param RoutingResults       $routingResults
+     * @param string|null          $basePath
+     */
     private function __construct(
         ?RouteInterface $route,
         RouteParserInterface $routeParser,
@@ -63,21 +81,33 @@ final class RouteContext
         $this->basePath = $basePath;
     }
 
+    /**
+     * @return RouteInterface|null
+     */
     public function getRoute(): ?RouteInterface
     {
         return $this->route;
     }
 
+    /**
+     * @return RouteParserInterface
+     */
     public function getRouteParser(): RouteParserInterface
     {
         return $this->routeParser;
     }
 
+    /**
+     * @return RoutingResults
+     */
     public function getRoutingResults(): RoutingResults
     {
         return $this->routingResults;
     }
 
+    /**
+     * @return string
+     */
     public function getBasePath(): string
     {
         if ($this->basePath === null) {
