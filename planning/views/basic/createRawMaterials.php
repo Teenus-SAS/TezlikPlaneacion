@@ -43,7 +43,7 @@ if (sizeof($_SESSION) == 0)
                                 <div class="page-title">
                                     <h3 class="mb-1 font-weight-bold text-dark">Materias Primas</h3>
                                     <ol class="breadcrumb mb-3 mb-md-0">
-                                        <li class="breadcrumb-item active">Creación de Materias Primas</li>
+                                        <li class="breadcrumb-item active">Inventario Materias Prima</li>
                                     </ol>
                                 </div>
                             </div>
@@ -75,14 +75,6 @@ if (sizeof($_SESSION) == 0)
                                                     <label for="nameRawMaterial">Nombre Materia Prima</label>
                                                     <input type="text" class="form-control" id="nameRawMaterial" name="nameRawMaterial">
                                                 </div>
-                                                <div class="col-md-3 floating-label enable-floating-label show-label">
-                                                    <label for="validationCustom02">Categorias</label>
-                                                    <select class="form-control" id="category" name="category">
-                                                        <option value="" selected disabled>Seleccionar</option>
-                                                        <option value="1">Insumos</option>
-                                                        <option value="2">Materiales</option>
-                                                    </select>
-                                                </div>
                                             </div>
                                             <div class="form-row">
                                                 <div class="col-sm-3 floating-label enable-floating-label show-label" style="margin-bottom:20px">
@@ -96,7 +88,7 @@ if (sizeof($_SESSION) == 0)
                                                     <label for="">Unidad</label>
                                                 </div>
                                                 <div class="col-sm-2 floating-label enable-floating-label show-label">
-                                                    <label for="validationCustom05">Cantidad En Inventario</label>
+                                                    <label for="quantity">Existencias</label>
                                                     <input type="text" class="form-control text-center number" id="quantity" name="quantity">
                                                 </div>
                                                 <div class="col-sm mt-1">

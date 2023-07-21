@@ -58,7 +58,6 @@ $(document).ready(function () {
         maximumFractionDigits: 2,
       });
     $('#quantity').val(quantity);
-    $(`#category option[value=${data.category}]`).prop('selected', true);
 
     $('html, body').animate(
       {
@@ -74,9 +73,8 @@ $(document).ready(function () {
     let material = $('#nameRawMaterial').val();
     let unity = $('#unit').val();
     let quantity = $('#quantity').val();
-    let category = $('#category').val();
 
-    if (ref == '' || material == '' || unity == '' || category == '') {
+    if (ref == '' || material == '' || unity == '') {
       toastr.error('Ingrese todos los campos');
       return false;
     }

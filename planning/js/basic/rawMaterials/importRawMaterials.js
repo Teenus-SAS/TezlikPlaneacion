@@ -30,9 +30,8 @@ $(document).ready(function () {
           return {
             refRawMaterial: item.referencia.trim(),
             nameRawMaterial: item.material.trim(),
-            unityRawMaterial: item.unidad.trim(),
-            quantity: item.cantidad,
-            category: item.categoria,
+            unit: item.unidad.trim(),
+            quantity: item.existencia,
           };
         });
 

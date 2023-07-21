@@ -43,21 +43,25 @@
                                     <div class="col-md-3" id="navPlanBasics">
                                         <h5 class="font-size-14 font-weight-600">Básico</h5>
                                         <ul class="list-unstyled megamenu-list">
-                                            <?php if ($_SESSION['create_mold'] == 1) { ?>
-                                                <li class="invMolds"><a href="/planning/molds">Moldes</a></li>
-                                            <?php } ?>
+                                            <?php // if ($_SESSION['create_mold'] == 1) { 
+                                            ?>
+                                            <!-- <li class="invMolds"><a href="/planning/molds">Moldes</a></li> -->
+                                            <?php //} 
+                                            ?>
                                             <?php if ($_SESSION['planning_product'] == 1) { ?>
-                                                <li class="planProducts"><a href="/planning/products">Productos</a></li>
+                                                <li class="planProducts"><a href="/planning/products">Inventario Productos</a></li>
                                             <?php } ?>
                                             <?php if ($_SESSION['planning_material'] == 1) { ?>
-                                                <li class="planMaterials"><a href="/planning/materials">Materia Prima</a></li>
+                                                <li class="planMaterials"><a href="/planning/materials">Inventario Materias Prima</a></li>
                                             <?php } ?>
                                             <?php if ($_SESSION['planning_machine'] == 1) { ?>
                                                 <li class="planMachines"><a href="/planning/machines">Máquinas</a></li>
                                             <?php } ?>
-                                            <?php if ($_SESSION['planning_process'] == 1) { ?>
-                                                <li class="planProcess"><a href="/planning/process">Procesos</a></li>
-                                            <?php } ?>
+                                            <?php //if ($_SESSION['planning_process'] == 1) { 
+                                            ?>
+                                            <!-- <li class="planProcess"><a href="/planning/process">Procesos</a></li> -->
+                                            <?php //} 
+                                            ?>
                                         </ul>
                                     </div>
                                 <?php } ?>
@@ -71,15 +75,19 @@
                                             <?php if ($_SESSION['planning_products_material'] == 1) { ?>
                                                 <li class="planProductsMaterials"><a href="/planning/product-materials">Ficha Técnica Productos</a></li>
                                             <?php } ?>
-                                            <?php if ($_SESSION['planning_products_process'] == 1) { ?>
-                                                <li class="planProductsProcess"><a href="/planning/product-process">Ficha Técnica Procesos</a></li>
-                                            <?php } ?>
+                                            <?php //if ($_SESSION['planning_products_process'] == 1) { 
+                                            ?>
+                                            <!-- <li class="planProductsProcess"><a href="/planning/product-process">Ficha Técnica Procesos</a></li> -->
+                                            <?php //} 
+                                            ?>
                                             <?php if ($_SESSION['programs_machine'] == 1) { ?>
                                                 <li class="planningMachines"><a href="/planning/planning-machines">Datos Programación Máquinas</a></li>
                                             <?php } ?>
-                                            <?php if ($_SESSION['cicles_machine'] == 1) { ?>
-                                                <li class="planCiclesMachine"><a href="/planning/cicles-machines">Plan Ciclos Maquina</a></li>
-                                            <?php } ?>
+                                            <?php //if ($_SESSION['cicles_machine'] == 1) { 
+                                            ?>
+                                            <!-- <li class="planCiclesMachine"><a href="/planning/cicles-machines">Plan Ciclos Maquina</a></li> -->
+                                            <?php //} 
+                                            ?>
                                         </ul>
                                     </div>
                                 <?php } ?>

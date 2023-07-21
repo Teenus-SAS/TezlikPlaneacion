@@ -28,12 +28,7 @@ $(document).ready(function () {
         title: 'Producto',
         data: 'product',
         className: 'uniqueClassName',
-      },
-      {
-        title: 'Molde',
-        data: 'mold',
-        className: 'uniqueClassName',
-      },
+      }, 
       {
         title: 'Img',
         data: 'img',
@@ -43,13 +38,7 @@ $(document).ready(function () {
           ('use strict');
           return `<img src="${data}" alt="" style="width:80px;border-radius:100px">`;
         },
-      },
-      {
-        title: 'Categoria',
-        data: 'category',
-        className: 'uniqueClassName',
-        //render: function (data) {},
-      },
+      }, 
       {
         title: 'Acciones',
         data: 'id_product',

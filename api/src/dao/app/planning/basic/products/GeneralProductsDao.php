@@ -34,6 +34,22 @@ class GeneralProductsDao
         return $findProduct;
     }
 
+    /* Consultar si existe referencia o nombre de producto en BD por compañia */
+    public function findProductByReferenceOrName($dataProduct, $id_company)
+    {
+        $connection = Connection::getInstance()->getConnection();
+
+        $stmt = $connection->prepare("SELECT * FROM products
+                                      WHERE id_company = :id_company AND (reference = :reference OR product = :product)");
+        $stmt->execute([
+            'reference' => trim($dataProduct['referenceProduct']),
+            'product' => strtoupper(trim($dataProduct['product'])),
+            'id_company' => $id_company
+        ]);
+        $findProduct = $stmt->fetch($connection::FETCH_ASSOC);
+        return $findProduct;
+    }
+
     public function findProductByCategoryInProcess($dataProduct, $id_company)
     {
         $connection = Connection::getInstance()->getConnection();

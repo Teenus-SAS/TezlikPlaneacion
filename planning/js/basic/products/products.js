@@ -24,8 +24,7 @@ $(document).ready(function () {
     $('#btnCreateProduct').html('Crear Producto');
 
     sessionStorage.removeItem('id_product');
-
-    $('#idMold').css('border-color', '');
+ 
     $('#formCreateProduct').trigger('reset');
     $('#img').remove();
   });
@@ -39,9 +38,7 @@ $(document).ready(function () {
     if (idProduct == '' || idProduct == null) {
       ref = $('#referenceProduct').val();
       prod = $('#product').val();
-      quantity = $('#quantity').val();
-      mold = $('#idMold').val();
-      productsCategories = $('#productsCategories').val();
+      quantity = $('#quantity').val(); 
 
       if (
         ref == '' ||
@@ -54,13 +51,7 @@ $(document).ready(function () {
         toastr.error('Ingrese todos los campos');
         return false;
       }
-
-      if (!mold) {
-        toastr.error('Seleccione molde para crear el producto');
-        $('#idMold').css('border-color', 'red');
-        return false;
-      }
-
+ 
       let imageProd = $('#formFile')[0].files[0];
 
       dataProduct = new FormData(formCreateProduct);
@@ -77,8 +68,7 @@ $(document).ready(function () {
         success: function (resp) {
           $('.cardCreateProduct').hide(800);
           $('.cardImportProducts').hide(800);
-          $('#formFile').val('');
-          $('#idMold').css('border-color', '');
+          $('#formFile').val(''); 
           message(resp);
           updateTable();
         },
@@ -102,12 +92,7 @@ $(document).ready(function () {
     let data = tblProducts.fnGetData(row);
     $('#referenceProduct').val(data.reference);
     $('#product').val(data.product);
-    $('#quantity').val(data.quantity);
-    $(`#productsCategories option[value=${data.id_category}]`).prop(
-      'selected',
-      true
-    );
-    $(`#idMold option:contains(${data.mold})`).prop('selected', true);
+    $('#quantity').val(data.quantity); 
     $('#preview').html(
       `<img id="img" src="${data.img}" style="width:50%;padding-bottom:15px"/>`
     );

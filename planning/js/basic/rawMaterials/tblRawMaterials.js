@@ -30,18 +30,6 @@ $(document).ready(function () {
         className: 'classCenter',
       },
       {
-        title: 'Categoria',
-        data: null,
-        className: 'classCenter',
-        render: function (data) {
-          if (data.category == 1) category = 'Insumos';
-          if (data.category == 2) category = 'Materiales';
-          if (data.category == 0 || !data.category) category = '';
-
-          return `<p>${category}</p>`;
-        },
-      },
-      {
         title: 'Unidad',
         data: 'abbreviation',
         className: 'classCenter',

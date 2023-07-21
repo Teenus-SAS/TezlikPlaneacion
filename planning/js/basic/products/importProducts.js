@@ -29,11 +29,8 @@ $(document).ready(function () {
         let productsToImport = data.map((item) => {
           return {
             referenceProduct: item.referencia_producto.trim(),
-            product: item.producto.trim(),
-            referenceMold: item.referencia_molde.trim(),
-            quantity: item.cantidad_producto,
-            mold: item.molde.trim(),
-            category: item.categoria.trim(),
+            product: item.producto.trim(), 
+            quantity: item.existencias, 
           };
         });
         checkProduct(productsToImport);

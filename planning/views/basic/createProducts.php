@@ -44,7 +44,7 @@ if (sizeof($_SESSION) == 0)
                                 <div class="page-title">
                                     <h3 class="mb-1 font-weight-bold text-dark">Productos</h3>
                                     <ol class="breadcrumb mb-3 mb-md-0">
-                                        <li class="breadcrumb-item active">Creación de Productos</li>
+                                        <li class="breadcrumb-item active">Inventario Productos Terminados</li>
                                     </ol>
                                 </div>
                             </div>
@@ -77,28 +77,18 @@ if (sizeof($_SESSION) == 0)
                                                     <input type="text" class="form-control" name="product" id="product">
                                                 </div>
                                                 <div class="col-sm-3 floating-label enable-floating-label show-label">
-                                                    <label for="">Molde</label>
-                                                    <select class="form-control" name="idMold" id="idMold"></select>
+                                                    <label for="">Existencias</label>
+                                                    <input type="text" class="form-control text-center number" id="quantity" name="quantity">
                                                 </div>
                                             </div>
                                             <div class="row">
                                                 <div class="col-sm-8">
                                                     <div class="form-row">
-                                                        <div class="col-xs floating-label enable-floating-label show-label">
-                                                            <label for="">Cantidad en inventario</label>
-                                                            <input type="text" class="form-control text-center number" id="quantity" name="quantity">
-                                                        </div>
-                                                        <div class="col-sm-4 floating-label enable-floating-label show-label">
-                                                            <label for="category">Categoría</label>
-                                                            <select id="productsCategories" name="category" type="number" class="form-control"></select>
-                                                        </div>
-                                                    </div>
-                                                    <div class="form-row">
                                                         <div class="col-sm-6 floating-label enable-floating-label show-label">
                                                             <label for="formFile" class="form-label"> Cargar imagen producto</label>
                                                             <input class="form-control" type="file" id="formFile">
                                                         </div>
-                                                        <div class="col-sm-2 mt-1">
+                                                        <div class="col-sm-4 mt-1">
                                                             <button type="text" class="btn btn-success" id="btnCreateProduct">Crear Producto</button>
                                                         </div>
                                                     </div>

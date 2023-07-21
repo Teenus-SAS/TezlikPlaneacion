@@ -39,8 +39,8 @@ $app->post('/materialsDataValidation', function (Request $request, Response $res
         for ($i = 0; $i < sizeof($materials); $i++) {
 
             if (
-                empty($materials[$i]['refRawMaterial']) || empty($materials[$i]['nameRawMaterial']) || empty($materials[$i]['unityRawMaterial']) ||
-                empty($materials[$i]['quantity']) || empty($materials[$i]['category'])
+                empty($materials[$i]['refRawMaterial']) || empty($materials[$i]['nameRawMaterial']) ||
+                empty($materials[$i]['unit']) || empty($materials[$i]['quantity'])
             ) {
                 $i = $i + 1;
                 $dataImportMaterial = array('error' => true, 'message' => "Campos vacios. Fila: {$i}");
@@ -71,14 +71,17 @@ $app->post('/addMaterials', function (Request $request, Response $response, $arg
     $dataMaterials = sizeof($dataMaterial);
 
     if ($dataMaterials > 1) {
-        $materials = $materialsDao->insertMaterialsByCompany($dataMaterial, $id_company);
-
-        if ($materials == null)
-            $resp = array('success' => true, 'message' => 'Materia Prima creada correctamente');
-        else if (isset($materials['info']))
-            $resp = array('info' => true, 'message' => $materials['message']);
-        else
-            $resp = array('error' => true, 'message' => 'Ocurrio un error mientras ingresaba la información. Intente nuevamente');
+        $material = $generalMaterialsDao->findMaterial($dataMaterial, $id_company);
+        if (!$material) {
+            $materials = $materialsDao->insertMaterialsByCompany($dataMaterial, $id_company);
+            if ($materials == null)
+                $resp = array('success' => true, 'message' => 'Materia Prima creada correctamente');
+            else if (isset($materials['info']))
+                $resp = array('info' => true, 'message' => $materials['message']);
+            else
+                $resp = array('error' => true, 'message' => 'Ocurrio un error mientras ingresaba la información. Intente nuevamente');
+        } else
+            $resp = array('info' => true, 'message' => 'La materia prima ya existe. Ingrese una nueva');
     } else {
         $materials = $dataMaterial['importMaterials'];
 
@@ -103,18 +106,26 @@ $app->post('/addMaterials', function (Request $request, Response $response, $arg
 });
 
 $app->post('/updateMaterials', function (Request $request, Response $response, $args) use (
-    $materialsDao
+    $materialsDao,
+    $generalMaterialsDao
 ) {
+    session_start();
     $dataMaterial = $request->getParsedBody();
+    $id_company = $_SESSION['id_company'];
 
-    $materials = $materialsDao->updateMaterialsByCompany($dataMaterial);
+    $material = $generalMaterialsDao->findMaterial($dataMaterial, $id_company);
+    !is_array($material) ? $data['id_material'] = 0 : $data = $material;
+    if ($data['id_material'] == $dataMaterial['idMaterial'] || $data['id_material'] == 0) {
+        $materials = $materialsDao->updateMaterialsByCompany($dataMaterial);
 
-    if ($materials == null)
-        $resp = array('success' => true, 'message' => 'Materia Prima actualizada correctamente');
-    else if (isset($materials['info']))
-        $resp = array('info' => true, 'message' => $materials['message']);
-    else
-        $resp = array('error' => true, 'message' => 'Ocurrio un error mientras actualizaba la información. Intente nuevamente');
+        if ($materials == null)
+            $resp = array('success' => true, 'message' => 'Materia Prima actualizada correctamente');
+        else if (isset($materials['info']))
+            $resp = array('info' => true, 'message' => $materials['message']);
+        else
+            $resp = array('error' => true, 'message' => 'Ocurrio un error mientras actualizaba la información. Intente nuevamente');
+    } else
+        $resp = array('info' => true, 'message' => 'La materia prima ya existe. Ingrese una nueva');
 
     $response->getBody()->write(json_encode($resp));
     return $response->withStatus(200)->withHeader('Content-Type', 'application/json');

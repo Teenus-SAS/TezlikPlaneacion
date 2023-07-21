@@ -51,22 +51,6 @@ $app->post('/productsDataValidation', function (Request $request, Response $resp
                 break;
             }
 
-            // Obtener id Molde
-            $findMold = $invMoldsDao->findInvMold($products[$i], $id_company);
-            if (!$findMold) {
-                $i = $i + 1;
-                $dataImportProduct = array('error' => true, 'message' => "Molde no existe en la base de datos<br>Fila: {$i}");
-                break;
-            }
-
-            // Obtener id Categoria
-            $findCategory = $invCategoriesDao->findCategory($products[$i]);
-            if (!$findCategory) {
-                $i = $i + 1;
-                $dataImportProduct = array('error' => true, 'message' => "Categoria no existe en la base de datos<br>Fila: {$i}");
-                break;
-            }
-
             $findProduct = $generalProductsDao->findProduct($products[$i], $id_company);
             if (!$findProduct) $insert = $insert + 1;
             else $update = $update + 1;
@@ -96,32 +80,28 @@ $app->post('/addProduct', function (Request $request, Response $response, $args)
     $dataProducts = sizeof($dataProduct);
 
     if ($dataProducts > 1) {
-        //INGRESA id_company, referencia, producto. BD
-        $products = $productsDao->insertProductByCompany($dataProduct, $id_company);
+        $product = $generalProductsDao->findProductByReferenceOrName($dataProduct, $id_company);
+        if (!$product) {
+            //INGRESA id_company, referencia, producto. BD
+            $products = $productsDao->insertProductByCompany($dataProduct, $id_company);
 
-        //ULTIMO REGISTRO DE ID, EL MÁS ALTO
-        $lastProductId = $lastDataDao->lastInsertedProductId($id_company);
+            //ULTIMO REGISTRO DE ID, EL MÁS ALTO
+            $lastProductId = $lastDataDao->lastInsertedProductId($id_company);
 
-        if (sizeof($_FILES) > 0) $FilesDao->imageProduct($lastProductId['id_product'], $id_company);
+            if (sizeof($_FILES) > 0) $FilesDao->imageProduct($lastProductId['id_product'], $id_company);
 
-        if ($products == null)
-            $resp = array('success' => true, 'message' => 'Producto creado correctamente');
-        else if (isset($products['info']))
-            $resp = array('info' => true, 'message' => $products['message']);
-        else
-            $resp = array('error' => true, 'message' => 'Ocurrió un error mientras ingresaba la información. Intente nuevamente');
+            if ($products == null)
+                $resp = array('success' => true, 'message' => 'Producto creado correctamente');
+            else if (isset($products['info']))
+                $resp = array('info' => true, 'message' => $products['message']);
+            else
+                $resp = array('error' => true, 'message' => 'Ocurrió un error mientras ingresaba la información. Intente nuevamente');
+        } else
+            $resp = array('info' => true, 'message' => 'El producto ya existe en la base de datos. Ingrese uno nuevo');
     } else {
         $products = $dataProduct['importProducts'];
 
         for ($i = 0; $i < sizeof($products); $i++) {
-
-            // Obtener id Molde
-            $findMold = $invMoldsDao->findInvMold($products[$i], $id_company);
-            $products[$i]['idMold'] = $findMold['id_mold'];
-
-            // Obtener id Categoria
-            $findCategory = $invCategoriesDao->findCategory($products[$i]);
-            $products[$i]['category'] = $findCategory['id_category'];
 
             $product = $generalProductsDao->findProduct($products[$i], $id_company);
 
@@ -141,27 +121,32 @@ $app->post('/addProduct', function (Request $request, Response $response, $args)
     return $response->withStatus(200)->withHeader('Content-Type', 'application/json');
 });
 
-$app->post('/updatePlanProduct', function (Request $request, Response $response, $args) use ($productsDao, $FilesDao) {
+$app->post('/updatePlanProduct', function (Request $request, Response $response, $args) use ($productsDao, $generalProductsDao, $FilesDao) {
     session_start();
     $id_company = $_SESSION['id_company'];
 
     $dataProduct = $request->getParsedBody();
 
-    if (empty($dataProduct['referenceProduct']) || empty($dataProduct['product']) || empty($dataProduct['idMold']) || empty($dataProduct['quantity']))
+    if (empty($dataProduct['referenceProduct']) || empty($dataProduct['product']) || empty($dataProduct['quantity']))
         $resp = array('error' => true, 'message' => 'Ingrese todos los datos a actualizar');
     else {
-        // Actualizar Datos, Imagen y Calcular Precio del producto
-        $products = $productsDao->updateProductByCompany($dataProduct, $id_company);
+        $product = $generalProductsDao->findProductByReferenceOrName($dataProduct, $id_company);
+        !is_array($product) ? $data['id_product'] = 0 : $data = $product;
+        if ($data['id_product'] == $dataProduct['idProduct'] || $data['id_product'] == 0) {
+            // Actualizar Datos, Imagen y Calcular Precio del producto
+            $products = $productsDao->updateProductByCompany($dataProduct, $id_company);
 
-        if (sizeof($_FILES) > 0)
-            $products = $FilesDao->imageProduct($dataProduct['idProduct'], $id_company);
+            if (sizeof($_FILES) > 0)
+                $products = $FilesDao->imageProduct($dataProduct['idProduct'], $id_company);
 
-        if ($products == null)
-            $resp = array('success' => true, 'message' => 'Producto actualizado correctamente');
-        else if (isset($products['info']))
-            $resp = array('info' => true, 'message' => $products['message']);
-        else
-            $resp = array('error' => true, 'message' => 'Ocurrio un error mientras actualizaba la información. Intente nuevamente');
+            if ($products == null)
+                $resp = array('success' => true, 'message' => 'Producto actualizado correctamente');
+            else if (isset($products['info']))
+                $resp = array('info' => true, 'message' => $products['message']);
+            else
+                $resp = array('error' => true, 'message' => 'Ocurrio un error mientras actualizaba la información. Intente nuevamente');
+        } else
+            $resp = array('info' => true, 'message' => 'El producto ya existe en la base de datos. Ingrese uno nuevo');
     }
 
     $response->getBody()->write(json_encode($resp));
