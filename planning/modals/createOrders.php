@@ -71,17 +71,17 @@
                                             </div>
                                         </div>
 
-                                        <div class="col-12 col-lg-4">
+                                        <!-- <div class="col-12 col-lg-4">
                                             <div class="input-group floating-label enable-floating-label show-label date">
                                                 <select id="orderType" name="idOrderType" class="form-control"></select>
                                                 <label for="">Tipo de Pedido<span class="text-danger">*</span></label>
                                                 <div class="validation-error d-none font-size-13">Requerido</div>
                                             </div>
-                                        </div>
+                                        </div> -->
 
-                                        <div class="col-12 col-lg-12 titlePayroll">
+                                        <!-- <div class="col-12 col-lg-12 titlePayroll">
                                             <label for=""><b></b></label>
-                                        </div>
+                                        </div> -->
 
                                         <div class="col-12 col-lg-4">
                                             <div class="form-group floating-label enable-floating-label show-label">
@@ -91,13 +91,13 @@
                                             </div>
                                         </div>
 
-                                        <div class="col-12 col-lg-4">
+                                        <!-- <div class="col-12 col-lg-4">
                                             <div class="form-group floating-label enable-floating-label show-label">
                                                 <input id="quantity" name="quantity" type="number" class="form-control text-center">
                                                 <label for="">Cantidad Pendiente<span class="text-danger">*</span></label>
                                                 <div class="validation-error d-none font-size-13">Requerido</div>
                                             </div>
-                                        </div>
+                                        </div> -->
                                         <hr>
                                     </div>
                                 </form>

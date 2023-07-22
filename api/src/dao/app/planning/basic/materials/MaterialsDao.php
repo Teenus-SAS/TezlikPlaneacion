@@ -19,8 +19,8 @@ class MaterialsDao
   public function findAllMaterialsByCompany($id_company)
   {
     $connection = Connection::getInstance()->getConnection();
-    $stmt = $connection->prepare("SELECT m.id_material, m.reference, m.material, mg.id_magnitude, mg.magnitude, 
-                                         u.id_unit, u.abbreviation, m.quantity
+    $stmt = $connection->prepare("SELECT m.id_material, m.reference, m.material, m.material AS descript, mg.id_magnitude, mg.magnitude, 
+                                         u.id_unit, u.unit, u.abbreviation, m.quantity
                                   FROM materials m
                                     INNER JOIN convert_units u ON u.id_unit = m.unit
                                     INNER JOIN convert_magnitudes mg ON mg.id_magnitude = u.id_magnitude
@@ -49,7 +49,7 @@ class MaterialsDao
         'id_company' => $id_company,
         'reference' => trim($dataMaterial['refRawMaterial']),
         'material' => strtoupper(trim($dataMaterial['nameRawMaterial'])),
-        'unit' => strtoupper(trim($dataMaterial['unit'])),
+        'unit' => $dataMaterial['unit'],
         'quantity' => $quantity
       ]);
       $this->logger->info(__FUNCTION__, array('query' => $stmt->queryString, 'errors' => $stmt->errorInfo()));

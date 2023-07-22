@@ -30,13 +30,17 @@ $(document).ready(function () {
         className: 'uniqueClassName',
       }, 
       {
+        title: 'Existencia',
+        data: 'quantity',
+        className: 'uniqueClassName',
+      }, 
+      {
         title: 'Img',
         data: 'img',
         className: 'uniqueClassName',
         render: (data, type, row) => {
-          data ? data : (data = '');
-          ('use strict');
-          return `<img src="${data}" alt="" style="width:80px;border-radius:100px">`;
+          data ? img = `<img src="${data}" alt="" style="width:80px;border-radius:100px">` : (img = ''); 
+          return img;
         },
       }, 
       {

@@ -6,8 +6,7 @@ $(document).ready(function () {
     id = this.value;
     $('#selectNameProduct option').removeAttr('selected');
     $(`#selectNameProduct option[value=${id}]`).prop('selected', true);
-    loadtableMaterials(id);
-    loadTableProcess(id);
+    loadtableMaterials(id); 
   });
 
   $('#selectNameProduct').change(function (e) {
@@ -15,8 +14,8 @@ $(document).ready(function () {
     id = this.value;
     $('#refProduct option').removeAttr('selected');
     $(`#refProduct option[value=${id}]`).prop('selected', true);
-    loadtableMaterials(id);
-    loadTableProcess(id);
+    loadtableMaterials(id); 
+    // loadTableProcess(id)
   });
 
   /* Cargue tabla de Productos Materiales */
@@ -77,7 +76,7 @@ $(document).ready(function () {
       ],
     });
   };
-  /* Cargue tabla de Productos en proceso */
+  /* Cargue tabla de Productos en proceso 
 
   const loadTableProcess = (idProduct) => {
     $('.cardTableProductsInProcess').show(800);
@@ -122,5 +121,5 @@ $(document).ready(function () {
         },
       ],
     });
-  };
+  }; */
 });

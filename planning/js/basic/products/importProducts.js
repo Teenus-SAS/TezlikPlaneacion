@@ -27,8 +27,10 @@ $(document).ready(function () {
     importFile(selectedFile)
       .then((data) => {
         let productsToImport = data.map((item) => {
+          let reference = item.referencia_producto.toString();
+          
           return {
-            referenceProduct: item.referencia_producto.trim(),
+            referenceProduct: reference.trim(),
             product: item.producto.trim(), 
             quantity: item.existencias, 
           };

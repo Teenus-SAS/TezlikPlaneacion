@@ -52,16 +52,16 @@ if (sizeof($_SESSION) == 0)
                                 <div class="col-xs-2 mr-2">
                                     <button class="btn btn-warning" id="btnCreateProduct">Adicionar Nueva Materia Prima</button>
                                 </div>
-                                <div class="col-xs-2 py-2 mr-2">
+                                <!-- <div class="col-xs-2 py-2 mr-2">
                                     <button class="btn btn-secondary" id="btnCreateProductInProcess">Adicionar Producto En Proceso</button>
-                                </div>
+                                </div> -->
                                 <div class="col-xs-2 py-2 dropleft show mr-2">
                                     <a class="btn btn-info dropdown-toggle" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                        Importar
+                                        Importar Productos*Materia Prima
                                     </a>
                                     <div class="dropdown-menu" aria-labelledby="btnImport">
                                         <a class="dropdown-item import" id="1" href="javascript:void(0)">Materias Prima</a>
-                                        <a class="dropdown-item import" id="2" href="javascript:void(0)">Productos en Proceso</a>
+                                        <!-- <a class="dropdown-item import" id="2" href="javascript:void(0)">Productos en Proceso</a> -->
                                     </div>
                                 </div>
                             </div>
@@ -92,7 +92,7 @@ if (sizeof($_SESSION) == 0)
                     </div>
                 </div>
 
-                <div class="page-content-wrapper mt--45 mb-5 cardAddProductInProccess">
+                <!-- <div class="page-content-wrapper mt--45 mb-5 cardAddProductInProccess">
                     <div class="container-fluid">
                         <div class="row">
                             <div class="col-12">
@@ -114,7 +114,7 @@ if (sizeof($_SESSION) == 0)
                             </div>
                         </div>
                     </div>
-                </div>
+                </div> -->
 
                 <div class="page-content-wrapper mt--45 mb-5 cardAddMaterials">
                     <div class="container-fluid">
@@ -192,7 +192,7 @@ if (sizeof($_SESSION) == 0)
                                     </div>
                                 </div>
                             </div>
-                            <div class="col-12 cardTableProductsInProcess">
+                            <!-- <div class="col-12 cardTableProductsInProcess">
                                 <div class="card">
                                     <div class="card-header">
                                         <h5 class="card-title">Productos En Proceso</h5>
@@ -204,7 +204,7 @@ if (sizeof($_SESSION) == 0)
                                         </div>
                                     </div>
                                 </div>
-                            </div>
+                            </div> -->
                         </div>
                     </div>
                 </div>
@@ -223,7 +223,7 @@ if (sizeof($_SESSION) == 0)
     <script src="/planning/js/basic/products/configProducts.js"></script>
     <script src="/planning/js/basic/rawMaterials/configRawMaterials.js"></script>
     <script src="/planning/js/config/productMaterials/productMaterials.js"></script>
-    <script src="/planning/js/config/productMaterials/productsInProcess.js"></script>
+    <!-- <script src="/planning/js/config/productMaterials/productsInProcess.js"></script> -->
     <script src="../global/js/import/import.js"></script>
     <script src="/planning/js/config/productMaterials/importProductMaterials.js"></script>
     <script src="../global/js/import/file.js"></script>

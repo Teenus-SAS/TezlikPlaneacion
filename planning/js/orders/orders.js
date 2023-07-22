@@ -47,12 +47,12 @@ $(document).ready(function () {
       maxDate = $('#maxDate').val();
       idProduct = $('#refProduct').val();
       idClient = $('#client').val();
-      orderType = $('#orderType').val();
+      // orderType = $('#orderType').val();
       originalQuantity = $('#originalQuantity').val();
-      quantity = $('#quantity').val();
+      // quantity = $('#quantity').val();
 
       data =
-        order * idProduct * idClient * orderType * originalQuantity * quantity;
+        order * idProduct * idClient * originalQuantity;
 
       if (
         !data ||
@@ -96,9 +96,9 @@ $(document).ready(function () {
       true
     );
     $(`#client option[value=${data.id_client}]`).prop('selected', true);
-    $(`#orderType option[value=${data.id_order_type}]`).prop('selected', true);
+    // $(`#orderType option[value=${data.id_order_type}]`).prop('selected', true);
     $('#originalQuantity').val(data.original_quantity);
-    $('#quantity').val(data.quantity);
+    // $('#quantity').val(data.quantity);
 
     $('html, body').animate(
       {

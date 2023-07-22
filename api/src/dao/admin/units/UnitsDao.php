@@ -47,10 +47,10 @@ class UnitsDao
     {
         $connection = Connection::getInstance()->getConnection();
 
-        $stmt = $connection->prepare("SELECT * FROM convert_units WHERE id_magnitude = :id_magnitude AND abbreviation = :abbreviation");
+        $stmt = $connection->prepare("SELECT * FROM convert_units WHERE id_magnitude = :id_magnitude AND unit = :unit");
         $stmt->execute([
             'id_magnitude' => $dataUnit['idMagnitude'],
-            'abbreviation' => strtoupper(trim($dataUnit['abbreviation']))
+            'unit' => strtoupper(trim($dataUnit['unit']))
         ]);
 
         $unit = $stmt->fetch($connection::FETCH_ASSOC);

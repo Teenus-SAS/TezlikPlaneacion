@@ -23,12 +23,9 @@ $(document).ready(function () {
       return false;
     }
 
-    category = $('#category').val();
+    // category = $('#category').val();
 
-    if (category.includes('en proceso'))
-      products = sessionStorage.getItem('dataProductsInProcess');
-    else if (category.includes('terminado'))
-      products = sessionStorage.getItem('dataFinishProducts');
+    products = sessionStorage.getItem('dataProducts');
 
     products = JSON.parse(products);
     dataInventory = [];
@@ -60,8 +57,7 @@ $(document).ready(function () {
       $('#category').change();
 
       toastr.success(data.message);
-      sessionStorage.removeItem('dataProductsInProcess');
-      sessionStorage.removeItem('dataFinishProducts');
+      sessionStorage.removeItem('dataProducts');
       return false;
     } else if (data.error == true) toastr.error(data.message);
     else if (data.info == true) toastr.info(data.message);

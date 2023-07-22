@@ -35,9 +35,9 @@ $(document).ready(function () {
             referenceProduct: item.referencia_producto,
             product: item.producto,
             client: item.cliente,
-            orderType: item.tipo_pedido,
+            // orderType: item.tipo_pedido,
             originalQuantity: item.cantidad_original,
-            quantity: item.cantidad_pendiente,
+            // quantity: item.cantidad_pendiente,
           };
         });
         checkOrder(OrderToImport);

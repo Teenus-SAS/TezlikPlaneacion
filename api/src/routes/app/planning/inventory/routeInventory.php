@@ -24,31 +24,25 @@ use Psr\Http\Message\ResponseInterface as Response;
 use Psr\Http\Message\ServerRequestInterface as Request;
 
 $app->get('/inventory', function (Request $request, Response $response, $args) use (
-    $inventoryDao
+    $productsDao,
+    $materialsDao
 ) {
     session_start();
     $id_company = $_SESSION['id_company'];
 
-    // Insumos
-    $supplies = $inventoryDao->findAllInventoryMaterialsAndSupplies($id_company, 1);
-    // Materias Prima
-    $rawMaterials = $inventoryDao->findAllInventoryMaterialsAndSupplies($id_company, 2);
-    // Productos en proceso
-    $productsInProcess = $inventoryDao->findAllInventoryProductsByCategory($id_company, 12);
-    // Productos terminados
-    $finishProducts = $inventoryDao->findAllInventoryProductsByCategory($id_company, 11);
+    // Productos
+    $products = $productsDao->findAllProductsByCompany($id_company);
+    // Materiales
+    $rawMaterials = $materialsDao->findAllMaterialsByCompany($id_company);
 
-    $inventory['supplies'] = $supplies;
+    $inventory['products'] = $products;
     $inventory['rawMaterials'] = $rawMaterials;
-    $inventory['productsInProcess'] = $productsInProcess;
-    $inventory['finishProducts'] = $finishProducts;
 
     $response->getBody()->write(json_encode($inventory, JSON_NUMERIC_CHECK));
     return $response->withHeader('Content-Type', 'application/json');
 });
 
 $app->post('/inventoryDataValidation', function (Request $request, Response $response, $args) use (
-    $categoriesDao,
     $generalProductsDao,
     $generalMaterialsDao,
     $moldsDao,
@@ -74,15 +68,6 @@ $app->post('/inventoryDataValidation', function (Request $request, Response $res
                 break;
             }
 
-            // Obtener id categoria
-            $findCategory = $categoriesDao->findCategory($inventory[$i]);
-
-            if (!$findCategory) {
-                $i = $i + 1;
-                $dataImportinventory = array('error' => true, 'message' => "Categoria no existe en la base de datos. Fila: {$i}");
-                break;
-            }
-
             $category = $inventory[$i]['category'];
 
             if ($category == 'Productos') {
@@ -101,7 +86,7 @@ $app->post('/inventoryDataValidation', function (Request $request, Response $res
                 }
             }
 
-            if ($category == 'Materiales' || $category == 'Insumos') {
+            if ($category == 'Materiales') {
                 if (empty($inventory[$i]['unityRawMaterial'])) {
                     $i = $i + 1;
                     $dataImportinventory = array('error' => true, 'message' => "Unidad vacia en la fila: {$i}");
@@ -161,7 +146,6 @@ $app->post('/addInventory', function (Request $request, Response $response, $arg
     $generalProductsDao,
     $materialsDao,
     $generalMaterialsDao,
-    $moldsDao,
     $classificationDao
 ) {
     session_start();
@@ -173,10 +157,6 @@ $app->post('/addInventory', function (Request $request, Response $response, $arg
         $category = $inventory[$i]['category'];
         // Producto
         if ($category == 'Productos') {
-            // Obtener id molde
-            $findMold = $moldsDao->findInvMold($inventory[$i], $id_company);
-            $inventory[$i]['idMold'] = $findMold['id_mold'];
-
             $findProduct = $generalProductsDao->findProduct($inventory[$i], $id_company);
 
             $resolution = $productsDao->updateProductByCompany($inventory[$i], $id_company);
@@ -187,7 +167,7 @@ $app->post('/addInventory', function (Request $request, Response $response, $arg
         }
 
         // Materia prima y Insumos
-        if ($category == 'Materiales' || $category == 'Insumos') {
+        if ($category == 'Materiales') {
             $findMaterial = $generalMaterialsDao->findMaterial($inventory[$i], $id_company);
             $inventory[$i]['idMaterial'] = $findMaterial['id_material'];
 

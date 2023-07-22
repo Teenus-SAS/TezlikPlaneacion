@@ -93,9 +93,11 @@ $(document).ready(function () {
     $('#referenceProduct').val(data.reference);
     $('#product').val(data.product);
     $('#quantity').val(data.quantity); 
-    $('#preview').html(
-      `<img id="img" src="${data.img}" style="width:50%;padding-bottom:15px"/>`
-    );
+    
+    if(data.img)
+      $('#preview').html(
+        `<img id="img" src="${data.img}" style="width:50%;padding-bottom:15px"/>`
+      );
 
     $('html, body').animate({ scrollTop: 0 }, 1000);
   });

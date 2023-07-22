@@ -51,7 +51,7 @@ $app->post('/orderDataValidation', function (Request $request, Response $respons
         for ($i = 0; $i < sizeof($order); $i++) {
             if (
                 empty($order[$i]['order'])  || empty($order[$i]['dateOrder']) || empty($order[$i]['minDate']) ||
-                empty($order[$i]['maxDate']) || empty($order[$i]['originalQuantity']) ||  empty($order[$i]['quantity'])
+                empty($order[$i]['maxDate']) || empty($order[$i]['originalQuantity'])
             ) {
                 $i = $i + 1;
                 $dataImportOrder = array('error' => true, 'message' => "Campos vacios en fila: {$i}");
@@ -76,12 +76,12 @@ $app->post('/orderDataValidation', function (Request $request, Response $respons
             } else $order[$i]['idClient'] = $findClient['id_client'];
 
             // Obtener id Tipo pedido
-            $findOrderType = $orderTypesDao->findOrderType($order[$i]);
-            if (!$findOrderType) {
-                $i = $i + 1;
-                $dataImportOrder = array('error' => true, 'message' => "Tipo de pedido no existe en la base de datos.<br>Fila: {$i}");
-                break;
-            } else $order[$i]['idOrderType'] = $findOrderType['id_order_type'];
+            // $findOrderType = $orderTypesDao->findOrderType($order[$i]);
+            // if (!$findOrderType) {
+            //     $i = $i + 1;
+            //     $dataImportOrder = array('error' => true, 'message' => "Tipo de pedido no existe en la base de datos.<br>Fila: {$i}");
+            //     break;
+            // } else $order[$i]['idOrderType'] = $findOrderType['id_order_type'];
 
             $findOrder = $generalOrdersDao->findOrder($order[$i], $id_company);
             !$findOrder ? $insert = $insert + 1 : $update = $update + 1;
@@ -136,8 +136,8 @@ $app->post('/addOrder', function (Request $request, Response $response, $args) u
             $order[$i]['idClient'] = $findClient['id_client'];
 
             // Obtener id tipo pedido
-            $findOrderType = $orderTypesDao->findOrderType($order[$i]);
-            $order[$i]['idOrderType'] = $findOrderType['id_order_type'];
+            // $findOrderType = $orderTypesDao->findOrderType($order[$i]);
+            // $order[$i]['idOrderType'] = $findOrderType['id_order_type'];
 
             $order[$i] = $convertDataDao->changeDateOrder($order[$i]);
 

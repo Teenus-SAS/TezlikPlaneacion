@@ -15,7 +15,7 @@ class InventoryDao
         $this->logger = new Logger(self::class);
         $this->logger->pushHandler(new RotatingFileHandler(Constants::LOGS_PATH . 'querys.log', 20, Logger::DEBUG));
     }
-
+    /*
     public function findAllInventoryMaterialsAndSupplies($id_company, $category)
     {
         $connection = Connection::getInstance()->getConnection();
@@ -32,7 +32,7 @@ class InventoryDao
         $this->logger->notice("materials", array('materials' => $materials));
         return $materials;
     }
-
+    
     public function findAllInventoryProductsByCategory($id_company, $category)
     {
         $connection = Connection::getInstance()->getConnection();
@@ -49,7 +49,7 @@ class InventoryDao
         $this->logger->notice("materials", array('materials' => $materials));
         return $materials;
     }
-
+*/
     // Contar cantidad productos
     public function countProduct($dataInventory, $id_company)
     {

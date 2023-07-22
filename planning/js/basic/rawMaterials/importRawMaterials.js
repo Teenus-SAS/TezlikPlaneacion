@@ -27,9 +27,12 @@ $(document).ready(function () {
     importFile(selectedFile)
       .then((data) => {
         let materialsToImport = data.map((item) => {
+          let reference = item.referencia.toString();
+
           return {
-            refRawMaterial: item.referencia.trim(),
+            refRawMaterial: reference.trim(),
             nameRawMaterial: item.material.trim(),
+            magnitude: item.magnitud.trim(),
             unit: item.unidad.trim(),
             quantity: item.existencia,
           };
