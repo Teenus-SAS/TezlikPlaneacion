@@ -1,7 +1,9 @@
 $(document).ready(function () {
   /* Ocultar panel crear cliente */
-
-  $('.cardCreateClient').hide();
+$('#btnCloseClient').click(function (e) {
+    e.preventDefault();
+    $('#createClients').modal('hide');
+  });
 
   /* Abrir panel crear cliente */
 
@@ -9,7 +11,8 @@ $(document).ready(function () {
     e.preventDefault();
 
     $('.cardImportClient').hide(800);
-    $('.cardCreateClient').toggle(800);
+    $('#createClients').modal('show');
+
     $('#btnCreateClient').html('Crear');
 
     sessionStorage.removeItem('id_client');
@@ -25,27 +28,44 @@ $(document).ready(function () {
     let idClient = sessionStorage.getItem('id_client');
 
     if (idClient == '' || idClient == null) {
-      ean = $('#ean').val();
-      nit = $('#nit').val();
-      client = $('#client').val();
+      let nit = $('#nit').val();
+      let companyName = $('#companyName').val();
+      let address = $('#address').val();
+      let phone = $('#phone').val();
+      let city = $('#city').val();
 
       if (
-        ean == '' ||
-        ean == null ||
         nit == '' ||
-        nit == null ||
-        client == '' ||
-        client == null
+        companyName == '' ||
+        address == '' ||
+        phone == '' ||
+        city == ''
       ) {
         toastr.error('Ingrese todos los campos');
         return false;
       }
 
-      client = $('#formCreateClient').serialize();
+      let imgClient = $('#formFile')[0].files[0];
 
-      $.post('../../api/addClient', client, function (data, textStatus, jqXHR) {
-        message(data);
+      let client = new FormData(formCreateClient);
+      client.append('img', imgClient);
+
+      $.ajax({
+        type: 'POST',
+        url: '/api/addClient',
+        data: client,
+        contentType: false,
+        cache: false,
+        processData: false,
+
+        success: function (resp) {
+          $('#createClients').modal('hide');
+          $('#formFile').val('');
+          message(resp);
+          updateTable();
+        },
       });
+      
     } else {
       updateClient();
     }
@@ -54,17 +74,23 @@ $(document).ready(function () {
   /* Actualizar clientes */
 
   $(document).on('click', '.updateClient', function (e) {
-    $('.cardImportClient').hide(800);
-    $('.cardCreateClient').show(800);
+    $('.cardImportClient').hide(800); 
     $('#btnCreateClient').html('Actualizar');
 
     let row = $(this).parent().parent()[0];
     let data = tblClients.fnGetData(row);
 
     sessionStorage.setItem('id_client', data.id_client);
-    $('#ean').val(data.ean.toLocaleString('es-CO'));
-    $('#nit').val(data.nit.toLocaleString('es-CO'));
-    $('#client').val(data.client);
+
+    $('#nit').val(data.nit);
+    $('#companyName').val(data.client);
+    $('#address').val(data.address);
+    $('#phone').val(data.phone);
+    $('#city').val(data.city);
+    if (data.img) avatar.src = data.img;
+
+    $('#createClients').modal('show');
+    $('#btnCreateClient').html('Actualizar');
 
     $('html, body').animate(
       {
@@ -75,12 +101,27 @@ $(document).ready(function () {
   });
 
   updateClient = () => {
-    let data = $('#formCreateClient').serialize();
     idClient = sessionStorage.getItem('id_client');
-    data = data + '&idClient=' + idClient;
+    let imgCompany = $('#formFile')[0].files[0];
 
-    $.post('../../api/updateClient', data, function (data, textStatus, jqXHR) {
-      message(data);
+    let company = new FormData(formCreateClient);
+    company.append('idClient', idClient);
+    company.append('img', imgCompany);
+
+    $.ajax({
+      type: 'POST',
+      url: '/api/updateClient',
+      data: company,
+      contentType: false,
+      cache: false,
+      processData: false,
+
+      success: function (resp) {
+        $('#createClients').modal('hide');
+        $('#formFile').val('');
+        message(resp);
+        updateTable();
+      },
     });
   };
 
@@ -121,8 +162,7 @@ $(document).ready(function () {
   /* Mensaje de exito */
 
   message = (data) => {
-    if (data.success == true) {
-      $('.cardCreateClient').hide(800);
+    if (data.success == true) { 
       $('#formCreateClient').trigger('reset');
       updateTable();
       toastr.success(data.message);

@@ -5,7 +5,6 @@ $(document).ready(function () {
 
   $('#btnImportNewClient').click(function (e) {
     e.preventDefault();
-    $('.cardCreateClient').hide(800);
     $('.cardImportClients').toggle(800);
   });
 

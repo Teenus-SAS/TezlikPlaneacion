@@ -67,4 +67,16 @@ class LastDataDao
         $id_product = $query->fetch($connection::FETCH_ASSOC);
         return $id_product;
     }
+
+    public function findLastInsertedClient()
+    {
+        $connection = Connection::getInstance()->getConnection();
+
+        $stmt = $connection->prepare("SELECT MAX(id_client) AS id_client FROM plan_clients");
+        $stmt->execute();
+        $this->logger->info(__FUNCTION__, array('query' => $stmt->queryString, 'errors' => $stmt->errorInfo()));
+
+        $company = $stmt->fetch($connection::FETCH_ASSOC);
+        return $company;
+    }
 }

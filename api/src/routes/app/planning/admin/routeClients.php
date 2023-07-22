@@ -1,10 +1,15 @@
 <?php
 
 use TezlikPlaneacion\dao\ClientsDao;
+use TezlikPlaneacion\dao\FilesDao;
 use TezlikPlaneacion\dao\GeneralClientsDao;
+use TezlikPlaneacion\dao\LastDataDao;
 
 $clientsDao = new ClientsDao();
 $generalClientsDao = new GeneralClientsDao();
+$lastDataDao = new LastDataDao();
+$FilesDao = new FilesDao();
+
 
 use Psr\Http\Message\ResponseInterface as Response;
 use Psr\Http\Message\ServerRequestInterface as Request;
@@ -49,7 +54,9 @@ $app->post('/clientsDataValidation', function (Request $request, Response $respo
 
 $app->post('/addClient', function (Request $request, Response $response, $args) use (
     $clientsDao,
-    $generalClientsDao
+    $generalClientsDao,
+    $lastDataDao,
+    $FilesDao
 ) {
     session_start();
     $id_company = $_SESSION['id_company'];
@@ -59,6 +66,13 @@ $app->post('/addClient', function (Request $request, Response $response, $args) 
 
     if ($countClients > 1) {
         $client = $clientsDao->insertClient($dataClient, $id_company);
+
+        if (sizeof($_FILES) > 0) {
+            $lastCompany = $lastDataDao->findLastInsertedClient();
+
+            // Insertar imagen
+            $FilesDao->imageClient($lastCompany['id_client'], $id_company);
+        }
 
         if ($client == null)
             $resp = array('success' => true, 'message' => 'Cliente ingresado correctamente');
@@ -87,13 +101,25 @@ $app->post('/addClient', function (Request $request, Response $response, $args) 
     return $response->withStatus(200)->withHeader('Content-Type', 'application/json');
 });
 
-$app->post('/updateClient', function (Request $request, Response $response, $args) use ($clientsDao) {
+$app->post('/updateClient', function (Request $request, Response $response, $args) use ($clientsDao, $lastDataDao, $FilesDao) {
+    session_start();
+    $id_company = $_SESSION['id_company'];
     $dataClient = $request->getParsedBody();
 
-    if (empty($dataClient['idClient']) || empty($dataClient['ean']) || empty($dataClient['nit']) || empty($dataClient['client']))
+    if (
+        empty($dataClient['idClient']) || empty($dataClient['nit']) || empty($dataClient['client']) ||
+        empty($dataClient['address']) || empty($dataClient['phone']) || empty($dataClient['city'])
+    )
         $resp = array('error' => true, 'message' => 'No hubo cambio alguno');
     else {
         $client = $clientsDao->updateClient($dataClient);
+
+        if (sizeof($_FILES) > 0) {
+            $lastCompany = $lastDataDao->findLastInsertedClient();
+
+            // Insertar imagen
+            $FilesDao->imageClient($lastCompany['id_client'], $id_company);
+        }
 
         if ($client == null)
             $resp = array('success' => true, 'message' => 'Cliente actualizado correctamente');

@@ -33,16 +33,16 @@ class ClientsDao
     {
         $connection = Connection::getInstance()->getConnection();
 
-        $ean = str_replace('.', '', $dataClient['ean']);
-        $nit = str_replace('.', '', $dataClient['nit']);
-
         try {
-            $stmt = $connection->prepare("INSERT INTO plan_clients (ean, nit, client, id_company) VALUES (:ean, :nit, :client, :id_company)");
+            $stmt = $connection->prepare("INSERT INTO plan_clients (nit, client, address, phone, city, id_company) 
+                                          VALUES (:nit, :client, :addr, :phone, :city, :id_company)");
             $stmt->execute([
-                'ean' => $ean,
-                'nit' => $nit,
-                'client' => ucfirst(strtolower(trim($dataClient['client']))),
-                'id_company' => $id_company
+                'id_company' => $id_company,
+                'nit' => $dataClient['nit'],
+                'client' => $dataClient['client'],
+                'addr' => $dataClient['address'],
+                'phone' => $dataClient['phone'],
+                'city' => $dataClient['city'],
             ]);
             $this->logger->info(__FUNCTION__, array('query' => $stmt->queryString, 'errors' => $stmt->errorInfo()));
         } catch (\Exception $e) {
@@ -58,15 +58,15 @@ class ClientsDao
     {
         $connection = Connection::getInstance()->getConnection();
 
-        $ean = str_replace('.', '', $dataClient['ean']);
-        $nit = str_replace('.', '', $dataClient['nit']);
-
         try {
-            $stmt = $connection->prepare("UPDATE plan_clients SET ean = :ean, nit = :nit, client = :client WHERE id_client = :id_client");
+            $stmt = $connection->prepare("UPDATE plan_clients SET nit = :nit, client = :client, address = :addr, phone = :phone, city = :city
+                                          WHERE id_client = :id_client");
             $stmt->execute([
-                'ean' => $ean,
-                'nit' => $nit,
-                'client' => ucfirst(strtolower(trim($dataClient['client']))),
+                'nit' => $dataClient['nit'],
+                'client' => $dataClient['client'],
+                'addr' => $dataClient['address'],
+                'phone' => $dataClient['phone'],
+                'city' => $dataClient['city'],
                 'id_client' => $dataClient['idClient']
             ]);
             $this->logger->info(__FUNCTION__, array('query' => $stmt->queryString, 'errors' => $stmt->errorInfo()));

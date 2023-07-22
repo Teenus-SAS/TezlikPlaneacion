@@ -162,4 +162,41 @@ class FilesDao
             move_uploaded_file($tmp_name, $targetFilePath);
         }
     }
+
+    public function imageClient($id_client, $id_company)
+    {
+        $connection = Connection::getInstance()->getConnection();
+        $targetDir = dirname(dirname(dirname(__DIR__))) . '/assets/images/clients/' . $id_company;
+        $allowTypes = array('jpg', 'jpeg', 'png');
+
+        $image_name = str_replace(' ', '', $_FILES['img']['name']);
+        $tmp_name   = $_FILES['img']['tmp_name'];
+        $size       = $_FILES['img']['size'];
+        $type       = $_FILES['img']['type'];
+        $error      = $_FILES['img']['error'];
+
+
+        /* Verifica si directorio esta creado y lo crea */
+        if (!is_dir($targetDir))
+            mkdir($targetDir, 0777, true);
+
+        $targetDir = '/api/src/assets/images/clients/' . $id_company;
+        $targetFilePath = $targetDir . '/' . $image_name;
+
+        $fileType = pathinfo($targetFilePath, PATHINFO_EXTENSION);
+
+        if (in_array($fileType, $allowTypes)) {
+            $sql = "UPDATE plan_clients SET img = :img WHERE id_client = :id_client";
+            $query = $connection->prepare($sql);
+            $query->execute([
+                'img' => $targetFilePath,
+                'id_client' => $id_client
+            ]);
+
+            $targetDir = dirname(dirname(dirname(__DIR__))) . '/assets/images/clients/' . $id_company;
+            $targetFilePath = $targetDir . '/' . $image_name;
+
+            move_uploaded_file($tmp_name, $targetFilePath);
+        }
+    }
 }
