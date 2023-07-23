@@ -19,7 +19,8 @@ class AutenticationUserDao
   public function findByEmail($dataUser)
   {
     $connection = Connection::getInstance()->getConnection();
-    $stmt = $connection->prepare("SELECT * FROM users WHERE email = :email");
+    $sql ="SELECT * FROM users WHERE email = :email";
+    $stmt = $connection->prepare($sql);
     $stmt->execute(['email' => $dataUser]);
     $user = $stmt->fetch($connection::FETCH_ASSOC);
 
