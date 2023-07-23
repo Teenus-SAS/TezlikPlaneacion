@@ -44,17 +44,17 @@
             <div class="auth-user-testimonial">
               <div class="owl-carousel">
                 <div class="item">
-                  <h3 class="text-white mb-1">Con la planificacion y programacion de la produccion usted puede aumentar la eficiencia de la fabrica y reducir costos lo que significa tambien la reduccion de desperdicio y mejores tiempos para los plazos de entrega</h3>
+                  <h3 class="text-white mb-1">Estaría bien, aumentar la eficiencia de la fábrica y reducir los costos, además de los desperdicios y los plazos de entrega</h3>
                   <!-- <h5 class="text-white mb-3">"Vende más!"</h5> -->
                   <p>Tezlik Software</p>
                 </div>
                 <div class="item">
-                  <h3 class="text-white mb-1">Con la optimizacion de la cadena de suministro, usted puede mejorar la comunicación y colaboracion entre las areas de la fabrica lo que significa un aumento en la satisfaccion del cliente</h3>
+                  <h3 class="text-white mb-1">Con la optimización de la cadena de suministro, usted puede mejorar la comunicación y colaboración entre las áreas de la fábrica lo que significa un aumento en la satisfacción del cliente</h3>
                   <!-- <h5 class="text-white mb-3">"Una estructura de costos para fijar los precios lo llevara a ser mas competitivo"</h5> -->
                   <p>Tezlik Software</p>
                 </div>
                 <div class="item">
-                  <h3 class="text-white mb-1">Con el seguimiento del inventario, usted puede puede reducir el riesgo de desabastecimiento y exceso de stock lo que significa una mejora en la rentabilidad de la fábrica</h3>
+                  <h3 class="text-white mb-1">Con el seguimiento del inventario, usted puede reducir el riesgo de desabastecimiento y exceso de stock lo que significa una mejora en la rentabilidad de la fábrica</h3>
                   <!-- <h5 class="text-white mb-3">"Conocer que necesita y que desea le da mayor fortaleza"</h5> -->
                   <p>Tezlik Software</p>
                 </div>
