@@ -45,7 +45,7 @@ $app->post('/productsDataValidation', function (Request $request, Response $resp
         $products = $dataProduct['importProducts'];
 
         for ($i = 0; $i < sizeof($products); $i++) {
-            if (empty($products[$i]['referenceProduct']) || empty($products[$i]['product']) || empty($products[$i]['quantity'])) {
+            if (empty($products[$i]['referenceProduct']) || empty($products[$i]['product'])) {
                 $i = $i + 1;
                 $dataImportProduct = array('error' => true, 'message' => "Campos vacios. Fila: {$i}");
                 break;
@@ -127,7 +127,7 @@ $app->post('/updatePlanProduct', function (Request $request, Response $response,
 
     $dataProduct = $request->getParsedBody();
 
-    if (empty($dataProduct['referenceProduct']) || empty($dataProduct['product']) || empty($dataProduct['quantity']))
+    if (empty($dataProduct['referenceProduct']) || empty($dataProduct['product']))
         $resp = array('error' => true, 'message' => 'Ingrese todos los datos a actualizar');
     else {
         $product = $generalProductsDao->findProductByReferenceOrName($dataProduct, $id_company);
