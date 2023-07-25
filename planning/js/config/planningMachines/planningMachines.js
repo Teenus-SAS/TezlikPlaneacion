@@ -193,4 +193,6 @@ $(document).ready(function () {
     $('#tblPlanMachines').DataTable().clear();
     $('#tblPlanMachines').DataTable().ajax.reload();
   }
+
+  loadDataMachines(2);
 });

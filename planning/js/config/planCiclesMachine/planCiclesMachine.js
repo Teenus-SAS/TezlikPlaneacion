@@ -144,4 +144,6 @@ $(document).ready(function () {
     $('#tblPlanCiclesMachine').DataTable().clear();
     $('#tblPlanCiclesMachine').DataTable().ajax.reload();
   }
+
+  loadDataMachines(2);
 });

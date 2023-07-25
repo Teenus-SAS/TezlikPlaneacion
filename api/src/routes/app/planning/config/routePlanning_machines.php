@@ -90,8 +90,8 @@ $app->post('/addPlanningMachines', function (Request $request, Response $respons
     $dataPMachine =  sizeof($dataPMachines);
 
     if ($dataPMachine > 1) {
-        $dataPMachine = $timeConvertDao->timeConverter($dataPMachine);
-        $planningMachines = $planningMachinesDao->insertPlanMachinesByCompany($dataPMachines, $id_company);
+        $dataPMachine = $timeConvertDao->timeConverter($dataPMachines);
+        $planningMachines = $planningMachinesDao->insertPlanMachinesByCompany($dataPMachine, $id_company);
 
         if ($planningMachines == null)
             $resp = array('success' => true, 'message' => 'Planeación de maquina creada correctamente');

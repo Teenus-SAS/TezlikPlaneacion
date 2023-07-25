@@ -25,7 +25,7 @@ use Psr\Http\Message\ServerRequestInterface as Request;
 
 $app->get('/inventory', function (Request $request, Response $response, $args) use (
     $productsDao,
-    $materialsDao
+    $inventoryDao
 ) {
     session_start();
     $id_company = $_SESSION['id_company'];
@@ -33,7 +33,7 @@ $app->get('/inventory', function (Request $request, Response $response, $args) u
     // Productos
     $products = $productsDao->findAllProductsByCompany($id_company);
     // Materiales
-    $rawMaterials = $materialsDao->findAllMaterialsByCompany($id_company);
+    $rawMaterials = $inventoryDao->findAllMaterialsByCompany($id_company);
 
     $inventory['products'] = $products;
     $inventory['rawMaterials'] = $rawMaterials;

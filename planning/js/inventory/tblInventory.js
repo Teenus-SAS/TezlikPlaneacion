@@ -105,14 +105,14 @@ $(document).ready(function () {
           className: 'uniqueClassName',
         },
         {
-          title: 'Unidad',
-          data: 'unit',
-          className: 'classCenter',
-        },
-        {
           title: 'Existencia',
           data: 'quantity',
           className: 'uniqueClassName',
+        },
+        {
+          title: 'Unidad',
+          data: 'unit',
+          className: 'classCenter',
         },
         // {
         //   title: 'Precio',

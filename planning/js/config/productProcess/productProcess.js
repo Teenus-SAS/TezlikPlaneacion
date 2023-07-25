@@ -200,4 +200,6 @@ $(document).ready(function () {
     $('#tblConfigProcess').DataTable().clear();
     $('#tblConfigProcess').DataTable().ajax.reload();
   }
+
+  loadDataMachines(1);
 });

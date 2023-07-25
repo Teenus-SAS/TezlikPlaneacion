@@ -15,6 +15,25 @@ class InventoryDao
         $this->logger = new Logger(self::class);
         $this->logger->pushHandler(new RotatingFileHandler(Constants::LOGS_PATH . 'querys.log', 20, Logger::DEBUG));
     }
+
+    public function findAllMaterialsByCompany($id_company)
+    {
+        $connection = Connection::getInstance()->getConnection();
+        $stmt = $connection->prepare("SELECT m.id_material, m.reference, m.material, m.material AS descript, mg.id_magnitude, mg.magnitude, 
+                                         u.id_unit, u.unit, u.abbreviation, m.quantity
+                                  FROM materials m
+                                    INNER JOIN products_materials pm ON pm.id_material = m.id_material
+                                    INNER JOIN convert_units u ON u.id_unit = pm.id_unit
+                                    INNER JOIN convert_magnitudes mg ON mg.id_magnitude = u.id_magnitude
+                                  WHERE m.id_company = :id_company ORDER BY m.material ASC");
+        $stmt->execute(['id_company' => $id_company]);
+
+        $this->logger->info(__FUNCTION__, array('query' => $stmt->queryString, 'errors' => $stmt->errorInfo()));
+
+        $materials = $stmt->fetchAll($connection::FETCH_ASSOC);
+        $this->logger->notice("materials", array('materials' => $materials));
+        return $materials;
+    }
     /*
     public function findAllInventoryMaterialsAndSupplies($id_company, $category)
     {
