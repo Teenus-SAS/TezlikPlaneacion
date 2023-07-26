@@ -27,9 +27,9 @@ $(document).ready(function () {
       .then((data) => {
         let planCiclesMachineToImport = data.map((item) => {
           return {
-            referenceProduct: item.referencia_producto.trim(),
-            product: item.producto.trim(),
-            machine: item.maquina.trim(),
+            referenceProduct: item.referencia_producto,
+            product: item.producto,
+            machine: item.maquina,
             ciclesHour: item.ciclo_hora,
           };
         });

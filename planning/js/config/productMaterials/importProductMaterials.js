@@ -42,19 +42,19 @@ $(document).ready(function () {
           id = sessionStorage.getItem('id');
           // if (id == 1)
             arr = {
-              referenceProduct: item.referencia_producto.trim(),
-              product: item.producto.trim(),
-              refRawMaterial: item.referencia_material.trim(),
-              nameRawMaterial: item.material.trim(),
+              referenceProduct: item.referencia_producto,
+              product: item.producto,
+              refRawMaterial: item.referencia_material,
+              nameRawMaterial: item.material,
               quantity: item.cantidad,
             };
 
           // if (id == 2)
           //   arr = {
-          //     referenceFinalProduct: item.referencia_producto_final.trim(),
-          //     finalProduct: item.producto_final.trim(),
-          //     referenceProduct: item.referencia.trim(),
-          //     product: item.producto.trim(),
+          //     referenceFinalProduct: item.referencia_producto_final,
+          //     finalProduct: item.producto_final,
+          //     referenceProduct: item.referencia,
+          //     product: item.producto,
           //   };
 
           return arr;

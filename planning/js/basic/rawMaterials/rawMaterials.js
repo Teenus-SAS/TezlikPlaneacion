@@ -34,6 +34,7 @@ $(document).ready(function () {
 
   $(document).on('click', '.updateRawMaterials', async function (e) {
     $('.cardImportMaterials').hide(800);
+    $('#units').empty();
     $('.cardRawMaterials').show(800);
     $('#btnCreateMaterial').html('Actualizar');
 
@@ -46,7 +47,7 @@ $(document).ready(function () {
     $('#refRawMaterial').val(data.reference);
     $('#nameRawMaterial').val(data.material);
     $(`#magnitudes option[value=${data.id_magnitude}]`).prop('selected', true);
-    await loadUnitsByMagnitude(data.id_magnitude);
+    await loadUnitsByMagnitude(data.id_magnitude, 1);
     $(`#units option[value=${data.id_unit}]`).prop('selected', true);
 
     quantity = data.quantity;

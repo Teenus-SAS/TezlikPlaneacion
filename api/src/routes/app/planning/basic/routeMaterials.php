@@ -43,6 +43,15 @@ $app->post('/materialsDataValidation', function (Request $request, Response $res
         $materials = $dataMaterial['importMaterials'];
 
         for ($i = 0; $i < sizeof($materials); $i++) {
+            if (
+                empty($materials[$i]['refRawMaterial']) || empty($materials[$i]['nameRawMaterial']) ||
+                empty($materials[$i]['magnitude']) || empty($materials[$i]['unit'])
+            ) {
+                $i = $i + 1;
+                $dataImportMaterial = array('error' => true, 'message' => "Campos vacios. Fila: {$i}");
+                break;
+            }
+
             // Consultar magnitud
             $magnitude = $magnitudesDao->findMagnitude($materials[$i]);
 
@@ -63,20 +72,11 @@ $app->post('/materialsDataValidation', function (Request $request, Response $res
                 break;
             }
 
-            if (
-                empty($materials[$i]['refRawMaterial']) || empty($materials[$i]['nameRawMaterial']) ||
-                empty($materials[$i]['quantity'])
-            ) {
-                $i = $i + 1;
-                $dataImportMaterial = array('error' => true, 'message' => "Campos vacios. Fila: {$i}");
-                break;
-            } else {
-                $findMaterial = $generalMaterialsDao->findMaterial($materials[$i], $id_company);
-                if (!$findMaterial) $insert = $insert + 1;
-                else $update = $update + 1;
-                $dataImportMaterial['insert'] = $insert;
-                $dataImportMaterial['update'] = $update;
-            }
+            $findMaterial = $generalMaterialsDao->findMaterial($materials[$i], $id_company);
+            if (!$findMaterial) $insert = $insert + 1;
+            else $update = $update + 1;
+            $dataImportMaterial['insert'] = $insert;
+            $dataImportMaterial['update'] = $update;
         }
     } else
         $dataImportMaterial = array('error' => true, 'message' => 'El archivo se encuentra vacio. Intente nuevamente');

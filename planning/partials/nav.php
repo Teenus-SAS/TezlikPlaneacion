@@ -67,7 +67,7 @@
 
                     <?php if ($_SESSION['office'] == 1 && $_SESSION['plan_planning_office'] == 1) { ?>
                         <li class="nav-item offices">
-                            <a class="nav-link" href="/planning/">
+                            <a class="nav-link" href="/planning/offices">
                                 <i class="bx bxs-customize mr-1"></i> Despachos
                                 <i class="bx bx-chevron-down"></i>
                             </a>

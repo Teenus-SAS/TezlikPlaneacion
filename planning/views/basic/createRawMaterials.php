@@ -67,11 +67,11 @@ if (sizeof($_SESSION) == 0)
                                     <div class="card-body">
                                         <form id="formCreateMaterial">
                                             <div class="form-row">
-                                                <div class="col-md-3 floating-label enable-floating-label show-label">
+                                                <div class="col-md-4 floating-label enable-floating-label show-label">
                                                     <label for="refRawMaterial">Referencia</label>
                                                     <input type="text" class="form-control" id="refRawMaterial" name="refRawMaterial">
                                                 </div>
-                                                <div class="col-md-6 floating-label enable-floating-label show-label">
+                                                <div class="col-md-8 floating-label enable-floating-label show-label">
                                                     <label for="nameRawMaterial">Nombre Materia Prima</label>
                                                     <input type="text" class="form-control" id="nameRawMaterial" name="nameRawMaterial">
                                                 </div>

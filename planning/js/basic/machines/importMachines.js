@@ -28,7 +28,7 @@ $(document).ready(function () {
       .then((data) => {
         let machinesToImport = data.map((item) => {
           return {
-            machine: item.maquina.trim(),
+            machine: item.maquina,
           };
         });
         checkMachine(machinesToImport);

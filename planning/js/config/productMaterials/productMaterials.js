@@ -31,20 +31,19 @@ $(document).ready(function () {
 
   /* Adicionar unidad de materia prima */
 
-  $('#material').change(function (e) {
+  $('#material').change(async function (e) {
     e.preventDefault();
-    id = this.value;
+    let id = this.value;
 
-    data = sessionStorage.getItem('dataMaterials');
+    let data = sessionStorage.getItem('dataMaterials');
     if (data) {
-      dataMaterials = JSON.parse(dataMaterials);
+      dataMaterials = JSON.parse(data);
       sessionStorage.removeItem('dataMaterials');
     }
 
     for (i = 0; i < dataMaterials.length; i++) {
-      if (id == dataMaterials[i]['id_material']) {
-        $('#unity').val(dataMaterials[i].unit);
-        break;
+      if (id == dataMaterials[i].id_material) {
+        await loadUnitsByMagnitude(dataMaterials[i], 2);
       }
     }
   });
@@ -85,10 +84,11 @@ $(document).ready(function () {
 
   /* Actualizar productos materials */
 
-  $(document).on('click', '.updateMaterials', function (e) {
+  $(document).on('click', '.updateMaterials',async function (e) {
     $('.cardImportProductsMaterials').hide(800);
     $('.cardAddMaterials').show(800);
     $('#btnAddMaterials').html('Actualizar');
+    $('#units').empty();
 
     let row = $(this).parent().parent()[0];
     let data = tblConfigMaterials.fnGetData(row);
@@ -106,7 +106,7 @@ $(document).ready(function () {
         maximumFractionDigits: 4,
       });
     $('#quantity').val(quantity);
-    $('#unity').val(data.unit);
+    await loadUnitsByMagnitude(data, 2);
 
     $('html, body').animate(
       {

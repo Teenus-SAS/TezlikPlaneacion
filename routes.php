@@ -30,6 +30,7 @@ get('/admin/profile', '/admin/views/perfil/perfil.php');
 get('/planning', '/planning/index.php');
 get('/planning/inventory', '/planning/views/inventory/inventory.php');
 get('/planning/orders', '/planning/views/orders/orders.php');
+get('/planning/offices', '/planning/views/offices/offices.php');
 get('/planning/programming', '/planning/views/program/programming/programming.php');
 get('/planning/consolidated', '/planning/views/program/consolidated/consolidated.php');
 //Basic

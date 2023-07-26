@@ -18,6 +18,6 @@ $(document).ready(function () {
   $(document).on('change', '#magnitudes', function () {
     let value = this.value;
 
-    loadUnitsByMagnitude(value);
+    loadUnitsByMagnitude(value, 1);
   });
 });

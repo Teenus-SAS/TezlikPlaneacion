@@ -28,7 +28,7 @@ $(document).ready(function () {
       .then((data) => {
         let orderTypesToImport = data.map((item) => {
           return {
-            orderType: item.tipo_pedido.trim(),
+            orderType: item.tipo_pedido,
           };
         });
         checkOrderTypes(orderTypesToImport);

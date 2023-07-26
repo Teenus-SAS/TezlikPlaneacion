@@ -28,13 +28,13 @@ $(document).ready(function () {
       .then((data) => {
         let InventoryToImport = data.map((item) => {
           return {
-            reference: item.referencia.trim(),
-            nameInventory: item.nombre.trim(),
-            referenceMold: item.referencia_molde.trim(),
-            mold: item.molde.trim(),
-            unityRawMaterial: item.unidad.trim(),
+            reference: item.referencia,
+            nameInventory: item.nombre,
+            referenceMold: item.referencia_molde,
+            mold: item.molde,
+            unityRawMaterial: item.unidad,
             quantity: item.cantidad,
-            category: item.categoria.trim(),
+            category: item.categoria,
           };
         });
         checkInventory(InventoryToImport);
