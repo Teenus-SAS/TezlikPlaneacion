@@ -78,7 +78,7 @@ class MaterialsDao
         'id_material' => $dataMaterial['idMaterial'],
         'reference' => trim($dataMaterial['refRawMaterial']),
         'material' => strtoupper(trim($dataMaterial['nameRawMaterial'])),
-        'unit' => strtoupper(trim($dataMaterial['unit'])),
+        'unit' => trim($dataMaterial['unit']),
         'quantity' => $quantity
       ]);
       $this->logger->info(__FUNCTION__, array('query' => $stmt->queryString, 'errors' => $stmt->errorInfo()));
