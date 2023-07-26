@@ -24,7 +24,7 @@ class OrdersDao
                                       FROM plan_orders o
                                         INNER JOIN products p ON p.id_product = o.id_product
                                         INNER JOIN plan_clients c ON c.id_client = o.id_client
-                                      WHERE o.status_order = 0 AND o.id_company = :id_company");
+                                      WHERE o.status_order = 0 AND o.status = 'Alistamiento' AND o.id_company = :id_company");
         $stmt->execute(['id_company' => $id_company]);
 
         $this->logger->info(__FUNCTION__, array('query' => $stmt->queryString, 'errors' => $stmt->errorInfo()));
@@ -39,8 +39,8 @@ class OrdersDao
         $connection = Connection::getInstance()->getConnection();
 
         try {
-            $stmt = $connection->prepare("INSERT INTO plan_orders (num_order, date_order, min_date, max_date, id_company, id_product, id_client, original_quantity, status_order) 
-                                          VALUES (:num_order, :date_order, :min_date, :max_date, :id_company, :id_product, :id_client, :original_quantity, 1)");
+            $stmt = $connection->prepare("INSERT INTO plan_orders (num_order, date_order, min_date, max_date, id_company, id_product, id_client, original_quantity, status, status_order) 
+                                          VALUES (:num_order, :date_order, :min_date, :max_date, :id_company, :id_product, :id_client, :original_quantity, 'Alistamiento', 1)");
             $stmt->execute([
                 'num_order' => trim($dataOrder['order']),
                 'date_order' => trim($dataOrder['dateOrder']),

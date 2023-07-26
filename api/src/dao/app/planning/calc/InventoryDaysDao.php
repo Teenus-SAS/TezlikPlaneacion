@@ -23,7 +23,7 @@ class InventoryDaysDao
         /* SELECT (((:cantProducts/(january + february + march + april + june + july + august + september + november + december)/12)/4)/7) AS InventoryDays 
                                       FROM products_price_history
                                       WHERE id_product = :id_product 'cantProducts' => $dataInventory['cantProducts'],*/
-        $stmt = $connection->prepare("SELECT (((p.product/(pph.january + pph.february + pph.march + pph.april + pph.june + pph.july + pph.august + pph.september + pph.november + pph.december)/12)/4)/7) AS inventory_day 
+        $stmt = $connection->prepare("SELECT (((p.product / (pph.january + pph.february + pph.march + pph.april + pph.june + pph.july + pph.august + pph.september + pph.november + pph.december)/12)/4)/7) AS inventory_day 
                                       FROM products p
                                       INNER JOIN products_price_history pph ON pph.id_product = p.id_product
                                       WHERE p.id_product = :id_product");

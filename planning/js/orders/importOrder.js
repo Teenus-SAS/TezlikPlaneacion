@@ -34,10 +34,8 @@ $(document).ready(function () {
             maxDate: item.fecha_maxima,
             referenceProduct: item.referencia_producto,
             product: item.producto,
-            client: item.cliente,
-            // orderType: item.tipo_pedido,
-            originalQuantity: item.cantidad_original,
-            // quantity: item.cantidad_pendiente,
+            client: item.cliente, 
+            originalQuantity: item.cantidad_original, 
           };
         });
         checkOrder(OrderToImport);
