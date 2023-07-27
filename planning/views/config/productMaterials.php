@@ -55,14 +55,8 @@ if (sizeof($_SESSION) == 0)
                                 <!-- <div class="col-xs-2 py-2 mr-2">
                                     <button class="btn btn-secondary" id="btnCreateProductInProcess">Adicionar Producto En Proceso</button>
                                 </div> -->
-                                <div class="col-xs-2 py-2 dropleft show mr-2">
-                                    <a class="btn btn-info dropdown-toggle" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                        Importar Productos*Materia Prima
-                                    </a>
-                                    <div class="dropdown-menu" aria-labelledby="btnImport">
-                                        <a class="dropdown-item import" id="1" href="javascript:void(0)">Materias Prima</a>
-                                        <!-- <a class="dropdown-item import" id="2" href="javascript:void(0)">Productos en Proceso</a> -->
-                                    </div>
+                                <div class="col-xs-2 py-2 mr-2">
+                                    <button class="btn btn-info" id="btnImportProduct">Importar Productos*Materia Prima</button>
                                 </div>
                             </div>
                         </div>

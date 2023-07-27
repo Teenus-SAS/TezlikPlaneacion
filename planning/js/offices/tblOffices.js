@@ -20,12 +20,12 @@ $(document).ready(function () {
       },
       {
         title: 'No Pedido',
-        data: 'num_Offices',
+        data: 'num_order',
         className: 'uniqueClassName',
       },
       {
         title: 'Fecha Pedido',
-        data: 'date_Offices',
+        data: 'date_order',
         className: 'uniqueClassName',
         // render: $.fn.dataTable.render.moment('YYYY/MM/DD'),
       },

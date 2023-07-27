@@ -1,26 +1,12 @@
 $(document).ready(function () {
   let selectedFile;
-  let id;
 
   $('.cardImport').hide();
 
-  // $('.import').on('click', function () {
-  //   sessionStorage.removeItem('id');
-  //   id = this.id;
-  //   sessionStorage.setItem('id', id);
-
-  //   if (id == 1) {
-  //     $('#txtFile').html('Importar Productos*Materia Prima');
-  //   }
-  //   if (id == 2) {
-  //     $('#txtFile').html('Importar Productos En Proceso');
-  //     $('#comment').html('Asignación de productos en proceso');
-  //   }
-
-  //   $('.cardAddMaterials').hide(800);
-  //   $('.cardAddProductInProccess').hide(800);
-  //   $('.cardImport').show(800);
-  // });
+  $('#btnImportProduct').on('click', function () {
+    $('.cardAddMaterials').hide(800);
+    $('.cardImport').toggle(800);
+  });
 
   $('#file').change(function (e) {
     e.preventDefault();

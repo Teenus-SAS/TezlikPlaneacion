@@ -30,8 +30,13 @@ $(document).ready(function () {
         className: 'classCenter',
       },
       {
+        title: 'Existencia',
+        data: 'quantity',
+        className: 'classCenter',
+      },
+      {
         title: 'Unidad',
-        data: 'abbreviation',
+        data: 'unit',
         className: 'classCenter',
       },
       {

@@ -56,7 +56,7 @@ class GeneralOrdersDao
     {
         $connection = Connection::getInstance()->getConnection();
 
-        $stmt = $connection->prepare("SELECT CONCAT(num_order, '-' , id_product) AS concate FROM plan_orders WHERE id_company = :id_company");
+        $stmt = $connection->prepare("SELECT CONCAT(num_order, '-' , id_product) AS concate, id_order, id_product FROM plan_orders WHERE id_company = :id_company");
         $stmt->execute(['id_company' => $id_company]);
         $this->logger->info(__FUNCTION__, array('query' => $stmt->queryString, 'errors' => $stmt->errorInfo()));
 
@@ -64,7 +64,23 @@ class GeneralOrdersDao
         return $orders;
     }
 
-    public function changeStatus($num_order, $id_product)
+    public function checkAccumulatedQuantityOrder($id_product)
+    {
+        $connection = Connection::getInstance()->getConnection();
+
+        $stmt = $connection->prepare("SELECT (SELECT IFNULL(SUM(original_quantity), 0) FROM plan_orders WHERE id_product = p.id_product) AS accumulated_quantity, p.quantity 
+                                      FROM products p 
+                                      WHERE p.id_product = :id_product");
+        $stmt->execute([
+            'id_product' => $id_product
+        ]);
+        $this->logger->info(__FUNCTION__, array('query' => $stmt->queryString, 'errors' => $stmt->errorInfo()));
+
+        $order = $stmt->fetch($connection::FETCH_ASSOC);
+        return $order;
+    }
+
+    public function changeStatusOrder($num_order, $id_product)
     {
         $connection = Connection::getInstance()->getConnection();
 
@@ -77,6 +93,24 @@ class GeneralOrdersDao
             $this->logger->info(__FUNCTION__, array('query' => $stmt->queryString, 'errors' => $stmt->errorInfo()));
         } catch (\Exception $e) {
             $message = $e->getMessage();
+            $error = array('info' => true, 'message' => $message);
+            return $error;
+        }
+    }
+
+    public function changeStatus($id_order)
+    {
+        $connection = Connection::getInstance()->getConnection();
+
+        try {
+            $stmt = $connection->prepare("UPDATE plan_orders SET status = :status  WHERE id_order = :id_order");
+            $stmt->execute([
+                'status' => 'Despacho',
+                'id_order' => $id_order
+            ]);
+        } catch (\Exception $e) {
+            $message = $e->getMessage();
+
             $error = array('info' => true, 'message' => $message);
             return $error;
         }

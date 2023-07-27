@@ -35,6 +35,14 @@ $(document).ready(function () {
         className: 'uniqueClassName',
       }, 
       {
+        title: 'Unidad',
+        data: null,
+        className: 'classCenter',
+        render: function (data) {
+          return 'UNIDAD';
+        }
+      },
+      {
         title: 'Img',
         data: 'img',
         className: 'uniqueClassName',

@@ -1,5 +1,5 @@
 $(document).ready(function () {
-  /* ACCESOS DE USUARIO */
+  /* ACCESOS DE USUARIO 
   $.ajax({
     type: 'POST',
     url: '/api/planningUserAccess',
@@ -59,5 +59,5 @@ $(document).ready(function () {
         $('#navPlanAdmin').remove();
       }
     },
-  });
+  }); */
 });

@@ -39,8 +39,8 @@ class OrdersDao
         $connection = Connection::getInstance()->getConnection();
 
         try {
-            $stmt = $connection->prepare("INSERT INTO plan_orders (num_order, date_order, min_date, max_date, id_company, id_product, id_client, original_quantity, status, status_order) 
-                                          VALUES (:num_order, :date_order, :min_date, :max_date, :id_company, :id_product, :id_client, :original_quantity, 'Alistamiento', 1)");
+            $stmt = $connection->prepare("INSERT INTO plan_orders (num_order, date_order, min_date, max_date, id_company, id_product, id_client, original_quantity, status) 
+                                          VALUES (:num_order, :date_order, :min_date, :max_date, :id_company, :id_product, :id_client, :original_quantity, 'Alistamiento')");
             $stmt->execute([
                 'num_order' => trim($dataOrder['order']),
                 'date_order' => trim($dataOrder['dateOrder']),

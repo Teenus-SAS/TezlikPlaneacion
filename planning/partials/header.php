@@ -91,21 +91,23 @@
                                         </ul>
                                     </div>
                                 <?php } ?>
-                                <?php if ($_SESSION['inv_category'] != 0 || $_SESSION['sale'] != 0) { ?>
-                                    <div class="col-md-3" id="navPlanGeneral">
-                                        <h5 class="font-size-14 font-weight-600">General</h5>
-                                        <ul class="list-unstyled megamenu-list">
-                                            <?php //if ($_SESSION['client'] == 1) { 
-                                            ?>
-                                            <li class="clients"><a href="/planning/clients">Clientes</a></li>
-                                            <?php //} 
-                                            ?>
-                                            <?php if ($_SESSION['sale'] == 1) { ?>
-                                                <li class="sales"><a href="/planning/sales">Ventas</a></li>
-                                            <?php } ?>
-                                        </ul>
-                                    </div>
-                                <?php } ?>
+                                <?php //if ($_SESSION['client'] != 0 ||$_SESSION['sale'] != 0) { 
+                                ?>
+                                <div class="col-md-3" id="navPlanGeneral">
+                                    <h5 class="font-size-14 font-weight-600">General</h5>
+                                    <ul class="list-unstyled megamenu-list">
+                                        <?php //if ($_SESSION['client'] == 1) { 
+                                        ?>
+                                        <li class="clients"><a href="/planning/clients">Clientes</a></li>
+                                        <?php //} 
+                                        ?>
+                                        <?php if ($_SESSION['sale'] == 1) { ?>
+                                            <li class="sales"><a href="/planning/sales">Ventas</a></li>
+                                        <?php } ?>
+                                    </ul>
+                                </div>
+                                <?php //} 
+                                ?>
                                 <?php if ($_SESSION['planning_user'] != 0 || $_SESSION['client'] != 0 || $_SESSION['orders_type'] != 0) { ?>
                                     <div class="col-md-3" id="navPlanAdmin">
                                         <h5 class="font-size-14 font-weight-600">Administrador</h5>

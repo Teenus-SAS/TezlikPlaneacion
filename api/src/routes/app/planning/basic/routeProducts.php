@@ -3,12 +3,14 @@
 use TezlikPlaneacion\dao\GeneralProductsDao;
 use TezlikPlaneacion\dao\FilesDao;
 use TezlikPlaneacion\dao\GeneralCategoriesDao;
+use TezlikPlaneacion\dao\GeneralOrdersDao;
 use TezlikPlaneacion\dao\InvMoldsDao;
 use TezlikPlaneacion\dao\LastDataDao;
 use TezlikPlaneacion\dao\ProductsDao;
 
 $productsDao = new ProductsDao();
 $generalProductsDao = new GeneralProductsDao();
+$generalOrdersDao = new GeneralOrdersDao();
 $lastDataDao = new LastDataDao();
 $FilesDao = new FilesDao();
 $invMoldsDao = new InvMoldsDao();
@@ -30,8 +32,6 @@ $app->get('/products', function (Request $request, Response $response, $args) us
 /* Consultar productos importados */
 $app->post('/productsDataValidation', function (Request $request, Response $response, $args) use (
     $generalProductsDao,
-    $invMoldsDao,
-    $invCategoriesDao
 ) {
     $dataProduct = $request->getParsedBody();
 
@@ -69,8 +69,7 @@ $app->post('/addProduct', function (Request $request, Response $response, $args)
     $generalProductsDao,
     $lastDataDao,
     $FilesDao,
-    $invMoldsDao,
-    $invCategoriesDao
+    $generalOrdersDao
 ) {
     session_start();
     $id_company = $_SESSION['id_company'];
@@ -117,11 +116,33 @@ $app->post('/addProduct', function (Request $request, Response $response, $args)
         else
             $resp = array('error' => true, 'message' => 'Ocurrió un error mientras importaba los datos. Intente nuevamente');
     }
+
+    // Cambiar estado pedidos
+    $result = $generalOrdersDao->findAllOrdersConcat($id_company);
+
+    for ($i = 0; $i < sizeof($result); $i++) {
+        // Checkear cantidades
+        $order = $generalOrdersDao->checkAccumulatedQuantityOrder($result[$i]['id_product']);
+
+        if ($order['accumulated_quantity'] <= $order['quantity']) {
+            $generalOrdersDao->changeStatus($result[$i]['id_order']);
+            $accumulated_quantity = $order['accumulated_quantity'];
+        } else
+            $accumulated_quantity = $order['quantity'];
+
+        $generalProductsDao->updateAccumulatedQuantity($result[$i]['id_product'], $accumulated_quantity);
+    }
+
     $response->getBody()->write(json_encode($resp));
     return $response->withStatus(200)->withHeader('Content-Type', 'application/json');
 });
 
-$app->post('/updatePlanProduct', function (Request $request, Response $response, $args) use ($productsDao, $generalProductsDao, $FilesDao) {
+$app->post('/updatePlanProduct', function (Request $request, Response $response, $args) use (
+    $productsDao,
+    $generalProductsDao,
+    $generalOrdersDao,
+    $FilesDao
+) {
     session_start();
     $id_company = $_SESSION['id_company'];
 
@@ -138,6 +159,22 @@ $app->post('/updatePlanProduct', function (Request $request, Response $response,
 
             if (sizeof($_FILES) > 0)
                 $products = $FilesDao->imageProduct($dataProduct['idProduct'], $id_company);
+
+            // Cambiar estado pedidos
+            $result = $generalOrdersDao->findAllOrdersConcat($id_company);
+
+            for ($i = 0; $i < sizeof($result); $i++) {
+                // Checkear cantidades
+                $order = $generalOrdersDao->checkAccumulatedQuantityOrder($result[$i]['id_product']);
+
+                if ($order['accumulated_quantity'] <= $order['quantity']) {
+                    $generalOrdersDao->changeStatus($result[$i]['id_order']);
+                    $accumulated_quantity = $order['accumulated_quantity'];
+                } else
+                    $accumulated_quantity = $order['quantity'];
+
+                $generalProductsDao->updateAccumulatedQuantity($result[$i]['id_product'], $accumulated_quantity);
+            }
 
             if ($products == null)
                 $resp = array('success' => true, 'message' => 'Producto actualizado correctamente');

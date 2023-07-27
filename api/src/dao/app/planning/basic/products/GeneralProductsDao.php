@@ -64,4 +64,22 @@ class GeneralProductsDao
         $findProduct = $stmt->fetch($connection::FETCH_ASSOC);
         return $findProduct;
     }
+
+    public function updateAccumulatedQuantity($id_product, $accumulated_quantity)
+    {
+        $connection = Connection::getInstance()->getConnection();
+
+        try {
+            $stmt = $connection->prepare("UPDATE products SET accumulated_quantity = :accumulated_quantity  WHERE id_product = :id_product");
+            $stmt->execute([
+                'accumulated_quantity' => $accumulated_quantity,
+                'id_product' => $id_product
+            ]);
+        } catch (\Exception $e) {
+            $message = $e->getMessage();
+
+            $error = array('info' => true, 'message' => $message);
+            return $error;
+        }
+    }
 }

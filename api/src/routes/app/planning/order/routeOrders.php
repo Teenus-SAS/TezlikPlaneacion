@@ -12,6 +12,7 @@ use TezlikPlaneacion\dao\OrdersDao;
 
 $ordersDao = new OrdersDao();
 $generalOrdersDao = new GeneralOrdersDao();
+$generalProductsDao = new GeneralProductsDao();
 $convertDataDao = new ConvertDataDao();
 $productsDao = new GeneralProductsDao();
 $clientsDao = new ClientsDao();
@@ -23,10 +24,32 @@ $deliveryDateDao = new DeliveryDateDao();
 use Psr\Http\Message\ResponseInterface as Response;
 use Psr\Http\Message\ServerRequestInterface as Request;
 
-$app->get('/orders', function (Request $request, Response $response, $args) use ($ordersDao) {
+$app->get('/orders', function (Request $request, Response $response, $args) use (
+    $ordersDao,
+    $generalOrdersDao,
+    $generalProductsDao
+) {
     session_start();
     $id_company = $_SESSION['id_company'];
+
+    // Cambiar estado pedidos
+    $result = $generalOrdersDao->findAllOrdersConcat($id_company);
+
+    for ($i = 0; $i < sizeof($result); $i++) {
+        // Checkear cantidades
+        $order = $generalOrdersDao->checkAccumulatedQuantityOrder($result[$i]['id_product']);
+
+        if ($order['accumulated_quantity'] <= $order['quantity']) {
+            $generalOrdersDao->changeStatus($result[$i]['id_order']);
+            $accumulated_quantity = $order['accumulated_quantity'];
+        } else
+            $accumulated_quantity = $order['quantity'];
+
+        $generalProductsDao->updateAccumulatedQuantity($result[$i]['id_product'], $accumulated_quantity);
+    }
+
     $orders = $ordersDao->findAllOrdersByCompany($id_company);
+
     $response->getBody()->write(json_encode($orders, JSON_NUMERIC_CHECK));
     return $response->withHeader('Content-Type', 'application/json');
 });
@@ -99,10 +122,8 @@ $app->post('/addOrder', function (Request $request, Response $response, $args) u
     $generalOrdersDao,
     $convertDataDao,
     $productsDao,
-    $generalClientsDao,
-    $orderTypesDao,
-    $deliveryDateDao,
-    $mallasDao
+    $generalProductsDao,
+    $generalClientsDao
 ) {
     session_start();
     $id_company = $_SESSION['id_company'];
@@ -135,10 +156,6 @@ $app->post('/addOrder', function (Request $request, Response $response, $args) u
             $findClient = $generalClientsDao->findClient($order[$i], $id_company);
             $order[$i]['idClient'] = $findClient['id_client'];
 
-            // Obtener id tipo pedido
-            // $findOrderType = $orderTypesDao->findOrderType($order[$i]);
-            // $order[$i]['idOrderType'] = $findOrderType['id_order_type'];
-
             $order[$i] = $convertDataDao->changeDateOrder($order[$i]);
 
             // Consultar pedido
@@ -164,6 +181,17 @@ $app->post('/addOrder', function (Request $request, Response $response, $args) u
 
     $arrayBD = [];
     for ($i = 0; $i < sizeof($result); $i++) {
+        // Checkear cantidades
+        $order = $generalOrdersDao->checkAccumulatedQuantityOrder($result[$i]['id_product']);
+
+        if ($order['accumulated_quantity'] <= $order['quantity']) {
+            $generalOrdersDao->changeStatus($result[$i]['id_order']);
+            $accumulated_quantity = $order['accumulated_quantity'];
+        } else
+            $accumulated_quantity = $order['quantity'];
+
+        $generalProductsDao->updateAccumulatedQuantity($result[$i]['id_product'], $accumulated_quantity);
+
         array_push($arrayBD, $result[$i]['concate']);
     }
 
@@ -183,7 +211,7 @@ $app->post('/addOrder', function (Request $request, Response $response, $args) u
             $posicion =  strrpos($array_diff[$i], '-');
             $id_product = substr($array_diff[$i], $posicion + 1);
             $order = substr($array_diff[$i], 0, $posicion);
-            $result = $generalOrdersDao->changeStatus($order, $id_product);
+            $result = $generalOrdersDao->changeStatusOrder($order, $id_product);
         }
     else if (sizeof($array_diff) == 0)
         $result = null;
@@ -195,6 +223,8 @@ $app->post('/addOrder', function (Request $request, Response $response, $args) u
 
 $app->post('/updateOrder', function (Request $request, Response $response, $args) use (
     $ordersDao,
+    $generalOrdersDao,
+    $generalProductsDao,
     $convertDataDao
 ) {
     $dataOrder = $request->getParsedBody();
@@ -205,6 +235,17 @@ $app->post('/updateOrder', function (Request $request, Response $response, $args
         $dataOrder = $convertDataDao->changeDateOrder($dataOrder);
 
         $order = $ordersDao->updateOrder($dataOrder);
+
+        // Checkear cantidades
+        $order = $generalOrdersDao->checkAccumulatedQuantityOrder($dataOrder['idProduct']);
+
+        if ($order['accumulated_quantity'] <= $order['quantity']) {
+            $generalOrdersDao->changeStatus($dataOrder['idOrder']);
+            $accumulated_quantity = $order['accumulated_quantity'];
+        } else
+            $accumulated_quantity = $order['quantity'];
+
+        $generalProductsDao->updateAccumulatedQuantity($dataOrder['idOrder'], $accumulated_quantity);
 
         if ($order == null)
             $resp = array('success' => true, 'message' => 'Pedido modificado correctamente');
