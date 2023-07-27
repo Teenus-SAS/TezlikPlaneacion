@@ -41,9 +41,10 @@ class GeneralOrdersDao
     {
         $connection = Connection::getInstance()->getConnection();
 
-        $stmt = $connection->prepare("SELECT * FROM plan_orders WHERE num_order = :num_order AND id_company = :id_company");
+        $stmt = $connection->prepare("SELECT * FROM plan_orders WHERE num_order = :num_order AND id_product = :id_product AND id_company = :id_company");
         $stmt->execute([
             'num_order' => trim($dataOrder['order']),
+            'id_product' => $dataOrder['idProduct'],
             'id_company' => $id_company
         ]);
         $this->logger->info(__FUNCTION__, array('query' => $stmt->queryString, 'errors' => $stmt->errorInfo()));

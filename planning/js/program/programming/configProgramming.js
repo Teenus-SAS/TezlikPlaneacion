@@ -1,27 +1,14 @@
 $(document).ready(function () {
   data = {};
 
-  $(document).on('change', '.programmingSelect', function (e) {
+  $(document).on('change', '#order', function (e) {
     e.preventDefault();
-    if (!data.idMachine && !data.idOrder && !data.idProduct) {
-      id = this.id;
 
-      if (id.includes('machines')) {
-        id_machine = $('#idMachine').val();
-        loadProductsAndOrders(id_machine);
-      }
-      if (id.includes('orders')) {
-        id_order = $('#order').val();
-        loadProducts(id_order);
-      }
-      if (id.includes('products')) {
-        id_product = $('#selectNameProduct').val();
-        loadMachinesAndOrders(id_product);
-      }
-    }
+       let num_order = $('#order :selected').text().trim();
+        loadProducts(num_order);
   });
 
-  /* Cargar Pedidos y Productos */
+  /* Cargar Pedidos y Productos 
   loadProductsAndOrders = (id_machine) => {
     data['idMachine'] = id_machine;
     $.ajax({
@@ -61,9 +48,9 @@ $(document).ready(function () {
       },
     });
     delete data.idMachine;
-  };
+  }; */
 
-  /* Cargar Maquinas y Pedidos */
+  /* Cargar Maquinas y Pedidos 
   loadMachinesAndOrders = (id_product) => {
     data['idProduct'] = id_product;
     $.ajax({
@@ -98,36 +85,18 @@ $(document).ready(function () {
       },
     });
     delete data.idProduct;
-  };
+  }; */
 
   /* Cargar Productos y Maquinas */
-  loadProducts = (id_order) => {
-    data['idOrder'] = id_order;
-    $.ajax({
-      type: 'POST',
-      url: '/api/programming',
-      data: data,
-      success: function (r) {
-        let $select5 = $(`#idMachine`);
-        $select5.empty();
+  loadProducts = async (num_order) => {
+    let r = await searchData(`/api/programming/${num_order}`);
+    
+        let $select = $(`#selectNameProduct`);
+        $select.empty();
 
-        $select5.append(`<option disabled selected>Seleccionar</option>`);
+        $select.append(`<option disabled selected>Seleccionar</option>`);
         $.each(r, function (i, value) {
-          $select5.append(
-            `<option value = ${value.id_machine}> ${value.machine} </option>`
-          );
-          $(`#idMachine option[value=${value.id_machine}]`).prop(
-            'selected',
-            true
-          );
-        });
-
-        let $select6 = $(`#selectNameProduct`);
-        $select6.empty();
-
-        $select6.append(`<option disabled selected>Seleccionar</option>`);
-        $.each(r, function (i, value) {
-          $select6.append(
+          $select.append(
             `<option value = ${value.id_product}> ${value.product} </option>`
           );
           $(`#selectNameProduct option[value=${value.id_product}]`).prop(
@@ -140,8 +109,6 @@ $(document).ready(function () {
             true
           );
         });
-      },
-    });
-    delete data.idOrder;
+      
   };
 });

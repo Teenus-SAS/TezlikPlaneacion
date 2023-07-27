@@ -37,15 +37,8 @@ $app->get('/generalData', function (Request $request, Response $response, $args)
     return $response->withHeader('Content-Type', 'application/json');
 });
 
-$app->post('/programming', function (Request $request, Response $response, $args) use ($programmingDao) {
-    $dataProgramming = $request->getParsedBody();
-
-    if (isset($dataProgramming['idMachine']))
-        $programming = $programmingDao->findProductsAndOrdersByMachine($dataProgramming);
-    if (isset($dataProgramming['idProduct']))
-        $programming = $programmingDao->findMachinesAndOrdersByProducts($dataProgramming);
-    if (isset($dataProgramming['idOrder']))
-        $programming = $programmingDao->findProductsByOrders($dataProgramming);
+$app->get('/programming/{num_order}', function (Request $request, Response $response, $args) use ($programmingDao) {
+    $programming = $programmingDao->findProductsByOrders($args['num_order']);
 
     $response->getBody()->write(json_encode($programming, JSON_NUMERIC_CHECK));
     return $response->withHeader('Content-Type', 'application/json');

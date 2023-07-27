@@ -64,21 +64,20 @@ if (sizeof($_SESSION) == 0)
                                     <div class="card-body">
                                         <form id="formCreateProgramming">
                                             <div class="form-row">
-                                                <div class="col-sm-3 programmingSelect floating-label enable-floating-label show-label" id="machines">
-                                                    <label for="">Maquina</label>
-                                                    <select class="form-control" id="idMachine" name="idMachine">
-                                                    </select>
-                                                </div>
                                                 <div class="col-sm-2 programmingSelect floating-label enable-floating-label show-label" id="orders">
                                                     <label for="">Pedido</label>
                                                     <select class="form-control" id="order" name="order">
                                                     </select>
                                                 </div>
-
                                                 <div class="col-sm-3 programmingSelect floating-label enable-floating-label show-label" id="products">
                                                     <label for="">Producto</label>
                                                     <select class="form-control" id="selectNameProduct" name="idProduct"></select>
                                                     <select class="form-control" id="refProduct" style="display:none"></select>
+                                                </div>
+                                                <div class="col-sm-3 floating-label enable-floating-label show-label" id="machines">
+                                                    <label for="">Maquina</label>
+                                                    <select class="form-control" id="idMachine" name="idMachine">
+                                                    </select>
                                                 </div>
                                                 <div class="col-sm-2 floating-label enable-floating-label show-label">
                                                     <label for="">Cantidad</label>
@@ -142,7 +141,7 @@ if (sizeof($_SESSION) == 0)
     </div>
 
     <?php include_once dirname(dirname(dirname(dirname(__DIR__)))) . '/global/partials/scriptsJS.php'; ?>
-    <script src="/planning/js/users/usersAccess.js"></script>
+    <!-- <script src="/planning/js/users/usersAccess.js"></script> -->
 
     <!-- <style>
         td {
@@ -151,9 +150,9 @@ if (sizeof($_SESSION) == 0)
     </style> -->
     <!-- <script src="/global/js/global/number.js"></script> -->
     <script src="../planning/js/program/programming/tblProgramming.js"></script>
-    <!-- <script src="/planning/js/orders/configOrders.js"></script>
+    <!--  <script src="/planning/js/basic/products/configProducts.js"></script> -->
+    <script src="/planning/js/orders/configOrders.js"></script>
     <script src="/planning/js/basic/machines/configMachines.js"></script>
-    <script src="/planning/js/basic/products/configProducts.js"></script> -->
     <script src="/planning/js/program/programming/programming.js"></script>
     <script src="/planning/js/program/programming/configProgramming.js"></script>
     <script src="../global/js/global/validateExt.js"></script>

@@ -13,18 +13,17 @@ $(document).ready(function () {
 
   $('#btnNewProgramming').click(function (e) {
     e.preventDefault();
-    fetchindataProgramm = async () => {
-      await generalData();
+    
       $('.cardImportProgramming').hide(800);
       $('.cardCreateProgramming').toggle(800);
       $('#btnCreateProgramming').html('Crear');
       $('#formCreateProgramming').trigger('reset');
-    };
-    fetchindataProgramm();
+    
+    
     data = {};
   });
 
-  /* Cargar datos generales */
+  /* Cargar datos generales 
   generalData = async () => {
     await $.ajax({
       url: '/api/generalData',
@@ -70,7 +69,7 @@ $(document).ready(function () {
         });
       },
     });
-  };
+  }; */
 
   /* Crear nueva programa de producción */
   $('#btnCreateProgramming').click(function (e) {
@@ -161,4 +160,7 @@ $(document).ready(function () {
     toastr.success('Programación creada correctamente');
     return false;
   };
+
+  loadDataMachines(2);
+
 });

@@ -15,7 +15,7 @@ class ProgrammingDao
         $this->logger = new Logger(self::class);
         $this->logger->pushHandler(new RotatingFileHandler(Constants::LOGS_PATH . 'querys.log', 20, Logger::DEBUG));
     }
-
+    /*
     public function findProductsAndOrdersByMachine($dataProgramming)
     {
         $connection = Connection::getInstance()->getConnection();
@@ -45,19 +45,19 @@ class ProgrammingDao
         $machinesAndOrders = $stmt->fetchAll($connection::FETCH_ASSOC);
         return $machinesAndOrders;
     }
-
-    public function findProductsByOrders($dataProgramming)
+ */
+    public function findProductsByOrders($num_order)
     {
         $connection = Connection::getInstance()->getConnection();
 
-        $stmt = $connection->prepare("SELECT m.id_machine, m.machine, p.id_product, p.product
+        $stmt = $connection->prepare("SELECT p.id_product, p.reference, p.product, p.quantity 
                                       FROM products p
-                                      INNER JOIN plan_cicles_machine pcm ON pcm.id_product = p.id_product
-                                      INNER JOIN machines m ON m.id_machine = pcm.id_machine
                                       INNER JOIN plan_orders o ON o.id_product = p.id_product
-                                      WHERE o.id_order = :id_order");
-        $stmt->execute(['id_order' => $dataProgramming['idOrder']]);
+                                      WHERE o.num_order = :num_order AND o.status = 'Alistamiento' GROUP BY p.id_product");
+        $stmt->execute(['num_order' => $num_order]);
+
         $this->logger->info(__FUNCTION__, array('query' => $stmt->queryString, 'errors' => $stmt->errorInfo()));
+
         $products = $stmt->fetchAll($connection::FETCH_ASSOC);
         return $products;
     }
