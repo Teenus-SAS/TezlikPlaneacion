@@ -3,7 +3,7 @@ $(document).ready(function () {
   tblOffices = $('#tblOffices').dataTable({
     pageLength: 50,
     ajax: {
-      url: '../../api/offices',
+      url: '/api/actualOffices',
       dataSrc: '',
     },
     language: {
@@ -27,7 +27,6 @@ $(document).ready(function () {
         title: 'Fecha Pedido',
         data: 'date_order',
         className: 'uniqueClassName',
-        // render: $.fn.dataTable.render.moment('YYYY/MM/DD'),
       },
       {
         title: 'Cliente',
@@ -66,14 +65,12 @@ $(document).ready(function () {
         className: 'classCenter',
       },
       // {
-      //   title: 'Acciones',
-      //   data: 'id_Offices',
+      //   title: 'Fecha de Entrega',
+      //   data: 'id_order',
       //   className: 'classCenter',
-      //   render: function (data) {
-      //     return `
-      //           <a href="javascript:;" <i class="bx bx-edit-alt updateOffices" id="${data}" data-toggle='tooltip' title='Actualizar Pedido' style="font-size: 30px;"></i></a>
-      //           <a href="javascript:;" <i class="mdi mdi-delete-forever" id="${data}" data-toggle='tooltip' title='Eliminar Pedido' style="font-size: 30px;color:red" onclick="deleteFunction()"></i></a>`;
-      //   },
+      //   render: function (data) { 
+      //     return `<a href="javascript:;" <i class="bi bi-calendar-plus-fill changeDate" id="${data}" data-toggle='tooltip' title='Actualizar Fecha' style="font-size: 30px;"></i></a>`;
+      //   }
       // },
     ],
   });

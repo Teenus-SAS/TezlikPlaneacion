@@ -93,5 +93,7 @@ require_once('../api/src/routes/app/planning/program/routeProgramming.php');
 require_once('../api/src/routes/app/planning/program/routeConsolidated.php');
 // Despachos
 require_once('../api/src/routes/app/planning/offices/routeOffices.php');
+// Explosion de Materiales
+require_once('../api/src/routes/app/planning/explosionMaterials/routeExplosionMaterial.php');
 
 $app->run();

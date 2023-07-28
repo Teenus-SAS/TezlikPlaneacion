@@ -33,4 +33,23 @@ class OfficesDao
         $this->logger->notice("pedidos", array('pedidos' => $orders));
         return $orders;
     }
+
+    public function updateDeliveryDate($dataOrder)
+    {
+        $connection = Connection::getInstance()->getConnection();
+
+        try {
+            $stmt = $connection->prepare("UPDATE plan_orders SET delivery_date = :delivery_date WHERE id_order = :id_order");
+            $stmt->execute([
+                'delivery_date' => $dataOrder['date'],
+                'id_order' => $dataOrder['idOrder']
+            ]);
+        } catch (\Exception $e) {
+            $message = $e->getMessage();
+
+            $error = array('info' => true, 'message' => $message);
+
+            return $error;
+        }
+    }
 }

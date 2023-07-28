@@ -58,7 +58,7 @@
 
                     <?php if ($_SESSION['explosion_of_material'] == 1 && $_SESSION['plan_planning_explosion_of_material'] == 1) { ?>
                         <li class="nav-item explosionMaterials">
-                            <a class="nav-link" href="/planning/">
+                            <a class="nav-link" href="/planning/explosion-materials">
                                 <i class="bx bxs-customize mr-1"></i> Explosión de Materiales
                                 <i class="bx bx-chevron-down"></i>
                             </a>

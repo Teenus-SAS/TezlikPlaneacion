@@ -6,6 +6,8 @@ if (!isset($_SESSION)) {
 }
 if (sizeof($_SESSION) == 0)
     header('location: /');
+
+$fechaActual = date("Y-m-d");
 ?>
 
 <!DOCTYPE html>
@@ -49,35 +51,36 @@ if (sizeof($_SESSION) == 0)
                                     </ol>
                                 </div>
                             </div>
-                            <!-- <div class="col-sm-7 col-xl-6 form-inline justify-content-sm-end">
+                            <div class="col-sm-7 col-xl-6 form-inline justify-content-sm-end">
                                 <div class="col-xs-2 mr-2">
-                                    <button class="btn btn-warning" id="btnNewOffices" name="btnNewOffices">Nuevo Despachos</button>
+                                    <button class="btn btn-warning" id="btnNewDate" name="btnNewDate">Agregar Fecha de Entrega</button>
                                 </div>
-                                <div class="col-xs-2 py-2 mr-2">
+                                <!-- <div class="col-xs-2 py-2 mr-2">
                                     <button class="btn btn-info" id="btnImportNewOffices">Importar Despachos</button>
-                                </div>
-                            </div> -->
+                                </div> -->
+                            </div>
                         </div>
                     </div>
                 </div>
 
-                <!-- <div class="page-content-wrapper mt--45 mb-5 cardImportOffices">
+                <div class="page-content-wrapper mt--45 mb-5 cardAddDate">
                     <div class="container-fluid">
                         <div class="row">
                             <div class="col-12">
-                                <form id="formImportOffices" enctype="multipart/form-data">
+                                <form id="formAddDate">
                                     <div class="card">
                                         <div class="card-body pt-3">
                                             <div class="form-row">
-                                                <div class="col-sm-6 floating-label enable-floating-label show-label drag-area" style="margin-bottom:10px!important">
-                                                    <input class="form-control" type="file" id="fileOffices" accept=".xls,.xlsx">
-                                                    <label for="formFile" class="form-label"> Importar Despachos</label>
+                                                <div class="col-sm-4 floating-label enable-floating-label">
+                                                    <select id="order" name="order" class="form-control"></select>
+                                                    <label for="order" class="form-label"> Pedido</label>
                                                 </div>
-                                                <div class="col-xs-2" style="margin-top:7px">
-                                                    <button type="text" class="btn btn-success" id="btnImportOffices">Importar</button>
+                                                <div class="col-sm-3 floating-label enable-floating-label">
+                                                    <input class="form-control" type="date" name="date" id="date" min="<?php echo $fechaActual; ?>"></input>
+                                                    <label for="date">Fecha Entrega</span></label>
                                                 </div>
-                                                <div class="col-xs-2" style="margin-top:7px">
-                                                    <button type="text" class="btn btn-info" id="btnDownloadImportsOffices">Descarga Formato</button>
+                                                <div class="col-xs-2 mt-1">
+                                                    <button type="text" class="btn btn-info" id="btnAddDate">Guardar Fecha</button>
                                                 </div>
                                             </div>
                                         </div>
@@ -86,7 +89,7 @@ if (sizeof($_SESSION) == 0)
                             </div>
                         </div>
                     </div>
-                </div> -->
+                </div>
 
                 <!-- page content -->
                 <div class="page-content-wrapper mt--45">
@@ -122,9 +125,10 @@ if (sizeof($_SESSION) == 0)
 
     <!-- <script src="/planning/js/basic/products/configProducts.js"></script> -->
     <!-- <script src="/planning/js/admin/clients/configClients.js"></script> -->
-    <script src="../planning/js/offices/tblOffices.js"></script>
+    <script src="/planning/js/offices/configOffices.js"></script>
+    <script src="/planning/js/offices/tblOffices.js"></script>
+    <script src="/planning/js/offices/offices.js"></script>
     <!-- <script src="../global/js/import/import.js"></script> -->
-    <!-- <script src="../planning/js/offices/offices.js"></script> -->
     <!-- <script src="../planning/js/offices/importOffices.js"></script> -->
     <!-- <script src="../global/js/import/file.js"></script> -->
 </body>

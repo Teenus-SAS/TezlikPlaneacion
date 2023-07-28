@@ -73,6 +73,7 @@ $app->post('/orderDataValidation', function (Request $request, Response $respons
 
         for ($i = 0; $i < sizeof($order); $i++) {
             if (
+                empty($order[$i]['referenceProduct'])  || empty($order[$i]['product']) || empty($order[$i]['client']) ||
                 empty($order[$i]['order'])  || empty($order[$i]['dateOrder']) || empty($order[$i]['minDate']) ||
                 empty($order[$i]['maxDate']) || empty($order[$i]['originalQuantity'])
             ) {
@@ -89,22 +90,30 @@ $app->post('/orderDataValidation', function (Request $request, Response $respons
                 break;
             } else $order[$i]['idProduct'] = $findProduct['id_product'];
 
-            // Obtener id cliente
-            $findClient = $generalClientsDao->findClient($order[$i], $id_company);
+
+            if (isset($order[$i]['client']))
+                // Obtener id cliente
+                $findClient = $generalClientsDao->findClient($order[$i], $id_company);
+            else $findClient = false;
+
             if (!$findClient) {
+                $order[$i]['nit'] = '';
+                $order[$i]['address'] = '';
+                $order[$i]['phone'] = '';
+                $order[$i]['city'] = '';
                 // Crear cliente
                 $clientsDao->insertClient($order[$i], $id_company);
+
                 $client = $generalClientsDao->findClient($order[$i], $id_company);
                 $order[$i]['idClient'] = $client['id_client'];
             } else $order[$i]['idClient'] = $findClient['id_client'];
-
-            // Obtener id Tipo pedido
-            // $findOrderType = $orderTypesDao->findOrderType($order[$i]);
-            // if (!$findOrderType) {
-            //     $i = $i + 1;
-            //     $dataImportOrder = array('error' => true, 'message' => "Tipo de pedido no existe en la base de datos.<br>Fila: {$i}");
-            //     break;
-            // } else $order[$i]['idOrderType'] = $findOrderType['id_order_type'];
+            /* // Obtener id cliente
+            $findClient = $generalClientsDao->findClient($order[$i], $id_company);
+            if (!$findClient) {
+                $i = $i + 1;
+                $dataImportOrder = array('error' => true, 'message' => "Cliente no existe en la base de datos.<br>Fila: {$i}");
+                break;
+            } else $order[$i]['idClient'] = $findClient['id_client']; */
 
             $findOrder = $generalOrdersDao->findOrder($order[$i], $id_company);
             !$findOrder ? $insert = $insert + 1 : $update = $update + 1;
