@@ -30,25 +30,25 @@ $(document).ready(function () {
         className: 'uniqueClassName',
       },
       {
-        title: 'Producto',
-        data: 'product',
-        className: 'uniqueClassName',
-      },
-      {
         title: 'Cliente',
         data: 'client',
         className: 'uniqueClassName',
       },
       {
-        title: 'Fecha Maxima',
-        data: 'max_date',
-        className: 'classCenter',
+        title: 'Producto',
+        data: 'product',
+        className: 'uniqueClassName',
       },
       {
         title: 'Cantidad',
         data: 'original_quantity',
         className: 'classCenter',
         render: $.fn.dataTable.render.number('.', ',', 0, ''),
+      },
+      {
+        title: 'Fecha Maxima',
+        data: 'max_date',
+        className: 'classCenter',
       },
       {
         title: 'Fecha Entrega',
