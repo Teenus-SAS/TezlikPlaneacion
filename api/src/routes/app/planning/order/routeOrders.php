@@ -46,6 +46,7 @@ $app->get('/orders', function (Request $request, Response $response, $args) use 
             $accumulated_quantity = $order['quantity'];
 
         $generalProductsDao->updateAccumulatedQuantity($result[$i]['id_product'], $accumulated_quantity);
+        // $generalOrdersDao->updateAccumulatedQuantityOrder($result[$i]['id_order'], $accumulated_quantity);
     }
 
     $orders = $ordersDao->findAllOrdersByCompany($id_company);
@@ -90,30 +91,16 @@ $app->post('/orderDataValidation', function (Request $request, Response $respons
                 break;
             } else $order[$i]['idProduct'] = $findProduct['id_product'];
 
+            // Obtener id cliente
+            $findClient = $generalClientsDao->findClient($order[$i], $id_company);
 
-            if (isset($order[$i]['client']))
-                // Obtener id cliente
-                $findClient = $generalClientsDao->findClient($order[$i], $id_company);
-            else $findClient = false;
-
-            if (!$findClient) {
-                $order[$i]['nit'] = '';
-                $order[$i]['address'] = '';
-                $order[$i]['phone'] = '';
-                $order[$i]['city'] = '';
-                // Crear cliente
-                $clientsDao->insertClient($order[$i], $id_company);
-
-                $client = $generalClientsDao->findClient($order[$i], $id_company);
-                $order[$i]['idClient'] = $client['id_client'];
-            } else $order[$i]['idClient'] = $findClient['id_client'];
-            /* // Obtener id cliente
+            // Obtener id cliente
             $findClient = $generalClientsDao->findClient($order[$i], $id_company);
             if (!$findClient) {
                 $i = $i + 1;
                 $dataImportOrder = array('error' => true, 'message' => "Cliente no existe en la base de datos.<br>Fila: {$i}");
                 break;
-            } else $order[$i]['idClient'] = $findClient['id_client']; */
+            } else $order[$i]['idClient'] = $findClient['id_client'];
 
             $findOrder = $generalOrdersDao->findOrder($order[$i], $id_company);
             !$findOrder ? $insert = $insert + 1 : $update = $update + 1;
@@ -254,7 +241,8 @@ $app->post('/updateOrder', function (Request $request, Response $response, $args
         } else
             $accumulated_quantity = $order['quantity'];
 
-        $generalProductsDao->updateAccumulatedQuantity($dataOrder['idOrder'], $accumulated_quantity);
+        $generalProductsDao->updateAccumulatedQuantity($dataOrder['idProduct'], $accumulated_quantity);
+        // $generalOrdersDao->updateAccumulatedQuantityOrder($dataOrder['idOrder'], $accumulated_quantity);
 
         if ($order == null)
             $resp = array('success' => true, 'message' => 'Pedido modificado correctamente');

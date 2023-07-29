@@ -17,6 +17,18 @@ $app->get('/offices', function (Request $request, Response $response, $args) use
     return $response->withHeader('Content-Type', 'application/json');
 });
 
+$app->get('/offices/{min_date}/{max_date}', function (Request $request, Response $response, $args) use (
+    $generalOfficesDao
+) {
+    session_start();
+    $id_company = $_SESSION['id_company'];
+
+    $orders = $generalOfficesDao->findAllFilterOrders($args['min_date'], $args['max_date'], $id_company);
+
+    $response->getBody()->write(json_encode($orders, JSON_NUMERIC_CHECK));
+    return $response->withHeader('Content-Type', 'application/json');
+});
+
 $app->get('/actualOffices', function (Request $request, Response $response, $args) use ($generalOfficesDao) {
     session_start();
     $id_company = $_SESSION['id_company'];

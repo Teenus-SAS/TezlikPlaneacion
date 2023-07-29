@@ -116,4 +116,22 @@ class GeneralOrdersDao
             return $error;
         }
     }
+
+    public function updateAccumulatedQuantityOrder($id_order, $quantity)
+    {
+        $connection = Connection::getInstance()->getConnection();
+
+        try {
+            $stmt = $connection->prepare("UPDATE plan_orders SET accumulated_quantity = :accumulated_quantity WHERE id_order = :id_order");
+            $stmt->execute([
+                'accumulated_quantity' => $quantity,
+                'id_order' => $id_order
+            ]);
+        } catch (\Exception $e) {
+            $message = $e->getMessage();
+
+            $error = array('info' => true, 'message' => $message);
+            return $error;
+        }
+    }
 }
