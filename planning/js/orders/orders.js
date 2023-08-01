@@ -113,7 +113,7 @@ $(document).ready(function () {
     idOrder = sessionStorage.getItem('id_order');
     data = data + '&idOrder=' + idOrder;
 
-    $.post('../../api/updateOrder', data, function (data, textStatus, jqXHR) {
+    $.post('/api/updateOrder', data, function (data, textStatus, jqXHR) {
       message(data);
     });
   };

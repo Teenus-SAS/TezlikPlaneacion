@@ -24,7 +24,8 @@ class GeneralOfficesDao
                                       FROM plan_orders o
                                         INNER JOIN products p ON p.id_product = o.id_product
                                         INNER JOIN plan_clients c ON c.id_client = o.id_client
-                                      WHERE o.status = 'Despacho' AND MONTH(o.delivery_date) = MONTH(CURRENT_DATE) AND o.id_company = :id_company");
+                                      WHERE o.status = 'Despacho' AND o.id_company = :id_company
+                                      AND (o.delivery_date IS NULL OR MONTH(o.delivery_date) = MONTH(CURRENT_DATE))");
         $stmt->execute(['id_company' => $id_company]);
 
         $this->logger->info(__FUNCTION__, array('query' => $stmt->queryString, 'errors' => $stmt->errorInfo()));
@@ -42,7 +43,7 @@ class GeneralOfficesDao
                                       FROM plan_orders o
                                         INNER JOIN products p ON p.id_product = o.id_product
                                         INNER JOIN plan_clients c ON c.id_client = o.id_client
-                                      WHERE o.id_company = :id_company AND (o.date_order BETWEEN :min_date AND :max_date)");
+                                      WHERE o.id_company = :id_company AND (o.delivery_date BETWEEN :min_date AND :max_date)");
         $stmt->execute([
             'min_date' => $min_date,
             'max_date' => $max_date,

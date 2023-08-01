@@ -1,31 +1,87 @@
 $(document).ready(function () {
-    $('.cardAddDate').hide();
+    // $('.cardAddDate').hide();
 
-    $('#btnNewDate').click(function (e) { 
-        e.preventDefault();
+    // $('#btnNewDate').click(function (e) { 
+    //     e.preventDefault();
 
-        $('.cardAddDate').toggle(800);
-        $('#formAddDate').trigger('reset');
-    });
+    //     $('.cardAddDate').toggle(800);
+    //     $('#formAddDate').trigger('reset');
+    // });
 
-    $('#btnAddDate').click(async function (e) { 
-        e.preventDefault();
+    // $('#btnAddDate').click(async function (e) { 
+    //     e.preventDefault();
         
-        let order = $('#order').val();
-        let date = $('#date').val();
+    //     let order = $('#order').val();
+    //     let date = $('#date').val();
                 
-        if (!order || !date) {
-            toastr.error('Ingrese los campos');
-            return false;
-        }
+    //     if (!order || !date) {
+    //         toastr.error('Ingrese los campos');
+    //         return false;
+    //     }
 
-        let form = new FormData();
-        form.append('idOrder', order);
-        form.append('date', date);
+    //     let form = new FormData();
+    //     form.append('idOrder', order);
+    //     form.append('date', date);
 
-        let resp = await sendDataPOST('/api/changeOffices', form);
-        message(resp); 
+    //     let resp = await sendDataPOST('/api/changeOffices', form);
+    //     message(resp); 
+    // });
+    
+    $(document).on('click', '.changeDate', function (e) {
+        e.preventDefault();
+
+        let date = new Date().toISOString().split('T')[0];
+        let row = $(this).parent().parent()[0];
+        let data = tblOffices.fnGetData(row);
+
+        !data.delivery_date ? delivery_date = '' : delivery_date = data.delivery_date;
+
+        bootbox.confirm({
+            title: 'Ingrese Fecha De Entrega!',
+            message: `<div class="col-sm-12 floating-label enable-floating-label">
+                        <input class="form-control" type="date" name="date" id="date" max="${date}" value="${delivery_date}"></input>
+                        <label for="date">Fecha</span></label>
+                      </div>`,
+            buttons: {
+                confirm: {
+                    label: 'Agregar',
+                    className: 'btn-success',
+                },
+                cancel: {
+                    label: 'Cancelar',
+                    className: 'btn-danger',
+                },
+            },
+            callback: function (result) {
+                if (result == true) {
+                    let date = $('#date').val();
+
+                    if (!date) {
+                        toastr.error('Ingrese los campos');
+                        return false;
+                    }
+
+                    let form = new FormData();
+                    form.append('idOrder', data.id_order);
+                    form.append('date', date);
+
+                    $.ajax({
+                        type: "POST",
+                        url: '/api/changeOffices',
+                        data: form,
+                        contentType: false,
+                        cache: false,
+                        processData: false,
+                        success: function (resp) {
+                            message(resp);
+                        }
+                    });
+                }
+            },
+        });
     });
+
+    
 
     $(document).on('change', '.dateOrders', async function (e) {
         e.preventDefault();

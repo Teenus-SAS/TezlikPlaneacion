@@ -72,14 +72,14 @@ $(document).ready(function () {
           data: 'quantity',
           className: 'classCenter',
         },
-        // {
-        //   title: 'Fecha de Entrega',
-        //   data: 'id_order',
-        //   className: 'classCenter',
-        //   render: function (data) { 
-        //     return `<a href="javascript:;" <i class="bi bi-calendar-plus-fill changeDate" id="${data}" data-toggle='tooltip' title='Actualizar Fecha' style="font-size: 30px;"></i></a>`;
-        //   }
-        // },
+        {
+          title: 'Fecha de Entrega',
+          data: 'id_order',
+          className: 'classCenter',
+          render: function (data) { 
+            return `<a href="javascript:;" <i class="bi bi-calendar-plus-fill changeDate" id="${data}" data-toggle='tooltip' title='Actualizar Fecha' style="font-size: 30px;"></i></a>`;
+          }
+        },
       ],
     });
   };

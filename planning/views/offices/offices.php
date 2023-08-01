@@ -60,9 +60,9 @@ $fechaActual = date("Y-m-d");
                                     <label for="lastDate" class="form-label text-dark">Fecha Final</label>
                                     <input class="form-control dateOrders" id="lastDate" type="date">
                                 </div>
-                                <div class="col-xs-2 mt-3">
+                                <!-- <div class="col-xs-2 mt-3">
                                     <button class="btn btn-warning" id="btnNewDate" name="btnNewDate">Agregar Fecha de Entrega</button>
-                                </div>
+                                </div> -->
                                 <!-- <div class="col-xs-2 py-2 mr-2">
                                     <button class="btn btn-info" id="btnImportNewOffices">Importar Despachos</button>
                                 </div> -->
@@ -71,7 +71,7 @@ $fechaActual = date("Y-m-d");
                     </div>
                 </div>
 
-                <div class="page-content-wrapper mt--45 mb-5 cardAddDate">
+                <!-- <div class="page-content-wrapper mt--45 mb-5 cardAddDate">
                     <div class="container-fluid">
                         <div class="row">
                             <div class="col-12">
@@ -84,7 +84,7 @@ $fechaActual = date("Y-m-d");
                                                     <label for="order" class="form-label"> Pedido</label>
                                                 </div>
                                                 <div class="col-sm-3 floating-label enable-floating-label">
-                                                    <input class="form-control" type="date" name="date" id="date" min="<?php echo $fechaActual; ?>"></input>
+                                                    <input class="form-control" type="date" name="date" id="date" max=""></input>
                                                     <label for="date">Fecha Entrega</span></label>
                                                 </div>
                                                 <div class="col-xs-2 mt-1">
@@ -97,7 +97,7 @@ $fechaActual = date("Y-m-d");
                             </div>
                         </div>
                     </div>
-                </div>
+                </div> -->
 
                 <!-- page content -->
                 <div class="page-content-wrapper mt--45">

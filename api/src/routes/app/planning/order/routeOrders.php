@@ -230,7 +230,7 @@ $app->post('/updateOrder', function (Request $request, Response $response, $args
     else {
         $dataOrder = $convertDataDao->changeDateOrder($dataOrder);
 
-        $order = $ordersDao->updateOrder($dataOrder);
+        $result = $ordersDao->updateOrder($dataOrder);
 
         // Checkear cantidades
         $order = $generalOrdersDao->checkAccumulatedQuantityOrder($dataOrder['idProduct']);
@@ -242,12 +242,11 @@ $app->post('/updateOrder', function (Request $request, Response $response, $args
             $accumulated_quantity = $order['quantity'];
 
         $generalProductsDao->updateAccumulatedQuantity($dataOrder['idProduct'], $accumulated_quantity);
-        // $generalOrdersDao->updateAccumulatedQuantityOrder($dataOrder['idOrder'], $accumulated_quantity);
 
-        if ($order == null)
+        if ($result == null)
             $resp = array('success' => true, 'message' => 'Pedido modificado correctamente');
-        else if ($order['info'])
-            $resp = array('info' => true, 'message' => $order['message']);
+        else if (isset($result['info']))
+            $resp = array('info' => true, 'message' => $result['message']);
         else
             $resp = array('error' => true, 'message' => 'Ocurrio un error mientras modificaba la información. Intente nuevamente');
     }
