@@ -19,18 +19,18 @@ $(document).ready(function () {
                     return meta.row + 1;
                 },
             },
-            {
-                title: 'Referencia',
-                data: 'reference_product',
-                className: 'uniqueClassName',
-                visible: false,
-            },
-            {
-                title: 'Producto',
-                data: 'product',
-                className: 'uniqueClassName',
-                visible: false,
-            },
+            // {
+            //     title: 'Referencia',
+            //     data: 'reference_product',
+            //     className: 'uniqueClassName',
+            //     visible: false,
+            // },
+            // {
+            //     title: 'Producto',
+            //     data: 'product',
+            //     className: 'uniqueClassName',
+            //     visible: false,
+            // },
             {
                 title: 'Referencia Material',
                 data: 'reference_material',
@@ -55,15 +55,6 @@ $(document).ready(function () {
             //     return `<a href="javascript:;" <i class="bi bi-calendar-plus-fill changeDate" id="${data}" data-toggle='tooltip' title='Actualizar Fecha' style="font-size: 30px;"></i></a>`;
             //   }
             // },
-        ],
-        rowGroup: {
-            dataSrc: function (row) {
-                return `<th class="text-center" colspan="4" style="font-weight: bold;"> ${row.reference_product} * ${row.product} </th>`;
-            },
-            startRender: function (rows, group) {
-                return $('<tr/>').append(group);
-            },
-            className: 'odd',
-        },
+        ], 
     });
 });

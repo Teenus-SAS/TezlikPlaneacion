@@ -34,7 +34,10 @@ $app->post('/clientsDataValidation', function (Request $request, Response $respo
         $clients = $dataClient['importClients'];
 
         for ($i = 0; $i < sizeof($clients); $i++) {
-            if (empty($clients[$i]['ean']) || empty($clients[$i]['nit']) || empty($clients[$i]['client'])) {
+            if (
+                empty($clients[$i]['nit']) || empty($clients[$i]['client']) || empty($clients[$i]['address']) ||
+                empty($clients[$i]['phone']) || empty($clients[$i]['city'])
+            ) {
                 $i = $i + 1;
                 $dataImportClients = array('error' => true, 'message' => "Campos vacios en la fila: {$i}");
                 break;

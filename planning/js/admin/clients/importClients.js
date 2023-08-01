@@ -27,9 +27,11 @@ $(document).ready(function () {
       .then((data) => {
         let ClientsToImport = data.map((item) => {
           return {
-            ean: item.ean,
             nit: item.nit,
             client: item.cliente,
+            address: item.direccion,
+            phone: item.telefono,
+            city: item.ciudad,
           };
         });
         checkClients(ClientsToImport);

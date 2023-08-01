@@ -54,9 +54,9 @@ if (sizeof($_SESSION) == 0)
                                 <div class="col-xs-2 mr-2">
                                     <button class="btn btn-warning" id="btnNewClient" name="btnNewClient">Nuevo Cliente</button>
                                 </div>
-                                <!-- <div class="col-xs-2 py-2 mr-2">
+                                <div class="col-xs-2 py-2 mr-2">
                                     <button class="btn btn-info" id="btnImportNewClient">Importar Clientes</button>
-                                </div> -->
+                                </div>
                             </div>
                         </div>
                     </div>
