@@ -50,10 +50,6 @@ if (sizeof($_SESSION) == 0)
                             <div class="col-sm-7 col-xl-6 form-inline justify-content-sm-end">
                                 <div class="col-xs-2 mr-2">
                                     <select class="form-control" name="category" id="category">
-                                        <option disabled selected value="0">Seleccionar</option>
-                                        <option value="1">Productos</option>
-                                        <option value="2">Materiales</option>
-                                        <option value="3">Todos</option>
                                     </select>
                                 </div>
                                 <div class="col-xs-2 py-2 mr-2">

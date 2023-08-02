@@ -9,6 +9,13 @@ $(document).ready(function () {
         // Guardar productos
         dataProducts = JSON.stringify(data.products); 
         sessionStorage.setItem('dataProducts', dataProducts);
+
+        let $select = $('#category');
+        $select.empty();
+        $select.append(`<option disabled selected>Seleccionar</option>`);
+        $select.append(`<option value="1">Productos</option>`);
+        $select.append(`<option value="2">Materiales</option>`);
+        $select.append(`<option value="3">Todos</option>`);
  
         products = data.products;
         materials = data.rawMaterials;

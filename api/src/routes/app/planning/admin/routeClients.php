@@ -68,21 +68,26 @@ $app->post('/addClient', function (Request $request, Response $response, $args) 
     $countClients = sizeof($dataClient);
 
     if ($countClients > 1) {
-        $client = $clientsDao->insertClient($dataClient, $id_company);
+        $findClient = $generalClientsDao->findClient($dataClient, $id_company);
 
-        if (sizeof($_FILES) > 0) {
-            $lastCompany = $lastDataDao->findLastInsertedClient();
+        if (!$findClient) {
+            $client = $clientsDao->insertClient($dataClient, $id_company);
 
-            // Insertar imagen
-            $FilesDao->imageClient($lastCompany['id_client'], $id_company);
-        }
+            if (sizeof($_FILES) > 0) {
+                $lastCompany = $lastDataDao->findLastInsertedClient();
 
-        if ($client == null)
-            $resp = array('success' => true, 'message' => 'Cliente ingresado correctamente');
-        else if (isset($client['info']))
-            $resp = array('info' => true, 'message' => $client['message']);
-        else
-            $resp = array('error' => true, 'message' => 'Ocurrio un error mientras ingresaba la información. Intente nuevamente');
+                // Insertar imagen
+                $FilesDao->imageClient($lastCompany['id_client'], $id_company);
+            }
+
+            if ($client == null)
+                $resp = array('success' => true, 'message' => 'Cliente ingresado correctamente');
+            else if (isset($client['info']))
+                $resp = array('info' => true, 'message' => $client['message']);
+            else
+                $resp = array('error' => true, 'message' => 'Ocurrio un error mientras ingresaba la información. Intente nuevamente');
+        } else
+            $resp = array('info' => true, 'message' => 'Ya existe un cliente con el mismo nit. Ingrese nuevo nit');
     } else {
         $clients = $dataClient['importClients'];
 
@@ -104,7 +109,11 @@ $app->post('/addClient', function (Request $request, Response $response, $args) 
     return $response->withStatus(200)->withHeader('Content-Type', 'application/json');
 });
 
-$app->post('/updateClient', function (Request $request, Response $response, $args) use ($clientsDao, $lastDataDao, $FilesDao) {
+$app->post('/updateClient', function (Request $request, Response $response, $args) use (
+    $clientsDao,
+    $generalClientsDao,
+    $FilesDao
+) {
     session_start();
     $id_company = $_SESSION['id_company'];
     $dataClient = $request->getParsedBody();
@@ -115,21 +124,25 @@ $app->post('/updateClient', function (Request $request, Response $response, $arg
     )
         $resp = array('error' => true, 'message' => 'No hubo cambio alguno');
     else {
-        $client = $clientsDao->updateClient($dataClient);
+        $client = $generalClientsDao->findClient($dataClient, $id_company);
 
-        if (sizeof($_FILES) > 0) {
-            $lastCompany = $lastDataDao->findLastInsertedClient();
+        !is_array($client) ? $data['id_client'] = 0 : $data = $client;
+        if ($data['id_client'] == $dataClient['idProduct'] || $data['idClient'] == 0) {
+            $client = $clientsDao->updateClient($dataClient);
 
-            // Insertar imagen
-            $FilesDao->imageClient($lastCompany['id_client'], $id_company);
-        }
+            if (sizeof($_FILES) > 0) {
+                // Insertar imagen
+                $FilesDao->imageClient($dataClient['idClient'], $id_company);
+            }
 
-        if ($client == null)
-            $resp = array('success' => true, 'message' => 'Cliente actualizado correctamente');
-        else if (isset($client['info']))
-            $resp = array('info' => true, 'message' => $client['message']);
-        else
-            $resp = array('error' => true, 'message' => 'Ocurrio un error mientras actualizaba la información. Intente nuevamente');
+            if ($client == null)
+                $resp = array('success' => true, 'message' => 'Cliente actualizado correctamente');
+            else if (isset($client['info']))
+                $resp = array('info' => true, 'message' => $client['message']);
+            else
+                $resp = array('error' => true, 'message' => 'Ocurrio un error mientras actualizaba la información. Intente nuevamente');
+        } else
+            $resp = array('info' => true, 'message' => 'Ya existe un cliente con el mismo nit. Ingrese nuevo nit');
     }
     $response->getBody()->write(json_encode($resp));
     return $response->withStatus(200)->withHeader('Content-Type', 'application/json');

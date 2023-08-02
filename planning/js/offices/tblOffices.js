@@ -1,7 +1,6 @@
 $(document).ready(function () {
   /* Cargar pedidos */
-  loadTblOffices = (min_date, max_date) =>
-  {
+  loadTblOffices = (min_date, max_date) => {
     if (min_date == null && max_date == null)
       url = '/api/actualOffices';
     else
@@ -73,10 +72,15 @@ $(document).ready(function () {
           className: 'classCenter',
         },
         {
+          title: 'Estado',
+          data: 'status',
+          className: 'classCenter',
+        },
+        {
           title: 'Fecha de Entrega',
           data: 'id_order',
           className: 'classCenter',
-          render: function (data) { 
+          render: function (data) {
             return `<a href="javascript:;" <i class="bi bi-calendar-plus-fill changeDate" id="${data}" data-toggle='tooltip' title='Actualizar Fecha' style="font-size: 30px;"></i></a>`;
           }
         },

@@ -42,7 +42,7 @@ class MachinesDao
                                     VALUES (:id_company ,:machine)");
       $stmt->execute([
         'id_company' => $id_company,
-        'machine' => strtoupper($dataMachine['machine'])
+        'machine' => strtoupper(trim($dataMachine['machine']))
       ]);
       $this->logger->info(__FUNCTION__, array('query' => $stmt->queryString, 'errors' => $stmt->errorInfo()));
     } catch (\Exception $e) {
@@ -64,7 +64,7 @@ class MachinesDao
       $stmt = $connection->prepare("UPDATE machines SET machine = :machine WHERE id_machine = :id_machine");
       $stmt->execute([
         'id_machine' => $dataMachine['idMachine'],
-        'machine' => strtoupper($dataMachine['machine'])
+        'machine' => strtoupper(trim($dataMachine['machine']))
       ]);
       $this->logger->info(__FUNCTION__, array('query' => $stmt->queryString, 'errors' => $stmt->errorInfo()));
     } catch (\Exception $e) {

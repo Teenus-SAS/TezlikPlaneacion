@@ -26,7 +26,8 @@ class ExplosionMaterialsDao
                                         INNER JOIN products_materials pm ON pm.id_product = p.id_product
                                         INNER JOIN materials m ON m.id_material = pm.id_material
                                         INNER JOIN plan_orders o ON o.id_product = p.id_product
-                                      WHERE p.id_company = :id_company GROUP BY m.id_material;");
+                                      WHERE p.id_company = :id_company AND o.status = 'Alistamiento'
+                                      GROUP BY m.id_material;");
         $stmt->execute(['id_company' => $id_company]);
 
         $this->logger->info(__FUNCTION__, array('query' => $stmt->queryString, 'errors' => $stmt->errorInfo()));

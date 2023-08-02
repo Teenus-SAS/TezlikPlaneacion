@@ -39,7 +39,7 @@ class ClientsDao
             $stmt->execute([
                 'id_company' => $id_company,
                 'nit' => $dataClient['nit'],
-                'client' => strtolower(trim($dataClient['client'])),
+                'client' => strtoupper(trim($dataClient['client'])),
                 'addr' => $dataClient['address'],
                 'phone' => $dataClient['phone'],
                 'city' => $dataClient['city'],
@@ -63,7 +63,7 @@ class ClientsDao
                                           WHERE id_client = :id_client");
             $stmt->execute([
                 'nit' => $dataClient['nit'],
-                'client' => strtolower(trim($dataClient['client'])),
+                'client' => strtoupper(trim($dataClient['client'])),
                 'addr' => $dataClient['address'],
                 'phone' => $dataClient['phone'],
                 'city' => $dataClient['city'],

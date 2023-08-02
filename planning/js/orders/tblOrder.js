@@ -50,11 +50,11 @@ $(document).ready(function () {
         data: 'max_date',
         className: 'classCenter',
       },
-      {
-        title: 'Fecha Entrega',
-        data: 'delivery_date',
-        className: 'classCenter',
-      },
+      // {
+      //   title: 'Fecha Entrega',
+      //   data: 'delivery_date',
+      //   className: 'classCenter',
+      // },
       {
         title: 'Estado',
         data: 'status',
@@ -62,12 +62,13 @@ $(document).ready(function () {
       },
       {
         title: 'Acciones',
-        data: 'id_order',
+        data: null,
         className: 'classCenter',
         render: function (data) {
-          return `
-                <a href="javascript:;" <i class="bx bx-edit-alt updateOrder" id="${data}" data-toggle='tooltip' title='Actualizar Pedido' style="font-size: 30px;"></i></a>
-                <a href="javascript:;" <i class="mdi mdi-delete-forever" id="${data}" data-toggle='tooltip' title='Eliminar Pedido' style="font-size: 30px;color:red" onclick="deleteFunction()"></i></a>`;
+          data.delivery_date == '' ? action = `<a href="javascript:;" <i class="bx bx-edit-alt updateOrder" id="${data.id_order}" data-toggle='tooltip' title='Actualizar Pedido' style="font-size: 30px;"></i></a><a href="javascript:;" <i class="mdi mdi-delete-forever" id="${data.id_order}" data-toggle='tooltip' title='Eliminar Pedido' style="font-size: 30px;color:red" onclick="deleteFunction()"></i></a>`
+            : action = '';
+
+          return action;
         },
       },
     ],
