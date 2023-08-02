@@ -125,12 +125,12 @@ $app->post('/addProduct', function (Request $request, Response $response, $args)
         $order = $generalOrdersDao->checkAccumulatedQuantityOrder($result[$i]['id_product']);
 
         if ($order['accumulated_quantity'] <= $order['quantity']) {
-            $generalOrdersDao->changeStatus($result[$i]['id_order']);
+            $generalOrdersDao->changeStatus($result[$i]['id_order'], 'Despacho');
             $accumulated_quantity = $order['accumulated_quantity'];
         } else
             $accumulated_quantity = $order['quantity'];
 
-        $generalProductsDao->updateAccumulatedQuantity($result[$i]['id_product'], $accumulated_quantity);
+        $generalProductsDao->updateAccumulatedQuantity($result[$i]['id_product'], $accumulated_quantity, 1);
     }
 
     $response->getBody()->write(json_encode($resp));
@@ -168,12 +168,12 @@ $app->post('/updatePlanProduct', function (Request $request, Response $response,
                 $order = $generalOrdersDao->checkAccumulatedQuantityOrder($result[$i]['id_product']);
 
                 if ($order['accumulated_quantity'] <= $order['quantity']) {
-                    $generalOrdersDao->changeStatus($result[$i]['id_order']);
+                    $generalOrdersDao->changeStatus($result[$i]['id_order'], 'Despacho');
                     $accumulated_quantity = $order['accumulated_quantity'];
                 } else
                     $accumulated_quantity = $order['quantity'];
 
-                $generalProductsDao->updateAccumulatedQuantity($result[$i]['id_product'], $accumulated_quantity);
+                $generalProductsDao->updateAccumulatedQuantity($result[$i]['id_product'], $accumulated_quantity, 1);
             }
 
             if ($products == null)

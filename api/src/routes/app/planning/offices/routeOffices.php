@@ -1,10 +1,14 @@
 <?php
 
 use TezlikPlaneacion\dao\GeneralOfficesDao;
+use TezlikPlaneacion\dao\GeneralOrdersDao;
+use TezlikPlaneacion\dao\GeneralProductsDao;
 use TezlikPlaneacion\dao\OfficesDao;
 
 $officesDao = new OfficesDao();
+$generalOrdersDao = new GeneralOrdersDao();
 $generalOfficesDao = new GeneralOfficesDao();
+$generalProductsDao = new GeneralProductsDao();
 
 use Psr\Http\Message\ResponseInterface as Response;
 use Psr\Http\Message\ServerRequestInterface as Request;
@@ -39,10 +43,15 @@ $app->get('/actualOffices', function (Request $request, Response $response, $arg
 
 $app->post('/changeOffices', function (Request $request, Response $response, $args) use (
     $officesDao,
+    $generalProductsDao,
+    $generalOrdersDao
 ) {
     $dataOrder = $request->getParsedBody();
 
     $order = $officesDao->updateDeliveryDate($dataOrder);
+
+    $generalProductsDao->updateAccumulatedQuantity($dataOrder['idProduct'], $dataOrder['quantity'] - $dataOrder['originalQuantity'], 2);
+    $generalOrdersDao->changeStatus($dataOrder['idOrder'], 'Entregado');
 
     if ($order == null)
         $resp = array('success' => true, 'message' => 'Pedido modificado correctamente');

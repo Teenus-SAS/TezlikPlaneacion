@@ -34,12 +34,10 @@ $(document).ready(function () {
         let row = $(this).parent().parent()[0];
         let data = tblOffices.fnGetData(row);
 
-        !data.delivery_date ? delivery_date = '' : delivery_date = data.delivery_date;
-
         bootbox.confirm({
             title: 'Ingrese Fecha De Entrega!',
             message: `<div class="col-sm-12 floating-label enable-floating-label">
-                        <input class="form-control" type="date" name="date" id="date" max="${date}" value="${delivery_date}"></input>
+                        <input class="form-control" type="date" name="date" id="date" max="${date}"></input>
                         <label for="date">Fecha</span></label>
                       </div>`,
             buttons: {
@@ -63,6 +61,9 @@ $(document).ready(function () {
 
                     let form = new FormData();
                     form.append('idOrder', data.id_order);
+                    form.append('idProduct', data.id_product);
+                    form.append('originalQuantity', data.original_quantity);
+                    form.append('quantity', data.quantity);
                     form.append('date', date);
 
                     $.ajax({

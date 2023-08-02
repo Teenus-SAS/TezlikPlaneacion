@@ -65,12 +65,16 @@ class GeneralProductsDao
         return $findProduct;
     }
 
-    public function updateAccumulatedQuantity($id_product, $accumulated_quantity)
+    public function updateAccumulatedQuantity($id_product, $accumulated_quantity, $op)
     {
         $connection = Connection::getInstance()->getConnection();
 
         try {
-            $stmt = $connection->prepare("UPDATE products SET accumulated_quantity = quantity - :accumulated_quantity  WHERE id_product = :id_product");
+            if ($op == 1)
+                $stmt = $connection->prepare("UPDATE products SET accumulated_quantity = :accumulated_quantity WHERE id_product = :id_product");
+            else
+                $stmt = $connection->prepare("UPDATE products SET accumulated_quantity = :accumulated_quantity, quantity = :accumulated_quantity WHERE id_product = :id_product");
+
             $stmt->execute([
                 'accumulated_quantity' => $accumulated_quantity,
                 'id_product' => $id_product

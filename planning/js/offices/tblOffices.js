@@ -78,10 +78,13 @@ $(document).ready(function () {
         },
         {
           title: 'Fecha de Entrega',
-          data: 'id_order',
+          data: null,
           className: 'classCenter',
           render: function (data) {
-            return `<a href="javascript:;" <i class="bi bi-calendar-plus-fill changeDate" id="${data}" data-toggle='tooltip' title='Actualizar Fecha' style="font-size: 30px;"></i></a>`;
+            data.status == 'Despacho' ? action = `<a href="javascript:;" <i class="bi bi-calendar-plus-fill changeDate" id="${data.id_order}" data-toggle='tooltip' title='Actualizar Fecha' style="font-size: 30px;"></i></a>`
+              : action =data.delivery_date;
+            
+            return action;
           }
         },
       ],

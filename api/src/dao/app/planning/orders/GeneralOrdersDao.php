@@ -99,32 +99,14 @@ class GeneralOrdersDao
         }
     }
 
-    public function changeStatus($id_order)
+    public function changeStatus($id_order, $status)
     {
         $connection = Connection::getInstance()->getConnection();
 
         try {
             $stmt = $connection->prepare("UPDATE plan_orders SET status = :status  WHERE id_order = :id_order");
             $stmt->execute([
-                'status' => 'Despacho',
-                'id_order' => $id_order
-            ]);
-        } catch (\Exception $e) {
-            $message = $e->getMessage();
-
-            $error = array('info' => true, 'message' => $message);
-            return $error;
-        }
-    }
-
-    public function updateAccumulatedQuantityOrder($id_order, $quantity)
-    {
-        $connection = Connection::getInstance()->getConnection();
-
-        try {
-            $stmt = $connection->prepare("UPDATE plan_orders SET accumulated_quantity = :accumulated_quantity WHERE id_order = :id_order");
-            $stmt->execute([
-                'accumulated_quantity' => $quantity,
+                'status' => $status,
                 'id_order' => $id_order
             ]);
         } catch (\Exception $e) {

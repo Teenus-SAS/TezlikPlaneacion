@@ -34,17 +34,17 @@ $(document).ready(function () {
             {
                 title: 'Referencia Material',
                 data: 'reference_material',
-                className: 'classCenter',
+                className: 'uniqueClassName',
             },
             {
                 title: 'Materia Prima',
                 data: 'material',
-                className: 'classCenter',
+                className: 'uniqueClassName',
             },
             {
                 title: 'Cantidad',
                 data: 'quantity',
-                className: 'classCenter',
+                className: 'uniqueClassName',
                 render: $.fn.dataTable.render.number('.', ',', 2, ''),
             },
             // {
