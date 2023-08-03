@@ -127,7 +127,7 @@ $app->post('/updateClient', function (Request $request, Response $response, $arg
         $client = $generalClientsDao->findClient($dataClient, $id_company);
 
         !is_array($client) ? $data['id_client'] = 0 : $data = $client;
-        if ($data['id_client'] == $dataClient['idProduct'] || $data['idClient'] == 0) {
+        if ($data['id_client'] == $dataClient['idClient'] || $data['idClient'] == 0) {
             $client = $clientsDao->updateClient($dataClient);
 
             if (sizeof($_FILES) > 0) {
