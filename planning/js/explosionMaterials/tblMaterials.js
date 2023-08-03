@@ -47,12 +47,12 @@ $(document).ready(function () {
                     data: 'material',
                     className: 'uniqueClassName',
                 },
-                // {
-                //     title: 'En transito',
-                //     data: 'quantity_material',
-                //     className: 'uniqueClassName',
-                //     render: $.fn.dataTable.render.number('.', ',', 2, ''),
-                // },
+                {
+                    title: 'En transito',
+                    data: 'quantity_material',
+                    className: 'uniqueClassName',
+                    render: $.fn.dataTable.render.number('.', ',', 2, ''),
+                },
                 {
                     title: 'Necesidad',
                     data: 'quantity',
