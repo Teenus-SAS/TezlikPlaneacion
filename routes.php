@@ -40,6 +40,7 @@ get('/planning/products', '/planning/views/basic/createProducts.php');
 get('/planning/materials', '/planning/views/basic/createRawMaterials.php');
 get('/planning/machines', '/planning/views/basic/createMachines.php');
 get('/planning/process', '/planning/views/basic/createProcess.php');
+get('/planning/requisitions', '/planning/views/basic/requisitions.php');
 //Config
 get('/planning/product-materials', '/planning/views/config/productMaterials.php');
 get('/planning/product-process', '/planning/views/config/productProcess.php');

@@ -3,7 +3,7 @@ $(document).ready(function () {
     loadTblMaterials = async () => {
         let data = await searchData('/api/explosionMaterials');
 
-        $('#inventory').val(data[0].quantity_product.toLocaleString('es-CO'));
+        // $('#inventory').val(data[0].quantity_product.toLocaleString('es-CO'));
 
         tblMaterials = $('#tblMaterials').dataTable({
             destroy: true,
@@ -48,7 +48,7 @@ $(document).ready(function () {
                     className: 'uniqueClassName',
                 },
                 {
-                    title: 'En transito',
+                    title: 'Inventario',
                     data: 'quantity_material',
                     className: 'uniqueClassName',
                     render: $.fn.dataTable.render.number('.', ',', 2, ''),

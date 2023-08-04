@@ -48,11 +48,6 @@ if (sizeof($_SESSION) == 0)
                                 </div>
                             </div>
                             <div class="col-sm-7 col-xl-6 form-inline justify-content-sm-end">
-                                <div class="col-xs-2 mr-2">
-                                    <label for="" class="text-dark">Inventario</label>
-                                    <input type="text" class="form-control text-center" id="inventory" name="inventory" readonly>
-                                    <!-- <button class="btn btn-warning" id="btnNewProcess" name="btnNewProcess">Nuevo Proceso</button> -->
-                                </div>
                                 <!-- <div class="col-xs-2 py-2 mr-2">
                                     <button class="btn btn-info" id="btnImportNewProcess">Importar Procesos</button>
                                 </div> -->

@@ -57,6 +57,7 @@
                                             <?php if ($_SESSION['planning_machine'] == 1) { ?>
                                                 <li class="planMachines"><a href="/planning/machines">Máquinas</a></li>
                                             <?php } ?>
+                                            <li class="requisitions"><a href="/planning/requisitions">Control Requisiciones</a></li>
                                             <?php //if ($_SESSION['planning_process'] == 1) { 
                                             ?>
                                             <!-- <li class="planProcess"><a href="/planning/process">Procesos</a></li> -->
