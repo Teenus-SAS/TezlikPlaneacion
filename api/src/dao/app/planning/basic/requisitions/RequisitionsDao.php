@@ -19,9 +19,9 @@ class RequisitionsDao
     public function findAllRequisitionByCompany($id_company)
     {
         $connection = Connection::getInstance()->getConnection();
-        $stmt = $connection->prepare("SELECT r.id_requisition, p.id_product, p.reference, p.product, r.application_date, r.delivery_date, r.quantity, r.purchase_order
+        $stmt = $connection->prepare("SELECT r.id_requisition, m.id_material, m.reference, m.material, r.application_date, r.delivery_date, r.quantity, r.purchase_order
                                       FROM requisitons r
-                                        INNER JOIN products p ON p.id_product = r.id_product
+                                        INNER JOIN materials m ON m.id_material = r.id_product
                                       WHERE r.id_company = :id_company");
         $stmt->execute(['id_company' => $id_company]);
 
@@ -41,7 +41,7 @@ class RequisitionsDao
                                           VALUES (:id_company, :id_product, :application_date, :delivery_date, :quantity, :purchase_order)");
             $stmt->execute([
                 'id_company' => $id_company,
-                'id_product' => $dataRequisition['idProduct'],
+                'id_product' => $dataRequisition['idMaterial'],
                 'application_date' => $dataRequisition['applicationDate'],
                 'delivery_date' => $dataRequisition['deliveryDate'],
                 'quantity' => $dataRequisition['quantity'],
@@ -66,7 +66,7 @@ class RequisitionsDao
                                     WHERE id_requisition = :id_requisition");
             $stmt->execute([
                 'id_requisition' => $dataRequisition['idRequisition'],
-                'id_product' => $dataRequisition['idProduct'],
+                'id_product' => $dataRequisition['idMaterial'],
                 'application_date' => $dataRequisition['applicationDate'],
                 'delivery_date' => $dataRequisition['deliveryDate'],
                 'quantity' => $dataRequisition['quantity'],

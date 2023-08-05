@@ -1,12 +1,12 @@
 <?php
 
-use TezlikPlaneacion\dao\GeneralProductsDao;
+use TezlikPlaneacion\dao\GeneralMaterialsDao;
 use TezlikPlaneacion\dao\GeneralRequisitionsDao;
 use TezlikPlaneacion\dao\requisitionsDao;
 
 $requisitionsDao = new requisitionsDao();
 $generalRequisitionsDao = new GeneralRequisitionsDao();
-$generalProductsDao = new GeneralProductsDao();
+$generalMaterialsDao = new GeneralMaterialsDao();
 
 use Psr\Http\Message\ResponseInterface as Response;
 use Psr\Http\Message\ServerRequestInterface as Request;
@@ -20,7 +20,7 @@ $app->get('/requisitions', function (Request $request, Response $response, $args
 });
 
 $app->post('/requisitionDataValidation', function (Request $request, Response $response, $args) use (
-    $generalProductsDao,
+    $generalMaterialsDao,
     $generalRequisitionsDao
 ) {
     $dataRequisition = $request->getParsedBody();
@@ -36,7 +36,7 @@ $app->post('/requisitionDataValidation', function (Request $request, Response $r
 
         for ($i = 0; $i < sizeof($requisition); $i++) {
             if (
-                empty($requisition[$i]['referenceProduct']) || empty($requisition[$i]['product']) || empty($requisition[$i]['applicationDate']) ||
+                empty($requisition[$i]['refRawMaterial']) || empty($requisition[$i]['nameRawMaterial']) || empty($requisition[$i]['applicationDate']) ||
                 empty($requisition[$i]['deliveryDate']) || empty($requisition[$i]['quantity'])
             ) {
                 $i = $i + 1;
@@ -44,13 +44,13 @@ $app->post('/requisitionDataValidation', function (Request $request, Response $r
                 break;
             }
 
-            // Obtener id producto
-            $findProduct = $generalProductsDao->findProduct($requisition[$i], $id_company);
-            if (!$findProduct) {
+            // Obtener id material
+            $findMaterial = $generalMaterialsDao->findMaterial($requisition[$i], $id_company);
+            if (!$findMaterial) {
                 $i = $i + 1;
-                $dataImportRequisition = array('error' => true, 'message' => "Producto no existe en la base de datos<br>Fila: {$i}");
+                $dataImportRequisition = array('error' => true, 'message' => "Material no existe en la base de datos<br>Fila: {$i}");
                 break;
-            } else $requisition[$i]['idProduct'] = $findProduct['id_product'];
+            } else $requisition[$i]['idMaterial'] = $findMaterial['id_material'];
 
 
             $findRequisition = $generalRequisitionsDao->findRequisition($requisition[$i], $id_company);
@@ -68,7 +68,7 @@ $app->post('/requisitionDataValidation', function (Request $request, Response $r
 $app->post('/addRequisition', function (Request $request, Response $response, $args) use (
     $requisitionsDao,
     $generalRequisitionsDao,
-    $generalProductsDao
+    $generalMaterialsDao
 ) {
     session_start();
     $id_company = $_SESSION['id_company'];
@@ -88,13 +88,13 @@ $app->post('/addRequisition', function (Request $request, Response $response, $a
             else
                 $resp = array('error' => true, 'message' => 'Ocurrio un error mientras ingresaba la información. Intente nuevamente');
         } else
-            $resp = array('error' => true, 'message' => 'Producto ya existente en la requisicion. Ingrese nuevo producto');
+            $resp = array('error' => true, 'message' => 'Material ya existente en la requisicion. Ingrese nuevo material');
     } else {
         $requisition = $dataRequisition['importRequisition'];
 
         for ($i = 0; $i < sizeof($requisition); $i++) {
-            $findProduct = $generalProductsDao->findProduct($requisition[$i], $id_company);
-            $requisition[$i]['idProduct'] = $findProduct['id_product'];
+            $findMaterial = $generalMaterialsDao->findMaterial($requisition[$i], $id_company);
+            $requisition[$i]['idMaterial'] = $findMaterial['id_material'];
 
             !isset($requisition[$i]['purchaseOrder']) ? $requisition[$i]['purchaseOrder'] = '' : $requisition[$i]['purchaseOrder'];
 
@@ -136,7 +136,7 @@ $app->post('/updateRequisition', function (Request $request, Response $response,
         else
             $resp = array('error' => true, 'message' => 'Ocurrio un error mientras modificaba la información. Intente nuevamente');
     } else
-        $resp = array('error' => true, 'message' => 'Producto ya existente en la requisicion. Ingrese nuevo producto');
+        $resp = array('error' => true, 'message' => 'Material ya existente en la requisicion. Ingrese nuevo material');
     $response->getBody()->write(json_encode($resp));
     return $response->withStatus(200)->withHeader('Content-Type', 'application/json');
 });

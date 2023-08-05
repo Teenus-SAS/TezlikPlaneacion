@@ -28,8 +28,8 @@ $(document).ready(function () {
       .then((data) => {
         let requisitionToImport = data.map((item) => {
           return {
-            referenceProduct: item.referencia_producto,
-            product: item.producto,
+            refRawMaterial: item.referencia_material,
+            nameRawMaterial: item.material,
             applicationDate: item.fecha_solicitud,
             deliveryDate: item.fecha_entrega,
             quantity: item.cantidad,

@@ -1,20 +1,4 @@
-$(document).ready(function () {
-    /* Seleccion producto */
-
-    $('#refProduct').change(function (e) {
-        e.preventDefault();
-        id = this.value;
-        $('#selectNameProduct option').removeAttr('selected');
-        $(`#selectNameProduct option[value=${id}]`).prop('selected', true);
-    });
-
-    $('#selectNameProduct').change(function (e) {
-        e.preventDefault();
-        id = this.value;
-        $('#refProduct option').removeAttr('selected');
-        $(`#refProduct option[value=${id}]`).prop('selected', true);
-    });
-
+$(document).ready(function () { 
     /* Cargue tabla de Productos Materiales */
     tblRequisitions = $('#tblRequisitions').dataTable({
         destroy: true,
@@ -41,8 +25,8 @@ $(document).ready(function () {
                 className: 'uniqueClassName',
             },
             {
-                title: 'Producto',
-                data: 'product',
+                title: 'Material',
+                data: 'material',
                 className: 'classCenter',
             },
             {

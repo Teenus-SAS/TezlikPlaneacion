@@ -67,13 +67,13 @@ if (sizeof($_SESSION) == 0)
                                     <div class="card-body">
                                         <form id="formAddRequisition">
                                             <div class="form-row">
-                                                <div class="col-sm-4 floating-label enable-floating-label show-label" style="margin-bottom:20px">
+                                                <!-- <div class="col-sm-4 floating-label enable-floating-label show-label" style="margin-bottom:20px">
                                                     <label for="">Referencia</label>
                                                     <select class="form-control refProduct" name="idProduct" id="refProduct"></select>
-                                                </div>
+                                                </div> -->
                                                 <div class="col-sm-8 floating-label enable-floating-label show-label" style="margin-bottom:5px">
-                                                    <label for="">Producto</label>
-                                                    <select class="form-control selectNameProduct" name="selectNameProduct" id="selectNameProduct"></select>
+                                                    <label for="">Material</label>
+                                                    <select class="form-control" name="idMaterial" id="material"></select>
                                                 </div>
                                                 <div class="col-sm-3 floating-label enable-floating-label show-label" style="margin-bottom:5px">
                                                     <label for="">Fecha Solicitud</label>
@@ -163,7 +163,7 @@ if (sizeof($_SESSION) == 0)
     <!-- <script src="/planning/js/users/usersAccess.js"></script> -->
 
     <script src="../global/js/global/number.js"></script>
-    <script src="/planning/js/basic/products/configProducts.js"></script>
+    <script src="/planning/js/basic/rawMaterials/configRawMaterials.js"></script>
     <script src="/planning/js/basic/requisitions/tblRequisitions.js"></script>
     <script src="/planning/js/basic/requisitions/requisitions.js"></script>
     <script src="../global/js/import/import.js"></script>
