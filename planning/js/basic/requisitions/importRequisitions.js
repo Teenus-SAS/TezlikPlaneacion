@@ -3,21 +3,21 @@ $(document).ready(function () {
 
   $('.cardImportRequisitions').hide();
 
-  $('#btnImportNewMachines').click(function (e) {
+  $('#btnImportNewRequisitions').click(function (e) {
     e.preventDefault();
     $('.cardAddRequisitions').hide(800);
     $('.cardImportRequisitions').toggle(800);
   });
 
-  $('#fileMachines').change(function (e) {
+  $('#fileRequisitions').change(function (e) {
     e.preventDefault();
     selectedFile = e.target.files[0];
   });
 
-  $('#btnImportMachines').click(function (e) {
+  $('#btnImportRequisitions').click(function (e) {
     e.preventDefault();
 
-    file = $('#fileMachines').val();
+    file = $('#fileRequisitions').val();
 
     if (!file) {
       toastr.error('Seleccione un archivo');
@@ -26,12 +26,17 @@ $(document).ready(function () {
 
     importFile(selectedFile)
       .then((data) => {
-        let machinesToImport = data.map((item) => {
+        let requisitionToImport = data.map((item) => {
           return {
-            machine: item.maquina,
+            referenceProduct: item.referencia_producto,
+            product: item.producto,
+            applicationDate: item.fecha_solicitud,
+            deliveryDate: item.fecha_entrega,
+            quantity: item.cantidad,
+            purchaseOrder: item.orden_compra,
           };
         });
-        checkMachine(machinesToImport);
+        checkRequisition(requisitionToImport);
       })
       .catch(() => {
         console.log('Ocurrio un error. Intente Nuevamente');
@@ -39,14 +44,14 @@ $(document).ready(function () {
   });
 
   /* Mensaje de advertencia */
-  checkMachine = (data) => {
+  checkRequisition = (data) => {
     $.ajax({
       type: 'POST',
-      url: '/api/machinesDataValidation',
-      data: { importMachines: data },
+      url: '/api/requisitionDataValidation',
+      data: { importRequisition: data },
       success: function (resp) {
         if (resp.error == true) {
-          $('#formImportMachines').trigger('reset');
+          $('#formImportRequisitions').trigger('reset');
           toastr.error(resp.message);
           return false;
         }
@@ -67,7 +72,7 @@ $(document).ready(function () {
           callback: function (result) {
             if (result == true) {
               saveMachineTable(data);
-            } else $('#fileMachines').val('');
+            } else $('#fileRequisitions').val('');
           },
         });
       },
@@ -77,13 +82,13 @@ $(document).ready(function () {
   saveMachineTable = (data) => {
     $.ajax({
       type: 'POST',
-      url: '/api/addPlanMachines',
-      data: { importMachines: data },
+      url: '/api/addRequisition',
+      data: { importRequisition: data },
       success: function (r) {
         /* Mensaje de exito */
         if (r.success == true) {
           $('.cardImportRequisitions').hide(800);
-          $('#formImportMachines').trigger('reset');
+          $('#formImportRequisitions').trigger('reset');
           updateTable();
           toastr.success(r.message);
           return false;
@@ -100,10 +105,10 @@ $(document).ready(function () {
   };
 
   /* Descargar formato */
-  $('#btnDownloadImportsMachines').click(function (e) {
+  $('#btnDownloadImportsRequisitions').click(function (e) {
     e.preventDefault();
 
-    url = 'assets/formatsXlsx/Maquinas.xlsx';
+    url = 'assets/formatsXlsx/Requisiciones.xlsx';
 
     link = document.createElement('a');
 

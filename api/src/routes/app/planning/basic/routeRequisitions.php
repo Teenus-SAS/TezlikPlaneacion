@@ -67,15 +67,16 @@ $app->post('/requisitionDataValidation', function (Request $request, Response $r
 
 $app->post('/addRequisition', function (Request $request, Response $response, $args) use (
     $requisitionsDao,
-    $generalRequisitionsDao
+    $generalRequisitionsDao,
+    $generalProductsDao
 ) {
     session_start();
     $id_company = $_SESSION['id_company'];
     $dataRequisition = $request->getParsedBody();
 
-    $dataRequisition = sizeof($dataRequisition);
+    $count = sizeof($dataRequisition);
 
-    if ($dataRequisition > 1) {
+    if ($count > 1) {
         $findRequisition = $generalRequisitionsDao->findRequisition($dataRequisition, $id_company);
         if (!$findRequisition) {
             $requisition = $requisitionsDao->insertRequisitionByCompany($dataRequisition, $id_company);
@@ -92,11 +93,16 @@ $app->post('/addRequisition', function (Request $request, Response $response, $a
         $requisition = $dataRequisition['importRequisition'];
 
         for ($i = 0; $i < sizeof($requisition); $i++) {
+            $findProduct = $generalProductsDao->findProduct($requisition[$i], $id_company);
+            $requisition[$i]['idProduct'] = $findProduct['id_product'];
+
+            !isset($requisition[$i]['purchaseOrder']) ? $requisition[$i]['purchaseOrder'] = '' : $requisition[$i]['purchaseOrder'];
+
             $findRequisition = $generalRequisitionsDao->findRequisition($requisition[$i], $id_company);
 
             if (!$findRequisition) $resolution = $requisitionsDao->insertRequisitionByCompany($requisition[$i], $id_company);
             else {
-                $requisition[$i]['idMold'] = $findRequisition['id_requisition'];
+                $requisition[$i]['idRequisition'] = $findRequisition['id_requisition'];
                 $resolution = $requisitionsDao->updateRequisition($dataRequisition);
             }
         }

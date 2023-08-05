@@ -21,8 +21,7 @@ $(document).ready(function () {
       {
         title: 'Fecha Pedido',
         data: 'date_order',
-        className: 'uniqueClassName',
-        // render: $.fn.dataTable.render.moment('YYYY/MM/DD'),
+        className: 'uniqueClassName', 
       },
       {
         title: 'No Pedido',
@@ -49,12 +48,7 @@ $(document).ready(function () {
         title: 'Fecha Maxima',
         data: 'max_date',
         className: 'classCenter',
-      },
-      // {
-      //   title: 'Fecha Entrega',
-      //   data: 'delivery_date',
-      //   className: 'classCenter',
-      // },
+      }, 
       {
         title: 'Estado',
         data: 'status',
