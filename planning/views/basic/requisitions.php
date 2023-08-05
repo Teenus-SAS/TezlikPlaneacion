@@ -67,19 +67,19 @@ if (sizeof($_SESSION) == 0)
                                     <div class="card-body">
                                         <form id="formAddRequisition">
                                             <div class="form-row">
-                                                <div class="col-sm-4 floating-label enable-floating-label show-label" style="margin-bottom:20px">
+                                                <div class="col-sm-2 floating-label enable-floating-label show-label" style="margin-bottom:20px">
                                                     <label for="">Referencia</label>
                                                     <select class="form-control refProduct" name="idProduct" id="refProduct"></select>
                                                 </div>
-                                                <div class="col-sm-8 floating-label enable-floating-label show-label" style="margin-bottom:5px">
+                                                <div class="col-sm-6 floating-label enable-floating-label show-label" style="margin-bottom:5px">
                                                     <label for="">Producto</label>
                                                     <select class="form-control selectNameProduct" name="selectNameProduct" id="selectNameProduct"></select>
                                                 </div>
-                                                <div class="col-sm-3 floating-label enable-floating-label show-label" style="margin-bottom:5px">
+                                                <div class="col-sm-2 floating-label enable-floating-label show-label" style="margin-bottom:5px">
                                                     <label for="">Fecha Solicitud</label>
                                                     <input class="form-control" type="date" name="applicationDate" id="applicationDate">
                                                 </div>
-                                                <div class="col-sm-3 floating-label enable-floating-label show-label" style="margin-bottom:5px">
+                                                <div class="col-sm-2 floating-label enable-floating-label show-label" style="margin-bottom:5px">
                                                     <label for="">Fecha Entrega</label>
                                                     <input class="form-control" type="date" name="deliveryDate" id="deliveryDate">
                                                 </div>
@@ -92,7 +92,7 @@ if (sizeof($_SESSION) == 0)
                                                     <input class="form-control text-center" type="text" name="purchaseOrder" id="purchaseOrder">
                                                 </div>
                                                 <div class="col-sm mt-1">
-                                                    <button class="btn btn-success" id="btnAddRequisition">Asingar</button>
+                                                    <button class="btn btn-success" id="btnAddRequisition">Asignar</button>
                                                 </div>
                                             </div>
                                         </form>
