@@ -32,7 +32,7 @@ $app->get('/orders', function (Request $request, Response $response, $args) use 
     session_start();
     $id_company = $_SESSION['id_company'];
 
-    // Cambiar estado pedidos
+    /* Cambiar estado pedidos
     $result = $generalOrdersDao->findAllOrdersConcat($id_company);
 
     for ($i = 0; $i < sizeof($result); $i++) {
@@ -46,7 +46,7 @@ $app->get('/orders', function (Request $request, Response $response, $args) use 
             $accumulated_quantity = $order['quantity'];
 
         $generalProductsDao->updateAccumulatedQuantity($result[$i]['id_product'], $accumulated_quantity, 1);
-    }
+    }*/
 
     $orders = $ordersDao->findAllOrdersByCompany($id_company);
 

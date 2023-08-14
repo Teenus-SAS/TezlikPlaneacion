@@ -69,7 +69,7 @@ class GeneralOrdersDao
     {
         $connection = Connection::getInstance()->getConnection();
 
-        $stmt = $connection->prepare("SELECT (SELECT IFNULL(SUM(original_quantity), 0) FROM plan_orders WHERE id_product = p.id_product) AS accumulated_quantity, p.quantity 
+        $stmt = $connection->prepare("SELECT (SELECT IFNULL(SUM(original_quantity), 0) FROM plan_orders WHERE id_product = p.id_product AND status != 'Entregado') AS accumulated_quantity, p.quantity 
                                       FROM products p 
                                       WHERE p.id_product = :id_product");
         $stmt->execute([

@@ -75,6 +75,10 @@ $(document).ready(function () {
           title: 'Estado',
           data: 'status',
           className: 'classCenter',
+          render: function (data) {
+            data == 'Entregado' ? status = '' : status = data;
+            return status;
+          }
         },
         {
           title: 'Fecha de Entrega',
@@ -82,7 +86,7 @@ $(document).ready(function () {
           className: 'classCenter',
           render: function (data) {
             data.status == 'Despacho' ? action = `<a href="javascript:;" <i class="bi bi-calendar-plus-fill changeDate" id="${data.id_order}" data-toggle='tooltip' title='Actualizar Fecha' style="font-size: 30px;"></i></a>`
-              : action =data.delivery_date;
+              : action = data.delivery_date;
             
             return action;
           }
