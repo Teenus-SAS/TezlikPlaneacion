@@ -32,21 +32,23 @@ $app->get('/orders', function (Request $request, Response $response, $args) use 
     session_start();
     $id_company = $_SESSION['id_company'];
 
-    /* Cambiar estado pedidos
-    $result = $generalOrdersDao->findAllOrdersConcat($id_company);
+    /* Cambiar estado pedidos */
+    $orders = $generalOrdersDao->findAllOrdersByCompany($id_company);
 
-    for ($i = 0; $i < sizeof($result); $i++) {
+    for ($i = 0; $i < sizeof($orders); $i++) {
         // Checkear cantidades
-        $order = $generalOrdersDao->checkAccumulatedQuantityOrder($result[$i]['id_product']);
+        $order = $generalOrdersDao->checkAccumulatedQuantityOrder($orders[$i]['id_product']);
 
         if ($order['accumulated_quantity'] <= $order['quantity']) {
-            $generalOrdersDao->changeStatus($result[$i]['id_order'], 'Despacho');
+            $generalOrdersDao->changeStatus($orders[$i]['id_order'], 'Despacho');
             $accumulated_quantity = $order['accumulated_quantity'];
-        } else
+        } else {
             $accumulated_quantity = $order['quantity'];
+            // $generalOrdersDao->changeStatus($orders[$i]['id_order'], 'Alistamiento');
+        }
 
-        $generalProductsDao->updateAccumulatedQuantity($result[$i]['id_product'], $accumulated_quantity, 1);
-    }*/
+        $generalProductsDao->updateAccumulatedQuantity($orders[$i]['id_product'], $accumulated_quantity, 1);
+    }
 
     $orders = $ordersDao->findAllOrdersByCompany($id_company);
 
@@ -172,21 +174,25 @@ $app->post('/addOrder', function (Request $request, Response $response, $args) u
     }
 
     // Cambiar estado pedidos
-    $result = $generalOrdersDao->findAllOrdersConcat($id_company);
+    $orders = $generalOrdersDao->findAllOrdersByCompany($id_company);
 
-    $arrayBD = [];
-    for ($i = 0; $i < sizeof($result); $i++) {
+    for ($i = 0; $i < sizeof($orders); $i++) {
         // Checkear cantidades
-        $order = $generalOrdersDao->checkAccumulatedQuantityOrder($result[$i]['id_product']);
+        $order = $generalOrdersDao->checkAccumulatedQuantityOrder($orders[$i]['id_product']);
 
         if ($order['accumulated_quantity'] <= $order['quantity']) {
-            $generalOrdersDao->changeStatus($result[$i]['id_order'], 'Despacho');
+            $generalOrdersDao->changeStatus($orders[$i]['id_order'], 'Despacho');
             $accumulated_quantity = $order['accumulated_quantity'];
         } else
             $accumulated_quantity = $order['quantity'];
 
-        $generalProductsDao->updateAccumulatedQuantity($result[$i]['id_product'], $accumulated_quantity, 1);
+        $generalProductsDao->updateAccumulatedQuantity($orders[$i]['id_product'], $accumulated_quantity, 1);
+    }
 
+    $result = $generalOrdersDao->findAllOrdersConcat($id_company);
+
+    $arrayBD = [];
+    for ($i = 0; $i < sizeof($result); $i++) {
         array_push($arrayBD, $result[$i]['concate']);
     }
 

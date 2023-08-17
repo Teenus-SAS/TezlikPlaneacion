@@ -16,6 +16,25 @@ class GeneralOrdersDao
         $this->logger->pushHandler(new RotatingFileHandler(Constants::LOGS_PATH . 'querys.log', 20, Logger::DEBUG));
     }
 
+    public function findAllOrdersByCompany($id_company)
+    {
+        $connection = Connection::getInstance()->getConnection();
+
+        $stmt = $connection->prepare("SELECT o.id_order, o.id_client, o.id_product, o.num_order, o.status, o.date_order, o.original_quantity, p.product, c.client, o.min_date, o.max_date, o.delivery_date
+                                      FROM plan_orders o
+                                        INNER JOIN products p ON p.id_product = o.id_product
+                                        INNER JOIN plan_clients c ON c.id_client = o.id_client  
+                                      WHERE o.status_order = 0 AND o.id_company = :id_company AND o.status != 'Entregado'
+                                      ORDER BY o.status ASC");
+        $stmt->execute(['id_company' => $id_company]);
+
+        $this->logger->info(__FUNCTION__, array('query' => $stmt->queryString, 'errors' => $stmt->errorInfo()));
+
+        $orders = $stmt->fetchAll($connection::FETCH_ASSOC);
+        $this->logger->notice("pedidos", array('pedidos' => $orders));
+        return $orders;
+    }
+
     // Obtener informacion pedido
     public function findOrdersByCompany($dataOrder, $id_company)
     {
@@ -104,7 +123,7 @@ class GeneralOrdersDao
         $connection = Connection::getInstance()->getConnection();
 
         try {
-            $stmt = $connection->prepare("UPDATE plan_orders SET status = :status  WHERE id_order = :id_order");
+            $stmt = $connection->prepare("UPDATE plan_orders SET status = :status WHERE id_order = :id_order");
             $stmt->execute([
                 'status' => $status,
                 'id_order' => $id_order

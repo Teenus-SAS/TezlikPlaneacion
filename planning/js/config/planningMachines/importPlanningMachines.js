@@ -118,17 +118,46 @@ $(document).ready(function () {
   $('#btnDownloadImportsPlanMachines').click(function (e) {
     e.preventDefault();
 
-    url = 'assets/formatsXlsx/Planeacion_Maquinas.xlsx';
+    // url = 'assets/formatsXlsx/Planeacion_Maquinas.xlsx';
 
-    link = document.createElement('a');
+    // link = document.createElement('a');
 
-    link.target = '_blank';
+    // link.target = '_blank';
 
-    link.href = url;
-    document.body.appendChild(link);
-    link.click();
+    // link.href = url;
+    // document.body.appendChild(link);
+    // link.click();
 
-    document.body.removeChild(link);
-    delete link;
+    // document.body.removeChild(link);
+    // delete link;
+    let wb = XLSX.utils.book_new();
+    let planningMachines = [];
+    let data = tblPlanMachines.fnGetData();
+
+    for (let i = 0; i < data.length; i++) {
+      planningMachines.push({
+        maquina: data[i].machine,
+        no_trabajadores: data[i].number_workers,
+        hora_dia: data[i].hours_day,
+        hora_inicio: data[i].hour_start,
+        hora_fin: data[i].hour_end,
+        enero: data[i].january,
+        febrero: data[i].february,
+        marzo: data[i].march,
+        abril: data[i].april,
+        mayo: data[i].may,
+        junio: data[i].june,
+        julio: data[i].july,
+        agosto: data[i].august,
+        septiembre: data[i].september,
+        octubre: data[i].october,
+        noviembre: data[i].november,
+        diciembre: data[i].december,
+      }); 
+    }
+
+    ws = XLSX.utils.json_to_sheet(planningMachines);
+    XLSX.utils.book_append_sheet(wb, ws, 'Planeacion Maquinas');
+    XLSX.writeFile(wb, 'Planeacion_Maquinas.xlsx');
   });
 });
