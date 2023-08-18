@@ -26,12 +26,12 @@ $(document).ready(function () {
         let idRequisition = sessionStorage.getItem('id_requisition');
 
         if (idRequisition == '' || idRequisition == null) {
-            idProduct = $('#selectNameProduct').val();
+            material = $('#material').val();
             applicationDate = $('#applicationDate').val();
             deliveryDate = $('#deliveryDate').val();
             quan = $('#quantity').val();
 
-            data = quan * idProduct;
+            data = quan * material;
 
             if (!data || applicationDate == ''|| deliveryDate == ''|| quan == '') {
                 toastr.error('Ingrese todos los campos');
@@ -63,9 +63,8 @@ $(document).ready(function () {
     let data = tblRequisitions.fnGetData(row);
 
     sessionStorage.setItem('id_requisition', data.id_requisition);
-
-    $(`#refProduct option[value=${data.id_product}]`).prop('selected', true);
-    $(`#selectNameProduct option[value=${data.id_product}]`).prop('selected', true);
+ 
+    $(`#material option[value=${data.id_material}]`).prop('selected', true);
     $('#applicationDate').val(data.application_date);
     $('#deliveryDate').val(data.delivery_date);
     $('#purchaseOrder').val(data.purchase_order);

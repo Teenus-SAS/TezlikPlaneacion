@@ -51,13 +51,21 @@ $(document).ready(function () {
                 className: 'classCenter', 
             },
             {
+                title: 'Recibir Material',
+                data: null,
+                className: 'classCenter',
+                render: function (data, type, full, meta) {  
+                    return `<a href="javascript:;" <i class="bi bi-calendar-plus-fill changeDate" id="${meta.row +1}" data-toggle='tooltip' title='Actualizar Fecha' style="font-size: 30px;"></i></a>`;
+                }
+            },
+            {
                 title: 'Acciones',
                 data: 'id_requisition',
                 className: 'uniqueClassName',
                 render: function (data) {
                     return `
-                <a href="javascript:;" <i id="${data}" class="bx bx-edit-alt updateRequisition" data-toggle='tooltip' title='Actualizar Requisicion' style="font-size: 30px;"></i></a>
-                <a href="javascript:;" <i id="${data}" class="mdi mdi-delete-forever" data-toggle='tooltip' title='Eliminar Requisicion' style="font-size: 30px;color:red" onclick="deleteFunction()"></i></a>`;
+                    <a href="javascript:;" <i id="${data}" class="bx bx-edit-alt updateRequisition" data-toggle='tooltip' title='Actualizar Requisicion' style="font-size: 30px;"></i></a>
+                    <a href="javascript:;" <i id="${data}" class="mdi mdi-delete-forever" data-toggle='tooltip' title='Eliminar Requisicion' style="font-size: 30px;color:red" onclick="deleteFunction()"></i></a>`;
                 },
             },
         ],

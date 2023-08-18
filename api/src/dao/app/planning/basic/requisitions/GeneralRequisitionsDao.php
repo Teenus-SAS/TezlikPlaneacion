@@ -22,7 +22,7 @@ class GeneralRequisitionsDao
 
         $stmt = $connection->prepare("SELECT * FROM requisitons WHERE id_product = :id_product AND id_company = :id_company");
         $stmt->execute([
-            'id_product' => $dataRequisition['idProduct'],
+            'id_product' => $dataRequisition['idMaterial'],
             'id_company' => $id_company
         ]);
         $this->logger->info(__FUNCTION__, array('query' => $stmt->queryString, 'errors' => $stmt->errorInfo()));

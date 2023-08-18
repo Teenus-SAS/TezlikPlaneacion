@@ -83,15 +83,16 @@ if (sizeof($_SESSION) == 0)
                                                     <label for="">Fecha Entrega</label>
                                                     <input class="form-control" type="date" name="deliveryDate" id="deliveryDate">
                                                 </div>
-                                                <div class="col-sm-1 floating-label enable-floating-label show-label" style="margin-bottom:5px">
+                                                <div class="w-100"></div>
+                                                <div class="col-sm-2 floating-label enable-floating-label show-label mt-2" style="margin-bottom:5px">
                                                     <label for="">Cantidad</label>
                                                     <input class="form-control text-center number" type="text" name="quantity" id="quantity">
                                                 </div>
-                                                <div class="col-sm-2 floating-label enable-floating-label show-label" style="margin-bottom:5px">
+                                                <div class="col-sm-2 floating-label enable-floating-label show-label mt-2" style="margin-bottom:5px">
                                                     <label for="">Orden de Compra</label>
                                                     <input class="form-control text-center" type="text" name="purchaseOrder" id="purchaseOrder">
                                                 </div>
-                                                <div class="col-sm mt-1">
+                                                <div class="col-sm" style="margin-top:12px">
                                                     <button class="btn btn-success" id="btnAddRequisition">Asignar</button>
                                                 </div>
                                             </div>
