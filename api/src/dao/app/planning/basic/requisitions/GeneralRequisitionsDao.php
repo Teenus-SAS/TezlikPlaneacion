@@ -29,4 +29,22 @@ class GeneralRequisitionsDao
         $molds = $stmt->fetch($connection::FETCH_ASSOC);
         return $molds;
     }
+
+    public function updateDateRequisition($dataRequisition)
+    {
+        $connection = Connection::getInstance()->getConnection();
+
+        try {
+            $stmt = $connection->prepare("UPDATE requisitons SET admission_date = :admission_date WHERE id_requisition = :id_requisition");
+            $stmt->execute([
+                'id_requisition' => $dataRequisition['idRequisition'],
+                'admission_date' => $dataRequisition['date'],
+            ]);
+            $this->logger->info(__FUNCTION__, array('query' => $stmt->queryString, 'errors' => $stmt->errorInfo()));
+        } catch (\Exception $e) {
+            $message = $e->getMessage();
+            $error = array('info' => true, 'message' => $message);
+            return $error;
+        }
+    }
 }

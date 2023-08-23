@@ -84,15 +84,16 @@ class GeneralOrdersDao
         return $orders;
     }
 
-    public function checkAccumulatedQuantityOrder($id_product)
+    public function checkAccumulatedQuantityOrder($id_order)
     {
         $connection = Connection::getInstance()->getConnection();
 
-        $stmt = $connection->prepare("SELECT (SELECT IFNULL(SUM(original_quantity), 0) FROM plan_orders WHERE id_product = p.id_product AND status != 'Entregado') AS accumulated_quantity, p.quantity 
-                                      FROM products p 
-                                      WHERE p.id_product = :id_product");
+        $stmt = $connection->prepare("SELECT o.original_quantity, p.quantity 
+                                      FROM plan_orders o
+                                     INNER JOIN products p ON p.id_product = o.id_product 
+                                      WHERE o.id_order = :id_order");
         $stmt->execute([
-            'id_product' => $id_product
+            'id_order' => $id_order
         ]);
         $this->logger->info(__FUNCTION__, array('query' => $stmt->queryString, 'errors' => $stmt->errorInfo()));
 

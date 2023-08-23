@@ -140,6 +140,58 @@ $(document).ready(function () {
     });
   };
 
+  $(document).on('click', '.changeDate', function (e) {
+        e.preventDefault();
+
+        let date = new Date().toISOString().split('T')[0];
+        let row = $(this).parent().parent()[0];
+        let data = tblRequisitions.fnGetData(row);
+
+        bootbox.confirm({
+            title: 'Ingrese Fecha De Ingreso!',
+            message: `<div class="col-sm-12 floating-label enable-floating-label">
+                        <input class="form-control" type="date" name="date" id="date" max="${date}"></input>
+                        <label for="date">Fecha</span></label>
+                      </div>`,
+            buttons: {
+                confirm: {
+                    label: 'Agregar',
+                    className: 'btn-success',
+                },
+                cancel: {
+                    label: 'Cancelar',
+                    className: 'btn-danger',
+                },
+            },
+            callback: function (result) {
+                if (result == true) {
+                    let date = $('#date').val();
+
+                    if (!date) {
+                        toastr.error('Ingrese los campos');
+                        return false;
+                    }
+
+                    let form = new FormData();
+                    form.append('idRequisition', data.id_requisition);
+                    form.append('date', date);
+
+                    $.ajax({
+                        type: "POST",
+                        url: '/api/saveAdmissionDate',
+                        data: form,
+                        contentType: false,
+                        cache: false,
+                        processData: false,
+                        success: function (resp) {
+                            message(resp);
+                        }
+                    });
+                }
+            },
+        });
+    });
+
   /* Mensaje de exito */
 
   const message = (data) => {

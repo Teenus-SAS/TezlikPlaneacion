@@ -141,6 +141,24 @@ $app->post('/updateRequisition', function (Request $request, Response $response,
     return $response->withStatus(200)->withHeader('Content-Type', 'application/json');
 });
 
+$app->post('/saveAdmissionDate', function (Request $request, Response $response, $args) use (
+    $generalRequisitionsDao
+) {
+    $dataRequisition = $request->getParsedBody();
+
+    $requisition = $generalRequisitionsDao->updateDateRequisition($dataRequisition);
+
+    if ($requisition == null)
+        $resp = array('success' => true, 'message' => 'Fecha guardada correctamente');
+    else if (isset($requisition['info']))
+        $resp = array('info' => true, 'message' => $requisition['message']);
+    else
+        $resp = array('error' => true, 'message' => 'Ocurrio un error mientras modificaba la información. Intente nuevamente');
+
+    $response->getBody()->write(json_encode($resp));
+    return $response->withStatus(200)->withHeader('Content-Type', 'application/json');
+});
+
 $app->get('/deleteRequisition/{id_requisition}', function (Request $request, Response $response, $args) use ($requisitionsDao) {
     $requisitions = $requisitionsDao->deleteRequisition($args['id_requisition']);
 

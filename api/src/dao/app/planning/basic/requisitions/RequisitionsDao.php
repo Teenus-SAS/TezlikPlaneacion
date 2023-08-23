@@ -19,7 +19,7 @@ class RequisitionsDao
     public function findAllRequisitionByCompany($id_company)
     {
         $connection = Connection::getInstance()->getConnection();
-        $stmt = $connection->prepare("SELECT r.id_requisition, m.id_material, m.reference, m.material, r.application_date, r.delivery_date, r.quantity, r.purchase_order
+        $stmt = $connection->prepare("SELECT r.id_requisition, m.id_material, m.reference, m.material, r.application_date, r.delivery_date, r.quantity, r.purchase_order, r.admission_date
                                       FROM requisitons r
                                         INNER JOIN materials m ON m.id_material = r.id_product
                                       WHERE r.id_company = :id_company");
