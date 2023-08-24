@@ -142,11 +142,18 @@ $app->post('/updateRequisition', function (Request $request, Response $response,
 });
 
 $app->post('/saveAdmissionDate', function (Request $request, Response $response, $args) use (
-    $generalRequisitionsDao
+    $generalRequisitionsDao,
+    $generalMaterialsDao
 ) {
     $dataRequisition = $request->getParsedBody();
 
     $requisition = $generalRequisitionsDao->updateDateRequisition($dataRequisition);
+
+    if ($requisition == null) {
+        $material = $generalMaterialsDao->calcMaterialRecieved($dataRequisition['idMaterial']);
+
+        $requisition = $generalMaterialsDao->updateQuantityMaterial($dataRequisition['idMaterial'], $material['quantity']);
+    }
 
     if ($requisition == null)
         $resp = array('success' => true, 'message' => 'Fecha guardada correctamente');

@@ -40,6 +40,12 @@ $(document).ready(function () {
                 render: $.fn.dataTable.render.number('.', ',', 2, ''),
             },
             {
+                title: 'En Transito',
+                data: 'transit',
+                className: 'uniqueClassName',
+                render: $.fn.dataTable.render.number('.', ',', 2, ''),
+            },
+            {
                 title: 'Necesidad',
                 data: 'need',
                 className: 'uniqueClassName',

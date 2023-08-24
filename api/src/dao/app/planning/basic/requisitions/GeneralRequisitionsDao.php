@@ -20,9 +20,9 @@ class GeneralRequisitionsDao
     {
         $connection = Connection::getInstance()->getConnection();
 
-        $stmt = $connection->prepare("SELECT * FROM requisitons WHERE id_product = :id_product AND id_company = :id_company");
+        $stmt = $connection->prepare("SELECT * FROM requisitons WHERE id_material = :id_material AND id_company = :id_company");
         $stmt->execute([
-            'id_product' => $dataRequisition['idMaterial'],
+            'id_material' => $dataRequisition['idMaterial'],
             'id_company' => $id_company
         ]);
         $this->logger->info(__FUNCTION__, array('query' => $stmt->queryString, 'errors' => $stmt->errorInfo()));

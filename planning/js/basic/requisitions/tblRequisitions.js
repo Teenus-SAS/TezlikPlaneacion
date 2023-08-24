@@ -43,7 +43,7 @@ $(document).ready(function () {
                 title: 'Cantidad',
                 data: 'quantity',
                 className: 'classCenter',
-                render: $.fn.dataTable.render.number('.', ',', 4, ''),
+                render: $.fn.dataTable.render.number('.', ',', 2, ''),
             },
             {
                 title: 'Orden de Compra',
@@ -54,8 +54,10 @@ $(document).ready(function () {
                 title: 'Recibir Material',
                 data: null,
                 className: 'classCenter',
-                render: function (data, type, full, meta) {  
-                    return `<a href="javascript:;" <i class="bi bi-calendar-plus-fill changeDate" id="${meta.row +1}" data-toggle='tooltip' title='Actualizar Fecha' style="font-size: 30px;"></i></a>`;
+                render: function (data, type, full, meta) {
+                    !data.admission_date ? date = `<a href="javascript:;" <i class="bi bi-calendar-plus-fill changeDate" id="${meta.row + 1}" data-toggle='tooltip' title='Actualizar Fecha' style="font-size: 30px;"></i></a>` : date = `Recibido<br>${data.admission_date}`;
+
+                    return date;
                 }
             },
             {
