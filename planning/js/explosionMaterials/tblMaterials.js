@@ -51,7 +51,12 @@ $(document).ready(function () {
                 className: 'uniqueClassName',
                 render: $.fn.dataTable.render.number('.', ',', 2, ''),
             },
-            
+            {
+                title: 'Disponible',
+                data: 'available',
+                className: 'uniqueClassName',
+                render: $.fn.dataTable.render.number('.', ',', 2, ''),
+            }, 
         ],
     }); 
 });

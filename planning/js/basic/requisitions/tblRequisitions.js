@@ -1,4 +1,4 @@
-$(document).ready(function () { 
+$(document).ready(function () {
     /* Cargue tabla de Productos Materiales */
     tblRequisitions = $('#tblRequisitions').dataTable({
         destroy: true,
@@ -37,7 +37,7 @@ $(document).ready(function () {
             {
                 title: 'Fecha Entrega',
                 data: 'delivery_date',
-                className: 'classCenter', 
+                className: 'classCenter',
             },
             {
                 title: 'Cantidad',
@@ -48,7 +48,7 @@ $(document).ready(function () {
             {
                 title: 'Orden de Compra',
                 data: 'purchase_order',
-                className: 'classCenter', 
+                className: 'classCenter',
             },
             {
                 title: 'Recibir Material',
@@ -62,12 +62,13 @@ $(document).ready(function () {
             },
             {
                 title: 'Acciones',
-                data: 'id_requisition',
+                data: null,
                 className: 'uniqueClassName',
                 render: function (data) {
-                    return `
-                    <a href="javascript:;" <i id="${data}" class="bx bx-edit-alt updateRequisition" data-toggle='tooltip' title='Actualizar Requisicion' style="font-size: 30px;"></i></a>
-                    <a href="javascript:;" <i id="${data}" class="mdi mdi-delete-forever" data-toggle='tooltip' title='Eliminar Requisicion' style="font-size: 30px;color:red" onclick="deleteFunction()"></i></a>`;
+                    !data.admission_date ? action = `<a href="javascript:;" <i id="${data.id_requisition}" class="bx bx-edit-alt updateRequisition" data-toggle='tooltip' title='Actualizar Requisicion' style="font-size: 30px;"></i></a>
+                                                     <a href="javascript:;" <i id="${data.id_requisition}" class="mdi mdi-delete-forever" data-toggle='tooltip' title='Eliminar Requisicion' style="font-size: 30px;color:red" onclick="deleteFunction()"></i></a>`
+                        : action = '';
+                    return action;
                 },
             },
         ],

@@ -39,7 +39,7 @@ if (sizeof($_SESSION) == 0)
                 <div class="page-title-box">
                     <div class="container-fluid">
                         <div class="row align-items-center">
-                            <div class="col-sm-5 col-xl-6">
+                            <div class="col-sm-5 col-xl-2">
                                 <div class="page-title">
                                     <h3 class="mb-1 font-weight-bold text-dark">Requisiciones</h3>
                                     <ol class="breadcrumb mb-3 mb-md-0">
@@ -47,7 +47,17 @@ if (sizeof($_SESSION) == 0)
                                     </ol>
                                 </div>
                             </div>
-                            <div class="col-sm-7 col-xl-6 form-inline justify-content-sm-end">
+                            <div class="col-sm-7 col-xl-10 form-inline justify-content-sm-end">
+                                <div class="col-sm-2">
+                                    <label for="firtsDate" class="form-label text-dark">Fecha Inicial</label>
+                                    <input class="form-control dateOrders" id="firtsDate" type="date">
+                                </div>
+                                <div class="col-sm-2">
+                                    <label for="lastDate" class="form-label text-dark">Fecha Final</label>
+                                    <input class="form-control dateOrders" id="lastDate" type="date">
+                                </div>
+                            </div>
+                            <div class="col-sm-7 col-xl-12 mt-4 form-inline justify-content-sm-end">
                                 <div class="col-xs-2 mr-2">
                                     <button class="btn btn-warning" id="btnNewRequisition" name="btnNewRequisition">Nueva Requisicion</button>
                                 </div>
