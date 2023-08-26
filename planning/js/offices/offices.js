@@ -1,32 +1,4 @@
-$(document).ready(function () {
-    // $('.cardAddDate').hide();
-
-    // $('#btnNewDate').click(function (e) { 
-    //     e.preventDefault();
-
-    //     $('.cardAddDate').toggle(800);
-    //     $('#formAddDate').trigger('reset');
-    // });
-
-    // $('#btnAddDate').click(async function (e) { 
-    //     e.preventDefault();
-        
-    //     let order = $('#order').val();
-    //     let date = $('#date').val();
-                
-    //     if (!order || !date) {
-    //         toastr.error('Ingrese los campos');
-    //         return false;
-    //     }
-
-    //     let form = new FormData();
-    //     form.append('idOrder', order);
-    //     form.append('date', date);
-
-    //     let resp = await sendDataPOST('/api/changeOffices', form);
-    //     message(resp); 
-    // });
-    
+$(document).ready(function () {     
     $(document).on('click', '.changeDate', function (e) {
         e.preventDefault();
 
@@ -82,29 +54,13 @@ $(document).ready(function () {
         });
     });
 
-    
+    $('.cardSearchDate').hide();
 
-    $(document).on('change', '.dateOrders', async function (e) {
+    $('#btnOpenSearchDate').click(function (e) { 
         e.preventDefault();
 
-        let dateOrders = document.getElementsByClassName('dateOrders');
-        let status = true;
-
-        for (let i = 0; i < dateOrders.length; i++) {
-            if (dateOrders[i].value == '') {
-                status = false;
-                break;
-            }
-        }
-
-        if (status == false) {
-            toastr.error('Ingrese Fecha Inicial y Fecha Final');
-        } else {
-            loadTblOffices(dateOrders[0].value, dateOrders[1].value);
-        }
-    });
-
-    loadDateOrders = () => {
+        $('.cardSearchDate').toggle(800);
+        $('#formSearchDate').trigger('reset');
         let date = new Date().toISOString().split('T')[0];
 
         $('#lastDate').val(date);
@@ -114,7 +70,41 @@ $(document).ready(function () {
 
         maxDate.setAttribute("max", date);
         minDate.setAttribute("max", date);
-    }
+    });
+
+    $('#btnSearchDate').click(async function (e) {
+        e.preventDefault();
+        
+        let firtsDate = $('#firtsDate').val();
+        let lastDate = $('#lastDate').val();
+                
+        if (!firtsDate || firtsDate == '' || !lastDate || lastDate == '') {
+            toastr.error('Ingrese los campos');
+            return false;
+        }
+
+        loadTblOffices(firtsDate, lastDate);
+    });
+
+    // $(document).on('change', '.dateOrders', async function (e) {
+    //     e.preventDefault();
+
+    //     let dateOrders = document.getElementsByClassName('dateOrders');
+    //     let status = true;
+
+    //     for (let i = 0; i < dateOrders.length; i++) {
+    //         if (dateOrders[i].value == '') {
+    //             status = false;
+    //             break;
+    //         }
+    //     }
+
+    //     if (status == false) {
+    //         toastr.error('Ingrese Fecha Inicial y Fecha Final');
+    //     } else {
+    //         loadTblOffices(dateOrders[0].value, dateOrders[1].value);
+    //     }
+    // });
 
     /* Mensaje de exito */
     message = (data) => {
@@ -133,6 +123,4 @@ $(document).ready(function () {
         $('#tblOffices').DataTable().clear();
         $('#tblOffices').DataTable().ajax.reload();
     } */
-
-    loadDateOrders();
 });

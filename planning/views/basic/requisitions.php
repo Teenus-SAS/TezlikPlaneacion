@@ -47,7 +47,7 @@ if (sizeof($_SESSION) == 0)
                                     </ol>
                                 </div>
                             </div>
-                            <div class="col-sm-7 col-xl-10 form-inline justify-content-sm-end">
+                            <!-- <div class="col-sm-7 col-xl-10 form-inline justify-content-sm-end">
                                 <div class="col-sm-2">
                                     <label for="firtsDate" class="form-label text-dark">Fecha Inicial</label>
                                     <input class="form-control dateOrders" id="firtsDate" type="date">
@@ -56,14 +56,45 @@ if (sizeof($_SESSION) == 0)
                                     <label for="lastDate" class="form-label text-dark">Fecha Final</label>
                                     <input class="form-control dateOrders" id="lastDate" type="date">
                                 </div>
-                            </div>
-                            <div class="col-sm-7 col-xl-12 mt-4 form-inline justify-content-sm-end">
+                            </div> -->
+                            <div class="col-sm-7 col-xl-10 mt-4 form-inline justify-content-sm-end">
                                 <div class="col-xs-2 mr-2">
                                     <button class="btn btn-warning" id="btnNewRequisition" name="btnNewRequisition">Nueva Requisicion</button>
                                 </div>
                                 <div class="col-xs-2 py-2 mr-2">
                                     <button class="btn btn-info" id="btnImportNewRequisitions" name="btnNewImportRequisitions">Importar Requisiciones</button>
                                 </div>
+                                <div class="col-xs-2 py-2 mr-2">
+                                    <button class="btn btn-secondary" id="btnOpenSearchDate" name="btnOpenSearchDate">Buscar Fecha</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="page-content-wrapper mt--45 mb-5 cardSearchDate">
+                    <div class="container-fluid">
+                        <div class="row">
+                            <div class="col-12">
+                                <form id="formSearchDate">
+                                    <div class="card">
+                                        <div class="card-body pt-3">
+                                            <div class="form-row">
+                                                <div class="col-sm-2">
+                                                    <label for="firtsDate" class="form-label text-dark">Fecha Inicial</label>
+                                                    <input class="form-control dateOrders" id="firtsDate" type="date">
+                                                </div>
+                                                <div class="col-sm-2">
+                                                    <label for="lastDate" class="form-label text-dark">Fecha Final</label>
+                                                    <input class="form-control dateOrders" id="lastDate" type="date">
+                                                </div>
+                                                <div class="col-xs-2" style="margin-top:33px">
+                                                    <button type="text" class="btn btn-info" id="btnSearchDate">Buscar Fecha</button>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </form>
                             </div>
                         </div>
                     </div>

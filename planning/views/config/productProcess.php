@@ -97,7 +97,7 @@ if (sizeof($_SESSION) == 0)
                                                 </div>
                                                 <div class="col-sm-3 floating-label enable-floating-label show-label" style="margin-bottom:20px">
                                                     <label for="">Maquina</label>
-                                                    <select class="form-control" name="idMachine" id="idMachine"></select>
+                                                    <select class="form-control idMachine" name="idMachine" id="idMachine"></select>
                                                 </div>
                                                 <div class="col-xs-2 floating-label enable-floating-label show-label" style="margin-bottom:20px">
                                                     <label for="" class="text-center">t.alistamiento (min)</label>

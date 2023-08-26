@@ -73,7 +73,7 @@ if (sizeof($_SESSION) == 0)
                                                     <label for="">Producto</label>
                                                 </div>
                                                 <div class="col-sm-4 floating-label enable-floating-label show-label" style="margin-bottom:0px">
-                                                    <select class="form-control" name="idMachine" id="idMachine"></select>
+                                                    <select class="form-control idMachine" name="idMachine" id="idMachine"></select>
                                                     <label for="">Maquina</label>
                                                 </div>
                                                 <div class="col-sm-2 floating-label enable-floating-label show-label" style="margin-bottom:0px">

@@ -51,6 +51,38 @@ $(document).ready(function () {
             updateRequisition();
         }
     });
+  
+   $('.cardSearchDate').hide();
+
+    $('#btnOpenSearchDate').click(function (e) { 
+        e.preventDefault();
+
+        $('.cardSearchDate').toggle(800);
+        $('#formSearchDate').trigger('reset');
+        let date = new Date().toISOString().split('T')[0];
+
+        $('#lastDate').val(date);
+
+        let maxDate = document.getElementById('lastDate');
+        let minDate = document.getElementById('firtsDate');
+
+        maxDate.setAttribute("max", date);
+        minDate.setAttribute("max", date);
+    });
+
+    $('#btnSearchDate').click(async function (e) {
+        e.preventDefault();
+        
+        let firtsDate = $('#firtsDate').val();
+        let lastDate = $('#lastDate').val();
+                
+        if (!firtsDate || firtsDate == '' || !lastDate || lastDate == '') {
+            toastr.error('Ingrese los campos');
+            return false;
+        }
+
+        loadTblRequisitions(firtsDate, lastDate);
+    });
 
   /* Actualizar productos materials */
 
@@ -102,7 +134,7 @@ $(document).ready(function () {
         message(data);
       }
     );
-  };
+  }; 
 
   /* Eliminar materia prima */
 
@@ -199,17 +231,18 @@ $(document).ready(function () {
     if (data.success == true) {
       $('.cardAddRequisitions').hide(800);
       $('#formAddRequisition').trigger('reset');
-      updateTable();
+      loadTblRequisitions(null, null);
+      // updateTable();
       toastr.success(data.message);
       return false;
     } else if (data.error == true) toastr.error(data.message);
     else if (data.info == true) toastr.info(data.message);
   };
 
-  /* Actualizar tabla */
+  /* Actualizar tabla 
 
   function updateTable() {
     $('#tblRequisitions').DataTable().clear();
     $('#tblRequisitions').DataTable().ajax.reload();
-  }
+  } */
 });

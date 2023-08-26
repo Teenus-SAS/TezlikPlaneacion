@@ -7,7 +7,7 @@
     machinesData = JSON.stringify(r);
     sessionStorage.setItem('machinesData', machinesData);
 
-    let $select = $(`#idMachine`);
+    let $select = $(`.idMachine`);
     $select.empty();
     $select.append(`<option disabled selected>Seleccionar</option>`);
     

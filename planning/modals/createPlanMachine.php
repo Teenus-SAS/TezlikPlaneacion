@@ -17,7 +17,7 @@
                                         </div>
                                         <div class="col-12 col-lg-6">
                                             <div class="form-group floating-label enable-floating-label show-label">
-                                                <select class="form-control" name="idMachine" id="idMachine"></select>
+                                                <select class="form-control idMachine" name="idMachine" id="idMachine"></select>
                                                 <label for="idMachine">Maquina<span class="text-danger">*</span></label>
                                                 <div class="validation-error d-none font-size-13">Requerido</div>
                                             </div>

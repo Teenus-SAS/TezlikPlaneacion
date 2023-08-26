@@ -39,7 +39,7 @@ if (sizeof($_SESSION) == 0)
                 <div class="page-title-box">
                     <div class="container-fluid">
                         <div class="row align-items-center">
-                            <div class="col-sm-5 col-xl-6">
+                            <div class="col-sm-5 col-xl-3">
                                 <div class="page-title">
                                     <h3 class="mb-1 font-weight-bold text-dark">Programa de Producción</h3>
                                     <ol class="breadcrumb mb-3 mb-md-0">
@@ -47,7 +47,12 @@ if (sizeof($_SESSION) == 0)
                                     </ol>
                                 </div>
                             </div>
-                            <div class="col-sm-7 col-xl-6 form-inline justify-content-sm-end">
+                            <div class="col-sm-7 col-xl-9 form-inline justify-content-sm-end">
+                                <div class="col-sm-3" id="machines">
+                                    <label class="font-weight-bold text-dark">Maquina</label>
+                                    <select class="form-control idMachine" id="idMachine" name="idMachine">
+                                    </select>
+                                </div>
                                 <div class="col-xs-2 mr-2">
                                     <button class="btn btn-warning" id="btnNewProgramming" name="btnNewProgramming">Programar</button>
                                 </div>
@@ -76,11 +81,11 @@ if (sizeof($_SESSION) == 0)
                                                 </div>
                                                 <div class="col-sm-3 floating-label enable-floating-label show-label" id="machines">
                                                     <label for="">Maquina</label>
-                                                    <select class="form-control" id="idMachine" name="idMachine">
+                                                    <select class="form-control idMachine" id="idMachine" name="idMachine">
                                                     </select>
                                                 </div>
                                                 <div class="col-sm-2 floating-label enable-floating-label show-label">
-                                                    <label for="">Cantidad</label>
+                                                    <label for="">Cantidad a Fabricar</label>
                                                     <input type="text" class="form-control text-center numberCalc" id="quantity" name="quantity">
                                                 </div>
                                                 <div class="col-sm mt-1">
@@ -115,7 +120,7 @@ if (sizeof($_SESSION) == 0)
                                                         <th scope="col">Producto</th>
                                                         <th scope="col">Cant.Pedido</th>
                                                         <th scope="col">Cant.Pendiente</th>
-                                                        <th scope="col">Cant.Realizar</th>
+                                                        <th scope="col">Cant.Fabricar</th>
                                                         <th scope="col">Cliente</th>
                                                         <th scope="col">Lote Economico</th>
                                                         <th scope="col">F.Inicio</th>

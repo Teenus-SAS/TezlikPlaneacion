@@ -11,10 +11,19 @@ $generalMaterialsDao = new GeneralMaterialsDao();
 use Psr\Http\Message\ResponseInterface as Response;
 use Psr\Http\Message\ServerRequestInterface as Request;
 
-$app->get('/requisitions', function (Request $request, Response $response, $args) use ($requisitionsDao) {
+$app->get('/requisitions', function (Request $request, Response $response, $args) use ($generalRequisitionsDao) {
     session_start();
     $id_company = $_SESSION['id_company'];
-    $requisitions = $requisitionsDao->findAllRequisitionByCompany($id_company);
+    $requisitions = $generalRequisitionsDao->findAllActualRequisitionByCompany($id_company);
+    $response->getBody()->write(json_encode($requisitions, JSON_NUMERIC_CHECK));
+    return $response->withHeader('Content-Type', 'application/json');
+});
+
+$app->get('/requisitions/{min_date}/{max_date}', function (Request $request, Response $response, $args) use ($generalRequisitionsDao) {
+    session_start();
+    $id_company = $_SESSION['id_company'];
+
+    $requisitions = $generalRequisitionsDao->findAllMinAndMaxRequisitionByCompany($args['min_date'], $args['max_date'], $id_company);
     $response->getBody()->write(json_encode($requisitions, JSON_NUMERIC_CHECK));
     return $response->withHeader('Content-Type', 'application/json');
 });

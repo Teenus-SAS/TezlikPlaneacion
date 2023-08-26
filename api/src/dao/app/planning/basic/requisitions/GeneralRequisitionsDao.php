@@ -16,6 +16,42 @@ class GeneralRequisitionsDao
         $this->logger->pushHandler(new RotatingFileHandler(Constants::LOGS_PATH . 'querys.log', 20, Logger::DEBUG));
     }
 
+    public function findAllActualRequisitionByCompany($id_company)
+    {
+        $connection = Connection::getInstance()->getConnection();
+        $stmt = $connection->prepare("SELECT r.id_requisition, r.id_material, m.reference, m.material, r.application_date, r.delivery_date, r.quantity, r.purchase_order, r.admission_date
+                                      FROM requisitons r
+                                        INNER JOIN materials m ON m.id_material = r.id_material
+                                      WHERE r.id_company = :id_company 
+                                      AND (r.admission_date IS NULL OR MONTH(r.application_date) = MONTH(CURRENT_DATE))");
+        $stmt->execute(['id_company' => $id_company]);
+
+        $this->logger->info(__FUNCTION__, array('query' => $stmt->queryString, 'errors' => $stmt->errorInfo()));
+        $products = $stmt->fetchAll($connection::FETCH_ASSOC);
+        $this->logger->notice("products", array('products' => $products));
+        return $products;
+    }
+
+    public function findAllMinAndMaxRequisitionByCompany($min_date, $max_date, $id_company)
+    {
+        $connection = Connection::getInstance()->getConnection();
+        $stmt = $connection->prepare("SELECT r.id_requisition, r.id_material, m.reference, m.material, r.application_date, r.delivery_date, r.quantity, r.purchase_order, r.admission_date
+                                      FROM requisitons r
+                                        INNER JOIN materials m ON m.id_material = r.id_material
+                                      WHERE r.id_company = :id_company
+                                      AND (r.application_date BETWEEN :min_date AND :max_date)");
+        $stmt->execute([
+            'id_company' => $id_company,
+            'min_date' => $min_date,
+            'max_date' => $max_date
+        ]);
+
+        $this->logger->info(__FUNCTION__, array('query' => $stmt->queryString, 'errors' => $stmt->errorInfo()));
+        $products = $stmt->fetchAll($connection::FETCH_ASSOC);
+        $this->logger->notice("products", array('products' => $products));
+        return $products;
+    }
+
     public function findRequisition($dataRequisition, $id_company)
     {
         $connection = Connection::getInstance()->getConnection();

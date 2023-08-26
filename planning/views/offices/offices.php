@@ -52,17 +52,9 @@ $fechaActual = date("Y-m-d");
                                 </div>
                             </div>
                             <div class="col-sm-7 col-xl-10 form-inline justify-content-sm-end">
-                                <div class="col-sm-2">
-                                    <label for="firtsDate" class="form-label text-dark">Fecha Inicial</label>
-                                    <input class="form-control dateOrders" id="firtsDate" type="date">
+                                <div class="col-xs-2 mt-3">
+                                    <button class="btn btn-warning" id="btnOpenSearchDate" name="btnOpenSearchDate">Buscar Fecha</button>
                                 </div>
-                                <div class="col-sm-2">
-                                    <label for="lastDate" class="form-label text-dark">Fecha Final</label>
-                                    <input class="form-control dateOrders" id="lastDate" type="date">
-                                </div>
-                                <!-- <div class="col-xs-2 mt-3">
-                                    <button class="btn btn-warning" id="btnNewDate" name="btnNewDate">Agregar Fecha de Entrega</button>
-                                </div> -->
                                 <!-- <div class="col-xs-2 py-2 mr-2">
                                     <button class="btn btn-info" id="btnImportNewOffices">Importar Despachos</button>
                                 </div> -->
@@ -71,24 +63,24 @@ $fechaActual = date("Y-m-d");
                     </div>
                 </div>
 
-                <!-- <div class="page-content-wrapper mt--45 mb-5 cardAddDate">
+                <div class="page-content-wrapper mt--45 mb-5 cardSearchDate">
                     <div class="container-fluid">
                         <div class="row">
                             <div class="col-12">
-                                <form id="formAddDate">
+                                <form id="formSearchDate">
                                     <div class="card">
                                         <div class="card-body pt-3">
                                             <div class="form-row">
-                                                <div class="col-sm-4 floating-label enable-floating-label">
-                                                    <select id="order" name="order" class="form-control"></select>
-                                                    <label for="order" class="form-label"> Pedido</label>
+                                                <div class="col-sm-2">
+                                                    <label for="firtsDate" class="form-label text-dark">Fecha Inicial</label>
+                                                    <input class="form-control dateOrders" id="firtsDate" type="date">
                                                 </div>
-                                                <div class="col-sm-3 floating-label enable-floating-label">
-                                                    <input class="form-control" type="date" name="date" id="date" max=""></input>
-                                                    <label for="date">Fecha Entrega</span></label>
+                                                <div class="col-sm-2">
+                                                    <label for="lastDate" class="form-label text-dark">Fecha Final</label>
+                                                    <input class="form-control dateOrders" id="lastDate" type="date">
                                                 </div>
-                                                <div class="col-xs-2 mt-1">
-                                                    <button type="text" class="btn btn-info" id="btnAddDate">Guardar Fecha</button>
+                                                <div class="col-xs-2" style="margin-top:33px">
+                                                    <button type="text" class="btn btn-info" id="btnSearchDate">Buscar Fecha</button>
                                                 </div>
                                             </div>
                                         </div>
@@ -97,7 +89,7 @@ $fechaActual = date("Y-m-d");
                             </div>
                         </div>
                     </div>
-                </div> -->
+                </div>
 
                 <!-- page content -->
                 <div class="page-content-wrapper mt--45">
