@@ -86,18 +86,18 @@ $app->post('/addRequisition', function (Request $request, Response $response, $a
     $count = sizeof($dataRequisition);
 
     if ($count > 1) {
-        $findRequisition = $generalRequisitionsDao->findRequisition($dataRequisition, $id_company);
-        if (!$findRequisition) {
-            $requisition = $requisitionsDao->insertRequisitionByCompany($dataRequisition, $id_company);
+        // $findRequisition = $generalRequisitionsDao->findRequisition($dataRequisition, $id_company);
+        // if (!$findRequisition) {
+        $requisition = $requisitionsDao->insertRequisitionByCompany($dataRequisition, $id_company);
 
-            if ($requisition == null)
-                $resp = array('success' => true, 'message' => 'Requisicion creada correctamente');
-            else if (isset($requisition['info']))
-                $resp = array('info' => true, 'message' => $requisition['message']);
-            else
-                $resp = array('error' => true, 'message' => 'Ocurrio un error mientras ingresaba la información. Intente nuevamente');
-        } else
-            $resp = array('error' => true, 'message' => 'Material ya existente en la requisicion. Ingrese nuevo material');
+        if ($requisition == null)
+            $resp = array('success' => true, 'message' => 'Requisicion creada correctamente');
+        else if (isset($requisition['info']))
+            $resp = array('info' => true, 'message' => $requisition['message']);
+        else
+            $resp = array('error' => true, 'message' => 'Ocurrio un error mientras ingresaba la información. Intente nuevamente');
+        // } else
+        // $resp = array('error' => true, 'message' => 'Material ya existente en la requisicion. Ingrese nuevo material');
     } else {
         $requisition = $dataRequisition['importRequisition'];
 
@@ -107,13 +107,14 @@ $app->post('/addRequisition', function (Request $request, Response $response, $a
 
             !isset($requisition[$i]['purchaseOrder']) ? $requisition[$i]['purchaseOrder'] = '' : $requisition[$i]['purchaseOrder'];
 
-            $findRequisition = $generalRequisitionsDao->findRequisition($requisition[$i], $id_company);
+            // $findRequisition = $generalRequisitionsDao->findRequisition($requisition[$i], $id_company);
 
-            if (!$findRequisition) $resolution = $requisitionsDao->insertRequisitionByCompany($requisition[$i], $id_company);
-            else {
-                $requisition[$i]['idRequisition'] = $findRequisition['id_requisition'];
-                $resolution = $requisitionsDao->updateRequisition($dataRequisition);
-            }
+            // if (!$findRequisition) 
+            $resolution = $requisitionsDao->insertRequisitionByCompany($requisition[$i], $id_company);
+            // else {
+            //     $requisition[$i]['idRequisition'] = $findRequisition['id_requisition'];
+            //     $resolution = $requisitionsDao->updateRequisition($dataRequisition);
+            // }
         }
         if ($resolution == null)
             $resp = array('success' => true, 'message' => 'Requisicions importados correctamente');
@@ -128,24 +129,24 @@ $app->post('/updateRequisition', function (Request $request, Response $response,
     $requisitionsDao,
     $generalRequisitionsDao
 ) {
-    session_start();
-    $id_company = $_SESSION['id_company'];
+    // session_start();
+    // $id_company = $_SESSION['id_company'];
     $dataRequisition = $request->getParsedBody();
 
-    $requisition = $generalRequisitionsDao->findRequisition($dataRequisition, $id_company);
-    !is_array($requisition) ? $data['id_requisition'] = 0 : $data = $requisition;
+    // $requisition = $generalRequisitionsDao->findRequisition($dataRequisition, $id_company);
+    // !is_array($requisition) ? $data['id_requisition'] = 0 : $data = $requisition;
 
-    if ($data['id_requisition'] == $dataRequisition['idRequisition'] || $data['id_requisition'] == 0) {
-        $requisition = $requisitionsDao->updateRequisition($dataRequisition);
+    // if ($data['id_requisition'] == $dataRequisition['idRequisition'] || $data['id_requisition'] == 0) {
+    $requisition = $requisitionsDao->updateRequisition($dataRequisition);
 
-        if ($requisition == null)
-            $resp = array('success' => true, 'message' => 'Requisicion modificada correctamente');
-        else if (isset($requisition['info']))
-            $resp = array('info' => true, 'message' => $requisition['message']);
-        else
-            $resp = array('error' => true, 'message' => 'Ocurrio un error mientras modificaba la información. Intente nuevamente');
-    } else
-        $resp = array('error' => true, 'message' => 'Material ya existente en la requisicion. Ingrese nuevo material');
+    if ($requisition == null)
+        $resp = array('success' => true, 'message' => 'Requisicion modificada correctamente');
+    else if (isset($requisition['info']))
+        $resp = array('info' => true, 'message' => $requisition['message']);
+    else
+        $resp = array('error' => true, 'message' => 'Ocurrio un error mientras modificaba la información. Intente nuevamente');
+    // } else
+    // $resp = array('error' => true, 'message' => 'Material ya existente en la requisicion. Ingrese nuevo material');
     $response->getBody()->write(json_encode($resp));
     return $response->withStatus(200)->withHeader('Content-Type', 'application/json');
 });
