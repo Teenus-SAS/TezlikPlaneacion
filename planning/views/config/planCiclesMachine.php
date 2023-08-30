@@ -52,9 +52,9 @@ if (sizeof($_SESSION) == 0)
                                 <div class="col-xs-2 mr-2">
                                     <button class="btn btn-warning" id="btnNewPlanCiclesMachine" name="btnNewPlanCiclesMachine">Nuevo Ciclo Máquina</button>
                                 </div>
-                                <div class="col-xs-2 py-2 mr-2">
+                                <!-- <div class="col-xs-2 py-2 mr-2">
                                     <button class="btn btn-info" id="btnImportNewPlanCiclesMachine" name="btnImportNewPlanCiclesMachine">Importar Ciclos Máquina</button>
-                                </div>
+                                </div> -->
                             </div>
                         </div>
                     </div>
