@@ -5,15 +5,19 @@ use TezlikPlaneacion\dao\ProgrammingDao;
 use TezlikPlaneacion\dao\DatesMachinesDao;
 use TezlikPlaneacion\dao\FinalDateDao;
 use TezlikPlaneacion\dao\GeneralOrdersDao;
+use TezlikPlaneacion\dao\GeneralProgrammingDao;
+use TezlikPlaneacion\dao\LastDataDao;
 use TezlikPlaneacion\dao\LotsProductsDao;
 use TezlikPlaneacion\dao\MachinesDao;
 use TezlikPlaneacion\dao\ProductsDao;
 
+$programmingDao = new ProgrammingDao();
+$generalProgrammingDao = new GeneralProgrammingDao();
+$lastDataDao = new LastDataDao();
 $machinesDao = new MachinesDao();
 $ordersDao = new OrdersDao();
 $generalOrdersDao = new GeneralOrdersDao();
 $productsDao = new ProductsDao();
-$programmingDao = new ProgrammingDao();
 $datesMachinesDao = new DatesMachinesDao();
 $finalDateDao = new FinalDateDao();
 $economicLotDao = new LotsProductsDao();
@@ -97,5 +101,87 @@ $app->post('/getProgrammingInfo', function (Request $request, Response $response
     $data['order'] = $orders;
 
     $response->getBody()->write(json_encode($data, JSON_NUMERIC_CHECK));
+    return $response->withHeader('Content-Type', 'application/json');
+});
+
+$app->get('/programming', function (Request $request, Response $response, $args) use ($programmingDao) {
+    session_start();
+    $id_company = $_SESSION['id_company'];
+    $programming = $programmingDao->findAllProgrammingByCompany($id_company);
+    $response->getBody()->write(json_encode($programming, JSON_NUMERIC_CHECK));
+    return $response->withHeader('Content-Type', 'application/json');
+});
+
+$app->get('/ordersProgramming', function (Request $request, Response $response, $args) use (
+    $generalProgrammingDao
+) {
+    session_start();
+    $id_company = $_SESSION['id_company'];
+    $orders = $generalProgrammingDao->findAllOrdersByCompany($id_company);
+    $response->getBody()->write(json_encode($orders, JSON_NUMERIC_CHECK));
+    return $response->withHeader('Content-Type', 'application/json');
+});
+
+$app->post('/addProgramming', function (Request $request, Response $response, $args) use (
+    $programmingDao,
+    $generalProgrammingDao,
+    $lastDataDao
+) {
+    session_start();
+    $dataProgramming = $request->getParsedBody();
+    $id_company = $_SESSION['id_company'];
+
+    $programming = $programmingDao->findAllProgrammingByCompany($id_company);
+
+    if (sizeof($programming) == 0) {
+        $minDate = $dataProgramming['minDate'];
+    } else {
+        $minDate = $programming[0]['min_date'];
+    }
+
+    $result = $programmingDao->insertProgrammingByCompany($dataProgramming, $id_company);
+
+    $programming = $lastDataDao->findLastInsertedProgramming($id_company);
+
+    $result = $generalProgrammingDao->setMinDateProgramming($programming['id_programming'], $minDate);
+
+    if ($result == null)
+        $resp = array('success' => true, 'message' => 'Programa de producción creado correctamente');
+    else if (isset($result['info']))
+        $resp = array('info' => true, 'message' => $result['message']);
+    else
+        $resp = array('error' => true, 'message' => 'Ocurrio un error mientras ingresaba la información. Intente nuevamente');
+
+    $response->getBody()->write(json_encode($resp));
+    return $response->withStatus(200)->withHeader('Content-Type', 'application/json');
+});
+
+$app->post('/updateProgramming', function (Request $request, Response $response, $args) use ($programmingDao) {
+    $dataProgramming = $request->getParsedBody();
+
+    $programming = $programmingDao->updateProgramming($dataProgramming);
+
+    if ($programming == null)
+        $resp = array('success' => true, 'message' => 'Programa de producción actualizado correctamente');
+    else if (isset($programming['info']))
+        $resp = array('info' => true, 'message' => $programming['message']);
+    else
+        $resp = array('error' => true, 'message' => 'Ocurrio un error mientras actualizaba la información. Intente nuevamente');
+
+    $response->getBody()->write(json_encode($resp));
+    return $response->withStatus(200)->withHeader('Content-Type', 'application/json');
+});
+
+$app->get('/deleteProgramming/{id_programming}', function (Request $request, Response $response, $args) use ($programmingDao) {
+    $programming = $programmingDao->deleteProgramming($args['id_programming']);
+
+    if ($programming == null)
+        $resp = array('success' => true, 'message' => 'Programa de producción eliminado correctamente');
+    else if (isset($programming['info']))
+        $resp = array('info' => true, 'message' => $programming['message']);
+    else
+        $resp = array('error' => true, 'message' => 'Ocurrio un error mientras eliminaba la información. Intente nuevamente');
+
+    $response->getBody()->write(json_encode($resp));
     return $response->withHeader('Content-Type', 'application/json');
 });

@@ -47,13 +47,15 @@ if (sizeof($_SESSION) == 0)
                                     </ol>
                                 </div>
                             </div>
-                            <div class="col-sm-7 col-xl-9 form-inline justify-content-sm-end">
+                            <div class="col-sm-7 col-xl-8 form-inline justify-content-sm-end">
                                 <div class="col-sm-3" id="machines">
                                     <label class="font-weight-bold text-dark">Maquina</label>
-                                    <select class="form-control idMachine" id="idMachine" name="idMachine">
+                                    <select class="form-control idMachine" id="searchMachine">
                                     </select>
                                 </div>
-                                <div class="col-xs-2 mr-2">
+                            </div>
+                            <div class="col-sm-7 col-xl-1 form-inline justify-content-sm-end">
+                                <div class="col-xs-2 mr-2 mt-3">
                                     <button class="btn btn-warning" id="btnNewProgramming" name="btnNewProgramming">Programar</button>
                                 </div>
                             </div>
@@ -113,22 +115,7 @@ if (sizeof($_SESSION) == 0)
                                     <div class="card-body">
                                         <div class="table-responsive">
                                             <table class="table table-striped" id="tblProgramming">
-                                                <thead>
-                                                    <tr>
-                                                        <th scope="col">Pedido</th>
-                                                        <th scope="col">Referencia</th>
-                                                        <th scope="col">Producto</th>
-                                                        <th scope="col">Cant.Pedido</th>
-                                                        <th scope="col">Cant.Pendiente</th>
-                                                        <th scope="col">Cant.Fabricar</th>
-                                                        <th scope="col">Cliente</th>
-                                                        <th scope="col">Lote Economico</th>
-                                                        <th scope="col">F.Inicio</th>
-                                                        <th scope="col">F.Final</th>
-                                                    </tr>
-                                                </thead>
-                                                <tbody class="colProgramming">
-                                                </tbody>
+
                                             </table>
                                         </div>
 
@@ -153,7 +140,7 @@ if (sizeof($_SESSION) == 0)
             cursor: move;
         }
     </style> -->
-    <!-- <script src="/global/js/global/number.js"></script> -->
+    <script src="/global/js/global/number.js"></script>
     <script src="../planning/js/program/programming/tblProgramming.js"></script>
     <!--  <script src="/planning/js/basic/products/configProducts.js"></script> -->
     <script src="/planning/js/orders/configOrders.js"></script>

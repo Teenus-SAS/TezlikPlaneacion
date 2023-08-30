@@ -84,11 +84,9 @@
                                             <?php if ($_SESSION['programs_machine'] == 1) { ?>
                                                 <li class="planningMachines"><a href="/planning/planning-machines">Datos Programación Máquinas</a></li>
                                             <?php } ?>
-                                            <?php //if ($_SESSION['cicles_machine'] == 1) { 
-                                            ?>
-                                            <!-- <li class="planCiclesMachine"><a href="/planning/cicles-machines">Plan Ciclos Maquina</a></li> -->
-                                            <?php //} 
-                                            ?>
+                                            <?php if ($_SESSION['cicles_machine'] == 1) { ?>
+                                                <li class="planCiclesMachine"><a href="/planning/cicles-machines">Producto/Ciclos Maquina</a></li>
+                                            <?php } ?>
                                         </ul>
                                     </div>
                                 <?php } ?>

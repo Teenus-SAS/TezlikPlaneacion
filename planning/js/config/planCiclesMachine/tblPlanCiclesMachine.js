@@ -1,4 +1,18 @@
 $(document).ready(function () {
+  $('#refProduct').change(function (e) {
+    e.preventDefault();
+    id = this.value;
+    $('#selectNameProduct option').removeAttr('selected');
+    $(`#selectNameProduct option[value=${id}]`).prop('selected', true); 
+  });
+
+  $('#selectNameProduct').change(function (e) {
+    e.preventDefault();
+    id = this.value;
+    $('#refProduct option').removeAttr('selected');
+    $(`#refProduct option[value=${id}]`).prop('selected', true); 
+  });
+
   // Mostrar Tabla planeacion maquinas
   tblPlanCiclesMachine = $('#tblPlanCiclesMachine').dataTable({
     pageLength: 50,
@@ -17,6 +31,11 @@ $(document).ready(function () {
         render: function (data, type, full, meta) {
           return meta.row + 1;
         },
+      },
+      {
+        title: 'Referencia',
+        data: 'reference',
+        className: 'uniqueClassName',
       },
       {
         title: 'Producto',

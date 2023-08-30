@@ -76,8 +76,21 @@ class LastDataDao
         $stmt->execute();
         $this->logger->info(__FUNCTION__, array('query' => $stmt->queryString, 'errors' => $stmt->errorInfo()));
 
-        $company = $stmt->fetch($connection::FETCH_ASSOC);
-        return $company;
+        $client = $stmt->fetch($connection::FETCH_ASSOC);
+        return $client;
+    }
+
+    public function findLastInsertedProgramming($id_company)
+    {
+        $connection = Connection::getInstance()->getConnection();
+
+        $stmt = $connection->prepare("SELECT MAX(id_programming) AS id_programming FROM programming WHERE id_company = :id_company");
+        $stmt->execute(['id_company' => $id_company]);
+
+        $this->logger->info(__FUNCTION__, array('query' => $stmt->queryString, 'errors' => $stmt->errorInfo()));
+
+        $programming = $stmt->fetch($connection::FETCH_ASSOC);
+        return $programming;
     }
 
     /* public function findLastInsertedOrder()

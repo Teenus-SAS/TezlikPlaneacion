@@ -68,7 +68,11 @@ if (sizeof($_SESSION) == 0)
                                     <div class="card-body">
                                         <form id="formCreatePlanCiclesMachine">
                                             <div class="form-row">
-                                                <div class="col-sm-5 floating-label enable-floating-label show-label" style="margin-bottom:0px">
+                                                <div class="col-sm-2 floating-label enable-floating-label show-label" style="margin-bottom:20px">
+                                                    <label for="">Referencia</label>
+                                                    <select class="form-control refProduct" name="refProduct" id="refProduct"></select>
+                                                </div>
+                                                <div class="col-sm-10 floating-label enable-floating-label show-label" style="margin-bottom:0px">
                                                     <select class="form-control" name="selectNameProduct" id="selectNameProduct"></select>
                                                     <label for="">Producto</label>
                                                 </div>

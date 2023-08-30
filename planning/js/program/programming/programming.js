@@ -11,16 +11,52 @@ $(document).ready(function () {
 
   /* Abrir panel crear programa de producción */
 
-  $('#btnNewProgramming').click(function (e) {
+  $('#btnNewProgramming').click(async function (e) {
     e.preventDefault();
-    
-      $('.cardImportProgramming').hide(800);
+
+    await loadOrdersProgramming();
+
+    let op = sessionStorage.getItem('opProgramming');
+
+    if (op) { 
       $('.cardCreateProgramming').toggle(800);
       $('#btnCreateProgramming').html('Crear');
       $('#formCreateProgramming').trigger('reset');
-    
-    
-    data = {};
+    } else {
+      bootbox.confirm({
+        title: 'Ingrese Fecha De Inicio!',
+        message: `<div class="col-sm-12 floating-label enable-floating-label">
+                        <input class="form-control" type="date" name="date" id="date"></input>
+                        <label for="date">Fecha</span></label>
+                      </div>`,
+        buttons: {
+          confirm: {
+            label: 'Agregar',
+            className: 'btn-success',
+          },
+          cancel: {
+              label: 'Cancelar',
+              className: 'btn-danger',
+          },
+        },
+        callback: function (result) {
+          if (result == true) {
+            let date = $('#date').val();
+
+            if (!date) {
+              toastr.error('Ingrese los campos');
+              return false;
+            }
+
+            sessionStorage.setItem('minDate', date);
+
+            $('.cardCreateProgramming').toggle(800);
+            $('#btnCreateProgramming').html('Crear');
+            $('#formCreateProgramming').trigger('reset');
+          }
+        },
+      });
+    }
   });
 
   /* Cargar datos generales 
@@ -69,9 +105,9 @@ $(document).ready(function () {
         });
       },
     });
-  }; */
+  };
 
-  /* Crear nueva programa de producción */
+  // Crear nueva programa de producción
   $('#btnCreateProgramming').click(function (e) {
     e.preventDefault();
     idMachine = parseInt($('#idMachine').val());
@@ -153,12 +189,128 @@ $(document).ready(function () {
     );
   };
 
-  /* Mensaje de exito */
+  // Mensaje de exito
   message = () => {
     $('.cardCreateProgramming').hide(800);
     $('#formCreateProgramming').trigger('reset');
     toastr.success('Programación creada correctamente');
     return false;
+  };
+
+  */
+  /* Crear nuevo programa de produccion */ 
+  $('#btnCreateProgramming').click(function (e) {
+    e.preventDefault();
+    let idProgramming = sessionStorage.getItem('id_programming');
+
+    if (idProgramming == '' || idProgramming == null) {
+      checkDataProcess('/api/addProgramming', idProgramming);
+    } else {
+      checkDataProcess('/api/updateProgramming', idProgramming);
+    }
+  });
+
+  /* Actualizar programa de produccion */
+
+  $(document).on('click', '.updateProgramming', async function (e) { 
+    $('.cardCreateProgramming').show(800);
+    $('#btnCreateProgramming').html('Actualizar');
+
+    let row = $(this).parent().parent()[0];
+    let data = tblProgramming.fnGetData(row);
+
+    sessionStorage.setItem('id_programming', data.id_programming);
+    $(`#order option[value=${data.id_order}]`).prop('selected', true);
+
+    await loadProducts(data.num_order);
+
+    $(`#selectNameProduct option[value=${data.id_product}]`).prop('selected', true); 
+    $(`#idMachine option[value=${data.id_machine}]`).prop('selected', true);
+
+    $('#quantity').val(data.quantity_programming);
+
+    $('html, body').animate(
+      {
+        scrollTop: 0,
+      },
+      1000
+    );
+  });
+
+  /* Revision data programa de produccion */
+  checkDataProcess = async (url, idProgramming) => {
+    let order = $('#order').val();
+    let product = $('#selectNameProduct').val();
+    let machine = $('#idMachine').val();
+    let quantity = $('#quantity').val();
+
+    let data = parseFloat(order * product * machine * quantity);
+
+    if (isNaN(data) || data <= 0) {
+      toastr.error('Ingrese todos los campos');
+      return false;
+    }
+
+    let dataProcess = new FormData(formCreateProgramming);
+
+    let min_date = sessionStorage.getItem('minDate');
+
+    if (min_date != '' || min_date != null)
+      dataProcess.append('minDate', min_date);
+
+    if (idProgramming != '' || idProgramming != null)
+      dataProcess.append('idProgramming', idProgramming);
+
+    let resp = await sendDataPOST(url, dataProcess);
+
+    message(resp);
+  };
+
+  /* Eliminar programa de produccion */
+
+  deleteFunction = () => {
+    let row = $(this.activeElement).parent().parent()[0];
+    let data = tblProgramming.fnGetData(row);
+
+    let id_programming = data.id_programming;
+
+    bootbox.confirm({
+      title: 'Eliminar',
+      message:
+        'Está seguro de eliminar este programa de produccion? Esta acción no se puede reversar.',
+      buttons: {
+        confirm: {
+          label: 'Si',
+          className: 'btn-success',
+        },
+        cancel: {
+          label: 'No',
+          className: 'btn-danger',
+        },
+      },
+      callback: function (result) {
+        if (result == true) {
+          $.get(
+            `/api/deleteProgramming/${id_programming}`,
+            function (data, textStatus, jqXHR) {
+              message(data);
+            }
+          );
+        }
+      },
+    });
+  };
+
+  /* Mensaje de exito */
+  message = (data) => {
+    if (data.success == true) {
+      $('.cardCreateProgramming').hide(800);
+      $('#btnCreateProgramming').trigger('reset');
+      loadTblProgramming();
+      toastr.success(data.message);
+      return false;
+    } else if (data.error == true) toastr.error(data.message);
+    else if (data.info == true) toastr.info(data.message);
   };
 
   loadDataMachines(2);

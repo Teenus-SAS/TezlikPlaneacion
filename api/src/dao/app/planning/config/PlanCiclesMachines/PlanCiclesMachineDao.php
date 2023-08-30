@@ -20,7 +20,7 @@ class PlanCiclesMachineDao
     {
         $connection = Connection::getInstance()->getConnection();
 
-        $stmt = $connection->prepare("SELECT pcm.id_cicles_machine, p.product, m.machine, pcm.cicles_hour 
+        $stmt = $connection->prepare("SELECT pcm.id_cicles_machine, p.reference, p.product, m.machine, pcm.cicles_hour 
                                       FROM plan_cicles_machine pcm
                                        INNER JOIN machines m ON m.id_machine = pcm.id_machine
                                        INNER JOIN products p ON p.id_product = pcm.id_product
