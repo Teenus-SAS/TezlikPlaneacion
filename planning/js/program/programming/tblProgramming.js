@@ -15,14 +15,25 @@ $(document).ready(function () {
   sessionStorage.removeItem('opProgramming');
   sessionStorage.removeItem('minDate');
 
-  loadTblProgramming = async () => {
-    let data = await searchData('/api/programming');
+  $('#searchMachine').change(function (e) { 
+    e.preventDefault();
 
-    if(data.length > 0)
-      sessionStorage.setItem('opProgramming', 1);
+    loadTblProgramming(this.value);
+  });
+
+  loadTblProgramming = async (machine) => {
+    let data;
+
+    if (machine == 0) {
+      data = await searchData('/api/programming');
+      if (data.length > 0)
+        sessionStorage.setItem('opProgramming', 1);
+    }
+    else 
+      data = await searchData(`/api/programmingByMachine/${machine}`);
       
     tblProgramming = $('#tblProgramming').dataTable({
-      destroy:true,
+      destroy: true,
       pageLength: 50,
       data: data,
       language: {
@@ -50,6 +61,11 @@ $(document).ready(function () {
         {
           title: 'Producto',
           data: 'product',
+          className: 'uniqueClassName',
+        },
+        {
+          title: 'Maquina',
+          data: 'machine',
           className: 'uniqueClassName',
         },
         {
@@ -99,7 +115,7 @@ $(document).ready(function () {
         },
       ],
     });
-  }
+  };
 
-  loadTblProgramming();
+  loadTblProgramming(0);
 });

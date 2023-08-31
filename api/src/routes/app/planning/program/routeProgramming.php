@@ -25,19 +25,85 @@ $economicLotDao = new LotsProductsDao();
 use Psr\Http\Message\ResponseInterface as Response;
 use Psr\Http\Message\ServerRequestInterface as Request;
 
-$app->get('/generalData', function (Request $request, Response $response, $args) use ($machinesDao, $ordersDao, $productsDao) {
+/* 
+    $app->get('/generalData', function (Request $request, Response $response, $args) use ($machinesDao, $ordersDao, $productsDao) {
+        session_start();
+        $id_company = $_SESSION['id_company'];
+
+        $machines = $machinesDao->findAllMachinesByCompany($id_company);
+        $orders = $ordersDao->findAllOrdersByCompany($id_company);
+        $products = $productsDao->findAllProductsByCompany($id_company);
+
+        $data['machines'] = $machines;
+        $data['orders'] = $orders;
+        $data['products'] = $products;
+
+        $response->getBody()->write(json_encode($data, JSON_NUMERIC_CHECK));
+        return $response->withHeader('Content-Type', 'application/json');
+    }); 
+
+    // Consultar fecha inicio maquina
+    $app->post('/dateMachine', function (Request $request, Response $response, $args) use ($datesMachinesDao) {
+        session_start();
+        $id_company = $_SESSION['id_company'];
+        $dataProgramming = $request->getParsedBody();
+
+        $datesMachines = $datesMachinesDao->findDatesMachine($dataProgramming, $id_company);
+        if (!$datesMachines)
+            $resp = array('nonExisting' => true);
+        else
+            $resp = array('existing' => true);
+
+        $response->getBody()->write(json_encode($resp, JSON_NUMERIC_CHECK));
+        return $response->withHeader('Content-Type', 'application/json');
+    });
+
+    // Obtener información
+    $app->post('/getProgrammingInfo', function (Request $request, Response $response, $args) use (
+        $finalDateDao,
+        $economicLotDao,
+        $datesMachinesDao,
+        $generalOrdersDao
+    ) {
+        session_start();
+        $id_company = $_SESSION['id_company'];
+        $dataProgramming = $request->getParsedBody();
+
+        if (isset($dataProgramming['startDate'])) {
+            // Insertar fechas maquina
+            $datesMachinesDao->insertDatesMachine($dataProgramming, $id_company);
+
+            // Calcular fecha final
+            $finalDate = $finalDateDao->calcFinalDate($dataProgramming, $id_company);
+            $dataProgramming['finalDate'] = $finalDate['final_date'];
+
+            // Actualizar fecha final
+            $finalDateDao->updateFinalDate($dataProgramming, $id_company);
+        }
+
+        // Calcular Lote economico
+        $economicLot = $economicLotDao->calcEconomicLot($dataProgramming, $id_company);
+
+        // Obtener fechas maquina
+        $datesMachines = $datesMachinesDao->findDatesMachine($dataProgramming, $id_company);
+
+        // Obtener información producto, pedido y cliente
+        $orders = $generalOrdersDao->findOrdersByCompany($dataProgramming, $id_company);
+
+        $data['economicLot'] = $economicLot['economic_lot'];
+        $data['datesMachines'] = $datesMachines;
+        $data['order'] = $orders;
+
+        $response->getBody()->write(json_encode($data, JSON_NUMERIC_CHECK));
+        return $response->withHeader('Content-Type', 'application/json');
+    }); 
+*/
+
+$app->get('/programming', function (Request $request, Response $response, $args) use ($programmingDao) {
     session_start();
     $id_company = $_SESSION['id_company'];
-
-    $machines = $machinesDao->findAllMachinesByCompany($id_company);
-    $orders = $ordersDao->findAllOrdersByCompany($id_company);
-    $products = $productsDao->findAllProductsByCompany($id_company);
-
-    $data['machines'] = $machines;
-    $data['orders'] = $orders;
-    $data['products'] = $products;
-
-    $response->getBody()->write(json_encode($data, JSON_NUMERIC_CHECK));
+    $programming = $programmingDao->findAllProgrammingByCompany($id_company);
+    $response->getBody()->write(json_encode($programming, JSON_NUMERIC_CHECK));
     return $response->withHeader('Content-Type', 'application/json');
 });
 
@@ -48,66 +114,10 @@ $app->get('/programming/{num_order}', function (Request $request, Response $resp
     return $response->withHeader('Content-Type', 'application/json');
 });
 
-// Consultar fecha inicio maquina
-$app->post('/dateMachine', function (Request $request, Response $response, $args) use ($datesMachinesDao) {
+$app->get('/programmingByMachine/{id_machine}', function (Request $request, Response $response, $args) use ($generalProgrammingDao) {
     session_start();
     $id_company = $_SESSION['id_company'];
-    $dataProgramming = $request->getParsedBody();
-
-    $datesMachines = $datesMachinesDao->findDatesMachine($dataProgramming, $id_company);
-    if (!$datesMachines)
-        $resp = array('nonExisting' => true);
-    else
-        $resp = array('existing' => true);
-
-    $response->getBody()->write(json_encode($resp, JSON_NUMERIC_CHECK));
-    return $response->withHeader('Content-Type', 'application/json');
-});
-
-// Obtener información
-$app->post('/getProgrammingInfo', function (Request $request, Response $response, $args) use (
-    $finalDateDao,
-    $economicLotDao,
-    $datesMachinesDao,
-    $generalOrdersDao
-) {
-    session_start();
-    $id_company = $_SESSION['id_company'];
-    $dataProgramming = $request->getParsedBody();
-
-    if (isset($dataProgramming['startDate'])) {
-        // Insertar fechas maquina
-        $datesMachinesDao->insertDatesMachine($dataProgramming, $id_company);
-
-        // Calcular fecha final
-        $finalDate = $finalDateDao->calcFinalDate($dataProgramming, $id_company);
-        $dataProgramming['finalDate'] = $finalDate['final_date'];
-
-        // Actualizar fecha final
-        $finalDateDao->updateFinalDate($dataProgramming, $id_company);
-    }
-
-    // Calcular Lote economico
-    $economicLot = $economicLotDao->calcEconomicLot($dataProgramming, $id_company);
-
-    // Obtener fechas maquina
-    $datesMachines = $datesMachinesDao->findDatesMachine($dataProgramming, $id_company);
-
-    // Obtener información producto, pedido y cliente
-    $orders = $generalOrdersDao->findOrdersByCompany($dataProgramming, $id_company);
-
-    $data['economicLot'] = $economicLot['economic_lot'];
-    $data['datesMachines'] = $datesMachines;
-    $data['order'] = $orders;
-
-    $response->getBody()->write(json_encode($data, JSON_NUMERIC_CHECK));
-    return $response->withHeader('Content-Type', 'application/json');
-});
-
-$app->get('/programming', function (Request $request, Response $response, $args) use ($programmingDao) {
-    session_start();
-    $id_company = $_SESSION['id_company'];
-    $programming = $programmingDao->findAllProgrammingByCompany($id_company);
+    $programming = $generalProgrammingDao->findAllProgrammingByMachine($args['id_machine'], $id_company);
     $response->getBody()->write(json_encode($programming, JSON_NUMERIC_CHECK));
     return $response->withHeader('Content-Type', 'application/json');
 });
@@ -125,6 +135,7 @@ $app->get('/ordersProgramming', function (Request $request, Response $response, 
 $app->post('/addProgramming', function (Request $request, Response $response, $args) use (
     $programmingDao,
     $generalProgrammingDao,
+    $generalOrdersDao,
     $lastDataDao
 ) {
     session_start();
@@ -141,9 +152,13 @@ $app->post('/addProgramming', function (Request $request, Response $response, $a
 
     $result = $programmingDao->insertProgrammingByCompany($dataProgramming, $id_company);
 
-    $programming = $lastDataDao->findLastInsertedProgramming($id_company);
+    if ($result == null) {
+        $programming = $lastDataDao->findLastInsertedProgramming($id_company);
+        $result = $generalProgrammingDao->setMinDateProgramming($programming['id_programming'], $minDate);
+    }
 
-    $result = $generalProgrammingDao->setMinDateProgramming($programming['id_programming'], $minDate);
+    if ($result == null)
+        $result = $generalOrdersDao->updateAccumulatedOrder($dataProgramming);
 
     if ($result == null)
         $resp = array('success' => true, 'message' => 'Programa de producción creado correctamente');
@@ -172,10 +187,18 @@ $app->post('/updateProgramming', function (Request $request, Response $response,
     return $response->withStatus(200)->withHeader('Content-Type', 'application/json');
 });
 
-$app->get('/deleteProgramming/{id_programming}', function (Request $request, Response $response, $args) use ($programmingDao) {
-    $programming = $programmingDao->deleteProgramming($args['id_programming']);
+$app->post('/deleteProgramming', function (Request $request, Response $response, $args) use (
+    $programmingDao,
+    $generalOrdersDao
+) {
+    $dataProgramming = $request->getParsedBody();
 
-    if ($programming == null)
+    $result = $generalOrdersDao->updateAccumulatedOrder($dataProgramming);
+
+    if ($result == null)
+        $result = $programmingDao->deleteProgramming($dataProgramming['idProgramming']);
+
+    if ($result == null)
         $resp = array('success' => true, 'message' => 'Programa de producción eliminado correctamente');
     else if (isset($programming['info']))
         $resp = array('info' => true, 'message' => $programming['message']);

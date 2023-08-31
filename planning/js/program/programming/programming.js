@@ -14,12 +14,16 @@ $(document).ready(function () {
   $('#btnNewProgramming').click(async function (e) {
     e.preventDefault();
 
+    let cardCreateProgramming = $('.cardCreateProgramming').css('display');
+
+    if(cardCreateProgramming == 'none'){
+
     await loadOrdersProgramming();
 
     let op = sessionStorage.getItem('opProgramming');
 
     if (op) { 
-      $('.cardCreateProgramming').toggle(800);
+      $('.cardCreateProgramming').show(800);
       $('#btnCreateProgramming').html('Crear');
       $('#formCreateProgramming').trigger('reset');
     } else {
@@ -50,12 +54,16 @@ $(document).ready(function () {
 
             sessionStorage.setItem('minDate', date);
 
-            $('.cardCreateProgramming').toggle(800);
+            $('.cardCreateProgramming').show(800);
             $('#btnCreateProgramming').html('Crear');
             $('#formCreateProgramming').trigger('reset');
           }
         },
       });
+      }
+    } else {
+      $('.cardCreateProgramming').hide(800); 
+      $('#formCreateProgramming').trigger('reset');
     }
   });
 
@@ -198,7 +206,8 @@ $(document).ready(function () {
   };
 
   */
-  /* Crear nuevo programa de produccion */ 
+
+  /* Crear nuevo programa de produccion */
   $('#btnCreateProgramming').click(function (e) {
     e.preventDefault();
     let idProgramming = sessionStorage.getItem('id_programming');
@@ -240,18 +249,28 @@ $(document).ready(function () {
   /* Revision data programa de produccion */
   checkDataProcess = async (url, idProgramming) => {
     let order = $('#order').val();
-    let product = $('#selectNameProduct').val();
-    let machine = $('#idMachine').val();
-    let quantity = $('#quantity').val();
-
-    let data = parseFloat(order * product * machine * quantity);
-
+    let product = parseFloat($('#selectNameProduct').val());
+    let machine = parseFloat($('#idMachine').val());
+    let quantity = parseFloat($('#quantity').val());
+    
+    let data = parseFloat(order) * product * machine * quantity;
+    
     if (isNaN(data) || data <= 0) {
       toastr.error('Ingrese todos los campos');
       return false;
     }
 
+    let quantityOrder = parseInt(getLastText(order));
+    order = parseInt(order);
+    let accumulated_quantity = 0;
+
+    if (quantity < quantityOrder)
+      accumulated_quantity = quantityOrder - quantity;
+
     let dataProcess = new FormData(formCreateProgramming);
+
+    dataProcess.append('order', order);
+    dataProcess.append('accumulatedQuantity', accumulated_quantity);
 
     let min_date = sessionStorage.getItem('minDate');
 
@@ -272,7 +291,7 @@ $(document).ready(function () {
     let row = $(this.activeElement).parent().parent()[0];
     let data = tblProgramming.fnGetData(row);
 
-    let id_programming = data.id_programming;
+    let dataProgramming = {};
 
     bootbox.confirm({
       title: 'Eliminar',
@@ -290,8 +309,12 @@ $(document).ready(function () {
       },
       callback: function (result) {
         if (result == true) {
-          $.get(
-            `/api/deleteProgramming/${id_programming}`,
+          dataProgramming['idProgramming'] = data.id_programming;
+          dataProgramming['order'] = data.id_order;
+          dataProgramming['accumulatedQuantity'] = 0;
+
+          $.post(
+            `/api/deleteProgramming`, dataProgramming,
             function (data, textStatus, jqXHR) {
               message(data);
             }
@@ -305,8 +328,12 @@ $(document).ready(function () {
   message = (data) => {
     if (data.success == true) {
       $('.cardCreateProgramming').hide(800);
-      $('#btnCreateProgramming').trigger('reset');
-      loadTblProgramming();
+      $('#formCreateProgramming').trigger('reset'); 
+      $('#searchMachine option').removeAttr('selected');
+      $(`#searchMachine option[value='0']`).prop('selected', true);
+
+      loadTblProgramming(0);
+
       toastr.success(data.message);
       return false;
     } else if (data.error == true) toastr.error(data.message);

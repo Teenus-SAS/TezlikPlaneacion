@@ -87,6 +87,9 @@ class ProgrammingDao
         try {
             $connection = Connection::getInstance()->getConnection();
 
+            $quantity = str_replace('.', '', $dataProgramming['quantity']);
+            $quantity = str_replace(',', '.', $dataProgramming['quantity']);
+
             $stmt = $connection->prepare("INSERT INTO programming (id_company, id_order, id_product, id_machine, quantity)
                                           VALUES (:id_company, :id_order, :id_product, :id_machine, :quantity)");
             $stmt->execute([
@@ -94,7 +97,7 @@ class ProgrammingDao
                 'id_order' => $dataProgramming['order'],
                 'id_product' => $dataProgramming['idProduct'],
                 'id_machine' => $dataProgramming['idMachine'],
-                'quantity' => $dataProgramming['quantity']
+                'quantity' => $quantity
             ]);
         } catch (\Exception $e) {
             $message = $e->getMessage();

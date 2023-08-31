@@ -15,7 +15,7 @@ $(document).ready(function () {
     $select.append(`<option disabled selected>Seleccionar</option>`);
     $.each(data, function (i, value) {
       $select.append(
-        `<option value = ${value.id_order}> ${value.num_order} </option>`
+        `<option value ='${value.id_order} ${value.original_quantity}'> ${value.num_order} </option>`
       );
     });
   }

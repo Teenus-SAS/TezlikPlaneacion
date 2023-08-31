@@ -16,10 +16,12 @@ class FinalDateDao
         $this->logger->pushHandler(new RotatingFileHandler(Constants::LOGS_PATH . 'querys.log', 20, Logger::DEBUG));
     }
 
-    public function calcFinalDate($dataMachine, $id_company)
+    public function calcFinalDateByProgramming($id_programming)
     {
         $connection = Connection::getInstance()->getConnection();
 
+        /* 
+        IFNULL((IFNULL(o.original_quantity, 0) / IFNULL(cm.cicles_hour, 0)) / IFNULL(pm.hours_day, 0), 0) AS days_to_produce,
         $stmt = $connection->prepare("SELECT DATE_ADD(dm.start_dat, INTERVAL((:quantity * (pp.enlistment_time + pp.operation_time))/60) HOUR) AS final_date 
                                       FROM products p 
                                        INNER JOIN products_process pp ON pp.id_product = pp.id_product 
@@ -34,7 +36,24 @@ class FinalDateDao
         ]);
         $this->logger->info(__FUNCTION__, array('query' => $stmt->queryString, 'errors' => $stmt->errorInfo()));
         $finalDate = $stmt->fetch($connection::FETCH_ASSOC);
-        return $finalDate;
+        return $finalDate; */
+        try {
+            $stmt = $connection->prepare("SELECT DATE_ADD(pg.min_date, INTERVAL IFNULL((IFNULL(o.original_quantity, 0) / IFNULL(cm.cicles_hour, 0)) / IFNULL(pm.hours_day, 0), 0) DAY) AS final_date
+                                          FROM programming pg
+                                            LEFT JOIN plan_orders o ON o.id_order = pg.id_order
+                                            LEFT JOIN plan_program_machines pm ON pm.id_machine = pg.id_machine
+                                            LEFT JOIN plan_cicles_machine cm ON cm.id_machine = pg.id_machine
+                                          WHERE pg.id_programming = :id_programming");
+            $stmt->execute(['id_programming' => $id_programming]);
+            $this->logger->info(__FUNCTION__, array('query' => $stmt->queryString, 'errors' => $stmt->errorInfo()));
+            $programming = $stmt->fetch($connection::FETCH_ASSOC);
+
+            return $programming;
+        } catch (\Exception $e) {
+            $message = $e->getMessage();
+            $error = array('info' => true, 'message' => $message);
+            return $error;
+        }
     }
 
     public function updateFinalDate($dataMachine, $id_company)
