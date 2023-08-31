@@ -12,16 +12,16 @@ function dragover(e) {
 }*/
 $(document).ready(function () {
   sessionStorage.removeItem('id_programming');
-  sessionStorage.removeItem('opProgramming');
   sessionStorage.removeItem('minDate');
-
+  
   $('#searchMachine').change(function (e) { 
     e.preventDefault();
-
+    
     loadTblProgramming(this.value);
   });
-
+  
   loadTblProgramming = async (machine) => {
+    sessionStorage.removeItem('opProgramming');
     let data;
 
     if (machine == 0) {
@@ -72,16 +72,19 @@ $(document).ready(function () {
           title: 'Cant.Pedido',
           data: 'quantity_order',
           className: 'uniqueClassName',
+          render: $.fn.dataTable.render.number('.', ',', 2, ''),
         },
         {
           title: 'Cant.Fabricar',
           data: 'quantity_programming',
           className: 'uniqueClassName',
+          render: $.fn.dataTable.render.number('.', ',', 2, ''),
         },
         {
           title: 'Cant.Pendiente',
           data: 'accumulated_quantity',
           className: 'uniqueClassName',
+          render: $.fn.dataTable.render.number('.', ',', 2, ''),
         },
         {
           title: 'Cliente',
@@ -93,23 +96,28 @@ $(document).ready(function () {
         //   data: 'process',
         //   className: 'uniqueClassName',
         // },
-        // {
-        //   title: 'F.Inicio',
-        //   data: 'process',
-        //   className: 'uniqueClassName',
-        // },
-        // {
-        //   title: 'F.Final',
-        //   data: 'process',
-        //   className: 'uniqueClassName',
-        // },
+        {
+          title: 'Fecha Inicio',
+          data: 'min_date',
+          className: 'uniqueClassName',
+        },
+        {
+          title: 'Fecha Final',
+          data: 'max_date',
+          className: 'uniqueClassName',
+        },
+        {
+          title: 'Hora Final',
+          data: 'max_hour',
+          className: 'uniqueClassName',
+        },
         {
           title: 'Acciones',
           data: 'id_programming',
           className: 'uniqueClassName',
           render: function (data) {
-            // <a href="javascript:;" <i id="${data}" class="bx bx-edit-alt updateProgramming" data-toggle='tooltip' title='Actualizar Programa' style="font-size: 30px;"></i></a>
             return `
+                <a href="javascript:;" <i id="${data}" class="bx bx-edit-alt updateProgramming" data-toggle='tooltip' title='Actualizar Programa' style="font-size: 30px;"></i></a>
                 <a href="javascript:;" <i id="${data}" class="mdi mdi-delete-forever" data-toggle='tooltip' title='Eliminar Programa' style="font-size: 30px;color:red" onclick="deleteFunction()"></i></a>`;
           },
         },

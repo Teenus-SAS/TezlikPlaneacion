@@ -66,8 +66,8 @@ class ProgrammingDao
     {
         $connection = Connection::getInstance()->getConnection();
 
-        $stmt = $connection->prepare("SELECT pg.id_programming, o.id_order, o.num_order, o.date_order, o.min_date, o.max_date, o.original_quantity AS quantity_order, o.accumulated_quantity, pg.quantity AS quantity_programming, p.id_product, 
-                                             p.reference, p.product, m.id_machine, m.machine, c.client
+        $stmt = $connection->prepare("SELECT pg.id_programming, o.id_order, o.num_order, o.date_order, o.original_quantity AS quantity_order, o.accumulated_quantity, pg.quantity AS quantity_programming, p.id_product, 
+                                             p.reference, p.product, m.id_machine, m.machine, c.client, pg.min_date, pg.max_date, pg.max_hour
                                       FROM programming pg
                                         INNER JOIN plan_orders o ON o.id_order = pg.id_order
                                         INNER JOIN products p ON p.id_product = pg.id_product
@@ -88,7 +88,7 @@ class ProgrammingDao
             $connection = Connection::getInstance()->getConnection();
 
             $quantity = str_replace('.', '', $dataProgramming['quantity']);
-            $quantity = str_replace(',', '.', $dataProgramming['quantity']);
+            $quantity = str_replace(',', '.', $quantity);
 
             $stmt = $connection->prepare("INSERT INTO programming (id_company, id_order, id_product, id_machine, quantity)
                                           VALUES (:id_company, :id_order, :id_product, :id_machine, :quantity)");

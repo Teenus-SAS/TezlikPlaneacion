@@ -16,53 +16,58 @@ $(document).ready(function () {
 
     let cardCreateProgramming = $('.cardCreateProgramming').css('display');
 
-    if(cardCreateProgramming == 'none'){
+    if (cardCreateProgramming == 'none') {
 
-    await loadOrdersProgramming();
+      let resp = await loadOrdersProgramming();
+      
+      if (resp) {
+        toastr.error('Todos los pedidos se encuentran programados');
+        return false;
+      }
 
-    let op = sessionStorage.getItem('opProgramming');
+      let op = sessionStorage.getItem('opProgramming');
 
-    if (op) { 
-      $('.cardCreateProgramming').show(800);
-      $('#btnCreateProgramming').html('Crear');
-      $('#formCreateProgramming').trigger('reset');
-    } else {
-      bootbox.confirm({
-        title: 'Ingrese Fecha De Inicio!',
-        message: `<div class="col-sm-12 floating-label enable-floating-label">
+      if (op) {
+        $('.cardCreateProgramming').show(800);
+        $('#btnCreateProgramming').html('Crear');
+        $('#formCreateProgramming').trigger('reset');
+      } else {
+        bootbox.confirm({
+          title: 'Ingrese Fecha De Inicio!',
+          message: `<div class="col-sm-12 floating-label enable-floating-label">
                         <input class="form-control" type="date" name="date" id="date"></input>
                         <label for="date">Fecha</span></label>
                       </div>`,
-        buttons: {
-          confirm: {
-            label: 'Agregar',
-            className: 'btn-success',
-          },
-          cancel: {
+          buttons: {
+            confirm: {
+              label: 'Agregar',
+              className: 'btn-success',
+            },
+            cancel: {
               label: 'Cancelar',
               className: 'btn-danger',
+            },
           },
-        },
-        callback: function (result) {
-          if (result == true) {
-            let date = $('#date').val();
+          callback: function (result) {
+            if (result == true) {
+              let date = $('#date').val();
 
-            if (!date) {
-              toastr.error('Ingrese los campos');
-              return false;
+              if (!date) {
+                toastr.error('Ingrese los campos');
+                return false;
+              }
+
+              sessionStorage.setItem('minDate', date);
+
+              $('.cardCreateProgramming').show(800);
+              $('#btnCreateProgramming').html('Crear');
+              $('#formCreateProgramming').trigger('reset');
             }
-
-            sessionStorage.setItem('minDate', date);
-
-            $('.cardCreateProgramming').show(800);
-            $('#btnCreateProgramming').html('Crear');
-            $('#formCreateProgramming').trigger('reset');
-          }
-        },
-      });
+          },
+        });
       }
     } else {
-      $('.cardCreateProgramming').hide(800); 
+      $('.cardCreateProgramming').hide(800);
       $('#formCreateProgramming').trigger('reset');
     }
   });
@@ -213,15 +218,15 @@ $(document).ready(function () {
     let idProgramming = sessionStorage.getItem('id_programming');
 
     if (idProgramming == '' || idProgramming == null) {
-      checkDataProcess('/api/addProgramming', idProgramming);
+      checkdataProgramming('/api/addProgramming', idProgramming);
     } else {
-      checkDataProcess('/api/updateProgramming', idProgramming);
+      checkdataProgramming('/api/updateProgramming', idProgramming);
     }
   });
 
   /* Actualizar programa de produccion */
 
-  $(document).on('click', '.updateProgramming', async function (e) { 
+  $(document).on('click', '.updateProgramming', async function (e) {
     $('.cardCreateProgramming').show(800);
     $('#btnCreateProgramming').html('Actualizar');
 
@@ -229,11 +234,16 @@ $(document).ready(function () {
     let data = tblProgramming.fnGetData(row);
 
     sessionStorage.setItem('id_programming', data.id_programming);
-    $(`#order option[value=${data.id_order}]`).prop('selected', true);
-
+    $('#order').empty();
+    $('#order').append(`<option disabled>Seleccionar</option>`);
+    $('#order').append(
+      `<option value ='${data.id_order} ${data.quantity_order}' selected> ${data.num_order} </option>`
+    );
+    
     await loadProducts(data.num_order);
 
-    $(`#selectNameProduct option[value=${data.id_product}]`).prop('selected', true); 
+    $(`#selectNameProduct option[value=${data.id_product}]`).prop('selected', true);
+
     $(`#idMachine option[value=${data.id_machine}]`).prop('selected', true);
 
     $('#quantity').val(data.quantity_programming);
@@ -247,40 +257,40 @@ $(document).ready(function () {
   });
 
   /* Revision data programa de produccion */
-  checkDataProcess = async (url, idProgramming) => {
-    let order = $('#order').val();
+  checkdataProgramming = async (url, idProgramming) => {
+    let order = parseFloat($('#order').val());
     let product = parseFloat($('#selectNameProduct').val());
     let machine = parseFloat($('#idMachine').val());
     let quantity = parseFloat($('#quantity').val());
     
-    let data = parseFloat(order) * product * machine * quantity;
+    let data = order * product * machine * quantity;
     
     if (isNaN(data) || data <= 0) {
       toastr.error('Ingrese todos los campos');
       return false;
     }
 
-    let quantityOrder = parseInt(getLastText(order));
-    order = parseInt(order);
-    let accumulated_quantity = 0;
+    // let quantityOrder = parseInt(getLastText(order));
+    // order = parseInt(order);
+    // let accumulated_quantity = 0;
 
-    if (quantity < quantityOrder)
-      accumulated_quantity = quantityOrder - quantity;
+    // if (quantity < quantityOrder)
+    //   accumulated_quantity = quantityOrder - quantity;
 
-    let dataProcess = new FormData(formCreateProgramming);
-
-    dataProcess.append('order', order);
-    dataProcess.append('accumulatedQuantity', accumulated_quantity);
-
+    
+    // dataProgramming.append('order', order);
+    // dataProgramming.append('accumulatedQuantity', accumulated_quantity);
+    
+    let dataProgramming = new FormData(formCreateProgramming);
     let min_date = sessionStorage.getItem('minDate');
 
     if (min_date != '' || min_date != null)
-      dataProcess.append('minDate', min_date);
+      dataProgramming.append('minDate', min_date);
 
     if (idProgramming != '' || idProgramming != null)
-      dataProcess.append('idProgramming', idProgramming);
+      dataProgramming.append('idProgramming', idProgramming);
 
-    let resp = await sendDataPOST(url, dataProcess);
+    let resp = await sendDataPOST(url, dataProgramming);
 
     message(resp);
   };
@@ -311,7 +321,7 @@ $(document).ready(function () {
         if (result == true) {
           dataProgramming['idProgramming'] = data.id_programming;
           dataProgramming['order'] = data.id_order;
-          dataProgramming['accumulatedQuantity'] = 0;
+          dataProgramming['accumulatedQuantity'] = null;
 
           $.post(
             `/api/deleteProgramming`, dataProgramming,

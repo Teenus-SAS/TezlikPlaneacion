@@ -139,12 +139,14 @@ class GeneralOrdersDao
 
     public function updateAccumulatedOrder($dataOrder)
     {
-        $connection = Connection::getInstance()->getConnection();
-
         try {
+            $connection = Connection::getInstance()->getConnection();
+
+            $dataOrder['accumulatedQuantity'] == '' ? $quantity = null : $quantity = $dataOrder['accumulatedQuantity'];
+
             $stmt = $connection->prepare("UPDATE plan_orders SET accumulated_quantity = :accumulated_quantity WHERE id_order = :id_order");
             $stmt->execute([
-                'accumulated_quantity' => $dataOrder['accumulatedQuantity'],
+                'accumulated_quantity' => $quantity,
                 'id_order' => $dataOrder['order']
             ]);
         } catch (\Exception $e) {

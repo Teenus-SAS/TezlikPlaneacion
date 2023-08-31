@@ -88,7 +88,7 @@ if (sizeof($_SESSION) == 0)
                                                 </div>
                                                 <div class="col-sm-2 floating-label enable-floating-label show-label">
                                                     <label for="">Cantidad a Fabricar</label>
-                                                    <input type="text" class="form-control text-center numberCalc" id="quantity" name="quantity">
+                                                    <input type="text" class="form-control text-center number" id="quantity" name="quantity">
                                                 </div>
                                                 <div class="col-sm mt-1">
                                                     <button class="btn btn-info" type="submit" id="btnCreateProgramming" name="btnCreateProgramming">Crear</button>

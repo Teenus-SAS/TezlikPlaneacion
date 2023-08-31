@@ -136,7 +136,8 @@ $app->post('/addProgramming', function (Request $request, Response $response, $a
     $programmingDao,
     $generalProgrammingDao,
     $generalOrdersDao,
-    $lastDataDao
+    $lastDataDao,
+    $finalDateDao
 ) {
     session_start();
     $dataProgramming = $request->getParsedBody();
@@ -153,12 +154,29 @@ $app->post('/addProgramming', function (Request $request, Response $response, $a
     $result = $programmingDao->insertProgrammingByCompany($dataProgramming, $id_company);
 
     if ($result == null) {
-        $programming = $lastDataDao->findLastInsertedProgramming($id_company);
-        $result = $generalProgrammingDao->setMinDateProgramming($programming['id_programming'], $minDate);
+        $lastData = $lastDataDao->findLastInsertedProgramming($id_company);
+        $result = $generalProgrammingDao->setMinDateProgramming($lastData['id_programming'], $minDate);
     }
 
-    if ($result == null)
+    if ($result == null) {
+        $order = $generalProgrammingDao->checkAccumulatedQuantityOrder($dataProgramming['order']);
+
+        if ($order['quantity_programming'] < $order['original_quantity'])
+            $dataProgramming['accumulatedQuantity'] = $order['original_quantity'] - $order['quantity_programming'];
+        else
+            $dataProgramming['accumulatedQuantity'] = 0;
+
         $result = $generalOrdersDao->updateAccumulatedOrder($dataProgramming);
+    }
+
+    // Calcular fecha y hora final
+    if ($result == null) {
+        $programming = $finalDateDao->calcFinalDateAndHourByProgramming($lastData['id_programming']);
+        $programming['idProgramming'] = $lastData['id_programming'];
+
+        $result = $generalProgrammingDao->updateFinalDateAndHour($programming);
+    }
+
 
     if ($result == null)
         $resp = array('success' => true, 'message' => 'Programa de producción creado correctamente');
@@ -171,15 +189,44 @@ $app->post('/addProgramming', function (Request $request, Response $response, $a
     return $response->withStatus(200)->withHeader('Content-Type', 'application/json');
 });
 
-$app->post('/updateProgramming', function (Request $request, Response $response, $args) use ($programmingDao) {
+$app->post('/updateProgramming', function (Request $request, Response $response, $args) use (
+    $programmingDao,
+    $generalProgrammingDao,
+    $generalOrdersDao
+) {
+    session_start();
+    $id_company = $_SESSION['id_company'];
     $dataProgramming = $request->getParsedBody();
 
-    $programming = $programmingDao->updateProgramming($dataProgramming);
+    $programming = $programmingDao->findAllProgrammingByCompany($id_company);
 
-    if ($programming == null)
+    if (sizeof($programming) == 0) {
+        $minDate = $dataProgramming['minDate'];
+    } else {
+        $minDate = $programming[0]['min_date'];
+    }
+
+    $result = $programmingDao->updateProgramming($dataProgramming);
+
+    if ($result == null) {
+        $result = $generalProgrammingDao->setMinDateProgramming($dataProgramming['idProgramming'], $minDate);
+    }
+
+    if ($result == null) {
+        $order = $generalProgrammingDao->checkAccumulatedQuantityOrder($dataProgramming['order']);
+
+        if ($order['quantity_programming'] < $order['original_quantity'])
+            $dataProgramming['accumulatedQuantity'] = $order['original_quantity'] - $order['quantity_programming'];
+        else
+            $dataProgramming['accumulatedQuantity'] = 0;
+
+        $result = $generalOrdersDao->updateAccumulatedOrder($dataProgramming);
+    }
+
+    if ($result == null)
         $resp = array('success' => true, 'message' => 'Programa de producción actualizado correctamente');
-    else if (isset($programming['info']))
-        $resp = array('info' => true, 'message' => $programming['message']);
+    else if (isset($result['info']))
+        $resp = array('info' => true, 'message' => $result['message']);
     else
         $resp = array('error' => true, 'message' => 'Ocurrio un error mientras actualizaba la información. Intente nuevamente');
 
@@ -189,14 +236,31 @@ $app->post('/updateProgramming', function (Request $request, Response $response,
 
 $app->post('/deleteProgramming', function (Request $request, Response $response, $args) use (
     $programmingDao,
-    $generalOrdersDao
+    $generalOrdersDao,
+    $generalProgrammingDao
 ) {
+    session_start();
+    $id_company = $_SESSION['id_company'];
+
     $dataProgramming = $request->getParsedBody();
+    $result = $programmingDao->deleteProgramming($dataProgramming['idProgramming']);
 
-    $result = $generalOrdersDao->updateAccumulatedOrder($dataProgramming);
+    if ($result == null) {
+        $programming = $programmingDao->findAllProgrammingByCompany($id_company);
 
-    if ($result == null)
-        $result = $programmingDao->deleteProgramming($dataProgramming['idProgramming']);
+        if (sizeof($programming) == 0) {
+            $result = $generalOrdersDao->updateAccumulatedOrder($dataProgramming);
+        } else {
+            $order = $generalProgrammingDao->checkAccumulatedQuantityOrder($dataProgramming['order']);
+
+            if ($order['quantity_programming'] < $order['original_quantity'])
+                $dataProgramming['accumulatedQuantity'] = $order['original_quantity'] - $order['quantity_programming'];
+            else
+                $dataProgramming['accumulatedQuantity'] = 0;
+
+            $result = $generalOrdersDao->updateAccumulatedOrder($dataProgramming);
+        }
+    }
 
     if ($result == null)
         $resp = array('success' => true, 'message' => 'Programa de producción eliminado correctamente');

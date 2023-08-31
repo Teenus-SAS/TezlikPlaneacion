@@ -21,7 +21,7 @@ class GeneralProgrammingDao
         $connection = Connection::getInstance()->getConnection();
 
         $stmt = $connection->prepare("SELECT pg.id_programming, o.id_order, o.num_order, o.date_order, o.min_date, o.max_date, o.original_quantity AS quantity_order, o.accumulated_quantity, pg.quantity AS quantity_programming, p.id_product, 
-                                             p.reference, p.product, m.id_machine, m.machine, c.client
+                                             p.reference, p.product, m.id_machine, m.machine, c.client, pg.min_date, pg.max_date, pg.max_hour
                                       FROM programming pg
                                         INNER JOIN plan_orders o ON o.id_order = pg.id_order
                                         INNER JOIN products p ON p.id_product = pg.id_product
@@ -45,8 +45,8 @@ class GeneralProgrammingDao
 
         $stmt = $connection->prepare("SELECT * FROM plan_orders o
                                       WHERE o.id_company = :id_company
-                                      AND o.id_order NOT IN (SELECT id_order FROM programming WHERE id_company = o.id_company) 
-                                      AND o.status != 'Despacho'");
+                                     -- AND o.id_order NOT IN (SELECT id_order FROM programming WHERE id_company = o.id_company) 
+                                      AND o.status != 'Despacho' AND (o.accumulated_quantity IS NULL OR o.accumulated_quantity != 0)");
         $stmt->execute(['id_company' => $id_company]);
 
         $this->logger->info(__FUNCTION__, array('query' => $stmt->queryString, 'errors' => $stmt->errorInfo()));
@@ -54,6 +54,22 @@ class GeneralProgrammingDao
         $orders = $stmt->fetchAll($connection::FETCH_ASSOC);
         $this->logger->notice("pedidos", array('pedidos' => $orders));
         return $orders;
+    }
+
+    public function checkAccumulatedQuantityOrder($id_order)
+    {
+        $connection = Connection::getInstance()->getConnection();
+
+        $stmt = $connection->prepare("SELECT o.original_quantity, (SELECT IFNULL(SUM(quantity), 0) FROM programming WHERE id_order = o.id_order) AS quantity_programming
+                                      FROM plan_orders o 
+                                      WHERE o.id_order = :id_order");
+        $stmt->execute([
+            'id_order' => $id_order
+        ]);
+        $this->logger->info(__FUNCTION__, array('query' => $stmt->queryString, 'errors' => $stmt->errorInfo()));
+
+        $order = $stmt->fetch($connection::FETCH_ASSOC);
+        return $order;
     }
 
     public function setMinDateProgramming($id_programming, $min_date)
@@ -67,6 +83,26 @@ class GeneralProgrammingDao
                 'id_programming' => $id_programming,
                 'min_date' => $min_date
             ]);
+        } catch (\Exception $e) {
+            $message = $e->getMessage();
+            $error = array('info' => true, 'message' => $message);
+            return $error;
+        }
+    }
+
+    public function updateFinalDateAndHour($dataProgramming)
+    {
+        $connection = Connection::getInstance()->getConnection();
+
+        try {
+            $stmt = $connection->prepare("UPDATE programming SET max_date = :max_date, max_hour = :max_hour
+                                          WHERE id_programming = :id_programming");
+            $stmt->execute([
+                'max_date' => $dataProgramming['final_date'],
+                'max_hour' => $dataProgramming['final_hour'],
+                'id_programming' => $dataProgramming['idProgramming']
+            ]);
+            $this->logger->info(__FUNCTION__, array('query' => $stmt->queryString, 'errors' => $stmt->errorInfo()));
         } catch (\Exception $e) {
             $message = $e->getMessage();
             $error = array('info' => true, 'message' => $message);
