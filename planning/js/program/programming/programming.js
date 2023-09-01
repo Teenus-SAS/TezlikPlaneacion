@@ -35,7 +35,7 @@ $(document).ready(function () {
         bootbox.confirm({
           title: 'Ingrese Fecha De Inicio!',
           message: `<div class="col-sm-12 floating-label enable-floating-label">
-                        <input class="form-control" type="date" name="date" id="date"></input>
+                        <input class="form-control" type="datetime-local" name="date" id="date"></input>
                         <label for="date">Fecha</span></label>
                       </div>`,
           buttons: {
@@ -282,10 +282,10 @@ $(document).ready(function () {
     // dataProgramming.append('accumulatedQuantity', accumulated_quantity);
     
     let dataProgramming = new FormData(formCreateProgramming);
-    let min_date = sessionStorage.getItem('minDate');
+    let min_datetime = sessionStorage.getItem('minDate');
 
-    if (min_date != '' || min_date != null)
-      dataProgramming.append('minDate', min_date);
+    if (min_datetime != '' || min_datetime != null)
+      dataProgramming.append('minDate', min_datetime);
 
     if (idProgramming != '' || idProgramming != null)
       dataProgramming.append('idProgramming', idProgramming);

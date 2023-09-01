@@ -165,7 +165,7 @@ $app->post('/addProgramming', function (Request $request, Response $response, $a
     if (sizeof($programming) == 0) {
         $minDate = $dataProgramming['minDate'];
     } else {
-        $minDate = $programming[0]['min_date'];
+        $minDate = $programming[0]['min_datetime'];
     }
 
     $result = $programmingDao->insertProgrammingByCompany($dataProgramming, $id_company);
@@ -220,7 +220,7 @@ $app->post('/updateProgramming', function (Request $request, Response $response,
     if (sizeof($programming) == 0) {
         $minDate = $dataProgramming['minDate'];
     } else {
-        $minDate = $programming[0]['min_date'];
+        $minDate = $programming[0]['min_datetime'];
     }
 
     $result = $programmingDao->updateProgramming($dataProgramming);

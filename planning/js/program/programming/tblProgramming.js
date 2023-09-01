@@ -98,7 +98,7 @@ $(document).ready(function () {
         // },
         {
           title: 'Fecha Inicio',
-          data: 'min_date',
+          data: 'min_datetime',
           className: 'uniqueClassName',
         },
         {
