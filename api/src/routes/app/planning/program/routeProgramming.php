@@ -99,10 +99,27 @@ use Psr\Http\Message\ServerRequestInterface as Request;
     }); 
 */
 
-$app->get('/programming', function (Request $request, Response $response, $args) use ($programmingDao) {
+$app->get('/programming', function (Request $request, Response $response, $args) use (
+    $programmingDao,
+    $generalProgrammingDao,
+    $generalOrdersDao
+) {
     session_start();
     $id_company = $_SESSION['id_company'];
     $programming = $programmingDao->findAllProgrammingByCompany($id_company);
+
+    for ($i = 0; $i < sizeof($programming); $i++) {
+        $dataProgramming['order'] = $programming[$i]['id_order'];
+        $order = $generalProgrammingDao->checkAccumulatedQuantityOrder($dataProgramming['order']);
+
+        if ($order['quantity_programming'] < $order['original_quantity'])
+            $dataProgramming['accumulatedQuantity'] = $order['original_quantity'] - $order['quantity_programming'];
+        else
+            $dataProgramming['accumulatedQuantity'] = 0;
+
+        $generalOrdersDao->updateAccumulatedOrder($dataProgramming);
+    }
+
     $response->getBody()->write(json_encode($programming, JSON_NUMERIC_CHECK));
     return $response->withHeader('Content-Type', 'application/json');
 });

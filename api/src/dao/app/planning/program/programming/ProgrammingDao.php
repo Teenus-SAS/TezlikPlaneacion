@@ -67,12 +67,13 @@ class ProgrammingDao
         $connection = Connection::getInstance()->getConnection();
 
         $stmt = $connection->prepare("SELECT pg.id_programming, o.id_order, o.num_order, o.date_order, o.original_quantity AS quantity_order, o.accumulated_quantity, pg.quantity AS quantity_programming, p.id_product, 
-                                             p.reference, p.product, m.id_machine, m.machine, c.client, pg.min_date, pg.max_date, pg.max_hour
+                                             p.reference, p.product, m.id_machine, m.machine, c.client, pg.min_date, pm.hour_start, pg.max_date, pg.max_hour
                                       FROM programming pg
                                         INNER JOIN plan_orders o ON o.id_order = pg.id_order
                                         INNER JOIN products p ON p.id_product = pg.id_product
                                         INNER JOIN machines m ON m.id_machine = pg.id_machine
                                         INNER JOIN plan_clients c ON c.id_client = o.id_client
+                                        INNER JOIN plan_program_machines pm ON pm.id_machine = pg.id_machine
                                       WHERE pg.id_company = :id_company");
         $stmt->execute(['id_company' => $id_company]);
 
@@ -111,6 +112,9 @@ class ProgrammingDao
         try {
             $connection = Connection::getInstance()->getConnection();
 
+            $quantity = str_replace('.', '', $dataProgramming['quantity']);
+            $quantity = str_replace(',', '.', $quantity);
+
             $stmt = $connection->prepare("UPDATE programming SET id_order = :id_order, id_product = :id_product, id_machine = :id_machine, quantity = :quantity
                                           WHERE id_programming = :id_programming");
             $stmt->execute([
@@ -118,7 +122,7 @@ class ProgrammingDao
                 'id_order' => $dataProgramming['order'],
                 'id_product' => $dataProgramming['idProduct'],
                 'id_machine' => $dataProgramming['idMachine'],
-                'quantity' => $dataProgramming['quantity'],
+                'quantity' => $quantity,
             ]);
         } catch (\Exception $e) {
             $message = $e->getMessage();

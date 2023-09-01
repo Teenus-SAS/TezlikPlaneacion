@@ -29,7 +29,7 @@ $(document).ready(function () {
       if (data.length > 0)
         sessionStorage.setItem('opProgramming', 1);
     }
-    else 
+    else
       data = await searchData(`/api/programmingByMachine/${machine}`);
       
     tblProgramming = $('#tblProgramming').dataTable({
@@ -102,6 +102,15 @@ $(document).ready(function () {
           className: 'uniqueClassName',
         },
         {
+          title: 'Hora Inicio',
+          data: 'hour_start',
+          className: 'text-center',
+          render: function (data) {
+            let hourStart = moment(data, ['HH:mm']).format('h:mm A');
+            return `<p>${hourStart}</p>`;
+          },
+        },
+        {
           title: 'Fecha Final',
           data: 'max_date',
           className: 'uniqueClassName',
@@ -109,7 +118,11 @@ $(document).ready(function () {
         {
           title: 'Hora Final',
           data: 'max_hour',
-          className: 'uniqueClassName',
+          className: 'text-center',
+          render: function (data) {
+            let max_hour = moment(data, ['HH:mm']).format('h:mm A');
+            return `<p>${max_hour}</p>`;
+          },
         },
         {
           title: 'Acciones',
