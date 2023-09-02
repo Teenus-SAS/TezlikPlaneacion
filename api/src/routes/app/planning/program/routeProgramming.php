@@ -160,20 +160,7 @@ $app->post('/addProgramming', function (Request $request, Response $response, $a
     $dataProgramming = $request->getParsedBody();
     $id_company = $_SESSION['id_company'];
 
-    $programming = $programmingDao->findAllProgrammingByCompany($id_company);
-
-    if (sizeof($programming) == 0) {
-        $minDate = $dataProgramming['minDate'];
-    } else {
-        $minDate = $programming[0]['min_datetime'];
-    }
-
     $result = $programmingDao->insertProgrammingByCompany($dataProgramming, $id_company);
-
-    if ($result == null) {
-        $lastData = $lastDataDao->findLastInsertedProgramming($id_company);
-        $result = $generalProgrammingDao->setMinDateProgramming($lastData['id_programming'], $minDate);
-    }
 
     if ($result == null) {
         $order = $generalProgrammingDao->checkAccumulatedQuantityOrder($dataProgramming['order']);
@@ -188,12 +175,13 @@ $app->post('/addProgramming', function (Request $request, Response $response, $a
 
     // Calcular fecha y hora final
     if ($result == null) {
+        $lastData = $lastDataDao->findLastInsertedProgramming($id_company);
+
         $programming = $finalDateDao->calcFinalDateAndHourByProgramming($lastData['id_programming']);
         $programming['idProgramming'] = $lastData['id_programming'];
 
         $result = $generalProgrammingDao->updateFinalDateAndHour($programming);
     }
-
 
     if ($result == null)
         $resp = array('success' => true, 'message' => 'Programa de producción creado correctamente');
@@ -211,23 +199,9 @@ $app->post('/updateProgramming', function (Request $request, Response $response,
     $generalProgrammingDao,
     $generalOrdersDao
 ) {
-    session_start();
-    $id_company = $_SESSION['id_company'];
     $dataProgramming = $request->getParsedBody();
 
-    $programming = $programmingDao->findAllProgrammingByCompany($id_company);
-
-    if (sizeof($programming) == 0) {
-        $minDate = $dataProgramming['minDate'];
-    } else {
-        $minDate = $programming[0]['min_datetime'];
-    }
-
     $result = $programmingDao->updateProgramming($dataProgramming);
-
-    if ($result == null) {
-        $result = $generalProgrammingDao->setMinDateProgramming($dataProgramming['idProgramming'], $minDate);
-    }
 
     if ($result == null) {
         $order = $generalProgrammingDao->checkAccumulatedQuantityOrder($dataProgramming['order']);

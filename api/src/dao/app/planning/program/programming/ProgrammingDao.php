@@ -53,7 +53,9 @@ class ProgrammingDao
         $stmt = $connection->prepare("SELECT p.id_product, p.reference, p.product, p.quantity 
                                       FROM products p
                                       INNER JOIN plan_orders o ON o.id_product = p.id_product
-                                      WHERE o.num_order = :num_order AND o.status = 'Alistamiento' GROUP BY p.id_product");
+                                      WHERE o.num_order = :num_order AND o.status = 'Alistamiento' 
+                                      AND (o.accumulated_quantity IS NULL OR o.accumulated_quantity != 0)
+                                      GROUP BY p.id_product");
         $stmt->execute(['num_order' => $num_order]);
 
         $this->logger->info(__FUNCTION__, array('query' => $stmt->queryString, 'errors' => $stmt->errorInfo()));
@@ -67,7 +69,7 @@ class ProgrammingDao
         $connection = Connection::getInstance()->getConnection();
 
         $stmt = $connection->prepare("SELECT pg.id_programming, o.id_order, o.num_order, o.date_order, o.original_quantity AS quantity_order, o.accumulated_quantity, pg.quantity AS quantity_programming, p.id_product, 
-                                             p.reference, p.product, m.id_machine, m.machine, c.client, pg.min_datetime, pm.hour_start, pg.max_date, pg.max_hour
+                                             p.reference, p.product, m.id_machine, m.machine, c.client, pg.min_date, pm.hour_start, pg.max_date, pg.max_hour
                                       FROM programming pg
                                         INNER JOIN plan_orders o ON o.id_order = pg.id_order
                                         INNER JOIN products p ON p.id_product = pg.id_product
@@ -91,14 +93,15 @@ class ProgrammingDao
             $quantity = str_replace('.', '', $dataProgramming['quantity']);
             $quantity = str_replace(',', '.', $quantity);
 
-            $stmt = $connection->prepare("INSERT INTO programming (id_company, id_order, id_product, id_machine, quantity)
-                                          VALUES (:id_company, :id_order, :id_product, :id_machine, :quantity)");
+            $stmt = $connection->prepare("INSERT INTO programming (id_company, id_order, id_product, id_machine, quantity, min_date)
+                                          VALUES (:id_company, :id_order, :id_product, :id_machine, :quantity, :min_date)");
             $stmt->execute([
                 'id_company' => $id_company,
                 'id_order' => $dataProgramming['order'],
                 'id_product' => $dataProgramming['idProduct'],
                 'id_machine' => $dataProgramming['idMachine'],
-                'quantity' => $quantity
+                'quantity' => $quantity,
+                'min_date' => $dataProgramming['minDate']
             ]);
         } catch (\Exception $e) {
             $message = $e->getMessage();
@@ -115,7 +118,7 @@ class ProgrammingDao
             $quantity = str_replace('.', '', $dataProgramming['quantity']);
             $quantity = str_replace(',', '.', $quantity);
 
-            $stmt = $connection->prepare("UPDATE programming SET id_order = :id_order, id_product = :id_product, id_machine = :id_machine, quantity = :quantity
+            $stmt = $connection->prepare("UPDATE programming SET id_order = :id_order, id_product = :id_product, id_machine = :id_machine, quantity = :quantity, min_date = :min_date
                                           WHERE id_programming = :id_programming");
             $stmt->execute([
                 'id_programming' => $dataProgramming['idProgramming'],
@@ -123,6 +126,7 @@ class ProgrammingDao
                 'id_product' => $dataProgramming['idProduct'],
                 'id_machine' => $dataProgramming['idMachine'],
                 'quantity' => $quantity,
+                'min_date' => $dataProgramming['minDate']
             ]);
         } catch (\Exception $e) {
             $message = $e->getMessage();

@@ -11,8 +11,7 @@ function dragover(e) {
   else e.target.parentNode.before(shadow);
 }*/
 $(document).ready(function () {
-  sessionStorage.removeItem('id_programming');
-  sessionStorage.removeItem('minDate');
+  sessionStorage.removeItem('id_programming'); 
   
   $('#searchMachine').change(function (e) { 
     e.preventDefault();
@@ -20,14 +19,11 @@ $(document).ready(function () {
     loadTblProgramming(this.value);
   });
   
-  loadTblProgramming = async (machine) => {
-    sessionStorage.removeItem('opProgramming');
+  loadTblProgramming = async (machine) => { 
     let data;
 
     if (machine == 0) {
       data = await searchData('/api/programming');
-      if (data.length > 0)
-        sessionStorage.setItem('opProgramming', 1);
     }
     else
       data = await searchData(`/api/programmingByMachine/${machine}`);
@@ -98,32 +94,22 @@ $(document).ready(function () {
         // },
         {
           title: 'Fecha Inicio',
-          data: 'min_datetime',
+          data: null,
           className: 'uniqueClassName',
-        },
-        {
-          title: 'Hora Inicio',
-          data: 'hour_start',
-          className: 'text-center',
-          render: function (data) {
-            let hourStart = moment(data, ['HH:mm']).format('h:mm A');
-            return `<p>${hourStart}</p>`;
+          render: function (data) { 
+            let hourStart = moment(data.hour_start, ['HH:mm']).format('h:mm A');
+            return `<p>${data.min_date}</p><p>${hourStart}</p>`;
           },
-        },
+        }, 
         {
           title: 'Fecha Final',
-          data: 'max_date',
+          data: null,
           className: 'uniqueClassName',
-        },
-        {
-          title: 'Hora Final',
-          data: 'max_hour',
-          className: 'text-center',
           render: function (data) {
-            let max_hour = moment(data, ['HH:mm']).format('h:mm A');
-            return `<p>${max_hour}</p>`;
+            let hourStart = moment(data.max_hour, ['HH:mm']).format('h:mm A');
+            return `<p>${data.max_date}</p><p>${hourStart}</p>`;
           },
-        },
+        }, 
         {
           title: 'Acciones',
           data: 'id_programming',

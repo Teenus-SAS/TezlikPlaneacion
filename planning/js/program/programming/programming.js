@@ -13,209 +13,23 @@ $(document).ready(function () {
 
   $('#btnNewProgramming').click(async function (e) {
     e.preventDefault();
-
-    let cardCreateProgramming = $('.cardCreateProgramming').css('display');
-
-    if (cardCreateProgramming == 'none') {
-
-      let resp = await loadOrdersProgramming();
-      
-      if (resp) {
-        toastr.error('Todos los pedidos se encuentran programados');
-        return false;
-      }
-
-      let op = sessionStorage.getItem('opProgramming');
-
-      if (op) {
-        $('.cardCreateProgramming').show(800);
-        $('#btnCreateProgramming').html('Crear');
-        $('#formCreateProgramming').trigger('reset');
-      } else {
-        bootbox.confirm({
-          title: 'Ingrese Fecha De Inicio!',
-          message: `<div class="col-sm-12 floating-label enable-floating-label">
-                        <input class="form-control" type="datetime-local" name="date" id="date"></input>
-                        <label for="date">Fecha</span></label>
-                      </div>`,
-          buttons: {
-            confirm: {
-              label: 'Agregar',
-              className: 'btn-success',
-            },
-            cancel: {
-              label: 'Cancelar',
-              className: 'btn-danger',
-            },
-          },
-          callback: function (result) {
-            if (result == true) {
-              let date = $('#date').val();
-
-              if (!date) {
-                toastr.error('Ingrese los campos');
-                return false;
-              }
-
-              sessionStorage.setItem('minDate', date);
-
-              $('.cardCreateProgramming').show(800);
-              $('#btnCreateProgramming').html('Crear');
-              $('#formCreateProgramming').trigger('reset');
-            }
-          },
-        });
-      }
-    } else {
-      $('.cardCreateProgramming').hide(800);
-      $('#formCreateProgramming').trigger('reset');
-    }
-  });
-
-  /* Cargar datos generales 
-  generalData = async () => {
-    await $.ajax({
-      url: '/api/generalData',
-      success: function (r) {
-        let $select = $(`#idMachine`);
-        $select.empty();
-
-        $select.append(`<option disabled selected>Seleccionar</option>`);
-        $.each(r.machines, function (i, value) {
-          $select.append(
-            `<option value = ${value.id_machine}> ${value.machine} </option>`
-          );
-        });
-
-        let $select1 = $(`#order`);
-        $select1.empty();
-
-        $select1.append(`<option disabled selected>Seleccionar</option>`);
-        $.each(r.orders, function (i, value) {
-          $select1.append(
-            `<option value = ${value.id_order}> ${value.num_order} </option>`
-          );
-        });
-
-        let $select2 = $(`#refProduct`);
-        $select2.empty();
-
-        $select2.append(`<option disabled selected>Seleccionar</option>`);
-        $.each(r.products, function (i, value) {
-          $select2.append(
-            `<option value = ${value.id_product}> ${value.reference} </option>`
-          );
-        });
-
-        let $select3 = $(`#selectNameProduct`);
-        $select3.empty();
-
-        $select3.append(`<option disabled selected>Seleccionar</option>`);
-        $.each(r.products, function (i, value) {
-          $select3.append(
-            `<option value = ${value.id_product}> ${value.product} </option>`
-          );
-        });
-      },
-    });
-  };
-
-  // Crear nueva programa de producción
-  $('#btnCreateProgramming').click(function (e) {
-    e.preventDefault();
-    idMachine = parseInt($('#idMachine').val());
-    idOrder = parseInt($('#order').val());
-    idProduct = parseInt($('#selectNameProduct').val());
-    quantity = $('#quantity').val();
-
-    data = idMachine * idOrder * idProduct;
-
-    if (!data || data == 0 || quantity == '') {
-      toastr.error('Ingrese todos los campos');
-      // generalData();
+    let resp = await loadOrdersProgramming();
+    
+    if (resp) {
+      toastr.error('Todos los pedidos se encuentran programados');
       return false;
     }
-    programming = $('#formCreateProgramming').serialize();
 
-    // Validar si existe tabla de programacion maquinas
-    $.post('/api/dateMachine', programming, function (data) {
-      if (data.error) {
-        toastr.error(data.message);
-        return false;
-      } else {
-        if (data.existing) {
-          saveProgramming(programming);
-          return false;
-        }
-        if (data.nonExisting) setStartDate(programming);
-      }
-    });
-  });
-
-  // Ingresar fecha de inicio
-  setStartDate = (programming) => {
-    bootbox.prompt({
-      title: 'Programación',
-      message: '<p>Ingrese fecha de inicio:</p>',
-      inputType: 'date',
-      callback: function (result) {
-        if (result != null) {
-          if (!result || result == '') {
-            toastr.error('Ingrese fecha de inicio');
-            return false;
-          }
-          programming = programming + `&startDate= ${result}`;
-          saveProgramming(programming);
-        }
-      },
-    });
-  };
-
-  // Guardar programa de producción a la tabla
-  saveProgramming = (programming) => {
-    machine = $('#idMachine').find('option:selected').text();
-    numOrder = $('#order').find('option:selected').text();
-    refProduct = $('#refProduct').find('option:selected').text();
-    product = $('#selectNameProduct').find('option:selected').text();
-
-    // Obtener información
-    $.post(
-      '/api/getProgrammingInfo',
-      programming,
-      function (data, textStatus, jqXHR) {
-        $('.colProgramming').append(`
-          <tr draggable="true" ondragstart="dragit(event)" ondragover="dragover(event)">
-          <td>${numOrder}</td>
-          <td>${refProduct}</td>
-          <td>${product}</td>
-          <td>${data.order.original_quantity}</td>
-          <td>${data.order.quantity}</td>
-          <td>${quantity}</td>
-          <td>${data.order.client}</td>
-          <td>${data.economicLot.toFixed(2)}</td>
-          <td>${data.datesMachines.start_dat}</td>
-          <td>${data.datesMachines.final_date}</td>
-          </tr>`);
-
-        message();
-      }
-    );
-  };
-
-  // Mensaje de exito
-  message = () => {
-    $('.cardCreateProgramming').hide(800);
+    $('.cardCreateProgramming').show(800);
+    $('#btnCreateProgramming').html('Crear');
     $('#formCreateProgramming').trigger('reset');
-    toastr.success('Programación creada correctamente');
-    return false;
-  };
-
-  */
+     
+  });
 
   /* Crear nuevo programa de produccion */
   $('#btnCreateProgramming').click(function (e) {
     e.preventDefault();
-    let idProgramming = sessionStorage.getItem('id_programming');
+    let idProgramming = sessionStorage.getItem('id_programming'); 
 
     if (idProgramming == '' || idProgramming == null) {
       checkdataProgramming('/api/addProgramming', idProgramming);
@@ -281,18 +95,86 @@ $(document).ready(function () {
     // dataProgramming.append('order', order);
     // dataProgramming.append('accumulatedQuantity', accumulated_quantity);
     
-    let dataProgramming = new FormData(formCreateProgramming);
-    let min_datetime = sessionStorage.getItem('minDate');
+    dataProgramming = new FormData(formCreateProgramming);
 
-    if (min_datetime != '' || min_datetime != null)
-      dataProgramming.append('minDate', min_datetime);
+    let machines = await searchData(`/api/programmingByMachine/${machine}`);
 
-    if (idProgramming != '' || idProgramming != null)
-      dataProgramming.append('idProgramming', idProgramming);
+    if (machines.length > 0) {
+      let data = tblProgramming.fnGetData(tblProgramming.fnSettings().aoData.length - 1);
+      dataProgramming.append('minDate', data.min_date);
 
-    let resp = await sendDataPOST(url, dataProgramming);
+      if (idProgramming != '' || idProgramming != null)
+        dataProgramming.append('idProgramming', idProgramming);
+              
+      $.ajax({
+        type: "POST",
+        url: url,
+        data: dataProgramming,
+        contentType: false,
+        cache: false,
+        processData: false,
+        success: function (resp) {
+          message(resp)
+        }
+      });
+    } else {
+      bootbox.confirm({
+        title: 'Ingrese Fecha De Inicio!',
+        message: `<div class="col-sm-12 floating-label enable-floating-label">
+                        <input class="form-control" type="date" name="date" id="date"></input>
+                        <label for="date">Fecha</span></label>
+                      </div>`,
+        buttons: {
+          confirm: {
+            label: 'Agregar',
+            className: 'btn-success',
+          },
+          cancel: {
+            label: 'Cancelar',
+            className: 'btn-danger',
+          },
+        },
+        callback: function (result) {
+          if (result == true) {
+            let date = $('#date').val();
 
-    message(resp);
+            if (!date) {
+              toastr.error('Ingrese los campos');
+              return false;
+            }
+
+            dataProgramming.append('minDate', date);
+
+            if (idProgramming != '' || idProgramming != null)
+              dataProgramming.append('idProgramming', idProgramming);
+              
+            $.ajax({
+              type: "POST",
+              url: url,
+              data: dataProgramming,
+              contentType: false,
+              cache: false,
+              processData: false,
+              success: function (resp) {
+                message(resp)
+              }
+            });
+          }
+        },
+      });
+    }
+
+    // let min_date = sessionStorage.getItem('minDate');
+
+    // if (min_date != '' || min_date != null)
+    //   dataProgramming.append('minDate', min_date);
+
+    // if (idProgramming != '' || idProgramming != null)
+    //   dataProgramming.append('idProgramming', idProgramming);
+
+    // let resp = await sendDataPOST(url, dataProgramming);
+
+    // message(resp);
   };
 
   /* Eliminar programa de produccion */
