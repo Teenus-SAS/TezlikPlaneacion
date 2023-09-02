@@ -43,7 +43,7 @@ class FinalDateDao
                                           FROM programming pg
                                             LEFT JOIN plan_orders o ON o.id_order = pg.id_order
                                             LEFT JOIN plan_program_machines pm ON pm.id_machine = pg.id_machine
-                                            LEFT JOIN plan_cicles_machine cm ON cm.id_machine = pg.id_machine
+                                            LEFT JOIN plan_cicles_machine cm ON cm.id_product = pg.id_product AND cm.id_machine = pg.id_machine
                                           WHERE pg.id_programming = :id_programming");
             $stmt->execute(['id_programming' => $id_programming]);
             $this->logger->info(__FUNCTION__, array('query' => $stmt->queryString, 'errors' => $stmt->errorInfo()));

@@ -102,7 +102,8 @@ use Psr\Http\Message\ServerRequestInterface as Request;
 $app->get('/programming', function (Request $request, Response $response, $args) use (
     $programmingDao,
     $generalProgrammingDao,
-    $generalOrdersDao
+    $generalOrdersDao,
+    $finalDateDao
 ) {
     session_start();
     $id_company = $_SESSION['id_company'];
@@ -118,6 +119,11 @@ $app->get('/programming', function (Request $request, Response $response, $args)
             $dataProgramming['accumulatedQuantity'] = 0;
 
         $generalOrdersDao->updateAccumulatedOrder($dataProgramming);
+
+        $arr = $finalDateDao->calcFinalDateAndHourByProgramming($programming[$i]['id_programming']);
+        $arr['idProgramming'] = $programming[$i]['id_programming'];
+
+        $generalProgrammingDao->updateFinalDateAndHour($arr);
     }
 
     $response->getBody()->write(json_encode($programming, JSON_NUMERIC_CHECK));
@@ -197,7 +203,8 @@ $app->post('/addProgramming', function (Request $request, Response $response, $a
 $app->post('/updateProgramming', function (Request $request, Response $response, $args) use (
     $programmingDao,
     $generalProgrammingDao,
-    $generalOrdersDao
+    $generalOrdersDao,
+    $finalDateDao
 ) {
     $dataProgramming = $request->getParsedBody();
 
@@ -212,6 +219,14 @@ $app->post('/updateProgramming', function (Request $request, Response $response,
             $dataProgramming['accumulatedQuantity'] = 0;
 
         $result = $generalOrdersDao->updateAccumulatedOrder($dataProgramming);
+    }
+
+    // Calcular fecha y hora final
+    if ($result == null) {
+        $programming = $finalDateDao->calcFinalDateAndHourByProgramming($dataProgramming['idProgramming']);
+        $programming['idProgramming'] = $dataProgramming['idProgramming'];
+
+        $result = $generalProgrammingDao->updateFinalDateAndHour($programming);
     }
 
     if ($result == null)

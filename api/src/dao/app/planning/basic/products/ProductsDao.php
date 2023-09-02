@@ -36,13 +36,16 @@ class ProductsDao
     $connection = Connection::getInstance()->getConnection();
 
     try {
+      $quantity = str_replace('.', '', $dataProduct['quantity']);
+      $quantity = str_replace(',', '.', $quantity);
+
       $stmt = $connection->prepare("INSERT INTO products (id_company, reference, product, quantity) 
                                       VALUES(:id_company, :reference, :product, :quantity)");
       $stmt->execute([
         'reference' => trim($dataProduct['referenceProduct']),
         'product' => strtoupper(trim($dataProduct['product'])),
         'id_company' => $id_company,
-        'quantity' => $dataProduct['quantity'],
+        'quantity' => $quantity,
       ]);
       $this->logger->info(__FUNCTION__, array('query' => $stmt->queryString, 'errors' => $stmt->errorInfo()));
     } catch (\Exception $e) {
@@ -61,13 +64,16 @@ class ProductsDao
     $connection = Connection::getInstance()->getConnection();
 
     try {
+      $quantity = str_replace('.', '', $dataProduct['quantity']);
+      $quantity = str_replace(',', '.', $quantity);
+
       $stmt = $connection->prepare("UPDATE products SET reference = :reference, product = :product, quantity = :quantity 
                                     WHERE id_product = :id_product AND id_company = :id_company");
       $stmt->execute([
         'reference' => trim($dataProduct['referenceProduct']),
         'product' => strtoupper(trim($dataProduct['product'])),
         'id_company' => $id_company,
-        'quantity' => $dataProduct['quantity'],
+        'quantity' => $quantity,
         'id_product' => $dataProduct['idProduct'],
       ]);
       $this->logger->info(__FUNCTION__, array('query' => $stmt->queryString, 'errors' => $stmt->errorInfo()));

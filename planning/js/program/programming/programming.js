@@ -45,18 +45,22 @@ $(document).ready(function () {
     $('#btnCreateProgramming').html('Actualizar');
 
     let row = $(this).parent().parent()[0];
+    // i = row.rowIndex;
     let data = tblProgramming.fnGetData(row);
 
     sessionStorage.setItem('id_programming', data.id_programming);
     $('#order').empty();
     $('#order').append(`<option disabled>Seleccionar</option>`);
     $('#order').append(
-      `<option value ='${data.id_order} ${data.quantity_order}' selected> ${data.num_order} </option>`
+      `<option value ='${data.id_order}' selected> ${data.num_order} </option>`
+    );
+    $('#selectNameProduct').empty();
+    $('#selectNameProduct').append(`<option disabled>Seleccionar</option>`);
+    $('#selectNameProduct').append(
+      `<option value ='${data.id_product}' selected> ${data.product} </option>`
     );
     
-    await loadProducts(data.num_order);
-
-    $(`#selectNameProduct option[value=${data.id_product}]`).prop('selected', true);
+    // await loadProducts(data.num_order);
 
     $(`#idMachine option[value=${data.id_machine}]`).prop('selected', true);
 
@@ -100,11 +104,10 @@ $(document).ready(function () {
     let machines = await searchData(`/api/programmingByMachine/${machine}`);
 
     if (machines.length > 0) {
-      let data = tblProgramming.fnGetData(tblProgramming.fnSettings().aoData.length - 1);
-      dataProgramming.append('minDate', data.min_date);
-
-      if (idProgramming != '' || idProgramming != null)
+      if (idProgramming)
         dataProgramming.append('idProgramming', idProgramming);
+      
+      dataProgramming.append('minDate', machines[machines.length - 1].max_date);
               
       $.ajax({
         type: "POST",
@@ -162,19 +165,7 @@ $(document).ready(function () {
           }
         },
       });
-    }
-
-    // let min_date = sessionStorage.getItem('minDate');
-
-    // if (min_date != '' || min_date != null)
-    //   dataProgramming.append('minDate', min_date);
-
-    // if (idProgramming != '' || idProgramming != null)
-    //   dataProgramming.append('idProgramming', idProgramming);
-
-    // let resp = await sendDataPOST(url, dataProgramming);
-
-    // message(resp);
+    } 
   };
 
   /* Eliminar programa de produccion */
