@@ -4,8 +4,8 @@ $(document).ready(function () {
   $(document).on('change', '#order', function (e) {
     e.preventDefault();
 
-       let num_order = $('#order :selected').text().trim();
-        loadProducts(num_order);
+    let num_order = $('#order :selected').text().trim();
+    loadProducts(num_order);
   });
 
   /* Cargar Pedidos y Productos 
@@ -90,25 +90,27 @@ $(document).ready(function () {
   /* Cargar Productos y Maquinas */
   loadProducts = async (num_order) => {
     let r = await searchData(`/api/programming/${num_order}`);
-    
-        let $select = $(`#selectNameProduct`);
-        $select.empty();
 
-        $select.append(`<option disabled selected>Seleccionar</option>`);
-        $.each(r, function (i, value) {
-          $select.append(
-            `<option value = ${value.id_product}> ${value.product} </option>`
-          );
-          $(`#selectNameProduct option[value=${value.id_product}]`).prop(
-            'selected',
-            true
-          );
-          // Obtener referencia producto
-          $(`#refProduct option[value=${value.id_product}]`).prop(
-            'selected',
-            true
-          );
-        });
+    $('#quantityOrder').val(r[0].original_quantity.toLocaleString());
+    
+    let $select = $(`#selectNameProduct`);
+    $select.empty();
+
+    $select.append(`<option disabled selected>Seleccionar</option>`);
+    $.each(r, function (i, value) {
+      $select.append(
+        `<option value = ${value.id_product}> ${value.product} </option>`
+      );
+      $(`#selectNameProduct option[value=${value.id_product}]`).prop(
+        'selected',
+        true
+      );
+      // Obtener referencia producto
+      $(`#refProduct option[value=${value.id_product}]`).prop(
+        'selected',
+        true
+      );
+    });
       
   };
 });

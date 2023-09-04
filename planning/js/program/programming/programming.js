@@ -53,12 +53,13 @@ $(document).ready(function () {
     $('#order').append(`<option disabled>Seleccionar</option>`);
     $('#order').append(
       `<option value ='${data.id_order}' selected> ${data.num_order} </option>`
-    );
-    $('#selectNameProduct').empty();
-    $('#selectNameProduct').append(`<option disabled>Seleccionar</option>`);
-    $('#selectNameProduct').append(
-      `<option value ='${data.id_product}' selected> ${data.product} </option>`
-    );
+      );
+      $('#selectNameProduct').empty();
+      $('#selectNameProduct').append(`<option disabled>Seleccionar</option>`);
+      $('#selectNameProduct').append(
+        `<option value ='${data.id_product}' selected> ${data.product} </option>`
+        );
+    $('#quantityOrder').val(data.quantity_order.toLocaleString());
     
     // await loadProducts(data.num_order);
 
@@ -101,7 +102,12 @@ $(document).ready(function () {
     
     dataProgramming = new FormData(formCreateProgramming);
 
-    let machines = await searchData(`/api/programmingByMachine/${machine}`);
+    let machines = await searchData(`/api/programmingByMachine/${machine}/${product}`);
+
+    if (machines == 1) {
+      toastr.error('Ciclo de maquina no existe para ese producto');
+      return false;
+    }
 
     if (machines.length > 0) {
       if (idProgramming)

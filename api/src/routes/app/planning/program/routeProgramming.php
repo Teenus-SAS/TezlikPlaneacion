@@ -5,6 +5,7 @@ use TezlikPlaneacion\dao\ProgrammingDao;
 use TezlikPlaneacion\dao\DatesMachinesDao;
 use TezlikPlaneacion\dao\FinalDateDao;
 use TezlikPlaneacion\dao\GeneralOrdersDao;
+use TezlikPlaneacion\dao\GeneralPlanCiclesMachinesDao;
 use TezlikPlaneacion\dao\GeneralProgrammingDao;
 use TezlikPlaneacion\dao\LastDataDao;
 use TezlikPlaneacion\dao\LotsProductsDao;
@@ -21,6 +22,7 @@ $productsDao = new ProductsDao();
 $datesMachinesDao = new DatesMachinesDao();
 $finalDateDao = new FinalDateDao();
 $economicLotDao = new LotsProductsDao();
+$generalPlanCiclesMachinesDao = new GeneralPlanCiclesMachinesDao();
 
 use Psr\Http\Message\ResponseInterface as Response;
 use Psr\Http\Message\ServerRequestInterface as Request;
@@ -137,10 +139,18 @@ $app->get('/programming/{num_order}', function (Request $request, Response $resp
     return $response->withHeader('Content-Type', 'application/json');
 });
 
-$app->get('/programmingByMachine/{id_machine}', function (Request $request, Response $response, $args) use ($generalProgrammingDao) {
+$app->get('/programmingByMachine/{id_machine}/{id_product}', function (Request $request, Response $response, $args) use (
+    $generalProgrammingDao,
+    $generalPlanCiclesMachinesDao
+) {
     session_start();
     $id_company = $_SESSION['id_company'];
     $programming = $generalProgrammingDao->findAllProgrammingByMachine($args['id_machine'], $id_company);
+
+    $planCiclesMachines = $generalPlanCiclesMachinesDao->findPlanCiclesMachineByProductAndMachine($args['id_product'], $args['id_machine'], $id_company);
+
+    if (!$planCiclesMachines) $programming = 1;
+
     $response->getBody()->write(json_encode($programming, JSON_NUMERIC_CHECK));
     return $response->withHeader('Content-Type', 'application/json');
 });
