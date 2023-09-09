@@ -57,6 +57,20 @@ class GeneralProgrammingDao
         return $orders;
     }
 
+    public function findLastProgrammingByMachine($id_machine)
+    {
+        $connection = Connection::getInstance()->getConnection();
+
+        $stmt = $connection->prepare("SELECT * FROM programming WHERE id_machine = :id_machine");
+        $stmt->execute([
+            'id_machine' => $id_machine
+        ]);
+        $this->logger->info(__FUNCTION__, array('query' => $stmt->queryString, 'errors' => $stmt->errorInfo()));
+
+        $programming = $stmt->fetch($connection::FETCH_ASSOC);
+        return $programming;
+    }
+
     public function checkAccumulatedQuantityOrder($id_order)
     {
         $connection = Connection::getInstance()->getConnection();

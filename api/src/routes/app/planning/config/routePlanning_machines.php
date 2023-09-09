@@ -21,6 +21,15 @@ $app->get('/planningMachines', function (Request $request, Response $response, $
     return $response->withHeader('Content-Type', 'application/json');
 });
 
+$app->get('/planningMachine/{id_machine}', function (Request $request, Response $response, $args) use ($generalPlanningMachinesDao) {
+    session_start();
+    $id_company = $_SESSION['id_company'];
+    $data['idMachine'] = $args['id_machine'];
+    $planningMachines = $generalPlanningMachinesDao->findPlanMachines($data, $id_company);
+    $response->getBody()->write(json_encode($planningMachines, JSON_NUMERIC_CHECK));
+    return $response->withHeader('Content-Type', 'application/json');
+});
+
 $app->post('/planningMachinesDataValidation', function (Request $request, Response $response, $args) use (
     $planningMachinesDao,
     $generalPlanningMachinesDao,

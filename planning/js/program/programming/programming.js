@@ -88,17 +88,6 @@ $(document).ready(function () {
       toastr.error('Ingrese todos los campos');
       return false;
     }
-
-    // let quantityOrder = parseInt(getLastText(order));
-    // order = parseInt(order);
-    // let accumulated_quantity = 0;
-
-    // if (quantity < quantityOrder)
-    //   accumulated_quantity = quantityOrder - quantity;
-
-    
-    // dataProgramming.append('order', order);
-    // dataProgramming.append('accumulatedQuantity', accumulated_quantity);
     
     dataProgramming = new FormData(formCreateProgramming);
 
@@ -114,6 +103,12 @@ $(document).ready(function () {
         dataProgramming.append('idProgramming', idProgramming);
       
       dataProgramming.append('minDate', machines[machines.length - 1].max_date);
+
+      let order = await searchData(`/api/order/${order}`);
+      let planningMachine = await searchData(`/api/planningMachine/${machine}`);
+      let ciclesMachine = await searchData(`/api/planCiclesMachine/${product}/${machine}`);
+
+      let max_hour = (order.original_quantity / ciclesMachine.cicles_hour) - ((order.original_quantity / ciclesMachine.cicles_hour / planningMachine.hours_day) * planningMachine.hours_day) + last_hour;
               
       $.ajax({
         type: "POST",

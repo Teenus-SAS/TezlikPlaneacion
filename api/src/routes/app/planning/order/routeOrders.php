@@ -56,6 +56,15 @@ $app->get('/orders', function (Request $request, Response $response, $args) use 
     return $response->withHeader('Content-Type', 'application/json');
 });
 
+$app->get('/orders/{id_order}', function (Request $request, Response $response, $args) use ($generalOrdersDao) {
+    session_start();
+    $id_company = $_SESSION['id_company'];
+    $data['order'] = $args['id_order'];
+    $order = $generalOrdersDao->findOrdersByCompany($data, $id_company);
+    $response->getBody()->write(json_encode($order, JSON_NUMERIC_CHECK));
+    return $response->withHeader('Content-Type', 'application/json');
+});
+
 $app->post('/orderDataValidation', function (Request $request, Response $response, $args) use (
     $generalOrdersDao,
     $productsDao,

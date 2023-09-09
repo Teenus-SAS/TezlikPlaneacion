@@ -200,6 +200,10 @@ $app->post('/addProgramming', function (Request $request, Response $response, $a
     }
 
     if ($result == null)
+        $result = $generalOrdersDao->changeStatus($dataProgramming['order'], 'Programacion');
+
+
+    if ($result == null)
         $resp = array('success' => true, 'message' => 'Programa de producción creado correctamente');
     else if (isset($result['info']))
         $resp = array('info' => true, 'message' => $result['message']);
@@ -277,6 +281,9 @@ $app->post('/deleteProgramming', function (Request $request, Response $response,
             $result = $generalOrdersDao->updateAccumulatedOrder($dataProgramming);
         }
     }
+
+    if ($result == null)
+        $result = $generalOrdersDao->changeStatus($dataProgramming['order'], 'Alistamiento');
 
     if ($result == null)
         $resp = array('success' => true, 'message' => 'Programa de producción eliminado correctamente');
