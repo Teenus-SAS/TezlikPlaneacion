@@ -38,8 +38,10 @@ class FinalDateDao
             return $finalDate; 
         */
         try {
-            $stmt = $connection->prepare("SELECT IFNULL(((IFNULL((IFNULL(o.original_quantity, 0) / IFNULL(cm.cicles_hour, 0)), 0)) - (FLOOR(IFNULL((IFNULL(o.original_quantity, 0) / IFNULL(cm.cicles_hour, 0)) / IFNULL(pm.hours_day, 0), 0)) * IFNULL(pm.hours_day, 0)) + IF((SELECT id_programming FROM programming WHERE id_machine = pg.id_machine AND id_programming <= pg.id_programming LIMIT 1) = pg.id_programming, 0, (SELECT max_hour FROM programming WHERE id_machine = pg.id_machine AND id_programming < pg.id_programming LIMIT 1))), 0) AS final_hour,
-                                                 DATE_ADD(pg.min_date, INTERVAL IFNULL((IFNULL(o.original_quantity, 0) / IFNULL(cm.cicles_hour, 0)) / IFNULL(pm.hours_day, 0), 0) DAY) AS final_date, IF((SELECT id_programming FROM programming WHERE id_machine = pg.id_machine AND id_programming <= pg.id_programming LIMIT 1) = pg.id_programming, pg.max_hour, (SELECT max_hour FROM programming WHERE id_machine = pg.id_machine AND id_programming < pg.id_programming LIMIT 1)) AS last_hour
+            $stmt = $connection->prepare("SELECT 
+            IFNULL(((IFNULL((IFNULL(o.original_quantity, 0) / IFNULL(cm.cicles_hour, 0)), 0)) - (FLOOR(IFNULL((IFNULL(o.original_quantity, 0) / IFNULL(cm.cicles_hour, 0)) / IFNULL(pm.hours_day, 0), 0)) * IFNULL(pm.hours_day, 0)) + IF((SELECT id_programming FROM programming WHERE id_machine = pg.id_machine AND id_programming <= pg.id_programming LIMIT 1) = pg.id_programming, 0, (SELECT HOUR(pg.max_date) FROM programming WHERE id_machine = pg.id_machine AND id_programming < pg.id_programming LIMIT 1))), 0) AS final_hour,
+            DATE_ADD(pg.min_date, INTERVAL IFNULL((IFNULL(o.original_quantity, 0) / IFNULL(cm.cicles_hour, 0)) / IFNULL(pm.hours_day, 0), 0) DAY) AS final_date, 
+            IF((SELECT id_programming FROM programming WHERE id_machine = pg.id_machine AND id_programming <= pg.id_programming LIMIT 1) = pg.id_programming, pg.max_hour, (SELECT HOUR(pg.max_date) FROM programming WHERE id_machine = pg.id_machine AND id_programming < pg.id_programming LIMIT 1)) AS last_hour
                                           FROM programming pg
                                             LEFT JOIN plan_orders o ON o.id_order = pg.id_order
                                             LEFT JOIN plan_program_machines pm ON pm.id_machine = pg.id_machine

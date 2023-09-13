@@ -190,14 +190,14 @@ $app->post('/addProgramming', function (Request $request, Response $response, $a
     }
 
     // Calcular fecha y hora final
-    if ($result == null) {
-        $lastData = $lastDataDao->findLastInsertedProgramming($id_company);
+    // if ($result == null) {
+    //     $lastData = $lastDataDao->findLastInsertedProgramming($id_company);
 
-        $programming = $finalDateDao->calcFinalDateAndHourByProgramming($lastData['id_programming']);
-        $programming['idProgramming'] = $lastData['id_programming'];
+    //     $programming = $finalDateDao->calcFinalDateAndHourByProgramming($lastData['id_programming']);
+    //     $programming['idProgramming'] = $lastData['id_programming'];
 
-        $result = $generalProgrammingDao->updateFinalDateAndHour($programming);
-    }
+    //     $result = $generalProgrammingDao->updateFinalDateAndHour($programming);
+    // }
 
     if ($result == null)
         $result = $generalOrdersDao->changeStatus($dataProgramming['order'], 'Programacion');
@@ -236,12 +236,12 @@ $app->post('/updateProgramming', function (Request $request, Response $response,
     }
 
     // Calcular fecha y hora final
-    if ($result == null) {
-        $programming = $finalDateDao->calcFinalDateAndHourByProgramming($dataProgramming['idProgramming']);
-        $programming['idProgramming'] = $dataProgramming['idProgramming'];
+    // if ($result == null) {
+    //     $programming = $finalDateDao->calcFinalDateAndHourByProgramming($dataProgramming['idProgramming']);
+    //     $programming['idProgramming'] = $dataProgramming['idProgramming'];
 
-        $result = $generalProgrammingDao->updateFinalDateAndHour($programming);
-    }
+    //     $result = $generalProgrammingDao->updateFinalDateAndHour($programming);
+    // }
 
     if ($result == null)
         $resp = array('success' => true, 'message' => 'Programa de producción actualizado correctamente');

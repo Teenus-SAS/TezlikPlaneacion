@@ -13,17 +13,17 @@ $(document).ready(function () {
 
   $('#btnNewProgramming').click(async function (e) {
     e.preventDefault();
-    let resp = await loadOrdersProgramming();
+    let resp = await loadOrdersProgramming(); 
     
     if (resp) {
       toastr.error('Todos los pedidos se encuentran programados');
       return false;
     }
 
-    $('.cardCreateProgramming').show(800);
+    $('.cardCreateProgramming').toggle(800);
+    $('.cardCalcProgramming').hide();
     $('#btnCreateProgramming').html('Crear');
-    $('#formCreateProgramming').trigger('reset');
-     
+    $('#formCreateProgramming').trigger('reset'); 
   });
 
   /* Crear nuevo programa de produccion */
@@ -42,6 +42,7 @@ $(document).ready(function () {
 
   $(document).on('click', '.updateProgramming', async function (e) {
     $('.cardCreateProgramming').show(800);
+    $('.cardCalcProgramming').show(800);
     $('#btnCreateProgramming').html('Actualizar');
 
     let row = $(this).parent().parent()[0];
@@ -67,6 +68,11 @@ $(document).ready(function () {
 
     $('#quantity').val(data.quantity_programming);
 
+    $('#minDate').val(data.min_date);
+    $('#maxDate').val(data.max_date);
+
+    dataProgramming = new FormData(formCreateProgramming); 
+
     $('html, body').animate(
       {
         scrollTop: 0,
@@ -75,8 +81,10 @@ $(document).ready(function () {
     );
   });
 
-  /* Revision data programa de produccion */
-  checkdataProgramming = async (url, idProgramming) => {
+  $(document).on('keyup', '#quantity', async function () {
+    $('#minDate').val('');
+    $('#maxDate').val('');
+
     let order = parseFloat($('#order').val());
     let product = parseFloat($('#selectNameProduct').val());
     let machine = parseFloat($('#idMachine').val());
@@ -88,9 +96,9 @@ $(document).ready(function () {
       toastr.error('Ingrese todos los campos');
       return false;
     }
-    
-    dataProgramming = new FormData(formCreateProgramming);
 
+    dataProgramming = new FormData(formCreateProgramming);
+    
     let machines = await searchData(`/api/programmingByMachine/${machine}/${product}`);
 
     if (machines == 1) {
@@ -98,29 +106,11 @@ $(document).ready(function () {
       return false;
     }
 
-    if (machines.length > 0) {
-      if (idProgramming)
-        dataProgramming.append('idProgramming', idProgramming);
-      
+    if (machines.length > 0) { 
       dataProgramming.append('minDate', machines[machines.length - 1].max_date);
 
-      let order = await searchData(`/api/order/${order}`);
-      let planningMachine = await searchData(`/api/planningMachine/${machine}`);
-      let ciclesMachine = await searchData(`/api/planCiclesMachine/${product}/${machine}`);
-
-      let max_hour = (order.original_quantity / ciclesMachine.cicles_hour) - ((order.original_quantity / ciclesMachine.cicles_hour / planningMachine.hours_day) * planningMachine.hours_day) + last_hour;
-              
-      $.ajax({
-        type: "POST",
-        url: url,
-        data: dataProgramming,
-        contentType: false,
-        cache: false,
-        processData: false,
-        success: function (resp) {
-          message(resp)
-        }
-      });
+      let hour = new Date(machines[machines.length - 1].max_date).getHours();
+      calcMaxDate(machines[machines.length - 1].max_date, hour, 1);
     } else {
       bootbox.confirm({
         title: 'Ingrese Fecha De Inicio!',
@@ -148,25 +138,67 @@ $(document).ready(function () {
             }
 
             dataProgramming.append('minDate', date);
-
-            if (idProgramming != '' || idProgramming != null)
-              dataProgramming.append('idProgramming', idProgramming);
-              
-            $.ajax({
-              type: "POST",
-              url: url,
-              data: dataProgramming,
-              contentType: false,
-              cache: false,
-              processData: false,
-              success: function (resp) {
-                message(resp)
-              }
-            });
+            calcMaxDate(date, 0, 2);
           }
         },
       });
-    } 
+    }
+  });
+
+  calcMaxDate = async (min_date, last_hour, op) => {
+    let id_order = parseFloat($('#order').val());
+    let product = parseFloat($('#selectNameProduct').val());
+    let machine = parseFloat($('#idMachine').val());
+
+    let order = await searchData(`/api/orders/${id_order}`);
+    let planningMachine = await searchData(`/api/planningMachine/${machine}`);
+    let ciclesMachine = await searchData(`/api/planCiclesMachine/${product}/${machine}`);
+    
+    if (op == 2) {
+      min_date = `${min_date} ${planningMachine.hour_start}:00:00`;
+    }
+    
+    let days = Math.trunc((order.original_quantity / ciclesMachine.cicles_hour / planningMachine.hours_day));
+    let final_date = new Date(min_date);
+    
+    final_date.setDate(final_date.getDate() + days);
+    
+    let max_hour = (order.original_quantity / ciclesMachine.cicles_hour) - (days * planningMachine.hours_day) + last_hour;
+    final_date =
+      final_date.getFullYear() + "-" +
+      ("00" + (final_date.getMonth() + 1)).slice(-2) + "-" +
+      ("00" + final_date.getDate()).slice(-2) + " " + max_hour + ':' + '00' + ':' + '00';
+    dataProgramming.append('minDate', min_date);
+    dataProgramming.append('maxDate', final_date); 
+
+    // max_date = new Date(final_date).toISOString().split('T')[0];
+    // min_date = new Date(min_date).toISOString().split('T')[0];
+
+    let maxDate = document.getElementById('maxDate');
+    let minDate = document.getElementById('minDate');
+
+    maxDate.value = final_date;
+    minDate.value = min_date; 
+
+    $('.cardCalcProgramming').show(800);
+  };
+
+  /* Revision data programa de produccion */
+  checkdataProgramming = async (url, idProgramming) => {  
+    if (idProgramming)
+      dataProgramming.append('idProgramming', idProgramming);
+    
+    $.ajax({
+      type: "POST",
+      url: url,
+      data: dataProgramming,
+      contentType: false,
+      cache: false,
+      processData: false,
+      success: function (resp) {
+        message(resp)
+      }
+    });
   };
 
   /* Eliminar programa de produccion */

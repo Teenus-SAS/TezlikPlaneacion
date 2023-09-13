@@ -67,9 +67,9 @@ if (sizeof($_SESSION) == 0)
                     <div class="container-fluid">
                         <div class="row">
                             <div class="col-12">
-                                <div class="card">
-                                    <div class="card-body">
-                                        <form id="formCreateProgramming">
+                                <form id="formCreateProgramming">
+                                    <div class="card">
+                                        <div class="card-body">
                                             <div class="form-row">
                                                 <div class="col-sm-2 programmingSelect floating-label enable-floating-label show-label" id="orders">
                                                     <label for="">Pedido</label>
@@ -94,13 +94,27 @@ if (sizeof($_SESSION) == 0)
                                                     <label for="">Cantidad a Fabricar</label>
                                                     <input type="text" class="form-control text-center number" id="quantity" name="quantity">
                                                 </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="card cardCalcProgramming">
+                                        <div class="card-body">
+                                            <div class="form-row">
+                                                <div class="col-sm-2 floating-label enable-floating-label show-label">
+                                                    <label for="">Fecha Inicial</label>
+                                                    <input type="text" class="form-control text-center" id="minDate" name="minDate" readonly>
+                                                </div>
+                                                <div class="col-sm-2 floating-label enable-floating-label show-label">
+                                                    <label for="">Fecha Final</label>
+                                                    <input type="text" class="form-control text-center number" id="maxDate" name="maxDate" readonly>
+                                                </div>
                                                 <div class="col-sm mt-1">
                                                     <button class="btn btn-info" type="submit" id="btnCreateProgramming" name="btnCreateProgramming">Crear</button>
                                                 </div>
                                             </div>
-                                        </form>
+                                        </div>
                                     </div>
-                                </div>
+                                </form>
                             </div>
                         </div>
                     </div>
