@@ -5,16 +5,17 @@ $(document).ready(function () {
     id = this.value;
     $(`#refProduct option[value=${id}]`).prop('selected', true);
   });
-
+  
   /* Ocultar panel crear programa de producción */
   $('.cardCreateProgramming').hide();
-
+  
   /* Abrir panel crear programa de producción */
-
+  
   $('#btnNewProgramming').click(async function (e) {
     e.preventDefault();
     let resp = await loadOrdersProgramming(); 
     
+    sessionStorage.removeItem('minDate');
     if (resp) {
       toastr.error('Todos los pedidos se encuentran programados');
       return false;
@@ -81,7 +82,7 @@ $(document).ready(function () {
     );
   });
 
-  $(document).on('keyup', '#quantity', async function () {
+  $(document).on('blur', '#quantity', async function () {
     $('#minDate').val('');
     $('#maxDate').val('');
 
@@ -106,42 +107,49 @@ $(document).ready(function () {
       return false;
     }
 
-    if (machines.length > 0) { 
+    if (machines.length > 0) {
       dataProgramming.append('minDate', machines[machines.length - 1].max_date);
-
       let hour = new Date(machines[machines.length - 1].max_date).getHours();
       calcMaxDate(machines[machines.length - 1].max_date, hour, 1);
     } else {
-      bootbox.confirm({
-        title: 'Ingrese Fecha De Inicio!',
-        message: `<div class="col-sm-12 floating-label enable-floating-label">
+      let date = sessionStorage.getItem('minDate');
+
+      if (!date) {
+        bootbox.confirm({
+          title: 'Ingrese Fecha De Inicio!',
+          message: `<div class="col-sm-12 floating-label enable-floating-label">
                         <input class="form-control" type="date" name="date" id="date"></input>
                         <label for="date">Fecha</span></label>
                       </div>`,
-        buttons: {
-          confirm: {
-            label: 'Agregar',
-            className: 'btn-success',
+          buttons: {
+            confirm: {
+              label: 'Agregar',
+              className: 'btn-success',
+            },
+            cancel: {
+              label: 'Cancelar',
+              className: 'btn-danger',
+            },
           },
-          cancel: {
-            label: 'Cancelar',
-            className: 'btn-danger',
-          },
-        },
-        callback: function (result) {
-          if (result == true) {
-            let date = $('#date').val();
+          callback: function (result) {
+            if (result == true) {
+              let date = $('#date').val();
 
-            if (!date) {
-              toastr.error('Ingrese los campos');
-              return false;
+              if (!date) {
+                toastr.error('Ingrese los campos');
+                return false;
+              }
+
+              sessionStorage.setItem('minDate', date);
+              dataProgramming.append('minDate', date);
+              calcMaxDate(date, 0, 2);
             }
-
-            dataProgramming.append('minDate', date);
-            calcMaxDate(date, 0, 2);
-          }
-        },
-      });
+          },
+        });
+      } else { 
+        dataProgramming.append('minDate', date);
+        calcMaxDate(date, 0, 2);
+      }
     }
   });
 
@@ -158,7 +166,7 @@ $(document).ready(function () {
       min_date = `${min_date} ${planningMachine.hour_start}:00:00`;
     }
     
-    let days = Math.trunc((order.original_quantity / ciclesMachine.cicles_hour / planningMachine.hours_day));
+    let days = Math.trunc((order.original_quantity / ciclesMachine.cicles_hour / planningMachine.hours_day)) + 1;
     let final_date = new Date(min_date);
     
     final_date.setDate(final_date.getDate() + days);

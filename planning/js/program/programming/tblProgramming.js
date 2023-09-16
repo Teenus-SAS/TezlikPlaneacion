@@ -108,7 +108,7 @@ $(document).ready(function () {
           data: null,
           className: 'uniqueClassName',
           render: function (data) {
-            let max_date = getFirstText(data.min_date);
+            let max_date = getFirstText(data.max_date);
 
             let hourStart = moment(data.max_hour, ['HH:mm']).format('h:mm A');
             return `<p>${max_date}</p><p>${hourStart}</p>`;
