@@ -122,10 +122,10 @@ $app->get('/programming', function (Request $request, Response $response, $args)
 
         $generalOrdersDao->updateAccumulatedOrder($dataProgramming);
 
-        $arr = $finalDateDao->calcFinalDateAndHourByProgramming($programming[$i]['id_programming']);
-        $arr['idProgramming'] = $programming[$i]['id_programming'];
+        // $arr = $finalDateDao->calcFinalDateAndHourByProgramming($programming[$i]['id_programming']);
+        // $arr['idProgramming'] = $programming[$i]['id_programming'];
 
-        $generalProgrammingDao->updateFinalDateAndHour($arr);
+        // $generalProgrammingDao->updateFinalDateAndHour($arr);
     }
 
     $response->getBody()->write(json_encode($programming, JSON_NUMERIC_CHECK));
