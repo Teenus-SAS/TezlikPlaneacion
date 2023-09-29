@@ -19,10 +19,9 @@ $(document).ready(function () {
     if (resp) {
       toastr.error('Todos los pedidos se encuentran programados');
       return false;
-    }
-
-    $('.cardCreateProgramming').toggle(800);
-    $('.cardCalcProgramming').hide();
+    } 
+    $('#selectNameProduct').empty();
+    $('.cardCreateProgramming').toggle(800); 
     $('#btnCreateProgramming').html('Crear');
     $('#formCreateProgramming').trigger('reset'); 
   });
@@ -42,8 +41,7 @@ $(document).ready(function () {
   /* Actualizar programa de produccion */
 
   $(document).on('click', '.updateProgramming', async function (e) {
-    $('.cardCreateProgramming').show(800);
-    $('.cardCalcProgramming').show(800);
+    $('.cardCreateProgramming').show(800); 
     $('#btnCreateProgramming').html('Actualizar');
 
     let row = $(this).parent().parent()[0];
@@ -82,81 +80,15 @@ $(document).ready(function () {
     );
   });
 
-  $(document).on('blur', '#quantity', async function () {
-    $('#minDate').val('');
-    $('#maxDate').val('');
-
-    let order = parseFloat($('#order').val());
-    let product = parseFloat($('#selectNameProduct').val());
-    let machine = parseFloat($('#idMachine').val());
-    let quantity = parseFloat($('#quantity').val());
-    
-    let data = order * product * machine * quantity;
-    
-    if (isNaN(data) || data <= 0) {
-      toastr.error('Ingrese todos los campos');
-      return false;
-    }
-
-    dataProgramming = new FormData(formCreateProgramming);
-    
-    let machines = await searchData(`/api/programmingByMachine/${machine}/${product}`);
-
-    if (machines == 1) {
-      toastr.error('Ciclo de maquina no existe para ese producto');
-      return false;
-    }
-
-    if (machines.length > 0) {
-      dataProgramming.append('minDate', machines[machines.length - 1].max_date);
-      let hour = new Date(machines[machines.length - 1].max_date).getHours();
-      calcMaxDate(machines[machines.length - 1].max_date, hour, 1);
-    } else {
-      let date = sessionStorage.getItem('minDate');
-
-      if (!date) {
-        bootbox.confirm({
-          title: 'Ingrese Fecha De Inicio!',
-          message: `<div class="col-sm-12 floating-label enable-floating-label">
-                        <input class="form-control" type="date" name="date" id="date"></input>
-                        <label for="date">Fecha</span></label>
-                      </div>`,
-          buttons: {
-            confirm: {
-              label: 'Agregar',
-              className: 'btn-success',
-            },
-            cancel: {
-              label: 'Cancelar',
-              className: 'btn-danger',
-            },
-          },
-          callback: function (result) {
-            if (result == true) {
-              let date = $('#date').val();
-
-              if (!date) {
-                toastr.error('Ingrese los campos');
-                return false;
-              }
-
-              sessionStorage.setItem('minDate', date);
-              dataProgramming.append('minDate', date);
-              calcMaxDate(date, 0, 2);
-            }
-          },
-        });
-      } else { 
-        dataProgramming.append('minDate', date);
-        calcMaxDate(date, 0, 2);
-      }
-    }
+  $(document).on('blur', '#quantity', function () {
+    checkData();
   });
 
   calcMaxDate = async (min_date, last_hour, op) => {
     let id_order = parseFloat($('#order').val());
     let product = parseFloat($('#selectNameProduct').val());
     let machine = parseFloat($('#idMachine').val());
+    let quantity = parseFloat($('#quantity').val());
 
     let order = await searchData(`/api/orders/${id_order}`);
     let planningMachine = await searchData(`/api/planningMachine/${machine}`);
@@ -176,6 +108,9 @@ $(document).ready(function () {
       final_date.getFullYear() + "-" +
       ("00" + (final_date.getMonth() + 1)).slice(-2) + "-" +
       ("00" + final_date.getDate()).slice(-2) + " " + max_hour + ':' + '00' + ':' + '00';
+    dataProgramming.append('idProduct', product); 
+    dataProgramming.append('idMachine', machine);
+    dataProgramming.append('quantity', quantity);
     dataProgramming.append('minDate', min_date);
     dataProgramming.append('maxDate', final_date); 
 
@@ -188,7 +123,6 @@ $(document).ready(function () {
     maxDate.value = final_date;
     minDate.value = min_date; 
 
-    $('.cardCalcProgramming').show(800);
   };
 
   /* Revision data programa de produccion */

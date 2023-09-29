@@ -108,13 +108,6 @@ if (sizeof($_SESSION) == 0)
                                             </div>
                                         </div>
                                     </div>
-                                    <div class="card cardCalcProgramming">
-                                        <div class="card-body">
-                                            <div class="form-row">
-
-                                            </div>
-                                        </div>
-                                    </div>
                                 </form>
                             </div>
                         </div>

@@ -199,7 +199,7 @@ $app->post('/addProgramming', function (Request $request, Response $response, $a
     //     $result = $generalProgrammingDao->updateFinalDateAndHour($programming);
     // }
 
-    if ($result == null)
+    if ($result == null && $dataProgramming['accumulatedQuantity'] = 0)
         $result = $generalOrdersDao->changeStatus($dataProgramming['order'], 'Programacion');
 
 

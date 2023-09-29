@@ -45,7 +45,7 @@ class LastLoginDao
 
         try {
             $stmt = $connection->prepare("UPDATE $table SET session_active = 0 
-                                          WHERE session_active = 1 AND TIMESTAMPDIFF(MINUTE, last_login, NOW()) > 10");
+                                          WHERE session_active = 1 -- AND TIMESTAMPDIFF(MINUTE, last_login, NOW()) > 10");
             $stmt->execute();
         } catch (\Exception $e) {
             $message = $e->getMessage();
