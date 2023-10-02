@@ -11,10 +11,17 @@ $(document).ready(function () {
   $(document).on('change', '#idMachine', function (e) {
     e.preventDefault();
 
-    checkData();
+    checkData(1);
   });
 
-  checkData = async() => {
+  checkData = async (op) => {
+    let inputs = document.getElementsByClassName('input');
+    let cont = 0;
+    
+    for (let i = 0; i < inputs.length; i++) {
+      if (inputs[i].value == '' || inputs[i].value == '0')
+        cont += 1;
+    }
     $('#minDate').val('');
     $('#maxDate').val('');
 
@@ -22,73 +29,98 @@ $(document).ready(function () {
     let product = parseFloat($('#selectNameProduct').val());
     let machine = parseFloat($('#idMachine').val());
     let quantity = parseFloat($('#quantity').val());
-    
-    let data = order * product * machine * quantity;
-    
-    if (isNaN(data) || data <= 0) {
-      toastr.error('Ingrese todos los campos');
-      return false;
-    } 
-    
-    let machines = await searchData(`/api/programmingByMachine/${machine}/${product}`);
 
-    if (machines == 1) {
-      toastr.error('Ciclo de maquina no existe para ese producto');
-      return false;
-    }
-
-    let planningMachine = await searchData(`/api/planningMachine/${machine}`);
-
-    if (!planningMachine) {
-      toastr.error('Programacion de maquina no existe');
-      return false;
-    }
-
-    if (machines.length > 0) {
-      dataProgramming.append('minDate', machines[machines.length - 1].max_date);
-      let hour = new Date(machines[machines.length - 1].max_date).getHours();
-      calcMaxDate(machines[machines.length - 1].max_date, hour, 1);
-    } else {
-      let date = sessionStorage.getItem('minDate');
-
-      if (!date) {
-        bootbox.confirm({
-          title: 'Ingrese Fecha De Inicio!',
-          message: `<div class="col-sm-12 floating-label enable-floating-label">
-                        <input class="form-control" type="date" name="date" id="date"></input>
-                        <label for="date">Fecha</span></label>
-                      </div>`,
-          buttons: {
-            confirm: {
-              label: 'Agregar',
-              className: 'btn-success',
-            },
-            cancel: {
-              label: 'Cancelar',
-              className: 'btn-danger',
-            },
-          },
-          callback: function (result) {
-            if (result == true) {
-              let date = $('#date').val();
-
-              if (!date) {
-                toastr.error('Ingrese los campos');
-                return false;
-              }
-
-              sessionStorage.setItem('minDate', date);
-              dataProgramming.append('minDate', date);
-              calcMaxDate(date, 0, 2);
-            }
-          },
-        });
-      } else { 
-        dataProgramming.append('minDate', date);
-        calcMaxDate(date, 0, 2);
+    if (op == 1 || !isNaN(machine)) {
+      machines = await searchData(`/api/programmingByMachine/${machine}/${product}`);
+  
+      if (machines == 1) {
+        toastr.error('Ciclo de maquina no existe para ese producto');
+        return false;
+      }
+  
+      planningMachine = await searchData(`/api/planningMachine/${machine}`);
+  
+      if (!planningMachine) {
+        toastr.error('Programacion de maquina no existe');
+        return false;
       }
     }
-  }
+
+    if (cont == 0) { 
+      let data = order * product * machine * quantity;
+    
+      if (isNaN(data) || data <= 0) {
+        toastr.error('Ingrese todos los campos');
+        return false;
+      }; 
+
+      if (machines.length > 0) {
+        dataProgramming.append('minDate', machines[machines.length - 1].max_date);
+        let hour = new Date(machines[machines.length - 1].max_date).getHours();
+        calcMaxDate(machines[machines.length - 1].max_date, hour, 1);
+      } else {
+        let date = sessionStorage.getItem('minDate');
+
+        if (!date) {
+          $('.date').show(800);
+          document.getElementById('minDate').readOnly = false;
+
+          $('#minDate').blur(function (e) {
+            e.preventDefault();
+
+            if (!this.value) {
+              toastr.error('Ingrese fecha inicial');
+              return false;
+            }
+
+            let min_date = convetFormatDate(this.value);
+
+
+            sessionStorage.setItem('minDate', min_date);
+            dataProgramming.append('minDate', min_date);
+            calcMaxDate(min_date, 0, 2);
+          });
+        
+          // bootbox.confirm({
+          //   title: 'Ingrese Fecha De Inicio!',
+          //   message: `<div class="col-sm-12 floating-label enable-floating-label">
+          //               <input class="form-control" type="date" name="date" id="date"></input>
+          //               <label for="date">Fecha</span></label>
+          //             </div>`,
+          //   buttons: {
+          //     confirm: {
+          //       label: 'Agregar',
+          //       className: 'btn-success',
+          //     },
+          //     cancel: {
+          //       label: 'Cancelar',
+          //       className: 'btn-danger',
+          //     },
+          //   },
+          //   callback: function (result) {
+          //     if (result == true) {
+          //       let date = $('#date').val();
+
+          //       if (!date) {
+          //         toastr.error('Ingrese los campos');
+          //         return false;
+          //       }
+
+          //       sessionStorage.setItem('minDate', date);
+          //       dataProgramming.append('minDate', date);
+          //       calcMaxDate(date, 0, 2);
+          //     }
+          //   },
+          // });
+        } else {
+          document.getElementById('minDate').readOnly = true;
+
+          dataProgramming.append('minDate', date);
+          calcMaxDate(date, 0, 2);
+        }
+      }
+    }
+  };
 
 
   /* Cargar Pedidos y Productos 
@@ -201,7 +233,7 @@ $(document).ready(function () {
         } 
       }
 
-      checkData(); 
+      checkData(2); 
     });
       
   };

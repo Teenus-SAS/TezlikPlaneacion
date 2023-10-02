@@ -13,6 +13,8 @@ $(document).ready(function () {
   
   $('#btnNewProgramming').click(async function (e) {
     e.preventDefault();
+    $('#btnCreateProgramming').hide();
+
     let resp = await loadOrdersProgramming(); 
     
     sessionStorage.removeItem('minDate');
@@ -20,6 +22,8 @@ $(document).ready(function () {
       toastr.error('Todos los pedidos se encuentran programados');
       return false;
     } 
+
+    $('.date').hide(); 
     $('#selectNameProduct').empty();
     $('.cardCreateProgramming').toggle(800); 
     $('#btnCreateProgramming').html('Crear');
@@ -67,8 +71,11 @@ $(document).ready(function () {
 
     $('#quantity').val(data.quantity_programming);
 
-    $('#minDate').val(data.min_date);
-    $('#maxDate').val(data.max_date);
+    max_date = convetFormatDateTime(data.max_date);
+    min_date = convetFormatDateTime(data.min_date);
+
+    $('#minDate').val(min_date);
+    $('#maxDate').val(max_date);
 
     dataProgramming = new FormData(formCreateProgramming); 
 
@@ -81,7 +88,7 @@ $(document).ready(function () {
   });
 
   $(document).on('blur', '#quantity', function () {
-    checkData();
+    checkData(2);
   });
 
   calcMaxDate = async (min_date, last_hour, op) => {
@@ -104,6 +111,9 @@ $(document).ready(function () {
     final_date.setDate(final_date.getDate() + days);
     
     let max_hour = (order.original_quantity / ciclesMachine.cicles_hour) - (days * planningMachine.hours_day) + last_hour;
+    
+    max_hour < 0 ? max_hour = max_hour * -1 : max_hour;
+
     final_date =
       final_date.getFullYear() + "-" +
       ("00" + (final_date.getMonth() + 1)).slice(-2) + "-" +
@@ -112,10 +122,10 @@ $(document).ready(function () {
     dataProgramming.append('idMachine', machine);
     dataProgramming.append('quantity', quantity);
     dataProgramming.append('minDate', min_date);
-    dataProgramming.append('maxDate', final_date); 
+    dataProgramming.append('maxDate', final_date);
 
-    // max_date = new Date(final_date).toISOString().split('T')[0];
-    // min_date = new Date(min_date).toISOString().split('T')[0];
+    final_date = convetFormatDateTime(final_date);
+    min_date = convetFormatDateTime(min_date);
 
     let maxDate = document.getElementById('maxDate');
     let minDate = document.getElementById('minDate');
@@ -123,6 +133,7 @@ $(document).ready(function () {
     maxDate.value = final_date;
     minDate.value = min_date; 
 
+    $('#btnCreateProgramming').show(800);
   };
 
   /* Revision data programa de produccion */

@@ -78,7 +78,7 @@ if (sizeof($_SESSION) == 0)
                                                 </div>
                                                 <div class="col-sm-6 programmingSelect floating-label enable-floating-label show-label" id="products">
                                                     <label for="">Producto</label>
-                                                    <select class="form-control" id="selectNameProduct" name="idProduct"></select>
+                                                    <select class="form-control input" id="selectNameProduct" name="idProduct"></select>
                                                     <select class="form-control" id="refProduct" style="display:none"></select>
                                                 </div>
                                                 <div class="col-sm-2 floating-label enable-floating-label show-label">
@@ -87,20 +87,20 @@ if (sizeof($_SESSION) == 0)
                                                 </div>
                                                 <div class="col-sm-4 floating-label enable-floating-label show-label" id="machines">
                                                     <label for="">Maquina</label>
-                                                    <select class="form-control idMachine" id="idMachine" name="idMachine">
+                                                    <select class="form-control idMachine input" id="idMachine" name="idMachine">
                                                     </select>
                                                 </div>
                                                 <div class="col-sm-2 floating-label enable-floating-label show-label">
                                                     <label for="">Cantidad a Fabricar</label>
-                                                    <input type="text" class="form-control text-center number" id="quantity" name="quantity">
+                                                    <input type="text" class="form-control text-center number input" id="quantity" name="quantity">
                                                 </div>
-                                                <div class="col-sm-2 floating-label enable-floating-label show-label">
+                                                <div class="col-sm-2 floating-label enable-floating-label show-label date">
                                                     <label for="">Fecha Inicial</label>
-                                                    <input type="input" class="form-control text-center" inline="true" id="minDate" name="minDate" readonly>
+                                                    <input type="datetime-local" class="form-control text-center" inline="true" id="minDate" name="minDate" readonly>
                                                 </div>
-                                                <div class="col-sm-2 floating-label enable-floating-label show-label">
+                                                <div class="col-sm-2 floating-label enable-floating-label show-label date">
                                                     <label for="">Fecha Final</label>
-                                                    <input type="text" class="form-control text-center number" id="maxDate" name="maxDate" readonly>
+                                                    <input type="datetime-local" class="form-control text-center number" id="maxDate" name="maxDate" readonly>
                                                 </div>
                                                 <div class="col-sm mt-2">
                                                     <button class="btn btn-info" type="submit" id="btnCreateProgramming" name="btnCreateProgramming">Crear</button>
@@ -160,6 +160,7 @@ if (sizeof($_SESSION) == 0)
     <script src="/planning/js/program/programming/programming.js"></script>
     <script src="/planning/js/program/programming/configProgramming.js"></script>
     <script src="../global/js/global/validateExt.js"></script>
+    <script src="/global/js/global/convertDate.js"></script>
 </body>
 
 </html>
