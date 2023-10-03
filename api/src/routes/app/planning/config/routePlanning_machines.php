@@ -99,15 +99,20 @@ $app->post('/addPlanningMachines', function (Request $request, Response $respons
     $dataPMachine =  sizeof($dataPMachines);
 
     if ($dataPMachine > 1) {
-        $dataPMachine = $timeConvertDao->timeConverter($dataPMachines);
-        $planningMachines = $planningMachinesDao->insertPlanMachinesByCompany($dataPMachine, $id_company);
+        $findPlanMachines = $generalPlanningMachinesDao->findPlanMachines($dataPMachines, $id_company);
 
-        if ($planningMachines == null)
-            $resp = array('success' => true, 'message' => 'Planeación de maquina creada correctamente');
-        else if (isset($planningMachines['info']))
-            $resp = array('info' => true, 'message' => $planningMachines['message']);
-        else
-            $resp = array('error' => true, 'message' => 'Ocurrio un problema al crear la planeación, intente nuevamente');
+        if (!$findPlanMachines) {
+            $dataPMachine = $timeConvertDao->timeConverter($dataPMachines);
+            $planningMachines = $planningMachinesDao->insertPlanMachinesByCompany($dataPMachine, $id_company);
+
+            if ($planningMachines == null)
+                $resp = array('success' => true, 'message' => 'Planeación de maquina creada correctamente');
+            else if (isset($planningMachines['info']))
+                $resp = array('info' => true, 'message' => $planningMachines['message']);
+            else
+                $resp = array('error' => true, 'message' => 'Ocurrio un problema al crear la planeación, intente nuevamente');
+        } else
+            $resp = array('error' => true, 'message' => 'Planeación de maquina existente. Ingrese nueva');
     } else {
         $planningMachines = $dataPMachines['importPlanMachines'];
 
@@ -136,8 +141,11 @@ $app->post('/addPlanningMachines', function (Request $request, Response $respons
 
 $app->post('/updatePlanningMachines', function (Request $request, Response $response, $args) use (
     $planningMachinesDao,
+    $generalPlanningMachinesDao,
     $timeConvertDao
 ) {
+    session_start();
+    $id_company = $_SESSION['id_company'];
     $dataPMachines = $request->getParsedBody();
 
     if (
@@ -146,15 +154,21 @@ $app->post('/updatePlanningMachines', function (Request $request, Response $resp
     )
         $resp = array('error' => true, 'message' => 'No hubo ningún cambio');
     else {
-        $dataPMachine = $timeConvertDao->timeConverter($dataPMachines);
-        $planningMachines = $planningMachinesDao->updatePlanMachines($dataPMachine);
+        $machine = $generalPlanningMachinesDao->findPlanMachines($dataPMachines, $id_company);
+        !is_array($machine) ? $data['id_program_machine'] = 0 : $data = $machine;
 
-        if ($planningMachines == null)
-            $resp = array('success' => true, 'message' => 'Planeación de maquina actualizada correctamente');
-        else if (isset($planningMachines['info']))
-            $resp = array('info' => true, 'message' => $planningMachines['message']);
-        else
-            $resp = array('error' => true, 'message' => 'Ocurrio un problema al actualizar la planeación, intente nuevamente');
+        if ($data['id_program_machine'] == $dataPMachines['idProgramMachine'] || $data['id_program_machine'] == 0) {
+            $dataPMachine = $timeConvertDao->timeConverter($dataPMachines);
+            $planningMachines = $planningMachinesDao->updatePlanMachines($dataPMachine);
+
+            if ($planningMachines == null)
+                $resp = array('success' => true, 'message' => 'Planeación de maquina actualizada correctamente');
+            else if (isset($planningMachines['info']))
+                $resp = array('info' => true, 'message' => $planningMachines['message']);
+            else
+                $resp = array('error' => true, 'message' => 'Ocurrio un problema al actualizar la planeación, intente nuevamente');
+        } else
+            $resp = array('error' => true, 'message' => 'Planeación de maquina existente. Ingrese nueva');
     }
     $response->getBody()->write(json_encode($resp));
     return $response->withStatus(200)->withHeader('Content-Type', 'application/json');

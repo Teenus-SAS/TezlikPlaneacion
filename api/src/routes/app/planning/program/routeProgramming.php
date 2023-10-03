@@ -147,9 +147,11 @@ $app->get('/programmingByMachine/{id_machine}/{id_product}', function (Request $
     $id_company = $_SESSION['id_company'];
     $programming = $generalProgrammingDao->findAllProgrammingByMachine($args['id_machine'], $id_company);
 
-    $planCiclesMachines = $generalPlanCiclesMachinesDao->findPlanCiclesMachineByProductAndMachine($args['id_product'], $args['id_machine'], $id_company);
+    if ($args['id_product'] != 0) {
+        $planCiclesMachines = $generalPlanCiclesMachinesDao->findPlanCiclesMachineByProductAndMachine($args['id_product'], $args['id_machine'], $id_company);
 
-    if (!$planCiclesMachines) $programming = 1;
+        if (!$planCiclesMachines) $programming = 1;
+    }
 
     $response->getBody()->write(json_encode($programming, JSON_NUMERIC_CHECK));
     return $response->withHeader('Content-Type', 'application/json');

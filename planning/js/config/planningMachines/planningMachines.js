@@ -69,7 +69,6 @@ $(document).ready(function () {
         '/api/addPlanningMachines',
         planningMachines,
         function (data, textStatus, jqXHR) {
-          $('#createPlanMachine').modal('hide');
           message(data);
         }
       );
@@ -134,7 +133,6 @@ $(document).ready(function () {
       '/api/updatePlanningMachines',
       data,
       function (data, textStatus, jqXHR) {
-        $('#createPlanMachine').modal('hide');
         message(data);
       }
     );
@@ -179,6 +177,7 @@ $(document).ready(function () {
 
   const message = (data) => {
     if (data.success == true) {
+      $('#createPlanMachine').modal('hide');
       $('#formCreatePlanMachine').trigger('reset');
       updateTable();
       toastr.success(data.message);

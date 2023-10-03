@@ -1,5 +1,18 @@
 $(document).ready(function () {
   data = {};
+  let allCiclesMachines = [];
+  let allPlanningMachines = [];
+  let allOrders = [];
+  let allProgramming = [];
+
+  loadAllDataProgramming = async () => {
+    allCiclesMachines = await searchData('/api/planCiclesMachine');
+    allPlanningMachines = await searchData('/api/planningMachines');
+    allOrders = await searchData('/api/orders');
+    allProgramming = await searchData('/api/programming');
+  } 
+
+  loadAllDataProgramming();
 
   $(document).on('change', '#order', function (e) {
     e.preventDefault();
@@ -22,6 +35,9 @@ $(document).ready(function () {
       if (inputs[i].value == '' || inputs[i].value == '0')
         cont += 1;
     }
+    $('#btnCreateProgramming').hide();
+    $('.date').hide(); 
+
     $('#minDate').val('');
     $('#maxDate').val('');
 
@@ -31,16 +47,39 @@ $(document).ready(function () {
     let quantity = parseFloat($('#quantity').val());
 
     if (op == 1 || !isNaN(machine)) {
-      machines = await searchData(`/api/programmingByMachine/${machine}/${product}`);
+      // machines = await searchData(`/api/programmingByMachine/${machine}/${product}`);
+      machines = false;
+
+      for (let i = 0; i < allCiclesMachines.length; i++) {
+        if (allCiclesMachines[i].id_machine == machine && allCiclesMachines[i].id_product == product) {
+          machines = true;
+          break;
+        } 
+      }
   
-      if (machines == 1) {
+      if (machines == false) {
         toastr.error('Ciclo de maquina no existe para ese producto');
         return false;
       }
+      machines = [];
+
+      for (let i = 0; i < allProgramming.length; i++) {
+        if (allProgramming[i].id_machine == machine)
+          machines.push(allProgramming[i]);   
+      }
+
+      let planningMachine = false;
+
+      for (let i = 0; i < allPlanningMachines.length; i++) {
+        if (allPlanningMachines[i].id_machine == machine) {
+          planningMachine = true;
+          break;
+        }
+      }
   
-      planningMachine = await searchData(`/api/planningMachine/${machine}`);
+      // planningMachine = await searchData(`/api/planningMachine/${machine}`);
   
-      if (!planningMachine) {
+      if (planningMachine == false) {
         toastr.error('Programacion de maquina no existe');
         return false;
       }
@@ -79,39 +118,7 @@ $(document).ready(function () {
             sessionStorage.setItem('minDate', min_date);
             dataProgramming.append('minDate', min_date);
             calcMaxDate(min_date, 0, 2);
-          });
-        
-          // bootbox.confirm({
-          //   title: 'Ingrese Fecha De Inicio!',
-          //   message: `<div class="col-sm-12 floating-label enable-floating-label">
-          //               <input class="form-control" type="date" name="date" id="date"></input>
-          //               <label for="date">Fecha</span></label>
-          //             </div>`,
-          //   buttons: {
-          //     confirm: {
-          //       label: 'Agregar',
-          //       className: 'btn-success',
-          //     },
-          //     cancel: {
-          //       label: 'Cancelar',
-          //       className: 'btn-danger',
-          //     },
-          //   },
-          //   callback: function (result) {
-          //     if (result == true) {
-          //       let date = $('#date').val();
-
-          //       if (!date) {
-          //         toastr.error('Ingrese los campos');
-          //         return false;
-          //       }
-
-          //       sessionStorage.setItem('minDate', date);
-          //       dataProgramming.append('minDate', date);
-          //       calcMaxDate(date, 0, 2);
-          //     }
-          //   },
-          // });
+          }); 
         } else {
           document.getElementById('minDate').readOnly = true;
 
@@ -122,85 +129,72 @@ $(document).ready(function () {
     }
   };
 
+  calcMaxDate = async (min_date, last_hour, op) => {
+    let id_order = parseFloat($('#order').val());
+    let product = parseFloat($('#selectNameProduct').val());
+    let machine = parseFloat($('#idMachine').val());
+    let quantity = $('#quantity').val();
 
-  /* Cargar Pedidos y Productos 
-  loadProductsAndOrders = (id_machine) => {
-    data['idMachine'] = id_machine;
-    $.ajax({
-      type: 'POST',
-      url: '/api/programming',
-      data: data,
-      success: function (r) {
-        let $select = $(`#selectNameProduct`);
-        $select.empty();
+    // let order = await searchData(`/api/orders/${id_order}`);
+    // let planningMachine = await searchData(`/api/planningMachine/${machine}`);
+    // let ciclesMachine = await searchData(`/api/planCiclesMachine/${product}/${machine}`);
 
-        $select.append(`<option disabled selected>Seleccionar</option>`);
-        $.each(r, function (i, value) {
-          $select.append(
-            `<option value = ${value.id_product}> ${value.product} </option>`
-          );
-          $(`#selectNameProduct option[value=${value.id_product}]`).prop(
-            'selected',
-            true
-          );
-          // Obtener referencia producto
-          $(`#refProduct option[value=${value.id_product}]`).prop(
-            'selected',
-            true
-          );
-        });
+    for (let i = 0; i < allOrders.length; i++) {
+      if (allOrders[i].id_order == id_order) {
+        order = allOrders[i];
+        break;
+      }
+    }
 
-        let $select1 = $(`#order`);
-        $select1.empty();
+    for (let i = 0; i < allCiclesMachines.length; i++) {
+      if (allCiclesMachines[i].id_machine == machine && allCiclesMachines[i].id_product == product) {
+        ciclesMachine = allCiclesMachines[i];
+        break;
+      }
+    }
 
-        $select1.append(`<option disabled selected>Seleccionar</option>`);
-        $.each(r, function (i, value) {
-          $select1.append(
-            `<option value = ${value.id_order}> ${value.num_order} </option>`
-          );
-          $(`#order option[value=${value.id_order}]`).prop('selected', true);
-        });
-      },
-    });
-    delete data.idMachine;
-  }; */
+    for (let i = 0; i < allPlanningMachines.length; i++) {
+      if (allPlanningMachines[i].id_machine == machine) {
+        planningMachine = allPlanningMachines[i];
+        break;
+      }
+    }
+    
+    if (op == 2) {
+      min_date = `${min_date} ${planningMachine.hour_start}:00:00`;
+    }
+    
+    let days = Math.trunc((order.original_quantity / ciclesMachine.cicles_hour / planningMachine.hours_day)) + 1;
+    let final_date = new Date(min_date);
+    
+    final_date.setDate(final_date.getDate() + days);
+    
+    let max_hour = (order.original_quantity / ciclesMachine.cicles_hour) - (days * planningMachine.hours_day) + last_hour;
+    
+    max_hour < 0 ? max_hour = max_hour * -1 : max_hour;
 
-  /* Cargar Maquinas y Pedidos 
-  loadMachinesAndOrders = (id_product) => {
-    data['idProduct'] = id_product;
-    $.ajax({
-      type: 'POST',
-      url: '/api/programming',
-      data: data,
-      success: function (r) {
-        let $select3 = $(`#idMachine`);
-        $select3.empty();
+    final_date =
+      final_date.getFullYear() + "-" +
+      ("00" + (final_date.getMonth() + 1)).slice(-2) + "-" +
+      ("00" + final_date.getDate()).slice(-2) + " " + max_hour + ':' + '00' + ':' + '00';
+    dataProgramming.append('idProduct', product);
+    dataProgramming.append('idMachine', machine);
+    dataProgramming.append('quantity', quantity);
+    dataProgramming.append('minDate', min_date);
+    dataProgramming.append('maxDate', final_date);
 
-        $select3.append(`<option disabled selected>Seleccionar</option>`);
-        $.each(r, function (i, value) {
-          $select3.append(
-            `<option value = ${value.id_machine}> ${value.machine} </option>`
-          );
-          $(`#idMachine option[value=${value.id_machine}]`).prop(
-            'selected',
-            true
-          );
-        });
+    final_date = convetFormatDateTime(final_date);
+    min_date = convetFormatDateTime(min_date);
 
-        let $select4 = $(`#order`);
-        $select4.empty();
+    let maxDate = document.getElementById('maxDate');
+    let minDate = document.getElementById('minDate');
 
-        $select4.append(`<option disabled selected>Seleccionar</option>`);
-        $.each(r, function (i, value) {
-          $select4.append(
-            `<option value = ${value.id_order}> ${value.num_order} </option>`
-          );
-          $(`#order option[value=${value.id_order}]`).prop('selected', true);
-        });
-      },
-    });
-    delete data.idProduct;
-  }; */
+    maxDate.value = final_date;
+    minDate.value = min_date;
+
+    $('.date').show(800);
+    $('#btnCreateProgramming').show(800);
+  };
 
   /* Cargar Productos y Maquinas */
   loadProducts = async (num_order) => {

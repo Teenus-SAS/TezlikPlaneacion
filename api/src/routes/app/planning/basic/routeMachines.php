@@ -66,14 +66,19 @@ $app->post('/addPlanMachines', function (Request $request, Response $response, $
     $dataMachine = $request->getParsedBody();
 
     if (empty($dataMachine['importMachines'])) {
-        $machines = $machinesDao->insertMachinesByCompany($dataMachine, $id_company);
+        $findMachine = $generalMachinesDao->findMachine($dataMachine, $id_company);
 
-        if ($machines == null)
-            $resp = array('success' => true, 'message' => 'Maquina creada correctamente');
-        else if (isset($machines['info']))
-            $resp = array('info' => true, 'message' => $machines['message']);
-        else
-            $resp = array('error' => true, 'message' => 'Ocurrio un error mientras ingresaba la información. Intente nuevamente');
+        if (!$findMachine) {
+            $machines = $machinesDao->insertMachinesByCompany($dataMachine, $id_company);
+
+            if ($machines == null)
+                $resp = array('success' => true, 'message' => 'Maquina creada correctamente');
+            else if (isset($machines['info']))
+                $resp = array('info' => true, 'message' => $machines['message']);
+            else
+                $resp = array('error' => true, 'message' => 'Ocurrio un error mientras ingresaba la información. Intente nuevamente');
+        } else
+            $resp = array('error' => true, 'message' => 'Maquina ya existe. Ingrese una nueva');
     } else {
         $machines = $dataMachine['importMachines'];
 
@@ -102,20 +107,32 @@ $app->post('/addPlanMachines', function (Request $request, Response $response, $
 
 
 /* Actualizar Maquina */
-$app->post('/updatePlanMachines', function (Request $request, Response $response, $args) use ($machinesDao) {
+$app->post('/updatePlanMachines', function (Request $request, Response $response, $args) use (
+    $machinesDao,
+    $generalMachinesDao
+) {
+    session_start();
+    $id_company = $_SESSION['id_company'];
+
     $dataMachine = $request->getParsedBody();
 
     if (empty($dataMachine['machine']))
         $resp = array('error' => true, 'message' => 'Ingrese todos los datos a actualizar');
     else {
-        $machines = $machinesDao->updateMachine($dataMachine);
+        $machine = $generalMachinesDao->findMachine($dataMachine, $id_company);
+        !is_array($machine) ? $data['id_machine'] = 0 : $data = $machine;
 
-        if ($machines == null)
-            $resp = array('success' => true, 'message' => 'Maquina actualizada correctamente');
-        else if (isset($machines['info']))
-            $resp = array('info' => true, 'message' => $machines['message']);
-        else
-            $resp = array('error' => true, 'message' => 'Ocurrio un error mientras actualizaba la información. Intente nuevamente');
+        if ($data['id_machine'] == $dataMachine['idMachine'] || $data['id_machine'] == 0) {
+            $machines = $machinesDao->updateMachine($dataMachine);
+
+            if ($machines == null)
+                $resp = array('success' => true, 'message' => 'Maquina actualizada correctamente');
+            else if (isset($machines['info']))
+                $resp = array('info' => true, 'message' => $machines['message']);
+            else
+                $resp = array('error' => true, 'message' => 'Ocurrio un error mientras actualizaba la información. Intente nuevamente');
+        } else
+            $resp = array('error' => true, 'message' => 'Maquina ya existe. Ingrese una nueva');
     }
 
     $response->getBody()->write(json_encode($resp));

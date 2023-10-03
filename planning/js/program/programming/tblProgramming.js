@@ -26,7 +26,7 @@ $(document).ready(function () {
       data = await searchData('/api/programming');
     }
     else
-      data = await searchData(`/api/programmingByMachine/${machine}`);
+      data = await searchData(`/api/programmingByMachine/${machine}/0`);
       
     tblProgramming = $('#tblProgramming').dataTable({
       destroy: true,

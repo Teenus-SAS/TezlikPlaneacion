@@ -103,14 +103,19 @@ $app->post('/addPlanCiclesMachine', function (Request $request, Response $respon
     $dataPlanCiclesMachines = sizeof($dataPlanCiclesMachine);
 
     if ($dataPlanCiclesMachines > 1) {
-        $planCiclesMachine = $planCiclesMachineDao->addPlanCiclesMachines($dataPlanCiclesMachine, $id_company);
+        $findPlanCiclesMachine = $generalPlanCiclesMachinesDao->findPlanCiclesMachine($dataPlanCiclesMachine, $id_company);
 
-        if ($planCiclesMachine == null)
-            $resp = array('success' => true, 'message' => 'Ciclo de maquina agregado correctamente');
-        else if (isset($planCiclesMachine['info']))
-            $resp = array('info' => true, 'message' => $planCiclesMachine['message']);
-        else
-            $resp = array('error' => true, 'message' => 'Ocurrio un error al agregar el ciclo de maquina. Intente nuevamente');
+        if (!$findPlanCiclesMachine) {
+            $planCiclesMachine = $planCiclesMachineDao->addPlanCiclesMachines($dataPlanCiclesMachine, $id_company);
+
+            if ($planCiclesMachine == null)
+                $resp = array('success' => true, 'message' => 'Ciclo de maquina agregado correctamente');
+            else if (isset($planCiclesMachine['info']))
+                $resp = array('info' => true, 'message' => $planCiclesMachine['message']);
+            else
+                $resp = array('error' => true, 'message' => 'Ocurrio un error al agregar el ciclo de maquina. Intente nuevamente');
+        } else
+            $resp = array('error' => true, 'message' => 'Ciclo de maquina existente. Ingrese uno nuevo');
     } else {
         $planCiclesMachine = $dataPlanCiclesMachine['importPlanCiclesMachine'];
 
@@ -139,16 +144,27 @@ $app->post('/addPlanCiclesMachine', function (Request $request, Response $respon
     return $response->withHeader('Content-Type', 'application/json');
 });
 
-$app->post('/updatePlanCiclesMachine', function (Request $request, Response $response, $args) use ($planCiclesMachineDao) {
+$app->post('/updatePlanCiclesMachine', function (Request $request, Response $response, $args) use (
+    $planCiclesMachineDao,
+    $generalPlanCiclesMachinesDao
+) {
+    session_start();
+    $id_company = $_SESSION['id_company'];
     $dataPlanCiclesMachine = $request->getParsedBody();
 
     if (empty($dataPlanCiclesMachine['idCiclesMachine']) || empty($dataPlanCiclesMachine['idProduct']) || empty($dataPlanCiclesMachine['idMachine']) || empty($dataPlanCiclesMachine['ciclesHour'])) {
         $resp = array('error' => true, 'message' => 'Ingrese todos los datos a actualizar');
     } else {
-        $planCiclesMachine = $planCiclesMachineDao->updatePlanCiclesMachine($dataPlanCiclesMachine);
+        $machine = $generalPlanCiclesMachinesDao->findPlanCiclesMachine($dataPlanCiclesMachine, $id_company);
+        !is_array($machine) ? $data['id_cicles_machine'] = 0 : $data = $machine;
 
-        if ($planCiclesMachine == null) $resp = array('success' => true, 'message' => 'Ciclo de maquina modificada correctamente');
-        else $resp = array('error' => true, 'message' => 'Ocurrio un error al modificar ciclo de maquina. Intente nuevamente');
+        if ($data['id_cicles_machine'] == $dataPlanCiclesMachine['idCiclesMachine'] || $data['id_cicles_machine'] == 0) {
+            $planCiclesMachine = $planCiclesMachineDao->updatePlanCiclesMachine($dataPlanCiclesMachine);
+
+            if ($planCiclesMachine == null) $resp = array('success' => true, 'message' => 'Ciclo de maquina modificada correctamente');
+            else $resp = array('error' => true, 'message' => 'Ocurrio un error al modificar ciclo de maquina. Intente nuevamente');
+        } else
+            $resp = array('error' => true, 'message' => 'Ciclo de maquina existente. Ingrese uno nuevo');
     }
     $response->getBody()->write(json_encode($resp, JSON_NUMERIC_CHECK));
     return $response->withHeader('Content-Type', 'application/json');
