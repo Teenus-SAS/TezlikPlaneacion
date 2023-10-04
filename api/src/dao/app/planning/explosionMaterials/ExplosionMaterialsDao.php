@@ -41,4 +41,27 @@ class ExplosionMaterialsDao
         $this->logger->notice("pedidos", array('pedidos' => $materials));
         return $materials;
     }
+
+    public function findAllMaterialsConsolidatedbyProduct($id_product)
+    {
+        $connection = Connection::getInstance()->getConnection();
+
+        $stmt = $connection->prepare("SELECT (SUM(m.quantity) + IFNULL(IF(r.admission_date != 'NULL', 0, r.quantity), 0) - ((SELECT SUM(cpm.quantity) FROM products_materials cpm INNER JOIN plan_orders co ON cpm.id_product = p.id_product 
+                                             WHERE cpm.id_material = m.id_material AND co.status = 'Alistamiento') * (SELECT SUM(co.original_quantity) FROM plan_orders co INNER JOIN products_materials cpm ON cpm.id_product = o.id_product WHERE cpm.id_material = m.id_material AND co.status = 'Alistamiento'))) AS available
+                                      FROM products p
+                                        INNER JOIN products_materials pm ON pm.id_product = p.id_product
+                                        INNER JOIN materials m ON m.id_material = pm.id_material
+                                        INNER JOIN convert_units u ON u.id_unit = m.unit
+                                        INNER JOIN plan_orders o ON o.id_product = p.id_product
+                                        LEFT JOIN requisitons r ON r.id_material = pm.id_material
+                                      WHERE p.id_product = :id_product AND o.status = 'Alistamiento'
+                                      GROUP BY m.id_material");
+        $stmt->execute(['id_product' => $id_product]);
+
+        $this->logger->info(__FUNCTION__, array('query' => $stmt->queryString, 'errors' => $stmt->errorInfo()));
+
+        $materials = $stmt->fetchAll($connection::FETCH_ASSOC);
+        $this->logger->notice("pedidos", array('pedidos' => $materials));
+        return $materials;
+    }
 }
