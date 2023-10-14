@@ -22,7 +22,8 @@ class MachinesDao
     $stmt = $connection->prepare("SELECT m.id_machine, m.machine, pcm.cicles_hour 
                                   FROM machines m
                                    LEFT JOIN plan_cicles_machine pcm ON pcm.id_machine = m.id_machine 
-                                  WHERE m.id_company = :id_company;");
+                                  WHERE m.id_company = :id_company
+                                  GROUP BY m.id_machine;");
     $stmt->execute(['id_company' => $id_company]);
 
     $this->logger->info(__FUNCTION__, array('query' => $stmt->queryString, 'errors' => $stmt->errorInfo()));

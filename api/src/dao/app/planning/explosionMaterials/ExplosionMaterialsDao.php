@@ -20,10 +20,10 @@ class ExplosionMaterialsDao
   {
     $connection = Connection::getInstance()->getConnection();
 
-    $stmt = $connection->prepare("SELECT p.id_product, p.reference AS reference_product, p.product, SUM(p.quantity) AS quantity_product, m.id_material, m.reference AS reference_material, m.material, SUM(m.quantity) AS quantity_material, 
-                                             IFNULL(IF(r.admission_date != 'NULL', 0, r.quantity), 0) AS transit, ((SELECT SUM(cpm.quantity) FROM products_materials cpm INNER JOIN plan_orders co ON co.id_product = p.id_product 
+    $stmt = $connection->prepare("SELECT p.id_product, p.reference AS reference_product, p.product, SUM(p.quantity) AS quantity_product, m.id_material, m.reference AS reference_material, m.material, m.quantity AS quantity_material, 
+                                             IFNULL(IF(r.admission_date != 'NULL', 0, r.quantity), 0) AS transit, ((SELECT SUM(cpm.quantity) FROM products_materials cpm INNER JOIN plan_orders co ON co.id_product = cpm.id_product 
                                              WHERE cpm.id_material = m.id_material AND co.status = 'Alistamiento') * (SELECT SUM(co.original_quantity) FROM plan_orders co INNER JOIN products_materials cpm ON cpm.id_product = co.id_product WHERE cpm.id_material = m.id_material AND co.status = 'Alistamiento')) AS need, u.unit,
-                                             (SUM(m.quantity) + IFNULL(IF(r.admission_date != 'NULL', 0, r.quantity), 0) - ((SELECT SUM(cpm.quantity) FROM products_materials cpm INNER JOIN plan_orders co ON co.id_product = p.id_product 
+                                             (m.quantity + IFNULL(IF(r.admission_date != 'NULL', 0, r.quantity), 0) - ((SELECT SUM(cpm.quantity) FROM products_materials cpm INNER JOIN plan_orders co ON co.id_product = cpm.id_product 
                                              WHERE cpm.id_material = m.id_material AND co.status = 'Alistamiento') * (SELECT SUM(co.original_quantity) FROM plan_orders co INNER JOIN products_materials cpm ON cpm.id_product = co.id_product WHERE cpm.id_material = m.id_material AND co.status = 'Alistamiento'))) AS available
                                       FROM products p
                                         INNER JOIN products_materials pm ON pm.id_product = p.id_product
@@ -46,8 +46,8 @@ class ExplosionMaterialsDao
   {
     $connection = Connection::getInstance()->getConnection();
 
-    $stmt = $connection->prepare("SELECT ((SELECT SUM(cpm.quantity) FROM products_materials cpm INNER JOIN plan_orders co ON co.id_product = p.id_product 
-                                             WHERE cpm.id_material = m.id_material AND co.status = 'Alistamiento') * (SELECT SUM(co.original_quantity) FROM plan_orders co INNER JOIN products_materials cpm ON cpm.id_product = co.id_product WHERE cpm.id_material = m.id_material AND co.status = 'Alistamiento')) AS need
+    $stmt = $connection->prepare("SELECT (m.quantity + IFNULL(IF(r.admission_date != 'NULL', 0, r.quantity), 0) - ((SELECT SUM(cpm.quantity) FROM products_materials cpm INNER JOIN plan_orders co ON co.id_product = cpm.id_product 
+                                             WHERE cpm.id_material = m.id_material AND co.status = 'Alistamiento') * (SELECT SUM(co.original_quantity) FROM plan_orders co INNER JOIN products_materials cpm ON cpm.id_product = co.id_product WHERE cpm.id_material = m.id_material AND co.status = 'Alistamiento'))) AS available
                                       FROM products p
                                         INNER JOIN products_materials pm ON pm.id_product = p.id_product
                                         INNER JOIN materials m ON m.id_material = pm.id_material

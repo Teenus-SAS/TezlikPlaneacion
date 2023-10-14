@@ -77,7 +77,7 @@ $app->post('/planCiclesMachineDataValidation', function (Request $request, Respo
                 break;
             } else $planCiclesMachine[$i]['idMachine'] = $findMachine['id_machine'];
 
-            $findPlanCiclesMachine = $generalPlanCiclesMachinesDao->findPlanCiclesMachine($planCiclesMachine[$i], $id_company);
+            $findPlanCiclesMachine = $generalPlanCiclesMachinesDao->findPlanCiclesMachineByProductAndMachine($planCiclesMachine[$i]['idProduct'], $planCiclesMachine[$i]['idMachine'], $id_company);
 
             if (!$findPlanCiclesMachine) $insert = $insert + 1;
             else $update = $update + 1;
@@ -103,7 +103,7 @@ $app->post('/addPlanCiclesMachine', function (Request $request, Response $respon
     $dataPlanCiclesMachines = sizeof($dataPlanCiclesMachine);
 
     if ($dataPlanCiclesMachines > 1) {
-        $findPlanCiclesMachine = $generalPlanCiclesMachinesDao->findPlanCiclesMachine($dataPlanCiclesMachine, $id_company);
+        $findPlanCiclesMachine = $generalPlanCiclesMachinesDao->findPlanCiclesMachineByProductAndMachine($dataPlanCiclesMachine['idProduct'], $dataPlanCiclesMachine['idMachine'], $id_company);
 
         if (!$findPlanCiclesMachine) {
             $planCiclesMachine = $planCiclesMachineDao->addPlanCiclesMachines($dataPlanCiclesMachine, $id_company);
@@ -128,7 +128,7 @@ $app->post('/addPlanCiclesMachine', function (Request $request, Response $respon
             $findMachine = $machinesDao->findMachine($planCiclesMachine[$i], $id_company);
             $planCiclesMachine[$i]['idMachine'] = $findMachine['id_machine'];
 
-            $findPlanCiclesMachine = $generalPlanCiclesMachinesDao->findPlanCiclesMachine($planCiclesMachine[$i], $id_company);
+            $findPlanCiclesMachine = $generalPlanCiclesMachinesDao->findPlanCiclesMachineByProductAndMachine($planCiclesMachine[$i]['idProduct'], $planCiclesMachine[$i]['idMachine'], $id_company);
             if (!$findPlanCiclesMachine) $resolution = $planCiclesMachineDao->addPlanCiclesMachines($planCiclesMachine[$i], $id_company);
             else {
                 $planCiclesMachine[$i]['idCiclesMachine'] = $findPlanCiclesMachine['id_cicles_machine'];
@@ -155,7 +155,7 @@ $app->post('/updatePlanCiclesMachine', function (Request $request, Response $res
     if (empty($dataPlanCiclesMachine['idCiclesMachine']) || empty($dataPlanCiclesMachine['idProduct']) || empty($dataPlanCiclesMachine['idMachine']) || empty($dataPlanCiclesMachine['ciclesHour'])) {
         $resp = array('error' => true, 'message' => 'Ingrese todos los datos a actualizar');
     } else {
-        $machine = $generalPlanCiclesMachinesDao->findPlanCiclesMachine($dataPlanCiclesMachine, $id_company);
+        $machine = $generalPlanCiclesMachinesDao->findPlanCiclesMachineByProductAndMachine($dataPlanCiclesMachine['idProduct'], $dataPlanCiclesMachine['idMachine'], $id_company);
         !is_array($machine) ? $data['id_cicles_machine'] = 0 : $data = $machine;
 
         if ($data['id_cicles_machine'] == $dataPlanCiclesMachine['idCiclesMachine'] || $data['id_cicles_machine'] == 0) {
