@@ -104,7 +104,7 @@ $(document).ready(function () {
           $('.date').show(800);
           document.getElementById('minDate').readOnly = false;
 
-          $('#minDate').blur(function (e) {
+          $('#minDate').change(function (e) {
             e.preventDefault();
 
             if (!this.value) {
@@ -130,70 +130,70 @@ $(document).ready(function () {
   };
 
   calcMaxDate = async (min_date, last_hour, op) => {
-    let id_order = parseFloat($('#order').val());
-    let product = parseFloat($('#selectNameProduct').val());
-    let machine = parseFloat($('#idMachine').val());
-    let quantity = $('#quantity').val();
+    try {
+      let id_order = parseFloat($('#order').val());
+      let product = parseFloat($('#selectNameProduct').val());
+      let machine = parseFloat($('#idMachine').val());
+      let quantity = $('#quantity').val();
 
-    // let order = await searchData(`/api/orders/${id_order}`);
-    // let planningMachine = await searchData(`/api/planningMachine/${machine}`);
-    // let ciclesMachine = await searchData(`/api/planCiclesMachine/${product}/${machine}`);
-
-    for (let i = 0; i < allOrders.length; i++) {
-      if (allOrders[i].id_order == id_order) {
-        order = allOrders[i];
-        break;
+      for (let i = 0; i < allOrders.length; i++) {
+        if (allOrders[i].id_order == id_order) {
+          order = allOrders[i];
+          break;
+        }
       }
-    }
 
-    for (let i = 0; i < allCiclesMachines.length; i++) {
-      if (allCiclesMachines[i].id_machine == machine && allCiclesMachines[i].id_product == product) {
-        ciclesMachine = allCiclesMachines[i];
-        break;
+      for (let i = 0; i < allCiclesMachines.length; i++) {
+        if (allCiclesMachines[i].id_machine == machine && allCiclesMachines[i].id_product == product) {
+          ciclesMachine = allCiclesMachines[i];
+          break;
+        }
       }
-    }
 
-    for (let i = 0; i < allPlanningMachines.length; i++) {
-      if (allPlanningMachines[i].id_machine == machine) {
-        planningMachine = allPlanningMachines[i];
-        break;
+      for (let i = 0; i < allPlanningMachines.length; i++) {
+        if (allPlanningMachines[i].id_machine == machine) {
+          planningMachine = allPlanningMachines[i];
+          break;
+        }
       }
+    
+      if (op == 2) {
+        min_date = `${min_date} ${planningMachine.hour_start}:00:00`;
+      }
+    
+      let days = Math.trunc((order.original_quantity / ciclesMachine.cicles_hour / planningMachine.hours_day)) + 1;
+      let final_date = new Date(min_date);
+    
+      final_date.setDate(final_date.getDate() + days);
+    
+      let max_hour = (order.original_quantity / ciclesMachine.cicles_hour) - (days * planningMachine.hours_day) + last_hour;
+    
+      max_hour < 0 ? max_hour = max_hour * -1 : max_hour;
+
+      final_date =
+        final_date.getFullYear() + "-" +
+        ("00" + (final_date.getMonth() + 1)).slice(-2) + "-" +
+        ("00" + final_date.getDate()).slice(-2) + " " + max_hour + ':' + '00' + ':' + '00';
+      dataProgramming.append('idProduct', product);
+      dataProgramming.append('idMachine', machine);
+      dataProgramming.append('quantity', quantity);
+      dataProgramming.append('minDate', min_date);
+      dataProgramming.append('maxDate', final_date);
+
+      final_date = convetFormatDateTime(final_date);
+      min_date = convetFormatDateTime(min_date);
+
+      let maxDate = document.getElementById('maxDate');
+      let minDate = document.getElementById('minDate');
+
+      maxDate.value = final_date;
+      minDate.value = min_date;
+
+      $('.date').show(800);
+      $('#btnCreateProgramming').show(800);
+    } catch (error) {
+      console.log(error);
     }
-    
-    if (op == 2) {
-      min_date = `${min_date} ${planningMachine.hour_start}:00:00`;
-    }
-    
-    let days = Math.trunc((order.original_quantity / ciclesMachine.cicles_hour / planningMachine.hours_day)) + 1;
-    let final_date = new Date(min_date);
-    
-    final_date.setDate(final_date.getDate() + days);
-    
-    let max_hour = (order.original_quantity / ciclesMachine.cicles_hour) - (days * planningMachine.hours_day) + last_hour;
-    
-    max_hour < 0 ? max_hour = max_hour * -1 : max_hour;
-
-    final_date =
-      final_date.getFullYear() + "-" +
-      ("00" + (final_date.getMonth() + 1)).slice(-2) + "-" +
-      ("00" + final_date.getDate()).slice(-2) + " " + max_hour + ':' + '00' + ':' + '00';
-    dataProgramming.append('idProduct', product);
-    dataProgramming.append('idMachine', machine);
-    dataProgramming.append('quantity', quantity);
-    dataProgramming.append('minDate', min_date);
-    dataProgramming.append('maxDate', final_date);
-
-    final_date = convetFormatDateTime(final_date);
-    min_date = convetFormatDateTime(min_date);
-
-    let maxDate = document.getElementById('maxDate');
-    let minDate = document.getElementById('minDate');
-
-    maxDate.value = final_date;
-    minDate.value = min_date;
-
-    $('.date').show(800);
-    $('#btnCreateProgramming').show(800);
   };
 
   /* Cargar Productos y Maquinas */
