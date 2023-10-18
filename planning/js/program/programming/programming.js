@@ -22,7 +22,7 @@ $(document).ready(function () {
       toastr.error('Todos los pedidos se encuentran programados');
       return false;
     } 
-
+ 
     $('.date').hide(); 
     $('#selectNameProduct').empty();
     $('.cardCreateProgramming').toggle(800); 
@@ -71,6 +71,10 @@ $(document).ready(function () {
 
     $('#quantity').val(data.quantity_programming);
 
+    document.getElementById('minDate').readOnly = false;
+    $('.date').show(800);
+    $('#btnCreateProgramming').show(800);
+
     max_date = convetFormatDateTime(data.max_date);
     min_date = convetFormatDateTime(data.min_date);
 
@@ -78,6 +82,27 @@ $(document).ready(function () {
     $('#maxDate').val(max_date);
 
     dataProgramming = new FormData(formCreateProgramming); 
+
+    $(document).one('click', '#minDate', function (e) {
+      e.preventDefault();
+ 
+      document.getElementById('minDate').type = 'date';
+    });
+
+    $('#minDate').change(function (e) {
+      e.preventDefault();
+
+      if (!this.value) {
+        toastr.error('Ingrese fecha inicial');
+        return false;
+      }
+
+      let min_date = convetFormatDate(this.value);
+
+      sessionStorage.setItem('minDate', min_date);
+      dataProgramming.append('minDate', min_date);
+      calcMaxDate(min_date, 0, 2);
+    });
 
     $('html, body').animate(
       {
@@ -149,13 +174,14 @@ $(document).ready(function () {
   };
 
   /* Mensaje de exito */
-  message = (data) => {
+  message = async (data) => {
     if (data.success == true) {
       $('.cardCreateProgramming').hide(800);
       $('#formCreateProgramming').trigger('reset'); 
       $('#searchMachine option').removeAttr('selected');
       $(`#searchMachine option[value='0']`).prop('selected', true);
 
+      await loadAllDataProgramming();
       loadTblProgramming(0);
 
       toastr.success(data.message);

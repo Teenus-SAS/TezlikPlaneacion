@@ -124,11 +124,6 @@ $app->get('/programming', function (Request $request, Response $response, $args)
             $dataProgramming['accumulatedQuantity'] = 0;
 
         $generalOrdersDao->updateAccumulatedOrder($dataProgramming);
-
-        // $arr = $finalDateDao->calcFinalDateAndHourByProgramming($programming[$i]['id_programming']);
-        // $arr['idProgramming'] = $programming[$i]['id_programming'];
-
-        // $generalProgrammingDao->updateFinalDateAndHour($arr);
     }
 
     $response->getBody()->write(json_encode($programming, JSON_NUMERIC_CHECK));
@@ -181,55 +176,44 @@ $app->post('/addProgramming', function (Request $request, Response $response, $a
     $dataProgramming = $request->getParsedBody();
     $id_company = $_SESSION['id_company'];
 
-    $explosionMaterials = $explosionMaterialsDao->findAllMaterialsConsolidatedbyProduct($dataProgramming['idProduct']);
-    $status = false;
+    // $explosionMaterials = $explosionMaterialsDao->findAllMaterialsConsolidatedbyProduct($dataProgramming['idProduct']);
+    // $status = false;
 
-    foreach ($explosionMaterials as $arr) {
-        if ($arr['available'] > 0)
-            $status = true;
-        else {
-            $status = false;
-            break;
-        }
+    // foreach ($explosionMaterials as $arr) {
+    // if ($arr['available'] > 0)
+    // $status = true;
+    // else {
+    // $status = false;
+    // break;
+    // }
+    // }
+
+    // if ($status == true) {
+
+    $result = $programmingDao->insertProgrammingByCompany($dataProgramming, $id_company);
+
+    if ($result == null) {
+        $order = $generalProgrammingDao->checkAccumulatedQuantityOrder($dataProgramming['order']);
+
+        if ($order['quantity_programming'] < $order['original_quantity'])
+            $dataProgramming['accumulatedQuantity'] = $order['original_quantity'] - $order['quantity_programming'];
+        else
+            $dataProgramming['accumulatedQuantity'] = 0;
+
+        $result = $generalOrdersDao->updateAccumulatedOrder($dataProgramming);
     }
 
-    if ($status == true) {
+    if ($result == null && $dataProgramming['accumulatedQuantity'] = 0)
+        $result = $generalOrdersDao->changeStatus($dataProgramming['order'], 'Programacion');
 
-        $result = $programmingDao->insertProgrammingByCompany($dataProgramming, $id_company);
-
-        if ($result == null) {
-            $order = $generalProgrammingDao->checkAccumulatedQuantityOrder($dataProgramming['order']);
-
-            if ($order['quantity_programming'] < $order['original_quantity'])
-                $dataProgramming['accumulatedQuantity'] = $order['original_quantity'] - $order['quantity_programming'];
-            else
-                $dataProgramming['accumulatedQuantity'] = 0;
-
-            $result = $generalOrdersDao->updateAccumulatedOrder($dataProgramming);
-        }
-
-        // Calcular fecha y hora final
-        // if ($result == null) {
-        //     $lastData = $lastDataDao->findLastInsertedProgramming($id_company);
-
-        //     $programming = $finalDateDao->calcFinalDateAndHourByProgramming($lastData['id_programming']);
-        //     $programming['idProgramming'] = $lastData['id_programming'];
-
-        //     $result = $generalProgrammingDao->updateFinalDateAndHour($programming);
-        // }
-
-        if ($result == null && $dataProgramming['accumulatedQuantity'] = 0)
-            $result = $generalOrdersDao->changeStatus($dataProgramming['order'], 'Programacion');
-
-
-        if ($result == null)
-            $resp = array('success' => true, 'message' => 'Programa de producción creado correctamente');
-        else if (isset($result['info']))
-            $resp = array('info' => true, 'message' => $result['message']);
-        else
-            $resp = array('error' => true, 'message' => 'Ocurrio un error mientras ingresaba la información. Intente nuevamente');
-    } else
-        $resp = array('error' => true, 'message' => 'Materia prima no existente o sin cantidad disponible');
+    if ($result == null)
+        $resp = array('success' => true, 'message' => 'Programa de producción creado correctamente');
+    else if (isset($result['info']))
+        $resp = array('info' => true, 'message' => $result['message']);
+    else
+        $resp = array('error' => true, 'message' => 'Ocurrio un error mientras ingresaba la información. Intente nuevamente');
+    // } else
+    // $resp = array('error' => true, 'message' => 'Materia prima no existente o sin cantidad disponible');
 
     $response->getBody()->write(json_encode($resp));
     return $response->withStatus(200)->withHeader('Content-Type', 'application/json');
@@ -255,14 +239,6 @@ $app->post('/updateProgramming', function (Request $request, Response $response,
 
         $result = $generalOrdersDao->updateAccumulatedOrder($dataProgramming);
     }
-
-    // Calcular fecha y hora final
-    // if ($result == null) {
-    //     $programming = $finalDateDao->calcFinalDateAndHourByProgramming($dataProgramming['idProgramming']);
-    //     $programming['idProgramming'] = $dataProgramming['idProgramming'];
-
-    //     $result = $generalProgrammingDao->updateFinalDateAndHour($programming);
-    // }
 
     if ($result == null)
         $resp = array('success' => true, 'message' => 'Programa de producción actualizado correctamente');

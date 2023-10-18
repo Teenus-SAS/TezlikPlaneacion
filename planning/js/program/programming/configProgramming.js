@@ -10,6 +10,7 @@ $(document).ready(function () {
     allPlanningMachines = await searchData('/api/planningMachines');
     allOrders = await searchData('/api/orders');
     allProgramming = await searchData('/api/programming');
+    allProductsMaterials = await searchData('/api/allProductsMaterials');
   } 
 
   loadAllDataProgramming();
@@ -46,8 +47,7 @@ $(document).ready(function () {
     let machine = parseFloat($('#idMachine').val());
     let quantity = parseFloat($('#quantity').val());
 
-    if (op == 1 || !isNaN(machine)) {
-      // machines = await searchData(`/api/programmingByMachine/${machine}/${product}`);
+    if (op == 1 || !isNaN(machine)) { 
       machines = false;
 
       for (let i = 0; i < allCiclesMachines.length; i++) {
@@ -75,9 +75,7 @@ $(document).ready(function () {
           planningMachine = true;
           break;
         }
-      }
-  
-      // planningMachine = await searchData(`/api/planningMachine/${machine}`);
+      } 
   
       if (planningMachine == false) {
         toastr.error('Programacion de maquina no existe');
@@ -86,12 +84,26 @@ $(document).ready(function () {
     }
 
     if (cont == 0) { 
+      let productMaterial = true;
+
+      for (let i = 0; i < allProductsMaterials.length; i++) {
+        if (allProductsMaterials[i].id_product == product && allProductsMaterials[i].quantity <= 0) {
+          productMaterial = false;
+          break;
+        } 
+      }
+
+      if (productMaterial == false) {
+        toastr.error('Sin existencias de Materia Prima');
+        return false;
+      }
+
       let data = order * product * machine * quantity;
     
       if (isNaN(data) || data <= 0) {
         toastr.error('Ingrese todos los campos');
         return false;
-      }; 
+      };
 
       if (machines.length > 0) {
         dataProgramming.append('minDate', machines[machines.length - 1].max_date);
@@ -103,6 +115,7 @@ $(document).ready(function () {
         if (!date) {
           $('.date').show(800);
           document.getElementById('minDate').readOnly = false;
+          document.getElementById('minDate').type = 'date';
 
           $('#minDate').change(function (e) {
             e.preventDefault();
@@ -114,11 +127,10 @@ $(document).ready(function () {
 
             let min_date = convetFormatDate(this.value);
 
-
             sessionStorage.setItem('minDate', min_date);
             dataProgramming.append('minDate', min_date);
             calcMaxDate(min_date, 0, 2);
-          }); 
+          });
         } else {
           document.getElementById('minDate').readOnly = true;
 
@@ -166,7 +178,7 @@ $(document).ready(function () {
     
       final_date.setDate(final_date.getDate() + days);
     
-      let max_hour = (order.original_quantity / ciclesMachine.cicles_hour) - (days * planningMachine.hours_day) + last_hour;
+      let max_hour = ((order.original_quantity / ciclesMachine.cicles_hour) - (days * planningMachine.hours_day) + last_hour).toLocaleString('es-CO',{maximumFractionDigits:0});
     
       max_hour < 0 ? max_hour = max_hour * -1 : max_hour;
 
@@ -184,6 +196,7 @@ $(document).ready(function () {
       min_date = convetFormatDateTime(min_date);
 
       let maxDate = document.getElementById('maxDate');
+      document.getElementById('minDate').type = 'datetime-local';
       let minDate = document.getElementById('minDate');
 
       maxDate.value = final_date;

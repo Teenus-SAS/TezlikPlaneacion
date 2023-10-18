@@ -27,6 +27,16 @@ $app->get('/productsMaterials/{idProduct}', function (Request $request, Response
     return $response->withHeader('Content-Type', 'application/json');
 });
 
+$app->get('/allProductsMaterials', function (Request $request, Response $response, $args) use ($generalProductsMaterialsDao) {
+    session_start();
+    $id_company = $_SESSION['id_company'];
+
+    $productMaterials = $generalProductsMaterialsDao->findAllProductsmaterials($id_company);
+
+    $response->getBody()->write(json_encode($productMaterials));
+    return $response->withHeader('Content-Type', 'application/json');
+});
+
 $app->post('/productsMaterialsDataValidation', function (Request $request, Response $response, $args) use (
     $generalProductsMaterialsDao,
     $productsDao,
