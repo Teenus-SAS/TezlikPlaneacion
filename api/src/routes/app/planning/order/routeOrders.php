@@ -32,23 +32,23 @@ $app->get('/orders', function (Request $request, Response $response, $args) use 
     session_start();
     $id_company = $_SESSION['id_company'];
 
-    /* Cambiar estado pedidos */
+    /* Cambiar estado pedidos 
     $orders = $generalOrdersDao->findAllOrdersByCompany($id_company);
 
     for ($i = 0; $i < sizeof($orders); $i++) {
         // Checkear cantidades
         $order = $generalOrdersDao->checkAccumulatedQuantityOrder($orders[$i]['id_order']);
 
-        if ($order['original_quantity'] <= $order['quantity']) {
+        if ($order['original_quantity'] <= $order['accumulated_quantity']) {
             $generalOrdersDao->changeStatus($orders[$i]['id_order'], 'Despacho');
-            $accumulated_quantity = $order['original_quantity'];
+            $accumulated_quantity = $order['accumulated_quantity'] - $order['original_quantity'];
         } else {
-            $accumulated_quantity = $order['quantity'];
-            // $generalOrdersDao->changeStatus($orders[$i]['id_order'], 'Alistamiento');
+            $accumulated_quantity = $order['accumulated_quantity'];
+            $generalOrdersDao->changeStatus($orders[$i]['id_order'], 'Alistamiento');
         }
 
         $generalProductsDao->updateAccumulatedQuantity($orders[$i]['id_product'], $accumulated_quantity, 1);
-    }
+    } */
 
     $orders = $ordersDao->findAllOrdersByCompany($id_company);
 
@@ -189,11 +189,13 @@ $app->post('/addOrder', function (Request $request, Response $response, $args) u
         // Checkear cantidades
         $order = $generalOrdersDao->checkAccumulatedQuantityOrder($orders[$i]['id_order']);
 
-        if ($order['original_quantity'] <= $order['quantity']) {
+        if ($order['original_quantity'] <= $order['accumulated_quantity']) {
             $generalOrdersDao->changeStatus($orders[$i]['id_order'], 'Despacho');
-            $accumulated_quantity = $order['original_quantity'];
-        } else
-            $accumulated_quantity = $order['quantity'];
+            $accumulated_quantity = $order['accumulated_quantity'] - $order['original_quantity'];
+        } else {
+            $accumulated_quantity = $order['accumulated_quantity'];
+            // $generalOrdersDao->changeStatus($orders[$i]['id_order'], 'Alistamiento');
+        }
 
         $generalProductsDao->updateAccumulatedQuantity($orders[$i]['id_product'], $accumulated_quantity, 1);
     }
@@ -249,11 +251,13 @@ $app->post('/updateOrder', function (Request $request, Response $response, $args
         // Checkear cantidades
         $order = $generalOrdersDao->checkAccumulatedQuantityOrder($dataOrder['idOrder']);
 
-        if ($order['original_quantity'] <= $order['quantity']) {
+        if ($order['original_quantity'] <= $order['accumulated_quantity']) {
             $generalOrdersDao->changeStatus($dataOrder['idOrder'], 'Despacho');
-            $accumulated_quantity = $order['original_quantity'];
-        } else
-            $accumulated_quantity = $order['quantity'];
+            $accumulated_quantity = $order['accumulated_quantity'] - $order['original_quantity'];
+        } else {
+            $accumulated_quantity = $order['accumulated_quantity'];
+            // $generalOrdersDao->changeStatus($dataOrder['idOrder'], 'Alistamiento');
+        }
 
         $generalProductsDao->updateAccumulatedQuantity($dataOrder['idProduct'], $accumulated_quantity, 1);
 

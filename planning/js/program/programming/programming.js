@@ -113,7 +113,7 @@ $(document).ready(function () {
   });
 
   $(document).on('blur', '#quantity', function () {
-    checkData(2);
+    checkData(2, this.id);
   });
 
   /* Revision data programa de produccion */

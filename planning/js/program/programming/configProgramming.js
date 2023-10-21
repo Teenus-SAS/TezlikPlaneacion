@@ -25,10 +25,10 @@ $(document).ready(function () {
   $(document).on('change', '#idMachine', function (e) {
     e.preventDefault();
 
-    checkData(1);
+    checkData(1, this.id);
   });
 
-  checkData = async (op) => {
+  checkData = async (op, id) => {
     let inputs = document.getElementsByClassName('input');
     let cont = 0;
     
@@ -37,7 +37,7 @@ $(document).ready(function () {
         cont += 1;
     }
     $('#btnCreateProgramming').hide();
-    $('.date').hide(); 
+    $('.date').hide();
 
     $('#minDate').val('');
     $('#maxDate').val('');
@@ -47,14 +47,14 @@ $(document).ready(function () {
     let machine = parseFloat($('#idMachine').val());
     let quantity = parseFloat($('#quantity').val());
 
-    if (op == 1 || !isNaN(machine)) { 
+    if (op == 1 || !isNaN(machine)) {
       machines = false;
 
       for (let i = 0; i < allCiclesMachines.length; i++) {
         if (allCiclesMachines[i].id_machine == machine && allCiclesMachines[i].id_product == product) {
           machines = true;
           break;
-        } 
+        }
       }
   
       if (machines == false) {
@@ -65,7 +65,7 @@ $(document).ready(function () {
 
       for (let i = 0; i < allProgramming.length; i++) {
         if (allProgramming[i].id_machine == machine)
-          machines.push(allProgramming[i]);   
+          machines.push(allProgramming[i]);
       }
 
       let planningMachine = false;
@@ -75,7 +75,7 @@ $(document).ready(function () {
           planningMachine = true;
           break;
         }
-      } 
+      }
   
       if (planningMachine == false) {
         toastr.error('Programacion de maquina no existe');
@@ -83,19 +83,36 @@ $(document).ready(function () {
       }
     }
 
-    if (cont == 0) { 
-      let productMaterial = true;
-
+    if (cont == 0) {
+      let productMaterial = false;
+      
       for (let i = 0; i < allProductsMaterials.length; i++) {
+        productMaterial = true;
         if (allProductsMaterials[i].id_product == product && allProductsMaterials[i].quantity <= 0) {
           productMaterial = false;
           break;
-        } 
+        }
       }
 
       if (productMaterial == false) {
-        toastr.error('Sin existencias de Materia Prima');
+        toastr.error('Materia prima no existente o sin cantidad disponible');
         return false;
+      }
+
+      if (id == 'quantity') {
+        let productMaterial = true;
+
+        for (let i = 0; i < allProductsMaterials.length; i++) {
+          if (allProductsMaterials[i].id_product == product && allProductsMaterials[i].quantity < quantity) {
+            productMaterial = false;
+            break;
+          }
+        }
+
+        if (productMaterial == false) {
+          toastr.error('Materia prima sin cantidad disponible');
+          return false;
+        }
       }
 
       let data = order * product * machine * quantity;
@@ -146,7 +163,7 @@ $(document).ready(function () {
       let id_order = parseFloat($('#order').val());
       let product = parseFloat($('#selectNameProduct').val());
       let machine = parseFloat($('#idMachine').val());
-      let quantity = $('#quantity').val();
+      let quantity = $('#quantity').val(); 
 
       for (let i = 0; i < allOrders.length; i++) {
         if (allOrders[i].id_order == id_order) {
@@ -240,7 +257,7 @@ $(document).ready(function () {
         } 
       }
 
-      checkData(2); 
+      checkData(2, this.id); 
     });
       
   };
