@@ -176,20 +176,6 @@ $app->post('/addProgramming', function (Request $request, Response $response, $a
     $dataProgramming = $request->getParsedBody();
     $id_company = $_SESSION['id_company'];
 
-    // $explosionMaterials = $explosionMaterialsDao->findAllMaterialsConsolidatedbyProduct($dataProgramming['idProduct']);
-    // $status = false;
-
-    // foreach ($explosionMaterials as $arr) {
-    // if ($arr['available'] > 0)
-    // $status = true;
-    // else {
-    // $status = false;
-    // break;
-    // }
-    // }
-
-    // if ($status == true) {
-
     $result = $programmingDao->insertProgrammingByCompany($dataProgramming, $id_company);
 
     if ($result == null) {
@@ -203,7 +189,7 @@ $app->post('/addProgramming', function (Request $request, Response $response, $a
         $result = $generalOrdersDao->updateAccumulatedOrder($dataProgramming);
     }
 
-    if ($result == null && $dataProgramming['accumulatedQuantity'] = 0)
+    if ($result == null)
         $result = $generalOrdersDao->changeStatus($dataProgramming['order'], 'Programacion');
 
     if ($result == null)
@@ -212,8 +198,6 @@ $app->post('/addProgramming', function (Request $request, Response $response, $a
         $resp = array('info' => true, 'message' => $result['message']);
     else
         $resp = array('error' => true, 'message' => 'Ocurrio un error mientras ingresaba la información. Intente nuevamente');
-    // } else
-    // $resp = array('error' => true, 'message' => 'Materia prima no existente o sin cantidad disponible');
 
     $response->getBody()->write(json_encode($resp));
     return $response->withStatus(200)->withHeader('Content-Type', 'application/json');

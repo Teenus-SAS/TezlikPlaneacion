@@ -128,5 +128,10 @@ $(document).ready(function () {
     });
   };
 
+  $('#btnAllData').click(function (e) {
+    e.preventDefault();
+    loadTblProgramming(0); 
+  });
+
   loadTblProgramming(0);
 });

@@ -46,8 +46,7 @@ class GeneralProgrammingDao
 
         $stmt = $connection->prepare("SELECT * FROM plan_orders o
                                       WHERE o.id_company = :id_company
-                                     -- AND o.id_order NOT IN (SELECT id_order FROM programming WHERE id_company = o.id_company) 
-                                      AND o.status != 'Despacho' AND (o.accumulated_quantity IS NULL OR o.accumulated_quantity != 0)");
+                                      AND (o.status != 'Despacho' AND o.status != 'Programacion') AND (o.accumulated_quantity IS NULL OR o.accumulated_quantity != 0)");
         $stmt->execute(['id_company' => $id_company]);
 
         $this->logger->info(__FUNCTION__, array('query' => $stmt->queryString, 'errors' => $stmt->errorInfo()));

@@ -53,6 +53,9 @@ if (sizeof($_SESSION) == 0)
                                     <select class="form-control idMachine" id="searchMachine">
                                     </select>
                                 </div>
+                                <div class="col-xs-2 mr-2 mt-3">
+                                    <button class="btn btn-primary" id="btnAllData" name="btnAllData">Todos</button>
+                                </div>
                             </div>
                             <div class="col-sm-7 col-xl-1 form-inline justify-content-sm-end">
                                 <div class="col-xs-2 mr-2 mt-3">
@@ -87,7 +90,7 @@ if (sizeof($_SESSION) == 0)
                                                 </div>
                                                 <div class="col-sm-4 floating-label enable-floating-label show-label" id="machines">
                                                     <label for="">Maquina</label>
-                                                    <select class="form-control idMachine input" id="idMachine" name="idMachine">
+                                                    <select class="form-control input" id="idMachine" name="idMachine">
                                                     </select>
                                                 </div>
                                                 <div class="col-sm-2 floating-label enable-floating-label show-label">

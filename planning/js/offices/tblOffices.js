@@ -76,8 +76,8 @@ $(document).ready(function () {
           data: 'status',
           className: 'classCenter',
           render: function (data) {
-            data == 'Entregado' ? status = '' : status = data;
-            return status;
+            data == 'Entregado' ? statusa = '' : statusa = data;
+            return statusa;
           }
         },
         {
@@ -95,8 +95,8 @@ $(document).ready(function () {
           title: 'Cancelar',
           data: null,
           className: 'classCenter',
-          render: function (data) {
-            return `<a href="javascript:;" <i class="bi bi-x-octagon-fill cancelOrder" id="${data.id_order}" data-toggle='tooltip' title='Cancelar Despacho' style="font-size: 30px;color:red;"></i></a>`
+          render: function (data) { 
+            return data.status == 'Despacho' ? `<a href="javascript:;" <i class="bi bi-x-octagon-fill cancelOrder" id="${data.id_order}" data-toggle='tooltip' title='Cancelar Despacho' style="font-size: 30px;color:red;"></i></a>` : '';
           }
         },
       ],

@@ -1,13 +1,20 @@
 $(document).ready(function () {
   data = {};
+  let allMachines = [];
   let allCiclesMachines = [];
   let allPlanningMachines = [];
   let allOrders = [];
   let allProgramming = [];
 
   loadAllDataProgramming = async () => {
+    allMachines = await searchData('/api/machines');
     allCiclesMachines = await searchData('/api/planCiclesMachine');
     allPlanningMachines = await searchData('/api/planningMachines');
+
+    console.log(allMachines);
+    console.log(allCiclesMachines);
+    console.log(allPlanningMachines);
+
     allOrders = await searchData('/api/orders');
     allProgramming = await searchData('/api/programming');
     allProductsMaterials = await searchData('/api/allProductsMaterials');
@@ -48,19 +55,19 @@ $(document).ready(function () {
     let quantity = parseFloat($('#quantity').val());
 
     if (op == 1 || !isNaN(machine)) {
-      machines = false;
+      // machines = false;
 
-      for (let i = 0; i < allCiclesMachines.length; i++) {
-        if (allCiclesMachines[i].id_machine == machine && allCiclesMachines[i].id_product == product) {
-          machines = true;
-          break;
-        }
-      }
+      // for (let i = 0; i < allCiclesMachines.length; i++) {
+      //   if (allCiclesMachines[i].id_machine == machine && allCiclesMachines[i].id_product == product) {
+      //     machines = true;
+      //     break;
+      //   }
+      // }
   
-      if (machines == false) {
-        toastr.error('Ciclo de maquina no existe para ese producto');
-        return false;
-      }
+      // if (machines == false) {
+      //   toastr.error('Ciclo de maquina no existe para ese producto');
+      //   return false;
+      // }
       machines = [];
 
       for (let i = 0; i < allProgramming.length; i++) {
@@ -242,11 +249,22 @@ $(document).ready(function () {
       );
     });
 
-    $('#selectNameProduct').change(function (e) { 
-      e.preventDefault();
+    $('#selectNameProduct').change(function (e) {
+      e.preventDefault(); 
 
       for (let i = 0; i < r.length; i++) {
         if (this.value == r[i].id_product) {
+          let ciclesMachine = allCiclesMachines.filter(item => item.id_product == this.value);
+          let $select = $(`#idMachine`);
+          $select.empty();
+          $select.append(`<option value="0" disabled selected>Seleccionar</option>`);
+     
+          $.each(ciclesMachine, function (i, value) {
+            $select.append(
+              `<option value = ${value.id_machine}> ${value.machine} </option>`
+            );
+          });
+          
           $('#quantityOrder').val(parseFloat(r[i].original_quantity).toLocaleString());
 
           dataProgramming = new FormData(formCreateProgramming);
@@ -254,11 +272,10 @@ $(document).ready(function () {
           dataProgramming.append('order', r[i].id_order);
           
           break;
-        } 
+        }
       }
 
-      checkData(2, this.id); 
+      checkData(2, this.id);
     });
-      
-  };
+  }; 
 });
