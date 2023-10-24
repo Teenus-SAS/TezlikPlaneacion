@@ -1,4 +1,4 @@
-$(document).ready(function () {     
+$(document).ready(function () {
     $(document).on('click', '.changeDate', function (e) {
         e.preventDefault();
 
@@ -56,7 +56,7 @@ $(document).ready(function () {
 
     $('.cardSearchDate').hide();
 
-    $('#btnOpenSearchDate').click(function (e) { 
+    $('#btnOpenSearchDate').click(function (e) {
         e.preventDefault();
 
         $('.cardSearchDate').toggle(800);
@@ -86,25 +86,48 @@ $(document).ready(function () {
         loadTblOffices(firtsDate, lastDate);
     });
 
-    // $(document).on('change', '.dateOrders', async function (e) {
-    //     e.preventDefault();
+    $(document).on('click', '.cancelOrder', function (e) {
+        e.preventDefault();
 
-    //     let dateOrders = document.getElementsByClassName('dateOrders');
-    //     let status = true;
+        let row = $(this).parent().parent()[0];
+        let data = tblOffices.fnGetData(row);
 
-    //     for (let i = 0; i < dateOrders.length; i++) {
-    //         if (dateOrders[i].value == '') {
-    //             status = false;
-    //             break;
-    //         }
-    //     }
+        bootbox.confirm({
+            title: 'Cancelar Despacho',
+            message: `Está seguro de cancelar este despacho? Esta acción no se puede reversar.`,
+            buttons: {
+                confirm: {
+                    label: 'Si',
+                    className: 'btn-success',
+                },
+                cancel: {
+                    label: 'No',
+                    className: 'btn-danger',
+                },
+            },
+            callback: function (result) {
+                if (result == true) {
+                    let form = new FormData();
+                    form.append('idOrder', data.id_order);
+                    form.append('idProduct', data.id_product);
+                    form.append('originalQuantity', data.original_quantity);
+                    form.append('quantity', data.accumulated_quantity);
 
-    //     if (status == false) {
-    //         toastr.error('Ingrese Fecha Inicial y Fecha Final');
-    //     } else {
-    //         loadTblOffices(dateOrders[0].value, dateOrders[1].value);
-    //     }
-    // });
+                    $.ajax({
+                        type: "POST",
+                        url: '/api/cancelOffice',
+                        data: form,
+                        contentType: false,
+                        cache: false,
+                        processData: false,
+                        success: function (resp) {
+                            message(resp);
+                        }
+                    });
+                }
+            },
+        });
+    });
 
     /* Mensaje de exito */
     message = (data) => {
@@ -117,10 +140,5 @@ $(document).ready(function () {
         } else if (data.error == true) toastr.error(data.message);
         else if (data.info == true) toastr.info(data.message);
     };
-
-    /* Actualizar tabla 
-    function updateTable() {
-        $('#tblOffices').DataTable().clear();
-        $('#tblOffices').DataTable().ajax.reload();
-    } */
+ 
 });

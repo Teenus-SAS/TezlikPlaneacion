@@ -20,7 +20,7 @@ class GeneralOfficesDao
     {
         $connection = Connection::getInstance()->getConnection();
 
-        $stmt = $connection->prepare("SELECT o.id_order, o.id_client, p.reference, p.quantity, o.id_product, o.status, o.num_order, o.date_order, o.original_quantity, p.product, c.client, o.min_date, o.max_date, o.delivery_date
+        $stmt = $connection->prepare("SELECT o.id_order, o.id_client, p.reference, p.quantity, p.accumulated_quantity, o.id_product, o.status, o.num_order, o.date_order, o.original_quantity, p.product, c.client, o.min_date, o.max_date, o.delivery_date
                                       FROM plan_orders o
                                         INNER JOIN products p ON p.id_product = o.id_product
                                         INNER JOIN plan_clients c ON c.id_client = o.id_client
@@ -39,7 +39,7 @@ class GeneralOfficesDao
     {
         $connection = Connection::getInstance()->getConnection();
 
-        $stmt = $connection->prepare("SELECT o.id_order, o.id_client, o.id_product, o.num_order, o.status, o.date_order, o.original_quantity, p.product, c.client, o.min_date, o.max_date, o.delivery_date
+        $stmt = $connection->prepare("SELECT o.id_order, o.id_client, o.id_product, o.num_order, o.status, o.date_order, o.original_quantity, p.product, p.quantity, p.accumulated_quantity, c.client, o.min_date, o.max_date, o.delivery_date
                                       FROM plan_orders o
                                         INNER JOIN products p ON p.id_product = o.id_product
                                         INNER JOIN plan_clients c ON c.id_client = o.id_client

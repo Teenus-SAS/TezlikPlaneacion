@@ -41,6 +41,26 @@ $app->get('/actualOffices', function (Request $request, Response $response, $arg
     return $response->withHeader('Content-Type', 'application/json');
 });
 
+$app->post('/cancelOffice', function (Request $request, Response $response, $args) use (
+    $generalProductsDao,
+    $generalOrdersDao
+) {
+    $dataOrder = $request->getParsedBody();
+
+    $order = $generalProductsDao->updateAccumulatedQuantity($dataOrder['idProduct'], $dataOrder['quantity'] + $dataOrder['originalQuantity'], 1);
+    $order = $generalOrdersDao->changeStatus($dataOrder['idOrder'], 'Alistamiento');
+
+    if ($order == null)
+        $resp = array('success' => true, 'message' => 'Despacho cancelado correctamente');
+    else if ($order['info'])
+        $resp = array('info' => true, 'message' => $order['message']);
+    else
+        $resp = array('error' => true, 'message' => 'Ocurrio un error mientras modificaba la información. Intente nuevamente');
+
+    $response->getBody()->write(json_encode($resp));
+    return $response->withStatus(200)->withHeader('Content-Type', 'application/json');
+});
+
 $app->post('/changeOffices', function (Request $request, Response $response, $args) use (
     $officesDao,
     $generalProductsDao,

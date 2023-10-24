@@ -91,6 +91,14 @@ $(document).ready(function () {
             return action;
           }
         },
+        {
+          title: 'Cancelar',
+          data: null,
+          className: 'classCenter',
+          render: function (data) {
+            return `<a href="javascript:;" <i class="bi bi-x-octagon-fill cancelOrder" id="${data.id_order}" data-toggle='tooltip' title='Cancelar Despacho' style="font-size: 30px;color:red;"></i></a>`
+          }
+        },
       ],
     });
   };
