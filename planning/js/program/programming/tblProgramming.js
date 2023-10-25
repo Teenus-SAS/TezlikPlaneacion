@@ -19,7 +19,7 @@ $(document).ready(function () {
     loadTblProgramming(this.value);
   });
   
-  loadTblProgramming = async (machine) => { 
+  loadTblProgramming = async (machine) => {
     let data;
 
     if (machine == 0) {
@@ -35,6 +35,10 @@ $(document).ready(function () {
       language: {
         url: '//cdn.datatables.net/plug-ins/1.10.20/i18n/Spanish.json',
       },
+      dom: 'Bfrtip',
+      buttons: [
+        'pdf',
+      ],
       columns: [
         {
           title: 'No.',
@@ -96,13 +100,13 @@ $(document).ready(function () {
           title: 'Fecha Inicio',
           data: null,
           className: 'uniqueClassName',
-          render: function (data) { 
+          render: function (data) {
             let min_date = getFirstText(data.min_date);
             let hourStart = moment(data.min_hour, ['HH:mm']).format('h:mm A');
 
             return `<p>${min_date}</p><p>${hourStart}</p>`;
           },
-        }, 
+        },
         {
           title: 'Fecha Final',
           data: null,
@@ -113,7 +117,7 @@ $(document).ready(function () {
             let hourStart = moment(data.max_hour, ['HH:mm']).format('h:mm A');
             return `<p>${max_date}</p><p>${hourStart}</p>`;
           },
-        }, 
+        },
         {
           title: 'Acciones',
           data: 'id_programming',
@@ -127,11 +131,7 @@ $(document).ready(function () {
       ],
     });
   };
-
-  $('#btnAllData').click(function (e) {
-    e.preventDefault();
-    loadTblProgramming(0); 
-  });
+ 
 
   loadTblProgramming(0);
 });

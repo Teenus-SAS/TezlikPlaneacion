@@ -53,9 +53,6 @@ if (sizeof($_SESSION) == 0)
                                     <select class="form-control idMachine" id="searchMachine">
                                     </select>
                                 </div>
-                                <div class="col-xs-2 mr-2 mt-3">
-                                    <button class="btn btn-primary" id="btnAllData" name="btnAllData">Todos</button>
-                                </div>
                             </div>
                             <div class="col-sm-7 col-xl-1 form-inline justify-content-sm-end">
                                 <div class="col-xs-2 mr-2 mt-3">
@@ -150,11 +147,12 @@ if (sizeof($_SESSION) == 0)
     <?php include_once dirname(dirname(dirname(dirname(__DIR__)))) . '/global/partials/scriptsJS.php'; ?>
     <!-- <script src="/planning/js/users/usersAccess.js"></script> -->
 
-    <!-- <style>
-        td {
-            cursor: move;
-        }
-    </style> -->
+    <script src="https://cdn.datatables.net/buttons/2.4.2/js/dataTables.buttons.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.53/pdfmake.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.53/vfs_fonts.js"></script>
+    <script src="https://cdn.datatables.net/buttons/2.4.2/js/buttons.html5.min.js"></script>
+    <script src="https://cdn.datatables.net/buttons/2.4.2/js/buttons.print.min.js"></script>
     <script src="/global/js/global/lastText.js"></script>
     <script src="../planning/js/program/programming/tblProgramming.js"></script>
     <!--  <script src="/planning/js/basic/products/configProducts.js"></script> -->

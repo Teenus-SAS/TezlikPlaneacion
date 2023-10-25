@@ -9,12 +9,7 @@ $(document).ready(function () {
   loadAllDataProgramming = async () => {
     allMachines = await searchData('/api/machines');
     allCiclesMachines = await searchData('/api/planCiclesMachine');
-    allPlanningMachines = await searchData('/api/planningMachines');
-
-    console.log(allMachines);
-    console.log(allCiclesMachines);
-    console.log(allPlanningMachines);
-
+    allPlanningMachines = await searchData('/api/planningMachines'); 
     allOrders = await searchData('/api/orders');
     allProgramming = await searchData('/api/programming');
     allProductsMaterials = await searchData('/api/allProductsMaterials');

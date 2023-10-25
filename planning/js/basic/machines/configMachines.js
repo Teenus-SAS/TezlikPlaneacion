@@ -13,6 +13,8 @@
     
     if(op == 1)
       $select.append(`<option value="0">Proceso Manual</option>`);
+    else if(op == 3)
+      $select.append(`<option value="0">Todos</option>`);
     
     $.each(r, function (i, value) {
       $select.append(

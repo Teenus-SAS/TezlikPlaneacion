@@ -23,7 +23,7 @@ class GeneralRequisitionsDao
                                       FROM requisitons r
                                         INNER JOIN materials m ON m.id_material = r.id_material
                                       WHERE r.id_company = :id_company 
-                                      AND (r.admission_date IS NULL OR MONTH(r.application_date) = MONTH(CURRENT_DATE))");
+                                      AND (r.admission_date IS NULL OR MONTH(r.admission_date) = MONTH(CURRENT_DATE))");
         $stmt->execute(['id_company' => $id_company]);
 
         $this->logger->info(__FUNCTION__, array('query' => $stmt->queryString, 'errors' => $stmt->errorInfo()));

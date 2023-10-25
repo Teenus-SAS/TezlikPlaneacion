@@ -190,6 +190,6 @@ $(document).ready(function () {
     else if (data.info == true) toastr.info(data.message);
   };
 
-  loadDataMachines(2);
+  loadDataMachines(3);
 
 });
