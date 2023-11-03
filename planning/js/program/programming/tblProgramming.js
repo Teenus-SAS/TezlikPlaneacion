@@ -37,7 +37,7 @@ $(document).ready(function () {
       },
       dom: 'Bfrtip',
       buttons: [
-        'pdf',
+        'excel',
       ],
       columns: [
         {
