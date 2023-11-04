@@ -43,9 +43,9 @@ class ExplosionMaterialsDao
       $repeat = false;
       for ($i = 0; $i < sizeof($data); $i++) {
         if ($data[$i]['id_material'] == $arr['id_material']) {
-          $data[$i]['transit'] += $arr['transit'];
+          $data[$i]['transit'] = $arr['transit'];
           $data[$i]['need'] += $arr['need'];
-          $data[$i]['available'] += $arr['available'];
+          $data[$i]['available'] = $arr['available'];
           $repeat = true;
           break;
         }
