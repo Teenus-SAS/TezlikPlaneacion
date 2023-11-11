@@ -13,12 +13,12 @@ $(document).ready(function () {
         return fechaFormateada;
     };
 
-    convetFormatDate = (date) => { 
-        var fecha = new Date(date);
+    convetFormatDate = (date) => {
+        var fecha = new Date(date + 'T00:00:00');
 
         var año = fecha.getFullYear();
         var mes = ('0' + (fecha.getMonth() + 1)).slice(-2);
-        var día = ('0' + fecha.getDate()).slice(-2); 
+        var día = ('0' + fecha.getDate()).slice(-2);
 
         // Formatear la fecha en el nuevo formato
         var fechaFormateada = año + '-' + mes + '-' + día;

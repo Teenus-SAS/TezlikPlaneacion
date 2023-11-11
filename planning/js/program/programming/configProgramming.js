@@ -4,7 +4,7 @@ $(document).ready(function () {
   let allCiclesMachines = [];
   let allPlanningMachines = [];
   let allOrders = [];
-  let allProgramming = [];
+  let allProgramming = []; 
 
   loadAllDataProgramming = async () => {
     allMachines = await searchData('/api/machines');
@@ -28,7 +28,7 @@ $(document).ready(function () {
     e.preventDefault();
 
     checkData(1, this.id);
-  });
+  }); 
 
   checkData = async (op, id) => {
     let inputs = document.getElementsByClassName('input');
@@ -39,10 +39,10 @@ $(document).ready(function () {
         cont += 1;
     }
     $('#btnCreateProgramming').hide();
-    $('.date').hide();
-
+    
     $('#minDate').val('');
     $('#maxDate').val('');
+    $('.date').hide();
 
     let order = parseFloat($('#order').val());
     let product = parseFloat($('#selectNameProduct').val());
@@ -165,7 +165,7 @@ $(document).ready(function () {
       let id_order = parseFloat($('#order').val());
       let product = parseFloat($('#selectNameProduct').val());
       let machine = parseFloat($('#idMachine').val());
-      let quantity = $('#quantity').val(); 
+      let quantity = $('#quantity').val();
 
       for (let i = 0; i < allOrders.length; i++) {
         if (allOrders[i].id_order == id_order) {
@@ -187,24 +187,41 @@ $(document).ready(function () {
           break;
         }
       }
-    
+      
       if (op == 2) {
-        min_date = `${min_date} ${planningMachine.hour_start}:00:00`;
+        min_date = new Date(`${min_date} ${planningMachine.hour_start}:00:00`); 
+        min_date =
+          min_date.getFullYear() + "-" +
+          ("00" + (min_date.getMonth() + 1)).slice(-2) + "-" +
+          ("00" + min_date.getDate()).slice(-2) + " " + ("00" + min_date.getHours()).slice(-2) + ':' + ("00" + min_date.getMinutes()).slice(-2) + ':' + '00';
       }
-    
-      let days = Math.trunc((order.original_quantity / ciclesMachine.cicles_hour / planningMachine.hours_day)) + 1;
       let final_date = new Date(min_date);
     
-      final_date.setDate(final_date.getDate() + days);
-    
-      let max_hour = ((order.original_quantity / ciclesMachine.cicles_hour) - (days * planningMachine.hours_day) + last_hour).toLocaleString('es-CO',{maximumFractionDigits:0});
-    
-      max_hour < 0 ? max_hour = max_hour * -1 : max_hour;
+      let days = (order.original_quantity / ciclesMachine.cicles_hour / planningMachine.hours_day);
 
-      final_date =
-        final_date.getFullYear() + "-" +
-        ("00" + (final_date.getMonth() + 1)).slice(-2) + "-" +
-        ("00" + final_date.getDate()).slice(-2) + " " + max_hour + ':' + '00' + ':' + '00';
+      if (days < 1) {
+        let hours = days * 24;
+        if (hours < 1) {
+          let minutes = hours * 60;
+          final_date.setMinutes(final_date.getMinutes() + minutes);
+        } else
+          final_date.setHours(final_date.getHours() + hours);
+        
+        final_date =
+          final_date.getFullYear() + "-" +
+          ("00" + (final_date.getMonth() + 1)).slice(-2) + "-" +
+          ("00" + final_date.getDate()).slice(-2) + " " + ("00" + final_date.getHours()).slice(-2) + ':' + ("00" + final_date.getMinutes()).slice(-2) + ':' + '00';
+      } else {
+        final_date.setDate(final_date.getDate() + days);
+    
+        let max_hour = (order.original_quantity / ciclesMachine.cicles_hour) - (days * planningMachine.hours_day) + last_hour;
+      
+        final_date =
+          final_date.getFullYear() + "-" +
+          ("00" + (final_date.getMonth() + 1)).slice(-2) + "-" +
+          ("00" + final_date.getDate()).slice(-2) + " " + max_hour + ':' + '00' + ':' + '00';
+      }
+
       dataProgramming.append('idProduct', product);
       dataProgramming.append('idMachine', machine);
       dataProgramming.append('quantity', quantity);
