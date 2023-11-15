@@ -173,6 +173,37 @@ $(document).ready(function () {
     });
   };
 
+  /* Cambiar estado 
+  $(document).on('click','.changeStatus', function () {
+    let row = $(this).parent().parent()[0];
+    let data = tblProgramming.fnGetData(row);
+
+    bootbox.confirm({
+      title: 'Cambiar Estado',
+      message:
+        'Está seguro de cambiar estado este programa de produccion? Esta acción no se puede reversar.',
+      buttons: {
+        confirm: {
+          label: 'Si',
+          className: 'btn-success',
+        },
+        cancel: {
+          label: 'No',
+          className: 'btn-danger',
+        },
+      },
+      callback: function (result) {
+        if (result == true) { 
+          $.get(`/api/changeStatusProgramming/${data.id_programming}`,
+            function (data, textStatus, jqXHR) {
+              
+            },
+          );
+        }
+      },
+    });
+  }); */
+
   /* Mensaje de exito */
   message = async (data) => {
     if (data.success == true) {

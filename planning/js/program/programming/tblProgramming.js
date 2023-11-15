@@ -129,6 +129,7 @@ $(document).ready(function () {
           className: 'uniqueClassName',
           render: function (data) {
             return `
+                <a href="javascript:;" <i id="${data}" class="bi bi-bookmark-plus-fill changeStatus" data-toggle='tooltip' title='Crear Orden de Produccion' style="font-size: 30px;"></i></a>
                 <a href="javascript:;" <i id="${data}" class="bx bx-edit-alt updateProgramming" data-toggle='tooltip' title='Actualizar Programa' style="font-size: 30px;"></i></a>
                 <a href="javascript:;" <i id="${data}" class="mdi mdi-delete-forever" data-toggle='tooltip' title='Eliminar Programa' style="font-size: 30px;color:red" onclick="deleteFunction()"></i></a>`;
           },
