@@ -53,7 +53,7 @@ class ProgrammingDao
         $stmt = $connection->prepare("SELECT o.id_order, p.id_product, p.reference, p.product, p.quantity, o.original_quantity
                                       FROM products p
                                       INNER JOIN plan_orders o ON o.id_product = p.id_product
-                                      WHERE o.num_order = :num_order AND o.status = 'Alistamiento' 
+                                      WHERE o.num_order = :num_order -- AND o.status = 'Alistamiento' 
                                       AND (o.accumulated_quantity IS NULL OR o.accumulated_quantity != 0)
                                       GROUP BY p.id_product");
         $stmt->execute(['num_order' => $num_order]);
@@ -76,7 +76,7 @@ class ProgrammingDao
                                         INNER JOIN machines m ON m.id_machine = pg.id_machine
                                         INNER JOIN plan_clients c ON c.id_client = o.id_client
                                         INNER JOIN plan_program_machines pm ON pm.id_machine = pg.id_machine
-                                      WHERE pg.id_company = :id_company");
+                                      WHERE pg.id_company = :id_company AND pg.status = 0");
         $stmt->execute(['id_company' => $id_company]);
 
         $this->logger->info(__FUNCTION__, array('query' => $stmt->queryString, 'errors' => $stmt->errorInfo()));

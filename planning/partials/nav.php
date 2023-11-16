@@ -65,6 +65,13 @@
                         </li>
                     <?php } ?>
 
+                    <li class="nav-item explosionMaterials">
+                        <a class="nav-link" href="/planning/production-order">
+                            <i class="bx bxs-customize mr-1"></i> Order de Produccion
+                            <i class="bx bx-chevron-down"></i>
+                        </a>
+                    </li>
+
                     <?php if ($_SESSION['office'] == 1 && $_SESSION['plan_planning_office'] == 1) { ?>
                         <li class="nav-item offices">
                             <a class="nav-link" href="/planning/offices">

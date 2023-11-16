@@ -1,4 +1,5 @@
 $(document).ready(function () {
+  let programming = [];
   // Obtener referencia producto
   $('#selectNameProduct').change(function (e) {
     e.preventDefault();
@@ -173,10 +174,13 @@ $(document).ready(function () {
     });
   };
 
-  /* Cambiar estado 
+  /* Cambiar estado */
   $(document).on('click','.changeStatus', function () {
     let row = $(this).parent().parent()[0];
     let data = tblProgramming.fnGetData(row);
+
+    let dataProgramming = {};
+    dataProgramming['idProgramming'] = data.id_programming;
 
     bootbox.confirm({
       title: 'Cambiar Estado',
@@ -194,15 +198,142 @@ $(document).ready(function () {
       },
       callback: function (result) {
         if (result == true) { 
-          $.get(`/api/changeStatusProgramming/${data.id_programming}`,
+          $.post(`/api/changeStatusProgramming`,dataProgramming,
             function (data, textStatus, jqXHR) {
-              
+              message(data);
             },
           );
         }
       },
     });
-  }); */
+  }); 
+
+  $(document).on('click','#btnChangeStatus', function () {
+    $('#tblStatusProgramming').empty();
+    
+    let tblStatusProgramming = document.getElementById(
+      'tblStatusProgramming'
+    );
+
+    tblStatusProgramming.insertAdjacentHTML('beforeend',
+      `<thead>
+        <th>No</th>
+        <th>Pedido</th>
+        <th>Referencia</th>
+        <th>Producto</th>
+        <th>Maquina</th>
+        <th>Cant. Pedido</th>
+        <th>Cant. Maquina</th>
+        <th></th>
+        </tr>
+      </thead>
+      <tbody id="tblStatusProgrammingBody"></tbody>`);
+    
+    setTblStatusProgramming();
+
+  }); 
+
+  setTblStatusProgramming = () => {
+    let data = copyAllProgramming;
+    
+    let tblStatusProgrammingBody = document.getElementById(
+      'tblStatusProgrammingBody'
+    );
+      
+    for (i = 0; i < data.length; i++) {
+      programming.push({ idProgramming: data[i].id_programming });
+
+      tblStatusProgrammingBody.insertAdjacentHTML(
+        'beforeend',
+        `
+        <tr>
+            <td>${i + 1}</td>
+            <td>${data[i].num_order}</td>
+            <td>${data[i].reference}</td>
+            <td>${data[i].product}</td>
+            <td>${data[i].machine}</td>
+            <td>${data[i].quantity_order}</td>
+            <td>${data[i].quantity_programming}</td>
+            <td>
+                <input type="checkbox" class="form-control-updated checkStatusProgramming" id="checkIn-${data[i].id_programming
+        }" checked>
+            </td>
+        </tr>
+      `
+      );
+    }
+
+    $('#changeStatusProgramming').modal('show');
+
+    $('#tblStatusProgramming').DataTable({
+      destroy: true,
+      scrollY: '150px',
+      scrollCollapse: true,
+      // language: {
+      //   url: '//cdn.datatables.net/plug-ins/1.10.20/i18n/Spanish.json',
+      // },
+      dom: '<"datatable-error-console">frtip',
+      fnInfoCallback: function (oSettings, iStart, iEnd, iMax, iTotal, sPre) {
+        if (oSettings.json && oSettings.json.hasOwnProperty('error')) {
+          console.error(oSettings.json.error);
+        }
+      },
+    });
+
+    let tables = document.getElementsByClassName(
+      'dataTables_scrollHeadInner'
+    );
+
+    let attr = tables[0];
+    attr.style.width = '100%';
+    attr = tables[0].firstElementChild;
+    attr.style.width = '100%';
+  };
+
+  $(document).on('click', '.checkStatusProgramming', function () {
+    let id = this.id;
+    let idProgramming = id.slice(8, id.length); 
+
+    if ($(`#${id}`).is(':checked')) {
+      let data = {
+        idProgramming: idProgramming,
+      };
+
+      programming.push(data);
+    } else {
+      for (i = 0; i < programming.length; i++)
+        if (programming[i].idProgramming == idProgramming)
+          programming.splice(i, 1);
+    }
+  });
+
+  $('#btnSaveProgramming').click(function (e) {
+    e.preventDefault();
+    
+    if (programming.length == 0) {
+      toastr.error('No hay ningún dato para guardar');
+      return false;
+    }
+
+    $.ajax({
+      type: "POST",
+      url: '/api/changeStatusProgramming',
+      data: { data: programming },
+      success: function (resp) {
+        programming = [];
+        $('#changeStatusProgramming').modal('hide');
+
+        message(resp);
+      }
+    });
+  });
+
+  $('.btnCloseStatusProgramming').click(function (e) {
+    e.preventDefault();
+    programming = [];
+    $('#changeStatusProgramming').modal('hide');
+    $('#tblStatusProgrammingBody').empty();
+  });
 
   /* Mensaje de exito */
   message = async (data) => {

@@ -35,6 +35,11 @@ $(document).ready(function () {
         className: 'classCenter',
       },
       {
+        title: 'Reservado',
+        data: 'accumulated_quantity',
+        className: 'uniqueClassName',
+      }, 
+      {
         title: 'Unidad',
         data: 'unit',
         className: 'classCenter',

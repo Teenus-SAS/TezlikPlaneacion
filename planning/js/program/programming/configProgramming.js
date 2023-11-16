@@ -9,9 +9,23 @@ $(document).ready(function () {
   loadAllDataProgramming = async () => {
     allMachines = await searchData('/api/machines');
     allCiclesMachines = await searchData('/api/planCiclesMachine');
-    allPlanningMachines = await searchData('/api/planningMachines'); 
+    allPlanningMachines = await searchData('/api/planningMachines');
     allOrders = await searchData('/api/orders');
     allProgramming = await searchData('/api/programming');
+    copyAllProgramming = allProgramming;
+
+    let cardHeader = document.getElementsByClassName('cardHeader');
+
+    if (cardHeader.length > 1)
+      cardHeader[1].remove();
+
+    cardHeader[0].insertAdjacentHTML('afterend',
+    `<div class="col-sm-7 col-xl-2 form-inline justify-content-sm-end cardHeader">
+      <div class="col-xs-2 mr-2 mt-3">
+        <button class="btn btn-danger" id="btnChangeStatus" name="btnChangeStatus">Orden de Producción</button>
+      </div>
+     </div>`);
+
     allProductsMaterials = await searchData('/api/allProductsMaterials');
   } 
 
@@ -289,5 +303,5 @@ $(document).ready(function () {
 
       checkData(2, this.id);
     });
-  }; 
+  };  
 });

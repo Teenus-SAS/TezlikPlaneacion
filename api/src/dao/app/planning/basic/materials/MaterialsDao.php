@@ -20,7 +20,7 @@ class MaterialsDao
   {
     $connection = Connection::getInstance()->getConnection();
     $stmt = $connection->prepare("SELECT m.id_material, m.reference, m.material, m.material AS descript, mg.id_magnitude, mg.magnitude, 
-                                         u.id_unit, u.unit, u.abbreviation, m.quantity
+                                         u.id_unit, u.unit, u.abbreviation, m.quantity, (SELECT IFNULL(SUM(quantity), 0) FROM requisitons WHERE id_material = m.id_material) AS accumulated_quantity
                                   FROM materials m
                                     INNER JOIN convert_units u ON u.id_unit = m.unit
                                     INNER JOIN convert_magnitudes mg ON mg.id_magnitude = u.id_magnitude

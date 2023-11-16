@@ -71,6 +71,7 @@ $(document).ready(function () {
         description: data[i].descript,
         unit: data[i].unit,
         quantity: data[i].quantity,
+        accumulated_quantity: data[i].accumulated_quantity,
         // price: data[i].price,
         classification,
       });
@@ -114,6 +115,11 @@ $(document).ready(function () {
         {
           title: 'Existencia',
           data: 'quantity',
+          className: 'uniqueClassName',
+        },
+        {
+          title: 'Reservado',
+          data: 'accumulated_quantity',
           className: 'uniqueClassName',
         },
         {

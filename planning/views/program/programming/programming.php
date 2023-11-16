@@ -7,6 +7,8 @@ if (!isset($_SESSION)) {
 if (sizeof($_SESSION) == 0)
     header('location: /');
 ?>
+<?php require_once dirname(dirname(dirname(__DIR__))) . '/modals/statusProgramming.php'; ?>
+
 <!DOCTYPE html>
 <html lang="es">
 
@@ -47,13 +49,14 @@ if (sizeof($_SESSION) == 0)
                                     </ol>
                                 </div>
                             </div>
-                            <div class="col-sm-7 col-xl-8 form-inline justify-content-sm-end">
+                            <div class="col-sm-7 col-xl-6 form-inline justify-content-sm-end cardHeader">
                                 <div class="col-sm-3" id="machines">
                                     <label class="font-weight-bold text-dark">Maquina</label>
                                     <select class="form-control idMachine" id="searchMachine">
                                     </select>
                                 </div>
                             </div>
+
                             <div class="col-sm-7 col-xl-1 form-inline justify-content-sm-end">
                                 <div class="col-xs-2 mr-2 mt-3">
                                     <button class="btn btn-warning" id="btnNewProgramming" name="btnNewProgramming">Programar</button>

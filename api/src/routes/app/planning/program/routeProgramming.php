@@ -26,27 +26,10 @@ $economicLotDao = new LotsProductsDao();
 $generalPlanCiclesMachinesDao = new GeneralPlanCiclesMachinesDao();
 $explosionMaterialsDao = new ExplosionMaterialsDao();
 
-
 use Psr\Http\Message\ResponseInterface as Response;
 use Psr\Http\Message\ServerRequestInterface as Request;
 
-/* 
-    $app->get('/generalData', function (Request $request, Response $response, $args) use ($machinesDao, $ordersDao, $productsDao) {
-        session_start();
-        $id_company = $_SESSION['id_company'];
-
-        $machines = $machinesDao->findAllMachinesByCompany($id_company);
-        $orders = $ordersDao->findAllOrdersByCompany($id_company);
-        $products = $productsDao->findAllProductsByCompany($id_company);
-
-        $data['machines'] = $machines;
-        $data['orders'] = $orders;
-        $data['products'] = $products;
-
-        $response->getBody()->write(json_encode($data, JSON_NUMERIC_CHECK));
-        return $response->withHeader('Content-Type', 'application/json');
-    }); 
-
+/*  
     // Consultar fecha inicio maquina
     $app->post('/dateMachine', function (Request $request, Response $response, $args) use ($datesMachinesDao) {
         session_start();
@@ -270,6 +253,31 @@ $app->post('/deleteProgramming', function (Request $request, Response $response,
         $resp = array('success' => true, 'message' => 'Programa de producción eliminado correctamente');
     else if (isset($programming['info']))
         $resp = array('info' => true, 'message' => $programming['message']);
+    else
+        $resp = array('error' => true, 'message' => 'Ocurrio un error mientras eliminaba la información. Intente nuevamente');
+
+    $response->getBody()->write(json_encode($resp));
+    return $response->withHeader('Content-Type', 'application/json');
+});
+
+$app->post('/changeStatusProgramming', function (Request $request, Response $response, $args) use ($generalProgrammingDao) {
+    $dataProgramming = $request->getParsedBody();
+    if (isset($dataProgramming['idProgramming']))
+        $result = $generalProgrammingDao->changeStatusProgramming($dataProgramming['idProgramming'], 1);
+    else {
+        $programming = $dataProgramming['data'];
+
+        for ($i = 0; $i < sizeof($programming); $i++) {
+            $result = $generalProgrammingDao->changeStatusProgramming($programming[$i]['idProgramming'], 1);
+
+            if (isset($result['info'])) break;
+        }
+    }
+
+    if ($result == null)
+        $resp = array('success' => true, 'message' => 'Programa de producción eliminado correctamente');
+    else if (isset($result['info']))
+        $resp = array('info' => true, 'message' => $result['message']);
     else
         $resp = array('error' => true, 'message' => 'Ocurrio un error mientras eliminaba la información. Intente nuevamente');
 
