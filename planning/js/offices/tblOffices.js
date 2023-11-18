@@ -31,7 +31,7 @@ $(document).ready(function () {
           className: 'uniqueClassName',
         },
         {
-          title: 'Fecha Pedido',
+          title: 'F.Pedido',
           data: 'date_order',
           className: 'uniqueClassName',
         },
@@ -41,17 +41,17 @@ $(document).ready(function () {
           className: 'uniqueClassName',
         },
         {
-          title: 'Fecha Minima',
+          title: 'F.Minima',
           data: 'min_date',
           className: 'classCenter',
         },
         {
-          title: 'Fecha Maxima',
+          title: 'F.Maxima',
           data: 'max_date',
           className: 'classCenter',
         },
         {
-          title: 'Referencia',
+          title: 'Ref',
           data: 'reference',
           className: 'uniqueClassName',
         },
@@ -61,7 +61,7 @@ $(document).ready(function () {
           className: 'uniqueClassName',
         },
         {
-          title: 'Cantidad Solicitada',
+          title: 'Cantidad',
           data: 'original_quantity',
           className: 'classCenter',
           render: $.fn.dataTable.render.number('.', ',', 0, ''),
@@ -81,7 +81,7 @@ $(document).ready(function () {
           }
         },
         {
-          title: 'Fecha de Entrega',
+          title: 'F.Entrega',
           data: null,
           className: 'classCenter',
           render: function (data) {
