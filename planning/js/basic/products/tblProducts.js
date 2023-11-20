@@ -36,8 +36,8 @@ $(document).ready(function () {
       }, 
       {
         title: 'Reservado',
-        data: 'accumulated_quantity',
-        className: 'uniqueClassName',
+        data: 'reserved',
+        className: 'uniqueClassName', 
       }, 
       {
         title: 'Unidad',

@@ -19,7 +19,7 @@ class ProductsDao
   public function findAllProductsByCompany($id_company)
   {
     $connection = Connection::getInstance()->getConnection();
-    $stmt = $connection->prepare("SELECT p.id_product, p.reference, p.product, p.product AS descript, p.img, p.quantity, p.accumulated_quantity, p.classification, 'UNIDAD' AS unit
+    $stmt = $connection->prepare("SELECT p.id_product, p.reference, p.product, p.product AS descript, p.img, p.quantity, (SELECT IFNULL(SUM(original_quantity), 0) FROM plan_orders WHERE id_product = p.id_product AND status != 'Alistamiento') AS reserved, p.classification, 'UNIDAD' AS unit
                                   FROM products p
                                   WHERE p.id_company = :id_company");
     $stmt->execute(['id_company' => $id_company]);

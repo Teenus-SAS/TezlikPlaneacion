@@ -47,7 +47,7 @@ $app->post('/cancelOffice', function (Request $request, Response $response, $arg
 ) {
     $dataOrder = $request->getParsedBody();
 
-    $order = $generalProductsDao->updateAccumulatedQuantity($dataOrder['idProduct'], $dataOrder['quantity'] + $dataOrder['originalQuantity'], 1);
+    // $order = $generalProductsDao->updateAccumulatedQuantity($dataOrder['idProduct'], $dataOrder['quantity'] + $dataOrder['originalQuantity'], 1);
     $order = $generalOrdersDao->changeStatus($dataOrder['idOrder'], 'Alistamiento');
 
     if ($order == null)
