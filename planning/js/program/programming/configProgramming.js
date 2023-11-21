@@ -12,19 +12,7 @@ $(document).ready(function () {
     allPlanningMachines = await searchData('/api/planningMachines');
     allOrders = await searchData('/api/orders');
     allProgramming = await searchData('/api/programming');
-    copyAllProgramming = allProgramming;
-
-    let cardHeader = document.getElementsByClassName('cardHeader');
-
-    if (cardHeader.length > 1)
-      cardHeader[1].remove();
-
-    cardHeader[0].insertAdjacentHTML('afterend',
-    `<div class="col-sm-7 col-xl-2 form-inline justify-content-sm-end cardHeader">
-      <div class="col-xs-2 mr-2 mt-3">
-        <button class="btn btn-danger" id="btnChangeStatus" name="btnChangeStatus">Orden de Producción</button>
-      </div>
-     </div>`);
+    copyAllProgramming = allProgramming; 
 
     allProductsMaterials = await searchData('/api/allProductsMaterials');
   } 
@@ -216,12 +204,13 @@ $(document).ready(function () {
       if (days < 1) {
         let hours = days * 24;
         if (hours < 1) {
-          let minutes = hours * 60;
+          // let minutes = hours * 60;
+          let minutes = quantity * 60 / ciclesMachine.cicles_hour;
           final_date.setMinutes(final_date.getMinutes() + minutes);
         } else
           final_date.setHours(final_date.getHours() + hours);
         
-        final_date =
+        final_date = 
           final_date.getFullYear() + "-" +
           ("00" + (final_date.getMonth() + 1)).slice(-2) + "-" +
           ("00" + final_date.getDate()).slice(-2) + " " + ("00" + final_date.getHours()).slice(-2) + ':' + ("00" + final_date.getMinutes()).slice(-2) + ':' + '00';
