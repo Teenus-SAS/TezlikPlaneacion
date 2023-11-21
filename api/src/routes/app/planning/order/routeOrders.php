@@ -256,7 +256,7 @@ $app->post('/updateOrder', function (Request $request, Response $response, $args
     $productsMaterialsDao
 ) {
     session_start();
-    $id_company = $_SESSION['id_product'];
+    $id_company = $_SESSION['id_company'];
     $dataOrder = $request->getParsedBody();
 
     if (empty($dataOrder['order']) || empty($dataOrder['idProduct']) || empty($dataOrder['idClient']))
