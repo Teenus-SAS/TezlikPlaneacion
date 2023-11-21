@@ -132,6 +132,14 @@ $app->post('/addProduct', function (Request $request, Response $response, $args)
         if (sizeof($productsMaterials) == 0) {
             $order = $generalOrdersDao->changeStatus($orders[$i]['id_order'], 'Sin Ficha Tecnica');
             $status = false;
+        } else {
+            foreach ($productsMaterials as $arr) {
+                if ($arr['quantity_material'] <= 0) {
+                    $order = $generalOrdersDao->changeStatus($orders[$i]['id_order'], 'Sin Ficha Tecnica');
+                    $status = false;
+                    break;
+                }
+            }
         }
 
         if ($status == true) {
@@ -190,6 +198,14 @@ $app->post('/updatePlanProduct', function (Request $request, Response $response,
                 if (sizeof($productsMaterials) == 0) {
                     $generalOrdersDao->changeStatus($orders[$i]['id_order'], 'Sin Ficha Tecnica');
                     $status = false;
+                } else {
+                    foreach ($productsMaterials as $arr) {
+                        if ($arr['quantity_material'] <= 0) {
+                            $order = $generalOrdersDao->changeStatus($orders[$i]['id_order'], 'Sin Ficha Tecnica');
+                            $status = false;
+                            break;
+                        }
+                    }
                 }
 
                 if ($status == true) {
