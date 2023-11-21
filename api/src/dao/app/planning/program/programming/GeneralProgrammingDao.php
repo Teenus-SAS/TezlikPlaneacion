@@ -51,7 +51,7 @@ class GeneralProgrammingDao
                                         INNER JOIN machines m ON m.id_machine = pg.id_machine
                                         INNER JOIN plan_clients c ON c.id_client = o.id_client
                                         INNER JOIN plan_program_machines pm ON pm.id_machine = pg.id_machine
-                                      WHERE pg.status = 1 AND pg.id_company = :id_company AND o.status = 'Despacho'");
+                                      WHERE pg.status = 1 AND pg.id_company = :id_company");
         $stmt->execute([
             'id_company' => $id_company
         ]);
@@ -67,7 +67,7 @@ class GeneralProgrammingDao
 
         $stmt = $connection->prepare("SELECT * FROM plan_orders o
                                       WHERE o.id_company = :id_company
-                                      AND o.status != 'Despacho' AND (o.accumulated_quantity IS NULL OR o.accumulated_quantity != 0)");
+                                      AND o.status = 'Alistamiento' AND (o.accumulated_quantity IS NULL OR o.accumulated_quantity != 0)");
         $stmt->execute(['id_company' => $id_company]);
 
         $this->logger->info(__FUNCTION__, array('query' => $stmt->queryString, 'errors' => $stmt->errorInfo()));
