@@ -166,7 +166,7 @@ $app->post('/addProductsMaterials', function (Request $request, Response $respon
         // Ficha tecnica
         $productsMaterials = $productsMaterialsDao->findAllProductsmaterials($orders[$i]['id_product'], $id_company);
 
-        if (sizeof($productsMaterials) > 0) {
+        if (sizeof($productsMaterials) == 0) {
             $generalOrdersDao->changeStatus($orders[$i]['id_order'], 'Sin Ficha Tecnica');
             $status = false;
         }

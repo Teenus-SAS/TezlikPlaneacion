@@ -194,7 +194,7 @@ $app->post('/addOrder', function (Request $request, Response $response, $args) u
         // Ficha tecnica
         $productsMaterials = $productsMaterialsDao->findAllProductsmaterials($orders[$i]['id_product'], $id_company);
 
-        if (sizeof($productsMaterials) > 0) {
+        if (sizeof($productsMaterials) == 0) {
             $generalOrdersDao->changeStatus($orders[$i]['id_order'], 'Sin Ficha Tecnica');
             $status = false;
         }
@@ -271,7 +271,7 @@ $app->post('/updateOrder', function (Request $request, Response $response, $args
         // Ficha tecnica
         $productsMaterials = $productsMaterialsDao->findAllProductsmaterials($dataOrder['idProduct'], $id_company);
 
-        if (sizeof($productsMaterials) > 0) {
+        if (sizeof($productsMaterials) == 0) {
             $order = $generalOrdersDao->changeStatus($dataOrder['idOrder'], 'Sin Ficha Tecnica');
             $status = false;
         }
