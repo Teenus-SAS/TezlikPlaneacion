@@ -1,31 +1,46 @@
 $(document).ready(function () {
-  $('.cardCreateProduct').hide();
-
-  $('#btnCreateProduct').click(function (e) {
-    e.preventDefault();
-    $('.cardCreateProduct').toggle(800);
-  });
-
   $.ajax({
     url: '/api/products',
     success: function (r) {
-      let $select = $(`#refProduct`);
+      let $select = $(`.refProduct`);
       $select.empty();
 
-      $select.append(`<option disabled selected>Seleccionar</option>`);
-      $.each(r, function (i, value) {
+      let ref = r.sort(sortReference);
+
+      $select.append(
+        `<option value='0' disabled selected>Seleccionar</option>`
+      );
+      $.each(ref, function (i, value) {
         $select.append(
-          `<option value = ${value.id_product}> ${value.reference} </option>`
+          `<option value =${value.id_product}> ${value.reference} </option>`
         );
       });
 
-      let $select1 = $(`#selectNameProduct`);
+      let $select1 = $(`.selectNameProduct`);
       $select1.empty();
 
-      $select1.append(`<option disabled selected>Seleccionar</option>`);
-      $.each(r, function (i, value) {
+      let prod = r.sort(sortNameProduct);
+
+      $select1.append(
+        `<option value='0' disabled selected>Seleccionar</option>`
+      );
+      $.each(prod, function (i, value) {
         $select1.append(
           `<option value = ${value.id_product}> ${value.product} </option>`
+        );
+      });
+
+      let $select2 = $(`#compositeProduct`);
+      $select2.empty();
+
+      let compositeProduct = prod.filter(item => item.composite == 1);
+
+      $select2.append(
+        `<option value='0' disabled selected>Seleccionar</option>`
+      );
+      $.each(compositeProduct, function (i, value) {
+        $select2.append(
+          `<option value ="${value.id_product}"> ${value.product} </option>`
         );
       });
     },
