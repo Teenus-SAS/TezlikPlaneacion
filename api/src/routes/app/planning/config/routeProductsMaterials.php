@@ -2,6 +2,7 @@
 
 use TezlikPlaneacion\dao\ConvertDataDao;
 use TezlikPlaneacion\dao\GeneralMaterialsDao;
+use TezlikPlaneacion\dao\GeneralOrdersDao;
 use TezlikPlaneacion\dao\GeneralProductsDao;
 use TezlikPlaneacion\dao\GeneralProductsMaterialsDao;
 use TezlikPlaneacion\dao\ProductsMaterialsDao;
@@ -11,6 +12,7 @@ $generalProductsMaterialsDao = new GeneralProductsMaterialsDao();
 $convertDataDao = new ConvertDataDao();
 $productsDao = new GeneralProductsDao();
 $materialsDao = new GeneralMaterialsDao();
+$generalOrdersDao = new GeneralOrdersDao();
 
 use Psr\Http\Message\ResponseInterface as Response;
 use Psr\Http\Message\ServerRequestInterface as Request;
@@ -107,7 +109,8 @@ $app->post('/addProductsMaterials', function (Request $request, Response $respon
     $generalProductsMaterialsDao,
     $convertDataDao,
     $productsDao,
-    $materialsDao
+    $materialsDao,
+    $generalOrdersDao
 ) {
     session_start();
     $id_company = $_SESSION['id_company'];
@@ -152,6 +155,36 @@ $app->post('/addProductsMaterials', function (Request $request, Response $respon
             $resp = array('success' => true, 'message' => 'Materia prima importada correctamente');
         else
             $resp = array('error' => true, 'message' => 'Ocurrio un error mientras importada la información. Intente nuevamente');
+    }
+
+    // Cambiar estado pedidos
+    $orders = $generalOrdersDao->findAllOrdersByCompany($id_company);
+
+    for ($i = 0; $i < sizeof($orders); $i++) {
+        $status = true;
+
+        // Ficha tecnica
+        $productsMaterials = $productsMaterialsDao->findAllProductsmaterials($orders[$i]['id_product'], $id_company);
+
+        if (sizeof($productsMaterials) > 0) {
+            $generalOrdersDao->changeStatus($orders[$i]['id_order'], 'Sin Ficha Tecnica');
+            $status = false;
+        }
+
+        if ($status == true) {
+            // Checkear cantidades
+            $order = $generalOrdersDao->checkAccumulatedQuantityOrder($orders[$i]['id_order']);
+
+            if ($order['original_quantity'] <= $order['accumulated_quantity']) {
+                $generalOrdersDao->changeStatus($orders[$i]['id_order'], 'Despacho');
+                $accumulated_quantity = $order['accumulated_quantity'] - $order['original_quantity'];
+            } else {
+                $accumulated_quantity = $order['accumulated_quantity'];
+                $generalOrdersDao->changeStatus($orders[$i]['id_order'], 'Alistamiento');
+            }
+
+            $productsDao->updateAccumulatedQuantity($orders[$i]['id_product'], $accumulated_quantity, 1);
+        }
     }
     $response->getBody()->write(json_encode($resp));
     return $response->withStatus(200)->withHeader('Content-Type', 'application/json');

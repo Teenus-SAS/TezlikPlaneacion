@@ -51,7 +51,7 @@ class GeneralProgrammingDao
                                         INNER JOIN machines m ON m.id_machine = pg.id_machine
                                         INNER JOIN plan_clients c ON c.id_client = o.id_client
                                         INNER JOIN plan_program_machines pm ON pm.id_machine = pg.id_machine
-                                      WHERE pg.status = 1 AND pg.id_company = :id_company");
+                                      WHERE pg.status = 1 AND pg.id_company = :id_company AND o.status != 'Sin Ficha Tecnica'");
         $stmt->execute([
             'id_company' => $id_company
         ]);

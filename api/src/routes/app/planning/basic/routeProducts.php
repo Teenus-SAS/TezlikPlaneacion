@@ -7,6 +7,7 @@ use TezlikPlaneacion\dao\GeneralOrdersDao;
 use TezlikPlaneacion\dao\InvMoldsDao;
 use TezlikPlaneacion\dao\LastDataDao;
 use TezlikPlaneacion\dao\ProductsDao;
+use TezlikPlaneacion\dao\ProductsMaterialsDao;
 
 $productsDao = new ProductsDao();
 $generalProductsDao = new GeneralProductsDao();
@@ -15,6 +16,7 @@ $lastDataDao = new LastDataDao();
 $FilesDao = new FilesDao();
 $invMoldsDao = new InvMoldsDao();
 $invCategoriesDao = new GeneralCategoriesDao();
+$productsMaterialsDao = new ProductsMaterialsDao();
 
 use Psr\Http\Message\ResponseInterface as Response;
 use Psr\Http\Message\ServerRequestInterface as Request;
@@ -69,7 +71,8 @@ $app->post('/addProduct', function (Request $request, Response $response, $args)
     $generalProductsDao,
     $lastDataDao,
     $FilesDao,
-    $generalOrdersDao
+    $generalOrdersDao,
+    $productsMaterialsDao
 ) {
     session_start();
     $id_company = $_SESSION['id_company'];
@@ -121,18 +124,30 @@ $app->post('/addProduct', function (Request $request, Response $response, $args)
     $orders = $generalOrdersDao->findAllOrdersByCompany($id_company);
 
     for ($i = 0; $i < sizeof($orders); $i++) {
-        // Checkear cantidades
-        $order = $generalOrdersDao->checkAccumulatedQuantityOrder($orders[$i]['id_order']);
+        $status = true;
 
-        if ($order['original_quantity'] <= $order['quantity']) {
-            $generalOrdersDao->changeStatus($orders[$i]['id_order'], 'Despacho');
-            $accumulated_quantity = $order['quantity'] - $order['original_quantity'];
-        } else {
-            $generalOrdersDao->changeStatus($orders[$i]['id_order'], 'Alistamiento');
-            $accumulated_quantity = $order['quantity'];
+        // Ficha tecnica
+        $productsMaterials = $productsMaterialsDao->findAllProductsmaterials($orders[$i]['id_product'], $id_company);
+
+        if (sizeof($productsMaterials) > 0) {
+            $order = $generalOrdersDao->changeStatus($orders[$i]['id_order'], 'Sin Ficha Tecnica');
+            $status = false;
         }
 
-        $generalProductsDao->updateAccumulatedQuantity($orders[$i]['id_product'], $accumulated_quantity, 1);
+        if ($status == true) {
+            // Checkear cantidades
+            $order = $generalOrdersDao->checkAccumulatedQuantityOrder($orders[$i]['id_order']);
+
+            if ($order['original_quantity'] <= $order['accumulated_quantity']) {
+                $generalOrdersDao->changeStatus($orders[$i]['id_order'], 'Despacho');
+                $accumulated_quantity = $order['accumulated_quantity'] - $order['original_quantity'];
+            } else {
+                $accumulated_quantity = $order['accumulated_quantity'];
+                $generalOrdersDao->changeStatus($orders[$i]['id_order'], 'Alistamiento');
+            }
+
+            $generalProductsDao->updateAccumulatedQuantity($orders[$i]['id_product'], $accumulated_quantity, 1);
+        }
     }
 
     $response->getBody()->write(json_encode($resp));
@@ -143,7 +158,8 @@ $app->post('/updatePlanProduct', function (Request $request, Response $response,
     $productsDao,
     $generalProductsDao,
     $generalOrdersDao,
-    $FilesDao
+    $FilesDao,
+    $productsMaterialsDao
 ) {
     session_start();
     $id_company = $_SESSION['id_company'];
@@ -166,18 +182,30 @@ $app->post('/updatePlanProduct', function (Request $request, Response $response,
             $orders = $generalOrdersDao->findAllOrdersByCompany($id_company);
 
             for ($i = 0; $i < sizeof($orders); $i++) {
-                // Checkear cantidades
-                $order = $generalOrdersDao->checkAccumulatedQuantityOrder($orders[$i]['id_order']);
+                $status = true;
 
-                if ($order['original_quantity'] <= $order['quantity']) {
-                    $generalOrdersDao->changeStatus($orders[$i]['id_order'], 'Despacho');
-                    $accumulated_quantity = $order['quantity'] - $order['original_quantity'];
-                } else {
-                    $generalOrdersDao->changeStatus($orders[$i]['id_order'], 'Alistamiento');
-                    $accumulated_quantity = $order['quantity'];
+                // Ficha tecnica
+                $productsMaterials = $productsMaterialsDao->findAllProductsmaterials($orders[$i]['id_product'], $id_company);
+
+                if (sizeof($productsMaterials) > 0) {
+                    $generalOrdersDao->changeStatus($orders[$i]['id_order'], 'Sin Ficha Tecnica');
+                    $status = false;
                 }
 
-                $generalProductsDao->updateAccumulatedQuantity($orders[$i]['id_product'], $accumulated_quantity, 1);
+                if ($status == true) {
+                    // Checkear cantidades
+                    $order = $generalOrdersDao->checkAccumulatedQuantityOrder($orders[$i]['id_order']);
+
+                    if ($order['original_quantity'] <= $order['accumulated_quantity']) {
+                        $generalOrdersDao->changeStatus($orders[$i]['id_order'], 'Despacho');
+                        $accumulated_quantity = $order['accumulated_quantity'] - $order['original_quantity'];
+                    } else {
+                        $accumulated_quantity = $order['accumulated_quantity'];
+                        $generalOrdersDao->changeStatus($orders[$i]['id_order'], 'Alistamiento');
+                    }
+
+                    $generalProductsDao->updateAccumulatedQuantity($orders[$i]['id_product'], $accumulated_quantity, 1);
+                }
             }
 
             if ($products == null)

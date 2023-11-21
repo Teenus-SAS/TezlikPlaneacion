@@ -66,5 +66,8 @@ $(document).ready(function () {
         },
       },
     ],
+    rowCallback: function (row, data, index) { 
+      if (data.status == 'Sin Ficha Tecnica') $(row).css('color', 'red'); 
+    },
   });
 });
