@@ -36,7 +36,7 @@ $(document).ready(function () {
       },
       {
         title: 'Reservado',
-        data: 'reserverd',
+        data: 'reserved',
         className: 'uniqueClassName',
       }, 
       {
