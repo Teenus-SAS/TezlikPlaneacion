@@ -36,7 +36,7 @@ $(document).ready(function () {
       },
       {
         title: 'Reservado',
-        data: 'accumulated_quantity',
+        data: 'reserverd',
         className: 'uniqueClassName',
       }, 
       {
