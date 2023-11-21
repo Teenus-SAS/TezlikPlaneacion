@@ -34,11 +34,11 @@ $(document).ready(function () {
         data: 'quantity',
         className: 'classCenter',
       },
-      {
-        title: 'Reservado',
-        data: 'reserved',
-        className: 'uniqueClassName',
-      }, 
+      // {
+      //   title: 'Reservado',
+      //   data: 'reserved',
+      //   className: 'uniqueClassName',
+      // }, 
       {
         title: 'Unidad',
         data: 'unit',
