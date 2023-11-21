@@ -66,6 +66,19 @@ class GeneralRequisitionsDao
         return $molds;
     }
 
+    public function findRequisitionByApplicationDate($id_material)
+    {
+        $connection = Connection::getInstance()->getConnection();
+
+        $stmt = $connection->prepare("SELECT * FROM requisitons WHERE id_material = :id_material AND application_date = '0000-00-00'");
+        $stmt->execute([
+            'id_material' => $id_material
+        ]);
+        $this->logger->info(__FUNCTION__, array('query' => $stmt->queryString, 'errors' => $stmt->errorInfo()));
+        $molds = $stmt->fetch($connection::FETCH_ASSOC);
+        return $molds;
+    }
+
     public function updateDateRequisition($dataRequisition)
     {
         $connection = Connection::getInstance()->getConnection();
