@@ -2,7 +2,7 @@ $(document).ready(function () {
   $.ajax({
     url: '/api/products',
     success: function (r) {
-      let $select = $(`.refProduct`);
+      let $select = $(`#refProduct`);
       $select.empty();
 
       let ref = r.sort(sortReference);
@@ -16,7 +16,7 @@ $(document).ready(function () {
         );
       });
 
-      let $select1 = $(`.selectNameProduct`);
+      let $select1 = $(`#selectNameProduct`);
       $select1.empty();
 
       let prod = r.sort(sortNameProduct);
@@ -27,20 +27,6 @@ $(document).ready(function () {
       $.each(prod, function (i, value) {
         $select1.append(
           `<option value = ${value.id_product}> ${value.product} </option>`
-        );
-      });
-
-      let $select2 = $(`#compositeProduct`);
-      $select2.empty();
-
-      let compositeProduct = prod.filter(item => item.composite == 1);
-
-      $select2.append(
-        `<option value='0' disabled selected>Seleccionar</option>`
-      );
-      $.each(compositeProduct, function (i, value) {
-        $select2.append(
-          `<option value ="${value.id_product}"> ${value.product} </option>`
         );
       });
     },
