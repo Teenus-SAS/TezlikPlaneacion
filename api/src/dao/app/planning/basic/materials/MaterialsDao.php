@@ -19,8 +19,8 @@ class MaterialsDao
   public function findAllMaterialsByCompany($id_company)
   {
     $connection = Connection::getInstance()->getConnection();
-    $stmt = $connection->prepare("SELECT m.id_material, m.reference, m.material, m.material AS descript, mg.id_magnitude, mg.magnitude, 
-                                         u.id_unit, u.unit, u.abbreviation, m.quantity, 0 AS reserved
+    $stmt = $connection->prepare("SELECT m.id_material, m.reference, m.material, m.material AS descript, mg.id_magnitude, mg.magnitude, u.id_unit, 
+                                         u.unit, u.abbreviation, m.quantity, (SELECT IFNULL(o.original_quantity * SUM(pm.quantity), 0) FROM plan_orders o LEFT JOIN products_materials pm ON pm.id_product = o.id_product WHERE pm.id_material = m.id_material AND o.status = 'Alistamiento') AS reserved
                                   FROM materials m
                                     INNER JOIN convert_units u ON u.id_unit = m.unit
                                     INNER JOIN convert_magnitudes mg ON mg.id_magnitude = u.id_magnitude
