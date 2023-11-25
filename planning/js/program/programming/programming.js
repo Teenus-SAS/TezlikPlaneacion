@@ -20,7 +20,7 @@ $(document).ready(function () {
     
     sessionStorage.removeItem('minDate');
     if (resp) {
-      toastr.error('Todos los pedidos se encuentran programados');
+      toastr.error('Sin pedidos para programar');
       return false;
     }
  
@@ -70,9 +70,9 @@ $(document).ready(function () {
     // await loadProducts(data.num_order);
     let $select = $(`#idMachine`);
     $select.empty();
-    $select.append(`<option value="0" disabled selected>Seleccionar</option>`);
+    $select.append(`<option value="0" disabled>Seleccionar</option>`);
      
-    $select.append(`<option value ='${data.id_machine}'> ${data.machine} </option>`);
+    $select.append(`<option value ='${data.id_machine}' selected> ${data.machine} </option>`);
     // $(`#idMachine option[value=${data.id_machine}]`).prop('selected', true);
 
     $('#quantity').val(data.quantity_programming);

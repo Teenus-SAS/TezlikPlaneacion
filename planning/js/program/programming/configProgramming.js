@@ -62,6 +62,12 @@ $(document).ready(function () {
     checkData(1, this.id);
   });
 
+  $(document).on('click', '#minDate', function (e) {
+    e.preventDefault();
+ 
+    document.getElementById('minDate').type = 'date';
+  });
+
   checkData = async (op, id) => {
     let inputs = document.getElementsByClassName('input');
     let cont = 0;
@@ -80,7 +86,12 @@ $(document).ready(function () {
     let order = parseFloat($('#order').val());
     let product = parseFloat($('#selectNameProduct').val());
     let machine = parseFloat($('#idMachine').val());
+    let quantityMissing = parseFloat($('#quantityMissing').val());
     let quantity = parseFloat($('#quantity').val());
+
+    // if (quantity > quantityMissing) {
+    //   toastr.error('');
+    // }
 
     if (op == 1 || !isNaN(machine)) {
       machines = [];
