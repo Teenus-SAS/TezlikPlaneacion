@@ -65,10 +65,15 @@ $(document).ready(function () {
       `<option value ='${data.id_product}' selected> ${data.product} </option>`
     );
     $('#quantityOrder').val(data.quantity_order.toLocaleString());
+    $('#quantityMissing').val(data.accumulated_quantity.toLocaleString());
     
     // await loadProducts(data.num_order);
-
-    $(`#idMachine option[value=${data.id_machine}]`).prop('selected', true);
+    let $select = $(`#idMachine`);
+    $select.empty();
+    $select.append(`<option value="0" disabled selected>Seleccionar</option>`);
+     
+    $select.append(`<option value ='${data.id_machine}'> ${data.machine} </option>`);
+    // $(`#idMachine option[value=${data.id_machine}]`).prop('selected', true);
 
     $('#quantity').val(data.quantity_programming);
 

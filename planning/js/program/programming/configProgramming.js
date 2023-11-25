@@ -70,6 +70,7 @@ $(document).ready(function () {
       if (inputs[i].value == '' || inputs[i].value == '0')
         cont += 1;
     }
+
     $('#btnCreateProgramming').hide();
     
     $('#minDate').val('');
