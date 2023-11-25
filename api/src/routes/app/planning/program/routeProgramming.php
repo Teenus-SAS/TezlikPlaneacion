@@ -173,7 +173,7 @@ $app->post('/addProgramming', function (Request $request, Response $response, $a
     }
 
     if ($result == null)
-        $result = $generalOrdersDao->changeStatus($dataProgramming['order'], 'Programacion');
+        $result = $generalOrdersDao->changeStatus($dataProgramming['order'], 'Programado');
 
     if ($result == null)
         $resp = array('success' => true, 'message' => 'Programa de producción creado correctamente');
