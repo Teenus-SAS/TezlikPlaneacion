@@ -62,11 +62,11 @@ $(document).ready(function () {
     checkData(1, this.id);
   });
 
-  $(document).on('click', '#minDate', function (e) {
-    e.preventDefault();
+  // $(document).on('click', '#minDate', function (e) {
+  //   e.preventDefault();
  
-    document.getElementById('minDate').type = 'date';
-  });
+  //   document.getElementById('minDate').type = 'date';
+  // });
 
   checkData = async (op, id) => {
     let inputs = document.getElementsByClassName('input');
