@@ -50,12 +50,12 @@ $(document).ready(function () {
           className: 'uniqueClassName',
           render: $.fn.dataTable.render.number('.', ',', 2, ''),
         },
-        {
-          title: 'Cant.Pendiente',
-          data: 'accumulated_quantity',
-          className: 'uniqueClassName',
-          render: $.fn.dataTable.render.number('.', ',', 2, ''),
-        },
+        // {
+        //   title: 'Cant.Pendiente',
+        //   data: 'accumulated_quantity',
+        //   className: 'uniqueClassName',
+        //   render: $.fn.dataTable.render.number('.', ',', 2, ''),
+        // },
         {
           title: 'Cliente',
           data: 'client',
