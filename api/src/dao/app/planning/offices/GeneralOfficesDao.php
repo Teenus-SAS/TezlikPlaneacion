@@ -24,7 +24,7 @@ class GeneralOfficesDao
                                       FROM plan_orders o
                                         INNER JOIN products p ON p.id_product = o.id_product
                                         INNER JOIN plan_clients c ON c.id_client = o.id_client
-                                      WHERE o.status != 'Alistamiento' AND o.id_company = :id_company
+                                      WHERE o.status != 'Programar' AND o.id_company = :id_company
                                       AND (o.delivery_date IS NULL OR MONTH(o.delivery_date) = MONTH(CURRENT_DATE)) ORDER BY `o`.`status` ASC");
         $stmt->execute(['id_company' => $id_company]);
 

@@ -188,7 +188,7 @@ $app->post('/addProductsMaterials', function (Request $request, Response $respon
                 $accumulated_quantity = $order['accumulated_quantity'] - $order['original_quantity'];
             } else {
                 $accumulated_quantity = $order['accumulated_quantity'];
-                $generalOrdersDao->changeStatus($orders[$i]['id_order'], 'Alistamiento');
+                $generalOrdersDao->changeStatus($orders[$i]['id_order'], 'Programar');
             }
 
             $productsDao->updateAccumulatedQuantity($orders[$i]['id_product'], $accumulated_quantity, 1);

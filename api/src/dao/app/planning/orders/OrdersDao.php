@@ -40,7 +40,7 @@ class OrdersDao
 
         try {
             $stmt = $connection->prepare("INSERT INTO plan_orders (num_order, date_order, min_date, max_date, id_company, id_product, id_client, original_quantity, status) 
-                                          VALUES (:num_order, :date_order, :min_date, :max_date, :id_company, :id_product, :id_client, :original_quantity, 'Alistamiento')");
+                                          VALUES (:num_order, :date_order, :min_date, :max_date, :id_company, :id_product, :id_client, :original_quantity, 'Programar')");
             $stmt->execute([
                 'num_order' => trim($dataOrder['order']),
                 'date_order' => trim($dataOrder['dateOrder']),
@@ -67,7 +67,7 @@ class OrdersDao
 
         try {
             $stmt = $connection->prepare("UPDATE plan_orders SET num_order = :num_order, date_order = :date_order, min_date = :min_date, max_date = :max_date, id_product = :id_product,
-                                                 id_client = :id_client, original_quantity = :original_quantity, status = 'Alistamiento', status_order = 0
+                                                 id_client = :id_client, original_quantity = :original_quantity, status = 'Programar', status_order = 0
                                           WHERE id_order = :id_order");
             $stmt->execute([
                 'num_order' => trim($dataOrder['order']),

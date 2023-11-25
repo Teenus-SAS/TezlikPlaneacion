@@ -151,7 +151,7 @@ $app->post('/addProduct', function (Request $request, Response $response, $args)
                 $accumulated_quantity = $order['accumulated_quantity'] - $order['original_quantity'];
             } else {
                 $accumulated_quantity = $order['accumulated_quantity'];
-                $generalOrdersDao->changeStatus($orders[$i]['id_order'], 'Alistamiento');
+                $generalOrdersDao->changeStatus($orders[$i]['id_order'], 'Programar');
             }
 
             $generalProductsDao->updateAccumulatedQuantity($orders[$i]['id_product'], $accumulated_quantity, 1);
@@ -217,7 +217,7 @@ $app->post('/updatePlanProduct', function (Request $request, Response $response,
                         $accumulated_quantity = $order['accumulated_quantity'] - $order['original_quantity'];
                     } else {
                         $accumulated_quantity = $order['accumulated_quantity'];
-                        $generalOrdersDao->changeStatus($orders[$i]['id_order'], 'Alistamiento');
+                        $generalOrdersDao->changeStatus($orders[$i]['id_order'], 'Programar');
                     }
 
                     $generalProductsDao->updateAccumulatedQuantity($orders[$i]['id_product'], $accumulated_quantity, 1);

@@ -247,7 +247,7 @@ $app->post('/deleteProgramming', function (Request $request, Response $response,
     }
 
     if ($result == null)
-        $result = $generalOrdersDao->changeStatus($dataProgramming['order'], 'Alistamiento');
+        $result = $generalOrdersDao->changeStatus($dataProgramming['order'], 'Programar');
 
     if ($result == null)
         $resp = array('success' => true, 'message' => 'Programa de producción eliminado correctamente');
