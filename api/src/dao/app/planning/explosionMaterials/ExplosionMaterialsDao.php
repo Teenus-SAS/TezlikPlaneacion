@@ -28,7 +28,7 @@ class ExplosionMaterialsDao
                                         INNER JOIN convert_units u ON u.id_unit = m.unit
                                         INNER JOIN plan_orders o ON o.id_product = p.id_product
                                         LEFT JOIN requisitons r ON r.id_material = pm.id_material
-                                      WHERE p.id_company = :id_company AND o.status = 'Programar'
+                                      WHERE p.id_company = :id_company AND (o.status = 'Programar' OR o.status = 'Programacion')
                                       GROUP BY pm.id_product_material, o.id_order");
     $stmt->execute(['id_company' => $id_company]);
 

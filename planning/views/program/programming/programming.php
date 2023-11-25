@@ -87,6 +87,10 @@ if (sizeof($_SESSION) == 0)
                                                     <label for="">Cantidad Pedido</label>
                                                     <input type="text" class="form-control text-center" id="quantityOrder" name="quantityOrder" readonly>
                                                 </div>
+                                                <div class="col-sm-2 floating-label enable-floating-label show-label">
+                                                    <label for="">Cantidad Faltante</label>
+                                                    <input type="text" class="form-control text-center" id="quantityMissing" name="quantityMissing" readonly>
+                                                </div>
                                                 <div class="col-sm-4 floating-label enable-floating-label show-label" id="machines">
                                                     <label for="">Maquina</label>
                                                     <select class="form-control input" id="idMachine" name="idMachine">
