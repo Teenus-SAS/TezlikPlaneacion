@@ -4,18 +4,48 @@ $(document).ready(function () {
   let allCiclesMachines = [];
   let allPlanningMachines = [];
   let allOrders = [];
-  let allProgramming = []; 
+  let allProgramming = [];
 
+  // loadAllDataProgramming = async () => {
+  //   allMachines = await searchData('/api/machines');
+  //   allCiclesMachines = await searchData('/api/planCiclesMachine');
+  //   allPlanningMachines = await searchData('/api/planningMachines');
+  //   allOrders = await searchData('/api/orders');
+  //   allProgramming = await searchData('/api/programming');
+  //   copyAllProgramming = allProgramming; 
+
+  //   allProductsMaterials = await searchData('/api/allProductsMaterials');
+  // } 
   loadAllDataProgramming = async () => {
-    allMachines = await searchData('/api/machines');
-    allCiclesMachines = await searchData('/api/planCiclesMachine');
-    allPlanningMachines = await searchData('/api/planningMachines');
-    allOrders = await searchData('/api/orders');
-    allProgramming = await searchData('/api/programming');
-    copyAllProgramming = allProgramming; 
+    try {
+      const [
+        machines,
+        ciclesMachines,
+        planningMachines,
+        orders,
+        programming,
+        productsMaterials
+      ] = await Promise.all([
+        searchData('/api/machines'),
+        searchData('/api/planCiclesMachine'),
+        searchData('/api/planningMachines'),
+        searchData('/api/orders'),
+        searchData('/api/programming'),
+        searchData('/api/allProductsMaterials')
+      ]);
 
-    allProductsMaterials = await searchData('/api/allProductsMaterials');
-  } 
+      allMachines = machines;
+      allCiclesMachines = ciclesMachines;
+      allPlanningMachines = planningMachines;
+      allOrders = orders;
+      allProgramming = programming;
+      copyAllProgramming = allProgramming;
+      allProductsMaterials = productsMaterials;
+    } catch (error) {
+      console.error('Error loading data:', error);
+    }
+  };
+
 
   loadAllDataProgramming();
 
@@ -30,7 +60,7 @@ $(document).ready(function () {
     e.preventDefault();
 
     checkData(1, this.id);
-  }); 
+  });
 
   checkData = async (op, id) => {
     let inputs = document.getElementsByClassName('input');
@@ -52,19 +82,6 @@ $(document).ready(function () {
     let quantity = parseFloat($('#quantity').val());
 
     if (op == 1 || !isNaN(machine)) {
-      // machines = false;
-
-      // for (let i = 0; i < allCiclesMachines.length; i++) {
-      //   if (allCiclesMachines[i].id_machine == machine && allCiclesMachines[i].id_product == product) {
-      //     machines = true;
-      //     break;
-      //   }
-      // }
-  
-      // if (machines == false) {
-      //   toastr.error('Ciclo de maquina no existe para ese producto');
-      //   return false;
-      // }
       machines = [];
 
       for (let i = 0; i < allProgramming.length; i++) {
@@ -191,7 +208,7 @@ $(document).ready(function () {
       }
       
       if (op == 2) {
-        min_date = new Date(`${min_date} ${planningMachine.hour_start}:00:00`); 
+        min_date = new Date(`${min_date} ${planningMachine.hour_start}:00:00`);
         min_date =
           min_date.getFullYear() + "-" +
           ("00" + (min_date.getMonth() + 1)).slice(-2) + "-" +
@@ -210,7 +227,7 @@ $(document).ready(function () {
         } else
           final_date.setHours(final_date.getHours() + hours);
         
-        final_date = 
+        final_date =
           final_date.getFullYear() + "-" +
           ("00" + (final_date.getMonth() + 1)).slice(-2) + "-" +
           ("00" + final_date.getDate()).slice(-2) + " " + ("00" + final_date.getHours()).slice(-2) + ':' + ("00" + final_date.getMinutes()).slice(-2) + ':' + '00';
@@ -265,7 +282,7 @@ $(document).ready(function () {
     });
 
     $('#selectNameProduct').change(function (e) {
-      e.preventDefault(); 
+      e.preventDefault();
 
       for (let i = 0; i < r.length; i++) {
         if (this.value == r[i].id_product) {
@@ -281,6 +298,7 @@ $(document).ready(function () {
           });
           
           $('#quantityOrder').val(parseFloat(r[i].original_quantity).toLocaleString());
+          $('#quantityMissing').val(parseFloat(r[i].accumulated_quantity).toLocaleString());
 
           dataProgramming = new FormData(formCreateProgramming);
 
@@ -292,5 +310,5 @@ $(document).ready(function () {
 
       checkData(2, this.id);
     });
-  };  
+  };
 });
