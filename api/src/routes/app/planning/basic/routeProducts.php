@@ -93,6 +93,9 @@ $app->post('/addProduct', function (Request $request, Response $response, $args)
             if (sizeof($_FILES) > 0) $FilesDao->imageProduct($lastProductId['id_product'], $id_company);
 
             if ($products == null)
+                $products = $generalProductsDao->updateAccumulatedQuantity($lastProductId['id_product'], $dataProduct['quantity'], 1);
+
+            if ($products == null)
                 $resp = array('success' => true, 'message' => 'Producto creado correctamente');
             else if (isset($products['info']))
                 $resp = array('info' => true, 'message' => $products['message']);
@@ -185,6 +188,9 @@ $app->post('/updatePlanProduct', function (Request $request, Response $response,
 
             if (sizeof($_FILES) > 0)
                 $products = $FilesDao->imageProduct($dataProduct['idProduct'], $id_company);
+
+            if ($products == null)
+                $products = $generalProductsDao->updateAccumulatedQuantity($dataProduct['idProduct'], $dataProduct['quantity'], 1);
 
             // Cambiar estado pedidos
             $orders = $generalOrdersDao->findAllOrdersByCompany($id_company);

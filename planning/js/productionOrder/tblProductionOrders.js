@@ -72,7 +72,8 @@ $(document).ready(function () {
           className: 'uniqueClassName',
           render: function (data) {
             let min_date = getFirstText(data.min_date);
-            let hourStart = moment(data.min_hour, ['HH:mm']).format('h:mm A');
+            let hour = getLastText(data.min_date);
+            let hourStart = moment(hour, ['HH:mm']).format('h:mm A');
 
             return `<p>${min_date}</p><p>${hourStart}</p>`;
           },
@@ -83,8 +84,9 @@ $(document).ready(function () {
           className: 'uniqueClassName',
           render: function (data) {
             let max_date = getFirstText(data.max_date);
+            let hour = getLastText(data.max_date);
 
-            let hourStart = moment(data.max_hour, ['HH:mm']).format('h:mm A');
+            let hourStart = moment(hour, ['HH:mm']).format('h:mm A');
             return `<p>${max_date}</p><p>${hourStart}</p>`;
           },
         },
