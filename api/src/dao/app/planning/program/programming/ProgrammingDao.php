@@ -53,7 +53,7 @@ class ProgrammingDao
         $stmt = $connection->prepare("SELECT o.id_order, p.id_product, p.reference, p.product, p.quantity, o.original_quantity, IFNULL(o.accumulated_quantity, 0) AS accumulated_quantity
                                       FROM products p
                                       INNER JOIN plan_orders o ON o.id_product = p.id_product
-                                      WHERE o.num_order = :num_order -- AND (o.status = 'Programar' OR o.status = 'Programacion')
+                                      WHERE o.num_order = :num_order AND (o.status = 'Programar' OR o.status = 'Programacion')
                                       AND (o.accumulated_quantity IS NULL OR o.accumulated_quantity != 0)
                                       GROUP BY p.id_product");
         $stmt->execute(['num_order' => $num_order]);
