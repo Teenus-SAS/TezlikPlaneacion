@@ -67,7 +67,7 @@ $(document).ready(function () {
       },
     ],
     rowCallback: function (row, data, index) { 
-      if (data.status == 'Sin Ficha Tecnica') $(row).css('color', 'red'); 
+      if (data.status == 'Sin Ficha Tecnica' || data.status == 'Sin Materia Prima') $(row).css('color', 'red');
     },
   });
 });
