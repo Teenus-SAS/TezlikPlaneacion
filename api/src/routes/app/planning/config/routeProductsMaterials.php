@@ -172,7 +172,7 @@ $app->post('/addProductsMaterials', function (Request $request, Response $respon
         } else {
             foreach ($productsMaterials as $arr) {
                 if ($arr['quantity_material'] <= 0) {
-                    $order = $generalOrdersDao->changeStatus($orders[$i]['id_order'], 'Sin Ficha Tecnica');
+                    $order = $generalOrdersDao->changeStatus($orders[$i]['id_order'], 'Sin Materia Prima');
                     $status = false;
                     break;
                 }

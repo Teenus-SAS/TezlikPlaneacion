@@ -200,7 +200,7 @@ $app->post('/addOrder', function (Request $request, Response $response, $args) u
         } else {
             foreach ($productsMaterials as $arr) {
                 if ($arr['quantity_material'] <= 0) {
-                    $order = $generalOrdersDao->changeStatus($orders[$i]['id_order'], 'Sin Ficha Tecnica');
+                    $order = $generalOrdersDao->changeStatus($orders[$i]['id_order'], 'Sin Materia Prima');
                     $status = false;
                     break;
                 }
@@ -285,7 +285,7 @@ $app->post('/updateOrder', function (Request $request, Response $response, $args
         } else {
             foreach ($productsMaterials as $arr) {
                 if ($arr['quantity_material'] <= 0) {
-                    $order = $generalOrdersDao->changeStatus($dataOrder['idOrder'], 'Sin Ficha Tecnica');
+                    $order = $generalOrdersDao->changeStatus($dataOrder['idOrder'], 'Sin Materia Prima');
                     $status = false;
                     break;
                 }
