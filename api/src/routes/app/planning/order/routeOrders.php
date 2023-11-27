@@ -27,30 +27,10 @@ use Psr\Http\Message\ResponseInterface as Response;
 use Psr\Http\Message\ServerRequestInterface as Request;
 
 $app->get('/orders', function (Request $request, Response $response, $args) use (
-    $ordersDao,
-    $generalOrdersDao,
-    $generalProductsDao
+    $ordersDao
 ) {
     session_start();
     $id_company = $_SESSION['id_company'];
-
-    /* Cambiar estado pedidos 
-    $orders = $generalOrdersDao->findAllOrdersByCompany($id_company);
-
-    for ($i = 0; $i < sizeof($orders); $i++) {
-        // Checkear cantidades
-        $order = $generalOrdersDao->checkAccumulatedQuantityOrder($orders[$i]['id_order']);
-
-        if ($order['original_quantity'] <= $order['accumulated_quantity']) {
-            $generalOrdersDao->changeStatus($orders[$i]['id_order'], 'Despacho');
-            $accumulated_quantity = $order['accumulated_quantity'] - $order['original_quantity'];
-        } else {
-            $accumulated_quantity = $order['accumulated_quantity'];
-            $generalOrdersDao->changeStatus($orders[$i]['id_order'], 'Alistamiento');
-        }
-
-        $generalProductsDao->updateAccumulatedQuantity($orders[$i]['id_product'], $accumulated_quantity, 1);
-    } */
 
     $orders = $ordersDao->findAllOrdersByCompany($id_company);
 
