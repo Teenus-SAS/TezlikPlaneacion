@@ -102,7 +102,7 @@ if (sizeof($_SESSION) == 0)
                                                 </div>
                                                 <div class="col-sm-2 floating-label enable-floating-label show-label">
                                                     <label for="">Cantidad a Fabricar</label>
-                                                    <input type="text" class="form-control text-center number input" id="quantity" name="quantity">
+                                                    <input type="number" class="form-control text-center input" id="quantity" name="quantity">
                                                 </div>
                                                 <div class="col-sm-3 floating-label enable-floating-label show-label date">
                                                     <label for="">Fecha Inicial</label>
