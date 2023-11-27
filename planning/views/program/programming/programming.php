@@ -95,7 +95,7 @@ if (sizeof($_SESSION) == 0)
                                                     <label for="">Inv MP</label>
                                                     <input type="text" class="form-control text-center" id="quantityMissing" name="quantityMissing" readonly>
                                                 </div>
-                                                <div class="col-sm-4 floating-label enable-floating-label show-label" id="machines">
+                                                <div class="col-sm-3 floating-label enable-floating-label show-label" id="machines">
                                                     <label for="">Maquina</label>
                                                     <select class="form-control input" id="idMachine" name="idMachine">
                                                     </select>
@@ -104,11 +104,11 @@ if (sizeof($_SESSION) == 0)
                                                     <label for="">Cantidad a Fabricar</label>
                                                     <input type="text" class="form-control text-center number input" id="quantity" name="quantity">
                                                 </div>
-                                                <div class="col-sm-2 floating-label enable-floating-label show-label date">
+                                                <div class="col-sm-3 floating-label enable-floating-label show-label date">
                                                     <label for="">Fecha Inicial</label>
                                                     <input type="datetime-local" class="form-control text-center" inline="true" id="minDate" name="minDate" readonly>
                                                 </div>
-                                                <div class="col-sm-2 floating-label enable-floating-label show-label date">
+                                                <div class="col-sm-3 floating-label enable-floating-label show-label date">
                                                     <label for="">Fecha Final</label>
                                                     <input type="datetime-local" class="form-control text-center number" id="maxDate" name="maxDate" readonly>
                                                 </div>
