@@ -243,10 +243,11 @@ $(document).ready(function () {
 
       if (days < 1) {
         let hours = (days % 1) * planningMachine.hours_day;
-        if (hours < 1) {
-          let minutes = quantity * 60 / ciclesMachine.cicles_hour;
-          final_date.setMinutes(final_date.getMinutes() + minutes);
-        } else
+        // if (hours < 1) {
+        let minutes = (hours % 1) * 60;
+        final_date.setMinutes(final_date.getMinutes() + minutes);
+
+        // } else
           final_date.setHours(final_date.getHours() + hours);
         
         final_date =
