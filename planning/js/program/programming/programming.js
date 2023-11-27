@@ -119,6 +119,7 @@ $(document).ready(function () {
   });
 
   $(document).on('blur', '#quantity', function () {
+    sessionStorage.removeItem('minDate');
     checkData(2, this.id);
   });
 

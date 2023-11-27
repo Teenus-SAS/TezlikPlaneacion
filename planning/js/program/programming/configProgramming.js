@@ -62,11 +62,15 @@ $(document).ready(function () {
     checkData(1, this.id);
   });
 
-  // $(document).on('click', '#minDate', function (e) {
-  //   e.preventDefault();
- 
-  //   document.getElementById('minDate').type = 'date';
-  // });
+  $(document).on('click', '#minDate', function () {
+    if (sessionStorage.getItem('minDate')) {
+      $('#minDate').val('');
+      $('#maxDate').val('');
+      document.getElementById('minDate').readOnly = false;
+      document.getElementById('minDate').type = 'date'; 
+      $('#btnCreateProgramming').hide(800);
+    }
+  });
 
   checkData = async (op, id) => {
     let inputs = document.getElementsByClassName('input');
@@ -81,12 +85,13 @@ $(document).ready(function () {
     
     $('#minDate').val('');
     $('#maxDate').val('');
+    document.getElementById('minDate').readOnly = false;
+    document.getElementById('minDate').type = 'date';
     $('.date').hide();
 
     let order = parseFloat($('#order').val());
     let product = parseFloat($('#selectNameProduct').val());
     let machine = parseFloat($('#idMachine').val());
-    let quantityMissing = parseFloat($('#quantityMissing').val());
     let quantity = parseFloat($('#quantity').val());
 
     // if (quantity > quantityMissing) {
@@ -166,16 +171,22 @@ $(document).ready(function () {
           $('.date').show(800);
           document.getElementById('minDate').readOnly = false;
           document.getElementById('minDate').type = 'date';
-
+          
           $('#minDate').change(function (e) {
             e.preventDefault();
 
-            if (!this.value) {
+            let date = this.value;
+
+            if (!date) {
               toastr.error('Ingrese fecha inicial');
               return false;
             }
 
-            let min_date = convetFormatDate(this.value);
+            if (date.includes('T')) {
+              date = date.split('T')[0];
+            }
+
+            let min_date = convetFormatDate(date);
 
             sessionStorage.setItem('minDate', min_date);
             dataProgramming.append('minDate', min_date);
