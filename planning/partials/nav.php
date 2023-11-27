@@ -85,7 +85,7 @@
                     ?>
                     <li class="nav-item store">
                         <a class="nav-link" href="/planning/store">
-                            <i class="bx bxs-customize mr-1"></i> Almacen
+                            <i class="bx bi bi-truck mr-1"></i> Almacen
                             <i class="bx bx-chevron-down"></i>
                         </a>
                     </li>

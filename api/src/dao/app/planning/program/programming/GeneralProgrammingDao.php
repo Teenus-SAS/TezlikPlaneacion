@@ -91,6 +91,20 @@ class GeneralProgrammingDao
         return $programming;
     }
 
+    public function findProgrammingByOrder($id_order)
+    {
+        $connection = Connection::getInstance()->getConnection();
+
+        $stmt = $connection->prepare("SELECT * FROM programming WHERE id_order = :id_order");
+        $stmt->execute([
+            'id_order' => $id_order
+        ]);
+        $this->logger->info(__FUNCTION__, array('query' => $stmt->queryString, 'errors' => $stmt->errorInfo()));
+
+        $programming = $stmt->fetchAll($connection::FETCH_ASSOC);
+        return $programming;
+    }
+
     public function checkAccumulatedQuantityOrder($id_order)
     {
         $connection = Connection::getInstance()->getConnection();

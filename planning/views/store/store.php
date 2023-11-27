@@ -17,7 +17,7 @@ if (sizeof($_SESSION) == 0)
     <meta name="keywords" content="admin, panels, dashboard, admin panel, multipurpose, bootstrap, bootstrap4, all type of dashboards">
     <meta name="author" content="MatrrDigital">
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>Tezlik - Planning | Process</title>
+    <title>Tezlik - Planning | Store</title>
     <link rel="shortcut icon" href="/assets/images/favicon/favicon_tezlik.jpg" type="image/x-icon" />
 
     <?php include_once dirname(dirname(dirname(__DIR__))) . '/global/partials/scriptsCSS.php'; ?>
@@ -48,28 +48,28 @@ if (sizeof($_SESSION) == 0)
                                 </div>
                             </div>
                             <div class="col-sm-7 col-xl-6 form-inline justify-content-sm-end">
-                                <!-- <div class="col-xs-2 py-2 mr-2">
-                                    <button class="btn btn-info" id="btnImportNewProcess">Importar Procesos</button>
-                                </div> -->
+                                <div class="col-xs-2 py-2 mr-2">
+                                    <button class="btn btn-info" id="btnDelivery">Entregar</button>
+                                </div>
                             </div>
                         </div>
                     </div>
                 </div>
 
-                <!-- <div class="page-content-wrapper mt--45 mb-5 cardCreateProcess">
+                <div class="page-content-wrapper mt--45 mb-5 cardAddDelivery">
                     <div class="container-fluid">
                         <div class="row">
                             <div class="col-12">
                                 <div class="card">
-                                    <form id="formCreateProcess">
+                                    <form id="formAddDelivery">
                                         <div class="card-body">
                                             <div class="form-row">
-                                                <div class="col-sm-10 floating-label enable-floating-label show-label" style="margin-bottom:0px">
-                                                    <label for="">Proceso</label>
-                                                    <input type="text" class="form-control" id="process" name="process">
+                                                <div class="col-sm-2 floating-label enable-floating-label show-label" style="margin-bottom:0px">
+                                                    <label for="">Cantidad a Entregar</label>
+                                                    <input type="text" class="form-control text-center" id="quantity" name="quantity">
                                                 </div>
                                                 <div class="col-sm mt-1">
-                                                    <button class="btn btn-success" id="btnCreateProcess">Crear Proceso</button>
+                                                    <button class="btn btn-success" id="btnAddDelivery">Guardar</button>
                                                 </div>
                                             </div>
                                         </div>
@@ -80,7 +80,7 @@ if (sizeof($_SESSION) == 0)
                     </div>
                 </div>
 
-                <div class="page-content-wrapper mt--45 mb-5 cardImportProcess">
+                <!-- <div class="page-content-wrapper mt--45 mb-5 cardImportProcess">
                     <div class="container-fluid">
                         <div class="row">
                             <form class="col-12" id="formImportProcess" enctype="multipart/form-data">
@@ -137,10 +137,9 @@ if (sizeof($_SESSION) == 0)
     <!-- Page End -->
 
     <?php include_once dirname(dirname(dirname(__DIR__))) . '/global/partials/scriptsJS.php'; ?>
-    <!-- <script src="/planning/js/users/usersAccess.js"></script> -->
 
     <script src="/planning/js/store/tblStore.js"></script>
-    <!-- <script src="/planning/js/explosionStore/process/process.js"></script> -->
+    <script src="/planning/js/store/store.js"></script>
 </body>
 
 </html>

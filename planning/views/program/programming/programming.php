@@ -93,7 +93,7 @@ if (sizeof($_SESSION) == 0)
                                                 </div>
                                                 <div class="col-sm-1 floating-label enable-floating-label show-label">
                                                     <label for="">Inv MP</label>
-                                                    <input type="text" class="form-control text-center" id="quantityMissing" name="quantityMissing" readonly>
+                                                    <input type="text" class="form-control text-center" id="quantityMP" name="quantityMP" readonly>
                                                 </div>
                                                 <div class="col-sm-3 floating-label enable-floating-label show-label" id="machines">
                                                     <label for="">Maquina</label>

@@ -246,27 +246,16 @@ $(document).ready(function () {
       }
 
       let hours = (days % 1) * planningMachine.hours_day;
-        // if (hours < 1) {
+      
       let minutes = (hours % 1) * 60;
       final_date.setMinutes(final_date.getMinutes() + minutes);
 
-        // } else
       final_date.setHours(final_date.getHours() + hours);
         
       final_date =
         final_date.getFullYear() + "-" +
         ("00" + (final_date.getMonth() + 1)).slice(-2) + "-" +
         ("00" + final_date.getDate()).slice(-2) + " " + ("00" + final_date.getHours()).slice(-2) + ':' + ("00" + final_date.getMinutes()).slice(-2) + ':' + '00';
-      // } else {
-      //   final_date.setDate(final_date.getDate() + days);
-    
-      //   let max_hour = (quantity / ciclesMachine.cicles_hour) - (days * planningMachine.hours_day) + last_hour;
-      
-      //   final_date =
-      //     final_date.getFullYear() + "-" +
-      //     ("00" + (final_date.getMonth() + 1)).slice(-2) + "-" +
-      //     ("00" + final_date.getDate()).slice(-2) + " " + max_hour + ':' + '00' + ':' + '00';
-      // }
 
       dataProgramming.append('idProduct', product);
       dataProgramming.append('idMachine', machine);
@@ -325,6 +314,10 @@ $(document).ready(function () {
           
           $('#quantityOrder').val(parseFloat(r[i].original_quantity).toLocaleString());
           $('#quantityMissing').val(parseFloat(r[i].accumulated_quantity) == 0 ? parseFloat(r[i].original_quantity).toLocaleString() : parseFloat(r[i].accumulated_quantity).toLocaleString());
+
+          let productsMaterials = allProductsMaterials.filter(item => item.id_product == this.value);
+          productsMaterials = productsMaterials.sort((a, b) => a.quantity - b.quantity);
+          $('#quantityMP').val(productsMaterials[0].quantity);
 
           dataProgramming = new FormData(formCreateProgramming);
 

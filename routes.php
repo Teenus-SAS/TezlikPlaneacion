@@ -35,6 +35,7 @@ get('/planning/programming', '/planning/views/program/programming/programming.ph
 get('/planning/consolidated', '/planning/views/program/consolidated/consolidated.php');
 get('/planning/explosion-materials', '/planning/views/explosionMaterials/explosionMaterials.php');
 get('/planning/production-order', '/planning/views/productionOrder/productionOrder.php');
+get('/planning/store', '/planning/views/store/store.php');
 //Basic
 get('/planning/molds', '/planning/views/basic/invMolds.php');
 get('/planning/products', '/planning/views/basic/createProducts.php');

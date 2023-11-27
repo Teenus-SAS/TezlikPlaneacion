@@ -187,6 +187,7 @@ $(document).ready(function () {
 
     let dataProgramming = {};
     dataProgramming['idProgramming'] = data.id_programming;
+    dataProgramming['idOrder'] = data.id_order;
 
     bootbox.confirm({
       title: 'Cambiar Estado',

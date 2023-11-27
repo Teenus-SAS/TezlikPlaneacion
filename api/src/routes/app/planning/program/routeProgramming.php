@@ -260,11 +260,17 @@ $app->post('/deleteProgramming', function (Request $request, Response $response,
     return $response->withHeader('Content-Type', 'application/json');
 });
 
-$app->post('/changeStatusProgramming', function (Request $request, Response $response, $args) use ($generalProgrammingDao) {
+$app->post('/changeStatusProgramming', function (Request $request, Response $response, $args) use ($generalProgrammingDao, $generalOrdersDao) {
     $dataProgramming = $request->getParsedBody();
-    if (isset($dataProgramming['idProgramming']))
+    if (isset($dataProgramming['idProgramming'])) {
         $result = $generalProgrammingDao->changeStatusProgramming($dataProgramming['idProgramming'], 1);
-    else {
+
+        $orders = $generalProgrammingDao->findProgrammingByOrder($dataProgramming['idOrder']);
+
+        if (sizeof($orders) == 1) {
+            $generalOrdersDao->changeStatus($dataProgramming['idOrder'], 'En Produccion');
+        }
+    } else {
         $programming = $dataProgramming['data'];
 
         for ($i = 0; $i < sizeof($programming); $i++) {

@@ -3,6 +3,7 @@
 use TezlikPlaneacion\dao\GeneralMaterialsDao;
 use TezlikPlaneacion\dao\GeneralOrdersDao;
 use TezlikPlaneacion\dao\GeneralProductsDao;
+use TezlikPlaneacion\dao\GeneralProgrammingDao;
 use TezlikPlaneacion\Dao\MagnitudesDao;
 use TezlikPlaneacion\dao\MaterialsDao;
 use TezlikPlaneacion\dao\ProductsMaterialsDao;
@@ -15,6 +16,7 @@ $unitsDao = new UnitsDao();
 $generalOrdersDao = new GeneralOrdersDao();
 $productsMaterialsDao = new ProductsMaterialsDao();
 $productsDao = new GeneralProductsDao();
+$generalProgrammingDao = new GeneralProgrammingDao();
 
 use Psr\Http\Message\ResponseInterface as Response;
 use Psr\Http\Message\ServerRequestInterface as Request;
@@ -152,7 +154,8 @@ $app->post('/updateMaterials', function (Request $request, Response $response, $
     $generalMaterialsDao,
     $generalOrdersDao,
     $productsMaterialsDao,
-    $productsDao
+    $productsDao,
+    $generalProgrammingDao
 ) {
     session_start();
     $dataMaterial = $request->getParsedBody();
@@ -198,6 +201,10 @@ $app->post('/updateMaterials', function (Request $request, Response $response, $
                 }
 
                 $productsDao->updateAccumulatedQuantity($orders[$i]['id_product'], $accumulated_quantity, 1);
+                $programming = $generalProgrammingDao->findProgrammingByOrder($orders[$i]['id_order']);
+                if (sizeof($programming) > 0) {
+                    $generalOrdersDao->changeStatus($orders[$i]['id_order'], 'Programado');
+                }
             }
         }
 
