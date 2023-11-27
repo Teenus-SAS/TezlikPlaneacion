@@ -228,12 +228,11 @@ $(document).ready(function () {
       }
       let final_date = new Date(min_date);
     
-      let days = (order.original_quantity / ciclesMachine.cicles_hour / planningMachine.hours_day);
+      let days = (quantity / ciclesMachine.cicles_hour / planningMachine.hours_day);
 
       if (days < 1) {
-        let hours = days * 24;
+        let hours = days / planningMachine.hours_day;
         if (hours < 1) {
-          // let minutes = hours * 60;
           let minutes = quantity * 60 / ciclesMachine.cicles_hour;
           final_date.setMinutes(final_date.getMinutes() + minutes);
         } else
@@ -246,7 +245,7 @@ $(document).ready(function () {
       } else {
         final_date.setDate(final_date.getDate() + days);
     
-        let max_hour = (order.original_quantity / ciclesMachine.cicles_hour) - (days * planningMachine.hours_day) + last_hour;
+        let max_hour = (quantity / ciclesMachine.cicles_hour) - (days * planningMachine.hours_day) + last_hour;
       
         final_date =
           final_date.getFullYear() + "-" +
