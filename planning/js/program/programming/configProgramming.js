@@ -242,7 +242,7 @@ $(document).ready(function () {
       let days = (quantity / ciclesMachine.cicles_hour / planningMachine.hours_day);
 
       if (days >= 1) { 
-        final_date.setDate(final_date.getDate() + Math.ceil(days));
+        final_date.setDate(final_date.getDate() + Math.floor(days));
       }
 
       let hours = (days % 1) * planningMachine.hours_day;
