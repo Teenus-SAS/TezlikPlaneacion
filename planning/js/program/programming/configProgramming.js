@@ -241,29 +241,32 @@ $(document).ready(function () {
     
       let days = (quantity / ciclesMachine.cicles_hour / planningMachine.hours_day);
 
-      if (days < 1) {
-        let hours = (days % 1) * planningMachine.hours_day;
+      if (days >= 1) { 
+        final_date.setDate(final_date.getDate() + Math.ceil(days));
+      }
+
+      let hours = (days % 1) * planningMachine.hours_day;
         // if (hours < 1) {
-        let minutes = (hours % 1) * 60;
-        final_date.setMinutes(final_date.getMinutes() + minutes);
+      let minutes = (hours % 1) * 60;
+      final_date.setMinutes(final_date.getMinutes() + minutes);
 
         // } else
-          final_date.setHours(final_date.getHours() + hours);
+      final_date.setHours(final_date.getHours() + hours);
         
-        final_date =
-          final_date.getFullYear() + "-" +
-          ("00" + (final_date.getMonth() + 1)).slice(-2) + "-" +
-          ("00" + final_date.getDate()).slice(-2) + " " + ("00" + final_date.getHours()).slice(-2) + ':' + ("00" + final_date.getMinutes()).slice(-2) + ':' + '00';
-      } else {
-        final_date.setDate(final_date.getDate() + days);
+      final_date =
+        final_date.getFullYear() + "-" +
+        ("00" + (final_date.getMonth() + 1)).slice(-2) + "-" +
+        ("00" + final_date.getDate()).slice(-2) + " " + ("00" + final_date.getHours()).slice(-2) + ':' + ("00" + final_date.getMinutes()).slice(-2) + ':' + '00';
+      // } else {
+      //   final_date.setDate(final_date.getDate() + days);
     
-        let max_hour = (quantity / ciclesMachine.cicles_hour) - (days * planningMachine.hours_day) + last_hour;
+      //   let max_hour = (quantity / ciclesMachine.cicles_hour) - (days * planningMachine.hours_day) + last_hour;
       
-        final_date =
-          final_date.getFullYear() + "-" +
-          ("00" + (final_date.getMonth() + 1)).slice(-2) + "-" +
-          ("00" + final_date.getDate()).slice(-2) + " " + max_hour + ':' + '00' + ':' + '00';
-      }
+      //   final_date =
+      //     final_date.getFullYear() + "-" +
+      //     ("00" + (final_date.getMonth() + 1)).slice(-2) + "-" +
+      //     ("00" + final_date.getDate()).slice(-2) + " " + max_hour + ':' + '00' + ':' + '00';
+      // }
 
       dataProgramming.append('idProduct', product);
       dataProgramming.append('idMachine', machine);
