@@ -189,9 +189,10 @@ $app->post('/updatePlanProduct', function (Request $request, Response $response,
             if (sizeof($_FILES) > 0)
                 $products = $FilesDao->imageProduct($dataProduct['idProduct'], $id_company);
 
-            if ($products == null)
+            if ($products == null) {
+                $products = $generalProductsDao->updateAccumulatedQuantityGeneral($id_company);
                 $products = $generalProductsDao->updateAccumulatedQuantity($dataProduct['idProduct'], $dataProduct['quantity'], 1);
-
+            }
             // Cambiar estado pedidos
             $orders = $generalOrdersDao->findAllOrdersByCompany($id_company);
 

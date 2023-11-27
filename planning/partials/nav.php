@@ -81,6 +81,17 @@
                         </li>
                     <?php } ?>
 
+                    <?php //if ($_SESSION['office'] == 1 && $_SESSION['plan_planning_office'] == 1) { 
+                    ?>
+                    <li class="nav-item store">
+                        <a class="nav-link" href="/planning/store">
+                            <i class="bx bxs-customize mr-1"></i> Almacen
+                            <i class="bx bx-chevron-down"></i>
+                        </a>
+                    </li>
+                    <?php //} 
+                    ?>
+
                 </ul>
             </div>
         </nav>

@@ -310,7 +310,7 @@ $(document).ready(function () {
           });
           
           $('#quantityOrder').val(parseFloat(r[i].original_quantity).toLocaleString());
-          $('#quantityMissing').val(parseFloat(r[i].accumulated_quantity).toLocaleString());
+          $('#quantityMissing').val(parseFloat(r[i].accumulated_quantity) == 0 ? parseFloat(r[i].original_quantity).toLocaleString() : parseFloat(r[i].accumulated_quantity).toLocaleString());
 
           dataProgramming = new FormData(formCreateProgramming);
 
