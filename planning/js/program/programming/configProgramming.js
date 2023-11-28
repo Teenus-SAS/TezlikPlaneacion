@@ -312,8 +312,6 @@ $(document).ready(function () {
           dataProgramming = new FormData(formCreateProgramming);
 
           dataProgramming.append('order', r[i].id_order);
-          dataProgramming.append('quantityMP', r[i].quantity);
-          
           break;
         }
       }
