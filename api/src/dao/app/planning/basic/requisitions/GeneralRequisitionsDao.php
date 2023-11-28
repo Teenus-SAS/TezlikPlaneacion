@@ -19,9 +19,10 @@ class GeneralRequisitionsDao
     public function findAllActualRequisitionByCompany($id_company)
     {
         $connection = Connection::getInstance()->getConnection();
-        $stmt = $connection->prepare("SELECT r.id_requisition, r.id_material, m.reference, m.material, r.application_date, r.delivery_date, r.quantity, r.purchase_order, r.admission_date
+        $stmt = $connection->prepare("SELECT r.id_requisition, r.id_material, m.reference, m.material, r.application_date, r.delivery_date, r.quantity, r.purchase_order, r.admission_date, u.unit
                                       FROM requisitons r
                                         INNER JOIN materials m ON m.id_material = r.id_material
+                                        INNER JOIN convert_units u ON u.id_unit = m.unit
                                       WHERE r.id_company = :id_company 
                                       AND (r.admission_date IS NULL OR MONTH(r.admission_date) = MONTH(CURRENT_DATE))");
         $stmt->execute(['id_company' => $id_company]);
@@ -35,9 +36,10 @@ class GeneralRequisitionsDao
     public function findAllMinAndMaxRequisitionByCompany($min_date, $max_date, $id_company)
     {
         $connection = Connection::getInstance()->getConnection();
-        $stmt = $connection->prepare("SELECT r.id_requisition, r.id_material, m.reference, m.material, r.application_date, r.delivery_date, r.quantity, r.purchase_order, r.admission_date
+        $stmt = $connection->prepare("SELECT r.id_requisition, r.id_material, m.reference, m.material, r.application_date, r.delivery_date, r.quantity, r.purchase_order, r.admission_date, u.unit
                                       FROM requisitons r
                                         INNER JOIN materials m ON m.id_material = r.id_material
+                                        INNER JOIN convert_units u ON u.id_unit = m.unit
                                       WHERE r.id_company = :id_company
                                       AND (r.application_date BETWEEN :min_date AND :max_date)");
         $stmt->execute([

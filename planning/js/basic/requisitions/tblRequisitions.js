@@ -36,6 +36,11 @@ $(document).ready(function () {
                     className: 'classCenter',
                 },
                 {
+                    title: 'Unidad',
+                    data: 'unit',
+                    className: 'classCenter',
+                },
+                {
                     title: 'Fecha Solicitud',
                     data: 'application_date',
                     className: 'classCenter',

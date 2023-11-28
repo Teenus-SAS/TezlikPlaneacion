@@ -34,11 +34,11 @@ $(document).ready(function () {
                 data: 'material',
                 className: 'uniqueClassName',
             },
-            // {
-            //     title: 'Unidad',
-            //     data: 'unit',
-            //     className: 'uniqueClassName',
-            // },
+            {
+                title: 'Unidad',
+                data: 'unit',
+                className: 'uniqueClassName',
+            },
             {
                 title: 'Cantidad',
                 data: 'quantity',
@@ -55,7 +55,7 @@ $(document).ready(function () {
         ],
         rowGroup: {
             dataSrc: function (row) {
-                return `<th class="text-center" colspan="5" style="font-weight: bold;"> No Pedido - ${row.num_order} </th>`;
+                return `<th class="text-center" colspan="6" style="font-weight: bold;"> No Pedido - ${row.num_order} </th>`;
             },
             startRender: function (rows, group) {
                 return $('<tr/>').append(group);
