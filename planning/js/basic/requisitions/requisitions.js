@@ -100,16 +100,14 @@ $(document).ready(function () {
     $('#applicationDate').val(data.application_date);
     $('#deliveryDate').val(data.delivery_date);
     $('#purchaseOrder').val(data.purchase_order);
-
-    quantity = data.quantity;
-
-    if (quantity.isInteger) quantity = quantity.toLocaleString('es-CO');
-    else
-      quantity = quantity.toLocaleString(undefined, {
-        minimumFractionDigits: 4,
-        maximumFractionDigits: 4,
-      });
-    $('#quantity').val(quantity);
+ 
+    // if (quantity.isInteger) quantity = quantity.toLocaleString('es-CO');
+    // else
+    //   quantity = quantity.toLocaleString(undefined, {
+    //     minimumFractionDigits: 4,
+    //     maximumFractionDigits: 4,
+    //   });
+    $('#quantity').val(data.quantity);
     
     $('html, body').animate(
       {
