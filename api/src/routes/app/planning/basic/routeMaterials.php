@@ -171,27 +171,28 @@ $app->post('/updateMaterials', function (Request $request, Response $response, $
 
         for ($i = 0; $i < sizeof($orders); $i++) {
             $status = true;
+            // Checkear cantidades
+            $order = $generalOrdersDao->checkAccumulatedQuantityOrder($orders[$i]['id_order']);
 
-            // Ficha tecnica
-            $productsMaterials = $productsMaterialsDao->findAllProductsmaterials($orders[$i]['id_product'], $id_company);
+            if ($order['original_quantity'] > $order['accumulated_quantity']) {
+                // Ficha tecnica
+                $productsMaterials = $productsMaterialsDao->findAllProductsmaterials($orders[$i]['id_product'], $id_company);
 
-            if (sizeof($productsMaterials) == 0) {
-                $generalOrdersDao->changeStatus($orders[$i]['id_order'], 'Sin Ficha Tecnica');
-                $status = false;
-            } else {
-                foreach ($productsMaterials as $arr) {
-                    if ($arr['quantity_material'] <= 0) {
-                        $order = $generalOrdersDao->changeStatus($orders[$i]['id_order'], 'Sin Materia Prima');
-                        $status = false;
-                        break;
+                if (sizeof($productsMaterials) == 0) {
+                    $generalOrdersDao->changeStatus($orders[$i]['id_order'], 'Sin Ficha Tecnica');
+                    $status = false;
+                } else {
+                    foreach ($productsMaterials as $arr) {
+                        if ($arr['quantity_material'] <= 0) {
+                            $order = $generalOrdersDao->changeStatus($orders[$i]['id_order'], 'Sin Materia Prima');
+                            $status = false;
+                            break;
+                        }
                     }
                 }
             }
 
             if ($status == true) {
-                // Checkear cantidades
-                $order = $generalOrdersDao->checkAccumulatedQuantityOrder($orders[$i]['id_order']);
-
                 if ($order['original_quantity'] <= $order['accumulated_quantity']) {
                     $generalOrdersDao->changeStatus($orders[$i]['id_order'], 'Despacho');
                     $accumulated_quantity = $order['accumulated_quantity'] - $order['original_quantity'];
