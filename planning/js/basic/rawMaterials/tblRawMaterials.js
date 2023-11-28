@@ -38,6 +38,7 @@ $(document).ready(function () {
         title: 'Reservado',
         data: 'reserved',
         className: 'uniqueClassName',
+        render: $.fn.dataTable.render.number('.', ',', 2),
       }, 
       {
         title: 'Unidad',
