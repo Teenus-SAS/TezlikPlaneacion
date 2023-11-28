@@ -66,6 +66,7 @@ $(document).ready(function () {
     );
     $('#quantityOrder').val(data.quantity_order.toLocaleString());
     $('#quantityMissing').val(data.accumulated_quantity.toLocaleString());
+    $('#quantityMP').val(data.quantity_mp.toLocaleString());
     
     // await loadProducts(data.num_order);
     let $select = $(`#idMachine`);
