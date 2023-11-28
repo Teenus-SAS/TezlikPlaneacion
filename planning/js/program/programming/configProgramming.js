@@ -4,18 +4,8 @@ $(document).ready(function () {
   let allCiclesMachines = [];
   let allPlanningMachines = [];
   let allOrders = [];
-  let allProgramming = [];
+  let allProgramming = []; 
 
-  // loadAllDataProgramming = async () => {
-  //   allMachines = await searchData('/api/machines');
-  //   allCiclesMachines = await searchData('/api/planCiclesMachine');
-  //   allPlanningMachines = await searchData('/api/planningMachines');
-  //   allOrders = await searchData('/api/orders');
-  //   allProgramming = await searchData('/api/programming');
-  //   copyAllProgramming = allProgramming; 
-
-  //   allProductsMaterials = await searchData('/api/allProductsMaterials');
-  // } 
   loadAllDataProgramming = async () => {
     try {
       const [
@@ -317,7 +307,7 @@ $(document).ready(function () {
 
           let productsMaterials = allProductsMaterials.filter(item => item.id_product == this.value);
           productsMaterials = productsMaterials.sort((a, b) => a.quantity - b.quantity);
-          $('#quantityMP').val(productsMaterials[0].quantity);
+          $('#quantityMP').val(productsMaterials[0].quantity.toLocaleString('es-CO', { maximumfractiondigits: 2 }));
 
           dataProgramming = new FormData(formCreateProgramming);
 
