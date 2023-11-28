@@ -26,7 +26,7 @@ $app->post('/userAutentication', function (Request $request, Response $response,
 
     $user = $parsedBody["validation-email"];
     $password = $parsedBody["validation-password"];
-    $user = $autenticationDao->findByEmail($user);
+    $user = $autenticationDao->findByEmail($user, 2);
 
     $resp = array();
 

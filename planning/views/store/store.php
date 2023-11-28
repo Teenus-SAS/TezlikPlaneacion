@@ -7,6 +7,8 @@ if (!isset($_SESSION)) {
 if (sizeof($_SESSION) == 0)
     header('location: /');
 ?>
+<?php require_once dirname(dirname(__DIR__)) . '/modals/deliverMaterial.php'; ?>
+
 <!DOCTYPE html>
 <html lang="es">
 
@@ -48,15 +50,15 @@ if (sizeof($_SESSION) == 0)
                                 </div>
                             </div>
                             <div class="col-sm-7 col-xl-6 form-inline justify-content-sm-end">
-                                <div class="col-xs-2 py-2 mr-2">
+                                <!-- <div class="col-xs-2 py-2 mr-2">
                                     <button class="btn btn-info" id="btnDelivery">Entregar</button>
-                                </div>
+                                </div> -->
                             </div>
                         </div>
                     </div>
                 </div>
 
-                <div class="page-content-wrapper mt--45 mb-5 cardAddDelivery">
+                <!-- <div class="page-content-wrapper mt--45 mb-5 cardAddDelivery">
                     <div class="container-fluid">
                         <div class="row">
                             <div class="col-12">
@@ -78,7 +80,7 @@ if (sizeof($_SESSION) == 0)
                             </div>
                         </div>
                     </div>
-                </div>
+                </div> -->
 
                 <!-- <div class="page-content-wrapper mt--45 mb-5 cardImportProcess">
                     <div class="container-fluid">

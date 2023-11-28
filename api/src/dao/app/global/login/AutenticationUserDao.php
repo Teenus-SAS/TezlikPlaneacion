@@ -16,15 +16,16 @@ class AutenticationUserDao
     $this->logger->pushHandler(new RotatingFileHandler(Constants::LOGS_PATH . 'querys.log', 20, Logger::DEBUG));
   }
 
-  public function findByEmail($dataUser)
+  public function findByEmail($dataUser, $op)
   {
     $connection = Connection::getInstance()->getConnection();
-    $sql ="SELECT * FROM users WHERE email = :email";
+
+    $sql = "SELECT * FROM users WHERE email = :email";
     $stmt = $connection->prepare($sql);
     $stmt->execute(['email' => $dataUser]);
     $user = $stmt->fetch($connection::FETCH_ASSOC);
 
-    if (!$user) {
+    if ($op == 2 && !$user) {
       $stmt = $connection->prepare("SELECT * FROM admins WHERE email = :email");
       $stmt->execute(['email' => $dataUser]);
       $user = $stmt->fetch($connection::FETCH_ASSOC);

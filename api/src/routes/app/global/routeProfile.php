@@ -30,7 +30,7 @@ $app->post('/updateProfile', function (Request $request, Response $response, $ar
     }
 
     if ($profile == null) {
-        $user = $usersDao->findByEmail($dataUser['emailUser']);
+        $user = $usersDao->findByEmail($dataUser['emailUser'], 2);
 
         $_SESSION['name'] = $user['firstname'];
         $_SESSION['lastname'] = $user['lastname'];

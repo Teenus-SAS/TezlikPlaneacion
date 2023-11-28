@@ -22,6 +22,7 @@ $(document).ready(function () {
                 title: 'No Pedido',
                 data: 'num_order',
                 className: 'uniqueClassName',
+                visible: false,
             },
             {
                 title: 'Referencia Material',
@@ -38,30 +39,23 @@ $(document).ready(function () {
                 data: 'quantity',
                 className: 'uniqueClassName',
             },
-            // {
-            //     title: 'Inventario',
-            //     data: 'quantity_material',
-            //     className: 'uniqueClassName',
-            //     render: $.fn.dataTable.render.number('.', ',', 2, ''),
-            // },
-            // {
-            //     title: 'En Transito',
-            //     data: 'transit',
-            //     className: 'uniqueClassName',
-            //     render: $.fn.dataTable.render.number('.', ',', 2, ''),
-            // },
-            // {
-            //     title: 'Necesidad',
-            //     data: 'need',
-            //     className: 'uniqueClassName',
-            //     render: $.fn.dataTable.render.number('.', ',', 2, ''),
-            // },
-            // {
-            //     title: 'Disponible',
-            //     data: 'available',
-            //     className: 'uniqueClassName',
-            //     render: $.fn.dataTable.render.number('.', ',', 2, ''),
-            // }, 
+            {
+                title: 'Acciones',
+                data: 'id_material',
+                className: 'uniqueClassName',
+                render: function (data) {
+                    return `<a href="javascript:;" <i id="${data}" class="bi bi-box-seam-fill deliver" data-toggle='tooltip' title='Entregar' style="font-size: 30px;"></i></a>`;
+                },
+            },
         ],
-    }); 
+        rowGroup: {
+            dataSrc: function (row) {
+                return `<th class="text-center" colspan="5" style="font-weight: bold;"> No Pedido - ${row.num_order} </th>`;
+            },
+            startRender: function (rows, group) {
+                return $('<tr/>').append(group);
+            },
+            className: 'odd',
+        },
+    });
 });

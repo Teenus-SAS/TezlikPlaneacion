@@ -7,7 +7,6 @@ if (!isset($_SESSION)) {
 if (sizeof($_SESSION) == 0)
     header('location: /');
 ?>
-<?php require_once dirname(dirname(dirname(__DIR__))) . '/modals/statusProgramming.php'; ?>
 
 <!DOCTYPE html>
 <html lang="es">
