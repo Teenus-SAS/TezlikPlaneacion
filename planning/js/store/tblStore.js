@@ -40,9 +40,16 @@ $(document).ready(function () {
                 className: 'uniqueClassName',
             },
             {
-                title: 'Cantidad',
+                title: 'Cantidad Inventario',
                 data: 'quantity',
                 className: 'uniqueClassName',
+                render: $.fn.dataTable.render.number('.', ',', 0),
+            },
+            {
+                title: 'Reservado',
+                data: 'reserved',
+                className: 'uniqueClassName',
+                render: $.fn.dataTable.render.number('.', ',', 2),
             },
             {
                 title: 'Acciones',
@@ -55,7 +62,7 @@ $(document).ready(function () {
         ],
         rowGroup: {
             dataSrc: function (row) {
-                return `<th class="text-center" colspan="6" style="font-weight: bold;"> No Pedido - ${row.num_order} </th>`;
+                return `<th class="text-center" colspan="7" style="font-weight: bold;"> No Pedido - ${row.num_order} </th>`;
             },
             startRender: function (rows, group) {
                 return $('<tr/>').append(group);

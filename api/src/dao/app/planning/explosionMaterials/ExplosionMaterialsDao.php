@@ -21,14 +21,15 @@ class ExplosionMaterialsDao
     $connection = Connection::getInstance()->getConnection();
 
     $stmt = $connection->prepare("SELECT p.id_product, o.id_order, pm.id_product_material, p.reference AS reference_product, p.product, SUM(p.quantity) AS quantity_product, m.id_material, m.reference AS reference_material, m.material, m.quantity AS quantity_material, u.unit, 
-                                         IFNULL(SUM(IF(IFNULL(r.admission_date, 0) = 0 AND r.application_date != '0000-00-00' AND r.delivery_date != '0000-00-00', r.quantity, 0)), 0) AS transit, (o.original_quantity * pm.quantity) AS need
+                                         IFNULL(SUM(IF(IFNULL(r.admission_date, 0) = 0 AND r.application_date != '0000-00-00' AND r.delivery_date != '0000-00-00', r.quantity, 0)), 0) AS transit, ((o.original_quantity * pm.quantity) - IF(m.status = 1, (IFNULL(SUM(pg.quantity * pm.quantity), 0)), 0)) AS need
                                       FROM products p
                                         INNER JOIN products_materials pm ON pm.id_product = p.id_product
                                         INNER JOIN materials m ON m.id_material = pm.id_material
                                         INNER JOIN convert_units u ON u.id_unit = m.unit
                                         INNER JOIN plan_orders o ON o.id_product = p.id_product
                                         LEFT JOIN requisitons r ON r.id_material = pm.id_material
-                                      WHERE p.id_company = :id_company AND (o.status = 'Programar' OR o.status = 'Programado' OR o.status = 'Sin Ficha Tecnica' OR o.status = 'Sin Materia Prima')
+                                        LEFT JOIN programming pg ON pg.id_order = o.id_order
+                                      WHERE p.id_company = :id_company AND (o.status = 'Programar' OR o.status = 'Programado' OR o.status = 'Sin Ficha Tecnica' OR o.status = 'Sin Materia Prima' OR o.status = 'En Produccion')
                                       GROUP BY pm.id_product_material, o.id_order");
     $stmt->execute(['id_company' => $id_company]);
 

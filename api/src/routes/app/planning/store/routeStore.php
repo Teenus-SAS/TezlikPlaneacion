@@ -1,10 +1,12 @@
 <?php
 
 use TezlikPlaneacion\dao\AutenticationUserDao;
+use TezlikPlaneacion\dao\GeneralMaterialsDao;
 use TezlikPlaneacion\dao\StoreDao;
 
 $storeDao = new StoreDao();
 $autenticationDao = new AutenticationUserDao();
+$generalMaterialsDao = new GeneralMaterialsDao();
 
 use Psr\Http\Message\ResponseInterface as Response;
 use Psr\Http\Message\ServerRequestInterface as Request;
@@ -19,7 +21,8 @@ $app->get('/store', function (Request $request, Response $response, $args) use (
 
 $app->post('/deliverStore', function (Request $request, Response $response, $args) use (
     $storeDao,
-    $autenticationDao
+    $autenticationDao,
+    $generalMaterialsDao
 ) {
     $dataStore = $request->getParsedBody();
 
@@ -45,6 +48,8 @@ $app->post('/deliverStore', function (Request $request, Response $response, $arg
     // }
 
     $store = $storeDao->saveDelivery($dataStore);
+    if ($store == null)
+        $store = $generalMaterialsDao->updateQuantityMaterial($dataStore['idMaterial'], $dataStore['stored']);
 
     if ($store == null)
         $resp = array('success' => true, 'message' => 'Materia prima entregada correctamente');

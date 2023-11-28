@@ -19,14 +19,24 @@ class StoreDao
     public function findAllStore($id_company)
     {
         $connection = Connection::getInstance()->getConnection();
-        $stmt = $connection->prepare("SELECT pg.id_programming, o.id_order, o.num_order, m.id_material, m.reference, m.material, m.quantity, u.unit
+        // $stmt = $connection->prepare("SELECT pg.id_programming, o.id_order, o.num_order, m.id_material, m.reference, m.material, m.quantity, u.unit
+        //                               FROM programming pg
+        //                                 INNER JOIN plan_orders o ON o.id_order = pg.id_order
+        //                                 INNER JOIN products_materials pm ON pm.id_product = pg.id_product
+        //                                 INNER JOIN materials m ON m.id_material = pm.id_material
+        //                                 INNER JOIN convert_units u ON u.id_unit = m.unit
+        //                               WHERE pg.id_company = :id_company AND pg.status = 1 AND m.status = 0
+        //                               ORDER BY `o`.`num_order` ASC");
+        $stmt = $connection->prepare("SELECT pg.id_programming, o.id_order, o.num_order, m.id_material, m.reference, 
+                                             m.material, m.quantity, u.unit, IFNULL(SUM(pg.quantity * pm.quantity), 0) AS reserved
                                       FROM programming pg
                                         INNER JOIN plan_orders o ON o.id_order = pg.id_order
                                         INNER JOIN products_materials pm ON pm.id_product = pg.id_product
                                         INNER JOIN materials m ON m.id_material = pm.id_material
                                         INNER JOIN convert_units u ON u.id_unit = m.unit
-                                      WHERE pg.id_company = :id_company AND pg.status = 1 AND m.status = 0
-                                      ORDER BY `o`.`num_order` ASC");
+                                      WHERE pg.id_company = :id_company AND pg.status = 1 AND m.status = 0 -- AND o.status = 'Programado'
+                                      GROUP BY pg.id_programming, o.id_order, o.num_order, m.id_material, m.reference, m.material, m.quantity, u.unit
+                                      ORDER BY o.num_order ASC;");
         $stmt->execute(['id_company' => $id_company]);
 
         $this->logger->info(__FUNCTION__, array('query' => $stmt->queryString, 'errors' => $stmt->errorInfo()));

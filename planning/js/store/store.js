@@ -1,5 +1,6 @@
 $(document).ready(function () {
     sessionStorage.removeItem('idMaterial');
+    sessionStorage.removeItem('stored');
 
     $('.cardAddDelivery').hide();
 
@@ -15,6 +16,7 @@ $(document).ready(function () {
         let data = tblStore.fnGetData(row);
 
         sessionStorage.setItem('idMaterial', data.id_material);
+        sessionStorage.setItem('stored', (data.quantity - data.reserved));
         $('#deliverMaterial').modal('show');
     });
 
@@ -22,6 +24,7 @@ $(document).ready(function () {
         e.preventDefault();
         
         sessionStorage.removeItem('idMaterial');
+        sessionStorage.removeItem('stored');
         $('#formDeliverMaterial').trigger('reset');
         $('#deliverMaterial').modal('hide');
     });
@@ -39,6 +42,7 @@ $(document).ready(function () {
 
         let dataStore = {};
         dataStore['idMaterial'] = sessionStorage.getItem('idMaterial');
+        dataStore['stored'] = sessionStorage.getItem('stored');
         dataStore['email'] = email;
         dataStore['password'] = password;
 
@@ -49,6 +53,7 @@ $(document).ready(function () {
             success: function (resp) {
                 if (resp.success == true) {
                     sessionStorage.removeItem('idMaterial');
+                    sessionStorage.removeItem('stored');
                     $('#formDeliverMaterial').trigger('reset');
                     $('#deliverMaterial').modal('hide');
                     toastr.success(resp.message);
