@@ -34,11 +34,11 @@ $(document).ready(function () {
                 data: 'material',
                 className: 'uniqueClassName',
             },
-            {
-                title: 'Unidad',
-                data: 'material',
-                className: 'uniqueClassName',
-            },
+            // {
+            //     title: 'Unidad',
+            //     data: 'unit',
+            //     className: 'uniqueClassName',
+            // },
             {
                 title: 'Cantidad',
                 data: 'quantity',

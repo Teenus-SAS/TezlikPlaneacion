@@ -21,7 +21,7 @@ class ExplosionMaterialsDao
     $connection = Connection::getInstance()->getConnection();
 
     $stmt = $connection->prepare("SELECT p.id_product, o.id_order, pm.id_product_material, p.reference AS reference_product, p.product, SUM(p.quantity) AS quantity_product, m.id_material, m.reference AS reference_material, m.material, m.quantity AS quantity_material, u.unit, 
-                                         IFNULL(SUM(IF(IFNULL(r.admission_date, 0) = 0, r.quantity, 0)), 0) AS transit, (o.original_quantity * pm.quantity) AS need
+                                         IFNULL(SUM(IF(IFNULL(r.admission_date, 0) = 0 AND r.application_date != '0000-00-00' AND r.delivery_date != '0000-00-00', r.quantity, 0)), 0) AS transit, (o.original_quantity * pm.quantity) AS need
                                       FROM products p
                                         INNER JOIN products_materials pm ON pm.id_product = p.id_product
                                         INNER JOIN materials m ON m.id_material = pm.id_material
