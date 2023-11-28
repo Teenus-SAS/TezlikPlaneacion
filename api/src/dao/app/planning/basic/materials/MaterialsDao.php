@@ -20,7 +20,7 @@ class MaterialsDao
   {
     $connection = Connection::getInstance()->getConnection();
     $stmt = $connection->prepare("SELECT m.id_material, m.reference, m.material, m.material AS descript, mg.id_magnitude, mg.magnitude, u.id_unit, 
-                                         u.unit, u.abbreviation, m.quantity, IFNULL((SELECT IFNULL(SUM(1*m.quantity/pm.quantity), 0) FROM programming pg 
+                                         u.unit, u.abbreviation, m.quantity, IFNULL((SELECT IFNULL(SUM(pg.quantity*pm.quantity), 0) FROM programming pg 
                                                                               LEFT JOIN plan_orders o ON o.id_order = pg.id_order
                                                                               LEFT JOIN products_materials pm ON pm.id_product = o.id_product WHERE pm.id_material = m.id_material AND o.status = 'Programado'), 0) AS reserved
                                   FROM materials m
