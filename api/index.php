@@ -77,6 +77,7 @@ require_once('../api/src/routes/app/planning/config/routeProductsInProcess.php')
 require_once('../api/src/routes/app/planning/config/routeProductsProcess.php');
 require_once('../api/src/routes/app/planning/config/routePlanning_machines.php');
 require_once('../api/src/routes/app/planning/config/routePlanCiclesMachine.php');
+require_once('../api/src/routes/app/planning/config/routeStock.php');
 // General
 require_once('../api/src/routes/app/planning/general/routeCategories.php');
 require_once('../api/src/routes/app/planning/general/routeUnitsSales.php');

@@ -1,10 +1,10 @@
 $(document).ready(function () {
   /* Cargue tabla de stock */
 
-  tblStock = $('#tblStock').dataTable({
+  tblStock = $('#tblStock1').dataTable({
     pageLength: 50,
     ajax: {
-      url: '../../api/process',
+      url: '../../api/stock',
       dataSrc: '',
     },
     language: {
@@ -20,20 +20,31 @@ $(document).ready(function () {
         },
       },
       {
-        title: 'Proceso',
-        data: 'process',
+        title: 'Material',
+        data: 'material',
         className: 'uniqueClassName',
       },
       {
-        title: 'Acciones',
-        data: 'id_process',
+        title: 'Plazo Max',
+        data: 'max',
         className: 'uniqueClassName',
-        render: function (data) {
-          return `
-                <a href="javascript:;" <i id="${data}" class="bx bx-edit-alt updateProcess" data-toggle='tooltip' title='Actualizar Proceso' style="font-size: 30px;"></i></a>
-                <a href="javascript:;" <i id="${data}" class="mdi mdi-delete-forever" data-toggle='tooltip' title='Eliminar Proceso' style="font-size: 30px;color:red" onclick="deleteFunction()"></i></a>`;
-        },
       },
+      {
+        title: 'Plazo Habitual',
+        data: 'habitual',
+        className: 'uniqueClassName',
+      },
+
+      // {
+      //   title: 'Acciones',
+      //   data: 'id_process',
+      //   className: 'uniqueClassName',
+      //   render: function (data) {
+      //     return `
+      //           <a href="javascript:;" <i id="${data}" class="bx bx-edit-alt updateProcess" data-toggle='tooltip' title='Actualizar Proceso' style="font-size: 30px;"></i></a>
+      //           <a href="javascript:;" <i id="${data}" class="mdi mdi-delete-forever" data-toggle='tooltip' title='Eliminar Proceso' style="font-size: 30px;color:red" onclick="deleteFunction()"></i></a>`;
+      //   },
+      // },
     ],
   });
 });
