@@ -19,7 +19,8 @@ class UnitSalesDao
     public function findAllSalesByCompany($id_company)
     {
         $connection = Connection::getInstance()->getConnection();
-        $stmt = $connection->prepare("SELECT u.id_unit_sales, u.id_product, p.product, u.year, u.jan, u.feb, u.mar, u.apr, u.may, u.jun, u.jul, u.aug, u.sept, u.oct, u.nov, u.dece 
+        $stmt = $connection->prepare("SELECT u.id_unit_sales, u.id_product, p.product, u.year, u.jan, u.feb, u.mar, u.apr, u.may, u.jun, u.jul, u.aug, u.sept, u.oct, u.nov, u.dece,
+                                             ((u.jan + u.feb + u.mar + u.apr + u.may + u.jun + u.jul + u.aug + u.sept + u.oct + u.nov + u.dece) / 12) AS average 
                                       FROM plan_unit_sales u 
                                         INNER JOIN products p ON p.id_product = u.id_product 
                                       WHERE u.id_company = :id_company;");

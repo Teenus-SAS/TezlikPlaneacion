@@ -45,14 +45,14 @@ class StoreDao
         return $store;
     }
 
-    public function saveDelivery($dataStore)
+    public function saveDelivery($dataStore, $status)
     {
         $connection = Connection::getInstance()->getConnection();
 
         try {
             $stmt = $connection->prepare("UPDATE materials SET status = :status WHERE id_material = :id_material");
             $stmt->execute([
-                'status' => 1,
+                'status' => $status,
                 'id_material' => $dataStore['idMaterial']
             ]);
         } catch (\Exception $e) {

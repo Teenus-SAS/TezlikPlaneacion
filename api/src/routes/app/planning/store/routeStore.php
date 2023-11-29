@@ -2,19 +2,51 @@
 
 use TezlikPlaneacion\dao\AutenticationUserDao;
 use TezlikPlaneacion\dao\GeneralMaterialsDao;
+use TezlikPlaneacion\dao\GeneralProgrammingDao;
+use TezlikPlaneacion\dao\ProductsMaterialsDao;
 use TezlikPlaneacion\dao\StoreDao;
 
 $storeDao = new StoreDao();
 $autenticationDao = new AutenticationUserDao();
+$programmingDao = new GeneralProgrammingDao();
+$productsMaterialsDao = new ProductsMaterialsDao();
 $generalMaterialsDao = new GeneralMaterialsDao();
 
 use Psr\Http\Message\ResponseInterface as Response;
 use Psr\Http\Message\ServerRequestInterface as Request;
 
-$app->get('/store', function (Request $request, Response $response, $args) use ($storeDao) {
+$app->get('/store', function (Request $request, Response $response, $args) use (
+    $storeDao,
+    $programmingDao,
+    $productsMaterialsDao
+) {
     session_start();
     $id_company = $_SESSION['id_company'];
     $store = $storeDao->findAllStore($id_company);
+
+    $programming = $programmingDao->findAllProgrammingByCompany($id_company);
+
+    for ($i = 0; $i < sizeof($programming); $i++) {
+        $materials = $productsMaterialsDao->findAllProductsmaterials($programming[$i]['id_product'], $id_company);
+
+        $status = true;
+
+        for ($j = 0; $j < sizeof($materials); $j++) {
+            if ($materials[$j]['status'] == 0) {
+                $status = false;
+                break;
+            }
+        }
+
+        for ($j = 0; $j < sizeof($materials); $j++) {
+            if ($status == true) {
+                $data = [];
+                $data['idMaterial'] = $materials[$j]['id_material'];
+                $storeDao->saveDelivery($data, 0);
+            } else break;
+        }
+    }
+
     $response->getBody()->write(json_encode($store, JSON_NUMERIC_CHECK));
     return $response->withHeader('Content-Type', 'application/json');
 });
@@ -47,7 +79,7 @@ $app->post('/deliverStore', function (Request $request, Response $response, $arg
     //     return $response->withStatus(200)->withHeader('Content-Type', 'application/json');
     // }
 
-    $store = $storeDao->saveDelivery($dataStore);
+    $store = $storeDao->saveDelivery($dataStore, 1);
     if ($store == null)
         $store = $generalMaterialsDao->updateQuantityMaterial($dataStore['idMaterial'], $dataStore['stored']);
 

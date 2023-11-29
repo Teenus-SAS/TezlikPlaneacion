@@ -131,7 +131,7 @@ $app->post('/addUnitSales', function (Request $request, Response $response, $arg
 $app->post('/updateUnitSale', function (Request $request, Response $response, $args) use ($unitSalesDao) {
     $dataSale = $request->getParsedBody();
 
-    if (empty($dataSale['idSale']) || empty($dataSale['refProduct']))
+    if (empty($dataSale['idSale']) || empty($dataSale['referenceProduct']))
         $resp = array('error' => true, 'message' => 'Ingrese todos los datos a actualizar');
     else {
         $unitSales = $unitSalesDao->updateSales($dataSale);

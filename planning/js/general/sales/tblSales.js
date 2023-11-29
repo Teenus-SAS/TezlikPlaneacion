@@ -116,6 +116,12 @@ $(document).ready(function () {
         render: $.fn.dataTable.render.number('.', ',', 0, ''),
       },
       {
+        title: 'Promedio',
+        data: 'average',
+        className: 'uniqueClassName',
+        render: $.fn.dataTable.render.number('.', ',', 0, ''),
+      },
+      {
         title: 'Acciones',
         data: 'id_unit_sales',
         className: 'uniqueClassName',

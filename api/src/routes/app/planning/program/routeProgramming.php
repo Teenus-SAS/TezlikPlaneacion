@@ -5,6 +5,7 @@ use TezlikPlaneacion\dao\ProgrammingDao;
 use TezlikPlaneacion\dao\DatesMachinesDao;
 use TezlikPlaneacion\dao\ExplosionMaterialsDao;
 use TezlikPlaneacion\dao\FinalDateDao;
+use TezlikPlaneacion\dao\GeneralMaterialsDao;
 use TezlikPlaneacion\dao\GeneralOrdersDao;
 use TezlikPlaneacion\dao\GeneralPlanCiclesMachinesDao;
 use TezlikPlaneacion\dao\GeneralProgrammingDao;
@@ -12,6 +13,8 @@ use TezlikPlaneacion\dao\LastDataDao;
 use TezlikPlaneacion\dao\LotsProductsDao;
 use TezlikPlaneacion\dao\MachinesDao;
 use TezlikPlaneacion\dao\ProductsDao;
+use TezlikPlaneacion\dao\ProductsMaterialsDao;
+use TezlikPlaneacion\dao\StoreDao;
 
 $programmingDao = new ProgrammingDao();
 $generalProgrammingDao = new GeneralProgrammingDao();
@@ -25,6 +28,8 @@ $finalDateDao = new FinalDateDao();
 $economicLotDao = new LotsProductsDao();
 $generalPlanCiclesMachinesDao = new GeneralPlanCiclesMachinesDao();
 $explosionMaterialsDao = new ExplosionMaterialsDao();
+$productsMaterialsDao = new ProductsMaterialsDao();
+$storeDao = new StoreDao();
 
 use Psr\Http\Message\ResponseInterface as Response;
 use Psr\Http\Message\ServerRequestInterface as Request;
@@ -91,7 +96,8 @@ $app->get('/programming', function (Request $request, Response $response, $args)
     $programmingDao,
     $generalProgrammingDao,
     $generalOrdersDao,
-    $finalDateDao
+    $productsMaterialsDao,
+    $storeDao
 ) {
     session_start();
     $id_company = $_SESSION['id_company'];
@@ -108,6 +114,27 @@ $app->get('/programming', function (Request $request, Response $response, $args)
 
         $generalOrdersDao->updateAccumulatedOrder($dataProgramming);
     }
+
+    // $programming1 = $generalProgrammingDao->findAllOrdersByCompany($id_company);
+
+    // for ($i = 0; $i < ($programming1); $i++) {
+    //     $materials = $productsMaterialsDao->findAllProductsmaterials($programming1[$i]['id_product'], $id_company);
+
+    //     $status = true;
+
+    //     for ($j = 0; $j < sizeof($materials); $j++) {
+    //         if ($materials[$j]['status'] == 0) {
+    //             $status = false;
+    //             break;
+    //         }
+    //     }
+
+    //     if ($status == true) {
+    //         $data = [];
+    //         $data['idMaterial'] = $programming1[$i]['id_material'];
+    //         $storeDao->saveDelivery($data, 0);
+    //     }
+    // }
 
     $response->getBody()->write(json_encode($programming, JSON_NUMERIC_CHECK));
     return $response->withHeader('Content-Type', 'application/json');

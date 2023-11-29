@@ -87,6 +87,7 @@
                                             <?php if ($_SESSION['cicles_machine'] == 1) { ?>
                                                 <li class="planCiclesMachine"><a href="/planning/cicles-machines">Producto/Ciclos Maquina</a></li>
                                             <?php } ?>
+                                            <li class="stock"><a href="/planning/stock">Stock Minimo</a></li>
                                         </ul>
                                     </div>
                                 <?php } ?>
