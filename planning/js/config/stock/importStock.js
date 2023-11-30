@@ -89,20 +89,31 @@ $(document).ready(function () {
   };
 
   /* Descargar formato */
-  $('#btnDownloadImportsStock').click(function (e) {
+  $('#btnDownloadImportsStock').click(async function (e) {
     e.preventDefault();
 
-    url = 'assets/formatsXlsx/Stock.xlsx';
+    let wb = XLSX.utils.book_new();
 
-    link = document.createElement('a');
+    let data = [];
 
-    link.target = '_blank';
+    namexlsx = 'Stock.xlsx';
+    url = '/api/stock';
+    
+    let stock = await searchData(url);
 
-    link.href = url;
-    document.body.appendChild(link);
-    link.click();
+    if (stock.length > 0) {
+      for (i = 0; i < stock.length; i++) {
+        data.push({
+          referencia_material: stock[i].reference,
+          material: stock[i].material,
+          plazo_maximo: parseFloat(stock[i].max_term),
+          plazo_habitual: parseFloat(stock[i].usual_term),
+        });
+      }
 
-    document.body.removeChild(link);
-    delete link;
+      let ws = XLSX.utils.json_to_sheet(data);
+      XLSX.utils.book_append_sheet(wb, ws, 'Stock');
+      XLSX.writeFile(wb, namexlsx);
+    }
   });
 });
