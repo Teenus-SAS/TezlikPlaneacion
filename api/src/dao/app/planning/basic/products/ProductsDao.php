@@ -19,8 +19,10 @@ class ProductsDao
   public function findAllProductsByCompany($id_company)
   {
     $connection = Connection::getInstance()->getConnection();
-    $stmt = $connection->prepare("SELECT p.id_product, p.reference, p.product, p.product AS descript, p.img, p.quantity, (SELECT IFNULL(SUM(original_quantity), 0) FROM plan_orders WHERE id_product = p.id_product AND status = 'Despacho') AS reserved, p.classification, 'UNIDAD' AS unit
+    $stmt = $connection->prepare("SELECT p.id_product, p.reference, p.product, p.product AS descript, p.img, p.quantity, (SELECT IFNULL(SUM(original_quantity), 0) FROM plan_orders WHERE id_product = p.id_product AND status = 'Despacho') AS reserved, p.classification, 'UNIDAD' AS unit, IFNULL(u.jan , 0) AS jan, 
+                                         IFNULL(u.feb, 0) AS feb, IFNULL(u.mar, 0) AS mar, IFNULL(u.apr, 0) AS apr, IFNULL(u.may, 0) AS may, IFNULL(u.jun, 0) AS jun, IFNULL(u.jul, 0) AS jul, IFNULL(u.aug, 0) AS aug, IFNULL(u.sept, 0) AS sept, IFNULL(u.oct, 0) AS oct, IFNULL(u.nov, 0) AS nov, IFNULL(u.dece, 0) AS dece
                                   FROM products p
+                                  LEFT JOIN plan_unit_sales u ON u.id_product = p.id_product 
                                   WHERE p.id_company = :id_company");
     $stmt->execute(['id_company' => $id_company]);
 

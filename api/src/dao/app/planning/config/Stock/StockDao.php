@@ -32,19 +32,6 @@ class StockDao
         return $stock;
     }
 
-    public function findStock($dataStock)
-    {
-        $connection = Connection::getInstance()->getConnection();
-        $stmt = $connection->prepare("SELECT * FROM stock WHERE id_material = :id_material");
-        $stmt->execute(['id_material' => $dataStock['idMaterial']]);
-
-        $this->logger->info(__FUNCTION__, array('query' => $stmt->queryString, 'errors' => $stmt->errorInfo()));
-
-        $stock = $stmt->fetch($connection::FETCH_ASSOC);
-        $this->logger->notice("stock", array('stock' => $stock));
-        return $stock;
-    }
-
     public function insertStockByCompany($dataStock, $id_company)
     {
         $connection = Connection::getInstance()->getConnection();

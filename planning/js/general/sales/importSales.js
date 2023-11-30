@@ -125,20 +125,41 @@ $(document).ready(function () {
   };
 
   /* Descargar formato */
-  $('#btnDownloadImportsSales').click(function (e) {
+  $('#btnDownloadImportsSales').click(async function (e) {
     e.preventDefault();
 
-    url = 'assets/formatsXlsx/Unidades_Ventas.xlsx';
+    let wb = XLSX.utils.book_new();
 
-    link = document.createElement('a');
+    let data = [];
 
-    link.target = '_blank';
+    namexlsx = 'Unidades_Ventas.xlsx';
+    url = '/api/products';
+    
+    let sales = await searchData(url);
 
-    link.href = url;
-    document.body.appendChild(link);
-    link.click();
+    if (sales.length > 0) {
+      for (i = 0; i < sales.length; i++) {
+        data.push({
+          referencia: sales[i].reference,
+          producto: sales[i].product,
+          enero: sales[i].jan,
+          febrero: sales[i].feb,
+          marzo: sales[i].marc,
+          abril: sales[i].apr,
+          mayo: sales[i].may,
+          junio: sales[i].jun,
+          julio: sales[i].jul,
+          agosto: sales[i].aug,
+          septiembre: sales[i].sep,
+          octubre: sales[i].oct,
+          noviembre: sales[i].nov,
+          diciembre: sales[i].dece,
+        });
+      }
 
-    document.body.removeChild(link);
-    delete link;
+      let ws = XLSX.utils.json_to_sheet(data);
+      XLSX.utils.book_append_sheet(wb, ws, 'Unidades_Ventas');
+      XLSX.writeFile(wb, namexlsx);
+    }
   });
 });

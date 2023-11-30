@@ -1,9 +1,11 @@
 <?php
 
 use TezlikPlaneacion\dao\GeneralMaterialsDao;
+use TezlikPlaneacion\dao\GeneralStockDao;
 use TezlikPlaneacion\dao\StockDao;
 
 $stockDao = new StockDao();
+$generalStockDao = new GeneralStockDao();
 $generalMaterialsDao = new GeneralMaterialsDao();
 
 use Psr\Http\Message\ResponseInterface as Response;
@@ -20,7 +22,7 @@ $app->get('/stock', function (Request $request, Response $response, $args) use (
 });
 
 $app->post('/stockDataValidation', function (Request $request, Response $response, $args) use (
-    $stockDao,
+    $generalStockDao,
     $generalMaterialsDao
 ) {
     $dataStock = $request->getParsedBody();
@@ -72,7 +74,7 @@ $app->post('/stockDataValidation', function (Request $request, Response $respons
                 break;
             } else $stock[$i]['idMaterial'] = $findMaterial['id_material'];
 
-            $findstock = $stockDao->findStock($stock[$i]);
+            $findstock = $generalStockDao->findStock($stock[$i]);
             if (!$findstock) $insert = $insert + 1;
             else $update = $update + 1;
             $dataImportStock['insert'] = $insert;
@@ -87,6 +89,7 @@ $app->post('/stockDataValidation', function (Request $request, Response $respons
 
 $app->post('/addStock', function (Request $request, Response $response, $args) use (
     $stockDao,
+    $generalStockDao,
     $generalMaterialsDao
 ) {
     session_start();
@@ -95,7 +98,7 @@ $app->post('/addStock', function (Request $request, Response $response, $args) u
 
     if (empty($dataStock['importStock'])) {
 
-        $findStock = $stockDao->findStock($dataStock);
+        $findStock = $generalStockDao->findStock($dataStock);
 
         if (!$findStock) {
             $stock = $stockDao->insertStockByCompany($dataStock, $id_company);
@@ -116,7 +119,7 @@ $app->post('/addStock', function (Request $request, Response $response, $args) u
             $findMaterial = $generalMaterialsDao->findMaterial($stock[$i], $id_company);
             $stock[$i]['idMaterial'] = $findMaterial['id_material'];
 
-            $findstock = $stockDao->findstock($stock[$i], $id_company);
+            $findstock = $generalStockDao->findstock($stock[$i], $id_company);
             if (!$findstock)
                 $resolution = $stockDao->insertStockByCompany($stock[$i], $id_company);
             else {
@@ -134,10 +137,13 @@ $app->post('/addStock', function (Request $request, Response $response, $args) u
     return $response->withStatus(200)->withHeader('Content-Type', 'application/json');
 });
 
-$app->post('/updateStock', function (Request $request, Response $response, $args) use ($stockDao) {
+$app->post('/updateStock', function (Request $request, Response $response, $args) use (
+    $stockDao,
+    $generalStockDao
+) {
     $dataStock = $request->getParsedBody();
 
-    $stock = $stockDao->findStock($dataStock);
+    $stock = $generalStockDao->findStock($dataStock);
     !is_array($stock) ? $data['id_stock'] = 0 : $data = $stock;
 
     if ($data['id_stock'] == $dataStock['idStock'] || $data['id_stock'] == 0) {
