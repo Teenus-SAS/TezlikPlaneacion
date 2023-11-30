@@ -40,6 +40,12 @@ $(document).ready(function () {
         className: 'uniqueClassName', 
       }, 
       {
+        title: 'Stock',
+        data: 'minimum_stock',
+        className: 'uniqueClassName', 
+        render: $.fn.dataTable.render.number('.', ',', 0),
+      }, 
+      {
         title: 'Unidad',
         data: null,
         className: 'classCenter',

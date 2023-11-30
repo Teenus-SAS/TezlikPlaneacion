@@ -23,7 +23,7 @@ class MaterialsDao
                                          u.unit, u.abbreviation, m.quantity, IFNULL((SELECT IFNULL(SUM(pg.quantity*pm.quantity), 0) FROM programming pg 
                                                                               LEFT JOIN plan_orders o ON o.id_order = pg.id_order
                                                                               LEFT JOIN products_materials pm ON pm.id_product = o.id_product WHERE pm.id_material = m.id_material AND o.status = 'Programado'), 0) AS reserved,
-                                         IFNULL(s.max_term, 0) AS max_term, IFNULL(s.usual_term, 0) AS usual_term                                   
+                                         IFNULL(s.max_term, 0) AS max_term, IFNULL(s.usual_term, 0) AS usual_term, m.minimum_stock                                  
                                   FROM materials m
                                     INNER JOIN convert_units u ON u.id_unit = m.unit
                                     INNER JOIN convert_magnitudes mg ON mg.id_magnitude = u.id_magnitude
