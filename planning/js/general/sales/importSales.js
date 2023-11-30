@@ -144,7 +144,7 @@ $(document).ready(function () {
           producto: sales[i].product,
           enero: sales[i].jan,
           febrero: sales[i].feb,
-          marzo: sales[i].marc,
+          marzo: sales[i].mar,
           abril: sales[i].apr,
           mayo: sales[i].may,
           junio: sales[i].jun,

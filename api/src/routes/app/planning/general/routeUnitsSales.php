@@ -95,10 +95,10 @@ $app->post('/addUnitSales', function (Request $request, Response $response, $arg
         $resolution = $unitSalesDao->insertSalesByCompany($dataSale, $id_company);
 
         // Calcular Clasificación producto
-        if ($resolution == null)
-            $product = $minimumStockDao->calcStockByProduct($dataSale['idProduct']);
-        if (isset($product['stock']))
-            $resolution = $productsDao->updateStockByProduct($dataSale['idProduct'], $product['stock']);
+        // if ($resolution == null)
+        //     $product = $minimumStockDao->calcStockByProduct($dataSale['idProduct']);
+        // if (isset($product['stock']))
+        //     $resolution = $productsDao->updateStockByProduct($dataSale['idProduct'], $product['stock']);
 
         if ($resolution == null) {
             // Calcular Clasificación material
@@ -137,10 +137,9 @@ $app->post('/addUnitSales', function (Request $request, Response $response, $arg
             }
             if (isset($resolution['info'])) break;
             // Calcular Clasificación producto 
-
-            $arr = $minimumStockDao->calcStockByProduct($unitSales[$i]['idProduct']);
-            if (isset($arr['stock']))
-                $resolution = $productsDao->updateStockByProduct($unitSales[$i]['idProduct'], $arr['stock']);
+            // $arr = $minimumStockDao->calcStockByProduct($unitSales[$i]['idProduct']);
+            // if (isset($arr['stock']))
+            //     $resolution = $productsDao->updateStockByProduct($unitSales[$i]['idProduct'], $arr['stock']);
 
             if (isset($resolution['info'])) break;
             // Calcular Clasificación material
@@ -193,10 +192,10 @@ $app->post('/updateUnitSale', function (Request $request, Response $response, $a
         $resolution = $unitSalesDao->updateSales($dataSale);
 
         // Calcular Clasificación producto
-        if ($resolution == null)
-            $product = $minimumStockDao->calcStockByProduct($dataSale['idProduct']);
-        if (isset($product['stock']))
-            $resolution = $productsDao->updateStockByProduct($dataSale['idProduct'], $product['stock']);
+        // if ($resolution == null)
+        //     $product = $minimumStockDao->calcStockByProduct($dataSale['idProduct']);
+        // if (isset($product['stock']))
+        //     $resolution = $productsDao->updateStockByProduct($dataSale['idProduct'], $product['stock']);
 
         if ($resolution == null) {
             // Calcular Clasificación material
@@ -235,10 +234,10 @@ $app->get('/deleteUnitSale/{id_unit_sales}/{id_product}', function (Request $req
     $resolution = $unitSalesDao->deleteSale($args['id_unit_sales']);
 
     // Calcular Clasificación producto
-    if ($resolution == null)
-        $product = $minimumStockDao->calcStockByProduct($args['id_product']);
-    if (isset($product['stock']))
-        $resolution = $productsDao->updateStockByProduct($args['id_product'], $product['stock']);
+    // if ($resolution == null)
+    //     $product = $minimumStockDao->calcStockByProduct($args['id_product']);
+    // if (isset($product['stock']))
+    //     $resolution = $productsDao->updateStockByProduct($args['id_product'], $product['stock']);
 
     if ($resolution == null) {
         // Calcular Clasificación material

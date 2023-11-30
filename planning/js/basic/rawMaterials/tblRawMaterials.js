@@ -33,6 +33,7 @@ $(document).ready(function () {
         title: 'Existencia',
         data: 'quantity',
         className: 'classCenter',
+        render: $.fn.dataTable.render.number('.', ',', 2),
       },
       {
         title: 'Reservado',

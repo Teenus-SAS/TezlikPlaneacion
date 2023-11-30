@@ -121,7 +121,13 @@ $(document).ready(function () {
           title: 'Reservado',
           data: 'reserved',
           className: 'uniqueClassName',
-        render: $.fn.dataTable.render.number('.', ',', 2),
+          render: $.fn.dataTable.render.number('.', ',', 2),
+        },
+        {
+          title: 'Stock',
+          data: 'minimum_stock',
+          className: 'uniqueClassName',
+          render: $.fn.dataTable.render.number('.', ',', 0),
         },
         {
           title: 'Unidad',
