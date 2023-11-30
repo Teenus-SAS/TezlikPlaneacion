@@ -20,29 +20,9 @@ $(document).ready(function () {
     let id_cicles_machine = sessionStorage.getItem('id_cicles_machine');
 
     if (id_cicles_machine == '' || id_cicles_machine == null) {
-      idMachine = parseInt($('#idMachine').val());
-      idProduct = parseInt($('#selectNameProduct').val());
-      ciclesHour = $('#ciclesHour').val();
-
-      data = idMachine * idProduct * ciclesHour;
-
-      if (!data || data == '' || data == null || data == 0) {
-        toastr.error('Ingrese todos los campos');
-        return false;
-      }
-
-      planCiclesMachine = $('#formCreatePlanCiclesMachine').serialize();
-      planCiclesMachine = planCiclesMachine + '&idProduct=' + idProduct;
-
-      $.post(
-        '/api/addPlanCiclesMachine',
-        planCiclesMachine,
-        function (data, textStatus, jqXHR) {
-          message(data);
-        }
-      );
+      checkPlanCiclesMachine('/api/addPlanCiclesMachine', id_cicles_machine);
     } else {
-      updatePlanCiclesMachine();
+      checkPlanCiclesMachine('/api/updatePlanCiclesMachine', id_cicles_machine);
     }
   });
 
@@ -61,6 +41,10 @@ $(document).ready(function () {
     let data = tblPlanCiclesMachine.fnGetData(row);
 
     $(`#idMachine option:contains(${data.machine})`).prop('selected', true);
+    $(`#refProduct option:contains(${data.reference})`).prop(
+      'selected',
+      true
+    );
     $(`#selectNameProduct option:contains(${data.product})`).prop(
       'selected',
       true
@@ -75,20 +59,28 @@ $(document).ready(function () {
     );
   });
 
-  updatePlanCiclesMachine = () => {
-    let data = $('#formCreatePlanCiclesMachine').serialize();
-    idProduct = $('#selectNameProduct').val();
-    id_cicles_machine = sessionStorage.getItem('id_cicles_machine');
-    data = `${data}&idCiclesMachine=${id_cicles_machine}&idProduct=${idProduct}`;
+  checkPlanCiclesMachine = async (url, idCiclesMachine) => {
+    let idMachine = parseInt($('#idMachine').val());
+    let idProduct = parseInt($('#selectNameProduct').val());
+    let ciclesHour = $('#ciclesHour').val();
 
-    $.post(
-      '/api/updatePlanCiclesMachine',
-      data,
-      function (data, textStatus, jqXHR) {
-        message(data);
-      }
-    );
-  };
+    let data = idMachine * idProduct * ciclesHour;
+
+    if (!data || data == '' || data == null || data == 0) {
+      toastr.error('Ingrese todos los campos');
+      return false;
+    }
+
+    let dataPlanCiclesMachine = new FormData(formCreatePlanCiclesMachine);
+    dataPlanCiclesMachine.append('idProduct', idProduct);
+
+    if (idCiclesMachine != '' || idCiclesMachine != null)
+      dataPlanCiclesMachine.append('idCiclesMachine', idCiclesMachine);
+
+    let resp = await sendDataPOST(url, dataPlanCiclesMachine);
+
+    message(resp);
+  } 
 
   // Eliminar plan ciclo maquina
 

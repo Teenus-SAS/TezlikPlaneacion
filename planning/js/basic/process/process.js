@@ -24,25 +24,10 @@ $(document).ready(function () {
 
     let idProcess = sessionStorage.getItem('id_process');
 
-    if (idProcess == '' || idProcess == null) {
-      process = $('#process').val();
-
-      if (process == '' || process == 0) {
-        toastr.error('Ingrese todos los campos');
-        return false;
-      }
-
-      process = $('#formCreateProcess').serialize();
-
-      $.post(
-        '../../api/addPlanProcess',
-        process,
-        function (data, textStatus, jqXHR) {
-          message(data);
-        }
-      );
+    if (idProcess == '' || idProcess == null) { 
+      checkDataProcess('/api/addPlanProcess', idProcess);
     } else {
-      updateProcess();
+      checkDataProcess('/api/updatePlanProcess', idProcess);
     }
   });
 
@@ -67,19 +52,24 @@ $(document).ready(function () {
     );
   });
 
-  updateProcess = () => {
-    let data = $('#formCreateProcess').serialize();
-    idProcess = sessionStorage.getItem('id_process');
-    data = data + '&idProcess=' + idProcess;
+  /* Revision data procesos */
+  checkDataProcess = async (url, idProcess) => {
+    let process = $('#process').val();
 
-    $.post(
-      '../../api/updatePlanProcess',
-      data,
-      function (data, textStatus, jqXHR) {
-        message(data);
-      }
-    );
-  };
+    if (process.trim() == '' || !process.trim()) {
+      toastr.error('Ingrese todos los campos');
+      return false;
+    }
+
+    let dataProcess = new FormData(formCreateProcess);
+
+    if (idProcess != '' || idProcess != null)
+      dataProcess.append('idProcess', idProcess);
+
+    let resp = await sendDataPOST(url, dataProcess);
+
+    message(resp);
+  }; 
 
   /* Eliminar proceso */
 

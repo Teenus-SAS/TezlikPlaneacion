@@ -6,8 +6,14 @@ $(document).ready(function () {
         else
             url = `/api/requisitions/${min_date}/${max_date}`;
 
+        if ($.fn.dataTable.isDataTable('#tblRequisitions')) { 
+            $('#tblRequisitions').DataTable().clear(); 
+            $('#tblRequisitions').DataTable().ajax.url(url).load();
+            return;
+        }
+        
         tblRequisitions = $('#tblRequisitions').dataTable({
-            destroy: true,
+            // destroy: true,
             pageLength: 50,
             ajax: {
                 url: url,
@@ -89,7 +95,7 @@ $(document).ready(function () {
                 },
             ],
         });
-    }
+    };
 
     loadTblRequisitions(null, null);
 });

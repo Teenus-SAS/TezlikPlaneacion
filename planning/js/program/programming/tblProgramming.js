@@ -28,8 +28,14 @@ $(document).ready(function () {
     else
       data = await searchData(`/api/programmingByMachine/${machine}/0`);
       
+    if ($.fn.dataTable.isDataTable('#tblProgramming')) { 
+        $('#tblProgramming').DataTable().clear(); 
+        $('#tblProgramming').DataTable().rows.add(data).draw();
+        return;
+    }
+    
     tblProgramming = $('#tblProgramming').dataTable({
-      destroy: true,
+      // destroy: true,
       pageLength: 50,
       data: data,
       language: {

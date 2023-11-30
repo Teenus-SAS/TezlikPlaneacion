@@ -64,14 +64,19 @@ $app->post('/addPlanProcess', function (Request $request, Response $response, $a
     $id_company = $_SESSION['id_company'];
 
     if (empty($dataProcess['importProcess'])) {
-        $process = $processDao->insertProcessByCompany($dataProcess, $id_company);
+        $findProcess = $generalProcessDao->findProcess($dataProcess, $id_company);
 
-        if ($process == null)
-            $resp = array('success' => true, 'message' => 'Proceso creado correctamente');
-        else if (isset($process['info']))
-            $resp = array('info' => true, 'message' => $process['message']);
-        else
-            $resp = array('error' => true, 'message' => 'Ocurrio un error mientras ingresaba la información. Intente nuevamente');
+        if (!$findProcess) {
+            $process = $processDao->insertProcessByCompany($dataProcess, $id_company);
+
+            if ($process == null)
+                $resp = array('success' => true, 'message' => 'Proceso creado correctamente');
+            else if (isset($process['info']))
+                $resp = array('info' => true, 'message' => $process['message']);
+            else
+                $resp = array('error' => true, 'message' => 'Ocurrio un error mientras ingresaba la información. Intente nuevamente');
+        } else
+            $resp = array('error' => true, 'message' => 'Proceso ya existe. Ingrese uno nuevo');
     } else {
         $process = $dataProcess['importProcess'];
 
@@ -94,12 +99,18 @@ $app->post('/addPlanProcess', function (Request $request, Response $response, $a
     return $response->withStatus(200)->withHeader('Content-Type', 'application/json');
 });
 
-$app->post('/updatePlanProcess', function (Request $request, Response $response, $args) use ($processDao) {
+$app->post('/updatePlanProcess', function (Request $request, Response $response, $args) use (
+    $processDao,
+    $generalProcessDao
+) {
+    session_start();
+    $id_company = $_SESSION['id_company'];
     $dataProcess = $request->getParsedBody();
 
-    if (empty($dataProcess['process']))
-        $resp = array('error' => true, 'message' => 'Ingrese todos los datos a actualizar');
-    else {
+    $process = $generalProcessDao->findProcess($dataProcess, $id_company);
+    !is_array($process) ? $data['id_process'] = 0 : $data = $process;
+
+    if ($data['id_process'] == $dataProcess['idProcess'] || $data['id_process'] == 0) {
         $process = $processDao->updateProcess($dataProcess);
 
         if ($process == null)
@@ -108,7 +119,8 @@ $app->post('/updatePlanProcess', function (Request $request, Response $response,
             $resp = array('info' => true, 'message' => $process['message']);
         else
             $resp = array('error' => true, 'message' => 'Ocurrio un error mientras actualizaba la información. Intente nuevamente');
-    }
+    } else
+        $resp = array('error' => true, 'message' => 'Proceso ya existe. Ingrese uno nuevo');
 
     $response->getBody()->write(json_encode($resp));
     return $response->withStatus(200)->withHeader('Content-Type', 'application/json');

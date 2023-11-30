@@ -19,67 +19,85 @@ class StockDao
     public function findAllStockByCompany($id_company)
     {
         $connection = Connection::getInstance()->getConnection();
-        $stmt = $connection->prepare("");
+        $stmt = $connection->prepare("SELECT s.id_stock, s.id_material, m.reference, m.material, m.unit, m.quantity, s.max_term, s.usual_term
+                                      FROM stock s
+                                        INNER JOIN materials m ON m.id_material = s.id_material
+                                      WHERE s.id_company = :id_company");
         $stmt->execute(['id_company' => $id_company]);
 
         $this->logger->info(__FUNCTION__, array('query' => $stmt->queryString, 'errors' => $stmt->errorInfo()));
 
-        $process = $stmt->fetchAll($connection::FETCH_ASSOC);
-        $this->logger->notice("process", array('process' => $process));
-        return $process;
+        $stock = $stmt->fetchAll($connection::FETCH_ASSOC);
+        $this->logger->notice("stock", array('stock' => $stock));
+        return $stock;
     }
 
-    // public function insertProcessByCompany($dataProcess, $id_company)
+    public function findStock($dataStock)
+    {
+        $connection = Connection::getInstance()->getConnection();
+        $stmt = $connection->prepare("SELECT * FROM stock WHERE id_material = :id_material");
+        $stmt->execute(['id_material' => $dataStock['idMaterial']]);
+
+        $this->logger->info(__FUNCTION__, array('query' => $stmt->queryString, 'errors' => $stmt->errorInfo()));
+
+        $stock = $stmt->fetch($connection::FETCH_ASSOC);
+        $this->logger->notice("stock", array('stock' => $stock));
+        return $stock;
+    }
+
+    public function insertStockByCompany($dataStock, $id_company)
+    {
+        $connection = Connection::getInstance()->getConnection();
+
+        try {
+            $stmt = $connection->prepare("INSERT INTO stock (id_company, id_material, max_term, usual_term) 
+                                          VALUES (:id_company, :id_material, :max_term, :usual_term)");
+            $stmt->execute([
+                'id_company' => $id_company,
+                'id_material' => $dataStock['idMaterial'],
+                'max_term' => $dataStock['max'],
+                'usual_term' => $dataStock['usual']
+            ]);
+            $this->logger->info(__FUNCTION__, array('query' => $stmt->queryString, 'errors' => $stmt->errorInfo()));
+        } catch (\Exception $e) {
+            $message = $e->getMessage();
+            $error = array('info' => true, 'message' => $message);
+            return $error;
+        }
+    }
+
+    public function updateStock($dataStock)
+    {
+        $connection = Connection::getInstance()->getConnection();
+
+        try {
+            $stmt = $connection->prepare("UPDATE stock SET id_material = :id_material, max_term = :max_term, usual_term = :usual_term 
+                                          WHERE id_stock = :id_stock");
+            $stmt->execute([
+                'id_stock' => $dataStock['idStock'],
+                'id_material' => $dataStock['idMaterial'],
+                'max_term' => $dataStock['max'],
+                'usual_term' => $dataStock['usual']
+            ]);
+            $this->logger->info(__FUNCTION__, array('query' => $stmt->queryString, 'errors' => $stmt->errorInfo()));
+        } catch (\Exception $e) {
+            $message = $e->getMessage();
+            $error = array('info' => true, 'message' => $message);
+            return $error;
+        }
+    }
+
+    // public function deletestock($id_stock)
     // {
     //     $connection = Connection::getInstance()->getConnection();
-
     //     try {
-    //         $stmt = $connection->prepare("INSERT INTO process (id_company ,process) VALUES (:id_company ,:process)");
-    //         $stmt->execute([
-    //             'id_company'  => $id_company,
-    //             'process' => strtoupper(trim($dataProcess['process']))
-    //         ]);
-    //         $this->logger->info(__FUNCTION__, array('query' => $stmt->queryString, 'errors' => $stmt->errorInfo()));
-    //     } catch (\Exception $e) {
-    //         $message = $e->getMessage();
-
-    //         if ($e->getCode() == 23000)
-    //             $message = 'Proceso duplicado. Ingrese una nuevo proceso';
-
-    //         $error = array('info' => true, 'message' => $message);
-    //         return $error;
-    //     }
-    // }
-
-    // public function updateProcess($dataProcess)
-    // {
-    //     $connection = Connection::getInstance()->getConnection();
-
-    //     try {
-    //         $stmt = $connection->prepare("UPDATE process SET process = :process WHERE id_process = :id_process");
-    //         $stmt->execute([
-    //             'process' => strtoupper(trim($dataProcess['process'])),
-    //             'id_process' => $dataProcess['idProcess'],
-    //         ]);
-    //         $this->logger->info(__FUNCTION__, array('query' => $stmt->queryString, 'errors' => $stmt->errorInfo()));
-    //     } catch (\Exception $e) {
-    //         $message = $e->getMessage();
-    //         $error = array('info' => true, 'message' => $message);
-    //         return $error;
-    //     }
-    // }
-
-    // public function deleteProcess($id_process)
-    // {
-    //     $connection = Connection::getInstance()->getConnection();
-    //     try {
-    //         $stmt = $connection->prepare("SELECT * FROM process WHERE id_process = :id_process");
-    //         $stmt->execute(['id_process' => $id_process]);
+    //         $stmt = $connection->prepare("SELECT * FROM stock WHERE id_stock = :id_stock");
+    //         $stmt->execute(['id_stock' => $id_stock]);
     //         $rows = $stmt->rowCount();
 
     //         if ($rows > 0) {
-    //             $stmt = $connection->prepare("DELETE FROM process WHERE id_process = :id_process");
-    //             $stmt->execute(['id_process' => $id_process]);
+    //             $stmt = $connection->prepare("DELETE FROM stock WHERE id_stock = :id_stock");
+    //             $stmt->execute(['id_stock' => $id_stock]);
     //             $this->logger->info(__FUNCTION__, array('query' => $stmt->queryString, 'errors' => $stmt->errorInfo()));
     //         }
     //     } catch (\Exception $e) {

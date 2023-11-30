@@ -43,37 +43,9 @@ $(document).ready(function () {
     let id_planning_machine = sessionStorage.getItem('id_planning_machine');
 
     if (id_planning_machine == '' || id_planning_machine == null) {
-      idMachine = parseInt($('#idMachine').val());
-      numberWorkers = parseInt($('#numberWorkers').val());
-      hoursDay = parseInt($('#hoursDay').val());
-      hourStart = $('#hourStart').val();
-      hourEnd = $('#hourEnd').val();
-      data = idMachine * numberWorkers * hoursDay;
-
-      if (!data || data == null || data == 0) {
-        toastr.error('Ingrese todos los campos');
-        return false;
-      }
-
-      if (hourStart.includes('PM') && hourEnd.includes('AM')) {
-        if (hourEnd > hourStart) {
-          toastr.error('La hora final no puede ser mayor a la hora inicio');
-          $('#hourEnd').css('border-color', 'red');
-          return false;
-        }
-      }
-
-      planningMachines = $('#formCreatePlanMachine').serialize();
-
-      $.post(
-        '/api/addPlanningMachines',
-        planningMachines,
-        function (data, textStatus, jqXHR) {
-          message(data);
-        }
-      );
+      checkDataPlanningMachines('/api/addPlanningMachines', id_planning_machine);
     } else {
-      updatePlanningMachines();
+      checkDataPlanningMachines('/api/updatePlanningMachines', id_planning_machine); 
     }
   });
 
@@ -124,19 +96,36 @@ $(document).ready(function () {
     );
   });
 
-  updatePlanningMachines = () => {
-    let data = $('#formCreatePlanMachine').serialize();
-    id_planning_machine = sessionStorage.getItem('id_planning_machine');
-    data = `${data}&idProgramMachine=${id_planning_machine}`;
+  checkDataPlanningMachines = async (url, idProgramMachine) => {
+    let idMachine = parseInt($('#idMachine').val());
+    let numberWorkers = parseInt($('#numberWorkers').val());
+    let hoursDay = parseInt($('#hoursDay').val());
+    let hourStart = $('#hourStart').val();
+    let hourEnd = $('#hourEnd').val();
+    let data = idMachine * numberWorkers * hoursDay;
 
-    $.post(
-      '/api/updatePlanningMachines',
-      data,
-      function (data, textStatus, jqXHR) {
-        message(data);
+    if (!data || data == null || data == 0) {
+      toastr.error('Ingrese todos los campos');
+      return false;
+    }
+
+    if (hourStart.includes('PM') && hourEnd.includes('AM')) {
+      if (hourEnd > hourStart) {
+        toastr.error('La hora final no puede ser mayor a la hora inicio');
+        $('#hourEnd').css('border-color', 'red');
+        return false;
       }
-    );
-  };
+    }
+
+    let dataPlanningMachines = new FormData(formCreatePlanMachine);
+
+    if (idProgramMachine != '' || idProgramMachine != null)
+      dataPlanningMachines.append('idProgramMachine', idProgramMachine);
+
+    let resp = await sendDataPOST(url, dataPlanningMachines);
+
+    message(resp);
+  }
 
   // Eliminar Plan maquina
 

@@ -188,77 +188,73 @@ $app->post('/updatePlanProduct', function (Request $request, Response $response,
 
     $dataProduct = $request->getParsedBody();
 
-    if (empty($dataProduct['referenceProduct']) || empty($dataProduct['product']))
-        $resp = array('error' => true, 'message' => 'Ingrese todos los datos a actualizar');
-    else {
-        $product = $generalProductsDao->findProductByReferenceOrName($dataProduct, $id_company);
-        !is_array($product) ? $data['id_product'] = 0 : $data = $product;
-        if ($data['id_product'] == $dataProduct['idProduct'] || $data['id_product'] == 0) {
-            // Actualizar Datos, Imagen y Calcular Precio del producto
-            $products = $productsDao->updateProductByCompany($dataProduct, $id_company);
+    $product = $generalProductsDao->findProductByReferenceOrName($dataProduct, $id_company);
+    !is_array($product) ? $data['id_product'] = 0 : $data = $product;
+    if ($data['id_product'] == $dataProduct['idProduct'] || $data['id_product'] == 0) {
+        // Actualizar Datos, Imagen y Calcular Precio del producto
+        $products = $productsDao->updateProductByCompany($dataProduct, $id_company);
 
-            if (sizeof($_FILES) > 0)
-                $products = $FilesDao->imageProduct($dataProduct['idProduct'], $id_company);
+        if (sizeof($_FILES) > 0)
+            $products = $FilesDao->imageProduct($dataProduct['idProduct'], $id_company);
 
-            if ($products == null) {
-                $products = $generalProductsDao->updateAccumulatedQuantityGeneral($id_company);
-                $products = $generalProductsDao->updateAccumulatedQuantity($dataProduct['idProduct'], $dataProduct['quantity'], 1);
-            }
-            // Cambiar estado pedidos
-            $orders = $generalOrdersDao->findAllOrdersByCompany($id_company);
+        if ($products == null) {
+            $products = $generalProductsDao->updateAccumulatedQuantityGeneral($id_company);
+            $products = $generalProductsDao->updateAccumulatedQuantity($dataProduct['idProduct'], $dataProduct['quantity'], 1);
+        }
+        // Cambiar estado pedidos
+        $orders = $generalOrdersDao->findAllOrdersByCompany($id_company);
 
-            for ($i = 0; $i < sizeof($orders); $i++) {
-                $status = true;
-                // Checkear cantidades
-                $order = $generalOrdersDao->checkAccumulatedQuantityOrder($orders[$i]['id_order']);
+        for ($i = 0; $i < sizeof($orders); $i++) {
+            $status = true;
+            // Checkear cantidades
+            $order = $generalOrdersDao->checkAccumulatedQuantityOrder($orders[$i]['id_order']);
 
-                if ($order['status'] != 'En Produccion' && $order['status'] = 'Entregado') {
-                    if ($order['original_quantity'] > $order['accumulated_quantity']) {
-                        // Ficha tecnica
-                        $productsMaterials = $productsMaterialsDao->findAllProductsmaterials($orders[$i]['id_product'], $id_company);
+            if ($order['status'] != 'En Produccion' && $order['status'] = 'Entregado') {
+                if ($order['original_quantity'] > $order['accumulated_quantity']) {
+                    // Ficha tecnica
+                    $productsMaterials = $productsMaterialsDao->findAllProductsmaterials($orders[$i]['id_product'], $id_company);
 
-                        if (sizeof($productsMaterials) == 0) {
-                            $generalOrdersDao->changeStatus($orders[$i]['id_order'], 'Sin Ficha Tecnica');
-                            $status = false;
-                        } else {
-                            foreach ($productsMaterials as $arr) {
-                                if ($arr['quantity_material'] <= 0) {
-                                    $order = $generalOrdersDao->changeStatus($orders[$i]['id_order'], 'Sin Materia Prima');
-                                    $status = false;
-                                    break;
-                                }
+                    if (sizeof($productsMaterials) == 0) {
+                        $generalOrdersDao->changeStatus($orders[$i]['id_order'], 'Sin Ficha Tecnica');
+                        $status = false;
+                    } else {
+                        foreach ($productsMaterials as $arr) {
+                            if ($arr['quantity_material'] <= 0) {
+                                $order = $generalOrdersDao->changeStatus($orders[$i]['id_order'], 'Sin Materia Prima');
+                                $status = false;
+                                break;
                             }
                         }
                     }
+                }
 
-                    if ($status == true) {
-                        if ($order['original_quantity'] <= $order['accumulated_quantity']) {
-                            $generalOrdersDao->changeStatus($orders[$i]['id_order'], 'Despacho');
-                            $accumulated_quantity = $order['accumulated_quantity'] - $order['original_quantity'];
-                        } else {
-                            $accumulated_quantity = $order['accumulated_quantity'];
-                            $generalOrdersDao->changeStatus($orders[$i]['id_order'], 'Programar');
-                        }
+                if ($status == true) {
+                    if ($order['original_quantity'] <= $order['accumulated_quantity']) {
+                        $generalOrdersDao->changeStatus($orders[$i]['id_order'], 'Despacho');
+                        $accumulated_quantity = $order['accumulated_quantity'] - $order['original_quantity'];
+                    } else {
+                        $accumulated_quantity = $order['accumulated_quantity'];
+                        $generalOrdersDao->changeStatus($orders[$i]['id_order'], 'Programar');
+                    }
 
-                        $generalProductsDao->updateAccumulatedQuantity($orders[$i]['id_product'], $accumulated_quantity, 1);
+                    $generalProductsDao->updateAccumulatedQuantity($orders[$i]['id_product'], $accumulated_quantity, 1);
 
-                        $programming = $generalProgrammingDao->findProgrammingByOrder($orders[$i]['id_order']);
-                        if (sizeof($programming) > 0) {
-                            $generalOrdersDao->changeStatus($orders[$i]['id_order'], 'Programado');
-                        }
+                    $programming = $generalProgrammingDao->findProgrammingByOrder($orders[$i]['id_order']);
+                    if (sizeof($programming) > 0) {
+                        $generalOrdersDao->changeStatus($orders[$i]['id_order'], 'Programado');
                     }
                 }
             }
+        }
 
-            if ($products == null)
-                $resp = array('success' => true, 'message' => 'Producto actualizado correctamente');
-            else if (isset($products['info']))
-                $resp = array('info' => true, 'message' => $products['message']);
-            else
-                $resp = array('error' => true, 'message' => 'Ocurrio un error mientras actualizaba la información. Intente nuevamente');
-        } else
-            $resp = array('info' => true, 'message' => 'El producto ya existe en la base de datos. Ingrese uno nuevo');
-    }
+        if ($products == null)
+            $resp = array('success' => true, 'message' => 'Producto actualizado correctamente');
+        else if (isset($products['info']))
+            $resp = array('info' => true, 'message' => $products['message']);
+        else
+            $resp = array('error' => true, 'message' => 'Ocurrio un error mientras actualizaba la información. Intente nuevamente');
+    } else
+        $resp = array('info' => true, 'message' => 'El producto ya existe en la base de datos. Ingrese uno nuevo');
 
     $response->getBody()->write(json_encode($resp));
     return $response->withStatus(200)->withHeader('Content-Type', 'application/json');

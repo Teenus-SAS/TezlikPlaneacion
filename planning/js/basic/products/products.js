@@ -36,42 +36,9 @@ $(document).ready(function () {
     let idProduct = sessionStorage.getItem('id_product');
 
     if (idProduct == '' || idProduct == null) {
-      ref = $('#referenceProduct').val();
-      prod = $('#product').val();
-
-      if (
-        ref == '' ||
-        ref == 0 ||
-        prod == '' ||
-        prod == 0 
-      ) {
-        toastr.error('Ingrese todos los campos');
-        return false;
-      }
- 
-      let imageProd = $('#formFile')[0].files[0];
-
-      dataProduct = new FormData(formCreateProduct);
-      dataProduct.append('img', imageProd);
-
-      $.ajax({
-        type: 'POST',
-        url: '/api/addProduct',
-        data: dataProduct,
-        contentType: false,
-        cache: false,
-        processData: false,
-
-        success: function (resp) {
-          $('.cardCreateProduct').hide(800);
-          $('.cardImportProducts').hide(800);
-          $('#formFile').val(''); 
-          message(resp);
-          updateTable();
-        },
-      });
+      checkDataProducts('/api/addProduct', idProduct);
     } else {
-      updateProduct();
+      checkDataProducts('/api/updatePlanProduct', idProduct); 
     }
   });
 
@@ -99,31 +66,29 @@ $(document).ready(function () {
     $('html, body').animate({ scrollTop: 0 }, 1000);
   });
 
-  updateProduct = () => {
-    let idProduct = sessionStorage.getItem('id_product');
+  /* Revisar datos */
+  checkDataProducts = async (url, idProduct) => {
+    let ref = $('#referenceProduct').val();
+    let prod = $('#product').val();
+
+    if (ref.trim() == '' || !ref.trim() || prod.trim() == '' || !prod.trim()) {
+      toastr.error('Ingrese todos los campos');
+      return false;
+    } 
+
     let imageProd = $('#formFile')[0].files[0];
 
-    dataProduct = new FormData(formCreateProduct);
-    dataProduct.append('idProduct', idProduct);
+    let dataProduct = new FormData(formCreateProduct);
     dataProduct.append('img', imageProd);
 
-    $.ajax({
-      type: 'POST',
-      url: '/api/updatePlanProduct',
-      data: dataProduct,
-      contentType: false,
-      cache: false,
-      processData: false,
+    if (idProduct != '' || idProduct != null) {
+      dataProduct.append('idProduct', idProduct);
+    }
 
-      success: function (resp) {
-        $('.cardCreateProduct').hide(800);
-        $('.cardImportProducts').hide(800);
-        updateTable();
-        $('#formFile').val('');
-        message(resp);
-      },
-    });
-  };
+    let resp = await sendDataPOST(url, dataProduct);
+
+    message(resp);
+  }; 
 
   /* Eliminar productos */
 
@@ -159,43 +124,15 @@ $(document).ready(function () {
       },
     });
   };
-
-  /* $(document).on('click', '.deleteProducts', function (e) {
-    let idProduct = this.id;
-
-    bootbox.confirm({
-      title: 'Eliminar',
-      message:
-        'Está seguro de eliminar este producto? Esta acción no se puede reversar.',
-      buttons: {
-        confirm: {
-          label: 'Si',
-          className: 'btn-success',
-        },
-        cancel: {
-          label: 'No',
-          className: 'btn-danger',
-        },
-      },
-      callback: function (result) {
-        if (result == true) {
-          $.get(
-            `/api/deletePlanProduct/${idProduct}`,
-            function (data, textStatus, jqXHR) {
-              message(data);
-            }
-          );
-        }
-      },
-    });
-  }); */
-
+ 
   /* Mensaje de exito */
 
-  const message = (data) => {
+  message = (data) => {
     if (data.success == true) {
       $('.cardCreateProduct').hide(800);
+      $('.cardImportProducts').hide(800);
       $('#formCreateProduct').trigger('reset');
+      $('#formFile').val('');
       updateTable();
       toastr.success(data.message);
       return false;

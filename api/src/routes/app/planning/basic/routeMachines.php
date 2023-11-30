@@ -116,24 +116,20 @@ $app->post('/updatePlanMachines', function (Request $request, Response $response
 
     $dataMachine = $request->getParsedBody();
 
-    if (empty($dataMachine['machine']))
-        $resp = array('error' => true, 'message' => 'Ingrese todos los datos a actualizar');
-    else {
-        $machine = $generalMachinesDao->findMachine($dataMachine, $id_company);
-        !is_array($machine) ? $data['id_machine'] = 0 : $data = $machine;
+    $machine = $generalMachinesDao->findMachine($dataMachine, $id_company);
+    !is_array($machine) ? $data['id_machine'] = 0 : $data = $machine;
 
-        if ($data['id_machine'] == $dataMachine['idMachine'] || $data['id_machine'] == 0) {
-            $machines = $machinesDao->updateMachine($dataMachine);
+    if ($data['id_machine'] == $dataMachine['idMachine'] || $data['id_machine'] == 0) {
+        $machines = $machinesDao->updateMachine($dataMachine);
 
-            if ($machines == null)
-                $resp = array('success' => true, 'message' => 'Maquina actualizada correctamente');
-            else if (isset($machines['info']))
-                $resp = array('info' => true, 'message' => $machines['message']);
-            else
-                $resp = array('error' => true, 'message' => 'Ocurrio un error mientras actualizaba la información. Intente nuevamente');
-        } else
-            $resp = array('error' => true, 'message' => 'Maquina ya existe. Ingrese una nueva');
-    }
+        if ($machines == null)
+            $resp = array('success' => true, 'message' => 'Maquina actualizada correctamente');
+        else if (isset($machines['info']))
+            $resp = array('info' => true, 'message' => $machines['message']);
+        else
+            $resp = array('error' => true, 'message' => 'Ocurrio un error mientras actualizaba la información. Intente nuevamente');
+    } else
+        $resp = array('error' => true, 'message' => 'Maquina ya existe. Ingrese una nueva');
 
     $response->getBody()->write(json_encode($resp));
     return $response->withStatus(200)->withHeader('Content-Type', 'application/json');

@@ -28,7 +28,10 @@ $(document).ready(function () {
       .then((data) => {
         let StockToImport = data.map((item) => {
           return {
-            Stock: item.proceso,
+            refRawMaterial: item.referencia_material,
+            nameRawMaterial: item.material,
+            max: item.plazo_maximo,
+            usual: item.plazo_habitual,
           };
         });
         checkStock(StockToImport);
@@ -42,7 +45,7 @@ $(document).ready(function () {
   checkStock = (data) => {
     $.ajax({
       type: 'POST',
-      url: '/api/StockDataValidation',
+      url: '/api/stockDataValidation',
       data: { importStock: data },
       success: function (resp) {
         if (resp.error == true) {
@@ -77,24 +80,10 @@ $(document).ready(function () {
   saveStockTable = (data) => {
     $.ajax({
       type: 'POST',
-      url: '../../api/addPlanStock',
+      url: '../../api/addStock',
       data: { importStock: data },
       success: function (r) {
-        /* Mensaje de exito */
-        if (r.success == true) {
-          $('.cardImportStock').hide(800);
-          $('#formImportStock').trigger('reset');
-          updateTable();
-          toastr.success(r.message);
-          return false;
-        } else if (r.error == true) toastr.error(r.message);
-        else if (r.info == true) toastr.info(r.message);
-
-        /* Actualizar tabla */
-        function updateTable() {
-          $('#tblStock').DataTable().clear();
-          $('#tblStock').DataTable().ajax.reload();
-        }
+        message(r);
       },
     });
   };

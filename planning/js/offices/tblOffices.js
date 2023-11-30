@@ -6,8 +6,14 @@ $(document).ready(function () {
     else
       url = `/api/offices/${min_date}/${max_date}`;
 
+    if ($.fn.dataTable.isDataTable('#tblOffices')) {
+      $('#tblOffices').DataTable().clear();
+      $('#tblOffices').DataTable().ajax.url(url).load();
+      return;
+    }
+
     tblOffices = $('#tblOffices').dataTable({
-      destroy: true,
+      // destroy: true,
       pageLength: 50,
       ajax: {
         url: url,
@@ -95,7 +101,7 @@ $(document).ready(function () {
           title: 'Cancelar',
           data: null,
           className: 'classCenter',
-          render: function (data) { 
+          render: function (data) {
             return data.status == 'Despacho' ? `<a href="javascript:;" <i class="bi bi-x-octagon-fill cancelOrder" id="${data.id_order}" data-toggle='tooltip' title='Cancelar Despacho' style="font-size: 30px;color:red;"></i></a>` : '';
           }
         },

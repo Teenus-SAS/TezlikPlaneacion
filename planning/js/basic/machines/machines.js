@@ -21,24 +21,9 @@ $(document).ready(function () {
     e.preventDefault();
     let idMachine = sessionStorage.getItem('id_machine');
     if (idMachine == '' || idMachine == null) {
-      Machine = $('#machine').val();
-
-      if (Machine == '' || Machine == null) {
-        toastr.error('Ingrese todos los campos');
-        return false;
-      }
-
-      machine = $('#formCreateMachine').serialize();
-
-      $.post(
-        '../api/addPlanMachines',
-        machine,
-        function (data, textStatus, jqXHR) {
-          message(data);
-        }
-      );
+      checkDataMachines('/api/addPlanMachines', idMachine);
     } else {
-      updateMachine();
+      checkDataMachines('/api/updatePlanMachines', idMachine); 
     }
   });
 
@@ -63,14 +48,23 @@ $(document).ready(function () {
     );
   });
 
-  updateMachine = () => {
-    let data = $('#formCreateMachine').serialize();
-    idMachine = sessionStorage.getItem('id_machine');
+  /* Verificar datos */
+  checkDataMachines = async (url, idMachine) => {
+    let Machine = $('#machine').val(); 
 
-    data = data + '&idMachine=' + idMachine;
-    $.post('/api/updatePlanMachines', data, function (data, textStatus, jqXHR) {
-      message(data);
-    });
+    if (Machine.trim() == '' || Machine.trim() == null) {
+      toastr.error('Ingrese todos los campos');
+      return false;
+    } 
+
+    let dataMachine = new FormData(formCreateMachine);
+
+    if (idMachine != '' || idMachine != null)
+      dataMachine.append('idMachine', idMachine);
+
+    let resp = await sendDataPOST(url, dataMachine);
+
+    message(resp);
   };
 
   /* Eliminar productos */

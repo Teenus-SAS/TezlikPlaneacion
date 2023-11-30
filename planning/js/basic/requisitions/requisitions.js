@@ -8,7 +8,7 @@ $(document).ready(function () {
   $('#btnNewRequisition').click(function (e) {
     e.preventDefault();
 
-    $('.cardImportRequisitions').hide(800); 
+    $('.cardImportRequisitions').hide(800);
     $('.cardTableConfigMaterials').show(800);
     $('.cardAddRequisitions').toggle(800);
     $('#btnAddRequisition').html('Asignar');
@@ -18,75 +18,55 @@ $(document).ready(function () {
     $('#formAddRequisition').trigger('reset');
   });
 
-    /* Adicionar nueva materia prima */
+  /* Adicionar nueva materia prima */
 
-    $('#btnAddRequisition').click(function (e) {
-        e.preventDefault();
+  $('#btnAddRequisition').click(function (e) {
+    e.preventDefault();
 
-        let idRequisition = sessionStorage.getItem('id_requisition');
+    let idRequisition = sessionStorage.getItem('id_requisition');
 
-        if (idRequisition == '' || idRequisition == null) {
-            material = $('#material').val();
-            applicationDate = $('#applicationDate').val();
-            deliveryDate = $('#deliveryDate').val();
-            quan = $('#quantity').val();
-
-            data = quan * material;
-
-            if (!data || applicationDate == ''|| deliveryDate == ''|| quan == '') {
-                toastr.error('Ingrese todos los campos');
-                return false;
-            }
-
-            requisition = $('#formAddRequisition').serialize();
-
-            $.post(
-                '/api/addRequisition',
-                requisition,
-                function (data, textStatus, jqXHR) {
-                    message(data);
-                }
-            );
-        } else {
-            updateRequisition();
-        }
-    });
+    if (idRequisition == '' || idRequisition == null) {
+      checkDataRequisition('/api/addRequisition', idRequisition);
+    } else {
+      checkDataRequisition('/api/updateRequisition', idRequisition); 
+    }
+  });
   
-   $('.cardSearchDate').hide();
+  $('.cardSearchDate').hide();
 
-    $('#btnOpenSearchDate').click(function (e) { 
-        e.preventDefault();
+  $('#btnOpenSearchDate').click(function (e) {
+    e.preventDefault();
 
-        $('.cardSearchDate').toggle(800);
-        $('#formSearchDate').trigger('reset');
-        let date = new Date().toISOString().split('T')[0];
+    $('.cardSearchDate').toggle(800);
+    $('#formSearchDate').trigger('reset');
+    let date = new Date().toISOString().split('T')[0];
 
-        $('#lastDate').val(date);
+    $('#lastDate').val(date);
 
-        let maxDate = document.getElementById('lastDate');
-        let minDate = document.getElementById('firtsDate');
+    let maxDate = document.getElementById('lastDate');
+    let minDate = document.getElementById('firtsDate');
 
-        maxDate.setAttribute("max", date);
-        minDate.setAttribute("max", date);
-    });
+    maxDate.setAttribute("max", date);
+    minDate.setAttribute("max", date);
+  });
 
-    $('#btnSearchDate').click(async function (e) {
-        e.preventDefault();
+  $('#btnSearchDate').click(async function (e) {
+    e.preventDefault();
         
-        let firtsDate = $('#firtsDate').val();
-        let lastDate = $('#lastDate').val();
+    let firtsDate = $('#firtsDate').val();
+    let lastDate = $('#lastDate').val();
                 
-        if (!firtsDate || firtsDate == '' || !lastDate || lastDate == '') {
-            toastr.error('Ingrese los campos');
-            return false;
-        }
+    if (!firtsDate || firtsDate == '' || !lastDate || lastDate == '') {
+      toastr.error('Ingrese los campos');
+      return false;
+    }
 
-        loadTblRequisitions(firtsDate, lastDate);
-    });
+    loadTblRequisitions(firtsDate, lastDate);
+  });
 
   /* Actualizar productos materials */
 
-  $(document).on('click', '.updateRequisition',async function (e) {
+  $(document).on('click', '.updateRequisition', async function (e) {
     $('.cardImportRequisitions').hide(800);
     $('.cardAddRequisitions').show(800);
     $('#btnAddRequisition').html('Actualizar');
@@ -99,14 +79,7 @@ $(document).ready(function () {
     $(`#material option[value=${data.id_material}]`).prop('selected', true);
     $('#applicationDate').val(data.application_date);
     $('#deliveryDate').val(data.delivery_date);
-    $('#purchaseOrder').val(data.purchase_order);
- 
-    // if (quantity.isInteger) quantity = quantity.toLocaleString('es-CO');
-    // else
-    //   quantity = quantity.toLocaleString(undefined, {
-    //     minimumFractionDigits: 4,
-    //     maximumFractionDigits: 4,
-    //   });
+    $('#purchaseOrder').val(data.purchase_order); 
     $('#quantity').val(data.quantity);
     
     $('html, body').animate(
@@ -117,22 +90,28 @@ $(document).ready(function () {
     );
   });
 
-  updateRequisition = () => {
-    let data = $('#formAddRequisition').serialize();
-    idRequisition = sessionStorage.getItem('id_requisition');
-    data =
-      data +
-      '&idRequisition=' +
-      idRequisition;
+  checkDataRequisition = async (url, idRequisition) => {
+    let material = $('#material').val();
+    let applicationDate = $('#applicationDate').val();
+    let deliveryDate = $('#deliveryDate').val();
+    let quan = $('#quantity').val();
 
-    $.post(
-      '/api/updateRequisition',
-      data,
-      function (data, textStatus, jqXHR) {
-        message(data);
-      }
-    );
-  }; 
+    let data = quan * material;
+
+    if (!data || applicationDate == '' || deliveryDate == '' || quan == '') {
+      toastr.error('Ingrese todos los campos');
+      return false;
+    }
+
+    let dataRequisition = new FormData(formAddRequisition);
+
+    if (idRequisition != '' || idRequisition != null)
+      dataRequisition.append('idRequisition', idRequisition);
+
+    let resp = await sendDataPOST(url, dataRequisition);
+
+    message(resp);
+  } 
 
   /* Eliminar materia prima */
 
@@ -225,22 +204,15 @@ $(document).ready(function () {
 
   /* Mensaje de exito */
 
-  const message = (data) => {
+  message = (data) => {
     if (data.success == true) {
       $('.cardAddRequisitions').hide(800);
       $('#formAddRequisition').trigger('reset');
       loadTblRequisitions(null, null);
-      // updateTable();
       toastr.success(data.message);
       return false;
     } else if (data.error == true) toastr.error(data.message);
     else if (data.info == true) toastr.info(data.message);
   };
-
-  /* Actualizar tabla 
-
-  function updateTable() {
-    $('#tblRequisitions').DataTable().clear();
-    $('#tblRequisitions').DataTable().ajax.reload();
-  } */
+ 
 });

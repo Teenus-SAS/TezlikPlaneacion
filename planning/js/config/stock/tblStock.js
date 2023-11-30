@@ -1,7 +1,7 @@
 $(document).ready(function () {
   /* Cargue tabla de stock */
 
-  tblStock = $('#tblStock1').dataTable({
+  tblStock = $('#tblStock').dataTable({
     pageLength: 50,
     ajax: {
       url: '../../api/stock',
@@ -26,25 +26,22 @@ $(document).ready(function () {
       },
       {
         title: 'Plazo Max',
-        data: 'max',
+        data: 'max_term',
         className: 'uniqueClassName',
       },
       {
         title: 'Plazo Habitual',
-        data: 'habitual',
+        data: 'usual_term',
         className: 'uniqueClassName',
+      }, 
+      {
+        title: 'Acciones',
+        data: 'id_stock',
+        className: 'uniqueClassName',
+        render: function (data) {
+          return `<a href="javascript:;" <i id="${data}" class="bx bx-edit-alt updateStock" data-toggle='tooltip' title='Actualizar Stock' style="font-size: 30px;"></i></a>`;
+        },
       },
-
-      // {
-      //   title: 'Acciones',
-      //   data: 'id_process',
-      //   className: 'uniqueClassName',
-      //   render: function (data) {
-      //     return `
-      //           <a href="javascript:;" <i id="${data}" class="bx bx-edit-alt updateProcess" data-toggle='tooltip' title='Actualizar Proceso' style="font-size: 30px;"></i></a>
-      //           <a href="javascript:;" <i id="${data}" class="mdi mdi-delete-forever" data-toggle='tooltip' title='Eliminar Proceso' style="font-size: 30px;color:red" onclick="deleteFunction()"></i></a>`;
-      //   },
-      // },
     ],
   });
 });

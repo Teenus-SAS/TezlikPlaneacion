@@ -13,7 +13,7 @@ $(document).ready(function () {
         $('#formCreateStock').trigger('reset');
         $('#btnCreateStock').html('Crear');
 
-        // sessionStorage.removeItem('id_process');
+        sessionStorage.removeItem('idStock');
     });
 
     /* Crear nuevo proceso */
@@ -21,21 +21,27 @@ $(document).ready(function () {
     $('#btnCreateStock').click(function (e) {
         e.preventDefault();
 
-         
+        let idStock = sessionStorage.getItem('idStock');
+        if (!idStock)
+            checkDataStock('/api/addStock', idStock);
+        else
+            checkDataStock('/api/updateStock', idStock);
     });
 
-    /* Actualizar procesos 
+    /* Actualizar procesos */
 
-    $(document).on('click', '.updateProcess', function (e) {
+    $(document).on('click', '.updateStock', function (e) {
         $('.cardImportStock').hide(800);
         $('.cardCreateStock').show(800);
         $('#btnCreateStock').html('Actualizar');
 
         let row = $(this).parent().parent()[0];
-        let data = tblProcess.fnGetData(row);
+        let data = tblStock.fnGetData(row);
 
-        // // sessionStorage.setItem('id_process', data.id_process);
-        $('#process').val(data.process);
+        sessionStorage.setItem('idStock', data.id_stock);
+        $(`#material option[value=${data.id_material}]`).prop('selected', true);
+        $('#max').val(data.max_term);
+        $('#usual').val(data.usual_term);
 
         $('html, body').animate(
             {
@@ -43,29 +49,38 @@ $(document).ready(function () {
             },
             1000
         );
-    }); 
+    });
 
-    updateProcess = () => {
-        let data = $('#formCreateStock').serialize();
-        // idProcess = sessionStorage.getItem('id_process');
-        data = data + '&idProcess=' + idProcess;
+    checkDataStock = async (url, idStock) => {
+        let material = parseFloat($('#material').val());
+        let max = parseFloat($('#max').val());
+        let usual = parseFloat($('#usual').val());
 
-        $.post(
-            '../../api/updatePlanProcess',
-            data,
-            function (data, textStatus, jqXHR) {
-                message(data);
-            }
-        );
-    }; */
+        let data = material * max * usual;
+
+        if (isNaN(data) || data <= 0) {
+            toastr.error('Ingrese todos los campos');
+            return false;
+        }
+
+        let dataStock = new FormData(formCreateStock);
+        dataStock.append('idMaterial', material);
+
+        if (idStock != '' || idStock != null)
+            dataStock.append('idStock', idStock);
+
+        let resp = await sendDataPOST(url, dataStock);
+
+        message(resp);
+    }
 
     /* Eliminar proceso 
 
     deleteFunction = () => {
         let row = $(this.activeElement).parent().parent()[0];
-        let data = tblProcess.fnGetData(row);
+        let data = tblStock.fnGetData(row);
 
-        // // let id_process = data.id_process;
+        // // let id_Stock = data.id_Stock;
 
         bootbox.confirm({
             title: 'Eliminar',
@@ -84,7 +99,7 @@ $(document).ready(function () {
             callback: function (result) {
                 if (result == true) {
                     $.get(
-                        // `../../api/deletePlanProcess/${id_process}`,
+                        // `../../api/deletePlanProcess/${id_Stock}`,
                         function (data, textStatus, jqXHR) {
                             message(data);
                         }
@@ -98,6 +113,7 @@ $(document).ready(function () {
 
     message = (data) => {
         if (data.success == true) {
+            $('.cardImportStock').hide(800);
             $('.cardCreateStock').hide(800);
             $('#formCreateStock').trigger('reset');
             updateTable();
