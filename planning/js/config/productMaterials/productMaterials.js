@@ -143,7 +143,8 @@ $(document).ready(function () {
 
     let data = tblConfigMaterials.fnGetData(row);
 
-    idProductMaterial = data.id_product_material;
+    let idProductMaterial = data.id_product_material;
+    let idMaterial = data.id_material;
 
     bootbox.confirm({
       title: 'Eliminar',
@@ -162,7 +163,7 @@ $(document).ready(function () {
       callback: function (result) {
         if (result == true) {
           $.get(
-            `/api/deletePlanProductMaterial/${idProductMaterial}`,
+            `/api/deletePlanProductMaterial/${idProductMaterial}/${idMaterial}`,
             function (data, textStatus, jqXHR) {
               message(data);
             }

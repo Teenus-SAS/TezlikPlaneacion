@@ -6,6 +6,7 @@ use TezlikPlaneacion\dao\GeneralOrdersDao;
 use TezlikPlaneacion\dao\GeneralProductsDao;
 use TezlikPlaneacion\dao\GeneralProductsMaterialsDao;
 use TezlikPlaneacion\dao\GeneralProgrammingDao;
+use TezlikPlaneacion\dao\MinimumStockDao;
 use TezlikPlaneacion\dao\ProductsMaterialsDao;
 
 $productsMaterialsDao = new ProductsMaterialsDao();
@@ -15,6 +16,8 @@ $productsDao = new GeneralProductsDao();
 $materialsDao = new GeneralMaterialsDao();
 $generalOrdersDao = new GeneralOrdersDao();
 $generalProgrammingDao = new GeneralProgrammingDao();
+$generalMaterialsDao = new GeneralMaterialsDao();
+$minimumStockDao = new MinimumStockDao();
 
 use Psr\Http\Message\ResponseInterface as Response;
 use Psr\Http\Message\ServerRequestInterface as Request;
@@ -113,7 +116,9 @@ $app->post('/addProductsMaterials', function (Request $request, Response $respon
     $productsDao,
     $materialsDao,
     $generalOrdersDao,
-    $generalProgrammingDao
+    $generalProgrammingDao,
+    $minimumStockDao,
+    $generalMaterialsDao
 ) {
     session_start();
     $id_company = $_SESSION['id_company'];
@@ -124,18 +129,25 @@ $app->post('/addProductsMaterials', function (Request $request, Response $respon
     if ($dataProductMaterials > 1) {
         $dataProductMaterial = $convertDataDao->strReplaceProductsMaterials($dataProductMaterial);
 
-        $productMaterials = $productsMaterialsDao->insertProductsMaterialsByCompany($dataProductMaterial, $id_company);
+        $resolution = $productsMaterialsDao->insertProductsMaterialsByCompany($dataProductMaterial, $id_company);
 
-        if ($productMaterials == null)
+        if ($resolution == null) {
+            $arr = $minimumStockDao->calcStockByMaterial($dataProductMaterial['material']);
+            if (isset($arr['stock']))
+                $resolution = $generalMaterialsDao->updateStockMaterial($dataProductMaterial['material'], $arr['stock']);
+        }
+
+        if ($resolution == null)
             $resp = array('success' => true, 'message' => 'Materia prima asignada correctamente');
-        else if (isset($productMaterials['info']))
-            $resp = array('info' => true, 'message' => $productMaterials['message']);
+        else if (isset($resolution['info']))
+            $resp = array('info' => true, 'message' => $resolution['message']);
         else
             $resp = array('error' => true, 'message' => 'Ocurrio un error mientras asignaba la información. Intente nuevamente');
     } else {
         $productMaterials = $dataProductMaterial['importProducts'];
 
         for ($i = 0; $i < sizeof($productMaterials); $i++) {
+            if (isset($resolution['info'])) break;
             // Obtener id producto
             $findProduct = $productsDao->findProduct($productMaterials[$i], $id_company);
             $productMaterials[$i]['idProduct'] = $findProduct['id_product'];
@@ -153,9 +165,18 @@ $app->post('/addProductsMaterials', function (Request $request, Response $respon
                 $productMaterials[$i]['idProductMaterial'] = $findProductsMaterials['id_product_material'];
                 $resolution = $productsMaterialsDao->updateProductsMaterials($productMaterials[$i]);
             }
+
+            if (isset($resolution['info'])) break;
+            $arr = $minimumStockDao->calcStockByMaterial($productMaterials[$i]['material']);
+            if (isset($arr['stock']))
+                $resolution = $generalMaterialsDao->updateStockMaterial($productMaterials[$i]['material'], $arr['stock']);
         }
+
         if ($resolution == null)
             $resp = array('success' => true, 'message' => 'Materia prima importada correctamente');
+        else if (isset($resolution['info']))
+            $resp = array('info' => true, 'message' => $resolution['message']);
+
         else
             $resp = array('error' => true, 'message' => 'Ocurrio un error mientras importada la información. Intente nuevamente');
     }
@@ -209,7 +230,9 @@ $app->post('/addProductsMaterials', function (Request $request, Response $respon
 
 $app->post('/updatePlanProductsMaterials', function (Request $request, Response $response, $args) use (
     $productsMaterialsDao,
-    $convertDataDao
+    $convertDataDao,
+    $generalMaterialsDao,
+    $minimumStockDao
 ) {
     $dataProductMaterial = $request->getParsedBody();
 
@@ -217,12 +240,18 @@ $app->post('/updatePlanProductsMaterials', function (Request $request, Response 
         $resp = array('error' => true, 'message' => 'Ingrese todos los datos');
     else {
         $dataProductMaterial = $convertDataDao->strReplaceProductsMaterials($dataProductMaterial);
-        $productMaterials = $productsMaterialsDao->updateProductsMaterials($dataProductMaterial);
+        $resolution = $productsMaterialsDao->updateProductsMaterials($dataProductMaterial);
 
-        if ($productMaterials == null)
+        if ($resolution == null) {
+            $arr = $minimumStockDao->calcStockByMaterial($dataProductMaterial['material']);
+            if (isset($arr['stock']))
+                $resolution = $generalMaterialsDao->updateStockMaterial($dataProductMaterial['material'], $arr['stock']);
+        }
+
+        if ($resolution == null)
             $resp = array('success' => true, 'message' => 'Materia prima actualizada correctamente');
-        else if (isset($productMaterials['info']))
-            $resp = array('info' => true, 'message' => $productMaterials['message']);
+        else if (isset($resolution['info']))
+            $resp = array('info' => true, 'message' => $resolution['message']);
         else
             $resp = array('error' => true, 'message' => 'Ocurrio un error mientras actualizaba la información. Intente nuevamente');
     }
@@ -230,12 +259,23 @@ $app->post('/updatePlanProductsMaterials', function (Request $request, Response 
     return $response->withStatus(200)->withHeader('Content-Type', 'application/json');
 });
 
-$app->get('/deletePlanProductMaterial/{id_product_material}', function (Request $request, Response $response, $args) use ($productsMaterialsDao) {
-    $product = $productsMaterialsDao->deleteProductMaterial($args['id_product_material']);
+$app->get('/deletePlanProductMaterial/{id_product_material}/{id_material}', function (Request $request, Response $response, $args) use (
+    $productsMaterialsDao,
+    $generalMaterialsDao,
+    $minimumStockDao
+) {
+    $resolution = $productsMaterialsDao->deleteProductMaterial($args['id_product_material']);
 
-    if ($product == null)
+    if ($resolution == null) {
+        $arr = $minimumStockDao->calcStockByMaterial($args['id_material']);
+        if (isset($arr['stock']))
+            $resolution = $generalMaterialsDao->updateStockMaterial($args['id_material'], $arr['stock']);
+    }
+
+    if ($resolution == null)
         $resp = array('success' => true, 'message' => 'Materia prima eliminada correctamente');
-
+    else if (isset($resolution['info']))
+        $resp = array('info' => true, 'message' => $resolution['message']);
     else
         $resp = array('error' => true, 'message' => 'No es posible eliminar la materia prima asignada, existe información asociada a ella');
 
