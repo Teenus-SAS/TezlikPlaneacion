@@ -65,4 +65,21 @@ class GeneralMaterialsDao
             return $error;
         }
     }
+
+    public function updateStockMaterial($id_material, $stock)
+    {
+        try {
+            $connection = Connection::getInstance()->getConnection();
+
+            $stmt = $connection->prepare("UPDATE materials SET minimum_stock = :minimum_stock WHERE id_material = :id_material");
+            $stmt->execute([
+                'id_material' => $id_material,
+                'minimum_stock' => $stock
+            ]);
+        } catch (\Exception $e) {
+            $message = $e->getMessage();
+            $error = array('info' => true, 'message' => $message);
+            return $error;
+        }
+    }
 }

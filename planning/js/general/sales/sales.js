@@ -134,6 +134,7 @@ $(document).ready(function () {
     let data = tblSales.fnGetData(row);
 
     let id_unit_sales = data.id_unit_sales;
+    let id_product = data.id_product;
 
     bootbox.confirm({
       title: 'Eliminar',
@@ -152,7 +153,7 @@ $(document).ready(function () {
       callback: function (result) {
         if (result == true) {
           $.get(
-            `../../api/deleteUnitSale/${id_unit_sales}`,
+            `../../api/deleteUnitSale/${id_unit_sales}/${id_product}`,
             function (data, textStatus, jqXHR) {
               message(data);
             }

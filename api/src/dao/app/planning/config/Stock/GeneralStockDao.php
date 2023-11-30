@@ -28,13 +28,4 @@ class GeneralStockDao
         $this->logger->notice("stock", array('stock' => $stock));
         return $stock;
     }
-
-    // public function calcStockByMaterial($id_material)
-    // {
-    //     try{
-
-    //     }catch(\Exception $e){
-    //         $error = array('info'=>true,'message'=)
-    //     }
-    // }
 }

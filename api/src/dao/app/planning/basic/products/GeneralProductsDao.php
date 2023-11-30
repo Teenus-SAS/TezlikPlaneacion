@@ -87,16 +87,35 @@ class GeneralProductsDao
         }
     }
 
-    public function updateAccumulatedQuantityGeneral($id_company)
+    public function updateAccumulatedQuantityGeneral($id_product)
     {
         $connection = Connection::getInstance()->getConnection();
 
         try {
-            $stmt = $connection->prepare("UPDATE products SET accumulated_quantity = :accumulated_quantity WHERE id_company = :id_company");
+            $stmt = $connection->prepare("UPDATE products SET accumulated_quantity = :accumulated_quantity WHERE id_product = :id_product");
 
             $stmt->execute([
                 'accumulated_quantity' => 0,
-                'id_product' => $id_company
+                'id_product' => $id_product
+            ]);
+        } catch (\Exception $e) {
+            $message = $e->getMessage();
+
+            $error = array('info' => true, 'message' => $message);
+            return $error;
+        }
+    }
+
+    public function updateStockByProduct($id_product, $stock)
+    {
+        $connection = Connection::getInstance()->getConnection();
+
+        try {
+            $stmt = $connection->prepare("UPDATE products SET minimum_stock = :minimum_stock WHERE id_product = :id_product");
+
+            $stmt->execute([
+                'minimum_stock' => $stock,
+                'id_product' => $id_product
             ]);
         } catch (\Exception $e) {
             $message = $e->getMessage();

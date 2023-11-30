@@ -1,12 +1,18 @@
 <?php
 
 use TezlikPlaneacion\dao\GeneralMaterialsDao;
+use TezlikPlaneacion\dao\GeneralProductsDao;
 use TezlikPlaneacion\dao\GeneralStockDao;
+use TezlikPlaneacion\dao\MinimumStockDao;
+use TezlikPlaneacion\dao\ProductsMaterialsDao;
 use TezlikPlaneacion\dao\StockDao;
 
 $stockDao = new StockDao();
 $generalStockDao = new GeneralStockDao();
 $generalMaterialsDao = new GeneralMaterialsDao();
+$generalProductsDao = new GeneralProductsDao();
+$minimumStockDao = new MinimumStockDao();
+$productMaterialsDao = new ProductsMaterialsDao();
 
 use Psr\Http\Message\ResponseInterface as Response;
 use Psr\Http\Message\ServerRequestInterface as Request;
@@ -90,7 +96,8 @@ $app->post('/stockDataValidation', function (Request $request, Response $respons
 $app->post('/addStock', function (Request $request, Response $response, $args) use (
     $stockDao,
     $generalStockDao,
-    $generalMaterialsDao
+    $generalMaterialsDao,
+    $minimumStockDao,
 ) {
     session_start();
     $dataStock = $request->getParsedBody();
@@ -101,12 +108,18 @@ $app->post('/addStock', function (Request $request, Response $response, $args) u
         $findStock = $generalStockDao->findStock($dataStock);
 
         if (!$findStock) {
-            $stock = $stockDao->insertStockByCompany($dataStock, $id_company);
+            $resolution = $stockDao->insertStockByCompany($dataStock, $id_company);
 
-            if ($stock == null)
+            if ($resolution == null) {
+                $arr = $minimumStockDao->calcStockByMaterial($dataStock['idMaterial']);
+                if (isset($arr['stock']))
+                    $resolution = $generalMaterialsDao->updateStockMaterial($dataStock['idMaterial'], $arr['stock']);
+            }
+
+            if ($resolution == null)
                 $resp = array('success' => true, 'message' => 'Stock creado correctamente');
-            else if (isset($stock['info']))
-                $resp = array('info' => true, 'message' => $stock['message']);
+            else if (isset($resolution['info']))
+                $resp = array('info' => true, 'message' => $resolution['message']);
             else
                 $resp = array('error' => true, 'message' => 'Ocurrio un error mientras ingresaba la información. Intente nuevamente');
         } else
@@ -115,6 +128,7 @@ $app->post('/addStock', function (Request $request, Response $response, $args) u
         $stock = $dataStock['importStock'];
 
         for ($i = 0; $i < sizeof($stock); $i++) {
+            if (isset($resolution['info'])) break;
             // Obtener id materia prima
             $findMaterial = $generalMaterialsDao->findMaterial($stock[$i], $id_company);
             $stock[$i]['idMaterial'] = $findMaterial['id_material'];
@@ -126,9 +140,16 @@ $app->post('/addStock', function (Request $request, Response $response, $args) u
                 $stock[$i]['idStock'] = $findstock['id_stock'];
                 $resolution = $stockDao->updateStock($stock[$i]);
             }
+
+            if (isset($resolution['info'])) break;
+            $arr = $minimumStockDao->calcStockByMaterial($stock[$i]['idMaterial']);
+            if (isset($arr['stock']))
+                $resolution = $generalMaterialsDao->updateStockMaterial($stock[$i]['idMaterial'], $arr['stock']);
         }
         if ($resolution == null)
             $resp = array('success' => true, 'message' => 'Stock importado correctamente');
+        else if (isset($resolution['info']))
+            $resp = array('info' => true, 'message' => $resolution['message']);
         else
             $resp = array('error' => true, 'message' => 'Ocurrio un error mientras importaba la información. Intente nuevamente');
     }
@@ -139,7 +160,9 @@ $app->post('/addStock', function (Request $request, Response $response, $args) u
 
 $app->post('/updateStock', function (Request $request, Response $response, $args) use (
     $stockDao,
-    $generalStockDao
+    $generalStockDao,
+    $generalMaterialsDao,
+    $minimumStockDao
 ) {
     $dataStock = $request->getParsedBody();
 
@@ -147,12 +170,18 @@ $app->post('/updateStock', function (Request $request, Response $response, $args
     !is_array($stock) ? $data['id_stock'] = 0 : $data = $stock;
 
     if ($data['id_stock'] == $dataStock['idStock'] || $data['id_stock'] == 0) {
-        $stock = $stockDao->updateStock($dataStock);
+        $resolution = $stockDao->updateStock($dataStock);
 
-        if ($stock == null)
+        if ($resolution == null) {
+            $arr = $minimumStockDao->calcStockByMaterial($dataStock['idMaterial']);
+            if (isset($arr['stock']))
+                $resolution = $generalMaterialsDao->updateStockMaterial($dataStock['idMaterial'], $arr['stock']);
+        }
+
+        if ($resolution == null)
             $resp = array('success' => true, 'message' => 'Stock actualizado correctamente');
-        else if (isset($stock['info']))
-            $resp = array('info' => true, 'message' => $stock['message']);
+        else if (isset($resolution['info']))
+            $resp = array('info' => true, 'message' => $resolution['message']);
         else
             $resp = array('error' => true, 'message' => 'Ocurrio un error mientras actualizaba la información. Intente nuevamente');
     } else

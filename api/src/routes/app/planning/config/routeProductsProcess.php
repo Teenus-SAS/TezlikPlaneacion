@@ -175,10 +175,10 @@ $app->post('/addProductsProcess', function (Request $request, Response $response
             }
 
             // Calcular lote economico
-            $minimumStock = $minimumStockDao->calcMinimumStock($productProcess[$i], $id_company);
+            // $minimumStock = $minimumStockDao->calcMinimumStock($productProcess[$i], $id_company);
         }
 
-        if ($resolution == null && $minimumStock == null)
+        if ($resolution == null)
             $resp = array('success' => true, 'message' => 'Proceso importado correctamente');
         else {
             $resp = array('error' => true, 'message' => 'Ocurrio un error mientras importaba la información. Intente nuevamente');

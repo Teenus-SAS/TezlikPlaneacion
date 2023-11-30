@@ -2,15 +2,19 @@
 
 use TezlikPlaneacion\dao\UnitSalesDao;
 use TezlikPlaneacion\dao\ClassificationDao;
+use TezlikPlaneacion\dao\GeneralMaterialsDao;
 use TezlikPlaneacion\dao\GeneralProductsDao;
 use TezlikPlaneacion\dao\GeneralUnitSalesDao;
 use TezlikPlaneacion\dao\MinimumStockDao;
+use TezlikPlaneacion\dao\ProductsMaterialsDao;
 
 $unitSalesDao = new UnitSalesDao();
 $generalUnitSalesDao = new GeneralUnitSalesDao();
 $productsDao = new GeneralProductsDao();
 $classificationDao = new ClassificationDao();
 $minimumStockDao = new MinimumStockDao();
+$generalMaterialDao = new GeneralMaterialsDao();
+$productMaterialsDao = new ProductsMaterialsDao();
 
 use Psr\Http\Message\ResponseInterface as Response;
 use Psr\Http\Message\ServerRequestInterface as Request;
@@ -76,6 +80,8 @@ $app->post('/addUnitSales', function (Request $request, Response $response, $arg
     $unitSalesDao,
     $generalUnitSalesDao,
     $productsDao,
+    $generalMaterialDao,
+    $productMaterialsDao,
     $classificationDao,
     $minimumStockDao
 ) {
@@ -86,12 +92,31 @@ $app->post('/addUnitSales', function (Request $request, Response $response, $arg
     $dataSales = sizeof($dataSale);
 
     if ($dataSales > 1) {
-        $unitSales = $unitSalesDao->insertSalesByCompany($dataSale, $id_company);
+        $resolution = $unitSalesDao->insertSalesByCompany($dataSale, $id_company);
 
-        if ($unitSales == null)
+        // Calcular Clasificación producto
+        if ($resolution == null)
+            $product = $minimumStockDao->calcStockByProduct($dataSale['idProduct']);
+        if (isset($product['stock']))
+            $resolution = $productsDao->updateStockByProduct($dataSale['idProduct'], $product['stock']);
+
+        if ($resolution == null) {
+            // Calcular Clasificación material
+            $materials = $productMaterialsDao->findAllProductsmaterials($dataSale['idProduct'], $id_company);
+
+            for ($i = 0; $i < sizeof($materials); $i++) {
+                if (isset($resolution['info'])) break;
+
+                $arr = $minimumStockDao->calcStockByMaterial($materials[$i]['id_material']);
+                if (isset($arr['stock']))
+                    $resolution = $generalMaterialDao->updateStockMaterial($materials[$i]['id_material'], $arr['stock']);
+            }
+        }
+
+        if ($resolution == null)
             $resp = array('success' => true, 'message' => 'Venta asociada correctamente');
-        else if (isset($unitSales['info']))
-            $resp = array('info' => true, 'message' => $unitSales['message']);
+        else if (isset($resolution['info']))
+            $resp = array('info' => true, 'message' => $resolution['message']);
         else
             $resp = array('error' => true, 'message' => 'Ocurrio un error mientras ingresaba la información. Intente nuevamente');
     } else {
@@ -110,15 +135,37 @@ $app->post('/addUnitSales', function (Request $request, Response $response, $arg
                 $unitSales[$i]['idSale'] = $findUnitSales['id_unit_sales'];
                 $resolution = $unitSalesDao->updateSales($unitSales[$i]);
             }
+            if (isset($resolution['info'])) break;
+            // Calcular Clasificación producto 
+
+            $arr = $minimumStockDao->calcStockByProduct($unitSales[$i]['idProduct']);
+            if (isset($arr['stock']))
+                $resolution = $productsDao->updateStockByProduct($unitSales[$i]['idProduct'], $arr['stock']);
+
+            if (isset($resolution['info'])) break;
+            // Calcular Clasificación material
+            $materials = $productMaterialsDao->findAllProductsmaterials($dataSale['idProduct'], $id_company);
+
+            for (
+                $i = 0;
+                $i < sizeof($materials);
+                $i++
+            ) {
+                if (isset($resolution['info'])) break;
+
+                $arr = $minimumStockDao->calcStockByMaterial($materials[$i]['id_material']);
+                if (isset($arr['stock']))
+                    $resolution = $generalMaterialDao->updateStockMaterial($materials[$i]['id_material'], $arr['stock']);
+            }
 
             // Calcular Clasificación producto
-            $unitSales[$i]['cantMonths'] = 3;
-            $classification = $classificationDao->calcClassificationByProduct($unitSales[$i], $id_company);
+            // $unitSales[$i]['cantMonths'] = 3;
+            // $classification = $classificationDao->calcClassificationByProduct($unitSales[$i], $id_company);
 
             // Calcular Stock minimo
-            $minimumStock = $minimumStockDao->calcMinimumStock($unitSales[$i], $id_company);
+            // $minimumStock = $minimumStockDao->calcMinimumStock($unitSales[$i], $id_company);
         }
-        if ($resolution == null && $classification == null && $minimumStock == null)
+        if ($resolution == null)
             $resp = array('success' => true, 'message' => 'Venta importada correctamente');
         else
             $resp = array('error' => true, 'message' => 'Ocurrio un error mientras importaba la información. Intente nuevamente');
@@ -128,18 +175,46 @@ $app->post('/addUnitSales', function (Request $request, Response $response, $arg
     return $response->withStatus(200)->withHeader('Content-Type', 'application/json');
 });
 
-$app->post('/updateUnitSale', function (Request $request, Response $response, $args) use ($unitSalesDao) {
+$app->post('/updateUnitSale', function (Request $request, Response $response, $args) use (
+    $unitSalesDao,
+    $minimumStockDao,
+    $productsDao,
+    $generalMaterialDao,
+    $productMaterialsDao
+) {
+    session_start();
+    $id_company = $_SESSION['id_company'];
+
     $dataSale = $request->getParsedBody();
 
     if (empty($dataSale['idSale']) || empty($dataSale['referenceProduct']))
         $resp = array('error' => true, 'message' => 'Ingrese todos los datos a actualizar');
     else {
-        $unitSales = $unitSalesDao->updateSales($dataSale);
+        $resolution = $unitSalesDao->updateSales($dataSale);
 
-        if ($unitSales == null)
+        // Calcular Clasificación producto
+        if ($resolution == null)
+            $product = $minimumStockDao->calcStockByProduct($dataSale['idProduct']);
+        if (isset($product['stock']))
+            $resolution = $productsDao->updateStockByProduct($dataSale['idProduct'], $product['stock']);
+
+        if ($resolution == null) {
+            // Calcular Clasificación material
+            $materials = $productMaterialsDao->findAllProductsmaterials($dataSale['idProduct'], $id_company);
+
+            for ($i = 0; $i < sizeof($materials); $i++) {
+                if (isset($resolution['info'])) break;
+
+                $arr = $minimumStockDao->calcStockByMaterial($materials[$i]['id_material']);
+                if (isset($arr['stock']))
+                    $resolution = $generalMaterialDao->updateStockMaterial($materials[$i]['id_material'], $arr['stock']);
+            }
+        }
+
+        if ($resolution == null)
             $resp = array('success' => true, 'message' => 'Venta actualizada correctamente');
-        else if (isset($unitSales['info']))
-            $resp = array('info' => true, 'message' => $unitSales['message']);
+        else if (isset($resolution['info']))
+            $resp = array('info' => true, 'message' => $resolution['message']);
         else
             $resp = array('error' => true, 'message' => 'Ocurrio un error mientras actualizaba la información. Intente nuevamente');
     }
@@ -148,13 +223,40 @@ $app->post('/updateUnitSale', function (Request $request, Response $response, $a
     return $response->withStatus(200)->withHeader('Content-Type', 'application/json');
 });
 
-$app->get('/deleteUnitSale/{id_unit_sales}', function (Request $request, Response $response, $args) use ($unitSalesDao) {
-    $unitSales = $unitSalesDao->deleteSale($args['id_unit_sales']);
+$app->get('/deleteUnitSale/{id_unit_sales}/{id_product}', function (Request $request, Response $response, $args) use (
+    $unitSalesDao,
+    $minimumStockDao,
+    $generalMaterialDao,
+    $productsDao,
+    $productMaterialsDao
+) {
+    session_start();
+    $id_company = $_SESSION['id_company'];
+    $resolution = $unitSalesDao->deleteSale($args['id_unit_sales']);
 
-    if ($unitSales == null)
+    // Calcular Clasificación producto
+    if ($resolution == null)
+        $product = $minimumStockDao->calcStockByProduct($args['id_product']);
+    if (isset($product['stock']))
+        $resolution = $productsDao->updateStockByProduct($args['id_product'], $product['stock']);
+
+    if ($resolution == null) {
+        // Calcular Clasificación material
+        $materials = $productMaterialsDao->findAllProductsmaterials($args['id_product'], $id_company);
+
+        for ($i = 0; $i < sizeof($materials); $i++) {
+            if (isset($resolution['info'])) break;
+
+            $arr = $minimumStockDao->calcStockByMaterial($materials[$i]['id_material']);
+            if (isset($arr['stock']))
+                $resolution = $generalMaterialDao->updateStockMaterial($materials[$i]['id_material'], $arr['stock']);
+        }
+    }
+
+    if ($resolution == null)
         $resp = array('success' => true, 'message' => 'Venta eliminada correctamente');
 
-    if ($unitSales != null)
+    if ($resolution != null)
         $resp = array('error' => true, 'message' => 'No es posible eliminar la Venta, existe información asociada a ella');
 
     $response->getBody()->write(json_encode($resp));
