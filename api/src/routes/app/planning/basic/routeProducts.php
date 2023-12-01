@@ -164,9 +164,9 @@ $app->post('/addProduct', function (Request $request, Response $response, $args)
                         $generalOrdersDao->changeStatus($orders[$i]['id_order'], 'Programar');
                     }
 
-                    $reserved = $generalProductsDao->findProductReserved($orders[$i]['id_product']);
-                    !$reserved ? $reserved = 0 : $reserved;
-                    $generalProductsDao->updateReservedByProduct($orders[$i]['id_product'], $reserved);
+                    $arr = $generalProductsDao->findProductReserved($orders[$i]['id_product']);
+                    !$arr['reserved'] ? $arr['reserved'] = 0 : $arr;
+                    $generalProductsDao->updateReservedByProduct($orders[$i]['id_product'], $arr['reserved']);
 
                     $generalProductsDao->updateAccumulatedQuantity($orders[$i]['id_product'], $accumulated_quantity, 1);
                     $programming = $generalProgrammingDao->findProgrammingByOrder($orders[$i]['id_order']);
@@ -176,9 +176,9 @@ $app->post('/addProduct', function (Request $request, Response $response, $args)
                         $productsMaterials = $productsMaterialsDao->findAllProductsmaterials($orders[$i]['id_product'], $id_company);
 
                         foreach ($productsMaterials as $arr) {
-                            $reserved = $generalMaterialsDao->findReservedMaterial($arr['id_material']);
-                            !$reserved ? $reserved = 0 : $reserved;
-                            $generalMaterialsDao->updateReservedMaterial($arr['id_material'], $reserved);
+                            $k = $generalMaterialsDao->findReservedMaterial($arr['id_material']);
+                            !$k['reserved'] ? $k['reserved'] = 0 : $k;
+                            $generalMaterialsDao->updateReservedMaterial($arr['id_material'], $k['reserved']);
                         }
                     }
                 }
@@ -253,12 +253,11 @@ $app->post('/updatePlanProduct', function (Request $request, Response $response,
                         $generalOrdersDao->changeStatus($orders[$i]['id_order'], 'Programar');
                     }
 
-                    $reserved = $generalProductsDao->findProductReserved($orders[$i]['id_product']);
-                    !$reserved ? $reserved = 0 : $reserved;
-                    $generalProductsDao->updateReservedByProduct($orders[$i]['id_product'], $reserved);
+                    $arr = $generalProductsDao->findProductReserved($orders[$i]['id_product']);
+                    !$arr['reserved'] ? $arr['reserved'] = 0 : $arr;
+                    $generalProductsDao->updateReservedByProduct($orders[$i]['id_product'], $arr['reserved']);
 
                     $generalProductsDao->updateAccumulatedQuantity($orders[$i]['id_product'], $accumulated_quantity, 1);
-
                     $programming = $generalProgrammingDao->findProgrammingByOrder($orders[$i]['id_order']);
                     if (sizeof($programming) > 0) {
                         $generalOrdersDao->changeStatus($orders[$i]['id_order'], 'Programado');
@@ -266,9 +265,9 @@ $app->post('/updatePlanProduct', function (Request $request, Response $response,
                         $productsMaterials = $productsMaterialsDao->findAllProductsmaterials($orders[$i]['id_product'], $id_company);
 
                         foreach ($productsMaterials as $arr) {
-                            $reserved = $generalMaterialsDao->findReservedMaterial($arr['id_material']);
-                            !$reserved ? $reserved = 0 : $reserved;
-                            $generalMaterialsDao->updateReservedMaterial($arr['id_material'], $reserved);
+                            $k = $generalMaterialsDao->findReservedMaterial($arr['id_material']);
+                            !$k['reserved'] ? $k['reserved'] = 0 : $k;
+                            $generalMaterialsDao->updateReservedMaterial($arr['id_material'], $k['reserved']);
                         }
                     }
                 }
