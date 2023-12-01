@@ -26,7 +26,7 @@ $app->get('/explosionMaterials', function (Request $request, Response $response,
             $data['idMaterial'] = $materials[$i]['id_material'];
             $data['applicationDate'] = '';
             $data['deliveryDate'] = '';
-            $data['quantity'] = $materials[$i]['available'];
+            $data['quantity'] = abs($materials[$i]['available']);
             $data['purchaseOrder'] = '';
 
             $requisition = $generalRequisitionsDao->findRequisitionByApplicationDate($materials[$i]['id_material']);
