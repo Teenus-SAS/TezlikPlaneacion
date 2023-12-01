@@ -42,7 +42,7 @@ $(document).ready(function () {
         render: $.fn.dataTable.render.number('.', ',', 2),
       }, 
       {
-        title: 'Stock',
+        title: 'Stock Min',
         data: 'minimum_stock',
         className: 'uniqueClassName', 
         render: $.fn.dataTable.render.number('.', ',', 2),
