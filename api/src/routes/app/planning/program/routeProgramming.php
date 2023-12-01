@@ -210,10 +210,10 @@ $app->post('/addProgramming', function (Request $request, Response $response, $a
         foreach ($productsMaterials as $arr) {
             if (isset($result['info'])) break;
 
-            $reserved = $generalMaterialsDao->findReservedMaterial($arr['id_material']);
-            !$reserved ? $reserved = 0 : $reserved;
+            $k = $generalMaterialsDao->findReservedMaterial($arr['id_material']);
+            !$k['reserved'] ? $k['reserved'] = 0 : $k['reserved'];
 
-            $result = $generalMaterialsDao->updateReservedMaterial($arr['id_material'], $reserved);
+            $result = $generalMaterialsDao->updateReservedMaterial($arr['id_material'], $k['reserved']);
         }
     }
 
