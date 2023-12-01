@@ -40,6 +40,12 @@ $(document).ready(function () {
                 render: $.fn.dataTable.render.number('.', ',', 2, ''),
             },
             {
+                title: 'Stock',
+                data: 'minimum_stock',
+                className: 'uniqueClassName',
+                render: $.fn.dataTable.render.number('.', ',', 2, ''),
+            },
+            {
                 title: 'En Transito',
                 data: 'transit',
                 className: 'uniqueClassName',
@@ -48,12 +54,6 @@ $(document).ready(function () {
             {
                 title: 'Necesidad',
                 data: 'need',
-                className: 'uniqueClassName',
-                render: $.fn.dataTable.render.number('.', ',', 2, ''),
-            },
-            {
-                title: 'Stock',
-                data: 'minimum_stock',
                 className: 'uniqueClassName',
                 render: $.fn.dataTable.render.number('.', ',', 2, ''),
             },
