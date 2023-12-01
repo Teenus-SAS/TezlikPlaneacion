@@ -1,5 +1,5 @@
 $(document).ready(function () {
-  let selectedFile;
+  let selectedfileProductsMaterials;
 
   $('.cardImport').hide();
 
@@ -8,21 +8,21 @@ $(document).ready(function () {
     $('.cardImport').toggle(800);
   });
 
-  $('#file').change(function (e) {
+  $('#fileProductsMaterials').change(function (e) {
     e.preventDefault();
-    selectedFile = e.target.files[0];
+    selectedfileProductsMaterials = e.target.fileProductsMaterialss[0];
   });
 
-  $('#btnImport').click(function (e) {
+  $('#btnImportProductsMaterials').click(function (e) {
     e.preventDefault();
 
-    file = $('#file').val();
-    if (!file) {
+    fileProductsMaterials = $('#fileProductsMaterials').val();
+    if (!fileProductsMaterials) {
       toastr.error('Seleccione un archivo');
       return false;
     }
 
-    importFile(selectedFile)
+    importfileProductsMaterials(selectedfileProductsMaterials)
       .then((data) => {
         let dataToImport = data.map((item) => {
           return {
@@ -49,7 +49,7 @@ $(document).ready(function () {
       data: { importProducts: data },
       success: function (resp) {
         if (resp.error == true) {
-          $('#formImport').trigger('reset');
+          $('#formImportProductMaterial').trigger('reset');
           toastr.error(resp.message);
           return false;
         }
@@ -70,7 +70,7 @@ $(document).ready(function () {
           callback: function (result) {
             if (result == true) {
               saveProduct(data);
-            } else $('#file').val('');
+            } else $('#fileProductsMaterials').val('');
           },
         });
       },
@@ -90,7 +90,7 @@ $(document).ready(function () {
   };
 
   /* Descargar formato */
-  $('#btnDownloadImports').click(function (e) {
+  $('#btnDownloadImportsProductsMaterials').click(function (e) {
     e.preventDefault();
     link = document.createElement('a');
     link.target = '_blank';
