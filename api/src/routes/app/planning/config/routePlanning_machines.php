@@ -52,7 +52,7 @@ $app->post('/planningMachinesDataValidation', function (Request $request, Respon
                 $planningMachines[$i]['may'] > 31 || $planningMachines[$i]['june'] > 30 || $planningMachines[$i]['july'] > 31 || $planningMachines[$i]['august'] > 31 ||
                 $planningMachines[$i]['september'] > 30 ||  $planningMachines[$i]['october'] > 31 ||  $planningMachines[$i]['november'] > 30 ||  $planningMachines[$i]['december'] > 31
             ) {
-                $i = $i + 1;
+                $i = $i + 2;
                 $dataImportPlanMachines = array('error' => true, 'message' => "El valor es mayor al ultimo dia del mes<br>Fila: {$i}");
                 break;
             }
@@ -60,7 +60,7 @@ $app->post('/planningMachinesDataValidation', function (Request $request, Respon
             // Obtener id maquina
             $findMachine = $machinesDao->findMachine($planningMachines[$i], $id_company);
             if (!$findMachine) {
-                $i = $i + 1;
+                $i = $i + 2;
                 $dataImportPlanMachines = array('error' => true, 'message' => "Maquina no existe en la base de datos<br>Fila: {$i}");
                 break;
             } else $planningMachines[$i]['idMachine'] = $findMachine['id_machine'];
@@ -70,7 +70,7 @@ $app->post('/planningMachinesDataValidation', function (Request $request, Respon
                 empty($planningMachines[$i]['march']) || empty($planningMachines[$i]['april']) || empty($planningMachines[$i]['may']) || empty($planningMachines[$i]['june']) || empty($planningMachines[$i]['july']) ||
                 empty($planningMachines[$i]['august']) || empty($planningMachines[$i]['september']) ||  empty($planningMachines[$i]['october']) ||  empty($planningMachines[$i]['november']) ||  empty($planningMachines[$i]['december'])
             ) {
-                $i = $i + 1;
+                $i = $i + 2;
                 $dataImportPlanMachines = array('error' => true, 'message' => "Columna vacia en la fila: {$i}");
                 break;
             }
@@ -148,28 +148,22 @@ $app->post('/updatePlanningMachines', function (Request $request, Response $resp
     $id_company = $_SESSION['id_company'];
     $dataPMachines = $request->getParsedBody();
 
-    if (
-        empty($dataPMachines['idProgramMachine']) || empty($dataPMachines['idMachine']) || empty($dataPMachines['numberWorkers']) ||
-        empty($dataPMachines['hoursDay']) || empty($dataPMachines['hourStart']) || empty($dataPMachines['hourEnd'])
-    )
-        $resp = array('error' => true, 'message' => 'No hubo ningún cambio');
-    else {
-        $machine = $generalPlanningMachinesDao->findPlanMachines($dataPMachines, $id_company);
-        !is_array($machine) ? $data['id_program_machine'] = 0 : $data = $machine;
+    $machine = $generalPlanningMachinesDao->findPlanMachines($dataPMachines, $id_company);
+    !is_array($machine) ? $data['id_program_machine'] = 0 : $data = $machine;
 
-        if ($data['id_program_machine'] == $dataPMachines['idProgramMachine'] || $data['id_program_machine'] == 0) {
-            $dataPMachine = $timeConvertDao->timeConverter($dataPMachines);
-            $planningMachines = $planningMachinesDao->updatePlanMachines($dataPMachine);
+    if ($data['id_program_machine'] == $dataPMachines['idProgramMachine'] || $data['id_program_machine'] == 0) {
+        $dataPMachine = $timeConvertDao->timeConverter($dataPMachines);
+        $planningMachines = $planningMachinesDao->updatePlanMachines($dataPMachine);
 
-            if ($planningMachines == null)
-                $resp = array('success' => true, 'message' => 'Planeación de maquina actualizada correctamente');
-            else if (isset($planningMachines['info']))
-                $resp = array('info' => true, 'message' => $planningMachines['message']);
-            else
-                $resp = array('error' => true, 'message' => 'Ocurrio un problema al actualizar la planeación, intente nuevamente');
-        } else
-            $resp = array('error' => true, 'message' => 'Planeación de maquina existente. Ingrese nueva');
-    }
+        if ($planningMachines == null)
+            $resp = array('success' => true, 'message' => 'Planeación de maquina actualizada correctamente');
+        else if (isset($planningMachines['info']))
+            $resp = array('info' => true, 'message' => $planningMachines['message']);
+        else
+            $resp = array('error' => true, 'message' => 'Ocurrio un problema al actualizar la planeación, intente nuevamente');
+    } else
+        $resp = array('error' => true, 'message' => 'Planeación de maquina existente. Ingrese nueva');
+
     $response->getBody()->write(json_encode($resp));
     return $response->withStatus(200)->withHeader('Content-Type', 'application/json');
 });

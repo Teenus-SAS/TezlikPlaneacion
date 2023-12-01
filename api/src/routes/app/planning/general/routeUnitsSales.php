@@ -9,6 +9,7 @@ use TezlikPlaneacion\dao\MinimumStockDao;
 use TezlikPlaneacion\dao\ProductsMaterialsDao;
 
 $unitSalesDao = new UnitSalesDao();
+$generalProductsDao = new GeneralProductsDao();
 $generalUnitSalesDao = new GeneralUnitSalesDao();
 $productsDao = new GeneralProductsDao();
 $classificationDao = new ClassificationDao();
@@ -26,6 +27,14 @@ $app->get('/unitSales', function (Request $request, Response $response, $args) u
     $id_company = $_SESSION['id_company'];
     $unitSales = $unitSalesDao->findAllSalesByCompany($id_company);
     $response->getBody()->write(json_encode($unitSales, JSON_NUMERIC_CHECK));
+    return $response->withHeader('Content-Type', 'application/json');
+});
+
+$app->get('/productUnitSales', function (Request $request, Response $response, $args) use ($generalProductsDao) {
+    session_start();
+    $id_company = $_SESSION['id_company'];
+    $products = $generalProductsDao->findAllProductsUnitSalesByCompany($id_company);
+    $response->getBody()->write(json_encode($products, JSON_NUMERIC_CHECK));
     return $response->withHeader('Content-Type', 'application/json');
 });
 
@@ -50,7 +59,7 @@ $app->post('/unitSalesDataValidation', function (Request $request, Response $res
                 empty($unitSales[$i]['may']) && empty($unitSales[$i]['june']) && empty($unitSales[$i]['july']) && empty($unitSales[$i]['august']) &&
                 empty($unitSales[$i]['september']) && empty($unitSales[$i]['october']) &&  empty($unitSales[$i]['november']) && empty($unitSales[$i]['december'])
             ) {
-                $i = $i + 1;
+                $i = $i + 2;
                 $dataImportUnitSales = array('error' => true, 'message' => "Campos vacios en la fila: {$i}");
                 break;
             }
@@ -58,7 +67,7 @@ $app->post('/unitSalesDataValidation', function (Request $request, Response $res
             // Obtener id producto
             $findProduct = $productsDao->findProduct($unitSales[$i], $id_company);
             if (!$findProduct) {
-                $i = $i + 1;
+                $i = $i + 2;
                 $dataImportUnitSales = array('error' => true, 'message' => "Producto no existe en la base de datos.<br>Fila: {$i}");
                 break;
             } else $unitSales[$i]['idProduct'] = $findProduct['id_product'];

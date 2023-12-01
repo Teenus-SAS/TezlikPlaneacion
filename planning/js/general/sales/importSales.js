@@ -1,5 +1,4 @@
-$(document).ready(function () {
-  let selectedFile;
+$(document).ready(function () { 
 
   $('.cardImportSales').hide();
 
@@ -8,17 +7,18 @@ $(document).ready(function () {
     $('.cardImportSales').toggle(800);
   });
 
-  $('#fileSales').change(function (e) {
-    e.preventDefault();
-    selectedFile = e.target.files[0];
-  });
+  // $('#fileSales').change(function (e) {
+  //   e.preventDefault();
+  //   selectedFile = e.target.files[0];
+  // });
 
   $('#btnImportSales').click(function (e) {
     e.preventDefault();
 
-    file = $('#fileSales').val();
+    const fileInput = document.getElementById('fileSales');
+    const selectedFile = fileInput.files[0];
 
-    if (!file) {
+    if (!selectedFile) {
       toastr.error('Seleccione un archivo');
       return false;
     }
@@ -133,7 +133,7 @@ $(document).ready(function () {
     let data = [];
 
     namexlsx = 'Unidades_Ventas.xlsx';
-    url = '/api/products';
+    url = '/api/productUnitSales';
     
     let sales = await searchData(url);
 
@@ -150,7 +150,7 @@ $(document).ready(function () {
           junio: sales[i].jun,
           julio: sales[i].jul,
           agosto: sales[i].aug,
-          septiembre: sales[i].sep,
+          septiembre: sales[i].sept,
           octubre: sales[i].oct,
           noviembre: sales[i].nov,
           diciembre: sales[i].dece,

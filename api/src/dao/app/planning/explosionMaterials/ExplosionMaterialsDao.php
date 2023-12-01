@@ -21,7 +21,7 @@ class ExplosionMaterialsDao
     $connection = Connection::getInstance()->getConnection();
 
     $stmt = $connection->prepare("SELECT p.id_product, o.id_order, pm.id_product_material, p.reference AS reference_product, p.product, SUM(p.quantity) AS quantity_product, m.id_material, m.reference AS reference_material, m.material, m.quantity AS quantity_material, u.unit, 
-                                         IFNULL(SUM(IF(IFNULL(r.admission_date, 0) = 0 AND r.application_date != '0000-00-00' AND r.delivery_date != '0000-00-00', r.quantity, 0)), 0) AS transit, (o.original_quantity * pm.quantity) AS need
+                                         IFNULL(SUM(IF(IFNULL(r.admission_date, 0) = 0 AND r.application_date != '0000-00-00' AND r.delivery_date != '0000-00-00', r.quantity, 0)), 0) AS transit, (o.original_quantity * pm.quantity) AS need, m.minimum_stock
                                          -- ((o.original_quantity * pm.quantity) - IF(m.status = 1, (IFNULL(SUM(pg.quantity * pm.quantity), 0)), 0)) AS need
                                       FROM products p
                                         INNER JOIN products_materials pm ON pm.id_product = p.id_product
@@ -30,7 +30,7 @@ class ExplosionMaterialsDao
                                         INNER JOIN plan_orders o ON o.id_product = p.id_product
                                         LEFT JOIN requisitons r ON r.id_material = pm.id_material
                                         LEFT JOIN programming pg ON pg.id_order = o.id_order
-                                      WHERE p.id_company = :id_company AND (o.status = 'Programar' OR o.status = 'Programado' OR o.status = 'Sin Ficha Tecnica' OR o.status = 'Sin Materia Prima' -- OR o.status = 'En Produccion')
+                                      WHERE p.id_company = :id_company AND (o.status = 'Programar' OR o.status = 'Programado' OR o.status = 'Sin Ficha Tecnica' OR o.status = 'Sin Materia Prima') -- OR o.status = 'En Produccion')
                                       GROUP BY pm.id_product_material, o.id_order");
     $stmt->execute(['id_company' => $id_company]);
 
@@ -46,7 +46,8 @@ class ExplosionMaterialsDao
         if ($data[$i]['id_material'] == $arr['id_material']) {
           $data[$i]['transit'] = $arr['transit'];
           $data[$i]['need'] += $arr['need'];
-          $data[$i]['available'] = $arr['quantity_material'] + $arr['transit'] - $data[$i]['need'];
+          $data[$i]['minimum_stock'] = $arr['minimum_stock'];
+          $data[$i]['available'] = $arr['quantity_material'] + $arr['transit'] - $data[$i]['minimum_stock'] - $data[$i]['need'];
           $repeat = true;
           break;
         }
@@ -65,7 +66,8 @@ class ExplosionMaterialsDao
           'transit' => $arr['transit'],
           'need' => $arr['need'],
           'unit' => $arr['unit'],
-          'available' => $arr['quantity_material'] + $arr['transit'] - $arr['need'],
+          'minimum_stock' => $arr['minimum_stock'],
+          'available' => $arr['quantity_material'] + $arr['transit'] - $arr['minimum_stock'] - $arr['need'],
         );
       }
     }

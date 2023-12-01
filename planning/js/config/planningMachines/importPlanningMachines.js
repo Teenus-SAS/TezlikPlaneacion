@@ -3,8 +3,7 @@ $(document).ready(function () {
   $('.cardImportPlanMachines').hide();
 
   $('#btnImportNewPlanMachines').click(function (e) {
-    e.preventDefault();
-    $('.cardCreatePlanMachines').hide(800);
+    e.preventDefault(); 
     $('.cardImportPlanMachines').toggle(800);
   });
 
@@ -95,41 +94,14 @@ $(document).ready(function () {
       url: '/api/addPlanningMachines',
       data: { importPlanMachines: data },
       success: function (r) {
-        /* Mensaje de exito */
-        if (r.success == true) {
-          $('.cardImportPlanMachines').hide(800);
-          $('#formImportPlanMachines').trigger('reset');
-          updateTable();
-          toastr.success(r.message);
-          return false;
-        } else if (r.error == true) toastr.error(r.message);
-        else if (r.info == true) toastr.info(r.message);
-
-        /* Actualizar tabla */
-        function updateTable() {
-          $('#tblPlanMachines').DataTable().clear();
-          $('#tblPlanMachines').DataTable().ajax.reload();
-        }
+        message(r);
       },
     });
   };
 
   /* Descargar formato */
   $('#btnDownloadImportsPlanMachines').click(function (e) {
-    e.preventDefault();
-
-    // url = 'assets/formatsXlsx/Planeacion_Maquinas.xlsx';
-
-    // link = document.createElement('a');
-
-    // link.target = '_blank';
-
-    // link.href = url;
-    // document.body.appendChild(link);
-    // link.click();
-
-    // document.body.removeChild(link);
-    // delete link;
+    e.preventDefault(); 
     let wb = XLSX.utils.book_new();
     let planningMachines = [];
     let data = tblPlanMachines.fnGetData();

@@ -27,6 +27,14 @@ $app->get('/stock', function (Request $request, Response $response, $args) use (
     return $response->withHeader('Content-Type', 'application/json');
 });
 
+$app->get('/stockMaterials', function (Request $request, Response $response, $args) use ($generalMaterialsDao) {
+    session_start();
+    $id_company = $_SESSION['id_company'];
+    $materials = $generalMaterialsDao->findAllMaterialsStockByCompany($id_company);
+    $response->getBody()->write(json_encode($materials, JSON_NUMERIC_CHECK));
+    return $response->withHeader('Content-Type', 'application/json');
+});
+
 $app->post('/stockDataValidation', function (Request $request, Response $response, $args) use (
     $generalStockDao,
     $generalMaterialsDao
@@ -47,7 +55,7 @@ $app->post('/stockDataValidation', function (Request $request, Response $respons
                 empty($stock[$i]['refRawMaterial']) || empty($stock[$i]['nameRawMaterial']) ||
                 $stock[$i]['max'] == '' || $stock[$i]['usual'] == ''
             ) {
-                $i = $i + 1;
+                $i = $i + 2;
                 $dataImportStock = array('error' => true, 'message' => "Columna vacia en la fila: {$i}");
                 break;
             }
@@ -56,7 +64,7 @@ $app->post('/stockDataValidation', function (Request $request, Response $respons
                 empty(trim($stock[$i]['refRawMaterial'])) || empty(trim($stock[$i]['nameRawMaterial'])) ||
                 trim($stock[$i]['max']) == '' || trim($stock[$i]['usual']) == ''
             ) {
-                $i = $i + 1;
+                $i = $i + 2;
                 $dataImportStock = array('error' => true, 'message' => "Columna vacia en la fila: {$i}");
                 break;
             }
@@ -67,7 +75,7 @@ $app->post('/stockDataValidation', function (Request $request, Response $respons
             $data = $max * $usual;
 
             if ($data <= 0 || is_nan($data)) {
-                $i = $i + 1;
+                $i = $i + 2;
                 $dataImportStock = array('error' => true, 'message' => "La cantidad debe ser mayor a cero (0)<br>Fila: {$i}");
                 break;
             }
@@ -75,7 +83,7 @@ $app->post('/stockDataValidation', function (Request $request, Response $respons
             // Obtener id materia prima
             $findMaterial = $generalMaterialsDao->findMaterial($stock[$i], $id_company);
             if (!$findMaterial) {
-                $i = $i + 1;
+                $i = $i + 2;
                 $dataImportStock = array('error' => true, 'message' => "Materia prima no existe en la base de datos<br>Fila: {$i}");
                 break;
             } else $stock[$i]['idMaterial'] = $findMaterial['id_material'];

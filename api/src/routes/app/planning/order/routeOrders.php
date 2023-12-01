@@ -70,7 +70,7 @@ $app->post('/orderDataValidation', function (Request $request, Response $respons
                 empty($order[$i]['order'])  || empty($order[$i]['dateOrder']) || empty($order[$i]['minDate']) ||
                 empty($order[$i]['maxDate']) || empty($order[$i]['originalQuantity'])
             ) {
-                $i = $i + 1;
+                $i = $i + 2;
                 $dataImportOrder = array('error' => true, 'message' => "Campos vacios en fila: {$i}");
                 break;
             }
@@ -78,7 +78,7 @@ $app->post('/orderDataValidation', function (Request $request, Response $respons
             // Obtener id producto
             $findProduct = $productsDao->findProduct($order[$i], $id_company);
             if (!$findProduct) {
-                $i = $i + 1;
+                $i = $i + 2;
                 $dataImportOrder = array('error' => true, 'message' => "Producto no existe en la base de datos.<br>Fila: {$i}");
                 break;
             } else $order[$i]['idProduct'] = $findProduct['id_product'];
@@ -89,7 +89,7 @@ $app->post('/orderDataValidation', function (Request $request, Response $respons
             // Obtener id cliente
             $findClient = $generalClientsDao->findClient($order[$i], $id_company);
             if (!$findClient) {
-                $i = $i + 1;
+                $i = $i + 2;
                 $dataImportOrder = array('error' => true, 'message' => "Cliente no existe en la base de datos.<br>Fila: {$i}");
                 break;
             } else $order[$i]['idClient'] = $findClient['id_client'];
@@ -200,6 +200,10 @@ $app->post('/addOrder', function (Request $request, Response $response, $args) u
                     // $generalOrdersDao->changeStatus($orders[$i]['id_order'], 'Alistamiento');
                 }
 
+                $reserved = $generalProductsDao->findProductReserved($orders[$i]['id_product']);
+                !$reserved ? $reserved = 0 : $reserved;
+                $generalProductsDao->updateReservedByProduct($orders[$i]['id_product'], $reserved);
+
                 $generalProductsDao->updateAccumulatedQuantity($orders[$i]['id_product'], $accumulated_quantity, 1);
             }
         }
@@ -287,6 +291,10 @@ $app->post('/updateOrder', function (Request $request, Response $response, $args
                     $accumulated_quantity = $order['accumulated_quantity'];
                     // $generalOrdersDao->changeStatus($dataOrder['idOrder'], 'Alistamiento');
                 }
+
+                $reserved = $generalProductsDao->findProductReserved($dataOrder['idProduct']);
+                !$reserved ? $reserved = 0 : $reserved;
+                $generalProductsDao->updateReservedByProduct($dataOrder['idProduct'], $reserved);
 
                 $generalProductsDao->updateAccumulatedQuantity($dataOrder['idProduct'], $accumulated_quantity, 1);
             }

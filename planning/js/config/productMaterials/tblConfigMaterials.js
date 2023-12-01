@@ -20,9 +20,7 @@ $(document).ready(function () {
 
   /* Cargue tabla de Productos Materiales */
 
-  const loadtableMaterials = (idProduct) => {
-    $('.cardTableConfigMaterials').show(800);
-
+  const loadtableMaterials = (idProduct) => { 
     tblConfigMaterials = $('#tblConfigMaterials').dataTable({
       destroy: true,
       pageLength: 50,

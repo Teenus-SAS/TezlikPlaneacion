@@ -37,7 +37,7 @@ $app->post('/machinesDataValidation', function (Request $request, Response $resp
         for ($i = 0; $i < sizeof($machines); $i++) {
 
             if (empty($machines[$i]['machine'])) {
-                $i = $i + 1;
+                $i = $i + 2;
                 $dataImportMachine = array('error' => true, 'message' => "Campos vacios. Fila: {$i}");
                 break;
             } else {

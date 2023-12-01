@@ -26,33 +26,18 @@ $(document).ready(function () {
 
   /* calcular el tiempo total proceso */
 
-  $(document).on('click keyup', '#enlistmentTime', function (e) {
-    tOperation = $('#operationTime').val();
+  $(document).on('click keyup', '.time', function (e) {
+    let tOperation = parseFloat($('#operationTime').val());
+    let tEnlistment = parseFloat($('#enlistmentTime').val());
 
-    tOperation == '' ? (tOperation = '0') : tOperation;
-    tOperation = strReplaceNumber(tOperation);
+    isNaN(tOperation) ? (tOperation = 0) : tOperation; 
 
-    this.value == '' ? (this.value = '0') : this.value;
-    tEnlistment = strReplaceNumber(this.value);
+    isNaN(tEnlistment) ? (tEnlistment = 0) : tEnlistment; 
 
-    let val = parseFloat(tEnlistment) + parseFloat(tOperation);
-    val = validateNumber(val);
+    let val = tEnlistment + tOperation;
+    // val = validateNumber(val);
     $('#totalTime').val(val);
-  });
-
-  $(document).on('click keyup', '#operationTime', function (e) {
-    tEnlistment = $('#enlistmentTime').val();
-
-    tEnlistment == '' ? (tEnlistment = '0') : tEnlistment;
-    tEnlistment = strReplaceNumber(tEnlistment);
-
-    this.value == '' ? (this.value = '0') : this.value;
-    operationTime = strReplaceNumber(this.value);
-
-    let val = parseFloat(operationTime) + parseFloat(tEnlistment);
-    val = validateNumber(val);
-    $('#totalTime').val(val);
-  });
+  }); 
 
   /* Adicionar nuevo proceso */
 

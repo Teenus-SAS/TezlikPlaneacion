@@ -56,7 +56,7 @@ $app->post('/planCiclesMachineDataValidation', function (Request $request, Respo
 
         for ($i = 0; $i < sizeof($planCiclesMachine); $i++) {
             if (empty($planCiclesMachine[$i]['ciclesHour'])) {
-                $i = $i + 1;
+                $i = $i + 2;
                 $dataImportPlanCiclesMachine = array('error' => true, 'message' => "Columna vacia en la fila: {$i}");
                 break;
             }
@@ -64,7 +64,7 @@ $app->post('/planCiclesMachineDataValidation', function (Request $request, Respo
             // Obtener id producto
             $findProduct = $productsDao->findProduct($planCiclesMachine[$i], $id_company);
             if (!$findProduct) {
-                $i = $i + 1;
+                $i = $i + 2;
                 $dataImportPlanCiclesMachine = array('error' => true, 'message' => "No existe el producto en la base de datos<br>Fila: {$i}");
                 break;
             } else $planCiclesMachine[$i]['idProduct'] = $findProduct['id_product'];
@@ -72,7 +72,7 @@ $app->post('/planCiclesMachineDataValidation', function (Request $request, Respo
             // Obtener id maquina
             $findMachine = $machinesDao->findMachine($planCiclesMachine[$i], $id_company);
             if (!$findMachine) {
-                $i = $i + 1;
+                $i = $i + 2;
                 $dataImportPlanCiclesMachine = array('error' => true, 'message' => "No existe la maquina en la base de datos<br>Fila: {$i}");
                 break;
             } else $planCiclesMachine[$i]['idMachine'] = $findMachine['id_machine'];

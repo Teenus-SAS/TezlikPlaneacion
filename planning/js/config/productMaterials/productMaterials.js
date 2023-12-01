@@ -1,6 +1,4 @@
-$(document).ready(function () {
-  let idProduct;
-
+$(document).ready(function () { 
   /* Ocultar panel crear producto */
 
   $('.cardAddMaterials').hide();
@@ -10,23 +8,14 @@ $(document).ready(function () {
   $('#btnCreateProduct').click(function (e) {
     e.preventDefault();
 
-    $('.cardImportProductsMaterials').hide(800);
-    // $('.cardAddProductInProccess').hide(800);
-    // $('.cardTableProductsInProcess').hide(800);
-    $('.cardTableConfigMaterials').show(800);
+    $('.cardImportProductsMaterials').hide(800); 
+    // $('.cardTableConfigMaterials').show(800);
     $('.cardAddMaterials').toggle(800);
     $('#btnAddMaterials').html('Asignar');
 
     sessionStorage.removeItem('id_product_material');
 
     $('#formAddMaterials').trigger('reset');
-  });
-
-  /* Seleccionar producto */
-
-  $('#selectNameProduct').change(function (e) {
-    e.preventDefault();
-    idProduct = $('#selectNameProduct').val();
   });
 
   /* Adicionar unidad de materia prima */
@@ -55,30 +44,10 @@ $(document).ready(function () {
 
     let idProductMaterial = sessionStorage.getItem('id_product_material');
 
-    if (idProductMaterial == '' || idProductMaterial == null) {
-      ref = $('#material').val();
-      quan = $('#quantity').val();
-      idProduct = $('#selectNameProduct').val();
-
-      data = ref * idProduct;
-
-      if (!data || quan == '') {
-        toastr.error('Ingrese todos los campos');
-        return false;
-      }
-
-      productMaterial = $('#formAddMaterials').serialize();
-      productMaterial = productMaterial + '&idProduct=' + idProduct;
-
-      $.post(
-        '/api/addProductsMaterials',
-        productMaterial,
-        function (data, textStatus, jqXHR) {
-          message(data);
-        }
-      );
+    if (idProductMaterial == '' || idProductMaterial == null) { 
+      checkDataPMaterial('/api/addProductsMaterials', idProductMaterial);
     } else {
-      updateMaterial();
+      checkDataPMaterial('/api/updatePlanProductsMaterials', idProductMaterial);
     }
   });
 
@@ -96,16 +65,8 @@ $(document).ready(function () {
     sessionStorage.setItem('id_product_material', data.id_product_material);
 
     $(`#material option[value=${data.id_material}]`).prop('selected', true);
-
-    quantity = data.quantity;
-
-    if (quantity.isInteger) quantity = quantity.toLocaleString('es-CO');
-    else
-      quantity = quantity.toLocaleString(undefined, {
-        minimumFractionDigits: 4,
-        maximumFractionDigits: 4,
-      });
-    $('#quantity').val(quantity);
+ 
+    $('#quantity').val(data.quantity);
     await loadUnitsByMagnitude(data, 2);
 
     $('html, body').animate(
@@ -116,25 +77,28 @@ $(document).ready(function () {
     );
   });
 
-  updateMaterial = () => {
-    let data = $('#formAddMaterials').serialize();
-    idProduct = $('#selectNameProduct').val();
-    idProductMaterial = sessionStorage.getItem('id_product_material');
-    data =
-      data +
-      '&idProductMaterial=' +
-      idProductMaterial +
-      '&idProduct=' +
-      idProduct;
+  checkDataPMaterial = async (url, idProductMaterial) => {
+    let ref = $('#material').val();
+    let quan = $('#quantity').val();
+    let idProduct = $('#selectNameProduct').val();
+ 
+    let data = ref * idProduct;
 
-    $.post(
-      '/api/updatePlanProductsMaterials',
-      data,
-      function (data, textStatus, jqXHR) {
-        message(data);
-      }
-    );
-  };
+    if (!data || quan == '') {
+      toastr.error('Ingrese todos los campos');
+      return false;
+    }
+
+    let dataMaterials = new FormData(formAddMaterials);
+    dataMaterials.append('idProduct', idProduct);
+
+    if (idProductMaterial != '' || idProductMaterial != null)
+      dataMaterials.append('idProductMaterial', idProductMaterial);
+
+    let resp = await sendDataPOST(url, dataMaterials);
+
+    message(resp);
+  } 
 
   /* Eliminar materia prima */
 
@@ -175,9 +139,11 @@ $(document).ready(function () {
 
   /* Mensaje de exito */
 
-  const message = (data) => {
+  message = (data) => {
     if (data.success == true) {
+      $('.cardImportProductsMaterials').hide(800);
       $('.cardAddMaterials').hide(800);
+      $('#formImport').trigger('reset');
       $('#formAddMaterials').trigger('reset');
       updateTable();
       toastr.success(data.message);

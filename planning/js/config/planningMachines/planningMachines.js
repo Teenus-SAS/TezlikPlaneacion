@@ -164,9 +164,11 @@ $(document).ready(function () {
 
   /* Mensaje de exito */
 
-  const message = (data) => {
+  message = (data) => {
     if (data.success == true) {
       $('#createPlanMachine').modal('hide');
+      $('.cardImportPlanMachines').hide(800);
+      $('#formImportPlanMachines').trigger('reset');
       $('#formCreatePlanMachine').trigger('reset');
       updateTable();
       toastr.success(data.message);

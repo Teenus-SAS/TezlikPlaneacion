@@ -18,6 +18,8 @@ use TezlikPlaneacion\dao\StoreDao;
 
 $programmingDao = new ProgrammingDao();
 $generalProgrammingDao = new GeneralProgrammingDao();
+$generalMaterialsDao = new GeneralMaterialsDao();
+$productsMaterialsDao = new ProductsMaterialsDao();
 $lastDataDao = new LastDataDao();
 $machinesDao = new MachinesDao();
 $ordersDao = new OrdersDao();
@@ -179,8 +181,8 @@ $app->post('/addProgramming', function (Request $request, Response $response, $a
     $programmingDao,
     $generalProgrammingDao,
     $generalOrdersDao,
-    $explosionMaterialsDao,
-    $finalDateDao
+    $productsMaterialsDao,
+    $generalMaterialsDao
 ) {
     session_start();
     $dataProgramming = $request->getParsedBody();
@@ -201,6 +203,19 @@ $app->post('/addProgramming', function (Request $request, Response $response, $a
 
     if ($result == null)
         $result = $generalOrdersDao->changeStatus($dataProgramming['order'], 'Programado');
+
+    if ($result == null) {
+        $productsMaterials = $productsMaterialsDao->findAllProductsmaterials($dataProgramming['idProduct'], $id_company);
+
+        foreach ($productsMaterials as $arr) {
+            if (isset($result['info'])) break;
+
+            $reserved = $generalMaterialsDao->findReservedMaterial($arr['id_material']);
+            !$reserved ? $reserved = 0 : $reserved;
+
+            $result = $generalMaterialsDao->updateReservedMaterial($arr['id_material'], $reserved);
+        }
+    }
 
     if ($result == null)
         $resp = array('success' => true, 'message' => 'Programa de producción creado correctamente');

@@ -97,7 +97,7 @@ $(document).ready(function () {
     let data = [];
 
     namexlsx = 'Stock.xlsx';
-    url = '/api/materials';
+    url = '/api/stockMaterials';
     
     let stock = await searchData(url);
 

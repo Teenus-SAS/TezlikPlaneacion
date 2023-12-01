@@ -123,6 +123,8 @@ $(document).ready(function () {
     if (data.success == true) {
       $('.cardCreatePlanCiclesMachine').hide(800);
       $('#formCreatePlanCiclesMachine').trigger('reset');
+      $('.cardImportPlanCiclesMachine').hide(800);
+      $('#formImportPlanCiclesMachine').trigger('reset');
       updateTable();
       toastr.success(data.message);
       return false;

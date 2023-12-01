@@ -1,7 +1,7 @@
 $(document).ready(function () {
   /* Horas */
-  $('#hourStartPicker').datetimepicker({ format: 'LT' });
-  $('#hourEndPicker').datetimepicker({ format: 'LT' });
+  $('#hourStartPicker').datetimepicker({ format: 'HH:mm A' });
+  $('#hourEndPicker').datetimepicker({ format: 'HH:mm A' });
 
   /* Meses */
   let date = new Date();

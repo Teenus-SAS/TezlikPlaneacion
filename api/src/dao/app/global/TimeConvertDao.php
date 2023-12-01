@@ -20,8 +20,8 @@ class TimeConvertDao
     public function timeConverter($dataPMachines)
     {
         $dataPMachines['year'] = date('Y');
-        $dataPMachines['hourStart'] = date("G:i", strtotime($dataPMachines['hourStart']));
-        $dataPMachines['hourEnd'] = date("G:i", strtotime($dataPMachines['hourEnd']));
+        $dataPMachines['hourStart'] = date("G.i", strtotime($dataPMachines['hourStart']));
+        $dataPMachines['hourEnd'] = date("G.i", strtotime($dataPMachines['hourEnd']));
 
         return $dataPMachines;
     }

@@ -48,7 +48,7 @@ $app->post('/requisitionDataValidation', function (Request $request, Response $r
                 empty($requisition[$i]['refRawMaterial']) || empty($requisition[$i]['nameRawMaterial']) || empty($requisition[$i]['applicationDate']) ||
                 empty($requisition[$i]['deliveryDate']) || empty($requisition[$i]['quantity'])
             ) {
-                $i = $i + 1;
+                $i = $i + 2;
                 $dataImportRequisition = array('error' => true, 'message' => "Campos vacios. Fila: {$i}");
                 break;
             }
@@ -56,7 +56,7 @@ $app->post('/requisitionDataValidation', function (Request $request, Response $r
             // Obtener id material
             $findMaterial = $generalMaterialsDao->findMaterial($requisition[$i], $id_company);
             if (!$findMaterial) {
-                $i = $i + 1;
+                $i = $i + 2;
                 $dataImportRequisition = array('error' => true, 'message' => "Material no existe en la base de datos<br>Fila: {$i}");
                 break;
             } else $requisition[$i]['idMaterial'] = $findMaterial['id_material'];

@@ -36,24 +36,20 @@ class MinimumStockDao
     //     $minimumStock = $stmt->fetch($connection::FETCH_ASSOC);
     //     return $minimumStock;
     // }
-    // public function calcStockByProduct($id_product)
-    // {
-    //     try {
-    //         $connection = Connection::getInstance()->getConnection();
-    //         $stmt = $connection->prepare("SELECT ((SUM(IFNULL(s.max_term, 0)) - SUM(IFNULL(s.usual_term, 0))) * ((IFNULL(u.jan, 0) + IFNULL(u.feb, 0) + IFNULL(u.mar, 0) + IFNULL(u.apr, 0) + IFNULL(u.may, 0) + IFNULL(u.jun, 0) + IFNULL(u.jul, 0) + IFNULL(u.aug, 0) + IFNULL(u.sept, 0) + IFNULL(u.oct, 0) + IFNULL(u.nov, 0) + IFNULL(u.dece, 0)) / 12)) AS stock 
-    //                                       FROM products p
-    //                                       LEFT JOIN products_materials pm ON pm.id_product = p.id_product
-    //                                       LEFT JOIN stock s ON s.id_material = pm.id_material
-    //                                       LEFT JOIN plan_unit_sales u ON u.id_product = pm.id_product
-    //                                       WHERE p.id_product = :id_product");
-    //         $stmt->execute(['id_product' => $id_product]);
-    //         $product = $stmt->fetch($connection::FETCH_ASSOC);
-    //         return $product;
-    //     } catch (\Exception $e) {
-    //         $error = array('info' => true, 'message' => $e->getMessage());
-    //         return $error;
-    //     }
-    // }
+
+    public function calcStockByProduct($id_product)
+    {
+        try {
+            $connection = Connection::getInstance()->getConnection();
+            $stmt = $connection->prepare("");
+            $stmt->execute(['id_product' => $id_product]);
+            $product = $stmt->fetch($connection::FETCH_ASSOC);
+            return $product;
+        } catch (\Exception $e) {
+            $error = array('info' => true, 'message' => $e->getMessage());
+            return $error;
+        }
+    }
 
     public function calcStockByMaterial($id_material)
     {

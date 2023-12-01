@@ -26,7 +26,7 @@ $app->post('/orderTypesDataValidation', function (Request $request, Response $re
 
         for ($i = 0; $i < sizeof($orderTypes); $i++) {
             if (empty($orderTypes[$i]['orderType'])) {
-                $i = $i + 1;
+                $i = $i + 2;
                 $dataImportOrderTypes = array('error' => true, 'message' => "Campos vacios en fila: {$i}");
                 break;
             } else {

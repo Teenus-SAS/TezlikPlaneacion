@@ -82,21 +82,7 @@ $(document).ready(function () {
       url: '/api/addPlanCiclesMachine',
       data: { importPlanCiclesMachine: data },
       success: function (r) {
-        /* Mensaje de exito */
-        if (r.success == true) {
-          $('.cardImportPlanCiclesMachine').hide(800);
-          $('#formImportPlanCiclesMachine').trigger('reset');
-          updateTable();
-          toastr.success(r.message);
-          return false;
-        } else if (r.error == true) toastr.error(r.message);
-        else if (r.info == true) toastr.info(r.message);
-
-        /* Actualizar tabla */
-        function updateTable() {
-          $('#tblPlanCiclesMachine').DataTable().clear();
-          $('#tblPlanCiclesMachine').DataTable().ajax.reload();
-        }
+        message(r);
       },
     });
   };

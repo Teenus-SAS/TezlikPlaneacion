@@ -128,7 +128,7 @@ if (sizeof($_SESSION) == 0)
                                                 </div>
                                                 <div class="col-sm-2 floating-label enable-floating-label show-label" style="margin-bottom:20px">
                                                     <label for="">Cantidad</label>
-                                                    <input class="form-control text-center number" type="text" name="quantity" id="quantity">
+                                                    <input class="form-control text-center" type="number" name="quantity" id="quantity">
                                                 </div>
                                                 <div class="col-xs-1 mt-1">
                                                     <button class="btn btn-success" id="btnAddMaterials">Adicionar Materia Prima</button>
@@ -172,7 +172,7 @@ if (sizeof($_SESSION) == 0)
                     <div class="container-fluid">
                         <!-- Row 5 -->
                         <div class="row">
-                            <div class="col-12 cardTableConfigMaterials">
+                            <div class="col-12">
                                 <div class="card">
                                     <div class="card-header">
                                         <h5 class="card-title">Materias Primas</h5>

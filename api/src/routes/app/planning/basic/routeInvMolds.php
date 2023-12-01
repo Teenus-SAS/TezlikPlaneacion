@@ -61,12 +61,12 @@ $app->post('/invMoldDataValidation', function (Request $request, Response $respo
                 empty($molds[$i]['referenceMold']) || empty($molds[$i]['mold']) || empty($molds[$i]['assemblyTime']) ||
                 empty($molds[$i]['assemblyProduction']) || empty($molds[$i]['cavity']) || empty($molds[$i]['cavityAvailable'])
             ) {
-                $i = $i + 1;
+                $i = $i + 2;
                 $dataImportInvMold = array('error' => true, 'message' => "Campos vacios. Fila: {$i}");
                 break;
             }
             if ($molds[$i]['cavity'] < $molds[$i]['cavityAvailable']) {
-                $i = $i + 1;
+                $i = $i + 2;
                 $dataImportInvMold = array('error' => true, 'message' => "N° de cavidades disponibles mayor a N° de cavidades. Fila: {$i}");
                 break;
             } else {

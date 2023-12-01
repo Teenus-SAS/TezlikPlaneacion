@@ -65,7 +65,7 @@ $app->post('/productsMaterialsDataValidation', function (Request $request, Respo
                 empty($productMaterials[$i]['referenceProduct']) || empty($productMaterials[$i]['product']) || empty($productMaterials[$i]['refRawMaterial']) ||
                 empty($productMaterials[$i]['nameRawMaterial']) || $productMaterials[$i]['quantity'] == ''
             ) {
-                $i = $i + 1;
+                $i = $i + 2;
                 $dataImportProductsMaterials = array('error' => true, 'message' => "Columna vacia en la fila: {$i}");
                 break;
             }
@@ -75,7 +75,7 @@ $app->post('/productsMaterialsDataValidation', function (Request $request, Respo
             $quantity = 1 * $quantity;
 
             if ($quantity <= 0 || is_nan($quantity)) {
-                $i = $i + 1;
+                $i = $i + 2;
                 $dataImportProductsMaterials = array('error' => true, 'message' => "La cantidad debe ser mayor a cero (0)<br>Fila: {$i}");
                 break;
             }
@@ -83,7 +83,7 @@ $app->post('/productsMaterialsDataValidation', function (Request $request, Respo
             // Obtener id producto
             $findProduct = $productsDao->findProduct($productMaterials[$i], $id_company);
             if (!$findProduct) {
-                $i = $i + 1;
+                $i = $i + 2;
                 $dataImportProductsMaterials = array('error' => true, 'message' => "Producto no existe en la base de datos<br>Fila: {$i}");
                 break;
             } else $productMaterials[$i]['idProduct'] = $findProduct['id_product'];
@@ -91,7 +91,7 @@ $app->post('/productsMaterialsDataValidation', function (Request $request, Respo
             // Obtener id materia prima
             $findMaterial = $materialsDao->findMaterial($productMaterials[$i], $id_company);
             if (!$findMaterial) {
-                $i = $i + 1;
+                $i = $i + 2;
                 $dataImportProductsMaterials = array('error' => true, 'message' => "Materia prima no existe en la base de datos<br>Fila: {$i}");
                 break;
             } else $productMaterials[$i]['material'] = $findMaterial['id_material'];
@@ -127,22 +127,25 @@ $app->post('/addProductsMaterials', function (Request $request, Response $respon
     $dataProductMaterials = sizeof($dataProductMaterial);
 
     if ($dataProductMaterials > 1) {
-        $dataProductMaterial = $convertDataDao->strReplaceProductsMaterials($dataProductMaterial);
 
-        $resolution = $productsMaterialsDao->insertProductsMaterialsByCompany($dataProductMaterial, $id_company);
+        $productMaterials = $generalProductsMaterialsDao->findProductMaterial($dataProductMaterial, $id_company);
+        if (!$productMaterials) {
+            $resolution = $productsMaterialsDao->insertProductsMaterialsByCompany($dataProductMaterial, $id_company);
 
-        if ($resolution == null) {
-            $arr = $minimumStockDao->calcStockByMaterial($dataProductMaterial['material']);
-            if (isset($arr['stock']))
-                $resolution = $generalMaterialsDao->updateStockMaterial($dataProductMaterial['material'], $arr['stock']);
-        }
+            if ($resolution == null) {
+                $arr = $minimumStockDao->calcStockByMaterial($dataProductMaterial['material']);
+                if (isset($arr['stock']))
+                    $resolution = $generalMaterialsDao->updateStockMaterial($dataProductMaterial['material'], $arr['stock']);
+            }
 
-        if ($resolution == null)
-            $resp = array('success' => true, 'message' => 'Materia prima asignada correctamente');
-        else if (isset($resolution['info']))
-            $resp = array('info' => true, 'message' => $resolution['message']);
-        else
-            $resp = array('error' => true, 'message' => 'Ocurrio un error mientras asignaba la información. Intente nuevamente');
+            if ($resolution == null)
+                $resp = array('success' => true, 'message' => 'Materia prima asignada correctamente');
+            else if (isset($resolution['info']))
+                $resp = array('info' => true, 'message' => $resolution['message']);
+            else
+                $resp = array('error' => true, 'message' => 'Ocurrio un error mientras asignaba la información. Intente nuevamente');
+        } else
+            $resp = array('info' => true, 'message' => 'El material ya existe. Ingrese nuevo material');
     } else {
         $productMaterials = $dataProductMaterial['importProducts'];
 
@@ -216,10 +219,22 @@ $app->post('/addProductsMaterials', function (Request $request, Response $respon
                     $generalOrdersDao->changeStatus($orders[$i]['id_order'], 'Programar');
                 }
 
+                $reserved = $productsDao->findProductReserved($orders[$i]['id_product']);
+                !$reserved ? $reserved = 0 : $reserved;
+                $productsDao->updateReservedByProduct($orders[$i]['id_product'], $reserved);
+
                 $productsDao->updateAccumulatedQuantity($orders[$i]['id_product'], $accumulated_quantity, 1);
                 $programming = $generalProgrammingDao->findProgrammingByOrder($orders[$i]['id_order']);
                 if (sizeof($programming) > 0) {
                     $generalOrdersDao->changeStatus($orders[$i]['id_order'], 'Programado');
+
+                    $productsMaterials = $productsMaterialsDao->findAllProductsmaterials($orders[$i]['id_product'], $id_company);
+
+                    foreach ($productsMaterials as $arr) {
+                        $reserved = $generalMaterialsDao->findReservedMaterial($arr['id_material']);
+                        !$reserved ? $reserved = 0 : $reserved;
+                        $generalMaterialsDao->updateReservedMaterial($arr['id_material'], $reserved);
+                    }
                 }
             }
         }
@@ -230,16 +245,19 @@ $app->post('/addProductsMaterials', function (Request $request, Response $respon
 
 $app->post('/updatePlanProductsMaterials', function (Request $request, Response $response, $args) use (
     $productsMaterialsDao,
-    $convertDataDao,
+    $generalProductsMaterialsDao,
     $generalMaterialsDao,
     $minimumStockDao
 ) {
+    session_start();
+    $id_company = $_SESSION['id_company'];
     $dataProductMaterial = $request->getParsedBody();
 
-    if (empty($dataProductMaterial['material']) || empty($dataProductMaterial['idProduct'] || empty($dataProductMaterial['quantity'])))
-        $resp = array('error' => true, 'message' => 'Ingrese todos los datos');
-    else {
-        $dataProductMaterial = $convertDataDao->strReplaceProductsMaterials($dataProductMaterial);
+    $productMaterials = $generalProductsMaterialsDao->findProductMaterial($dataProductMaterial, $id_company);
+    !is_array($productMaterials) ? $data['id_productMaterial'] = 0 : $data = $productMaterials;
+
+    if ($data['id_product_material'] == $dataProductMaterial['idProductMaterial'] || $data['id_productMaterial'] == 0) {
+        // $dataProductMaterial = $convertDataDao->strReplaceProductsMaterials($dataProductMaterial);
         $resolution = $productsMaterialsDao->updateProductsMaterials($dataProductMaterial);
 
         if ($resolution == null) {
@@ -254,7 +272,9 @@ $app->post('/updatePlanProductsMaterials', function (Request $request, Response 
             $resp = array('info' => true, 'message' => $resolution['message']);
         else
             $resp = array('error' => true, 'message' => 'Ocurrio un error mientras actualizaba la información. Intente nuevamente');
-    }
+    } else
+        $resp = array('info' => true, 'message' => 'El material ya existe. Ingrese nuevo material');
+
     $response->getBody()->write(json_encode($resp));
     return $response->withStatus(200)->withHeader('Content-Type', 'application/json');
 });
