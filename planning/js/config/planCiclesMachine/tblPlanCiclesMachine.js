@@ -48,7 +48,7 @@ $(document).ready(function () {
         className: 'uniqueClassName',
       },
       {
-        title: 'Ciclo x Hora',
+        title: 'Und/Hora',
         data: 'cicles_hour',
         className: 'text-center',
         render: $.fn.dataTable.render.number('.', ',', 0),
