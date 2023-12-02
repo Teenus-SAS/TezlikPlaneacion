@@ -113,7 +113,7 @@
                                         <h5 class="font-size-14 font-weight-600">Administrador</h5>
                                         <ul class="list-unstyled megamenu-list">
                                             <?php if ($_SESSION['planning_user'] == 1) { ?>
-                                                <li class="planUsers"><a href="/planning/users">Usuarios</a></li>
+                                                <li class="planUsers"><a href="/planning/users">Usuarios y Accesos</a></li>
                                             <?php } ?>
                                             <?php if ($_SESSION['orders_type'] == 1) { ?>
                                                 <li class="typeOrder"><a href="/planning/order-types">Tipo Pedidos</a></li>

@@ -29,12 +29,12 @@ $(document).ready(function () {
         className: 'text-center',
       },
       {
-        title: 'Hora x Dia',
+        title: 'H.Dia',
         data: 'hours_day',
         className: 'text-center',
       },
       {
-        title: 'Hora x Inicio',
+        title: 'H.Inicio',
         data: null,
         className: 'text-center',
         render: function (data) {
@@ -43,7 +43,7 @@ $(document).ready(function () {
         },
       },
       {
-        title: 'Hora x Fin',
+        title: 'H.Final',
         data: null,
         className: 'text-center',
         render: function (data) {
