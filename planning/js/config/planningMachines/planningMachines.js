@@ -132,6 +132,7 @@ $(document).ready(function () {
     let data = tblPlanMachines.fnGetData(row);
 
     let id_program_machine = data.id_program_machine;
+    let id_machine = data.id_machine;
 
     bootbox.confirm({
       title: 'Eliminar',
@@ -150,7 +151,7 @@ $(document).ready(function () {
       callback: function (result) {
         if (result == true) {
           $.get(
-            `/api/deletePlanningMachines/${id_program_machine}`,
+            `/api/deletePlanningMachines/${id_program_machine}/${id_machine}`,
             function (data, textStatus, jqXHR) {
               message(data);
             }

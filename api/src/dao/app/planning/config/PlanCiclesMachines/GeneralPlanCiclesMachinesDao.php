@@ -31,11 +31,22 @@ class GeneralPlanCiclesMachinesDao
         return $planCiclesMachine;
     }
 
-    public function findPlanCiclesMachineByProductAndMachine($id_product, $id_machine, $id_company)
+    public function findAllPlanCiclesMachine($id_machine)
     {
         $connection = Connection::getInstance()->getConnection();
 
         $stmt = $connection->prepare("SELECT *  FROM plan_cicles_machine
+                                      WHERE id_machine = :id_machine");
+        $stmt->execute(['id_machine' => $id_machine]);
+        $machines = $stmt->fetchAll($connection::FETCH_ASSOC);
+        return $machines;
+    }
+
+    public function findPlanCiclesMachineByProductAndMachine($id_product, $id_machine, $id_company)
+    {
+        $connection = Connection::getInstance()->getConnection();
+
+        $stmt = $connection->prepare("SELECT * FROM plan_cicles_machine
                                       WHERE id_product = :id_product AND id_machine = :id_machine AND id_company = :id_company");
         $stmt->execute([
             'id_product' => $id_product,
@@ -44,5 +55,21 @@ class GeneralPlanCiclesMachinesDao
         ]);
         $planCiclesMachine = $stmt->fetch($connection::FETCH_ASSOC);
         return $planCiclesMachine;
+    }
+
+    public function updateUnits($dataCiclesMachine)
+    {
+        try {
+            $connection = Connection::getInstance()->getConnection();
+            $stmt = $connection->prepare("UPDATE plan_cicles_machine SET units_turn = :units_turn, units_month = :units_month
+                                          WHERE id_cicles_machine = :id_cicles_machine");
+            $stmt->execute([
+                'units_turn' => $dataCiclesMachine['units_turn'],
+                'units_month' => $dataCiclesMachine['units_month'],
+                'id_cicles_machine' => $dataCiclesMachine['idCiclesMachine']
+            ]);
+        } catch (\Exception $e) {
+            return array('info' => true, 'message' => $e->getMessage());
+        }
     }
 }

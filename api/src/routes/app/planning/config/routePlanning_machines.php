@@ -1,12 +1,16 @@
 <?php
 
+use TezlikPlaneacion\dao\CiclesMachineDao;
 use TezlikPlaneacion\dao\GeneralMachinesDao;
+use TezlikPlaneacion\dao\GeneralPlanCiclesMachinesDao;
 use TezlikPlaneacion\dao\GeneralPlanningMachinesDao;
 use TezlikPlaneacion\dao\Planning_machinesDao;
 use TezlikPlaneacion\dao\TimeConvertDao;
 
 $planningMachinesDao = new Planning_machinesDao();
 $generalPlanningMachinesDao = new GeneralPlanningMachinesDao();
+$generalPlanCiclesMachinesDao = new GeneralPlanCiclesMachinesDao();
+$ciclesMachinesDao = new CiclesMachineDao();
 $machinesDao = new GeneralMachinesDao();
 $timeConvertDao = new TimeConvertDao();
 
@@ -89,6 +93,8 @@ $app->post('/planningMachinesDataValidation', function (Request $request, Respon
 $app->post('/addPlanningMachines', function (Request $request, Response $response, $args) use (
     $planningMachinesDao,
     $generalPlanningMachinesDao,
+    $generalPlanCiclesMachinesDao,
+    $ciclesMachinesDao,
     $timeConvertDao,
     $machinesDao
 ) {
@@ -129,6 +135,22 @@ $app->post('/addPlanningMachines', function (Request $request, Response $respons
             else {
                 $planningMachines[$i]['idProgramMachine'] = $findPlanMachines['id_program_machine'];
                 $resolution = $planningMachinesDao->updatePlanMachines($planningMachines[$i]);
+
+                $machines = $generalPlanCiclesMachinesDao->findAllPlanCiclesMachine($planningMachines[$i]['idMachine']);
+
+                foreach ($machines as $k) {
+                    if (isset($resolution['info'])) break;
+                    $data = [];
+                    $data['idCiclesMachine'] = $k['id_cicles_machine'];
+
+                    $arr = $ciclesMachinesDao->calcUnitsTurn($k['id_cicles_machine']);
+                    $data['units_turn'] = $arr['units_turn'];
+
+                    $arr = $ciclesMachinesDao->calcUnitsMonth($k['id_cicles_machine']);
+                    $data['units_month'] = $arr['units_month'];
+
+                    $resolution = $generalPlanCiclesMachinesDao->updateUnits($data);
+                }
             }
         }
         if ($resolution == null) $resp = array('success' => true, 'message' => 'Planeacion de maquina importada correctamente');
@@ -142,6 +164,8 @@ $app->post('/addPlanningMachines', function (Request $request, Response $respons
 $app->post('/updatePlanningMachines', function (Request $request, Response $response, $args) use (
     $planningMachinesDao,
     $generalPlanningMachinesDao,
+    $generalPlanCiclesMachinesDao,
+    $ciclesMachinesDao,
     $timeConvertDao
 ) {
     session_start();
@@ -154,6 +178,22 @@ $app->post('/updatePlanningMachines', function (Request $request, Response $resp
     if ($data['id_program_machine'] == $dataPMachines['idProgramMachine'] || $data['id_program_machine'] == 0) {
         $dataPMachine = $timeConvertDao->timeConverter($dataPMachines);
         $planningMachines = $planningMachinesDao->updatePlanMachines($dataPMachine);
+
+        $machines = $generalPlanCiclesMachinesDao->findAllPlanCiclesMachine($dataPMachine['idMachine']);
+
+        foreach ($machines as $k) {
+            if (isset($planningMachines['info'])) break;
+            $data = [];
+            $data['idCiclesMachine'] = $k['id_cicles_machine'];
+
+            $arr = $ciclesMachinesDao->calcUnitsTurn($k['id_cicles_machine']);
+            $data['units_turn'] = $arr['units_turn'];
+
+            $arr = $ciclesMachinesDao->calcUnitsMonth($k['id_cicles_machine']);
+            $data['units_month'] = $arr['units_month'];
+
+            $planningMachines = $generalPlanCiclesMachinesDao->updateUnits($data);
+        }
 
         if ($planningMachines == null)
             $resp = array('success' => true, 'message' => 'Planeación de maquina actualizada correctamente');
@@ -168,10 +208,28 @@ $app->post('/updatePlanningMachines', function (Request $request, Response $resp
     return $response->withStatus(200)->withHeader('Content-Type', 'application/json');
 });
 
-$app->get('/deletePlanningMachines/{id_program_machine}', function (Request $request, Response $response, $args) use (
-    $planningMachinesDao
+$app->get('/deletePlanningMachines/{id_program_machine}/{id}', function (Request $request, Response $response, $args) use (
+    $planningMachinesDao,
+    $generalPlanCiclesMachinesDao,
+    $ciclesMachinesDao
 ) {
     $planningMachines = $planningMachinesDao->deletePlanMachines($args['id_program_machine']);
+
+    $machines = $generalPlanCiclesMachinesDao->findAllPlanCiclesMachine($args['id_machine']);
+
+    foreach ($machines as $k) {
+        if (isset($resolution['info'])) break;
+        $data = [];
+        $data['idCiclesMachine'] = $k['id_cicles_machine'];
+
+        $arr = $ciclesMachinesDao->calcUnitsTurn($k['id_cicles_machine']);
+        $data['units_turn'] = $arr['units_turn'];
+
+        $arr = $ciclesMachinesDao->calcUnitsMonth($k['id_cicles_machine']);
+        $data['units_month'] = $arr['units_month'];
+
+        $resolution = $generalPlanCiclesMachinesDao->updateUnits($data);
+    }
 
     if ($planningMachines == null) $resp = array('success' => true, 'message' => 'Planeación de maquina eliminada correctamente');
     else $resp = array('error' => true, 'message' => 'No se pudo eliminar la planeación, existe información asociada a ella');

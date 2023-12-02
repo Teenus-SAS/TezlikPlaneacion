@@ -93,6 +93,19 @@ class LastDataDao
         return $programming;
     }
 
+    public function findLastInsertedCiclesMachine($id_company)
+    {
+        $connection = Connection::getInstance()->getConnection();
+
+        $stmt = $connection->prepare("SELECT MAX(id_cicles_machine) AS id_cicles_machine FROM plan_cicles_machine WHERE id_company = :id_company");
+        $stmt->execute(['id_company' => $id_company]);
+
+        $this->logger->info(__FUNCTION__, array('query' => $stmt->queryString, 'errors' => $stmt->errorInfo()));
+
+        $programming = $stmt->fetch($connection::FETCH_ASSOC);
+        return $programming;
+    }
+
     /* public function findLastInsertedOrder()
     {
         $connection = Connection::getInstance()->getConnection();

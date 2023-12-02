@@ -1,13 +1,17 @@
 <?php
 
+use TezlikPlaneacion\dao\CiclesMachineDao;
 use TezlikPlaneacion\dao\GeneralMachinesDao;
 use TezlikPlaneacion\dao\GeneralPlanCiclesMachinesDao;
 use TezlikPlaneacion\dao\GeneralProductsDao;
+use TezlikPlaneacion\dao\LastDataDao;
 use TezlikPlaneacion\dao\LotsProductsDao;
 use TezlikPlaneacion\dao\PlanCiclesMachineDao;
 
 $planCiclesMachineDao = new PlanCiclesMachineDao();
 $generalPlanCiclesMachinesDao = new GeneralPlanCiclesMachinesDao();
+$lastDataDao = new LastDataDao();
+$ciclesMachinesDao = new CiclesMachineDao();
 $machinesDao = new GeneralMachinesDao();
 $productsDao = new GeneralProductsDao();
 $economicLotDao = new LotsProductsDao();
@@ -93,6 +97,8 @@ $app->post('/planCiclesMachineDataValidation', function (Request $request, Respo
 $app->post('/addPlanCiclesMachine', function (Request $request, Response $response, $args) use (
     $planCiclesMachineDao,
     $generalPlanCiclesMachinesDao,
+    $ciclesMachinesDao,
+    $lastDataDao,
     $productsDao,
     $machinesDao
 ) {
@@ -108,6 +114,20 @@ $app->post('/addPlanCiclesMachine', function (Request $request, Response $respon
         if (!$findPlanCiclesMachine) {
             $planCiclesMachine = $planCiclesMachineDao->addPlanCiclesMachines($dataPlanCiclesMachine, $id_company);
 
+            if ($planCiclesMachine == null) {
+                $data = [];
+                $machine = $lastDataDao->findLastInsertedCiclesMachine($id_company);
+                $data['idCiclesMachine'] = $machine['id_cicles_machine'];
+
+                $arr = $ciclesMachinesDao->calcUnitsTurn($machine['id_cicles_machine']);
+                $data['units_turn'] = $arr['units_turn'];
+
+                $arr = $ciclesMachinesDao->calcUnitsMonth($machine['id_cicles_machine']);
+                $data['units_month'] = $arr['units_month'];
+
+                $planCiclesMachine = $generalPlanCiclesMachinesDao->updateUnits($data);
+            }
+
             if ($planCiclesMachine == null)
                 $resp = array('success' => true, 'message' => 'Ciclo de maquina agregado correctamente');
             else if (isset($planCiclesMachine['info']))
@@ -118,6 +138,8 @@ $app->post('/addPlanCiclesMachine', function (Request $request, Response $respon
             $resp = array('error' => true, 'message' => 'Ciclo de maquina existente. Ingrese uno nuevo');
     } else {
         $planCiclesMachine = $dataPlanCiclesMachine['importPlanCiclesMachine'];
+
+        $resolution = 1;
 
         for ($i = 0; $i < sizeof($planCiclesMachine); $i++) {
             // Obtener id producto
@@ -134,6 +156,23 @@ $app->post('/addPlanCiclesMachine', function (Request $request, Response $respon
                 $planCiclesMachine[$i]['idCiclesMachine'] = $findPlanCiclesMachine['id_cicles_machine'];
                 $resolution = $planCiclesMachineDao->updatePlanCiclesMachine($planCiclesMachine[$i]);
             }
+
+            if (isset($resolution)) break;
+
+            $data = [];
+            if (!$findPlanCiclesMachine) {
+                $machine = $lastDataDao->findLastInsertedCiclesMachine($id_company);
+                $data['idCiclesMachine'] = $machine['id_cicles_machine'];
+            } else
+                $data['idCiclesMachine'] = $findPlanCiclesMachine['idCiclesMachine'];
+
+            $arr = $ciclesMachinesDao->calcUnitsTurn($machine['id_cicles_machine']);
+            $data['units_turn'] = $arr['units_turn'];
+
+            $arr = $ciclesMachinesDao->calcUnitsMonth($machine['id_cicles_machine']);
+            $data['units_month'] = $arr['units_month'];
+
+            $resolution = $generalPlanCiclesMachinesDao->updateUnits($data);
         }
 
         if ($resolution == null) $resp = array('success' => true, 'message' => 'Plan ciclos de maquina importado correctamente');
@@ -146,6 +185,7 @@ $app->post('/addPlanCiclesMachine', function (Request $request, Response $respon
 
 $app->post('/updatePlanCiclesMachine', function (Request $request, Response $response, $args) use (
     $planCiclesMachineDao,
+    $ciclesMachinesDao,
     $generalPlanCiclesMachinesDao
 ) {
     session_start();
@@ -157,6 +197,18 @@ $app->post('/updatePlanCiclesMachine', function (Request $request, Response $res
 
     if ($data['id_cicles_machine'] == $dataPlanCiclesMachine['idCiclesMachine'] || $data['id_cicles_machine'] == 0) {
         $planCiclesMachine = $planCiclesMachineDao->updatePlanCiclesMachine($dataPlanCiclesMachine);
+
+        $data = [];
+
+        $data['idCiclesMachine'] = $dataPlanCiclesMachine['idCiclesMachine'];
+
+        $arr = $ciclesMachinesDao->calcUnitsTurn($machine['id_cicles_machine']);
+        $data['units_turn'] = $arr['units_turn'];
+
+        $arr = $ciclesMachinesDao->calcUnitsMonth($machine['id_cicles_machine']);
+        $data['units_month'] = $arr['units_month'];
+
+        $planCiclesMachine = $generalPlanCiclesMachinesDao->updateUnits($data);
 
         if ($planCiclesMachine == null) $resp = array('success' => true, 'message' => 'Ciclo de maquina modificada correctamente');
         else $resp = array('error' => true, 'message' => 'Ocurrio un error al modificar ciclo de maquina. Intente nuevamente');

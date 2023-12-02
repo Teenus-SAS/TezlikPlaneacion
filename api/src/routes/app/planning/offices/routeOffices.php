@@ -90,7 +90,7 @@ $app->post('/changeOffices', function (Request $request, Response $response, $ar
     !$arr['reserved'] ? $arr['reserved'] = 0 : $arr;
     $generalProductsDao->updateReservedByProduct($dataOrder['idProduct'], $arr['reserved']);
 
-    if ($dataOrder['stock'] < ($dataOrder['quantity'] - $dataOrder['originalQuantity'])) {
+    if ($dataOrder['stock'] > ($dataOrder['quantity'] - $dataOrder['originalQuantity'])) {
         $data = [];
         $arr = $generalOrdersDao->findLastNumOrder($id_company);
         $client = $generalClientsDao->findInternalClient($id_company);
@@ -102,7 +102,7 @@ $app->post('/changeOffices', function (Request $request, Response $response, $ar
         $data['idProduct'] = $dataOrder['idProduct'];
         $data['idClient'] = $client['id_client'];
         // $data['originalQuantity'] = $dataOrder['quantity'] - $dataOrder['stock'];
-        $data['originalQuantity'] = ($dataOrder['quantity'] - $dataOrder['originalQuantity']) - $dataOrder['stock'];
+        $data['originalQuantity'] =  $dataOrder['stock'] - ($dataOrder['quantity'] - $dataOrder['originalQuantity']);
 
         $resolution = $ordersDao->insertOrderByCompany($data, $id_company);
 
