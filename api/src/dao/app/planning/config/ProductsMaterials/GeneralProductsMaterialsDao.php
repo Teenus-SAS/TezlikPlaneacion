@@ -56,9 +56,7 @@ class GeneralProductsMaterialsDao
                                       INNER JOIN products p ON p.id_product = pm.id_product
                                       INNER JOIN plan_unit_sales u ON u.id_product = pm.id_product
                                       WHERE id_material = :id_material");
-        $stmt->execute([
-            'id_material' => $id_material
-        ]);
+        $stmt->execute(['id_material' => $id_material]);
         $products = $stmt->fetchAll($connection::FETCH_ASSOC);
         return $products;
     }

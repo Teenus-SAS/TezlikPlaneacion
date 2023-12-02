@@ -317,7 +317,7 @@ $app->post('/updatePlanProductsMaterials', function (Request $request, Response 
     return $response->withStatus(200)->withHeader('Content-Type', 'application/json');
 });
 
-$app->get('/deletePlanProductMaterial', function (Request $request, Response $response, $args) use (
+$app->post('/deletePlanProductMaterial', function (Request $request, Response $response, $args) use (
     $productsMaterialsDao,
     $generalProductsMaterialsDao,
     $productsDao,
