@@ -50,6 +50,18 @@ class GeneralProductsDao
         return $findProduct;
     }
 
+    public function findProductById($id_product)
+    {
+        $connection = Connection::getInstance()->getConnection();
+
+        $stmt = $connection->prepare("SELECT * FROM products WHERE id_product = :id_product");
+        $stmt->execute([
+            'id_product' => $id_product
+        ]);
+        $product = $stmt->fetch($connection::FETCH_ASSOC);
+        return $product;
+    }
+
     /* Consultar si existe referencia o nombre de producto en BD por compañia */
     public function findProductByReferenceOrName($dataProduct, $id_company)
     {

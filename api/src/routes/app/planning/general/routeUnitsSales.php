@@ -132,19 +132,6 @@ $app->post('/addUnitSales', function (Request $request, Response $response, $arg
                         $resolution = $productsDao->updateStockByProduct($arr['id_product'], $product['stock']);
 
                     if (isset($resolution['info'])) break;
-
-                    // if ($arr['quantity'] > $product['stock']) {
-                    //     $data = [];
-                    //     $data['order'] = '';
-                    //     $data['dateOrder'] = '';
-                    //     $data['minDate'] = '';
-                    //     $data['maxDate'] = '';
-                    //     $data['idProduct'] = '';
-                    //     $data['idClient'] = '';
-                    //     $data['originalQuantity'] = '';
-
-                    //     $resolution = $ordersDao->insertOrderByCompany($data, $id_company);
-                    // }
                 }
             }
         }

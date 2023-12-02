@@ -36,6 +36,7 @@ $(document).ready(function () {
                     form.append('idProduct', data.id_product);
                     form.append('originalQuantity', data.original_quantity);
                     form.append('quantity', data.quantity);
+                    form.append('stock', data.minimum_stock);
                     form.append('date', date);
 
                     $.ajax({

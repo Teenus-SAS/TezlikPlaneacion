@@ -31,6 +31,18 @@ class GeneralClientsDao
         return $client;
     }
 
+    public function findInternalClient($id_company)
+    {
+        $connection = Connection::getInstance()->getConnection();
+
+        $stmt = $connection->prepare("SELECT * FROM plan_clients WHERE status = 1 AND id_company = :id_company");
+        $stmt->execute(['id_company' => $id_company]);
+        $this->logger->info(__FUNCTION__, array('query' => $stmt->queryString, 'errors' => $stmt->errorInfo()));
+
+        $client = $stmt->fetch($connection::FETCH_ASSOC);
+        return $client;
+    }
+
     public function changeStatusClientByCompany($id_company)
     {
         try {
