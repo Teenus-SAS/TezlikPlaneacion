@@ -313,6 +313,7 @@ $app->post('/updateOrder', function (Request $request, Response $response, $args
 
 $app->get('/deleteOrder/{id_order}', function (Request $request, Response $response, $args) use ($ordersDao) {
     $order = $ordersDao->deleteOrder($args['id_order']);
+    // $generalProductsDao->updateAccumulatedQuantity($dataOrder['idProduct'], 0, 1);
 
     if ($order == null)
         $resp = array('success' => true, 'message' => 'Pedido eliminado correctamente');

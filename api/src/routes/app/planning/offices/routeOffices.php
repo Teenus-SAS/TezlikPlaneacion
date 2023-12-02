@@ -50,6 +50,10 @@ $app->post('/cancelOffice', function (Request $request, Response $response, $arg
     // $order = $generalProductsDao->updateAccumulatedQuantity($dataOrder['idProduct'], $dataOrder['quantity'] + $dataOrder['originalQuantity'], 1);
     $order = $generalOrdersDao->changeStatus($dataOrder['idOrder'], 'Programar');
 
+    $arr = $generalProductsDao->findProductReserved($dataOrder['idProduct']);
+    !$arr['reserved'] ? $arr['reserved'] = 0 : $arr;
+    $generalProductsDao->updateReservedByProduct($dataOrder['idProduct'], $arr['reserved']);
+
     if ($order == null)
         $resp = array('success' => true, 'message' => 'Despacho cancelado correctamente');
     else if ($order['info'])
@@ -69,6 +73,10 @@ $app->post('/changeOffices', function (Request $request, Response $response, $ar
     $dataOrder = $request->getParsedBody();
 
     $order = $officesDao->updateDeliveryDate($dataOrder);
+
+    $arr = $generalProductsDao->findProductReserved($dataOrder['idProduct']);
+    !$arr['reserved'] ? $arr['reserved'] = 0 : $arr;
+    $generalProductsDao->updateReservedByProduct($dataOrder['idProduct'], $arr['reserved']);
 
     $generalProductsDao->updateAccumulatedQuantity($dataOrder['idProduct'], $dataOrder['quantity'] - $dataOrder['originalQuantity'], 2);
     $generalOrdersDao->changeStatus($dataOrder['idOrder'], 'Entregado');
