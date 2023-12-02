@@ -54,6 +54,18 @@ $(document).ready(function () {
         render: $.fn.dataTable.render.number('.', ',', 0),
       },
       {
+        title: 'Und/Turno',
+        data: 'units_turn',
+        className: 'text-center',
+        render: $.fn.dataTable.render.number('.', ',', 0),
+      },
+      {
+        title: 'Und/Mes',
+        data: 'units_month',
+        className: 'text-center',
+        render: $.fn.dataTable.render.number('.', ',', 0),
+      },
+      {
         title: 'Acciones',
         data: 'id_cicles_machine',
         className: 'uniqueClassName',
