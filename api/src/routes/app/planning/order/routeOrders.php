@@ -292,9 +292,9 @@ $app->post('/updateOrder', function (Request $request, Response $response, $args
                     // $generalOrdersDao->changeStatus($dataOrder['idOrder'], 'Alistamiento');
                 }
 
-                $reserved = $generalProductsDao->findProductReserved($dataOrder['idProduct']);
-                !$reserved ? $reserved = 0 : $reserved;
-                $generalProductsDao->updateReservedByProduct($dataOrder['idProduct'], $reserved);
+                $arr = $generalProductsDao->findProductReserved($dataOrder['idProduct']);
+                !$arr['reserved'] ? $arr['reserved'] = 0 : $arr;
+                $generalProductsDao->updateReservedByProduct($dataOrder['idProduct'], $arr['reserved']);
 
                 $generalProductsDao->updateAccumulatedQuantity($dataOrder['idProduct'], $accumulated_quantity, 1);
             }
