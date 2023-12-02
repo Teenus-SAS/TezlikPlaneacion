@@ -74,12 +74,12 @@ $app->post('/changeOffices', function (Request $request, Response $response, $ar
 
     $order = $officesDao->updateDeliveryDate($dataOrder);
 
+    $generalOrdersDao->changeStatus($dataOrder['idOrder'], 'Entregado');
     $arr = $generalProductsDao->findProductReserved($dataOrder['idProduct']);
     !$arr['reserved'] ? $arr['reserved'] = 0 : $arr;
     $generalProductsDao->updateReservedByProduct($dataOrder['idProduct'], $arr['reserved']);
 
     $generalProductsDao->updateAccumulatedQuantity($dataOrder['idProduct'], $dataOrder['quantity'] - $dataOrder['originalQuantity'], 2);
-    $generalOrdersDao->changeStatus($dataOrder['idOrder'], 'Entregado');
 
     if ($order == null)
         $resp = array('success' => true, 'message' => 'Pedido modificado correctamente');
