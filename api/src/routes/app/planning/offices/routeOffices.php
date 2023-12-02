@@ -83,7 +83,7 @@ $app->post('/changeOffices', function (Request $request, Response $response, $ar
     $id_company = $_SESSION['id_company'];
     $dataOrder = $request->getParsedBody();
 
-    $order = $officesDao->updateDeliveryDate($dataOrder);
+    $resolution = $officesDao->updateDeliveryDate($dataOrder);
 
     $generalOrdersDao->changeStatus($dataOrder['idOrder'], 'Entregado');
     $arr = $generalProductsDao->findProductReserved($dataOrder['idProduct']);
@@ -92,10 +92,10 @@ $app->post('/changeOffices', function (Request $request, Response $response, $ar
 
     if ($dataOrder['stock'] < ($dataOrder['quantity'] - $dataOrder['originalQuantity'])) {
         $data = [];
-        $order = $generalOrdersDao->findLastNumOrder($id_company);
+        $arr = $generalOrdersDao->findLastNumOrder($id_company);
         $client = $generalClientsDao->findInternalClient($id_company);
 
-        $data['order'] = $order['num_order'];
+        $data['order'] = $arr['num_order'];
         $data['dateOrder'] = date('Y-m-d');
         $data['minDate'] = '';
         $data['maxDate'] = '';
@@ -104,7 +104,7 @@ $app->post('/changeOffices', function (Request $request, Response $response, $ar
         // $data['originalQuantity'] = $dataOrder['quantity'] - $dataOrder['stock'];
         $data['originalQuantity'] = ($dataOrder['quantity'] - $dataOrder['originalQuantity']) - $dataOrder['stock'];
 
-        $order = $ordersDao->insertOrderByCompany($data, $id_company);
+        $resolution = $ordersDao->insertOrderByCompany($data, $id_company);
 
         $status = true;
 
@@ -150,10 +150,10 @@ $app->post('/changeOffices', function (Request $request, Response $response, $ar
 
     $generalProductsDao->updateAccumulatedQuantity($dataOrder['idProduct'], $dataOrder['quantity'] - $dataOrder['originalQuantity'], 2);
 
-    if ($order == null)
+    if ($resolution == null)
         $resp = array('success' => true, 'message' => 'Pedido modificado correctamente');
-    else if ($order['info'])
-        $resp = array('info' => true, 'message' => $order['message']);
+    else if (isset($resolution['info']))
+        $resp = array('info' => true, 'message' => $resolution['message']);
     else
         $resp = array('error' => true, 'message' => 'Ocurrio un error mientras modificaba la información. Intente nuevamente');
 
