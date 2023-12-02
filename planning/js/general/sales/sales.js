@@ -133,8 +133,10 @@ $(document).ready(function () {
     let row = $(this.activeElement).parent().parent()[0];
     let data = tblSales.fnGetData(row);
 
-    let id_unit_sales = data.id_unit_sales;
-    let id_product = data.id_product;
+    let dataSale = {};
+
+    dataSale['idUnitSales'] = data.id_unit_sales;
+    dataSale['idProduct'] = data.id_product;
 
     bootbox.confirm({
       title: 'Eliminar',
@@ -152,11 +154,10 @@ $(document).ready(function () {
       },
       callback: function (result) {
         if (result == true) {
-          $.get(
-            `../../api/deleteUnitSale/${id_unit_sales}/${id_product}`,
+          $.post('/api/deleteUnitSale', dataSale,
             function (data, textStatus, jqXHR) {
               message(data);
-            }
+            },
           );
         }
       },

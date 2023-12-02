@@ -41,7 +41,10 @@ class MinimumStockDao
     {
         try {
             $connection = Connection::getInstance()->getConnection();
-            $stmt = $connection->prepare("");
+            $stmt = $connection->prepare("SELECT SUM(IFNULL(m.minimum_stock, 0) * IFNULL(m.quantity, 0) * IFNULL(pm.quantity, 0)) AS stock
+                                          FROM products_materials pm
+                                          LEFT JOIN materials m ON m.id_material = pm.id_material
+                                          WHERE pm.id_product = :id_product");
             $stmt->execute(['id_product' => $id_product]);
             $product = $stmt->fetch($connection::FETCH_ASSOC);
             return $product;

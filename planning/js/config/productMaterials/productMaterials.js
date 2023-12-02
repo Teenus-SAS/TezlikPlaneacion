@@ -106,9 +106,11 @@ $(document).ready(function () {
     let row = $(this.activeElement).parent().parent()[0];
 
     let data = tblConfigMaterials.fnGetData(row);
+    let dataMaterials = {};
 
-    let idProductMaterial = data.id_product_material;
-    let idMaterial = data.id_material;
+    dataMaterials['idProductMaterial'] = data.id_product_material;
+    dataMaterials['idMaterial'] = data.id_material;
+    dataMaterials['idProduct'] = data.id_product;
 
     bootbox.confirm({
       title: 'Eliminar',
@@ -126,12 +128,11 @@ $(document).ready(function () {
       },
       callback: function (result) {
         if (result == true) {
-          $.get(
-            `/api/deletePlanProductMaterial/${idProductMaterial}/${idMaterial}`,
+          $.post('/api/deletePlanProductMaterial', dataMaterials,
             function (data, textStatus, jqXHR) {
               message(data);
-            }
-          );
+            }, 
+          ); 
         }
       },
     });

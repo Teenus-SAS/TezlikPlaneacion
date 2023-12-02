@@ -138,6 +138,18 @@ $app->post('/addProductsMaterials', function (Request $request, Response $respon
                     $resolution = $generalMaterialsDao->updateStockMaterial($dataProductMaterial['material'], $arr['stock']);
             }
 
+            if ($resolution == null) {
+                $products = $generalProductsMaterialsDao->findAllProductByMaterial($dataProductMaterial['material']);
+
+                foreach ($products as $arr) {
+                    $product = $minimumStockDao->calcStockByProduct($arr['id_product']);
+                    if (isset($product['stock']))
+                        $resolution = $productsDao->updateStockByProduct($arr['id_product'], $product['stock']);
+
+                    if (isset($resolution['info'])) break;
+                }
+            }
+
             if ($resolution == null)
                 $resp = array('success' => true, 'message' => 'Materia prima asignada correctamente');
             else if (isset($resolution['info']))
@@ -148,6 +160,8 @@ $app->post('/addProductsMaterials', function (Request $request, Response $respon
             $resp = array('info' => true, 'message' => 'El material ya existe. Ingrese nuevo material');
     } else {
         $productMaterials = $dataProductMaterial['importProducts'];
+
+        $resolution = 1;
 
         for ($i = 0; $i < sizeof($productMaterials); $i++) {
             if (isset($resolution['info'])) break;
@@ -173,6 +187,17 @@ $app->post('/addProductsMaterials', function (Request $request, Response $respon
             $arr = $minimumStockDao->calcStockByMaterial($productMaterials[$i]['material']);
             if (isset($arr['stock']))
                 $resolution = $generalMaterialsDao->updateStockMaterial($productMaterials[$i]['material'], $arr['stock']);
+
+            if (isset($resolution['info'])) break;
+            $products = $generalProductsMaterialsDao->findAllProductByMaterial($productMaterials[$i]['material']);
+
+            foreach ($products as $arr) {
+                $product = $minimumStockDao->calcStockByProduct($arr['id_product']);
+                if (isset($product['stock']))
+                    $resolution = $productsDao->updateStockByProduct($arr['id_product'], $product['stock']);
+
+                if (isset($resolution['info'])) break;
+            }
         }
 
         if ($resolution == null)
@@ -245,6 +270,7 @@ $app->post('/addProductsMaterials', function (Request $request, Response $respon
 
 $app->post('/updatePlanProductsMaterials', function (Request $request, Response $response, $args) use (
     $productsMaterialsDao,
+    $productsDao,
     $generalProductsMaterialsDao,
     $generalMaterialsDao,
     $minimumStockDao
@@ -266,6 +292,18 @@ $app->post('/updatePlanProductsMaterials', function (Request $request, Response 
                 $resolution = $generalMaterialsDao->updateStockMaterial($dataProductMaterial['material'], $arr['stock']);
         }
 
+        if ($resolution == null) {
+            $products = $generalProductsMaterialsDao->findAllProductByMaterial($dataProductMaterial['material']);
+
+            foreach ($products as $arr) {
+                $product = $minimumStockDao->calcStockByProduct($arr['id_product']);
+                if (isset($product['stock']))
+                    $resolution = $productsDao->updateStockByProduct($arr['id_product'], $product['stock']);
+
+                if (isset($resolution['info'])) break;
+            }
+        }
+
         if ($resolution == null)
             $resp = array('success' => true, 'message' => 'Materia prima actualizada correctamente');
         else if (isset($resolution['info']))
@@ -279,19 +317,33 @@ $app->post('/updatePlanProductsMaterials', function (Request $request, Response 
     return $response->withStatus(200)->withHeader('Content-Type', 'application/json');
 });
 
-$app->get('/deletePlanProductMaterial/{id_product_material}/{id_material}', function (Request $request, Response $response, $args) use (
+$app->get('/deletePlanProductMaterial', function (Request $request, Response $response, $args) use (
     $productsMaterialsDao,
+    $generalProductsMaterialsDao,
+    $productsDao,
     $generalMaterialsDao,
     $minimumStockDao
 ) {
-    $resolution = $productsMaterialsDao->deleteProductMaterial($args['id_product_material']);
+    $dataProductMaterial = $request->getParsedBody();
+    $resolution = $productsMaterialsDao->deleteProductMaterial($dataProductMaterial['idProductMaterial']);
 
     if ($resolution == null) {
-        $arr = $minimumStockDao->calcStockByMaterial($args['id_material']);
+        $arr = $minimumStockDao->calcStockByMaterial($dataProductMaterial['idMaterial']);
         if (isset($arr['stock']))
-            $resolution = $generalMaterialsDao->updateStockMaterial($args['id_material'], $arr['stock']);
+            $resolution = $generalMaterialsDao->updateStockMaterial($dataProductMaterial['idMaterial'], $arr['stock']);
     }
 
+    if ($resolution == null) {
+        $products = $generalProductsMaterialsDao->findAllProductByMaterial($dataProductMaterial['idMaterial']);
+
+        foreach ($products as $arr) {
+            $product = $minimumStockDao->calcStockByProduct($arr['id_product']);
+            if (isset($product['stock']))
+                $resolution = $productsDao->updateStockByProduct($arr['id_product'], $product['stock']);
+
+            if (isset($resolution['info'])) break;
+        }
+    }
     if ($resolution == null)
         $resp = array('success' => true, 'message' => 'Materia prima eliminada correctamente');
     else if (isset($resolution['info']))

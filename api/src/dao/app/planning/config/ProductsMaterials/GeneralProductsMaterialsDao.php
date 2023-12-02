@@ -36,7 +36,7 @@ class GeneralProductsMaterialsDao
     {
         $connection = Connection::getInstance()->getConnection();
 
-        $stmt = $connection->prepare("SELECT id_product_material FROM products_materials
+        $stmt = $connection->prepare("SELECT * FROM products_materials
                                       WHERE id_product = :id_product AND id_material = :id_material");
         $stmt->execute([
             'id_product' => $dataProductMaterial['idProduct'],
@@ -44,5 +44,21 @@ class GeneralProductsMaterialsDao
         ]);
         $findProductMaterial = $stmt->fetch($connection::FETCH_ASSOC);
         return $findProductMaterial;
+    }
+
+    // Consultar si existe el product_material en la BD
+    public function findAllProductByMaterial($id_material)
+    {
+        $connection = Connection::getInstance()->getConnection();
+
+        $stmt = $connection->prepare("SELECT pm.id_product_material, pm.id_material, pm.id_product, p.quantity
+                                      FROM products_materials pm
+                                      INNER JOIN products p ON p.id_product = pm.id_product
+                                      WHERE id_material = :id_material");
+        $stmt->execute([
+            'id_material' => $id_material
+        ]);
+        $products = $stmt->fetchAll($connection::FETCH_ASSOC);
+        return $products;
     }
 }

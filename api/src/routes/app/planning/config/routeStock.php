@@ -2,6 +2,7 @@
 
 use TezlikPlaneacion\dao\GeneralMaterialsDao;
 use TezlikPlaneacion\dao\GeneralProductsDao;
+use TezlikPlaneacion\dao\GeneralProductsMaterialsDao;
 use TezlikPlaneacion\dao\GeneralStockDao;
 use TezlikPlaneacion\dao\MinimumStockDao;
 use TezlikPlaneacion\dao\ProductsMaterialsDao;
@@ -13,6 +14,7 @@ $generalMaterialsDao = new GeneralMaterialsDao();
 $generalProductsDao = new GeneralProductsDao();
 $minimumStockDao = new MinimumStockDao();
 $productMaterialsDao = new ProductsMaterialsDao();
+$generalProductsMaterialsDao = new GeneralProductsMaterialsDao();
 
 use Psr\Http\Message\ResponseInterface as Response;
 use Psr\Http\Message\ServerRequestInterface as Request;
@@ -105,6 +107,8 @@ $app->post('/addStock', function (Request $request, Response $response, $args) u
     $stockDao,
     $generalStockDao,
     $generalMaterialsDao,
+    $generalProductsMaterialsDao,
+    $generalProductsDao,
     $minimumStockDao,
 ) {
     session_start();
@@ -124,6 +128,19 @@ $app->post('/addStock', function (Request $request, Response $response, $args) u
                     $resolution = $generalMaterialsDao->updateStockMaterial($dataStock['idMaterial'], $arr['stock']);
             }
 
+            if ($resolution == null) {
+                $products = $generalProductsMaterialsDao->findAllProductByMaterial($dataStock['idMaterial']);
+
+                foreach ($products as $arr) {
+                    $product = $minimumStockDao->calcStockByProduct($arr['id_product']);
+                    if (isset($product['stock']))
+                        $resolution = $generalProductsDao->updateStockByProduct($arr['id_product'], $product['stock']);
+
+                    if (isset($resolution['info'])) break;
+                }
+            }
+
+
             if ($resolution == null)
                 $resp = array('success' => true, 'message' => 'Stock creado correctamente');
             else if (isset($resolution['info']))
@@ -134,6 +151,8 @@ $app->post('/addStock', function (Request $request, Response $response, $args) u
             $resp = array('error' => true, 'message' => 'Stock ya existe. Ingrese uno nuevo');
     } else {
         $stock = $dataStock['importStock'];
+
+        $resolution = 1;
 
         for ($i = 0; $i < sizeof($stock); $i++) {
             if (isset($resolution['info'])) break;
@@ -153,7 +172,20 @@ $app->post('/addStock', function (Request $request, Response $response, $args) u
             $arr = $minimumStockDao->calcStockByMaterial($stock[$i]['idMaterial']);
             if (isset($arr['stock']))
                 $resolution = $generalMaterialsDao->updateStockMaterial($stock[$i]['idMaterial'], $arr['stock']);
+
+            if (isset($resolution['info'])) break;
+
+            $products = $generalProductsMaterialsDao->findAllProductByMaterial($stock[$i]['idMaterial']);
+
+            foreach ($products as $arr) {
+                $product = $minimumStockDao->calcStockByProduct($arr['id_product']);
+                if (isset($product['stock']))
+                    $resolution = $generalProductsDao->updateStockByProduct($arr['id_product'], $product['stock']);
+
+                if (isset($resolution['info'])) break;
+            }
         }
+
         if ($resolution == null)
             $resp = array('success' => true, 'message' => 'Stock importado correctamente');
         else if (isset($resolution['info']))
@@ -169,6 +201,8 @@ $app->post('/addStock', function (Request $request, Response $response, $args) u
 $app->post('/updateStock', function (Request $request, Response $response, $args) use (
     $stockDao,
     $generalStockDao,
+    $generalProductsMaterialsDao,
+    $generalProductsDao,
     $generalMaterialsDao,
     $minimumStockDao
 ) {
@@ -184,6 +218,18 @@ $app->post('/updateStock', function (Request $request, Response $response, $args
             $arr = $minimumStockDao->calcStockByMaterial($dataStock['idMaterial']);
             if (isset($arr['stock']))
                 $resolution = $generalMaterialsDao->updateStockMaterial($dataStock['idMaterial'], $arr['stock']);
+        }
+
+        if ($resolution == null) {
+            $products = $generalProductsMaterialsDao->findAllProductByMaterial($dataStock['idMaterial']);
+
+            foreach ($products as $arr) {
+                $product = $minimumStockDao->calcStockByProduct($arr['id_product']);
+                if (isset($product['stock']))
+                    $resolution = $generalProductsDao->updateStockByProduct($arr['id_product'], $product['stock']);
+
+                if (isset($resolution['info'])) break;
+            }
         }
 
         if ($resolution == null)
