@@ -24,7 +24,8 @@ class OfficesDao
                                       FROM plan_orders o
                                         INNER JOIN products p ON p.id_product = o.id_product
                                         INNER JOIN plan_clients c ON c.id_client = o.id_client
-                                      WHERE (o.status = 'Despacho' OR o.status = 'Entregado') AND o.id_company = :id_company");
+                                      WHERE (o.status = 'Despacho' OR o.status = 'Entregado') AND o.id_company = :id_company
+                                      ORDER BY o.num_order DESC");
         $stmt->execute(['id_company' => $id_company]);
 
         $this->logger->info(__FUNCTION__, array('query' => $stmt->queryString, 'errors' => $stmt->errorInfo()));
