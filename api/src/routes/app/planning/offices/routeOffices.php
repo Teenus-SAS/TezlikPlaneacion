@@ -106,46 +106,46 @@ $app->post('/changeOffices', function (Request $request, Response $response, $ar
 
         $resolution = $ordersDao->insertOrderByCompany($data, $id_company);
 
-        $status = true;
+        // $status = true;
 
-        // Checkear cantidades
-        $order = $generalOrdersDao->checkAccumulatedQuantityOrder($dataOrder['idOrder']);
-        if ($order['status'] != 'En Produccion' && $order['status'] = 'Entregado') {
+        // // Checkear cantidades
+        // $order = $generalOrdersDao->checkAccumulatedQuantityOrder($dataOrder['idOrder']);
+        // if ($order['status'] != 'En Produccion' && $order['status'] = 'Entregado') {
 
-            if ($order['original_quantity'] > $order['accumulated_quantity']) {
-                // Ficha tecnica
-                $productsMaterials = $productsMaterialsDao->findAllProductsmaterials($dataOrder['idProduct'], $id_company);
+        //     if ($order['original_quantity'] > $order['accumulated_quantity']) {
+        //         // Ficha tecnica
+        //         $productsMaterials = $productsMaterialsDao->findAllProductsmaterials($dataOrder['idProduct'], $id_company);
 
-                if (sizeof($productsMaterials) == 0) {
-                    $order = $generalOrdersDao->changeStatus($dataOrder['idOrder'], 'Sin Ficha Tecnica');
-                    $status = false;
-                } else {
-                    foreach ($productsMaterials as $arr) {
-                        if ($arr['quantity_material'] <= 0) {
-                            $order = $generalOrdersDao->changeStatus($dataOrder['idOrder'], 'Sin Materia Prima');
-                            $status = false;
-                            break;
-                        }
-                    }
-                }
-            }
+        //         if (sizeof($productsMaterials) == 0) {
+        //             $order = $generalOrdersDao->changeStatus($dataOrder['idOrder'], 'Sin Ficha Tecnica');
+        //             $status = false;
+        //         } else {
+        //             foreach ($productsMaterials as $arr) {
+        //                 if ($arr['quantity_material'] <= 0) {
+        //                     $order = $generalOrdersDao->changeStatus($dataOrder['idOrder'], 'Sin Materia Prima');
+        //                     $status = false;
+        //                     break;
+        //                 }
+        //             }
+        //         }
+        //     }
 
-            if ($status == true) {
-                if ($order['original_quantity'] <= $order['accumulated_quantity']) {
-                    $generalOrdersDao->changeStatus($dataOrder['idOrder'], 'Despacho');
-                    $accumulated_quantity = $order['accumulated_quantity'] - $order['original_quantity'];
-                } else {
-                    $accumulated_quantity = $order['accumulated_quantity'];
-                    // $generalOrdersDao->changeStatus($dataOrder['idOrder'], 'Alistamiento');
-                }
+        //     if ($status == true) {
+        //         if ($order['original_quantity'] <= $order['accumulated_quantity']) {
+        //             $generalOrdersDao->changeStatus($dataOrder['idOrder'], 'Despacho');
+        //             $accumulated_quantity = $order['accumulated_quantity'] - $order['original_quantity'];
+        //         } else {
+        //             $accumulated_quantity = $order['accumulated_quantity'];
+        //             // $generalOrdersDao->changeStatus($dataOrder['idOrder'], 'Alistamiento');
+        //         }
 
-                $arr = $generalProductsDao->findProductReserved($dataOrder['idProduct']);
-                !$arr['reserved'] ? $arr['reserved'] = 0 : $arr;
-                $generalProductsDao->updateReservedByProduct($dataOrder['idProduct'], $arr['reserved']);
+        //         $arr = $generalProductsDao->findProductReserved($dataOrder['idProduct']);
+        //         !$arr['reserved'] ? $arr['reserved'] = 0 : $arr;
+        //         $generalProductsDao->updateReservedByProduct($dataOrder['idProduct'], $arr['reserved']);
 
-                $generalProductsDao->updateAccumulatedQuantity($dataOrder['idProduct'], $accumulated_quantity, 1);
-            }
-        }
+        //         $generalProductsDao->updateAccumulatedQuantity($dataOrder['idProduct'], $accumulated_quantity, 1);
+        //     }
+        // }
     }
 
     $generalProductsDao->updateAccumulatedQuantity($dataOrder['idProduct'], $dataOrder['quantity'] - $dataOrder['originalQuantity'], 2);
