@@ -101,7 +101,8 @@ $app->post('/changeOffices', function (Request $request, Response $response, $ar
         $data['maxDate'] = '';
         $data['idProduct'] = $dataOrder['idProduct'];
         $data['idClient'] = $client['id_client'];
-        $data['originalQuantity'] = ($dataOrder['quantity'] - $dataOrder['originalQuantity']) - $dataOrder['stock'];
+        $data['originalQuantity'] = $dataOrder['quantity'] - $dataOrder['stock'];
+        // $data['originalQuantity'] = ($dataOrder['quantity'] - $dataOrder['originalQuantity']) - $dataOrder['stock'];
 
         $order = $ordersDao->insertOrderByCompany($data, $id_company);
 
