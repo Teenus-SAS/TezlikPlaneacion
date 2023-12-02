@@ -27,4 +27,6 @@ class GeneralPlanningMachinesDao
         $planningMachines = $stmt->fetch($connection::FETCH_ASSOC);
         return $planningMachines;
     }
+
+    // public function calcPlan
 }

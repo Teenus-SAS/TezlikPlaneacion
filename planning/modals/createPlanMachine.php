@@ -37,7 +37,7 @@
 
                                         <div class="col-12 col-lg-4">
                                             <div class="form-group floating-label enable-floating-label show-label">
-                                                <input id="hoursDay" name="hoursDay" type="number" class="form-control text-center" min="1" max="24">
+                                                <input id="hoursDay" name="hoursDay" type="number" class="form-control text-center hours" min="1" max="24">
                                                 <label for="hoursDay">Horas x Dia<span class="text-danger">*</span></label>
                                                 <div class="validation-error d-none font-size-13">Requerido</div>
                                             </div>
@@ -45,7 +45,7 @@
 
                                         <div class="col-12 col-lg-4">
                                             <div class="input-group floating-label enable-floating-label show-label date" id="hourStartPicker" data-target-input="nearest">
-                                                <input id="hourStart" name="hourStart" type="text" class="form-control text-center datetimepicker-input" data-target="#hourStartPicker">
+                                                <input id="hourStart" name="hourStart" type="text" class="form-control text-center hours datetimepicker-input" data-target="#hourStartPicker">
                                                 <label for="hourStart">Horas Inicio<span class="text-danger">*</span></label>
                                                 <div class="validation-error d-none font-size-13">Requerido</div>
                                                 <div class="input-group-append" data-target="#hourStartPicker" data-toggle="datetimepicker">
@@ -56,7 +56,7 @@
 
                                         <div class="col-12 col-lg-4">
                                             <div class="input-group floating-label enable-floating-label show-label date" id="hourEndPicker" data-target-input="nearest">
-                                                <input id="hourEnd" name="hourEnd" type="text" class="form-control text-center datetimepicker-input" data-target="#hourEndPicker">
+                                                <input id="hourEnd" name="hourEnd" type="text" class="form-control text-center datetimepicker-input" data-target="#hourEndPicker" readonly>
                                                 <label for="hourEnd">Horas Fin<span class="text-danger">*</span></label>
                                                 <div class="validation-error d-none font-size-13">Requerido</div>
                                                 <div class="input-group-append" data-target="#hourEndPicker" data-toggle="datetimepicker">

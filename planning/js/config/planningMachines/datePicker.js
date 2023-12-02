@@ -66,4 +66,29 @@ $(document).ready(function () {
     $(`#${id}`).css('border-color', 'red');
     $(`#${id}`).val('');
   };
+
+  $(document).on('blur','.hours', function () {
+    let hourStart = $('#hourStart').val();
+    let hoursDay = parseFloat($('#hoursDay').val());
+
+    if (!hourStart || hourStart == '') {
+      toastr.error('Ingrese hora inicial');
+      return false;
+    }
+    
+    if (!hoursDay || hoursDay == '') {
+      return false; 
+    }
+
+    var date = new Date("2000-01-01 " + hourStart);
+
+    var horas = date.getHours();
+    var minutos = date.getMinutes();
+ 
+    var hourEnd = parseFloat(horas + '.' + (minutos < 10 ? '0' : '') + minutos) + hoursDay;
+
+    hourEnd = moment(hourEnd, ['HH:mm']).format('h:mm A');
+
+    $('#hourEnd').val(hourEnd);
+  });
 });

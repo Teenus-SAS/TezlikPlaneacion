@@ -99,9 +99,7 @@ $(document).ready(function () {
   checkDataPlanningMachines = async (url, idProgramMachine) => {
     let idMachine = parseInt($('#idMachine').val());
     let numberWorkers = parseInt($('#numberWorkers').val());
-    let hoursDay = parseInt($('#hoursDay').val());
-    let hourStart = $('#hourStart').val();
-    let hourEnd = $('#hourEnd').val();
+    let hoursDay = parseInt($('#hoursDay').val()); 
     let data = idMachine * numberWorkers * hoursDay;
 
     if (!data || data == null || data == 0) {
@@ -109,13 +107,13 @@ $(document).ready(function () {
       return false;
     }
 
-    if (hourStart.includes('PM') && hourEnd.includes('AM')) {
-      if (hourEnd > hourStart) {
-        toastr.error('La hora final no puede ser mayor a la hora inicio');
-        $('#hourEnd').css('border-color', 'red');
-        return false;
-      }
-    }
+    // if (hourStart.includes('PM') && hourEnd.includes('AM')) {
+    //   if (hourEnd > hourStart) {
+    //     toastr.error('La hora final no puede ser mayor a la hora inicio');
+    //     $('#hourEnd').css('border-color', 'red');
+    //     return false;
+    //   }
+    // }
 
     let dataPlanningMachines = new FormData(formCreatePlanMachine);
 
