@@ -30,4 +30,32 @@ class GeneralClientsDao
         $client = $stmt->fetch($connection::FETCH_ASSOC);
         return $client;
     }
+
+    public function changeStatusClientByCompany($id_company)
+    {
+        try {
+            $connection = Connection::getInstance()->getConnection();
+            $stmt = $connection->prepare("UPDATE plan_clients SET status = :status AND id_company = :id_company");
+            $stmt->execute([
+                'id_company' => $id_company,
+                'status' => 0
+            ]);
+        } catch (\Exception $e) {
+            return array('info' => true, 'message' => $e->getMessage());
+        }
+    }
+
+    public function changeStatusClient($id_client, $status)
+    {
+        try {
+            $connection = Connection::getInstance()->getConnection();
+            $stmt = $connection->prepare("UPDATE plan_clients SET status = :status AND id_client = :id_client");
+            $stmt->execute([
+                'id_client' => $id_client,
+                'status' => $status
+            ]);
+        } catch (\Exception $e) {
+            return array('info' => true, 'message' => $e->getMessage());
+        }
+    }
 }

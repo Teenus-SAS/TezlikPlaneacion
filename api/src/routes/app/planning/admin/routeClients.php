@@ -148,6 +148,22 @@ $app->post('/updateClient', function (Request $request, Response $response, $arg
     return $response->withStatus(200)->withHeader('Content-Type', 'application/json');
 });
 
+$app->get('/changeStatus/{id_client}', function (Request $request, Response $response, $args) use ($generalClientsDao) {
+    session_start();
+    $id_company = $_SESSION['id_company'];
+
+    $client = $generalClientsDao->changeStatusClientByCompany($id_company);
+    if ($client == null)
+        $client = $generalClientsDao->changeStatusClient($args['id_client'], 1);
+
+    if ($client == null)
+        $resp = array('success' => true, 'message' => 'Cliente interno modificado correctamente');
+    else
+        $resp = array('error' => true, 'message' => 'No es posible modificar el cliente, existe información asociada a él');
+    $response->getBody()->write(json_encode($resp));
+    return $response->withStatus(200)->withHeader('Content-Type', 'application/json');
+});
+
 $app->get('/deleteClient/{id_client}', function (Request $request, Response $response, $args) use ($clientsDao) {
     $client = $clientsDao->deleteClient($args['id_client']);
 

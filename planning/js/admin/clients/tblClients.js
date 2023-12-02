@@ -53,6 +53,14 @@ $(document).ready(function () {
         },
       },
       {
+        title: '',
+        data: null,
+        className: 'uniqueClassName',
+        render: (data, type, row) => {
+          return `<input type="checkbox" class="form-control-updated checkClient" id="check-${data.id_client}" ${data.status == 1 ? 'checked' : ''}>`;
+        },
+      },
+      {
         title: 'Acciones',
         data: 'id_client',
         className: 'uniqueClassName',

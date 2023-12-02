@@ -117,16 +117,16 @@ class GeneralProductsDao
         }
     }
 
-    public function updateAccumulatedQuantityGeneral($id_product)
+    public function updateAccumulatedQuantityGeneral($id_company)
     {
         $connection = Connection::getInstance()->getConnection();
 
         try {
-            $stmt = $connection->prepare("UPDATE products SET accumulated_quantity = :accumulated_quantity WHERE id_product = :id_product");
+            $stmt = $connection->prepare("UPDATE products SET accumulated_quantity = :accumulated_quantity WHERE id_company = :id_company");
 
             $stmt->execute([
                 'accumulated_quantity' => 0,
-                'id_product' => $id_product
+                'id_company' => $id_company
             ]);
         } catch (\Exception $e) {
             $message = $e->getMessage();

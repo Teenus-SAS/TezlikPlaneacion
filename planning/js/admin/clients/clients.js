@@ -159,6 +159,45 @@ $('#btnCloseClient').click(function (e) {
     });
   };
 
+  /* Camniar usuario interno */
+  $(document).on('click', '.checkClient', function () {
+    let id = this.id;
+
+    let id_client = id.slice(6, id.length);
+    if ($(`#${id}`).is(':checked')) {
+      bootbox.confirm({
+        title: 'Cliente Interno',
+        message:
+          'Está seguro de cambiar este cliente interno? Esta acción no se puede reversar.',
+        buttons: {
+          confirm: {
+            label: 'Si',
+            className: 'btn-success',
+          },
+          cancel: {
+            label: 'No',
+            className: 'btn-danger',
+          },
+        },
+        callback: function (result) {
+          if (result == true) {
+            $.get(
+              `../../api/changeStatus/${id_client}`,
+              function (data, textStatus, jqXHR) {
+                message(data);
+              }
+            );
+          } else {
+            $(`#${id}`).prop('checked', false);
+          }
+        },
+      });
+    } else {
+      toastr.error('Debe haber por lo menos un cliente interno');
+      return false;
+    }
+  });
+
   /* Mensaje de exito */
 
   message = (data) => {
