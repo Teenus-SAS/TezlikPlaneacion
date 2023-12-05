@@ -20,11 +20,11 @@ class GeneralUserAccessDao
     {
         $connection = Connection::getInstance()->getConnection();
         $stmt = $connection->prepare(
-            "SELECT us.id_user, us.firstname, us.lastname, us.email, IFNULL(usa.create_mold, 0) AS create_mold, IFNULL(usa.create_product, 0) AS create_product, IFNULL(usa.create_material, 0) AS create_material, 
+            "SELECT us.id_user, us.firstname, us.lastname, us.email, IFNULL(usa.create_mold, 0) AS create_mold, IFNULL(usa.create_product, 0) AS create_product, IFNULL(usa.create_material, 0) AS create_material, IFNULL(usa.requisition, 0) AS requisition, IFNULL(usa.stock, 0) AS stock,  
                     IFNULL(usa.create_machine, 0) AS create_machine, IFNULL(usa.create_process, 0) AS create_process, IFNULL(usa.products_material, 0) AS products_material, IFNULL(usa.products_process, 0) AS products_process, 
                     IFNULL(usa.programs_machine, 0) AS programs_machine, IFNULL(usa.cicles_machine, 0) AS cicles_machine, IFNULL(usa.inv_category, 0) AS inv_category, IFNULL(usa.sale, 0) AS sale, 
                     IFNULL(usa.user, 0) AS user, IFNULL(usa.client, 0) AS client, IFNULL(usa.orders_type, 0) AS orders_type, IFNULL(usa.inventory, 0) AS inventory, IFNULL(usa.plan_order, 0) AS plan_order, 
-                    IFNULL(usa.program, 0) AS program, IFNULL(usa.plan_load, 0) AS plan_load, IFNULL(usa.explosion_of_material, 0) AS explosion_of_material, IFNULL(usa.office, 0) AS office
+                    IFNULL(usa.program, 0) AS program, IFNULL(usa.plan_load, 0) AS plan_load, IFNULL(usa.explosion_of_material, 0) AS explosion_of_material, IFNULL(usa.office, 0) AS office, IFNULL(usa.production_order, 0) AS production_order, IFNULL(usa.store, 0) AS store
              FROM users us
                 LEFT JOIN planning_user_access usa ON us.id_user = usa.id_user
              WHERE us.id_company = :id_company AND us.id_user = :id_user;"
@@ -41,9 +41,9 @@ class GeneralUserAccessDao
         $connection = Connection::getInstance()->getConnection();
 
         $stmt = $connection->prepare("SELECT 
-                                            IFNULL(pua.create_mold, 0) AS create_mold, IFNULL(pua.create_product, 0) AS planning_product, 
-                                            IFNULL(pua.create_material, 0) AS planning_material, IFNULL(pua.create_machine, 0) AS planning_machine, IFNULL(pua.create_process, 0) AS planning_process, IFNULL(pua.products_material, 0) AS planning_products_material, IFNULL(pua.products_process, 0) AS planning_products_process, IFNULL(pua.programs_machine, 0) AS programs_machine, IFNULL(pua.cicles_machine, 0) AS cicles_machine, IFNULL(pua.inv_category, 0) AS inv_category, IFNULL(pua.sale, 0) AS sale, IFNULL(pua.user, 0) AS planning_user, IFNULL(pua.client, 0) AS client, 
-                                            IFNULL(pua.orders_type, 0) AS orders_type, IFNULL(pua.inventory, 0) AS inventory, IFNULL(pua.plan_order, 0) AS plan_order, IFNULL(pua.program, 0) AS program, IFNULL(pua.plan_load, 0) AS plan_load, IFNULL(pua.explosion_of_material, 0) AS explosion_of_material, IFNULL(pua.office, 0) AS office,  pa.plan_order AS plan_planning_order, pa.plan_inventory AS plan_planning_inventory, pa.plan_program AS plan_planning_program, pa.plan_load AS plan_planning_load, pa.plan_explosion_of_material AS plan_planning_explosion_of_material, pa.plan_office AS plan_planning_office, u.firstname, u.lastname, u.email
+                                            IFNULL(pua.create_mold, 0) AS create_mold, IFNULL(pua.create_product, 0) AS planning_product, IFNULL(pua.requisition, 0) AS requisition, IFNULL(pua.stock, 0) AS stock, 
+                                            IFNULL(pua.create_material, 0) AS planning_material, IFNULL(pua.create_machine, 0) AS planning_machine, IFNULL(pua.create_process, 0) AS planning_process, IFNULL(pua.products_material, 0) AS planning_products_material, IFNULL(pua.products_process, 0) AS planning_products_process, IFNULL(pua.programs_machine, 0) AS programs_machine, IFNULL(pua.cicles_machine, 0) AS cicles_machine, IFNULL(pua.inv_category, 0) AS inv_category, IFNULL(pua.sale, 0) AS sale, IFNULL(pua.user, 0) AS planning_user, IFNULL(pua.client, 0) AS client, IFNULL(pua.production_order, 0) AS production_order, IFNULL(pua.store, 0) AS store,
+                                            IFNULL(pua.orders_type, 0) AS orders_type, IFNULL(pua.inventory, 0) AS inventory, IFNULL(pua.plan_order, 0) AS plan_order, IFNULL(pua.program, 0) AS program, IFNULL(pua.plan_load, 0) AS plan_load, IFNULL(pua.explosion_of_material, 0) AS explosion_of_material, IFNULL(pua.office, 0) AS office,  pa.plan_order AS plan_planning_order, pa.plan_inventory AS plan_planning_inventory, pa.plan_program AS plan_planning_program, pa.plan_load AS plan_planning_load, pa.plan_explosion_of_material AS plan_planning_explosion_of_material, pa.plan_production_order, pa.plan_store, pa.plan_office AS plan_planning_office, u.firstname, u.lastname, u.email
                                       FROM users u
                                         LEFT JOIN planning_user_access pua ON pua.id_user = u.id_user
                                         INNER JOIN companies_licenses cl ON cl.id_company = u.id_company
@@ -70,7 +70,8 @@ class GeneralUserAccessDao
         $_SESSION['planning_products_process'] = $userAccess['planning_products_process'];
         $_SESSION['programs_machine'] = $userAccess['programs_machine'];
         $_SESSION['cicles_machine'] = $userAccess['cicles_machine'];
-        $_SESSION['inv_category'] = $userAccess['inv_category'];
+        $_SESSION['requisition'] = $userAccess['requisition'];
+        $_SESSION['stock'] = $userAccess['stock'];
         $_SESSION['sale'] = $userAccess['sale'];
         $_SESSION['planning_user'] = $userAccess['planning_user'];
         $_SESSION['client'] = $userAccess['client'];
@@ -80,12 +81,16 @@ class GeneralUserAccessDao
         $_SESSION['program'] = $userAccess['program'];
         $_SESSION['plan_load'] = $userAccess['plan_load'];
         $_SESSION['explosion_of_material'] = $userAccess['explosion_of_material'];
+        $_SESSION['production_order'] = $userAccess['production_order'];
+        $_SESSION['store'] = $userAccess['store'];
         $_SESSION['office'] = $userAccess['office'];
         $_SESSION['plan_planning_order'] = $userAccess['plan_planning_order'];
         $_SESSION['plan_planning_inventory'] = $userAccess['plan_planning_inventory'];
         $_SESSION['plan_planning_program'] = $userAccess['plan_planning_program'];
         $_SESSION['plan_planning_load'] = $userAccess['plan_planning_load'];
         $_SESSION['plan_planning_explosion_of_material'] = $userAccess['plan_planning_explosion_of_material'];
+        $_SESSION['plan_production_order'] = $userAccess['plan_production_order'];
+        $_SESSION['plan_store'] = $userAccess['plan_store'];
         $_SESSION['plan_planning_office'] = $userAccess['plan_planning_office'];
     }
 }

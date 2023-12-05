@@ -82,8 +82,28 @@ $(document).ready(function () {
         },
       },
       {
+        title: 'O. Produccion',
+        data: 'plan_production_order',
+        className: 'uniqueClassName',
+        render: function (data, type, row) {
+          return data == 1
+            ? '<i class="bx bx-check text-success fs-lg align-middle"></i>'
+            : '<i class="bx bx-x text-danger fs-lg align-middle"></i>';
+        },
+      },
+      {
         title: 'Despachos',
         data: 'plan_office',
+        className: 'uniqueClassName',
+        render: function (data, type, row) {
+          return data == 1
+            ? '<i class="bx bx-check text-success fs-lg align-middle"></i>'
+            : '<i class="bx bx-x text-danger fs-lg align-middle"></i>';
+        },
+      },
+      {
+        title: 'Almacen',
+        data: 'plan_store',
         className: 'uniqueClassName',
         render: function (data, type, row) {
           return data == 1

@@ -54,7 +54,9 @@ $(document).ready(function () {
       programs: data.plan_program,
       loads: data.plan_load,
       explosionMaterials: data.plan_explosion_of_material,
+      productionOrder: data.plan_production_order,
       offices: data.plan_office,
+      store: data.plan_store
     };
 
     let i = 1;
@@ -80,7 +82,9 @@ $(document).ready(function () {
       programming: 0,
       loads: 0,
       explosionOfMaterials: 0,
+      productionOrder: 0,
       offices: 0,
+      store: 0,
     };
 
     $.each(access, (index, value) => {

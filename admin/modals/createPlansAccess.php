@@ -68,8 +68,20 @@
                                                 </div>
                                                 <div class="col-sm-4 mb-2">
                                                     <div class="checkbox checkbox-success checkbox-circle">
-                                                        <input id="checkbox-6" name="offices" type="checkbox">
-                                                        <label for="checkbox-6">Despachos</label>
+                                                        <input id="checkbox-6" name="productionOrder" type="checkbox">
+                                                        <label for="checkbox-6">Orden de Producción</label>
+                                                    </div>
+                                                </div>
+                                                <div class="col-sm-4 mb-2">
+                                                    <div class="checkbox checkbox-success checkbox-circle">
+                                                        <input id="checkbox-7" name="offices" type="checkbox">
+                                                        <label for="checkbox-7">Despachos</label>
+                                                    </div>
+                                                </div>
+                                                <div class="col-sm-4 mb-2">
+                                                    <div class="checkbox checkbox-success checkbox-circle">
+                                                        <input id="checkbox-8" name="store" type="checkbox">
+                                                        <label for="checkbox-8">Almacen</label>
                                                     </div>
                                                 </div>
                                             </div>
