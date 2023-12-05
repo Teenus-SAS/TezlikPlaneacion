@@ -46,7 +46,7 @@ class PlanAccessDao
     {
         $connection = Connection::getInstance()->getConnection();
         try {
-            $stmt = $connection->prepare("UPDATE plans_access SET cant_products = :cant_products, plan_inventory = :plan_inventory, plan_order= :plan_order, plan_program= :plan_program, 
+            $stmt = $connection->prepare("UPDATE plans_access SET cant_products = :cant_products, plan_inventory = :plan_inventory, plan_order = :plan_order, plan_program = :plan_program, 
                                                                   plan_load= :plan_load, plan_explosion_of_material= :plan_explosion_of_material, plan_production_order = :plan_production_order, plan_office= :plan_office, plan_store = :plan_store
                                           WHERE id_plan= :id_plan");
             $stmt->execute([
@@ -55,6 +55,7 @@ class PlanAccessDao
                 'plan_inventory' => $dataPlan['inventories'],
                 'plan_order' => $dataPlan['orders'],
                 'plan_program' => $dataPlan['programming'],
+                'plan_load' =>  $dataPlan['loads'],
                 'plan_explosion_of_material' =>  $dataPlan['explosionOfMaterials'],
                 'plan_production_order' =>  $dataPlan['productionOrder'],
                 'plan_office' =>  $dataPlan['offices'],

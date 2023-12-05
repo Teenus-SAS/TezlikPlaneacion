@@ -1,7 +1,10 @@
 $(document).ready(function () {
   tblPlans = $('#tblPlans').dataTable({
     pageLength: 50,
-    data: data,
+    ajax: {
+      url: `/api/plansAccess`,
+      dataSrc: '',
+    },
     language: {
       url: '//cdn.datatables.net/plug-ins/1.10.20/i18n/Spanish.json',
     },
