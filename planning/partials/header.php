@@ -107,9 +107,11 @@
                                             <?php if ($_SESSION['planning_user'] == 1) { ?>
                                                 <li class="planUsers"><a href="/planning/users">Usuarios y Accesos</a></li>
                                             <?php } ?>
-                                            <?php if ($_SESSION['orders_type'] == 1) { ?>
-                                                <li class="planTypeOrder"><a href="/planning/order-types">Tipo Pedidos</a></li>
-                                            <?php } ?>
+                                            <?php //if ($_SESSION['orders_type'] == 1) { 
+                                            ?>
+                                            <!-- <li class="planTypeOrder"><a href="/planning/order-types">Tipo Pedidos</a></li> -->
+                                            <?php //} 
+                                            ?>
                                         </ul>
                                     </div>
                                 <?php } ?>
