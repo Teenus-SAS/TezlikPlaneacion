@@ -25,9 +25,9 @@ $(document).ready(function () {
 
   $('#btnCreateUserAndAccess').click(function (e) {
     e.preventDefault();
-    let idUser = sessionStorage.getItem('id_user');
+    let id_user = sessionStorage.getItem('id_user');
 
-    if (idUser == '' || idUser == null) {
+    if (id_user == '' || id_user == null) {
       nameUser = $('#nameUser').val();
       lastnameUser = $('#lastnameUser').val();
       emailUser = $('#emailUser').val();
@@ -59,7 +59,7 @@ $(document).ready(function () {
       dataUser = setCheckBoxes(dataUser);
 
       $.post('/api/addUser', dataUser, function (data, textStatus, jqXHR) {
-        message(data);
+        message(data, null);
       });
     } else {
       updateUserAccess();
@@ -79,8 +79,8 @@ $(document).ready(function () {
     let row = $(this).parent().parent()[0];
     let data = tblUsers.fnGetData(row);
 
-    let idUser = this.id;
-    sessionStorage.setItem('id_user', idUser);
+    let id_user = this.id;
+    sessionStorage.setItem('id_user', id_user);
 
     $('#nameUser').val(data.firstname);
     $('#lastnameUser').val(data.lastname);
@@ -89,26 +89,26 @@ $(document).ready(function () {
     let i = 1;
 
     let access = {
-      createMold: data.create_mold,
       planningCreateProduct: data.create_product,
       planningCreateMaterial: data.create_material,
       planningCreateMachine: data.create_machine,
-      planningCreateProcess: data.create_process,
-      planningProductsMaterial: data.products_material,
-      planningProductsProcess: data.products_process,
+      requisition: data.requisition,
+      planningProductsMaterial: data.products_material, 
       programsMachine: data.programs_machine,
-      ciclesMachine: data.cicles_machine,
-      invCategory: data.inv_category,
+      ciclesMachine: data.cicles_machine, 
+      stock: data.stock,
       sale: data.sale,
-      plannigUser: data.user,
       client: data.client,
+      plannigUser: data.user,
       ordersType: data.orders_type,
       inventory: data.inventory,
       order: data.plan_order,
       program: data.program,
       load: data.plan_load,
+      productionOrder: data.production_order,
       explosionOfMaterial: data.explosion_of_material,
       office: data.office,
+      store: data.store
     };
 
     $.each(access, (index, value) => {
@@ -127,10 +127,10 @@ $(document).ready(function () {
   });
 
   updateUserAccess = () => {
-    idUser = sessionStorage.getItem('id_user');
+    id_user = sessionStorage.getItem('id_user');
 
     dataUser = {};
-    dataUser['idUser'] = idUser;
+    dataUser['id_user'] = id_user;
     dataUser['nameUser'] = $('#nameUser').val();
     dataUser['lastnameUser'] = $('#lastnameUser').val();
     dataUser['emailUser'] = $('#emailUser').val();
@@ -141,7 +141,7 @@ $(document).ready(function () {
       '/api/updatePlanningUserAccess',
       dataUser,
       function (data, textStatus, jqXHR) {
-        message(data);
+        message(data, id_user);
         updateTable();
       }
     );
@@ -152,26 +152,26 @@ $(document).ready(function () {
     let i = 1;
 
     let access = {
-      createMold: 0,
       planningCreateProduct: 0,
       planningCreateMaterial: 0,
       planningCreateMachine: 0,
-      planningCreateProcess: 0,
+      requisition: 0,
       planningProductsMaterial: 0,
-      planningProductsProcess: 0,
       programsMachine: 0,
       ciclesMachine: 0,
-      invCategory: 0,
+      stock: 0,
       sale: 0,
-      plannigUser: 0,
       client: 0,
+      plannigUser: 0,
       ordersType: 0,
       inventory: 0,
       order: 0,
       program: 0,
       load: 0,
+      productionOrder: 0,
       explosionOfMaterial: 0,
       office: 0,
+      store: 0
     };
 
     $.each(access, (index, value) => {
@@ -189,11 +189,10 @@ $(document).ready(function () {
     let row = $(this.activeElement).parent().parent()[0];
     let data = tblUsers.fnGetData(row);
 
-    // let idUser = data.id_user;
-    let idUser = data.id_user;
+    let id_user = data.id_user;
     let programsMachine = data.programs_machine;
     dataUser = {};
-    dataUser['idUser'] = idUser;
+    dataUser['id_user'] = id_user;
     dataUser['programsMachine'] = programsMachine;
 
     bootbox.confirm({
@@ -216,7 +215,7 @@ $(document).ready(function () {
             '/api/deleteUser',
             dataUser,
             function (data, textStatus, jqXHR) {
-              message(data);
+              message(data, id_user);
             }
           );
         }
@@ -226,11 +225,13 @@ $(document).ready(function () {
 
   /* Mensaje de exito */
 
-  message = (data) => {
+  message = async(data, id_user) => {
     if (data.success == true) {
       $('#createUserAccess').modal('hide');
       $('#formCreateUser').trigger('reset');
       updateTable();
+      if (id_user == idUser)
+        await loadUserAccess();
       toastr.success(data.message);
       return false;
     } else if (data.error == true) toastr.error(data.message);

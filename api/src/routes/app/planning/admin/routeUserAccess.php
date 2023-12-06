@@ -23,7 +23,7 @@ $app->get('/planningUsersAccess', function (Request $request, Response $response
     return $response->withHeader('Content-Type', 'application/json');
 });
 
-$app->post('/planningUserAccess', function (Request $request, Response $response, $args) use ($generalUAccessDao) {
+$app->get('/planningUserAccess', function (Request $request, Response $response, $args) use ($generalUAccessDao) {
     session_start();
     $company = $_SESSION['id_company'];
     $id_user = $_SESSION['idUser'];
@@ -81,7 +81,7 @@ $app->post('/updatePlanningUserAccess', function (Request $request, Response $re
     // }
 
     /* Modificar accesos */
-    $generalUAccessDao->setGeneralAccess($dataUserAccess['idUser']);
+    $generalUAccessDao->setGeneralAccess($dataUserAccess['id_user']);
 
     if ($userAccess == null)
         $resp = array('success' => true, 'message' => 'Acceso de usuario actualizado correctamente');

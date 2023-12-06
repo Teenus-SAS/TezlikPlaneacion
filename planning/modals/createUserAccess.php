@@ -57,79 +57,86 @@
                                             </div>
                                             <div class="w-100"></div>
 
+                                            <div class="col">
+                                                <div class="checkbox checkbox-success checkbox-circle">
+                                                    <input id="checkbox-1" name="planningCreateProduct" type="checkbox">
+                                                    <label for="checkbox-1">Productos</label>
+                                                </div>
+                                            </div>
                                             <div class="col-lg-4">
                                                 <div class="checkbox checkbox-success checkbox-circle">
-                                                    <input id="checkbox-6" name="productMaterials" type="checkbox">
-                                                    <label for="checkbox-6">Ficha Técnica Materiales</label>
+                                                    <input id="checkbox-5" name="productMaterials" type="checkbox">
+                                                    <label for="checkbox-5">Ficha Técnica Productos</label>
                                                 </div>
                                             </div>
                                             <div class="col">
                                                 <div class="checkbox checkbox-success checkbox-circle">
-                                                    <input id="checkbox-12" name="user" type="checkbox">
-                                                    <label for="checkbox-12">Usuarios</label>
-                                                </div>
-                                            </div>
-                                            <div class="w-100"></div>
-                                            <div class="col">
-                                                <div class="checkbox checkbox-success checkbox-circle">
-                                                    <input id="checkbox-2" name="planningCreateProduct" type="checkbox">
-                                                    <label for="checkbox-2">Productos</label>
+                                                    <input id="checkbox-9" name="clients" type="checkbox">
+                                                    <label for="checkbox-9">Clientes</label>
                                                 </div>
                                             </div>
                                             <div class="col">
                                                 <div class="checkbox checkbox-success checkbox-circle">
-                                                    <input id="checkbox-11" name="sales" type="checkbox">
-                                                    <label for="checkbox-11">Ventas</label>
-                                                </div>
-                                            </div>
-                                            <div class="col">
-                                                <div class="checkbox checkbox-success checkbox-circle">
-                                                    <input id="checkbox-13" name="clients" type="checkbox">
-                                                    <label for="checkbox-13">Clientes</label>
+                                                    <input id="checkbox-11" name="user" type="checkbox">
+                                                    <label for="checkbox-11">Usuarios</label>
                                                 </div>
                                             </div>
                                             <div class="w-100"></div>
                                             <div class="col">
                                                 <div class="checkbox checkbox-success checkbox-circle">
-                                                    <input id="checkbox-3" name="planningCreateMaterials" type="checkbox">
-                                                    <label for="checkbox-3">Materiales</label>
+                                                    <input id="checkbox-2" name="planningCreateMaterials" type="checkbox">
+                                                    <label for="checkbox-2">Materiales</label>
                                                 </div>
                                             </div>
                                             <div class="col col-lg-4">
                                                 <div class="checkbox checkbox-success checkbox-circle">
-                                                    <input id="checkbox-8" name="planningMachine" type="checkbox">
-                                                    <label for="checkbox-8">Programación Maquina</label>
+                                                    <input id="checkbox-6" name="planningMachine" type="checkbox">
+                                                    <label for="checkbox-6">Programación Maquina</label>
+                                                </div>
+                                            </div>
+                                            <div class="col">
+                                                <div class="checkbox checkbox-success checkbox-circle">
+                                                    <input id="checkbox-10" name="sales" type="checkbox">
+                                                    <label for="checkbox-10">Ventas</label>
+                                                </div>
+                                            </div>
+                                            <div class="col">
+                                                <div class="checkbox checkbox-success checkbox-circle">
+                                                    <input id="checkbox-12" name="orderTypes" type="checkbox">
+                                                    <label for="checkbox-12">Tipos Pedidos</label>
+                                                </div>
+                                            </div>
+                                            <div class="w-100"></div>
+                                            <div class="col">
+                                                <div class="checkbox checkbox-success checkbox-circle">
+                                                    <input id="checkbox-3" name="planningCreateMachines" type="checkbox">
+                                                    <label for="checkbox-3">Máquinas</label>
+                                                </div>
+                                            </div>
+                                            <div class="col col-lg-4">
+                                                <div class="checkbox checkbox-success checkbox-circle">
+                                                    <input id="checkbox-7" name="planCiclesMachine" type="checkbox">
+                                                    <label for="checkbox-7">Plan Ciclos Maquina</label>
                                                 </div>
                                             </div>
                                             <div class="col"></div>
-                                            <div class="col">
-                                                <div class="checkbox checkbox-success checkbox-circle">
-                                                    <input id="checkbox-14" name="orderTypes" type="checkbox">
-                                                    <label for="checkbox-14">Tipos Pedidos</label>
-                                                </div>
-                                            </div>
+                                            <div class="col"></div>
                                             <div class="w-100"></div>
                                             <div class="col">
                                                 <div class="checkbox checkbox-success checkbox-circle">
                                                     <input id="checkbox-4" name="planningCreateMachines" type="checkbox">
-                                                    <label for="checkbox-4">Máquinas</label>
+                                                    <label for="checkbox-4">Requisiciones</label>
                                                 </div>
                                             </div>
                                             <div class="col col-lg-4">
                                                 <div class="checkbox checkbox-success checkbox-circle">
-                                                    <input id="checkbox-9" name="planCiclesMachine" type="checkbox">
-                                                    <label for="checkbox-9">Plan Ciclos Maquina</label>
+                                                    <input id="checkbox-8" name="planCiclesMachine" type="checkbox">
+                                                    <label for="checkbox-8">Stock</label>
                                                 </div>
                                             </div>
                                             <div class="col"></div>
                                             <div class="col"></div>
                                             <div class="w-100"></div>
-                                            <div class="col">
-                                                <div class="checkbox checkbox-success checkbox-circle">
-                                                    <input id="checkbox-5" name="planningCreateProcess" type="checkbox">
-                                                    <label for="checkbox-5">Procesos</label>
-                                                </div>
-                                            </div>
                                         </div>
                                         <div class="col-12 col-lg-12">
                                             <label for=""><b>Menú Navegación:</b></label>
@@ -137,53 +144,56 @@
                                         <div class="row" style="margin:auto;">
                                             <div class="col">
                                                 <div class="checkbox checkbox-success checkbox-circle">
-                                                    <input id="checkbox-15" name="inventories" type="checkbox">
-                                                    <label for="checkbox-15">Inventarios</label>
+                                                    <input id="checkbox-13" name="inventories" type="checkbox">
+                                                    <label for="checkbox-13">Inventarios</label>
                                                 </div>
                                             </div>
                                             <div class="col">
                                                 <div class="checkbox checkbox-success checkbox-circle">
-                                                    <input id="checkbox-16" name="orders" type="checkbox">
-                                                    <label for="checkbox-16">Pedidos</label>
+                                                    <input id="checkbox-16" name="loads" type="checkbox">
+                                                    <label for="checkbox-16">Cargues</label>
                                                 </div>
                                             </div>
                                             <div class="col">
                                                 <div class="checkbox checkbox-success checkbox-circle">
-                                                    <input id="checkbox-17" name="programming" type="checkbox">
-                                                    <label for="checkbox-17">Programa</label>
+                                                    <input id="checkbox-19" name="offices" type="checkbox">
+                                                    <label for="checkbox-19">Despachos</label>
                                                 </div>
                                             </div>
                                             <div class="w-100"></div>
+
                                             <div class="col">
                                                 <div class="checkbox checkbox-success checkbox-circle">
-                                                    <input id="checkbox-18" name="loads" type="checkbox">
-                                                    <label for="checkbox-18">Cargues</label>
+                                                    <input id="checkbox-14" name="orders" type="checkbox">
+                                                    <label for="checkbox-14">Pedidos</label>
                                                 </div>
                                             </div>
                                             <div class="col col-lg-4">
                                                 <div class="checkbox checkbox-success checkbox-circle">
-                                                    <input id="checkbox-19" name="explosionOfMaterials" type="checkbox">
-                                                    <label for="checkbox-19">Explosión de Materiales</label>
+                                                    <input id="checkbox-17" name="explosionOfMaterials" type="checkbox">
+                                                    <label for="checkbox-17">Explosión de Materiales</label>
                                                 </div>
                                             </div>
+                                            <div class="col">
+                                                <div class="checkbox checkbox-success checkbox-circle">
+                                                    <input id="checkbox-20" name="store" type="checkbox">
+                                                    <label for="checkbox-20">Almacen</label>
+                                                </div>
+                                            </div>
+                                            <div class="w-100"></div>
                                             <div class="col col-lg-4">
                                                 <div class="checkbox checkbox-success checkbox-circle">
-                                                    <input id="checkbox-20" name="productionOrder" type="checkbox">
-                                                    <label for="checkbox-20">Orden de Producción</label>
+                                                    <input id="checkbox-15" name="programming" type="checkbox">
+                                                    <label for="checkbox-15">Programa</label>
                                                 </div>
                                             </div>
                                             <div class="col">
                                                 <div class="checkbox checkbox-success checkbox-circle">
-                                                    <input id="checkbox-20" name="offices" type="checkbox">
-                                                    <label for="checkbox-20">Despachos</label>
+                                                    <input id="checkbox-18" name="productionOrder" type="checkbox">
+                                                    <label for="checkbox-18">Orden de Producción</label>
                                                 </div>
                                             </div>
-                                            <div class="col">
-                                                <div class="checkbox checkbox-success checkbox-circle">
-                                                    <input id="checkbox-21" name="store" type="checkbox">
-                                                    <label for="checkbox-21">Almacen</label>
-                                                </div>
-                                            </div>
+
                                         </div>
                                         <!-- <div class="col-12 col-lg-4">
 

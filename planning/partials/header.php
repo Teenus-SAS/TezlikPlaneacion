@@ -37,7 +37,7 @@
                         <div class="col-sm-9">
                             <div class="row" id="nav">
                                 <?php if (
-                                    $_SESSION['create_mold'] != 0 || $_SESSION['planning_product'] != 0 || $_SESSION['planning_material'] != 0 ||
+                                    $_SESSION['requisition'] != 0 || $_SESSION['planning_product'] != 0 || $_SESSION['planning_material'] != 0 ||
                                     $_SESSION['planning_machine'] != 0 || $_SESSION['planning_process'] != 0
                                 ) { ?>
                                     <div class="col-md-3" id="navPlanBasics">
@@ -57,17 +57,14 @@
                                             <?php if ($_SESSION['planning_machine'] == 1) { ?>
                                                 <li class="planMachines"><a href="/planning/machines">Máquinas</a></li>
                                             <?php } ?>
-                                            <li class="requisitions"><a href="/planning/requisitions">Control Requisiciones</a></li>
-                                            <?php //if ($_SESSION['planning_process'] == 1) { 
-                                            ?>
-                                            <!-- <li class="planProcess"><a href="/planning/process">Procesos</a></li> -->
-                                            <?php //} 
-                                            ?>
+                                            <?php if ($_SESSION['requisition'] == 1) { ?>
+                                                <li class="planRequisitions"><a href="/planning/requisitions">Control Requisiciones</a></li>
+                                            <?php } ?>
                                         </ul>
                                     </div>
                                 <?php } ?>
                                 <?php if (
-                                    $_SESSION['planning_products_material'] != 0 || $_SESSION['planning_products_process'] != 0 ||
+                                    $_SESSION['planning_products_material'] != 0 || $_SESSION['stock'] != 0 ||
                                     $_SESSION['programs_machine'] != 0 || $_SESSION['cicles_machine'] != 0
                                 ) { ?>
                                     <div class="col-md-3" id="navPlanSetting">
@@ -76,38 +73,33 @@
                                             <?php if ($_SESSION['planning_products_material'] == 1) { ?>
                                                 <li class="planProductsMaterials"><a href="/planning/product-materials">Ficha Técnica Productos</a></li>
                                             <?php } ?>
-                                            <?php //if ($_SESSION['planning_products_process'] == 1) { 
-                                            ?>
-                                            <!-- <li class="planProductsProcess"><a href="/planning/product-process">Ficha Técnica Procesos</a></li> -->
-                                            <?php //} 
-                                            ?>
                                             <?php if ($_SESSION['programs_machine'] == 1) { ?>
                                                 <li class="planningMachines"><a href="/planning/planning-machines">Datos Programación Máquinas</a></li>
                                             <?php } ?>
                                             <?php if ($_SESSION['cicles_machine'] == 1) { ?>
                                                 <li class="planCiclesMachine"><a href="/planning/cicles-machines">Producto/Ciclos Maquina</a></li>
                                             <?php } ?>
-                                            <li class="stock"><a href="/planning/stock">Stock Minimo</a></li>
+                                            <?php if ($_SESSION['stock'] == 1) { ?>
+                                                <li class="planStock"><a href="/planning/stock">Stock Minimo</a></li>
+                                            <?php } ?>
                                         </ul>
                                     </div>
                                 <?php } ?>
-                                <?php //if ($_SESSION['client'] != 0 ||$_SESSION['sale'] != 0) { 
-                                ?>
-                                <div class="col-md-3" id="navPlanGeneral">
-                                    <h5 class="font-size-14 font-weight-600">General</h5>
-                                    <ul class="list-unstyled megamenu-list">
-                                        <?php //if ($_SESSION['client'] == 1) { 
-                                        ?>
-                                        <li class="clients"><a href="/planning/clients">Clientes</a></li>
-                                        <?php //} 
-                                        ?>
-                                        <?php if ($_SESSION['sale'] == 1) { ?>
-                                            <li class="sales"><a href="/planning/sales">Ventas</a></li>
-                                        <?php } ?>
-                                    </ul>
-                                </div>
-                                <?php //} 
-                                ?>
+                                <?php if ($_SESSION['client'] != 0 || $_SESSION['sale'] != 0) { ?>
+                                    <div class="col-md-3" id="navPlanGeneral">
+                                        <h5 class="font-size-14 font-weight-600">General</h5>
+                                        <ul class="list-unstyled megamenu-list">
+                                            <?php if ($_SESSION['client'] == 1) {
+                                            ?>
+                                                <li class="planClients"><a href="/planning/clients">Clientes</a></li>
+                                            <?php }
+                                            ?>
+                                            <?php if ($_SESSION['sale'] == 1) { ?>
+                                                <li class="planSales"><a href="/planning/sales">Ventas</a></li>
+                                            <?php } ?>
+                                        </ul>
+                                    </div>
+                                <?php } ?>
                                 <?php if ($_SESSION['planning_user'] != 0 || $_SESSION['client'] != 0 || $_SESSION['orders_type'] != 0) { ?>
                                     <div class="col-md-3" id="navPlanAdmin">
                                         <h5 class="font-size-14 font-weight-600">Administrador</h5>
@@ -116,7 +108,7 @@
                                                 <li class="planUsers"><a href="/planning/users">Usuarios y Accesos</a></li>
                                             <?php } ?>
                                             <?php if ($_SESSION['orders_type'] == 1) { ?>
-                                                <li class="typeOrder"><a href="/planning/order-types">Tipo Pedidos</a></li>
+                                                <li class="planTypeOrder"><a href="/planning/order-types">Tipo Pedidos</a></li>
                                             <?php } ?>
                                         </ul>
                                     </div>

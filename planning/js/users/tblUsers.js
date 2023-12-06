@@ -28,17 +28,7 @@ $(document).ready(function () {
         title: 'Email',
         data: 'email',
         className: 'uniqueClassName',
-      },
-      {
-        title: 'Crear Moldes',
-        data: 'create_mold',
-        className: 'uniqueClassName',
-        render: function (data, type, row) {
-          return data == 1
-            ? '<i class="bx bx-check text-success fs-lg align-middle"></i>'
-            : '<i class="bx bx-x text-danger fs-lg align-middle"></i>';
-        },
-      },
+      }, 
       {
         title: 'Crear Productos',
         data: 'create_product',
@@ -68,17 +58,17 @@ $(document).ready(function () {
             ? '<i class="bx bx-check text-success fs-lg align-middle"></i>'
             : '<i class="bx bx-x text-danger fs-lg align-middle"></i>';
         },
-      },
+      }, 
       {
-        title: 'Crear Procesos',
-        data: 'create_process',
+        title: 'Requisisiones',
+        data: 'requisition',
         className: 'uniqueClassName',
         render: function (data, type, row) {
           return data == 1
             ? '<i class="bx bx-check text-success fs-lg align-middle"></i>'
             : '<i class="bx bx-x text-danger fs-lg align-middle"></i>';
         },
-      },
+      }, 
       {
         title: 'Ficha Técnica Materiales',
         data: 'products_material',
@@ -88,18 +78,7 @@ $(document).ready(function () {
             ? '<i class="bx bx-check text-success fs-lg align-middle"></i>'
             : '<i class="bx bx-x text-danger fs-lg align-middle"></i>';
         },
-      },
-      {
-        title: 'Ficha Técnica Procesos',
-        data: 'products_process',
-        className: 'uniqueClassName',
-        render: function (data, type, row) {
-          return data == 1
-            ? '<i class="bx bx-check text-success fs-lg align-middle"></i>'
-            : '<i class="bx bx-x text-danger fs-lg align-middle"></i>';
-        },
-      },
-
+      },  
       {
         title: 'Programación Maquinas',
         data: 'programs_machine',
@@ -121,8 +100,8 @@ $(document).ready(function () {
         },
       },
       {
-        title: 'Categorias',
-        data: 'inv_category',
+        title: 'Stock',
+        data: 'stock',
         className: 'uniqueClassName',
         render: function (data, type, row) {
           return data == 1
@@ -201,8 +180,28 @@ $(document).ready(function () {
         },
       },
       {
+        title: 'Orden Produccion',
+        data: 'production_order',
+        className: 'uniqueClassName',
+        render: function (data, type, row) {
+          return data == 1
+            ? '<i class="bx bx-check text-success fs-lg align-middle"></i>'
+            : '<i class="bx bx-x text-danger fs-lg align-middle"></i>';
+        },
+      },
+      {
         title: 'Despachos',
         data: 'office',
+        className: 'uniqueClassName',
+        render: function (data, type, row) {
+          return data == 1
+            ? '<i class="bx bx-check text-success fs-lg align-middle"></i>'
+            : '<i class="bx bx-x text-danger fs-lg align-middle"></i>';
+        },
+      },
+      {
+        title: 'Almacen',
+        data: 'store',
         className: 'uniqueClassName',
         render: function (data, type, row) {
           return data == 1
