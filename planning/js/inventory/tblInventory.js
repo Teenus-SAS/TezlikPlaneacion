@@ -72,6 +72,7 @@ $(document).ready(function () {
         unit: data[i].unit,
         quantity: data[i].quantity,
         reserved: data[i].reserved,
+        minimum_stock: data[i].minimum_stock,
         // price: data[i].price,
         classification,
       });
