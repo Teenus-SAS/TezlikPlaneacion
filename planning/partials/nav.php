@@ -38,7 +38,7 @@
                                 <li class="nav-item dropdown planPrograms" style="display: none;">
                                 <?php } ?>
                                 <a class="nav-link dropdown-toggle" href="javascript:void(0)" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                    <i class="bx bxs-customize mr-1"></i> Programa
+                                    <i class="bx bxs-customize mr-1"></i> Programa de Producción
                                     <i class="bx bx-chevron-down"></i>
                                 </a>
                                 <div class="dropdown-menu" aria-labelledby="navbarDropdown">
@@ -59,10 +59,10 @@
                                     <?php } else { ?>
                                     <li class="nav-item planLoads" style="display: none;">
                                     <?php } ?>
-                                    <a class="nav-link" href="/planning/">
+                                    <!-- <a class="nav-link" href="/planning/">
                                         <i class="bx bx-layer mr-1"></i> Cargues
                                         <i class="bx bx-chevron-down"></i>
-                                    </a>
+                                    </a> -->
                                     </li>
 
                                     <?php if ($_SESSION['explosion_of_material'] == 1 && $_SESSION['plan_planning_explosion_of_material'] == 1) { ?>

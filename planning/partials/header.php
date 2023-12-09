@@ -104,21 +104,21 @@
                                                             <?php } else { ?>
                                                             <li class="planningMachines" style="display: none;">
                                                             <?php } ?>
-                                                            <a href="/planning/planning-machines">Datos Programación Máquinas</a>
+                                                            <a href="/planning/planning-machines">Programación Máquinas</a>
                                                             </li>
                                                             <?php if ($_SESSION['cicles_machine'] == 1) { ?>
                                                                 <li class="planCiclesMachine">
                                                                 <?php } else { ?>
                                                                 <li class="planCiclesMachine" style="display: none;">
                                                                 <?php } ?>
-                                                                <a href="/planning/cicles-machines">Producto/Ciclos Maquina</a>
+                                                                <a href="/planning/cicles-machines">Productos/Ciclos Maquinas</a>
                                                                 </li>
                                                                 <?php if ($_SESSION['stock'] == 1) { ?>
                                                                     <li class="planStock">
                                                                     <?php } else { ?>
                                                                     <li class="planStock" style="display: none;">
                                                                     <?php } ?>
-                                                                    <a href="/planning/stock">Stock Minimo</a>
+                                                                    <a href="/planning/stock">Tiempos Stock Mínimo</a>
                                                                     </li>
                                                 </ul>
                                                 </div>
