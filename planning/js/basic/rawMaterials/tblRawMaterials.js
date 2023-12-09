@@ -34,7 +34,7 @@ $(document).ready(function () {
         data: null,
         className: 'classCenter',
         render: function (data) { 
-          data.unit == 'UNIDAD' ? number = data.quantity.toLocaleString('es-CO', { maximumFractionDigits: 0 }) : data.quantity.toLocaleString('es-CO', { minimumFractionDigits: 2 });
+          data.unit == 'UNIDAD' ? number = data.quantity.toLocaleString('es-CO', { maximumFractionDigits: 0 }) : number = data.quantity.toLocaleString('es-CO', { minimumFractionDigits: 2 });
           return number;
          }
       },
@@ -43,7 +43,7 @@ $(document).ready(function () {
         data: null,
         className: 'uniqueClassName',
         render: function (data) { 
-          data.unit == 'UNIDAD' ? number = data.reserved.toLocaleString('es-CO', { maximumFractionDigits: 0 }) : data.reserved.toLocaleString('es-CO', { minimumFractionDigits: 2 });
+          data.unit == 'UNIDAD' ? number = data.reserved.toLocaleString('es-CO', { maximumFractionDigits: 0 }) : number = data.reserved.toLocaleString('es-CO', { minimumFractionDigits: 2});
           return number;
          }
       }, 
@@ -52,7 +52,7 @@ $(document).ready(function () {
         data: null,
         className: 'uniqueClassName', 
         render: function (data) { 
-          data.unit == 'UNIDAD' ? number = data.minimum_stock.toLocaleString('es-CO', { maximumFractionDigits: 0 }) : data.minimum_stock.toLocaleString('es-CO', { minimumFractionDigits: 2 });
+          data.unit == 'UNIDAD' ? number = data.minimum_stock.toLocaleString('es-CO', { maximumFractionDigits: 0 }) : number = data.minimum_stock.toLocaleString('es-CO', { minimumFractionDigits: 2});
           return number;
          }
       }, 
