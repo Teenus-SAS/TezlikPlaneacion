@@ -31,21 +31,30 @@ $(document).ready(function () {
       },
       {
         title: 'Existencia',
-        data: 'quantity',
+        data: null,
         className: 'classCenter',
-        render: $.fn.dataTable.render.number('.', ',', 2),
+        render: function (data) { 
+          data.unit == 'UNIDAD' ? number = data.quantity.toLocaleString('es-CO', { maximumFractionDigits: 0 }) : data.quantity.toLocaleString('es-CO', { minimumFractionDigits: 2 });
+          return number;
+         }
       },
       {
         title: 'Reservado',
-        data: 'reserved',
+        data: null,
         className: 'uniqueClassName',
-        render: $.fn.dataTable.render.number('.', ',', 2),
+        render: function (data) { 
+          data.unit == 'UNIDAD' ? number = data.reserved.toLocaleString('es-CO', { maximumFractionDigits: 0 }) : data.reserved.toLocaleString('es-CO', { minimumFractionDigits: 2 });
+          return number;
+         }
       }, 
       {
         title: 'Stock Min',
-        data: 'minimum_stock',
+        data: null,
         className: 'uniqueClassName', 
-        render: $.fn.dataTable.render.number('.', ',', 2),
+        render: function (data) { 
+          data.unit == 'UNIDAD' ? number = data.minimum_stock.toLocaleString('es-CO', { maximumFractionDigits: 0 }) : data.minimum_stock.toLocaleString('es-CO', { minimumFractionDigits: 2 });
+          return number;
+         }
       }, 
       {
         title: 'Unidad',
