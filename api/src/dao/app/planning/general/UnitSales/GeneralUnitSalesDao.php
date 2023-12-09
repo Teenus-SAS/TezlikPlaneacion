@@ -34,11 +34,59 @@ class GeneralUnitSalesDao
     {
         $connection = Connection::getInstance()->getConnection();
 
-        $stmt = $connection->prepare("SELECT * FROM WHERE id_company = :id_company");
+        $stmt = $connection->prepare("SELECT * FROM sale_days WHERE id_company = :id_company");
         $stmt->execute([
             'id_company' => $id_company
         ]);
+        $findSales = $stmt->fetchAll($connection::FETCH_ASSOC);
+        return $findSales;
+    }
+
+    public function findSaleDays($dataSale, $id_company)
+    {
+        $connection = Connection::getInstance()->getConnection();
+
+        $stmt = $connection->prepare("SELECT * FROM sale_days WHERE year = :year AND month = :month AND id_company = :id_company");
+        $stmt->execute([
+            'id_company' => $id_company,
+            'year' => $dataSale['year'],
+            'month' => $dataSale['month']
+        ]);
         $findSales = $stmt->fetch($connection::FETCH_ASSOC);
         return $findSales;
+    }
+
+    public function insertSaleDaysByCompany($dataSale, $id_company)
+    {
+        try {
+            $connection = Connection::getInstance()->getConnection();
+
+            $stmt = $connection->prepare("INSERT INTO sale_days (id_company, days, month, year) VALUES (:id_company, :days, :month, :year)");
+            $stmt->execute([
+                'id_company' => $id_company,
+                'days' => $dataSale['days'],
+                'month' => $dataSale['month'],
+                'year' => $dataSale['year']
+            ]);
+        } catch (\Exception $e) {
+            return array('info' => true, 'message' => $e->getMessage());
+        }
+    }
+
+    public function updateSaleDays($dataSale)
+    {
+        try {
+            $connection = Connection::getInstance()->getConnection();
+
+            $stmt = $connection->prepare("UPDATE sale_days SET days = :days, month = :month, year = :year WHERE id_sale_day = :id_sale_day");
+            $stmt->execute([
+                'id_sale_day' => $dataSale['idSaleDay'],
+                'days' => $dataSale['days'],
+                'month' => $dataSale['month'],
+                'year' => $dataSale['year']
+            ]);
+        } catch (\Exception $e) {
+            return array('info' => true, 'message' => $e->getMessage());
+        }
     }
 }

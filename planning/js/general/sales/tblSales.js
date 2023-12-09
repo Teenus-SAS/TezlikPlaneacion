@@ -1,4 +1,19 @@
 $(document).ready(function () {
+  const nombresMeses = {
+    1: 'Enero',
+    2: 'Febrero',
+    3: 'Marzo',
+    4: 'Abril',
+    5: 'Mayo',
+    6: 'Junio',
+    7: 'Julio',
+    8: 'Agosto',
+    9: 'Septiembre',
+    10: 'Octubre',
+    11: 'Noviembre',
+    12: 'Diciembre'
+  };
+  
   /* Seleccion producto */
   $('#refProduct').change(function (e) {
     e.preventDefault();
@@ -131,6 +146,57 @@ $(document).ready(function () {
                 <a href="javascript:;" <i id="${data}" class="mdi mdi-delete-forever" data-toggle='tooltip' title='Eliminar Venta' style="font-size: 30px;color:red" onclick="deleteFunction()"></i></a>`;
         },
       },
+    ],
+  });
+
+  // Cargar tabla de Dias Ventas
+  tblSalesDays = $('#tblSalesDays').dataTable({
+    pageLength: 50,
+    ajax: {
+      url: '../../api/saleDays',
+      dataSrc: '',
+    },
+    language: {
+      url: '//cdn.datatables.net/plug-ins/1.10.20/i18n/Spanish.json',
+    },
+    columns: [
+      {
+        title: 'No.',
+        data: null,
+        className: 'uniqueClassName',
+        render: function (data, type, full, meta) {
+          return meta.row + 1;
+        },
+      }, 
+      {
+        title: 'Año',
+        data: 'year',
+        className: 'uniqueClassName',
+      },
+      {
+        title: 'Mes',
+        data: 'month',
+        className: 'uniqueClassName',
+        render: function(data, type, row) {
+          return nombresMeses[data]; 
+        }
+      },
+      {
+        title: 'Dias',
+        data: 'days',
+        className: 'uniqueClassName',
+        render: $.fn.dataTable.render.number('.', ',', 0, ''),
+      },
+      // {
+      //   title: 'Acciones',
+      //   data: 'id_unit_sales',
+      //   className: 'uniqueClassName',
+      //   render: function (data) {
+      //     return `
+      //           <a href="javascript:;" <i id="${data}" class="bx bx-edit-alt updateSale" data-toggle='tooltip' title='Actualizar Venta' style="font-size: 30px;"></i></a>
+      //           <a href="javascript:;" <i id="${data}" class="mdi mdi-delete-forever" data-toggle='tooltip' title='Eliminar Venta' style="font-size: 30px;color:red" onclick="deleteFunction()"></i></a>`;
+      //   },
+      // },
     ],
   });
 });

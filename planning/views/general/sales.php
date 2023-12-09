@@ -74,12 +74,30 @@ if (sizeof($_SESSION) == 0)
                                         <div class="card-body pt-3">
                                             <div class="form-row">
                                                 <div class="col-sm-2 floating-label enable-floating-label show-label" style="margin-bottom:10px!important">
-                                                    <input type="number" class="text-center form-control" name="days" id="days">
-                                                    <label for="">Ventas</label>
-                                                </div>
-                                                <div class="col-sm-2 floating-label enable-floating-label show-label" style="margin-bottom:10px!important">
                                                     <input type="number" class="text-center form-control" name="year" id="year">
                                                     <label for="">Año</label>
+                                                </div>
+                                                <div class="col-sm-2 floating-label enable-floating-label show-label" style="margin-bottom:10px!important">
+                                                    <select id="month" class="form-control">
+                                                        <option disabled selected>Seleccionar</option>
+                                                        <option value="1">Enero</option>
+                                                        <option value="2">Febrero</option>
+                                                        <option value="3">Marzo</option>
+                                                        <option value="4">Abril</option>
+                                                        <option value="5">Mayo</option>
+                                                        <option value="6">Junio</option>
+                                                        <option value="7">Julio</option>
+                                                        <option value="8">Agosto</option>
+                                                        <option value="9">Septiembre</option>
+                                                        <option value="10">Octubre</option>
+                                                        <option value="11">Noviembre</option>
+                                                        <option value="12">Diciembre</option>
+                                                    </select>
+                                                    <label for="">Mes</label>
+                                                </div>
+                                                <div class="col-sm-2 floating-label enable-floating-label show-label" style="margin-bottom:10px!important">
+                                                    <input type="number" class="text-center form-control" name="days" id="days">
+                                                    <label for="">Dias</label>
                                                 </div>
                                                 <div class="col-xs-2" style="margin-top:7px">
                                                     <button class="btn btn-success" id="btnAddDays">Guardar</button>
@@ -124,7 +142,7 @@ if (sizeof($_SESSION) == 0)
                 <div class="page-content-wrapper mt--45">
                     <div class="container-fluid">
                         <!-- Row 5 -->
-                        <div class="row">
+                        <div class="row cardSales">
                             <div class="col-12">
                                 <div class="card">
                                     <div class="card-header">
@@ -133,6 +151,22 @@ if (sizeof($_SESSION) == 0)
                                     <div class="card-body">
                                         <div class="table-responsive">
                                             <table class="table table-striped" id="tblSales">
+
+                                            </table>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row cardSaleDays">
+                            <div class="col-12">
+                                <div class="card">
+                                    <div class="card-header">
+                                        <h5 class="card-title">Dias Ventas</h5>
+                                    </div>
+                                    <div class="card-body">
+                                        <div class="table-responsive">
+                                            <table class="table table-striped" id="tblSalesDays">
 
                                             </table>
                                         </div>

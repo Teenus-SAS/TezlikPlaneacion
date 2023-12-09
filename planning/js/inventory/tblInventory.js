@@ -121,8 +121,7 @@ $(document).ready(function () {
         {
           title: 'Reservado',
           data: null,
-          className: 'uniqueClassName',
-          // render: $.fn.dataTable.render.number('.', ',', 2),
+          className: 'uniqueClassName', 
           render: function (data) { 
           data.unit == 'UNIDAD' ? number = data.reserved.toLocaleString('es-CO', { maximumFractionDigits: 0 }) : number = data.reserved.toLocaleString('es-CO', { minimumFractionDigits: 2});
           return number;
@@ -131,8 +130,7 @@ $(document).ready(function () {
         {
           title: 'Stock',
           data: null,
-          className: 'uniqueClassName',
-          // render: $.fn.dataTable.render.number('.', ',', 2),
+          className: 'uniqueClassName', 
           render: function (data) { 
           data.unit == 'UNIDAD' ? number = data.minimum_stock.toLocaleString('es-CO', { maximumFractionDigits: 0 }) : number = data.minimum_stock.toLocaleString('es-CO', { minimumFractionDigits: 2});
           return number;

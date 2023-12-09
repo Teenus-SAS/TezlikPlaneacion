@@ -1,5 +1,5 @@
 $(document).ready(function () {
-  $('.cardAddDays').hide();
+  $('.cardAddDays').hide(); 
   
   /* Ocultar modal crear venta */
   $('#btnCloseSale').click(function (e) {
@@ -14,6 +14,8 @@ $(document).ready(function () {
     e.preventDefault();
     
     $('.cardImportSales').hide(800);
+    $('.cardSaleDays').hide(800);
+    $('.cardSales').show(800);
     $('#createSale').modal('show');
     $('#btnCreateSale').html('Crear');
     $('.cardAddDays').hide();
@@ -171,7 +173,32 @@ $(document).ready(function () {
     e.preventDefault();
     
     $('.cardAddDays').toggle(800);
-    // $('#formAddDays').trigger('reset');
+    $('.cardSaleDays').show(800);
+    $('.cardSales').hide(800);
+    $('#formAddDays').trigger('reset');
+  });
+
+  $('#btnAddDays').click(async function (e) { 
+    e.preventDefault();
+    
+    let year = parseInt($('#year').val());
+    let month = parseInt($('#month').val());
+    let days = parseInt($('#days').val());
+    
+    let data = year * month * days;
+
+    if (!data || data <= 0 || isNaN(data)) {
+      toastr.error('Ingrese todos los campos');
+      return false;
+    }
+
+    let dataSale = new FormData(formAddDays);
+
+    dataSale.append('month', month); 
+
+    let resp = await sendDataPOST('/api/saveSaleDays', dataSale);
+
+    message(resp); 
   });
 
   /* Mensaje de exito */
@@ -181,6 +208,9 @@ $(document).ready(function () {
       $('.month').css('border-color', '');
       $('#createSale').modal('hide');
       $('#formCreateSale').trigger('reset');
+      $('.cardAddDays').hide(800);
+      $('#formAddDays').trigger('reset');
+      
       updateTable();
       toastr.success(data.message);
       return false;
@@ -193,5 +223,7 @@ $(document).ready(function () {
   function updateTable() {
     $('#tblSales').DataTable().clear();
     $('#tblSales').DataTable().ajax.reload();
+    $('#tblSalesDays').DataTable().clear();
+    $('#tblSalesDays').DataTable().ajax.reload();
   }
 });

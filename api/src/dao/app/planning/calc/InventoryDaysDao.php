@@ -16,23 +16,17 @@ class InventoryDaysDao
         $this->logger->pushHandler(new RotatingFileHandler(Constants::LOGS_PATH . 'querys.log', 20, Logger::DEBUG));
     }
 
-    public function calcInventoryDays($dataInventory)
+    public function calcInventoryDays($id_product)
     {
         $connection = Connection::getInstance()->getconnection();
-
-        /* SELECT (p.quantity / ((IFNULL(u.jan, 0) + IFNULL(u.feb, 0) + IFNULL(u.mar, 0) + IFNULL(u.apr, 0) + IFNULL(u.may, 0) + IFNULL(u.jun, 0) + IFNULL(u.jul, 0) + IFNULL(u.aug, 0) + IFNULL(u.sept, 0) + IFNULL(u.oct, 0) + IFNULL(u.nov, 0) + IFNULL(u.dece, 0)) / 12)) AS days
+        $stmt = $connection->prepare("SELECT (p.quantity / ((IFNULL(u.jan, 0) + IFNULL(u.feb, 0) + IFNULL(u.mar, 0) + IFNULL(u.apr, 0) + IFNULL(u.may, 0) + IFNULL(u.jun, 0) + IFNULL(u.jul, 0) + IFNULL(u.aug, 0) + IFNULL(u.sept, 0) + IFNULL(u.oct, 0) + IFNULL(u.nov, 0) + IFNULL(u.dece, 0)) / 12) * (SELECT days FROM sale_days WHERE month = MONTH(CURRENT_DATE()) AND year = YEAR(CURRENT_DATE()) AND id_company = p.id_company)) AS days
                                       FROM products p
                                       LEFT JOIN plan_unit_sales u ON u.id_product = p.id_product
-                                      WHERE p.id_product = */
-        $stmt = $connection->prepare("SELECT (((p.product / (pph.january + pph.february + pph.march + pph.april + pph.june + pph.july + pph.august + pph.september + pph.november + pph.december)/12)/4)/7) AS inventory_day 
-                                      FROM products p
-                                      INNER JOIN products_price_history pph ON pph.id_product = p.id_product
                                       WHERE p.id_product = :id_product");
-        $stmt->execute(['id_product' => $dataInventory['idProduct']]);
+        $stmt->execute(['id_product' => $id_product]);
         $this->logger->info(__FUNCTION__, array('query' => $stmt->queryString, 'errors' => $stmt->errorInfo()));
-        $inventoryDays = $stmt->fetch($connection::FETCH__ASSOC);
-
-        $this->updateInventoryDays($dataInventory, $inventoryDays['inventory_day']);
+        $product = $stmt->fetch($connection::FETCH__ASSOC);
+        return $product;
     }
 
     public function updateInventoryDays($dataInventory, $inventoryDay)

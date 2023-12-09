@@ -313,5 +313,28 @@ $app->get('/saleDays', function (Request $request, Response $response, $args) us
     $response->getBody()->write(json_encode($saleDays, JSON_NUMERIC_CHECK));
     return $response->withHeader('Content-Type', 'application/json');
 });
+
 $app->post('/saveSaleDays', function (Request $request, Response $response, $args) use ($generalUnitSalesDao) {
+    session_start();
+    $id_company = $_SESSION['id_company'];
+    $dataSales = $request->getParsedBody();
+
+    $saleDay = $generalUnitSalesDao->findSaleDays($dataSales, $id_company);
+
+    if (!$saleDay)
+        $resolution = $generalUnitSalesDao->insertSaleDaysByCompany($dataSales, $id_company);
+    else {
+        $dataSales['idSaleDay'] = $saleDay['id_sale_day'];
+        $resolution = $generalUnitSalesDao->updateSaleDays($dataSales);
+    }
+
+    if ($resolution == null)
+        $resp = array('success' => true, 'message' => 'Dias de venta almacenada correctamente');
+    else if (isset($resolution['info']))
+        $resp = array('info' => true, 'message' => $resolution['message']);
+    else
+        $resp = array('error' => true, 'message' => 'No es posible Guardar la información. intente nuevamente');
+
+    $response->getBody()->write(json_encode($resp));
+    return $response->withHeader('Content-Type', 'application/json');
 });
