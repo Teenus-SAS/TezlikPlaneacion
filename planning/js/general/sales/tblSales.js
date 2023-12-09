@@ -119,7 +119,7 @@ $(document).ready(function () {
         title: 'Promedio',
         data: 'average',
         className: 'uniqueClassName',
-        render: $.fn.dataTable.render.number('.', ',', 2, ''),
+        render: $.fn.dataTable.render.number('.', ',', 0, ''),
       },
       {
         title: 'Acciones',
