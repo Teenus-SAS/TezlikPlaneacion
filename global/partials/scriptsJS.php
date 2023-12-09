@@ -17,7 +17,7 @@
 
 <!-- page JS -->
 <script src="/assets/js/app.js"></script>
-<script src="/global/js/global/sessionUser.js"></script>
+<!-- <script src="/global/js/global/sessionUser.js"></script> -->
 
 <!-- Datatables -->
 <script src="https://cdn.datatables.net/1.11.4/js/jquery.dataTables.min.js"></script>

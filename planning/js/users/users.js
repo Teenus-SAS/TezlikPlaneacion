@@ -105,8 +105,8 @@ $(document).ready(function () {
       order: data.plan_order,
       program: data.program,
       load: data.plan_load,
-      productionOrder: data.production_order,
       explosionOfMaterial: data.explosion_of_material,
+      productionOrder: data.production_order,
       office: data.office,
       store: data.store
     };
@@ -168,8 +168,8 @@ $(document).ready(function () {
       order: 0,
       program: 0,
       load: 0,
-      productionOrder: 0,
       explosionOfMaterial: 0,
+      productionOrder: 0,
       office: 0,
       store: 0
     };

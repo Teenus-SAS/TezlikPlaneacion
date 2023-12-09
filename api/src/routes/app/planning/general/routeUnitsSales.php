@@ -303,3 +303,15 @@ $app->get('/deleteUnitSale', function (Request $request, Response $response, $ar
     $response->getBody()->write(json_encode($resp));
     return $response->withHeader('Content-Type', 'application/json');
 });
+
+$app->get('/saleDays', function (Request $request, Response $response, $args) use ($generalUnitSalesDao) {
+    session_start();
+    $id_company = $_SESSION['id_company'];
+
+    $saleDays = $generalUnitSalesDao->findSaleDaysByCompany($id_company);
+
+    $response->getBody()->write(json_encode($saleDays, JSON_NUMERIC_CHECK));
+    return $response->withHeader('Content-Type', 'application/json');
+});
+$app->post('/saveSaleDays', function (Request $request, Response $response, $args) use ($generalUnitSalesDao) {
+});

@@ -29,4 +29,16 @@ class GeneralUnitSalesDao
         $findSales = $stmt->fetch($connection::FETCH_ASSOC);
         return $findSales;
     }
+
+    public function findSaleDaysByCompany($id_company)
+    {
+        $connection = Connection::getInstance()->getConnection();
+
+        $stmt = $connection->prepare("SELECT * FROM WHERE id_company = :id_company");
+        $stmt->execute([
+            'id_company' => $id_company
+        ]);
+        $findSales = $stmt->fetch($connection::FETCH_ASSOC);
+        return $findSales;
+    }
 }

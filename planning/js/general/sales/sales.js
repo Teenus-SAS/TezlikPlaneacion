@@ -1,19 +1,22 @@
 $(document).ready(function () {
+  $('.cardAddDays').hide();
+  
   /* Ocultar modal crear venta */
   $('#btnCloseSale').click(function (e) {
     e.preventDefault();
-
+    
     $('.month').css('border-color', '');
     $('#createSale').modal('hide');
   });
   /* Abrir modal crear venta */
-
+  
   $('#btnNewSale').click(function (e) {
     e.preventDefault();
-
+    
     $('.cardImportSales').hide(800);
     $('#createSale').modal('show');
     $('#btnCreateSale').html('Crear');
+    $('.cardAddDays').hide();
 
     sessionStorage.removeItem('id_unit_sales');
 
@@ -163,6 +166,13 @@ $(document).ready(function () {
       },
     });
   };
+
+  $('#btnNewAddDays').click(async function (e) { 
+    e.preventDefault();
+    
+    $('.cardAddDays').toggle(800);
+    // $('#formAddDays').trigger('reset');
+  });
 
   /* Mensaje de exito */
 

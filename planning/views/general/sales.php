@@ -52,11 +52,42 @@ if (sizeof($_SESSION) == 0)
                             </div>
                             <div class="col-sm-7 col-xl-6 form-inline justify-content-sm-end">
                                 <div class="col-xs-2 mr-2">
+                                    <button class="btn btn-secondary" id="btnNewAddDays" name="btnNewAddDays">Dias de Ventas</button>
+                                </div>
+                                <div class="col-xs-2 mr-2">
                                     <button class="btn btn-warning" id="btnNewSale" name="btnNewSale">Nueva Venta</button>
                                 </div>
                                 <div class="col-xs-2 py-2 mr-2">
                                     <button class="btn btn-info" id="btnImportNewSales">Importar Venta</button>
                                 </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="page-content-wrapper mt--45 mb-5 cardAddDays">
+                    <div class="container-fluid">
+                        <div class="row">
+                            <div class="col-12">
+                                <form id="formAddDays">
+                                    <div class="card">
+                                        <div class="card-body pt-3">
+                                            <div class="form-row">
+                                                <div class="col-sm-2 floating-label enable-floating-label show-label" style="margin-bottom:10px!important">
+                                                    <input type="number" class="text-center form-control" name="days" id="days">
+                                                    <label for="">Ventas</label>
+                                                </div>
+                                                <div class="col-sm-2 floating-label enable-floating-label show-label" style="margin-bottom:10px!important">
+                                                    <input type="number" class="text-center form-control" name="year" id="year">
+                                                    <label for="">Año</label>
+                                                </div>
+                                                <div class="col-xs-2" style="margin-top:7px">
+                                                    <button class="btn btn-success" id="btnAddDays">Guardar</button>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </form>
                             </div>
                         </div>
                     </div>
