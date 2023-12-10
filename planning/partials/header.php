@@ -118,7 +118,7 @@
                                                                     <?php } else { ?>
                                                                     <li class="planStock" style="display: none;">
                                                                     <?php } ?>
-                                                                    <a href="/planning/stock">Tiempos Stock Mínimo</a>
+                                                                    <a href="/planning/stock">Tiempos Proveedores Stock Mínimo</a>
                                                                     </li>
                                                 </ul>
                                                 </div>
@@ -174,7 +174,7 @@
                                             </div>
                                     </div>
                             </div>
-                            <div class="d-none d-lg-block ml-0 ml-sm-2 dropdown">
+                            <!-- <div class="d-none d-lg-block ml-0 ml-sm-2 dropdown">
                                 <button data-toggle="dropdown" aria-haspopup="true" type="button" id="page-header-search-dropdown" aria-expanded="false" class="btn header-item notify-icon">
                                     <i class="bx bx-search"></i>
                                 </button>
@@ -188,7 +188,7 @@
                                         </div>
                                     </form>
                                 </div>
-                            </div>
+                            </div> -->
                             <!-- <div class="d-none d-lg-inline-flex ml-2 dropdown">
                 <button data-toggle="dropdown" aria-haspopup="true" type="button" id="page-header-app-dropdown" aria-expanded="false" class="btn header-item notify-icon">
                     <i class="bx bx-customize"></i>

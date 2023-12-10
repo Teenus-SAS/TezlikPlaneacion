@@ -42,7 +42,7 @@ if (sizeof($_SESSION) == 0)
                         <div class="row align-items-center">
                             <div class="col-sm-5 col-xl-6">
                                 <div class="page-title">
-                                    <h3 class="mb-1 font-weight-bold text-dark">Dashboard</h3>
+                                    <h3 class="mb-1 font-weight-bold text-dark">Dashboard General</h3>
                                     <ol class="breadcrumb mb-3 mb-md-0">
                                         <li class="breadcrumb-item active">Bienvenido</li>
                                     </ol>
@@ -56,18 +56,18 @@ if (sizeof($_SESSION) == 0)
                     <div class="container-fluid">
                         <!-- Widget  -->
                         <div class="row">
-                            <!-- <div class="col-md-6 col-xl-3">
+                            <div class="col-md-6 col-xl-3">
                                 <div class="card">
                                     <div class="card-body">
                                         <div class="media align-items-center">
                                             <div class="media-body">
-                                                <span class="text-muted text-uppercase font-size-12 font-weight-bold">Productos</span>
-                                                <h2 class="mb-0 mt-1" id="products"></h2>
+                                                <span class="text-muted text-uppercase font-size-12 font-weight-bold">Productos Agotados</span>
+                                                <h2 class="mb-0 mt-1" id="productStockout"></h2>
                                             </div>
                                             <div class="text-center">
                                                 <div id="t-rev"></div>
-                                                <span class="text-info font-weight-bold font-size-23">
-                                                    <i class='bx bx-box fs-lg'></i>
+                                                <span class="text-danger font-weight-bold font-size-23">
+                                                    <i class='bi bi-paint-bucket fs-lg'></i>
                                                 </span>
                                             </div>
                                         </div>
@@ -79,55 +79,55 @@ if (sizeof($_SESSION) == 0)
                                     <div class="card-body">
                                         <div class="media align-items-center">
                                             <div class="media-body">
-                                                <span class="text-muted text-uppercase font-size-12 font-weight-bold">Materias Primas</span>
-                                                <h2 class="mb-0 mt-1" id="materials"></h2>
+                                                <span class="text-muted text-uppercase font-size-12 font-weight-bold">Pedidos No Programados</span>
+                                                <h2 class="mb-0 mt-1" id="ActiveOrders"></h2>
                                             </div>
                                             <div class="text-center">
                                                 <div id="t-rev"></div>
-                                                <span class="text-info font-weight-bold font-size-13">
-                                                    <i class='bx bxs-customize fs-lg'></i>
+                                                <span class="text-warning font-weight-bold font-size-13">
+                                                    <i class='bi bi-phone-vibrate-fill fs-lg'></i>
                                                 </span>
                                             </div>
                                         </div>
                                     </div>
                                 </div>
-                            </div> -->
-                            <!-- <div class="col-md-6 col-xl-3">
-								<div class="card">
-									<div class="card-body">
-										<div class="media align-items-center">
-											<div class="media-body">
-												<span class="text-muted text-uppercase font-size-12 font-weight-bold">Rentabilidad (Promedio)</span>
-												<h2 class="mb-0 mt-1" id="profitabilityAverage"></h2>
-											</div>
-											<div class="text-center">
-												<div id="t-order"></div>
-												<span class="text-danger font-weight-bold font-size-13">
-													<i class="bx bx-down-arrow-alt"></i> 5.05%
-												</span>
-											</div>
-										</div>
-									</div>
-								</div>
-							</div> -->
-                            <!-- <div class="col-md-6 col-xl-3">
+                            </div>
+                            <div class="col-md-6 col-xl-3">
                                 <div class="card">
                                     <div class="card-body">
                                         <div class="media align-items-center">
                                             <div class="media-body">
-                                                <span class="text-muted text-uppercase font-size-12 font-weight-bold">Comisión de Ventas (Promedio)</span>
-                                                <h2 class="mb-0 mt-1" id="comissionAverage"></h2>
+                                                <span class="text-muted text-uppercase font-size-12 font-weight-bold">Pedidos Programados</span>
+                                                <h2 class="mb-0 mt-1" id="scheduledOrders"></h2>
                                             </div>
                                             <div class="text-center">
-                                                <div id="t-user"></div>
-                                                <span class="text-success font-weight-bold font-size-13">
-                                                    <i class='bx bx-money fs-lg'></i>
+                                                <div id="t-order"></div>
+                                                <span class="text-info font-weight-bold font-size-13">
+                                                    <i class="bi bi-boxes fs-lg"></i>
                                                 </span>
                                             </div>
                                         </div>
                                     </div>
                                 </div>
-                            </div> -->
+                            </div>
+                            <div class="col-md-6 col-xl-3">
+                                <div class="card">
+                                    <div class="card-body">
+                                        <div class="media align-items-center">
+                                            <div class="media-body">
+                                                <span class="text-muted text-uppercase font-size-12 font-weight-bold">Pedidos en Producción</span>
+                                                <h2 class="mb-0 mt-1" id="ordersInExecution"></h2>
+                                            </div>
+                                            <div class="text-center">
+                                                <div id="t-user"></div>
+                                                <span class="text-success font-weight-bold font-size-13">
+                                                    <i class='bi bi-border-style fs-lg'></i>
+                                                </span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
                             <!-- <div class="col-md-6 col-xl-3">
                                 <div class="card">
                                     <div class="card-body">
@@ -152,14 +152,14 @@ if (sizeof($_SESSION) == 0)
                             <!-- <div class="col-md-4 col-lg-3">
                                 <div class="card">
                                     <div class="card-header">
-                                        <h5 class="card-title">Ventas</h5>
+                                        <h5 class="card-title">Clasificación Inventarios</h5>
                                     </div>
                                     <div class="card-body p-0">
                                         <ul class="list-group list-group-flush">
                                             <li class="list-group-item py-4">
                                                 <div class="media">
                                                     <div class="media-body">
-                                                        <p class="text-muted mb-2">Total Unidades Vendidas</p>
+                                                        <p class="text-muted mb-2">Tipo A</p>
                                                         <h4 class="mb-0" id="productsSold"></h4>
                                                     </div>
                                                     <div class="avatar avatar-md bg-info mr-0 align-self-center">
@@ -170,7 +170,7 @@ if (sizeof($_SESSION) == 0)
                                             <li class="list-group-item py-4">
                                                 <div class="media">
                                                     <div class="media-body">
-                                                        <p class="text-muted mb-2">Total Ingresos por Ventas</p>
+                                                        <p class="text-muted mb-2">Tipo B</p>
                                                         <h4 class="mb-0" id="salesRevenue"></h4>
                                                     </div>
                                                     <div class="avatar avatar-md bg-primary mr-0 align-self-center">
@@ -181,8 +181,8 @@ if (sizeof($_SESSION) == 0)
                                             <li class="list-group-item py-4">
                                                 <div class="media">
                                                     <div class="media-body">
-                                                        <p class="text-muted mb-2">Rentabilidad Promedio</p>
-                                                        <h4 class="mb-0" id="profitabilityAverage">8,235</h4>
+                                                        <p class="text-muted mb-2">Tipo C</p>
+                                                        <h4 class="mb-0" id="profitabilityAverage"></h4>
                                                     </div>
                                                     <div class="avatar avatar-md bg-success mr-0 align-self-center">
                                                         <i class="bx bx-chart fs-lg"></i>
@@ -193,18 +193,32 @@ if (sizeof($_SESSION) == 0)
                                     </div>
                                 </div>
                             </div> -->
-                            <!-- Begin total revenue chart -->
-                            <!-- <div class="col-md-4 col-lg-6" style="height: fit-content;">
+
+                            <!-- Begin total orders vs clients chart -->
+                            <div class="col-md-4 col-lg-9" style="height: fit-content;">
                                 <div class="card">
                                     <div class="card-header">
-                                        <h5 class="card-title">Productos con mayor rentabilidad</h5>
+                                        <h5 class="card-title">Clientes con mayor número de pedidos</h5>
                                     </div>
-                                    <div class="card-body pt-2"> -->
+                                    <div class="card-body pt-2">
                                         <!-- <canvas id="chartTimeProcessProducts"></canvas> -->
-                                        <!-- <canvas id="chartProductsCost"></canvas>
+                                        <canvas id="chartProductsCost"></canvas>
                                     </div>
                                 </div>
-                            </div> -->
+                            </div>
+
+                            <!-- Begin Inventory classification chart -->
+                            <div class="col-md-4 col-lg-3" style="height: fit-content;">
+                                <div class="card">
+                                    <div class="card-header">
+                                        <h5 class="card-title">Entregas a tiempo</h5>
+                                    </div>
+                                    <div class="card-body pt-2">
+                                        <!-- <canvas id="chartTimeProcessProducts"></canvas> -->
+                                        <canvas id="chartProductsCost"></canvas>
+                                    </div>
+                                </div>
+                            </div>
                             <!-- <div class="col-md-4 col-lg-3">
                                 <div class="card">
                                     <div class="card-header">
@@ -252,6 +266,28 @@ if (sizeof($_SESSION) == 0)
                             <!-- End total revenue chart -->
                         </div>
                         <div class="row">
+                            <div class="col-md-4 col-lg-4" style="height: fit-content;">
+                                <div class="card">
+                                    <div class="card-header">
+                                        <h5 class="card-title">Clasificacion Inventario ABC</h5>
+                                    </div>
+                                    <div class="card-body pt-2">
+                                        <!-- <canvas id="chartTimeProcessProducts"></canvas> -->
+                                        <canvas id="chartProductsCost"></canvas>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-4 col-lg-8" style="height: fit-content;">
+                                <div class="card">
+                                    <div class="card-header">
+                                        <h5 class="card-title">Productos con mayor rotación</h5>
+                                    </div>
+                                    <div class="card-body pt-2">
+                                        <!-- <canvas id="chartTimeProcessProducts"></canvas> -->
+                                        <canvas id="chartProductsCost"></canvas>
+                                    </div>
+                                </div>
+                            </div>
                             <!-- <div class="col-lg-4">
                                 <div class="card">
                                     <div class="card-header">

@@ -1,5 +1,5 @@
 $(document).ready(function () {
-  sessionStorage.removeItem('products');
+  sessionStorage.removeItem("products");
   // Obtener Inventarios
   loadInventory = async () => {
     await fetch(`/api/inventory`)
@@ -7,16 +7,16 @@ $(document).ready(function () {
       .then((data) => {
         data = JSON.parse(data);
         // Guardar productos
-        dataProducts = JSON.stringify(data.products); 
-        sessionStorage.setItem('dataProducts', dataProducts);
+        dataProducts = JSON.stringify(data.products);
+        sessionStorage.setItem("dataProducts", dataProducts);
 
-        let $select = $('#category');
+        let $select = $("#category");
         $select.empty();
         $select.append(`<option disabled selected>Seleccionar</option>`);
         $select.append(`<option value="1">Productos</option>`);
         $select.append(`<option value="2">Materiales</option>`);
         $select.append(`<option value="3">Todos</option>`);
- 
+
         products = data.products;
         materials = data.rawMaterials;
       });
@@ -25,35 +25,33 @@ $(document).ready(function () {
   loadInventory();
 
   // Seleccionar Categoria
-  $('#category').change(function (e) {
+  $("#category").change(function (e) {
     e.preventDefault();
 
     // Ocultar card formulario Analisis Inventario ABC
-    $('.cardAddMonths').hide(800);
-    $('.cardBtnAddMonths').hide(800);
+    $(".cardAddMonths").hide(800);
+    $(".cardBtnAddMonths").hide(800);
 
     value = this.value;
     if (value != 0) {
       // Productos
       if (value == 1) {
-        $('.cardBtnAddMonths').show(800);
+        $(".cardBtnAddMonths").show(800);
         data = getInventory(products);
-        data['visible'] = true;
+        data["visible"] = true;
       }
       // Materias Prima
       else if (value == 2) {
         data = getInventory(materials);
-        data['visible'] = false;
+        data["visible"] = false;
       }
       // Todos
       else if (value == 3) {
         dataProducts = getInventory(products);
         dataMaterials = getInventory(materials);
 
-        data = dataProducts.concat(
-          dataMaterials
-        );
-        data['visible'] = false;
+        data = dataProducts.concat(dataMaterials);
+        data["visible"] = false;
       }
       loadTable(data);
     }
@@ -64,7 +62,7 @@ $(document).ready(function () {
     for (i = 0; i < data.length; i++) {
       data[i].classification
         ? (classification = data[i].classification)
-        : (classification = '');
+        : (classification = "");
 
       dataInventory.push({
         reference: data[i].reference,
@@ -83,74 +81,81 @@ $(document).ready(function () {
 
   /* Cargar Tabla Inventarios */
   loadTable = (data) => {
-    if ($.fn.dataTable.isDataTable('#tblInventories')) {
-      $('#tblInventories').DataTable().destroy();
-      $('#tblInventories').empty();
+    if ($.fn.dataTable.isDataTable("#tblInventories")) {
+      $("#tblInventories").DataTable().destroy();
+      $("#tblInventories").empty();
     }
 
-    tblInventories = $('#tblInventories').dataTable({
+    tblInventories = $("#tblInventories").dataTable({
       pageLength: 50,
       data: data,
       language: {
-        url: '//cdn.datatables.net/plug-ins/1.10.20/i18n/Spanish.json',
+        url: "//cdn.datatables.net/plug-ins/1.10.20/i18n/Spanish.json",
       },
       columns: [
         {
-          title: 'No.',
+          title: "No.",
           data: null,
-          className: 'uniqueClassName',
+          className: "uniqueClassName",
           render: function (data, type, full, meta) {
             return meta.row + 1;
           },
         },
         {
-          title: 'Referencia',
-          data: 'reference',
-          className: 'uniqueClassName',
+          title: "Referencia",
+          data: "reference",
+          className: "uniqueClassName",
         },
         {
-          title: 'Descripción',
-          data: 'description',
-          className: 'uniqueClassName',
+          title: "Descripción",
+          data: "description",
+          className: "uniqueClassName",
         },
         {
-          title: 'Existencia',
-          data: 'quantity',
-          className: 'uniqueClassName',
+          title: "Existencia",
+          data: "quantity",
+          className: "uniqueClassName",
         },
         {
-          title: 'Reservado',
+          title: "Medida",
+          data: "unit",
+          className: "classCenter",
+        },
+        {
+          title: "Reservado",
           data: null,
-          className: 'uniqueClassName', 
-          render: function (data) { 
-          data.unit == 'UNIDAD' ? number = data.reserved.toLocaleString('es-CO', { maximumFractionDigits: 0 }) : number = data.reserved.toLocaleString('es-CO', { minimumFractionDigits: 2});
-          return number;
-         }
+          className: "uniqueClassName",
+          render: function (data) {
+            data.unit == "UNIDAD"
+              ? (number = data.reserved.toLocaleString("es-CO", {
+                  maximumFractionDigits: 0,
+                }))
+              : (number = data.reserved.toLocaleString("es-CO", {
+                  minimumFractionDigits: 2,
+                }));
+            return number;
+          },
         },
         {
-          title: 'Stock',
+          title: "Stock",
           data: null,
-          className: 'uniqueClassName', 
-          render: function (data) { 
-          data.unit == 'UNIDAD' ? number = data.minimum_stock.toLocaleString('es-CO', { maximumFractionDigits: 0 }) : number = data.minimum_stock.toLocaleString('es-CO', { minimumFractionDigits: 2});
-          return number;
-         }
+          className: "uniqueClassName",
+          render: function (data) {
+            data.unit == "UNIDAD"
+              ? (number = data.minimum_stock.toLocaleString("es-CO", {
+                  maximumFractionDigits: 0,
+                }))
+              : (number = data.minimum_stock.toLocaleString("es-CO", {
+                  minimumFractionDigits: 2,
+                }));
+            return number;
+          },
         },
         {
-          title: 'Unidad',
-          data: 'unit',
-          className: 'classCenter',
-        },
-        // {
-        //   title: 'Precio',
-        //   data: 'price',
-        //   className: 'uniqueClassName',
-        // },
-        {
-          title: 'Clasificación',
+          title: "Clasificación",
           data: null,
-          className: 'uniqueClassName',
-          visible: data['visible'],
+          className: "uniqueClassName",
+          visible: data["visible"],
           render: function (data) {
             return `<p>${data.classification}</p>`;
           },

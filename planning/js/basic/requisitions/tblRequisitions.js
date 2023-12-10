@@ -37,13 +37,8 @@ $(document).ready(function () {
                     className: 'uniqueClassName',
                 },
                 {
-                    title: 'Material',
+                    title: 'Descripción',
                     data: 'material',
-                    className: 'classCenter',
-                },
-                {
-                    title: 'Unidad',
-                    data: 'unit',
                     className: 'classCenter',
                 },
                 {
@@ -61,6 +56,11 @@ $(document).ready(function () {
                     data: 'quantity',
                     className: 'classCenter',
                     render: $.fn.dataTable.render.number('.', ',', 2, ''),
+                },
+                {
+                    title: 'Medida',
+                    data: 'unit',
+                    className: 'classCenter',
                 },
                 {
                     title: 'Orden de Compra',
