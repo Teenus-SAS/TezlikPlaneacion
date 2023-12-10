@@ -111,7 +111,7 @@
                                                                 <?php } else { ?>
                                                                 <li class="planCiclesMachine" style="display: none;">
                                                                 <?php } ?>
-                                                                <a href="/planning/cicles-machines">Productos/Ciclos Maquinas</a>
+                                                                <a href="/planning/cicles-machines">Ciclos Maquinas x Producto</a>
                                                                 </li>
                                                                 <?php if ($_SESSION['stock'] == 1) { ?>
                                                                     <li class="planStock">

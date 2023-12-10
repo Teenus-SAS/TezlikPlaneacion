@@ -20,7 +20,7 @@ class GeneralRequisitionsDao
     {
         $connection = Connection::getInstance()->getConnection();
         $stmt = $connection->prepare("SELECT r.id_requisition, r.id_material, m.reference, m.material, r.application_date, r.delivery_date, r.quantity, r.purchase_order, r.admission_date, u.unit
-                                      FROM requisitons r
+                                      FROM requisitions r
                                         INNER JOIN materials m ON m.id_material = r.id_material
                                         INNER JOIN convert_units u ON u.id_unit = m.unit
                                       WHERE r.id_company = :id_company 
@@ -37,7 +37,7 @@ class GeneralRequisitionsDao
     {
         $connection = Connection::getInstance()->getConnection();
         $stmt = $connection->prepare("SELECT r.id_requisition, r.id_material, m.reference, m.material, r.application_date, r.delivery_date, r.quantity, r.purchase_order, r.admission_date, u.unit
-                                      FROM requisitons r
+                                      FROM requisitions r
                                         INNER JOIN materials m ON m.id_material = r.id_material
                                         INNER JOIN convert_units u ON u.id_unit = m.unit
                                       WHERE r.id_company = :id_company
@@ -58,7 +58,7 @@ class GeneralRequisitionsDao
     {
         $connection = Connection::getInstance()->getConnection();
 
-        $stmt = $connection->prepare("SELECT * FROM requisitons WHERE id_material = :id_material AND id_company = :id_company");
+        $stmt = $connection->prepare("SELECT * FROM requisitions WHERE id_material = :id_material AND id_company = :id_company");
         $stmt->execute([
             'id_material' => $dataRequisition['idMaterial'],
             'id_company' => $id_company
@@ -72,7 +72,7 @@ class GeneralRequisitionsDao
     {
         $connection = Connection::getInstance()->getConnection();
 
-        $stmt = $connection->prepare("SELECT * FROM requisitons WHERE id_material = :id_material AND application_date = '0000-00-00'");
+        $stmt = $connection->prepare("SELECT * FROM requisitions WHERE id_material = :id_material AND application_date = '0000-00-00'");
         $stmt->execute([
             'id_material' => $id_material
         ]);
@@ -86,7 +86,7 @@ class GeneralRequisitionsDao
         $connection = Connection::getInstance()->getConnection();
 
         try {
-            $stmt = $connection->prepare("UPDATE requisitons SET admission_date = :admission_date WHERE id_requisition = :id_requisition");
+            $stmt = $connection->prepare("UPDATE requisitions SET admission_date = :admission_date WHERE id_requisition = :id_requisition");
             $stmt->execute([
                 'id_requisition' => $dataRequisition['idRequisition'],
                 'admission_date' => $dataRequisition['date'],

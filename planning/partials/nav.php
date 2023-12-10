@@ -93,10 +93,10 @@
                                                 <?php } else { ?>
                                                 <li class="nav-item planOffices" style="display: none;">
                                                 <?php } ?>
-                                                <a class="nav-link" href="/planning/offices">
-                                                    <i class="bx bxs-truck mr-1"></i> Despachos
-                                                    <i class="bx bx-chevron-down"></i>
-                                                </a>
+                                                <a class="nav-link" href="/planning/store">
+                                                        <i class="bx bxs-package mr-1"></i> Almacen
+                                                        <i class="bx bx-chevron-down"></i>
+                                                    </a>
                                                 </li>
 
                                                 <?php if ($_SESSION['store'] == 1 && $_SESSION['plan_store'] == 1) { ?>
@@ -104,10 +104,11 @@
                                                     <?php } else { ?>
                                                     <li class="nav-item planStore" style="display: none;">
                                                     <?php } ?>
-                                                    <a class="nav-link" href="/planning/store">
-                                                        <i class="bx bxs-package mr-1"></i> Almacen
-                                                        <i class="bx bx-chevron-down"></i>
-                                                    </a>
+                                                    <a class="nav-link" href="/planning/offices">
+                                                    <i class="bx bxs-truck mr-1"></i> Despachos
+                                                    <i class="bx bx-chevron-down"></i>
+                                                </a>
+                                                    
                                                     </li>
 
                 </ul>

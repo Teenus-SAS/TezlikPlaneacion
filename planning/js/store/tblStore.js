@@ -25,7 +25,7 @@ $(document).ready(function () {
                 visible: false,
             },
             {
-                title: 'Referencia Material',
+                title: 'Referencia',
                 data: 'reference',
                 className: 'uniqueClassName',
             },
@@ -40,7 +40,7 @@ $(document).ready(function () {
                 className: 'uniqueClassName',
             },
             {
-                title: 'Cantidad Inventario',
+                title: 'Existencias',
                 data: 'quantity',
                 className: 'uniqueClassName',
                 render: $.fn.dataTable.render.number('.', ',', 0),
@@ -52,7 +52,7 @@ $(document).ready(function () {
                 render: $.fn.dataTable.render.number('.', ',', 2),
             },
             {
-                title: 'Acciones',
+                title: 'Entregar',
                 data: 'id_material',
                 className: 'uniqueClassName',
                 render: function (data) {

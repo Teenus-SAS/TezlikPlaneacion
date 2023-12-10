@@ -75,7 +75,7 @@ class GeneralMaterialsDao
 
         $stmt = $connection->prepare("SELECT (m.quantity + r.quantity) AS quantity
                                       FROM materials m
-                                        INNER JOIN requisitons r ON r.id_material = m.id_material
+                                        INNER JOIN requisitions r ON r.id_material = m.id_material
                                       WHERE m.id_material = :id_material");
         $stmt->execute([
             'id_material' => $id_material,

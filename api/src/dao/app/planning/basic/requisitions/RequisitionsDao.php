@@ -20,7 +20,7 @@ class RequisitionsDao
     {
         $connection = Connection::getInstance()->getConnection();
         $stmt = $connection->prepare("SELECT r.id_requisition, r.id_material, m.reference, m.material, r.application_date, r.delivery_date, r.quantity, r.purchase_order, r.admission_date
-                                      FROM requisitons r
+                                      FROM requisitions r
                                         INNER JOIN materials m ON m.id_material = r.id_material
                                       WHERE r.id_company = :id_company");
         $stmt->execute(['id_company' => $id_company]);
@@ -37,7 +37,7 @@ class RequisitionsDao
         $connection = Connection::getInstance()->getConnection();
 
         try {
-            $stmt = $connection->prepare("INSERT INTO requisitons (id_company, id_material, application_date, delivery_date, quantity, purchase_order) 
+            $stmt = $connection->prepare("INSERT INTO requisitions (id_company, id_material, application_date, delivery_date, quantity, purchase_order) 
                                           VALUES (:id_company, :id_material, :application_date, :delivery_date, :quantity, :purchase_order)");
             $stmt->execute([
                 'id_company' => $id_company,
@@ -61,7 +61,7 @@ class RequisitionsDao
         $connection = Connection::getInstance()->getConnection();
 
         try {
-            $stmt = $connection->prepare("UPDATE requisitons SET id_material = :id_material, application_date = :application_date, delivery_date = :delivery_date, 
+            $stmt = $connection->prepare("UPDATE requisitions SET id_material = :id_material, application_date = :application_date, delivery_date = :delivery_date, 
                                                               quantity = :quantity, purchase_order = :purchase_order
                                     WHERE id_requisition = :id_requisition");
             $stmt->execute([
@@ -85,12 +85,12 @@ class RequisitionsDao
         $connection = Connection::getInstance()->getConnection();
 
         try {
-            $stmt = $connection->prepare("SELECT * FROM requisitons WHERE id_requisition = :id_requisition");
+            $stmt = $connection->prepare("SELECT * FROM requisitions WHERE id_requisition = :id_requisition");
             $stmt->execute(['id_requisition' => $id_requisition]);
             $rows = $stmt->rowCount();
 
             if ($rows > 0) {
-                $stmt = $connection->prepare("DELETE FROM requisitons WHERE id_requisition = :id_requisition");
+                $stmt = $connection->prepare("DELETE FROM requisitions WHERE id_requisition = :id_requisition");
                 $stmt->execute(['id_requisition' => $id_requisition]);
                 $this->logger->info(__FUNCTION__, array('query' => $stmt->queryString, 'errors' => $stmt->errorInfo()));
             }

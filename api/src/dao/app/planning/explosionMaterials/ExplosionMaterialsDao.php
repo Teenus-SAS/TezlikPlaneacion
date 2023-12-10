@@ -28,7 +28,7 @@ class ExplosionMaterialsDao
                                         INNER JOIN materials m ON m.id_material = pm.id_material
                                         INNER JOIN convert_units u ON u.id_unit = m.unit
                                         INNER JOIN plan_orders o ON o.id_product = p.id_product
-                                        LEFT JOIN requisitons r ON r.id_material = pm.id_material
+                                        LEFT JOIN requisitions r ON r.id_material = pm.id_material
                                         LEFT JOIN programming pg ON pg.id_order = o.id_order
                                       WHERE p.id_company = :id_company AND (o.status = 'Programar' OR o.status = 'Programado' OR o.status = 'Sin Ficha Tecnica' OR o.status = 'Sin Materia Prima') -- OR o.status = 'En Produccion')
                                       GROUP BY pm.id_product_material, o.id_order");
@@ -87,7 +87,7 @@ class ExplosionMaterialsDao
   //                                       INNER JOIN materials m ON m.id_material = pm.id_material
   //                                       INNER JOIN convert_units u ON u.id_unit = m.unit
   //                                       INNER JOIN plan_orders o ON o.id_product = p.id_product
-  //                                       LEFT JOIN requisitons r ON r.id_material = pm.id_material
+  //                                       LEFT JOIN requisitions r ON r.id_material = pm.id_material
   //                                     WHERE p.id_product = :id_product AND o.status = 'Alistamiento'
   //                                     GROUP BY pm.id_product_material");
   //   $stmt->execute(['id_product' => $id_product]);

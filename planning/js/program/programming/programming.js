@@ -1,117 +1,119 @@
 $(document).ready(function () {
   let programming = [];
   // Obtener referencia producto
-  $('#selectNameProduct').change(function (e) {
+  $("#selectNameProduct").change(function (e) {
     e.preventDefault();
     id = this.value;
-    $(`#refProduct option[value=${id}]`).prop('selected', true);
+    $(`#refProduct option[value=${id}]`).prop("selected", true);
   });
-  
+
   /* Ocultar panel crear programa de producción */
-  $('.cardCreateProgramming').hide();
-  
+  $(".cardCreateProgramming").hide();
+
   /* Abrir panel crear programa de producción */
-  
-  $('#btnNewProgramming').click(async function (e) {
+
+  $("#btnNewProgramming").click(async function (e) {
     e.preventDefault();
-    $('#btnCreateProgramming').hide();
+    $("#btnCreateProgramming").hide();
 
     let resp = await loadOrdersProgramming();
-    
-    sessionStorage.removeItem('minDate');
+
+    sessionStorage.removeItem("minDate");
     if (resp) {
-      toastr.error('Sin pedidos para programar');
+      toastr.error("Sin pedidos para programar");
       return false;
     }
- 
-    $('.date').hide();
-    $('#selectNameProduct').empty();
-    $('.cardCreateProgramming').toggle(800);
-    $('#btnCreateProgramming').html('Crear');
-    $('#formCreateProgramming').trigger('reset');
+
+    $(".date").hide();
+    $("#selectNameProduct").empty();
+    $(".cardCreateProgramming").toggle(800);
+    $("#btnCreateProgramming").html("Crear");
+    $("#formCreateProgramming").trigger("reset");
   });
 
   /* Crear nuevo programa de produccion */
-  $('#btnCreateProgramming').click(function (e) {
+  $("#btnCreateProgramming").click(function (e) {
     e.preventDefault();
-    let idProgramming = sessionStorage.getItem('id_programming');
+    let idProgramming = sessionStorage.getItem("id_programming");
 
-    if (idProgramming == '' || idProgramming == null) {
-      checkdataProgramming('/api/addProgramming', idProgramming);
+    if (idProgramming == "" || idProgramming == null) {
+      checkdataProgramming("/api/addProgramming", idProgramming);
     } else {
-      checkdataProgramming('/api/updateProgramming', idProgramming);
+      checkdataProgramming("/api/updateProgramming", idProgramming);
     }
   });
 
   /* Actualizar programa de produccion */
 
-  $(document).on('click', '.updateProgramming', async function (e) {
-    $('.cardCreateProgramming').show(800);
-    $('#btnCreateProgramming').html('Actualizar');
+  $(document).on("click", ".updateProgramming", async function (e) {
+    $(".cardCreateProgramming").show(800);
+    $("#btnCreateProgramming").html("Actualizar");
 
     let row = $(this).parent().parent()[0];
     // i = row.rowIndex;
     let data = tblProgramming.fnGetData(row);
 
-    sessionStorage.setItem('id_programming', data.id_programming);
-    $('#order').empty();
-    $('#order').append(`<option disabled>Seleccionar</option>`);
-    $('#order').append(
+    sessionStorage.setItem("id_programming", data.id_programming);
+    $("#order").empty();
+    $("#order").append(`<option disabled>Seleccionar</option>`);
+    $("#order").append(
       `<option value ='${data.id_order}' selected> ${data.num_order} </option>`
     );
-    $('#selectNameProduct').empty();
-    $('#selectNameProduct').append(`<option disabled>Seleccionar</option>`);
-    $('#selectNameProduct').append(
+    $("#selectNameProduct").empty();
+    $("#selectNameProduct").append(`<option disabled>Seleccionar</option>`);
+    $("#selectNameProduct").append(
       `<option value ='${data.id_product}' selected> ${data.product} </option>`
     );
-    $('#quantityOrder').val(data.quantity_order.toLocaleString());
-    $('#quantityMissing').val(data.accumulated_quantity.toLocaleString());
-    $('#quantityMP').val(data.quantity_mp.toLocaleString());
-    
+    $("#quantityOrder").val(data.quantity_order.toLocaleString());
+    $("#quantityMissing").val(data.accumulated_quantity.toLocaleString());
+    $("#quantityMP").val(data.quantity_mp.toLocaleString());
+
     // await loadProducts(data.num_order);
     let $select = $(`#idMachine`);
     $select.empty();
     $select.append(`<option value="0" disabled>Seleccionar</option>`);
-     
-    $select.append(`<option value ='${data.id_machine}' selected> ${data.machine} </option>`);
+
+    $select.append(
+      `<option value ='${data.id_machine}' selected> ${data.machine} </option>`
+    );
     // $(`#idMachine option[value=${data.id_machine}]`).prop('selected', true);
 
-    $('#quantity').val(data.quantity_programming);
+    $("#quantity").val(data.quantity_programming);
 
-    document.getElementById('minDate').readOnly = false;
-    $('.date').show(800);
-    $('#btnCreateProgramming').show(800);
+    document.getElementById("minDate").readOnly = false;
+    $(".date").show(800);
+    $("#btnCreateProgramming").show(800);
 
     max_date = convetFormatDateTime(data.max_date);
     min_date = convetFormatDateTime(data.min_date);
 
-    $('#minDate').val(min_date);
-    $('#maxDate').val(max_date);
+    $("#minDate").val(min_date);
+    $("#maxDate").val(max_date);
 
     dataProgramming = new FormData(formCreateProgramming);
 
-    $(document).one('click', '#minDate', function (e) {
+    $(document).one("click", "#minDate", function (e) {
       e.preventDefault();
- 
-      document.getElementById('minDate').type = 'date';
+
+      document.getElementById("minDate").type = "date";
     });
 
-    $('#minDate').change(function (e) {
+    $("#minDate").change(function (e) {
       e.preventDefault();
 
       if (!this.value) {
-        toastr.error('Ingrese fecha inicial');
+        toastr.error("Ingrese fecha inicial");
         return false;
       }
 
       let min_date = convetFormatDate(this.value);
 
-      sessionStorage.setItem('minDate', min_date);
-      dataProgramming.append('minDate', min_date);
+      sessionStorage.setItem("minDate", min_date);
+      dataProgramming.append("minDate", min_date);
       calcMaxDate(min_date, 0, 2);
     });
 
-    $('html, body').animate(
+    $("html, body").animate(
       {
         scrollTop: 0,
       },
@@ -119,16 +121,15 @@ $(document).ready(function () {
     );
   });
 
-  $(document).on('blur', '#quantity', function () {
-    sessionStorage.removeItem('minDate');
+  $(document).on("blur", "#quantity", function () {
+    sessionStorage.removeItem("minDate");
     checkData(2, this.id);
   });
 
   /* Revision data programa de produccion */
   checkdataProgramming = async (url, idProgramming) => {
-    if (idProgramming)
-      dataProgramming.append('idProgramming', idProgramming);
-    
+    if (idProgramming) dataProgramming.append("idProgramming", idProgramming);
+
     $.ajax({
       type: "POST",
       url: url,
@@ -137,8 +138,8 @@ $(document).ready(function () {
       cache: false,
       processData: false,
       success: function (resp) {
-        message(resp)
-      }
+        message(resp);
+      },
     });
   };
 
@@ -151,27 +152,28 @@ $(document).ready(function () {
     let dataProgramming = {};
 
     bootbox.confirm({
-      title: 'Eliminar',
+      title: "Eliminar",
       message:
-        'Está seguro de eliminar este programa de produccion? Esta acción no se puede reversar.',
+        "Está seguro de eliminar este programa de produccion? Esta acción no se puede reversar.",
       buttons: {
         confirm: {
-          label: 'Si',
-          className: 'btn-success',
+          label: "Si",
+          className: "btn-success",
         },
         cancel: {
-          label: 'No',
-          className: 'btn-danger',
+          label: "No",
+          className: "btn-danger",
         },
       },
       callback: function (result) {
         if (result == true) {
-          dataProgramming['idProgramming'] = data.id_programming;
-          dataProgramming['order'] = data.id_order;
-          dataProgramming['accumulatedQuantity'] = null;
+          dataProgramming["idProgramming"] = data.id_programming;
+          dataProgramming["order"] = data.id_order;
+          dataProgramming["accumulatedQuantity"] = null;
 
           $.post(
-            `/api/deleteProgramming`, dataProgramming,
+            `/api/deleteProgramming`,
+            dataProgramming,
             function (data, textStatus, jqXHR) {
               message(data);
             }
@@ -182,48 +184,49 @@ $(document).ready(function () {
   };
 
   /* Cambiar estado */
-  $(document).on('click', '.changeStatus', function () {
+  $(document).on("click", ".changeStatus", function () {
     let row = $(this).parent().parent()[0];
     let data = tblProgramming.fnGetData(row);
 
     let dataProgramming = {};
-    dataProgramming['idProgramming'] = data.id_programming;
-    dataProgramming['idOrder'] = data.id_order;
+    dataProgramming["idProgramming"] = data.id_programming;
+    dataProgramming["idOrder"] = data.id_order;
 
     bootbox.confirm({
-      title: 'Cambiar Estado',
+      title: "Orden de Producción",
       message:
-        'Está seguro de cambiar estado este programa de produccion? Esta acción no se puede reversar.',
+        "Desea crear la Orden de Produccion? Esta acción no se puede reversar.",
       buttons: {
         confirm: {
-          label: 'Si',
-          className: 'btn-success',
+          label: "Si",
+          className: "btn-success",
         },
         cancel: {
-          label: 'No',
-          className: 'btn-danger',
+          label: "No",
+          className: "btn-danger",
         },
       },
       callback: function (result) {
         if (result == true) {
-          $.post(`/api/changeStatusProgramming`, dataProgramming,
+          $.post(
+            `/api/changeStatusProgramming`,
+            dataProgramming,
             function (data, textStatus, jqXHR) {
               message(data);
-            },
+            }
           );
         }
       },
     });
   });
 
-  $(document).on('click', '#btnChangeStatus', function () {
-    $('#tblStatusProgramming').empty();
-    
-    let tblStatusProgramming = document.getElementById(
-      'tblStatusProgramming'
-    );
+  $(document).on("click", "#btnChangeStatus", function () {
+    $("#tblStatusProgramming").empty();
 
-    tblStatusProgramming.insertAdjacentHTML('beforeend',
+    let tblStatusProgramming = document.getElementById("tblStatusProgramming");
+
+    tblStatusProgramming.insertAdjacentHTML(
+      "beforeend",
       `<thead>
         <th>No</th>
         <th>Pedido</th>
@@ -235,19 +238,19 @@ $(document).ready(function () {
         <th></th>
         </tr>
       </thead>
-      <tbody id="tblStatusProgrammingBody"></tbody>`);
-    
-    setTblStatusProgramming();
+      <tbody id="tblStatusProgrammingBody"></tbody>`
+    );
 
+    setTblStatusProgramming();
   });
 
   // setTblStatusProgramming = () => {
   //   let data = copyAllProgramming;
-    
+
   //   let tblStatusProgrammingBody = document.getElementById(
   //     'tblStatusProgrammingBody'
   //   );
-      
+
   //   for (i = 0; i < data.length; i++) {
   //     programming.push({ idProgramming: data[i].id_programming });
 
@@ -300,7 +303,7 @@ $(document).ready(function () {
 
   // $(document).on('click', '.checkStatusProgramming', function () {
   //   let id = this.id;
-  //   let idProgramming = id.slice(8, id.length); 
+  //   let idProgramming = id.slice(8, id.length);
 
   //   if ($(`#${id}`).is(':checked')) {
   //     let data = {
@@ -315,32 +318,32 @@ $(document).ready(function () {
   //   }
   // });
 
-  $('#btnSaveProgramming').click(function (e) {
+  $("#btnSaveProgramming").click(function (e) {
     e.preventDefault();
-    
+
     if (programming.length == 0) {
-      toastr.error('No hay ningún dato para guardar');
+      toastr.error("No hay ningún dato para guardar");
       return false;
     }
 
     $.ajax({
       type: "POST",
-      url: '/api/changeStatusProgramming',
+      url: "/api/changeStatusProgramming",
       data: { data: programming },
       success: function (resp) {
         programming = [];
-        $('#changeStatusProgramming').modal('hide');
+        $("#changeStatusProgramming").modal("hide");
 
         message(resp);
-      }
+      },
     });
   });
 
-  $('.btnCloseStatusProgramming').click(function (e) {
+  $(".btnCloseStatusProgramming").click(function (e) {
     e.preventDefault();
     programming = [];
-    $('#changeStatusProgramming').modal('hide');
-    $('#tblStatusProgrammingBody').empty();
+    $("#changeStatusProgramming").modal("hide");
+    $("#tblStatusProgrammingBody").empty();
   });
 
   /* Mensaje de exito */
@@ -357,17 +360,16 @@ $(document).ready(function () {
         toastr.info(data.message);
       }
     } catch (error) {
-      console.error('Error in message function:', error);
+      console.error("Error in message function:", error);
     }
   };
 
   // Función auxiliar para ocultar la tarjeta y reiniciar el formulario
   const hideCardAndResetForm = () => {
-    $('.cardCreateProgramming').hide(800);
-    $('#formCreateProgramming').trigger('reset');
-    $('#searchMachine').val('0');
+    $(".cardCreateProgramming").hide(800);
+    $("#formCreateProgramming").trigger("reset");
+    $("#searchMachine").val("0");
   };
 
   loadDataMachines(3);
-
 });

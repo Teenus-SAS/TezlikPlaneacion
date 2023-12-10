@@ -19,7 +19,7 @@ $(document).ready(function () {
                 },
             },
             {
-                title: 'Referencia Material',
+                title: 'Referencia',
                 data: 'reference_material',
                 className: 'uniqueClassName',
             },
@@ -29,7 +29,7 @@ $(document).ready(function () {
                 className: 'uniqueClassName',
             },
             {
-                title: 'Unidad',
+                title: 'Medida',
                 data: 'unit',
                 className: 'uniqueClassName',
             },
@@ -40,7 +40,7 @@ $(document).ready(function () {
                 render: $.fn.dataTable.render.number('.', ',', 2, ''),
             },
             {
-                title: 'Stock',
+                title: 'Stock Min',
                 data: 'minimum_stock',
                 className: 'uniqueClassName',
                 render: $.fn.dataTable.render.number('.', ',', 2, ''),
