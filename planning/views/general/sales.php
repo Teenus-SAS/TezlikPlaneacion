@@ -44,9 +44,9 @@ if (sizeof($_SESSION) == 0)
                         <div class="row align-items-center">
                             <div class="col-sm-5 col-xl-6">
                                 <div class="page-title">
-                                    <h3 class="mb-1 font-weight-bold text-dark">Ventas</h3>
+                                    <h3 class="mb-1 font-weight-bold text-dark">Ventas por producto en Unidades</h3>
                                     <ol class="breadcrumb mb-3 mb-md-0">
-                                        <li class="breadcrumb-item active">Unidades vendidas de productos</li>
+                                        <li class="breadcrumb-item active">Unidades vendidas por producto</li>
                                     </ol>
                                 </div>
                             </div>
@@ -145,9 +145,9 @@ if (sizeof($_SESSION) == 0)
                         <div class="row cardSales">
                             <div class="col-12">
                                 <div class="card">
-                                    <div class="card-header">
+                                    <!-- <div class="card-header">
                                         <h5 class="card-title">Unidades Vendidas</h5>
-                                    </div>
+                                    </div> -->
                                     <div class="card-body">
                                         <div class="table-responsive">
                                             <table class="table table-striped" id="tblSales">
@@ -162,7 +162,7 @@ if (sizeof($_SESSION) == 0)
                             <div class="col-12">
                                 <div class="card">
                                     <div class="card-header">
-                                        <h5 class="card-title">Dias Ventas</h5>
+                                        <h5 class="card-title">Dias Ventas por mes</h5>
                                     </div>
                                     <div class="card-body">
                                         <div class="table-responsive">
