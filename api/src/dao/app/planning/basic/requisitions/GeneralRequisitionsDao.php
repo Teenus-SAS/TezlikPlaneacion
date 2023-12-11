@@ -19,7 +19,7 @@ class GeneralRequisitionsDao
     public function findAllActualRequisitionByCompany($id_company)
     {
         $connection = Connection::getInstance()->getConnection();
-        $stmt = $connection->prepare("SELECT r.id_requisition, r.id_material, m.reference, m.material, r.application_date, r.delivery_date, r.quantity, r.purchase_order, r.admission_date, u.unit
+        $stmt = $connection->prepare("SELECT r.id_requisition, r.id_material, m.reference, m.material, r.application_date, r.delivery_date, r.quantity, r.purchase_order, r.admission_date, u.abbreviation
                                       FROM requisitions r
                                         INNER JOIN materials m ON m.id_material = r.id_material
                                         INNER JOIN convert_units u ON u.id_unit = m.unit
@@ -36,7 +36,7 @@ class GeneralRequisitionsDao
     public function findAllMinAndMaxRequisitionByCompany($min_date, $max_date, $id_company)
     {
         $connection = Connection::getInstance()->getConnection();
-        $stmt = $connection->prepare("SELECT r.id_requisition, r.id_material, m.reference, m.material, r.application_date, r.delivery_date, r.quantity, r.purchase_order, r.admission_date, u.unit
+        $stmt = $connection->prepare("SELECT r.id_requisition, r.id_material, m.reference, m.material, r.application_date, r.delivery_date, r.quantity, r.purchase_order, r.admission_date, u.abbreviation
                                       FROM requisitions r
                                         INNER JOIN materials m ON m.id_material = r.id_material
                                         INNER JOIN convert_units u ON u.id_unit = m.unit
