@@ -35,6 +35,14 @@ $(document).ready(function () {
         className: 'uniqueClassName',
       }, 
       {
+        title: 'Unidad',
+        data: null,
+        className: 'classCenter',
+        render: function (data) {
+          return 'UNIDAD';
+        }
+      },
+      {
         title: 'Reservado',
         data: 'reserved',
         className: 'uniqueClassName', 
@@ -46,19 +54,12 @@ $(document).ready(function () {
         render: $.fn.dataTable.render.number('.', ',', 0),
       }, 
       {
-          title: "Dias",
+          title: "Dias Inv",
           data: "days",
           className: "uniqueClassName",
           render: $.fn.dataTable.render.number('.', ',', 2),
         },
-      {
-        title: 'Unidad',
-        data: null,
-        className: 'classCenter',
-        render: function (data) {
-          return 'UNIDAD';
-        }
-      },
+      
       {
         title: 'Img',
         data: 'img',
