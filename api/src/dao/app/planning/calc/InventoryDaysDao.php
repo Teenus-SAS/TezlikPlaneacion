@@ -18,26 +18,31 @@ class InventoryDaysDao
 
     public function calcInventoryDays($id_product)
     {
-        $connection = Connection::getInstance()->getconnection();
-        $stmt = $connection->prepare("SELECT (p.quantity / ((IFNULL(u.jan, 0) + IFNULL(u.feb, 0) + IFNULL(u.mar, 0) + IFNULL(u.apr, 0) + IFNULL(u.may, 0) + IFNULL(u.jun, 0) + IFNULL(u.jul, 0) + IFNULL(u.aug, 0) + IFNULL(u.sept, 0) + IFNULL(u.oct, 0) + IFNULL(u.nov, 0) + IFNULL(u.dece, 0)) / 12) * (SELECT days FROM sale_days WHERE month = MONTH(CURRENT_DATE()) AND year = YEAR(CURRENT_DATE()) AND id_company = p.id_company)) AS days
+        try {
+            $connection = Connection::getInstance()->getconnection();
+            $stmt = $connection->prepare("SELECT (p.quantity / ((IFNULL(u.jan, 0) + IFNULL(u.feb, 0) + IFNULL(u.mar, 0) + IFNULL(u.apr, 0) + IFNULL(u.may, 0) + IFNULL(u.jun, 0) + IFNULL(u.jul, 0) + IFNULL(u.aug, 0) + IFNULL(u.sept, 0) + IFNULL(u.oct, 0) + IFNULL(u.nov, 0) + IFNULL(u.dece, 0)) / 12) * (SELECT days FROM sale_days WHERE month = MONTH(CURRENT_DATE()) AND year = YEAR(CURRENT_DATE()) AND id_company = p.id_company)) AS days
                                       FROM products p
                                       LEFT JOIN plan_unit_sales u ON u.id_product = p.id_product
                                       WHERE p.id_product = :id_product");
-        $stmt->execute(['id_product' => $id_product]);
-        $this->logger->info(__FUNCTION__, array('query' => $stmt->queryString, 'errors' => $stmt->errorInfo()));
-        $product = $stmt->fetch($connection::FETCH__ASSOC);
-        return $product;
+            $stmt->execute(['id_product' => $id_product]);
+            // $this->logger->info(__FUNCTION__, array('query' => $stmt->queryString, 'errors' => $stmt->errorInfo()));
+            $product = $stmt->fetch($connection::FETCH_ASSOC);
+
+            return $product;
+        } catch (\Exception $e) {
+            return array('info' => true, 'message' => $e->getMessage());
+        }
     }
 
-    public function updateInventoryDays($dataInventory, $inventoryDay)
+    public function updateInventoryDays($id_product, $inventoryDay)
     {
         $connection = Connection::getInstance()->getConnection();
 
         try {
-            $stmt = $connection->prepare("UPDATE products_price_history SET inventory_day = :inventory_day WHERE id_product = :id_product");
+            $stmt = $connection->prepare("UPDATE products SET days = :days WHERE id_product = :id_product");
             $stmt->execute([
-                'id_product' => $dataInventory['idProduct'],
-                'inventory_day' => $inventoryDay
+                'id_product' => $id_product,
+                'days' => $inventoryDay
             ]);
             $this->logger->info(__FUNCTION__, array('query' => $stmt->queryString, 'errors' => $stmt->errorInfo()));
         } catch (\Exception $e) {

@@ -6,6 +6,7 @@ use TezlikPlaneacion\dao\GeneralCategoriesDao;
 use TezlikPlaneacion\dao\GeneralMaterialsDao;
 use TezlikPlaneacion\dao\GeneralOrdersDao;
 use TezlikPlaneacion\dao\GeneralProgrammingDao;
+use TezlikPlaneacion\dao\InventoryDaysDao;
 use TezlikPlaneacion\dao\InvMoldsDao;
 use TezlikPlaneacion\dao\LastDataDao;
 use TezlikPlaneacion\dao\ProductsDao;
@@ -21,6 +22,7 @@ $invMoldsDao = new InvMoldsDao();
 $invCategoriesDao = new GeneralCategoriesDao();
 $productsMaterialsDao = new ProductsMaterialsDao();
 $generalProgrammingDao = new GeneralProgrammingDao();
+$inventoryDaysDao = new InventoryDaysDao();
 
 use Psr\Http\Message\ResponseInterface as Response;
 use Psr\Http\Message\ServerRequestInterface as Request;
@@ -197,7 +199,8 @@ $app->post('/updatePlanProduct', function (Request $request, Response $response,
     $generalOrdersDao,
     $FilesDao,
     $productsMaterialsDao,
-    $generalProgrammingDao
+    $generalProgrammingDao,
+    $inventoryDaysDao
 ) {
     session_start();
     $id_company = $_SESSION['id_company'];
@@ -272,6 +275,15 @@ $app->post('/updatePlanProduct', function (Request $request, Response $response,
                     }
                 }
             }
+        }
+
+        // Calcular Dias inventario
+        if ($products == null) {
+            $inventory = $inventoryDaysDao->calcInventoryDays($dataProduct['idProduct']);
+
+            !$inventory['days'] ? $days = 0 : $days = $inventory['days'];
+
+            $products = $inventoryDaysDao->updateInventoryDays($dataProduct['idProduct'], $days);
         }
 
         if ($products == null)

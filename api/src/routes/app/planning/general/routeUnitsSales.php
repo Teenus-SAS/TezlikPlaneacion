@@ -1,5 +1,6 @@
 <?php
 
+use PHPMailer\Test\PHPMailer\IsValidHostTest;
 use TezlikPlaneacion\dao\UnitSalesDao;
 use TezlikPlaneacion\dao\ClassificationDao;
 use TezlikPlaneacion\dao\GeneralMaterialsDao;
@@ -99,7 +100,8 @@ $app->post('/addUnitSales', function (Request $request, Response $response, $arg
     $productMaterialsDao,
     $generalProductsMaterialsDao,
     $classificationDao,
-    $minimumStockDao
+    $minimumStockDao,
+    $inventoryDaysDao
 ) {
     session_start();
     $dataSale = $request->getParsedBody();
@@ -135,6 +137,14 @@ $app->post('/addUnitSales', function (Request $request, Response $response, $arg
                 }
             }
         }
+        if ($resolution == null) {
+            // Calcular Dias inventario 
+            $inventory = $inventoryDaysDao->calcInventoryDays($dataSale['idProduct']);
+
+            !$inventory['days'] ? $days = 0 : $days = $inventory['days'];
+
+            $resolution = $inventoryDaysDao->updateInventoryDays($dataSale['idProduct'], $days);
+        }
 
         if ($resolution == null)
             $resp = array('success' => true, 'message' => 'Venta asociada correctamente');
@@ -162,7 +172,7 @@ $app->post('/addUnitSales', function (Request $request, Response $response, $arg
 
             if (isset($resolution['info'])) break;
             // Calcular stock material
-            $materials = $productMaterialsDao->findAllProductsmaterials($dataSale['idProduct'], $id_company);
+            $materials = $productMaterialsDao->findAllProductsmaterials($unitSales[$i]['idProduct'], $id_company);
 
             for ($i = 0; $i < sizeof($materials); $i++) {
                 if (isset($resolution['info'])) break;
@@ -184,6 +194,16 @@ $app->post('/addUnitSales', function (Request $request, Response $response, $arg
                     if (isset($resolution['info'])) break;
                 }
             }
+
+            if (isset($resolution['info'])) break;
+            // Calcular Dias inventario
+            $inventory = $inventoryDaysDao->calcInventoryDays($unitSales[$i]['idProduct']);
+
+            !$inventory['days'] ? $days = 0 : $days = $inventory['days'];
+
+            $resolution = $inventoryDaysDao->updateInventoryDays($unitSales[$i]['idProduct'], $days);
+
+
 
             // $unitSales[$i]['cantMonths'] = 3;
             // $classification = $classificationDao->calcClassificationByProduct($unitSales[$i], $id_company);
@@ -207,7 +227,8 @@ $app->post('/updateUnitSale', function (Request $request, Response $response, $a
     $productsDao,
     $generalMaterialDao,
     $productMaterialsDao,
-    $generalProductsMaterialsDao
+    $generalProductsMaterialsDao,
+    $inventoryDaysDao
 ) {
     session_start();
     $id_company = $_SESSION['id_company'];
@@ -244,6 +265,15 @@ $app->post('/updateUnitSale', function (Request $request, Response $response, $a
             }
         }
 
+        if ($resolution == null) {
+            // Calcular Dias inventario 
+            $inventory = $inventoryDaysDao->calcInventoryDays($dataSale['idProduct']);
+
+            !$inventory['days'] ? $days = 0 : $days = $inventory['days'];
+
+            $resolution = $inventoryDaysDao->updateInventoryDays($dataSale['idProduct'], $days);
+        }
+
         if ($resolution == null)
             $resp = array('success' => true, 'message' => 'Venta actualizada correctamente');
         else if (isset($resolution['info']))
@@ -256,13 +286,14 @@ $app->post('/updateUnitSale', function (Request $request, Response $response, $a
     return $response->withStatus(200)->withHeader('Content-Type', 'application/json');
 });
 
-$app->get('/deleteUnitSale', function (Request $request, Response $response, $args) use (
+$app->post('/deleteUnitSale', function (Request $request, Response $response, $args) use (
     $unitSalesDao,
     $minimumStockDao,
     $generalMaterialDao,
     $productsDao,
     $productMaterialsDao,
-    $generalProductsMaterialsDao
+    $generalProductsMaterialsDao,
+    $inventoryDaysDao
 ) {
     session_start();
     $id_company = $_SESSION['id_company'];
@@ -294,10 +325,20 @@ $app->get('/deleteUnitSale', function (Request $request, Response $response, $ar
         }
     }
 
+    if ($resolution == null) {
+        // Calcular Dias inventario 
+        $inventory = $inventoryDaysDao->calcInventoryDays($dataSale['idProduct']);
+
+        !$inventory['days'] ? $days = 0 : $days = $inventory['days'];
+
+        $resolution = $inventoryDaysDao->updateInventoryDays($dataSale['idProduct'], $days);
+    }
+
     if ($resolution == null)
         $resp = array('success' => true, 'message' => 'Venta eliminada correctamente');
-
-    if ($resolution != null)
+    else if (isset($resolution['info']))
+        $resp = array('info' => true, 'message' => $resolution['message']);
+    else
         $resp = array('error' => true, 'message' => 'No es posible eliminar la Venta, existe información asociada a ella');
 
     $response->getBody()->write(json_encode($resp));

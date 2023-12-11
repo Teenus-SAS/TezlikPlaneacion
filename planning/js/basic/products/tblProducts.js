@@ -45,12 +45,12 @@ $(document).ready(function () {
         className: 'uniqueClassName', 
         render: $.fn.dataTable.render.number('.', ',', 0),
       }, 
-      // {
-      //     title: "Dias",
-      //     data: "days",
-      //     className: "uniqueClassName",
-      //     render: $.fn.dataTable.render.number('.', ',', 0),
-      //   },
+      {
+          title: "Dias",
+          data: "days",
+          className: "uniqueClassName",
+          render: $.fn.dataTable.render.number('.', ',', 2),
+        },
       {
         title: 'Unidad',
         data: null,
