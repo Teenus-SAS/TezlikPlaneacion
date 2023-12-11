@@ -144,6 +144,16 @@
                                                                     <?php } ?>
                                                                     <a href="/planning/sales">Ventas por Producto en Unidades</a>
                                                                     </li>
+                                                                    <?php //if ($_SESSION['sale'] == 1) { 
+                                                                    ?>
+                                                                    <!-- <li class="planSales"> -->
+                                                                    <?php //} else { 
+                                                                    ?>
+                                                                    <li class="inventoryABC">
+                                                                        <?php //} 
+                                                                        ?>
+                                                                        <a href="/planning/inventoryABC">Inventario ABC</a>
+                                                                    </li>
                                                         </ul>
                                                         </div>
 

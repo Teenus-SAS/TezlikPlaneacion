@@ -52,6 +52,7 @@ get('/planning/stock', '/planning/views/config/stock.php');
 //General
 get('/planning/categories', '/planning/views/general/categories.php');
 get('/planning/sales', '/planning/views/general/sales.php');
+get('/planning/inventoryABC', '/planning/views/general/inventoryABC.php');
 //Admin
 get('/planning/clients', '/planning/views/admin/clients.php');
 get('/planning/order-types', '/planning/views/admin/order_types.php');
