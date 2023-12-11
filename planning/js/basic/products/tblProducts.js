@@ -35,7 +35,7 @@ $(document).ready(function () {
         className: 'uniqueClassName',
       }, 
       {
-        title: 'Unidad',
+        title: 'Medida',
         data: 'abbreviation',
         className: 'classCenter', 
       },
