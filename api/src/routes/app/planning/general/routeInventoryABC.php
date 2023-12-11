@@ -1,8 +1,16 @@
 <?php
 
+use TezlikPlaneacion\dao\ClassificationDao;
+use TezlikPlaneacion\dao\CompaniesLicenseStatusDao;
+use TezlikPlaneacion\dao\GeneralProductsDao;
+use TezlikPlaneacion\dao\GeneralUnitSalesDao;
 use TezlikPlaneacion\dao\InventoryABCDao;
 
 $inventoryABCDao = new InventoryABCDao();
+$companiesLicenseDao = new CompaniesLicenseStatusDao();
+$generalUnitSalesDao = new GeneralUnitSalesDao();
+$classificationDao = new ClassificationDao();
+$generalProductsDao = new GeneralProductsDao();
 
 use Psr\Http\Message\ResponseInterface as Response;
 use Psr\Http\Message\ServerRequestInterface as Request;
@@ -85,15 +93,42 @@ $app->get('/inventoryABC', function (Request $request, Response $response, $args
 //     return $response->withStatus(200)->withHeader('Content-Type', 'application/json');
 // });
 
-$app->post('/updateInventoryABC', function (Request $request, Response $response, $args) use ($inventoryABCDao) {
+$app->post('/updateInventoryABC', function (Request $request, Response $response, $args) use (
+    $inventoryABCDao,
+    $companiesLicenseDao,
+    $generalUnitSalesDao,
+    $classificationDao,
+    $generalProductsDao
+) {
+    session_start();
+    $id_company = $_SESSION['id_company'];
     $dataInventory = $request->getParsedBody();
 
-    $inventory = $inventoryABCDao->updateInventoryABC($dataInventory);
+    $resolution = $inventoryABCDao->updateInventoryABC($dataInventory);
 
-    if ($inventory == null)
+    if ($resolution == null) {
+        $license = $companiesLicenseDao->status($id_company);
+
+        if ($license['months'] > 0) {
+            $products = $generalUnitSalesDao->findAllProductsUnitSalesByCompany($id_company);
+
+            $resolution = $generalProductsDao->updateGeneralClassification($id_company);
+
+            for ($i = 0; $i < sizeof($products); $i++) {
+                if (isset($resolution)) break;
+                $inventory = $classificationDao->calcInventoryABCBYProduct($products[$i]['id_product'], $args['months']);
+
+                $inventory = $classificationDao->calcClassificationByProduct($inventory['year_sales'], $id_company);
+
+                $resolution = $classificationDao->updateProductClassification($products[$i]['id_product'], $inventory['classification']);
+            }
+        }
+    }
+
+    if ($resolution == null)
         $resp = array('success' => true, 'message' => 'Inventario actualizado correctamente');
-    else if (isset($inventory['info']))
-        $resp = array('info' => true, 'message' => $inventory['message']);
+    else if (isset($resolution['info']))
+        $resp = array('info' => true, 'message' => $resolution['message']);
     else
         $resp = array('error' => true, 'message' => 'Ocurrio un error mientras actualizaba la información. Intente nuevamente');
 

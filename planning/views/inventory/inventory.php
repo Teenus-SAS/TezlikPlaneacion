@@ -55,6 +55,9 @@ if (sizeof($_SESSION) == 0)
                                 <div class="col-xs-2 py-2 mr-2">
                                     <button class="btn btn-info" id="btnImportNewInventory">Importar Inventarios</button>
                                 </div>
+                                <div class="col-xs-4 cardBtnAddMonths">
+                                    <button class="btn btn-warning" id="btnInvetoryABC" name="btnInvetoryABC">Reclasificación Inventarios</button>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -95,9 +98,6 @@ if (sizeof($_SESSION) == 0)
                                                 <div class="col-sm-6 floating-label enable-floating-label show-label drag-area" style="margin-bottom:10px!important">
                                                     <input class="form-control" type="file" id="fileInventory" accept=" .xls,.xlsx">
                                                     <label class="form-label"> Importar Inventario</label>
-                                                </div>
-                                                <div class="col-lg-2 cardBtnAddMonths">
-                                                    <button class="btn btn-warning" id="btnInvetoryABC" name="btnInvetoryABC">Reclasificación Inventarios</button>
                                                 </div>
                                                 <div class="col-xs-2" style="margin-top:7px">
                                                     <button type="text" class="btn btn-success" id="btnImportInventory">Importar</button>

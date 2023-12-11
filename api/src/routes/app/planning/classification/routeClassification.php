@@ -1,35 +1,50 @@
 <?php
 
 use TezlikPlaneacion\dao\ClassificationDao;
+use TezlikPlaneacion\dao\CompaniesLicenseStatusDao;
+use TezlikPlaneacion\dao\GeneralProductsDao;
+use TezlikPlaneacion\dao\GeneralUnitSalesDao;
 
 $classificationDao = new ClassificationDao();
+$generalUnitSalesDao = new GeneralUnitSalesDao();
+$generalProductsDao = new GeneralProductsDao();
+$companiesLicenseDao = new CompaniesLicenseStatusDao();
 
 use Psr\Http\Message\ResponseInterface as Response;
 use Psr\Http\Message\ServerRequestInterface as Request;
 
-// $app->post('/calcClassification', function (Request $request, Response $response, $args) use ($classificationDao) {
-//     session_start();
-//     $id_company = $_SESSION['id_company'];
-//     $dataInventory = $request->getParsedBody();
+$app->get('/classification/{months}', function (Request $request, Response $response, $args) use (
+    $classificationDao,
+    $generalUnitSalesDao,
+    $generalProductsDao,
+    $companiesLicenseDao
+) {
+    session_start();
+    $id_company = $_SESSION['id_company'];
 
-//     $inventory = $dataInventory['products'];
+    $products = $generalUnitSalesDao->findAllProductsUnitSalesByCompany($id_company);
 
-//     for ($i = 0; $i < sizeof($inventory); $i++) {
-//         $classification = $classificationDao->calcClassificationByProduct($inventory[$i], $id_company);
+    $resolution = $generalProductsDao->updateGeneralClassification($id_company);
 
-//         if ($classification == 1) {
-//             $i = $i + 2;
-//             break;
-//         }
-//     }
+    for ($i = 0; $i < sizeof($products); $i++) {
+        if (isset($resolution)) break;
+        $inventory = $classificationDao->calcInventoryABCBYProduct($products[$i]['id_product'], $args['months']);
 
-//     if ($classification == null)
-//         $resp = array('success' => true, 'message' => 'Se calculó la clasificación correctamente');
-//     else if ($classification == 1)
-//         $resp = array('error' => true, 'message' => "Producto no tiene unidades vendidas en la base de datos. Fila: {$i}");
-//     else
-//         $resp = array('error' => true, 'message' => 'Ocurrio un error mientras calculaba. Intente nuevamente');
+        $inventory = $classificationDao->calcClassificationByProduct($inventory['year_sales'], $id_company);
 
-//     $response->getBody()->write(json_encode($resp, JSON_NUMERIC_CHECK));
-//     return $response->withHeader('Content-Type', 'application/json');
-// });
+        $resolution = $classificationDao->updateProductClassification($products[$i]['id_product'], $inventory['classification']);
+    }
+
+    if ($resolution == null)
+        $resolution = $companiesLicenseDao->monthLicense($args['months'], $id_company);
+
+    if ($resolution == null)
+        $resp = array('success' => true, 'message' => 'Se calculó la clasificación correctamente');
+    else if (isset($resolution))
+        $resp = array('info' => true, 'message' => $resolution['message']);
+    else
+        $resp = array('error' => true, 'message' => 'Ocurrio un error mientras calculaba. Intente nuevamente');
+
+    $response->getBody()->write(json_encode($resp, JSON_NUMERIC_CHECK));
+    return $response->withHeader('Content-Type', 'application/json');
+});

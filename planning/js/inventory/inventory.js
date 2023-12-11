@@ -25,26 +25,31 @@ $(document).ready(function () {
 
     // category = $('#category').val();
 
-    products = sessionStorage.getItem('dataProducts');
+    // products = sessionStorage.getItem('dataProducts');
 
-    products = JSON.parse(products);
-    dataInventory = [];
-    // Almacenar data para calcular clasificacion
-    for (let i in products) {
-      dataInventory.push({
-        cantMonths: cantMonths,
-        idProduct: products[i]['id_product'],
-      });
-    }
+    // products = JSON.parse(products);
+    // dataInventory = [];
+    // // Almacenar data para calcular clasificacion
+    // for (let i in products) {
+    //   dataInventory.push({
+    //     cantMonths: cantMonths,
+    //     idProduct: products[i]['id_product'],
+    //   });
+    // }
 
-    $.ajax({
-      type: 'POST',
-      url: '/api/calcClassification',
-      data: { products: dataInventory },
-      success: function (response) {
-        message(response);
+    // $.ajax({
+    //   type: 'POST',
+    //   url: '/api/calcClassification',
+    //   data: { products: dataInventory },
+    //   success: function (response) {
+    //     message(response);
+    //   },
+    // });
+    $.get(`/api/classification/${cantMonths}`, 
+      function (data, textStatus, jqXHR) {
+        message(data);
       },
-    });
+    );
   });
 
   /* Mensaje de exito */
@@ -57,7 +62,6 @@ $(document).ready(function () {
       $('#category').change();
 
       toastr.success(data.message);
-      sessionStorage.removeItem('dataProducts');
       return false;
     } else if (data.error == true) toastr.error(data.message);
     else if (data.info == true) toastr.info(data.message);

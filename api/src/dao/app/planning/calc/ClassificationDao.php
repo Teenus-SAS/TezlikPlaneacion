@@ -16,7 +16,7 @@ class ClassificationDao
         $this->logger->pushHandler(new RotatingFileHandler(Constants::LOGS_PATH . 'querys.log', 20, Logger::DEBUG));
     }
 
-    public function calcInventoryABCBYProduct($dataInventory, $id_company)
+    public function calcInventoryABCBYProduct($id_product, $months)
     {
         $connection = Connection::getInstance()->getConnection();
 
@@ -25,18 +25,18 @@ class ClassificationDao
                                                IF(may > 0, 1, 0) + IF(jun > 0, 1, 0) + IF(jul > 0, 1, 0) + IF(aug > 0, 1, 0) + 
                                                IF(sept > 0, 1, 0) + IF(oct > 0, 1, 0) + IF(nov > 0, 1, 0) + IF(dece > 0, 1, 0)) / :cant_months) AS year_sales                                             
                                       FROM plan_unit_sales 
-                                      WHERE id_product = :id_product AND id_company = :id_company;");
+                                      WHERE id_product = :id_product");
         $stmt->execute([
-            'cant_months' => $dataInventory['cantMonths'],
-            'id_product' => $dataInventory['idProduct'],
-            'id_company' => $id_company
+            'cant_months' => $months,
+            'id_product' => $id_product
         ]);
+
         $this->logger->info(__FUNCTION__, array('query' => $stmt->queryString, 'errors' => $stmt->errorInfo()));
         $inventoryABC = $stmt->fetch($connection::FETCH_ASSOC);
         return $inventoryABC;
     }
 
-    public function calcClassificationByProduct($inventoryABC, $id_company)
+    public function calcClassificationByProduct($year_sales, $id_company)
     {
         try {
             $connection = Connection::getInstance()->getConnection();
@@ -45,20 +45,12 @@ class ClassificationDao
                                           FROM inventory_abc
                                           WHERE id_company = :id_company");
             $stmt->execute([
-                'years' => $inventoryABC['year_sales'],
+                'years' => $year_sales,
                 'id_company' => $id_company
             ]);
             $this->logger->info(__FUNCTION__, array('query' => $stmt->queryString, 'errors' => $stmt->errorInfo()));
             $inventory = $stmt->fetch($connection::FETCH_ASSOC);
             return $inventory;
-
-            // if ($inventoryABC['year_sales'] > 0.83) $classification = 'A';
-            // else if ($inventoryABC['year_sales'] >= 0.50) $classification = 'B';
-            // else $classification = 'C';
-
-            // /*  */
-
-            // return $classification;
         } catch (\Exception $e) {
             return array('info' => true, 'message' => $e->getMessage());
         }

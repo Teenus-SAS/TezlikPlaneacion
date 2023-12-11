@@ -20,7 +20,7 @@ class CompaniesLicenseStatusDao
     public function status($id_company)
     {
         $connection = Connection::getInstance()->getConnection();
-        $stmt = $connection->prepare("SELECT license_status FROM companies_licenses WHERE id_company = :id_company");
+        $stmt = $connection->prepare("SELECT * FROM companies_licenses WHERE id_company = :id_company");
         $stmt->execute(['id_company' => $id_company]);
         $status = $stmt->fetch($connection::FETCH_ASSOC);
         $this->logger->info(__FUNCTION__, array('query' => $stmt->queryString, 'errors' => $stmt->errorInfo()));
@@ -36,6 +36,24 @@ class CompaniesLicenseStatusDao
                                           WHERE id_company = :id_company");
             $stmt->execute([
                 'stat' => $status,
+                'id_company' => $id_company,
+            ]);
+            $this->logger->info(__FUNCTION__, array('query' => $stmt->queryString, 'errors' => $stmt->errorInfo()));
+        } catch (\Exception $e) {
+            $message = $e->getMessage();
+            $error = array('info' => true, 'message' => $message);
+            return $error;
+        }
+    }
+
+    public function monthLicense($months, $id_company)
+    {
+        $connection = Connection::getInstance()->getConnection();
+        try {
+            $stmt = $connection->prepare("UPDATE companies_licenses SET months = :months 
+                                          WHERE id_company = :id_company");
+            $stmt->execute([
+                'months' => $months,
                 'id_company' => $id_company,
             ]);
             $this->logger->info(__FUNCTION__, array('query' => $stmt->queryString, 'errors' => $stmt->errorInfo()));

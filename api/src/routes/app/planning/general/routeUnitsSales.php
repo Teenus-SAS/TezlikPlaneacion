@@ -3,6 +3,7 @@
 use PHPMailer\Test\PHPMailer\IsValidHostTest;
 use TezlikPlaneacion\dao\UnitSalesDao;
 use TezlikPlaneacion\dao\ClassificationDao;
+use TezlikPlaneacion\dao\CompaniesLicenseStatusDao;
 use TezlikPlaneacion\dao\GeneralMaterialsDao;
 use TezlikPlaneacion\dao\GeneralOrdersDao;
 use TezlikPlaneacion\dao\GeneralProductsDao;
@@ -22,6 +23,7 @@ $generalMaterialDao = new GeneralMaterialsDao();
 $productMaterialsDao = new ProductsMaterialsDao();
 $generalProductsMaterialsDao = new GeneralProductsMaterialsDao();
 $ordersDao = new OrdersDao();
+$companiesLicenseDao = new CompaniesLicenseStatusDao();
 
 use Psr\Http\Message\ResponseInterface as Response;
 use Psr\Http\Message\ServerRequestInterface as Request;
@@ -101,7 +103,8 @@ $app->post('/addUnitSales', function (Request $request, Response $response, $arg
     $generalProductsMaterialsDao,
     $classificationDao,
     $minimumStockDao,
-    $inventoryDaysDao
+    $inventoryDaysDao,
+    $companiesLicenseDao
 ) {
     session_start();
     $dataSale = $request->getParsedBody();
@@ -144,6 +147,25 @@ $app->post('/addUnitSales', function (Request $request, Response $response, $arg
             !$inventory['days'] ? $days = 0 : $days = $inventory['days'];
 
             $resolution = $inventoryDaysDao->updateInventoryDays($dataSale['idProduct'], $days);
+        }
+
+        if ($resolution == null) {
+            $license = $companiesLicenseDao->status($id_company);
+
+            if ($license['months'] > 0) {
+                $products = $generalUnitSalesDao->findAllProductsUnitSalesByCompany($id_company);
+
+                $resolution = $productsDao->updateGeneralClassification($id_company);
+
+                for ($i = 0; $i < sizeof($products); $i++) {
+                    if (isset($resolution['info'])) break;
+                    $inventory = $classificationDao->calcInventoryABCBYProduct($products[$i]['id_product'], $args['months']);
+
+                    $inventory = $classificationDao->calcClassificationByProduct($inventory['year_sales'], $id_company);
+
+                    $resolution = $classificationDao->updateProductClassification($products[$i]['id_product'], $inventory['classification']);
+                }
+            }
         }
 
         if ($resolution == null)
@@ -203,16 +225,27 @@ $app->post('/addUnitSales', function (Request $request, Response $response, $arg
 
             $resolution = $inventoryDaysDao->updateInventoryDays($unitSales[$i]['idProduct'], $days);
 
+            if (isset($resolution['info'])) break;
+            $license = $companiesLicenseDao->status($id_company);
 
+            if ($license['months'] == 0) break;
+            $products = $generalUnitSalesDao->findAllProductsUnitSalesByCompany($id_company);
 
-            // $unitSales[$i]['cantMonths'] = 3;
-            // $classification = $classificationDao->calcClassificationByProduct($unitSales[$i], $id_company);
+            $resolution = $productsDao->updateGeneralClassification($id_company);
 
-            // Calcular Stock minimo
-            // $minimumStock = $minimumStockDao->calcMinimumStock($unitSales[$i], $id_company);
+            for ($i = 0; $i < sizeof($products); $i++) {
+                if (isset($resolution['info'])) break;
+                $inventory = $classificationDao->calcInventoryABCBYProduct($products[$i]['id_product'], $args['months']);
+
+                $inventory = $classificationDao->calcClassificationByProduct($inventory['year_sales'], $id_company);
+
+                $resolution = $classificationDao->updateProductClassification($products[$i]['id_product'], $inventory['classification']);
+            }
         }
         if ($resolution == null)
             $resp = array('success' => true, 'message' => 'Venta importada correctamente');
+        else if (isset($resolution['info']))
+            $resp = array('info' => true, 'message' => $resolution['message']);
         else
             $resp = array('error' => true, 'message' => 'Ocurrio un error mientras importaba la información. Intente nuevamente');
     }
@@ -228,7 +261,10 @@ $app->post('/updateUnitSale', function (Request $request, Response $response, $a
     $generalMaterialDao,
     $productMaterialsDao,
     $generalProductsMaterialsDao,
-    $inventoryDaysDao
+    $inventoryDaysDao,
+    $companiesLicenseDao,
+    $generalUnitSalesDao,
+    $classificationDao
 ) {
     session_start();
     $id_company = $_SESSION['id_company'];
@@ -274,6 +310,25 @@ $app->post('/updateUnitSale', function (Request $request, Response $response, $a
             $resolution = $inventoryDaysDao->updateInventoryDays($dataSale['idProduct'], $days);
         }
 
+        if ($resolution == null) {
+            $license = $companiesLicenseDao->status($id_company);
+
+            if ($license['months'] > 0) {
+                $products = $generalUnitSalesDao->findAllProductsUnitSalesByCompany($id_company);
+
+                $resolution = $productsDao->updateGeneralClassification($id_company);
+
+                for ($i = 0; $i < sizeof($products); $i++) {
+                    if (isset($resolution['info'])) break;
+                    $inventory = $classificationDao->calcInventoryABCBYProduct($products[$i]['id_product'], $args['months']);
+
+                    $inventory = $classificationDao->calcClassificationByProduct($inventory['year_sales'], $id_company);
+
+                    $resolution = $classificationDao->updateProductClassification($products[$i]['id_product'], $inventory['classification']);
+                }
+            }
+        }
+
         if ($resolution == null)
             $resp = array('success' => true, 'message' => 'Venta actualizada correctamente');
         else if (isset($resolution['info']))
@@ -293,7 +348,10 @@ $app->post('/deleteUnitSale', function (Request $request, Response $response, $a
     $productsDao,
     $productMaterialsDao,
     $generalProductsMaterialsDao,
-    $inventoryDaysDao
+    $inventoryDaysDao,
+    $companiesLicenseDao,
+    $generalUnitSalesDao,
+    $classificationDao
 ) {
     session_start();
     $id_company = $_SESSION['id_company'];
@@ -332,6 +390,25 @@ $app->post('/deleteUnitSale', function (Request $request, Response $response, $a
         !$inventory['days'] ? $days = 0 : $days = $inventory['days'];
 
         $resolution = $inventoryDaysDao->updateInventoryDays($dataSale['idProduct'], $days);
+    }
+
+    if ($resolution == null) {
+        $license = $companiesLicenseDao->status($id_company);
+
+        if ($license['months'] > 0) {
+            $products = $generalUnitSalesDao->findAllProductsUnitSalesByCompany($id_company);
+
+            $resolution = $productsDao->updateGeneralClassification($id_company);
+
+            for ($i = 0; $i < sizeof($products); $i++) {
+                if (isset($resolution['info'])) break;
+                $inventory = $classificationDao->calcInventoryABCBYProduct($products[$i]['id_product'], $args['months']);
+
+                $inventory = $classificationDao->calcClassificationByProduct($inventory['year_sales'], $id_company);
+
+                $resolution = $classificationDao->updateProductClassification($products[$i]['id_product'], $inventory['classification']);
+            }
+        }
     }
 
     if ($resolution == null)

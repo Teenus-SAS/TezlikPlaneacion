@@ -185,4 +185,21 @@ class GeneralProductsDao
             return $error;
         }
     }
+    public function updateGeneralClassification($id_company)
+    {
+        $connection = Connection::getInstance()->getConnection();
+
+        try {
+            $stmt = $connection->prepare("UPDATE products SET classification = '' WHERE id_company = :id_company");
+
+            $stmt->execute([
+                'id_company' => $id_company
+            ]);
+        } catch (\Exception $e) {
+            $message = $e->getMessage();
+
+            $error = array('info' => true, 'message' => $message);
+            return $error;
+        }
+    }
 }

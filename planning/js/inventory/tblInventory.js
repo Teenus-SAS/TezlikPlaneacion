@@ -7,8 +7,7 @@ $(document).ready(function () {
       .then((data) => {
         data = JSON.parse(data);
         // Guardar productos
-        dataProducts = JSON.stringify(data.products);
-        sessionStorage.setItem("dataProducts", dataProducts);
+        dataProducts = JSON.stringify(data.products); 
 
         let $select = $("#category");
         $select.empty();
