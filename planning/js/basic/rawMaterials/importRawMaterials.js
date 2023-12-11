@@ -104,20 +104,32 @@ $(document).ready(function () {
   };
 
   /* Descargar formato */
-  $('#btnDownloadImportsMaterials').click(function (e) {
+  $('#btnDownloadImportsMaterials').click(async function (e) {
     e.preventDefault();
 
-    url = 'assets/formatsXlsx/Materia_prima.xlsx';
+    let wb = XLSX.utils.book_new();
 
-    link = document.createElement('a');
+    let data = [];
 
-    link.target = '_blank';
+    namexlsx = 'Materia_prima.xlsx';
+    url = '/api/materials';
+    
+    let materials = await searchData(url);
 
-    link.href = url;
-    document.body.appendChild(link);
-    link.click();
+    if (materials.length > 0) {
+      for (i = 0; i < materials.length; i++) {
+        data.push({
+          referencia: materials[i].reference,
+          material: materials[i].material,
+          magnitud: materials[i].magnitude,
+          unidad: materials[i].unit,
+          existencia: materials[i].quantity,
+        });
+      }
 
-    document.body.removeChild(link);
-    delete link;
+      let ws = XLSX.utils.json_to_sheet(data);
+      XLSX.utils.book_append_sheet(wb, ws, 'Materiales');
+      XLSX.writeFile(wb, namexlsx);
+    }
   });
 });
