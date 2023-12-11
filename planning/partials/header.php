@@ -135,14 +135,14 @@
                                                                 <?php } else { ?>
                                                                 <li class="planClients" style="display: none;">
                                                                 <?php } ?>
-                                                                <a href="/planning/clients">Clientes</a>
+                                                                <a href="/planning/clients">Clientes y Proveedores</a>
                                                                 </li>
                                                                 <?php if ($_SESSION['sale'] == 1) { ?>
                                                                     <li class="planSales">
                                                                     <?php } else { ?>
                                                                     <li class="planSales" style="display: none;">
                                                                     <?php } ?>
-                                                                    <a href="/planning/sales">Ventas</a>
+                                                                    <a href="/planning/sales">Ventas por Producto en Unidades</a>
                                                                     </li>
                                                         </ul>
                                                         </div>
