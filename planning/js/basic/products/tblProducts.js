@@ -36,7 +36,7 @@ $(document).ready(function () {
         render: $.fn.dataTable.render.number('.', ',', 0),
       }, 
       {
-        title: 'Unidad',
+        title: 'Medida',
         data: 'abbreviation',
         className: 'classCenter', 
       },

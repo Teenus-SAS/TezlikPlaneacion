@@ -69,7 +69,7 @@ if (sizeof($_SESSION) == 0)
                                         <div class="card-body">
                                             <div class="form-row">
                                                 <div class="col-sm-3 floating-label enable-floating-label show-label" style="margin-bottom:0px">
-                                                    <label for="">Meses a Analizar:</label>
+                                                    <label for="cantMonths">Meses a Analizar:</label>
                                                     <input type="number" class="form-control text-center" id="cantMonths" name="cantMonths" style="width:200px">
                                                 </div>
                                                 <div class="col-sm mt-1">
@@ -94,7 +94,10 @@ if (sizeof($_SESSION) == 0)
                                             <div class="form-row">
                                                 <div class="col-sm-6 floating-label enable-floating-label show-label drag-area" style="margin-bottom:10px!important">
                                                     <input class="form-control" type="file" id="fileInventory" accept=" .xls,.xlsx">
-                                                    <label for="formFile" class="form-label"> Importar Inventario</label>
+                                                    <label class="form-label"> Importar Inventario</label>
+                                                </div>
+                                                <div class="col-lg-2 cardBtnAddMonths">
+                                                    <button class="btn btn-warning" id="btnInvetoryABC" name="btnInvetoryABC">Reclasificación Inventarios</button>
                                                 </div>
                                                 <div class="col-xs-2" style="margin-top:7px">
                                                     <button type="text" class="btn btn-success" id="btnImportInventory">Importar</button>
@@ -120,12 +123,10 @@ if (sizeof($_SESSION) == 0)
                                 <div class="card">
                                     <div class="card-header">
                                         <div class="row justify-content-around">
-                                            <div class="col">
+                                            <!--  <div class="col">
                                                 <h5 class="card-title">Inventarios</h5>
-                                            </div>
-                                            <div class="col-lg-2 cardBtnAddMonths">
-                                                <button class="btn btn-warning" id="btnInvetoryABC" name="btnInvetoryABC">Reclasificación Inventarios</button>
-                                            </div>
+                                            </div> -->
+
                                         </div>
                                     </div>
                                     <div class="card-body">
