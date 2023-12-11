@@ -118,6 +118,8 @@ $app->post('/addOrder', function (Request $request, Response $response, $args) u
     $dataOrders = sizeof($dataOrder);
 
     if ($dataOrders > 1) {
+        $import = false;
+
         $dataOrder = $convertDataDao->changeDateOrder($dataOrder);
 
         $order = $ordersDao->insertOrderByCompany($dataOrder, $id_company);
@@ -132,6 +134,7 @@ $app->post('/addOrder', function (Request $request, Response $response, $args) u
             $resp = array('error' => true, 'message' => 'Ocurrio un error mientras ingresaba la información. Intente nuevamente');
     } else {
         $order = $dataOrder['importOrder'];
+        $import = true;
 
         for ($i = 0; $i < sizeof($order); $i++) {
             // Obtener id producto
@@ -169,7 +172,7 @@ $app->post('/addOrder', function (Request $request, Response $response, $args) u
         $status = true;
         // Checkear cantidades
         $order = $generalOrdersDao->checkAccumulatedQuantityOrder($orders[$i]['id_order']);
-        if ($order['status'] != 'En Produccion' && $order['status'] = 'Entregado') {
+        if ($order['status'] != 'En Produccion' && $order['status'] = 'Entregado' && $import == false) {
             if ($order['original_quantity'] > $order['accumulated_quantity']) {
                 // Ficha tecnica
                 $productsMaterials = $productsMaterialsDao->findAllProductsmaterials($orders[$i]['id_product'], $id_company);
