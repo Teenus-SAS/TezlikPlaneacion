@@ -59,7 +59,7 @@ $(document).ready(function () {
                 },
                 {
                     title: 'Medida',
-                    data: 'unit',
+                    data: 'abbreviation',
                     className: 'classCenter',
                 },
                 {

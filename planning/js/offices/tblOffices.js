@@ -76,6 +76,7 @@ $(document).ready(function () {
           title: 'Existencias',
           data: 'quantity',
           className: 'classCenter',
+          render: $.fn.dataTable.render.number('.', ',', 0),
         },
         {
           title: 'Estado',

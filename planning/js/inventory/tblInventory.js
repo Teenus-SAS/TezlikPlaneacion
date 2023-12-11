@@ -115,6 +115,7 @@ $(document).ready(function () {
           title: "Existencia",
           data: "quantity",
           className: "uniqueClassName",
+          render: $.fn.dataTable.render.number('.', ',', 0),
         },
         {
           title: "Medida",
