@@ -36,11 +36,8 @@ $(document).ready(function () {
       }, 
       {
         title: 'Unidad',
-        data: null,
-        className: 'classCenter',
-        render: function (data) {
-          return 'UNIDAD';
-        }
+        data: 'abbreviation',
+        className: 'classCenter', 
       },
       {
         title: 'Reservado',

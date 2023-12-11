@@ -36,7 +36,7 @@ $(document).ready(function () {
             },
             {
                 title: 'Unidad',
-                data: 'unit',
+                data: 'abbreviation',
                 className: 'uniqueClassName',
             },
             {

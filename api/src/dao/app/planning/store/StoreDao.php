@@ -28,7 +28,7 @@ class StoreDao
         //                               WHERE pg.id_company = :id_company AND pg.status = 1 AND m.status = 0
         //                               ORDER BY `o`.`num_order` ASC");
         $stmt = $connection->prepare("SELECT pg.id_programming, o.id_order, o.num_order, m.id_material, m.reference, 
-                                             m.material, m.quantity, u.unit, IFNULL(SUM(pg.quantity * pm.quantity), 0) AS reserved
+                                             m.material, m.quantity, u.abbreviation, IFNULL(SUM(pg.quantity * pm.quantity), 0) AS reserved
                                       FROM programming pg
                                         INNER JOIN plan_orders o ON o.id_order = pg.id_order
                                         INNER JOIN products_materials pm ON pm.id_product = pg.id_product

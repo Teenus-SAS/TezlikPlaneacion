@@ -67,7 +67,7 @@ $(document).ready(function () {
       dataInventory.push({
         reference: data[i].reference,
         description: data[i].descript,
-        unit: data[i].unit,
+        abbreviation: data[i].abbreviation,
         quantity: data[i].quantity,
         reserved: data[i].reserved,
         minimum_stock: data[i].minimum_stock,
@@ -118,7 +118,7 @@ $(document).ready(function () {
         },
         {
           title: "Medida",
-          data: "unit",
+          data: "abbreviation",
           className: "classCenter",
         },
         {
