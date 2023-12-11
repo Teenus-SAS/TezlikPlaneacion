@@ -16,7 +16,7 @@
                                         </div>
                                         <div class="col-12 col-lg-3">
                                             <div class="form-group floating-label enable-floating-label show-label">
-                                                <input id="order" name="order" type="number" class="form-control text-center">
+                                                <input id="order" name="order" type="text" class="form-control text-center">
                                                 <label for="numberWorkers">Numero de Pedido<span class="text-danger">*</span></label>
                                                 <div class="validation-error d-none font-size-13">Requerido</div>
                                             </div>

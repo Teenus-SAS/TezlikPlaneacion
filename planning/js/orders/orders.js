@@ -52,11 +52,13 @@ $(document).ready(function () {
       // quantity = $('#quantity').val();
 
       data =
-        order * idProduct * idClient * originalQuantity;
+        idProduct * idClient * originalQuantity;
 
       if (
         !data ||
         data == '' ||
+        !order ||
+        order == '' ||
         !dateOrder ||
         dateOrder == '' ||
         !minDate ||
