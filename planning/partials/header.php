@@ -70,7 +70,7 @@
                                                         <?php } else { ?>
                                                         <li class="planMachines" style="display: none;">
                                                         <?php } ?>
-                                                        <a href="/planning/machines">Máquinas</a>
+                                                        <a href="/planning/machines">Máquinas y/o Procesos</a>
                                                         </li>
                                                         <?php if ($_SESSION['requisition'] == 1) { ?>
                                                             <li class="planRequisitions">
