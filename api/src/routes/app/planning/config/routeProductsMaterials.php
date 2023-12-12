@@ -6,8 +6,10 @@ use TezlikPlaneacion\dao\GeneralOrdersDao;
 use TezlikPlaneacion\dao\GeneralProductsDao;
 use TezlikPlaneacion\dao\GeneralProductsMaterialsDao;
 use TezlikPlaneacion\dao\GeneralProgrammingDao;
+use TezlikPlaneacion\Dao\MagnitudesDao;
 use TezlikPlaneacion\dao\MinimumStockDao;
 use TezlikPlaneacion\dao\ProductsMaterialsDao;
+use TezlikPlaneacion\dao\UnitsDao;
 
 $productsMaterialsDao = new ProductsMaterialsDao();
 $generalProductsMaterialsDao = new GeneralProductsMaterialsDao();
@@ -18,6 +20,8 @@ $generalOrdersDao = new GeneralOrdersDao();
 $generalProgrammingDao = new GeneralProgrammingDao();
 $generalMaterialsDao = new GeneralMaterialsDao();
 $minimumStockDao = new MinimumStockDao();
+$magnitudesDao = new MagnitudesDao();
+$unitsDao = new UnitsDao();
 
 use Psr\Http\Message\ResponseInterface as Response;
 use Psr\Http\Message\ServerRequestInterface as Request;
@@ -47,7 +51,9 @@ $app->get('/allProductsMaterials', function (Request $request, Response $respons
 $app->post('/productsMaterialsDataValidation', function (Request $request, Response $response, $args) use (
     $generalProductsMaterialsDao,
     $productsDao,
-    $materialsDao
+    $materialsDao,
+    $unitsDao,
+    $magnitudesDao
 ) {
     $dataProductMaterial = $request->getParsedBody();
 
@@ -61,9 +67,38 @@ $app->post('/productsMaterialsDataValidation', function (Request $request, Respo
         $productMaterials = $dataProductMaterial['importProducts'];
 
         for ($i = 0; $i < sizeof($productMaterials); $i++) {
+            // Consultar magnitud
+            $magnitude = $magnitudesDao->findMagnitude($productMaterials[$i]);
+
+            if (!$magnitude) {
+                $i = $i + 2;
+                $dataImportProductsMaterials = array('error' => true, 'message' => "Magnitud no existe en la base de datos. Fila: $i");
+                break;
+            }
+
+            $productMaterials[$i]['idMagnitude'] = $magnitude['id_magnitude'];
+
+            // Consultar unidad
+            $unit = $unitsDao->findUnit($productMaterials[$i]);
+
+            if (!$unit) {
+                $i = $i + 2;
+                $dataImportProductsMaterials = array('error' => true, 'message' => "Unidad no existe en la base de datos. Fila: $i");
+                break;
+            }
+
+
             if (
                 empty($productMaterials[$i]['referenceProduct']) || empty($productMaterials[$i]['product']) || empty($productMaterials[$i]['refRawMaterial']) ||
                 empty($productMaterials[$i]['nameRawMaterial']) || $productMaterials[$i]['quantity'] == ''
+            ) {
+                $i = $i + 2;
+                $dataImportProductsMaterials = array('error' => true, 'message' => "Columna vacia en la fila: {$i}");
+                break;
+            }
+            if (
+                empty(trim($productMaterials[$i]['referenceProduct'])) || empty(trim($productMaterials[$i]['product'])) || empty(trim($productMaterials[$i]['refRawMaterial'])) ||
+                empty(trim($productMaterials[$i]['nameRawMaterial'])) || trim($productMaterials[$i]['quantity']) == ''
             ) {
                 $i = $i + 2;
                 $dataImportProductsMaterials = array('error' => true, 'message' => "Columna vacia en la fila: {$i}");
@@ -96,7 +131,8 @@ $app->post('/productsMaterialsDataValidation', function (Request $request, Respo
                 break;
             } else $productMaterials[$i]['material'] = $findMaterial['id_material'];
 
-            $findProductsMaterials = $generalProductsMaterialsDao->findProductMaterial($productMaterials[$i]);
+
+            $findProductsMaterials = $generalProductsMaterialsDao->findProductMaterial($productMaterials[$i], $id_company);
             if (!$findProductsMaterials) $insert = $insert + 1;
             else $update = $update + 1;
             $dataImportProductsMaterials['insert'] = $insert;

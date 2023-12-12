@@ -142,21 +142,19 @@ $(document).ready(function () {
 
   message = (data) => {
     if (data.success == true) {
-      $('.cardImportProductsMaterials').hide(800);
+      $('.cardImport').hide(800);
       $('.cardAddMaterials').hide(800);
       $('#formImport').trigger('reset');
-      $('#formAddMaterials').trigger('reset');
-      updateTable();
+      $('#formAddMaterials').trigger('reset'); 
+
+      const idProduct = $('#selectNameProduct').val()
+
+      if(idProduct)
+        loadtableMaterials(idProduct);
+
       toastr.success(data.message);
       return false;
     } else if (data.error == true) toastr.error(data.message);
     else if (data.info == true) toastr.info(data.message);
-  };
-
-  /* Actualizar tabla */
-
-  function updateTable() {
-    $('#tblConfigMaterials').DataTable().clear();
-    $('#tblConfigMaterials').DataTable().ajax.reload();
-  }
+  }; 
 });
