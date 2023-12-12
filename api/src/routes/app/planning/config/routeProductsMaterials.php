@@ -245,6 +245,8 @@ $app->post('/addProductsMaterials', function (Request $request, Response $respon
             $resp = array('error' => true, 'message' => 'Ocurrio un error mientras importada la información. Intente nuevamente');
     }
 
+    $products = $productsDao->updateAccumulatedQuantityGeneral($id_company);
+
     // Cambiar estado pedidos
     $orders = $generalOrdersDao->findAllOrdersByCompany($id_company);
 
@@ -300,6 +302,7 @@ $app->post('/addProductsMaterials', function (Request $request, Response $respon
             }
         }
     }
+
     $response->getBody()->write(json_encode($resp));
     return $response->withStatus(200)->withHeader('Content-Type', 'application/json');
 });
