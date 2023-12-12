@@ -21,7 +21,7 @@ $(document).ready(function () {
       {
         title: 'Fecha Pedido',
         data: 'date_order',
-        className: 'uniqueClassName', 
+        className: 'uniqueClassName',
       },
       {
         title: 'No Pedido',
@@ -48,11 +48,23 @@ $(document).ready(function () {
         title: 'Fecha Maxima',
         data: 'max_date',
         className: 'classCenter',
-      }, 
+      },
       {
         title: 'Estado',
         data: 'status',
         className: 'classCenter',
+        render: function (data) {
+          if (data == 'Entregado')
+            badge = 'badge-success';
+          else if (data == 'Sin Ficha Tecnica' || data == 'Sin Materia Prima')
+            badge = 'badge-warning';
+          else if (data == 'Despacho')
+            badge = 'badge-info';
+          else
+            badge = 'badge-light';
+            
+          return `<span class="badge ${badge}">${data}</span>`
+        }
       },
       {
         title: 'Acciones',
@@ -66,7 +78,7 @@ $(document).ready(function () {
         },
       },
     ],
-    rowCallback: function (row, data, index) { 
+    rowCallback: function (row, data, index) {
       if (data.status == 'Sin Ficha Tecnica' || data.status == 'Sin Materia Prima') $(row).css('color', 'red');
     },
   });
