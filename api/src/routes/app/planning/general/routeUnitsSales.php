@@ -63,9 +63,21 @@ $app->post('/unitSalesDataValidation', function (Request $request, Response $res
 
         for ($i = 0; $i < sizeof($unitSales); $i++) {
             if (
-                empty($unitSales[$i]['january']) && empty($unitSales[$i]['february']) && empty($unitSales[$i]['march']) && empty($unitSales[$i]['april']) &&
-                empty($unitSales[$i]['may']) && empty($unitSales[$i]['june']) && empty($unitSales[$i]['july']) && empty($unitSales[$i]['august']) &&
-                empty($unitSales[$i]['september']) && empty($unitSales[$i]['october']) &&  empty($unitSales[$i]['november']) && empty($unitSales[$i]['december'])
+                empty($unitSales[$i]['referenceProduct']) == '' && empty($unitSales[$i]['product']) == '' &&
+                $unitSales[$i]['january'] == '' && $unitSales[$i]['february'] == '' && $unitSales[$i]['march'] == '' && $unitSales[$i]['april'] == '' &&
+                $unitSales[$i]['may'] == '' && $unitSales[$i]['june'] == '' && $unitSales[$i]['july'] == '' && $unitSales[$i]['august'] == '' &&
+                $unitSales[$i]['september'] == '' && $unitSales[$i]['october'] == '' &&  $unitSales[$i]['november'] == '' && $unitSales[$i]['december'] == ''
+            ) {
+                $i = $i + 2;
+                $dataImportUnitSales = array('error' => true, 'message' => "Campos vacios en la fila: {$i}");
+                break;
+            }
+
+            if (
+                empty(trim($unitSales[$i]['referenceProduct'])) == '' && empty(trim($unitSales[$i]['product'])) == '' &&
+                trim($unitSales[$i]['january']) == '' && trim($unitSales[$i]['february']) == '' && trim($unitSales[$i]['march']) == '' && trim($unitSales[$i]['april']) == '' &&
+                trim($unitSales[$i]['may']) == '' && trim($unitSales[$i]['june']) == '' && trim($unitSales[$i]['july']) == '' && trim($unitSales[$i]['august']) == '' &&
+                trim($unitSales[$i]['september']) == '' && trim($unitSales[$i]['october']) == '' &&  trim($unitSales[$i]['november']) == '' && trim($unitSales[$i]['december']) == ''
             ) {
                 $i = $i + 2;
                 $dataImportUnitSales = array('error' => true, 'message' => "Campos vacios en la fila: {$i}");
@@ -149,24 +161,24 @@ $app->post('/addUnitSales', function (Request $request, Response $response, $arg
             $resolution = $inventoryDaysDao->updateInventoryDays($dataSale['idProduct'], $days);
         }
 
-        if ($resolution == null) {
-            $license = $companiesLicenseDao->status($id_company);
+        // if ($resolution == null) {
+        //     $license = $companiesLicenseDao->status($id_company);
 
-            if ($license['months'] > 0) {
-                $products = $generalUnitSalesDao->findAllProductsUnitSalesByCompany($id_company);
+        //     if ($license['months'] > 0) {
+        //         $products = $generalUnitSalesDao->findAllProductsUnitSalesByCompany($id_company);
 
-                $resolution = $productsDao->updateGeneralClassification($id_company);
+        //         $resolution = $productsDao->updateGeneralClassification($id_company);
 
-                for ($i = 0; $i < sizeof($products); $i++) {
-                    if (isset($resolution['info'])) break;
-                    $inventory = $classificationDao->calcInventoryABCBYProduct($products[$i]['id_product'], $args['months']);
+        //         for ($i = 0; $i < sizeof($products); $i++) {
+        //             if (isset($resolution['info'])) break;
+        //             $inventory = $classificationDao->calcInventoryABCBYProduct($products[$i]['id_product'], $license['months']);
 
-                    $inventory = $classificationDao->calcClassificationByProduct($inventory['year_sales'], $id_company);
+        //             $inventory = $classificationDao->calcClassificationByProduct($inventory['year_sales'], $id_company);
 
-                    $resolution = $classificationDao->updateProductClassification($products[$i]['id_product'], $inventory['classification']);
-                }
-            }
-        }
+        //             $resolution = $classificationDao->updateProductClassification($products[$i]['id_product'], $inventory['classification']);
+        //         }
+        //     }
+        // }
 
         if ($resolution == null)
             $resp = array('success' => true, 'message' => 'Venta asociada correctamente');
@@ -196,17 +208,17 @@ $app->post('/addUnitSales', function (Request $request, Response $response, $arg
             // Calcular stock material
             $materials = $productMaterialsDao->findAllProductsmaterials($unitSales[$i]['idProduct'], $id_company);
 
-            for ($i = 0; $i < sizeof($materials); $i++) {
+            for ($j = 0; $j < sizeof($materials); $j++) {
                 if (isset($resolution['info'])) break;
 
                 // Calcular stock material
-                $arr = $minimumStockDao->calcStockByMaterial($materials[$i]['id_material']);
+                $arr = $minimumStockDao->calcStockByMaterial($materials[$j]['id_material']);
                 if (isset($arr['stock']))
-                    $resolution = $generalMaterialDao->updateStockMaterial($materials[$i]['id_material'], $arr['stock']);
+                    $resolution = $generalMaterialDao->updateStockMaterial($materials[$j]['id_material'], $arr['stock']);
 
                 if (isset($resolution['info'])) break;
                 // Calcular stock producto
-                $products = $generalProductsMaterialsDao->findAllProductByMaterial($materials[$i]['id_material']);
+                $products = $generalProductsMaterialsDao->findAllProductByMaterial($materials[$j]['id_material']);
 
                 foreach ($products as $arr) {
                     $product = $minimumStockDao->calcStockByProduct($arr['id_product']);
@@ -221,26 +233,26 @@ $app->post('/addUnitSales', function (Request $request, Response $response, $arg
             // Calcular Dias inventario
             $inventory = $inventoryDaysDao->calcInventoryDays($unitSales[$i]['idProduct']);
 
-            !$inventory['days'] ? $days = 0 : $days = $inventory['days'];
+            !isset($inventory['days']) ? $days = 0 : $days = $inventory['days'];
 
             $resolution = $inventoryDaysDao->updateInventoryDays($unitSales[$i]['idProduct'], $days);
 
-            if (isset($resolution['info'])) break;
-            $license = $companiesLicenseDao->status($id_company);
+            // if (isset($resolution['info'])) break;
+            // $license = $companiesLicenseDao->status($id_company);
 
-            if ($license['months'] == 0) break;
-            $products = $generalUnitSalesDao->findAllProductsUnitSalesByCompany($id_company);
+            // if ($license['months'] == 0) break;
+            // $products = $generalUnitSalesDao->findAllProductsUnitSalesByCompany($id_company);
 
-            $resolution = $productsDao->updateGeneralClassification($id_company);
+            // $resolution = $productsDao->updateGeneralClassification($id_company);
 
-            for ($i = 0; $i < sizeof($products); $i++) {
-                if (isset($resolution['info'])) break;
-                $inventory = $classificationDao->calcInventoryABCBYProduct($products[$i]['id_product'], $args['months']);
+            // for ($j = 0; $j < sizeof($products); $j++) {
+            //     if (isset($resolution['info'])) break;
+            //     $inventory = $classificationDao->calcInventoryABCBYProduct($products[$j]['id_product'], $license['months']);
 
-                $inventory = $classificationDao->calcClassificationByProduct($inventory['year_sales'], $id_company);
+            //     $inventory = $classificationDao->calcClassificationByProduct($inventory['year_sales'], $id_company);
 
-                $resolution = $classificationDao->updateProductClassification($products[$i]['id_product'], $inventory['classification']);
-            }
+            //     $resolution = $classificationDao->updateProductClassification($products[$j]['id_product'], $inventory['classification']);
+            // }
         }
         if ($resolution == null)
             $resp = array('success' => true, 'message' => 'Venta importada correctamente');
@@ -248,6 +260,25 @@ $app->post('/addUnitSales', function (Request $request, Response $response, $arg
             $resp = array('info' => true, 'message' => $resolution['message']);
         else
             $resp = array('error' => true, 'message' => 'Ocurrio un error mientras importaba la información. Intente nuevamente');
+    }
+
+    if ($resolution == null) {
+        $license = $companiesLicenseDao->status($id_company);
+
+        if ($license['months'] > 0) {
+            $products = $generalUnitSalesDao->findAllProductsUnitSalesByCompany($id_company);
+
+            $resolution = $productsDao->updateGeneralClassification($id_company);
+
+            for ($j = 0; $j < sizeof($products); $j++) {
+                if (isset($resolution['info'])) break;
+                $inventory = $classificationDao->calcInventoryABCBYProduct($products[$j]['id_product'], $license['months']);
+
+                $inventory = $classificationDao->calcClassificationByProduct($inventory['year_sales'], $id_company);
+
+                $resolution = $classificationDao->updateProductClassification($products[$j]['id_product'], $inventory['classification']);
+            }
+        }
     }
 
     $response->getBody()->write(json_encode($resp));
@@ -320,7 +351,7 @@ $app->post('/updateUnitSale', function (Request $request, Response $response, $a
 
                 for ($i = 0; $i < sizeof($products); $i++) {
                     if (isset($resolution['info'])) break;
-                    $inventory = $classificationDao->calcInventoryABCBYProduct($products[$i]['id_product'], $args['months']);
+                    $inventory = $classificationDao->calcInventoryABCBYProduct($products[$i]['id_product'], $license['months']);
 
                     $inventory = $classificationDao->calcClassificationByProduct($inventory['year_sales'], $id_company);
 
@@ -402,7 +433,7 @@ $app->post('/deleteUnitSale', function (Request $request, Response $response, $a
 
             for ($i = 0; $i < sizeof($products); $i++) {
                 if (isset($resolution['info'])) break;
-                $inventory = $classificationDao->calcInventoryABCBYProduct($products[$i]['id_product'], $args['months']);
+                $inventory = $classificationDao->calcInventoryABCBYProduct($products[$i]['id_product'], $license['months']);
 
                 $inventory = $classificationDao->calcClassificationByProduct($inventory['year_sales'], $id_company);
 
@@ -432,26 +463,49 @@ $app->get('/saleDays', function (Request $request, Response $response, $args) us
     return $response->withHeader('Content-Type', 'application/json');
 });
 
-$app->post('/saveSaleDays', function (Request $request, Response $response, $args) use ($generalUnitSalesDao) {
+$app->post('/addSaleDays', function (Request $request, Response $response, $args) use ($generalUnitSalesDao) {
     session_start();
     $id_company = $_SESSION['id_company'];
     $dataSales = $request->getParsedBody();
 
     $saleDay = $generalUnitSalesDao->findSaleDays($dataSales, $id_company);
 
-    if (!$saleDay)
+    if (!$saleDay) {
         $resolution = $generalUnitSalesDao->insertSaleDaysByCompany($dataSales, $id_company);
-    else {
-        $dataSales['idSaleDay'] = $saleDay['id_sale_day'];
-        $resolution = $generalUnitSalesDao->updateSaleDays($dataSales);
+        if ($resolution == null)
+            $resp = array('success' => true, 'message' => 'Dias de venta almacenada correctamente');
+        else if (isset($resolution['info']))
+            $resp = array('info' => true, 'message' => $resolution['message']);
+        else
+            $resp = array('error' => true, 'message' => 'No es posible Guardar la información. intente nuevamente');
+    } else {
+        $resp = array('error' => true, 'message' => 'Dia de venta de ese mes ya existe. Ingrese un mes nuevo');
     }
 
-    if ($resolution == null)
-        $resp = array('success' => true, 'message' => 'Dias de venta almacenada correctamente');
-    else if (isset($resolution['info']))
-        $resp = array('info' => true, 'message' => $resolution['message']);
-    else
-        $resp = array('error' => true, 'message' => 'No es posible Guardar la información. intente nuevamente');
+
+    $response->getBody()->write(json_encode($resp));
+    return $response->withHeader('Content-Type', 'application/json');
+});
+
+$app->post('/updateSaleDays', function (Request $request, Response $response, $args) use ($generalUnitSalesDao) {
+    session_start();
+    $id_company = $_SESSION['id_company'];
+    $dataSales = $request->getParsedBody();
+
+    $saleDay = $generalUnitSalesDao->findSaleDays($dataSales, $id_company);
+
+    !is_array($saleDay) ? $data['id_sale_day'] = 0 : $data = $saleDay;
+    if ($data['id_sale_day'] == $dataSales['idSaleDay'] || $data['id_sale_day'] == 0) {
+        $resolution = $generalUnitSalesDao->updateSaleDays($dataSales);
+        if ($resolution == null)
+            $resp = array('success' => true, 'message' => 'Dias de venta almacenada correctamente');
+        else if (isset($resolution['info']))
+            $resp = array('info' => true, 'message' => $resolution['message']);
+        else
+            $resp = array('error' => true, 'message' => 'No es posible Guardar la información. intente nuevamente');
+    } else {
+        $resp = array('error' => true, 'message' => 'Dia de venta de ese mes ya existe. Ingrese un mes nuevo');
+    }
 
     $response->getBody()->write(json_encode($resp));
     return $response->withHeader('Content-Type', 'application/json');

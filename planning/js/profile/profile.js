@@ -1,22 +1,33 @@
 $(document).ready(function () {
   $('#email').prop('disabled', true);
 
-  fetch(`/api/user`)
-    .then((response) => response.text())
-    .then((data) => {
-      data = JSON.parse(data);
-      loadProfile(data);
-    });
-
   /* Cargar Perfil de usuario */
-  loadProfile = (data) => {
+  loadProfile = async () => {
+    let data = await searchData('/api/user');
+
+    $('#profileName').html(data.firstname);
     $('#idUser').val(data.id_user);
     $('#firstname').val(data.firstname);
     $('#lastname').val(data.lastname);
     $('#position').val(data.position);
     $('#email').val(data.email);
     if (data.avatar) avatar.src = data.avatar;
+
+    /* Cargar data compañia */
+    data = await searchData('/api/company');
+
+    $('#idCompany').val(data[0].id_company);
+    $('#state').val(data[0].state);
+    $('#company').val(data[0].company);
+    $('#nit').val(data[0].nit);
+    $('#city').val(data[0].city);
+    $('#country').val(data[0].country);
+    $('#phone').val(data[0].telephone);
+    $('#address').val(data[0].address);
+    if (data[0].logo) $('#logo').prop('src', data[0].logo);
   };
+
+  loadProfile();
 
   /* Guardar perfil */
   $('#btnSaveProfile').click(function (e) {
@@ -43,6 +54,7 @@ $(document).ready(function () {
     let imageProd = $('#formFile')[0].files[0];
     dataProfile = new FormData(formSaveProfile);
     dataProfile.append('avatar', imageProd);
+    dataProfile.append('admin', 0);
 
     $.ajax({
       type: 'POST',
@@ -60,15 +72,15 @@ $(document).ready(function () {
   /* Cargar notificación */
   message = (data) => {
     if (data.success == true) {
-      avatar = sessionStorage.getItem('avatar');
+      // avatar = sessionStorage.getItem('avatar');
       firstname = sessionStorage.getItem('name');
       lastname = sessionStorage.getItem('lastname');
 
-      sessionStorage.removeItem('avatar');
+      // sessionStorage.removeItem('avatar');
       sessionStorage.removeItem('name');
       sessionStorage.removeItem('lastname');
 
-      if (avatar) hAvatar.src = avatar;
+      // if (avatar) hAvatar.src = avatar;
       $('.userName').html(`${firstname} ${lastname}`);
       $('#email').prop('disabled', true);
 

@@ -36,7 +36,7 @@ if (sizeof($_SESSION) == 0)
             <!-- content -->
             <div class="page-content">
                 <div class="container py-5">
-                    <div class="row">
+                    <!-- <div class="row">
                         <div class="col-lg-4">
                             <div class="card">
                                 <div class="card-body text-center">
@@ -179,21 +179,135 @@ if (sizeof($_SESSION) == 0)
                                 </div>
                             </form>
                         </div>
-                    </div>
+                    </div> -->
+                    <form id="formSaveProfile">
+                        <div class="row">
+                            <div class="col-lg-3">
+                                <div class="card">
+                                    <div class="card-body text-center">
+                                        <div class="picture-container">
+                                            <div class="picture">
+                                                <img id="avatar" src="" class="img-fluid" style="width: 100px;" />
+                                                <input class="form-control" type="file" id="formFile">
+                                            </div>
+                                        </div>
+                                        <h5 class="my-3" id="profileName"></h5>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-lg-9">
+                                <div class="card mb-4">
+                                    <div class="card-body">
+                                        <div class="form-row" style="margin-bottom:-30px">
+                                            <input type="" id="idUser" name="idUser" hidden>
+                                            <div class="col-sm-4 floating-label enable-floating-label show-label">
+                                                <input type="text" class="form-control text-center firstname general" placeholder="" aria-label="First name" id="firstname" name="nameUser">
+                                                <label for="">Nombres *</label>
+                                            </div>
+                                            <div class="col-sm-4 floating-label enable-floating-label show-label">
+                                                <input type="text" class="form-control text-center general" placeholder="" aria-label="Last name" id="lastname" name="lastnameUser">
+                                                <label for="">Apellidos *</label>
+                                            </div>
+                                            <div class="col-sm-4 floating-label enable-floating-label show-label">
+                                                <input type="text" class="form-control text-center" placeholder="" aria-label="Position" id="position" name="position">
+                                                <label for="">Cargo *</label>
+                                            </div>
+                                        </div>
+                                        <hr>
+                                        <div class="form-row" style="margin-bottom:-30px">
+                                            <div class="col-sm-4 floating-label enable-floating-label show-label">
+                                                <input type="email" class="form-control text-center" id="email" name="emailUser">
+                                                <label for="email" class="form-label">Email *</label>
+                                            </div>
+                                            <div class="col-sm-4 floating-label enable-floating-label show-label">
+                                                <input type="password" class="form-control text-center" placeholder="" aria-label="Password" id="password" name="password">
+                                                <label class="form-label">Nueva Contraseña</label>
+                                            </div>
+                                            <div class="col-sm-4 floating-label enable-floating-label show-label">
+                                                <input type="password" class="form-control text-center" placeholder="" aria-label="Confirm Password" id="conPassword" name="conPassword">
+                                                <label class="form-label">Confirmar Contraseña</label>
+                                            </div>
+                                        </div>
+                                        <hr>
+                                        <div class="form-row">
+                                            <div class="col-sm-12 d-flex justify-content-end">
+                                                <button type="button" class="btn btn-primary" id="btnSaveProfile">Actualizar Usuario</button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-lg-3">
+                                <div class="card">
+                                    <div class="card-body text-center">
+                                        <div class="picture-container mb-4">
+                                            <div class="pictureC">
+                                                <img id="logo" src="" class="img-fluid" style="width: 400px;" />
+                                                <input class="form-control" type="file" id="formFileC">
+                                            </div>
+                                        </div>
+                                        <h5 class="my-3" id="profileName"></h5>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-lg-9">
+                                <div class="card companyData">
+                                    <div class="card-body">
+                                        <input type="" id="state" name="companyState" hidden>
+                                        <input type="" id="idCompany" name="idCompany" hidden>
+
+                                        <div class="form-row">
+                                            <div class="col-sm-4 floating-label enable-floating-label show-label">
+                                                <label class="form-label">Compañia</label>
+                                                <input class="form-control text-center general" type="text" id="company" name="company" readonly>
+                                            </div>
+                                            <div class="col-sm-4 floating-label enable-floating-label show-label">
+                                                <label class="form-label">NIT</label>
+                                                <input class="form-control text-center general" type="number" id="nit" name="companyNIT" readonly>
+                                            </div>
+                                            <div class="col-sm-4 floating-label enable-floating-label show-label">
+                                                <label class="form-label">Ciudad</label>
+                                                <input class="form-control text-center general" type="text" id="city" name="companyCity" readonly>
+                                            </div>
+                                        </div>
+                                        <div class="form-row">
+                                            <div class="col-sm-6 floating-label enable-floating-label show-label">
+                                                <label class="form-label">Pais</label>
+                                                <input class="form-control text-center general" type="text" id="country" name="companyCountry" readonly>
+                                            </div>
+                                            <div class="col-sm-6 floating-label enable-floating-label show-label">
+                                                <label class="form-label">Telefono</label>
+                                                <input class="form-control text-center general" type="number" id="phone" name="companyTel" readonly>
+                                            </div>
+                                        </div>
+                                        <div class="form-row">
+                                            <div class="col-sm-12 floating-label enable-floating-label show-label">
+                                                <label class="form-label">Dirección</label>
+                                                <textarea class="form-control text-center general" id="address" name="companyAddress" readonly></textarea>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
                 </div>
+                </form>
             </div>
         </div>
-        <!-- main content End -->
-        <!-- footer -->
-        <?php include_once  dirname(dirname(dirname(__DIR__))) . '/global/partials/footer.php'; ?>
+    </div>
+    <!-- main content End -->
+    <!-- footer -->
+    <?php include_once  dirname(dirname(dirname(__DIR__))) . '/global/partials/footer.php'; ?>
     </div>
 
     <?php include_once dirname(dirname(dirname(__DIR__))) . '/global/partials/scriptsJS.php'; ?>
 
-    <script src="/global/js/global/companyData.js"></script>
+    <!-- <script src="/global/js/global/companyData.js"></script> -->
     <!-- <script src="/global/js/global/searchData.js"></script> -->
     <script src="/global/js/global/loadImg.js"></script>
-    <script src="/cost/js/profile/profile.js"></script>
+    <script src="/planning/js/profile/profile.js"></script>
 </body>
 
 </html>

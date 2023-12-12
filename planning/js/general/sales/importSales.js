@@ -22,22 +22,34 @@ $(document).ready(function () {
       toastr.error('Seleccione un archivo');
       return false;
     }
+    $('.cardBottons').hide();
+
+    let form = document.getElementById('formSales');
+
+    form.insertAdjacentHTML(
+      'beforeend',
+      `<div class="col-sm-1 cardLoading" style="margin-top: 7px; margin-left: 15px">
+        <div class="spinner-border text-secondary" role="status">
+            <span class="sr-only">Loading...</span>
+        </div>
+      </div>`
+    );
 
     importFile(selectedFile)
       .then((data) => {
         let SalesToImport = data.map((item) => {
-          !item.enero ? (item.enero = '') : item.enero;
-          !item.febrero ? (item.febrero = '') : item.febrero;
-          !item.marzo ? (item.marzo = '') : item.marzo;
-          !item.abril ? (item.abril = '') : item.abril;
-          !item.mayo ? (item.mayo = '') : item.mayo;
-          !item.junio ? (item.junio = '') : item.junio;
-          !item.julio ? (item.julio = '') : item.julio;
-          !item.agosto ? (item.agosto = '') : item.agosto;
-          !item.septiembre ? (item.septiembre = '') : item.septiembre;
-          !item.octubre ? (item.octubre = '') : item.octubre;
-          !item.noviembre ? (item.noviembre = '') : item.noviembre;
-          !item.diciembre ? (item.diciembre = '') : item.diciembre;
+          // !item.enero ? (item.enero = '') : item.enero;
+          // !item.febrero ? (item.febrero = '') : item.febrero;
+          // !item.marzo ? (item.marzo = '') : item.marzo;
+          // !item.abril ? (item.abril = '') : item.abril;
+          // !item.mayo ? (item.mayo = '') : item.mayo;
+          // !item.junio ? (item.junio = '') : item.junio;
+          // !item.julio ? (item.julio = '') : item.julio;
+          // !item.agosto ? (item.agosto = '') : item.agosto;
+          // !item.septiembre ? (item.septiembre = '') : item.septiembre;
+          // !item.octubre ? (item.octubre = '') : item.octubre;
+          // !item.noviembre ? (item.noviembre = '') : item.noviembre;
+          // !item.diciembre ? (item.diciembre = '') : item.diciembre;
 
           return {
             referenceProduct: item.referencia,
@@ -59,6 +71,9 @@ $(document).ready(function () {
         checkSales(SalesToImport);
       })
       .catch(() => {
+          $('.cardLoading').remove();
+          $('.cardBottons').show(400);
+
         console.log('Ocurrio un error. Intente Nuevamente');
       });
   });
@@ -71,6 +86,10 @@ $(document).ready(function () {
       data: { importUnitSales: data },
       success: function (resp) {
         if (resp.error == true) {
+          $('.cardLoading').remove();
+          $('.cardBottons').show(400);
+          $('#fileSales').val('');
+
           $('#formImportSales').trigger('reset');
           toastr.error(resp.message);
           return false;
@@ -92,7 +111,11 @@ $(document).ready(function () {
           callback: function (result) {
             if (result == true) {
               saveSalesTable(data);
-            } else $('#fileSales').val('');
+            } else {
+              $('.cardLoading').remove();
+              $('.cardBottons').show(400);
+              $('#fileSales').val('');
+            }
           },
         });
       },
@@ -105,21 +128,11 @@ $(document).ready(function () {
       url: '../../api/addUnitSales',
       data: { importUnitSales: data },
       success: function (r) {
-        /* Mensaje de exito */
-        if (r.success == true) {
-          $('.cardImportSales').hide(800);
-          $('#formImportSales').trigger('reset');
-          updateTable();
-          toastr.success(r.message);
-          return false;
-        } else if (r.error == true) toastr.error(r.message);
-        else if (r.info == true) toastr.info(r.message);
-
-        /* Actualizar tabla */
-        function updateTable() {
-          $('#tblSales').DataTable().clear();
-          $('#tblSales').DataTable().ajax.reload();
-        }
+        $('.cardLoading').remove();
+        $('.cardBottons').show(400); 
+        $('#fileSales').val('');
+        
+        message(r);
       },
     });
   };
@@ -127,7 +140,19 @@ $(document).ready(function () {
   /* Descargar formato */
   $('#btnDownloadImportsSales').click(async function (e) {
     e.preventDefault();
+    $('.cardBottons').hide();
 
+    let form = document.getElementById('formSales');
+
+    form.insertAdjacentHTML(
+      'beforeend',
+      `<div class="col-sm-1 cardLoading" style="margin-top: 7px; margin-left: 15px">
+        <div class="spinner-border text-secondary" role="status">
+            <span class="sr-only">Loading...</span>
+        </div>
+      </div>`
+    );
+    
     let wb = XLSX.utils.book_new();
 
     let data = [];
@@ -161,5 +186,9 @@ $(document).ready(function () {
       XLSX.utils.book_append_sheet(wb, ws, 'Unidades_Ventas');
       XLSX.writeFile(wb, namexlsx);
     }
+
+    $('.cardLoading').remove();
+    $('.cardBottons').show(400);
+    $('#fileSales').val('');
   });
 });

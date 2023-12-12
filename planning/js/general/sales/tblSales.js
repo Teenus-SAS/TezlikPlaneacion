@@ -187,16 +187,15 @@ $(document).ready(function () {
         className: 'uniqueClassName',
         render: $.fn.dataTable.render.number('.', ',', 0, ''),
       },
-      // {
-      //   title: 'Acciones',
-      //   data: 'id_unit_sales',
-      //   className: 'uniqueClassName',
-      //   render: function (data) {
-      //     return `
-      //           <a href="javascript:;" <i id="${data}" class="bx bx-edit-alt updateSale" data-toggle='tooltip' title='Actualizar Venta' style="font-size: 30px;"></i></a>
-      //           <a href="javascript:;" <i id="${data}" class="mdi mdi-delete-forever" data-toggle='tooltip' title='Eliminar Venta' style="font-size: 30px;color:red" onclick="deleteFunction()"></i></a>`;
-      //   },
-      // },
+      {
+        title: 'Acciones',
+        data: 'id_sale_day',
+        className: 'uniqueClassName',
+        render: function (data) {
+          return `<a href="javascript:;" <i id="${data}" class="bx bx-edit-alt updateDays" data-toggle='tooltip' title='Actualizar Dias' style="font-size: 30px;"></i></a>`;
+          // <a href="javascript:;" <i id="${data}" class="mdi mdi-delete-forever" data-toggle='tooltip' title='Eliminar Venta' style="font-size: 30px;color:red" onclick="deleteFunction()"></i></a>
+        },
+      },
     ],
   });
 });

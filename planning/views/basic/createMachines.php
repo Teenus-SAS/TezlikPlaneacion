@@ -89,7 +89,7 @@ if (sizeof($_SESSION) == 0)
                             <form class="col-12" id="formImportMachines" enctype="multipart/form-data">
                                 <div class="card">
                                     <div class="card-body pt-3">
-                                        <div class="form-row">
+                                        <div class="form-row" id="formMachines">
                                             <div class="col-sm-6 floating-label enable-floating-label show-label drag-area" style="margin-bottom:10px!important">
                                                 <input class="form-control" type="file" id="fileMachines" accept=".xls,.xlsx">
                                                 <label for="formFile" class="form-label"> Importar Máquinas</label>

@@ -1,12 +1,14 @@
 <?php
 
 use TezlikPlaneacion\dao\AutenticationUserDao;
+use TezlikPlaneacion\dao\CompaniesDao;
 use TezlikPlaneacion\dao\FilesDao;
 use TezlikPlaneacion\dao\ProfileDao;
 
 $profileDao = new ProfileDao();
 $FilesDao = new FilesDao();
 $usersDao = new AutenticationUserDao();
+$companyDao = new CompaniesDao();
 
 use Psr\Http\Message\ResponseInterface as Response;
 use Psr\Http\Message\ServerRequestInterface as Request;

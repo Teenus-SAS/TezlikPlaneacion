@@ -130,7 +130,7 @@ $(document).ready(function () {
         message(data);
       }
     );
-  };
+  }; 
 
   /* Eliminar venta */
 
@@ -172,6 +172,7 @@ $(document).ready(function () {
   $('#btnNewAddDays').click(async function (e) { 
     e.preventDefault();
     
+    sessionStorage.removeItem('id_sale_day');
     $('.cardAddDays').toggle(800);
     $('.cardSaleDays').show(800);
     $('.cardSales').hide(800);
@@ -181,6 +182,43 @@ $(document).ready(function () {
   $('#btnAddDays').click(async function (e) { 
     e.preventDefault();
     
+    let idSaleDay = sessionStorage.getItem('id_sale_day');
+
+    if (!idSaleDay)
+      checkDataSaleDays('/api/addSaleDays', idSaleDay);
+    else
+      checkDataSaleDays('/api/updateSaleDays', idSaleDay);
+  });
+
+  /* Actualizar venta */
+
+  $(document).on('click', '.updateDays', function (e) {
+    e.preventDefault();
+
+    $('.cardImportSales').hide(800);
+    $('.cardAddDays').show(800);
+    $('.cardSales').hide(800);
+
+    $('#btnCreateSale').html('Actualizar');
+
+    let row = $(this).parent().parent()[0];
+    let data = tblSalesDays.fnGetData(row);
+
+    sessionStorage.setItem('id_sale_day', data.id_sale_day);
+
+    $('#year').val(data.year);
+    $(`#month option[value=${data.month}]`).prop('selected', true);
+    $('#days').val(data.days);
+
+    $('html, body').animate(
+      {
+        scrollTop: 0,
+      },
+      1000
+    );
+  });
+
+  checkDataSaleDays = async (url, idSaleDay) => {
     let year = parseInt($('#year').val());
     let month = parseInt($('#month').val());
     let days = parseInt($('#days').val());
@@ -195,16 +233,20 @@ $(document).ready(function () {
     let dataSale = new FormData(formAddDays);
 
     dataSale.append('month', month); 
+    dataSale.append('idSaleDay', idSaleDay); 
 
-    let resp = await sendDataPOST('/api/saveSaleDays', dataSale);
+    let resp = await sendDataPOST(url, dataSale);
 
     message(resp); 
-  });
+  }
 
   /* Mensaje de exito */
 
   message = (data) => {
     if (data.success == true) {
+      $('.cardImportSales').hide(800);
+      $('#formImportSales').trigger('reset');
+
       $('.month').css('border-color', '');
       $('#createSale').modal('hide');
       $('#formCreateSale').trigger('reset');
