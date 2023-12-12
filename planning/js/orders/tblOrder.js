@@ -57,7 +57,7 @@ $(document).ready(function () {
           if (data == 'Entregado')
             badge = 'badge-success';
           else if (data == 'Sin Ficha Tecnica' || data == 'Sin Materia Prima')
-            badge = 'badge-warning';
+            badge = 'badge-danger';
           else if (data == 'Despacho')
             badge = 'badge-info';
           else
