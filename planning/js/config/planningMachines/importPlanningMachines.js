@@ -3,7 +3,7 @@ $(document).ready(function () {
   $('.cardImportPlanMachines').hide();
 
   $('#btnImportNewPlanMachines').click(function (e) {
-    e.preventDefault(); 
+    e.preventDefault();
     $('.cardImportPlanMachines').toggle(800);
   });
 
@@ -21,6 +21,18 @@ $(document).ready(function () {
       toastr.error('Seleccione un archivo');
       return false;
     }
+
+    $('.cardBottons').hide();
+
+    let form = document.getElementById('formPlanMachines');
+    form.insertAdjacentHTML(
+      'beforeend',
+      `<div class="col-sm-1 cardLoading" style="margin-top: 7px; margin-left: 15px">
+        <div class="spinner-border text-secondary" role="status">
+            <span class="sr-only">Loading...</span>
+        </div>
+      </div>`
+    );
 
     importFile(selectedFile)
       .then((data) => {
@@ -48,7 +60,11 @@ $(document).ready(function () {
         checkMachine(machinesToImport);
       })
       .catch(() => {
-        console.log('Ocurrio un error. Intente Nuevamente');
+        $('.cardLoading').remove();
+        $('.cardBottons').show(400);
+        $('#filePlanMachines').val('');
+
+        toastr.error('Ocurrio un error. Intente Nuevamente');
       });
   });
 
@@ -60,6 +76,10 @@ $(document).ready(function () {
       data: { importPlanMachines: data },
       success: function (resp) {
         if (resp.error == true) {
+          $('.cardLoading').remove();
+          $('.cardBottons').show(400);
+          $('#filePlanMachines').val('');
+
           $('#formImportPlanMachines').trigger('reset');
           toastr.error(resp.message);
           return false;
@@ -81,7 +101,11 @@ $(document).ready(function () {
           callback: function (result) {
             if (result == true) {
               saveMachineTable(data);
-            } else $('#filePlanMachines').val('');
+            } else {
+              $('.cardLoading').remove();
+              $('.cardBottons').show(400);
+              $('#filePlanMachines').val('');
+            }
           },
         });
       },
@@ -94,6 +118,9 @@ $(document).ready(function () {
       url: '/api/addPlanningMachines',
       data: { importPlanMachines: data },
       success: function (r) {
+        $('.cardLoading').remove();
+        $('.cardBottons').show(400);
+        $('#filePlanMachines').val('');
         message(r);
       },
     });
@@ -101,7 +128,7 @@ $(document).ready(function () {
 
   /* Descargar formato */
   $('#btnDownloadImportsPlanMachines').click(function (e) {
-    e.preventDefault(); 
+    e.preventDefault();
     let wb = XLSX.utils.book_new();
     let planningMachines = [];
     let data = tblPlanMachines.fnGetData();
@@ -125,7 +152,7 @@ $(document).ready(function () {
         octubre: data[i].october,
         noviembre: data[i].november,
         diciembre: data[i].december,
-      }); 
+      });
     }
 
     ws = XLSX.utils.json_to_sheet(planningMachines);

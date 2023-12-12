@@ -24,6 +24,18 @@ $(document).ready(function () {
       return false;
     }
 
+    $('.cardBottons').hide();
+
+    let form = document.getElementById('formStock');
+    form.insertAdjacentHTML(
+      'beforeend',
+      `<div class="col-sm-1 cardLoading" style="margin-top: 7px; margin-left: 15px">
+        <div class="spinner-border text-secondary" role="status">
+            <span class="sr-only">Loading...</span>
+        </div>
+      </div>`
+    );
+
     importFile(selectedFile)
       .then((data) => {
         let StockToImport = data.map((item) => {
@@ -37,7 +49,11 @@ $(document).ready(function () {
         checkStock(StockToImport);
       })
       .catch(() => {
-        console.log('Ocurrio un error. Intente Nuevamente');
+                  $('.cardLoading').remove();
+          $('.cardBottons').show(400);
+          $('#fileStock').val('');
+
+        toastr.error('Ocurrio un error. Intente Nuevamente');
       });
   });
 
@@ -49,6 +65,10 @@ $(document).ready(function () {
       data: { importStock: data },
       success: function (resp) {
         if (resp.error == true) {
+          $('.cardLoading').remove();
+          $('.cardBottons').show(400);
+          $('#fileStock').val('');
+
           $('#formImportStock').trigger('reset');
           toastr.error(resp.message);
           return false;
@@ -70,7 +90,11 @@ $(document).ready(function () {
           callback: function (result) {
             if (result == true) {
               saveStockTable(data);
-            } else $('#fileStock').val('');
+            } else {
+                        $('.cardLoading').remove();
+          $('.cardBottons').show(400);
+$('#fileStock').val('');
+            }
           },
         });
       },
@@ -83,6 +107,10 @@ $(document).ready(function () {
       url: '../../api/addStock',
       data: { importStock: data },
       success: function (r) {
+        $('.cardLoading').remove();
+          $('.cardBottons').show(400);
+        $('#fileStock').val('');
+        
         message(r);
       },
     });
@@ -91,6 +119,18 @@ $(document).ready(function () {
   /* Descargar formato */
   $('#btnDownloadImportsStock').click(async function (e) {
     e.preventDefault();
+
+    $('.cardBottons').hide();
+
+    let form = document.getElementById('formStock');
+    form.insertAdjacentHTML(
+      'beforeend',
+      `<div class="col-sm-1 cardLoading" style="margin-top: 7px; margin-left: 15px">
+        <div class="spinner-border text-secondary" role="status">
+            <span class="sr-only">Loading...</span>
+        </div>
+      </div>`
+    );
 
     let wb = XLSX.utils.book_new();
 
@@ -115,5 +155,9 @@ $(document).ready(function () {
       XLSX.utils.book_append_sheet(wb, ws, 'Stock');
       XLSX.writeFile(wb, namexlsx);
     }
+
+    $('.cardLoading').remove();
+    $('.cardBottons').show(400);
+    $('#fileStock').val('');
   });
 });

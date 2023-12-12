@@ -74,7 +74,7 @@ $(document).ready(function () {
           $('.cardLoading').remove();
           $('.cardBottons').show(400);
 
-        console.log('Ocurrio un error. Intente Nuevamente');
+        toastr.error('Ocurrio un error. Intente Nuevamente');
       });
   });
 

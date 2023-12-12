@@ -129,10 +129,10 @@ $(document).ready(function () {
 
   message = (data) => {
     if (data.success == true) {
+      $('#formImportProduct').trigger('reset');
       $('.cardCreateProduct').hide(800);
       $('.cardImportProducts').hide(800);
-      $('#formCreateProduct').trigger('reset');
-      $('#formFile').val('');
+      $('#formCreateProduct').trigger('reset'); 
       updateTable();
       toastr.success(data.message);
       return false;

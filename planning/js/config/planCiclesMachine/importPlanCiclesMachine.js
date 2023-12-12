@@ -25,7 +25,7 @@ $(document).ready(function () {
 
     $('.cardBottons').hide();
     
-    let form = document.getElementById('formProductMaterial');
+    let form = document.getElementById('formPlanCiclesMachine');
     form.insertAdjacentHTML(
       'beforeend',
       `<div class="col-sm-1 cardLoading" style="margin-top: 7px; margin-left: 15px">
@@ -48,10 +48,11 @@ $(document).ready(function () {
         checkCiclesMachine(planCiclesMachineToImport);
       })
       .catch(() => {
-                          $('.cardLoading').remove();
-          $('.cardBottons').show(400);
+        $('.cardLoading').remove();
+        $('.cardBottons').show(400);
+        $('#filePlanCiclesMachine').val('');
 
-        console.log('Ocurrio un error. Intente Nuevamente');
+        toastr.error('Ocurrio un error. Intente Nuevamente');
       });
   });
 
@@ -91,23 +92,23 @@ $(document).ready(function () {
             } else {
               $('.cardLoading').remove();
               $('.cardBottons').show(400);
-$('#filePlanCiclesMachine').val('');
-}
-},
-});
-},
-});
-};
+              $('#filePlanCiclesMachine').val('');
+            }
+          },
+        });
+      },
+    });
+  };
 
-saveCiclesMachineTable = (data) => {
-  $.ajax({
-    type: 'POST',
-    url: '/api/addPlanCiclesMachine',
-    data: { importPlanCiclesMachine: data },
-    success: function (r) {
-      $('.cardLoading').remove();
-      $('.cardBottons').show(400);
-      $('#filePlanCiclesMachine').val('');
+  saveCiclesMachineTable = (data) => {
+    $.ajax({
+      type: 'POST',
+      url: '/api/addPlanCiclesMachine',
+      data: { importPlanCiclesMachine: data },
+      success: function (r) {
+        $('.cardLoading').remove();
+        $('.cardBottons').show(400);
+        $('#filePlanCiclesMachine').val('');
 
         message(r);
       },

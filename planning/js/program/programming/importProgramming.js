@@ -38,7 +38,7 @@ $(document).ready(function () {
         checkProgramming(programmingToImport);
       })
       .catch(() => {
-        console.log('Ocurrio un error. Intente Nuevamente');
+        toastr.error('Ocurrio un error. Intente Nuevamente');
       });
   });
 

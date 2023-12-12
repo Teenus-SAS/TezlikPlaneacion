@@ -94,10 +94,10 @@ if (sizeof($_SESSION) == 0)
                                                 <input class="form-control" type="file" id="fileMachines" accept=".xls,.xlsx">
                                                 <label for="formFile" class="form-label"> Importar Máquinas</label>
                                             </div>
-                                            <div class="col-xs-2" style="margin-top:7px">
+                                            <div class="col-xs-2 cardBottons" style="margin-top:7px">
                                                 <button type="text" class="btn btn-success" id="btnImportMachines">Importar</button>
                                             </div>
-                                            <div class="col-xs-2" style="margin-top:7px">
+                                            <div class="col-xs-2 cardBottons" style="margin-top:7px">
                                                 <button type="text" class="btn btn-info" id="btnDownloadImportsMachines">Descarga Formato</button>
                                             </div>
                                         </div>

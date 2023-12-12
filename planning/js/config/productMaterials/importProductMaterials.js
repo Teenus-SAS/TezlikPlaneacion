@@ -1,4 +1,4 @@
-$(document).ready(function () { 
+$(document).ready(function () {
 
   $('.cardImport').hide();
 
@@ -41,16 +41,17 @@ $(document).ready(function () {
             magnitude: item.magnitud,
             unit: item.unidad,
             quantity: item.cantidad,
-          }  
-        }); 
+          }
+        });
 
         checkData(dataToImport);
       })
       .catch(() => {
-                  $('.cardLoading').remove();
-          $('.cardBottons').show(400);
+        $('.cardLoading').remove();
+        $('.cardBottons').show(400);
+        $('#fileProductsMaterials').val('');
 
-        console.log('Ocurrio un error. Intente Nuevamente');
+        toastr.error('Ocurrio un error. Intente Nuevamente');
       });
   });
 
@@ -88,26 +89,26 @@ $(document).ready(function () {
             if (result == true) {
               saveProduct(data);
             } else {
-                        $('.cardLoading').remove();
-          $('.cardBottons').show(400);
-$('#fileProductsMaterials').val('');
-}
-},
-});
-},
-});
-};
+              $('.cardLoading').remove();
+              $('.cardBottons').show(400);
+              $('#fileProductsMaterials').val('');
+            }
+          },
+        });
+      },
+    });
+  };
 
-saveProduct = (data) => {
-  // console.log(data);
-  $.ajax({
-    type: 'POST',
-    url: '/api/addProductsMaterials',
-    data: { importProducts: data },
-    success: function (r) {
-      $('.cardLoading').remove();
-      $('.cardBottons').show(400);
-      $('#fileProductsMaterials').val('');
+  saveProduct = (data) => {
+    // console.log(data);
+    $.ajax({
+      type: 'POST',
+      url: '/api/addProductsMaterials',
+      data: { importProducts: data },
+      success: function (r) {
+        $('.cardLoading').remove();
+        $('.cardBottons').show(400);
+        $('#fileProductsMaterials').val('');
 
         message(r);
       },

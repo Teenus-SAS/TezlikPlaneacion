@@ -106,6 +106,8 @@ $(document).ready(function () {
 
   message = (data) => {
     if (data.success == true) {
+      $('.cardImportMachines').hide(800);
+      $('#formImportMachines').trigger('reset');
       $('.cardCreateMachines').hide(800);
       $('#formCreateMachine').trigger('reset');
       toastr.success(data.message);

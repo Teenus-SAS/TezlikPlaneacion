@@ -24,6 +24,18 @@ $(document).ready(function () {
       return false;
     }
 
+    $('.cardBottons').hide();
+
+    let form = document.getElementById('formMachines');
+    form.insertAdjacentHTML(
+      'beforeend',
+      `<div class="col-sm-1 cardLoading" style="margin-top: 7px; margin-left: 15px">
+        <div class="spinner-border text-secondary" role="status">
+            <span class="sr-only">Loading...</span>
+        </div>
+      </div>`
+    );
+
     importFile(selectedFile)
       .then((data) => {
         let machinesToImport = data.map((item) => {
@@ -34,7 +46,10 @@ $(document).ready(function () {
         checkMachine(machinesToImport);
       })
       .catch(() => {
-        console.log('Ocurrio un error. Intente Nuevamente');
+        $('.cardLoading').remove();
+    $('.cardBottons').show(400);
+    $('#fileMachines').val('');
+        toastr.error('Ocurrio un error. Intente Nuevamente');
       });
   });
 
@@ -46,6 +61,9 @@ $(document).ready(function () {
       data: { importMachines: data },
       success: function (resp) {
         if (resp.error == true) {
+          $('.cardLoading').remove();
+    $('.cardBottons').show(400);
+    $('#fileMachines').val('');
           $('#formImportMachines').trigger('reset');
           toastr.error(resp.message);
           return false;
@@ -67,7 +85,11 @@ $(document).ready(function () {
           callback: function (result) {
             if (result == true) {
               saveMachineTable(data);
-            } else $('#fileMachines').val('');
+            } else {
+              $('.cardLoading').remove();
+    $('.cardBottons').show(400);
+    $('#fileMachines').val('');
+            }
           },
         });
       },
@@ -80,21 +102,10 @@ $(document).ready(function () {
       url: '/api/addPlanMachines',
       data: { importMachines: data },
       success: function (r) {
-        /* Mensaje de exito */
-        if (r.success == true) {
-          $('.cardImportMachines').hide(800);
-          $('#formImportMachines').trigger('reset');
-          updateTable();
-          toastr.success(r.message);
-          return false;
-        } else if (r.error == true) toastr.error(r.message);
-        else if (r.info == true) toastr.info(r.message);
-
-        /* Actualizar tabla */
-        function updateTable() {
-          $('#tblMachines').DataTable().clear();
-          $('#tblMachines').DataTable().ajax.reload();
-        }
+        $('.cardLoading').remove();
+    $('.cardBottons').show(400);
+    $('#fileMachines').val('');
+        message(r);
       },
     });
   };

@@ -39,7 +39,7 @@ $(document).ready(function () {
         checkMolds(MoldsToImport);
       })
       .catch(() => {
-        console.log('Ocurrio un error. Intente Nuevamente');
+        toastr.error('Ocurrio un error. Intente Nuevamente');
       });
   });
 
