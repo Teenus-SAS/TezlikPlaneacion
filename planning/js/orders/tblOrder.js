@@ -78,8 +78,8 @@ $(document).ready(function () {
         },
       },
     ],
-    rowCallback: function (row, data, index) {
-      if (data.status == 'Sin Ficha Tecnica' || data.status == 'Sin Materia Prima') $(row).css('color', 'red');
-    },
+    // rowCallback: function (row, data, index) {
+    //   if (data.status == 'Sin Ficha Tecnica' || data.status == 'Sin Materia Prima') $(row).css('color', 'red');
+    // },
   });
 });
