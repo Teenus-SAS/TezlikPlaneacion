@@ -23,6 +23,18 @@ $(document).ready(function () {
       return false;
     }
 
+    $('.cardBottons').hide();
+    
+    let form = document.getElementById('formProductMaterial');
+    form.insertAdjacentHTML(
+      'beforeend',
+      `<div class="col-sm-1 cardLoading" style="margin-top: 7px; margin-left: 15px">
+        <div class="spinner-border text-secondary" role="status">
+            <span class="sr-only">Loading...</span>
+        </div>
+      </div>`
+    );
+
     importFile(selectedFile)
       .then((data) => {
         let planCiclesMachineToImport = data.map((item) => {
@@ -36,6 +48,9 @@ $(document).ready(function () {
         checkCiclesMachine(planCiclesMachineToImport);
       })
       .catch(() => {
+                          $('.cardLoading').remove();
+          $('.cardBottons').show(400);
+
         console.log('Ocurrio un error. Intente Nuevamente');
       });
   });
@@ -48,6 +63,10 @@ $(document).ready(function () {
       data: { importPlanCiclesMachine: data },
       success: function (resp) {
         if (resp.error == true) {
+          $('.cardLoading').remove();
+          $('.cardBottons').show(400);
+          $('#filePlanCiclesMachine').val('');
+
           $('#formImportPlanCiclesMachine').trigger('reset');
           toastr.error(resp.message);
           return false;
@@ -69,19 +88,27 @@ $(document).ready(function () {
           callback: function (result) {
             if (result == true) {
               saveCiclesMachineTable(data);
-            } else $('#filePlanCiclesMachine').val('');
-          },
-        });
-      },
-    });
-  };
+            } else {
+              $('.cardLoading').remove();
+              $('.cardBottons').show(400);
+$('#filePlanCiclesMachine').val('');
+}
+},
+});
+},
+});
+};
 
-  saveCiclesMachineTable = (data) => {
-    $.ajax({
-      type: 'POST',
-      url: '/api/addPlanCiclesMachine',
-      data: { importPlanCiclesMachine: data },
-      success: function (r) {
+saveCiclesMachineTable = (data) => {
+  $.ajax({
+    type: 'POST',
+    url: '/api/addPlanCiclesMachine',
+    data: { importPlanCiclesMachine: data },
+    success: function (r) {
+      $('.cardLoading').remove();
+      $('.cardBottons').show(400);
+      $('#filePlanCiclesMachine').val('');
+
         message(r);
       },
     });
