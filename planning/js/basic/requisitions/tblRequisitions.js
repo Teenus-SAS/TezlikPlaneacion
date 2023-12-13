@@ -75,7 +75,7 @@ $(document).ready(function () {
                         if (data.application_date == '0000-00-00' && data.delivery_date == '0000-00-00' && data.purchase_order == '')
                             date = '';
                         else if (!data.admission_date)
-                            date = `<a href="javascript:;" <i class="bi bi-calendar-plus-fill changeDate" id="${meta.row + 1}" data-toggle='tooltip' title='Actualizar Fecha' style="font-size: 30px;"></i></a>`;
+                            date = `<button class="btn btn-warning changeDate " id="${meta.row + 1}" name="${meta.row + 1}">Recibir</button>`;
                         else
                             date = `Recibido<br>${data.admission_date}`;
                         
