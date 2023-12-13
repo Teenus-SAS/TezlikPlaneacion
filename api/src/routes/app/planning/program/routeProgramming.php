@@ -394,7 +394,7 @@ $app->post('/deleteProgramming', function (Request $request, Response $response,
     }
 
     if ($result == null)
-        $resp = array('success' => true, 'message' => 'Orden de Producción creada correctamente');
+        $resp = array('success' => true, 'message' => 'Orden de Producción eliminada correctamente');
     else if (isset($programming['info']))
         $resp = array('info' => true, 'message' => $programming['message']);
     else
