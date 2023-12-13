@@ -59,7 +59,7 @@ $(document).ready(function () {
       $('#formAddMonths').trigger('reset');
 
       await loadInventory();
-      $('#category').change();
+      $('#category').val(1).trigger('change');
 
       toastr.success(data.message);
       return false;
