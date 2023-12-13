@@ -3,10 +3,10 @@
 use TezlikPlaneacion\dao\ClassificationDao;
 use TezlikPlaneacion\dao\CompaniesLicenseStatusDao;
 use TezlikPlaneacion\dao\GeneralProductsDao;
-use TezlikPlaneacion\dao\GeneralUnitSalesDao;
+use TezlikPlaneacion\dao\ProductsDao;
 
 $classificationDao = new ClassificationDao();
-$generalUnitSalesDao = new GeneralUnitSalesDao();
+$productsDao = new ProductsDao();
 $generalProductsDao = new GeneralProductsDao();
 $companiesLicenseDao = new CompaniesLicenseStatusDao();
 
@@ -15,14 +15,14 @@ use Psr\Http\Message\ServerRequestInterface as Request;
 
 $app->get('/classification/{months}', function (Request $request, Response $response, $args) use (
     $classificationDao,
-    $generalUnitSalesDao,
+    $productsDao,
     $generalProductsDao,
     $companiesLicenseDao
 ) {
     session_start();
     $id_company = $_SESSION['id_company'];
 
-    $products = $generalUnitSalesDao->findAllProductsUnitSalesByCompany($id_company);
+    $products = $productsDao->findAllProductsByCompany($id_company);
 
     $resolution = $generalProductsDao->updateGeneralClassification($id_company);
 

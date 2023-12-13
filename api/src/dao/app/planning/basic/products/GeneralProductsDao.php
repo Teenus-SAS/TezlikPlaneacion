@@ -189,7 +189,7 @@ class GeneralProductsDao
         $connection = Connection::getInstance()->getConnection();
 
         try {
-            $stmt = $connection->prepare("UPDATE products SET classification = '' WHERE id_company = :id_company");
+            $stmt = $connection->prepare("UPDATE products SET classification = 'C' WHERE id_company = :id_company");
 
             $stmt->execute([
                 'id_company' => $id_company

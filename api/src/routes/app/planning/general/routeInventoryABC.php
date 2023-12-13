@@ -5,11 +5,13 @@ use TezlikPlaneacion\dao\CompaniesLicenseStatusDao;
 use TezlikPlaneacion\dao\GeneralProductsDao;
 use TezlikPlaneacion\dao\GeneralUnitSalesDao;
 use TezlikPlaneacion\dao\InventoryABCDao;
+use TezlikPlaneacion\dao\ProductsDao;
 
 $inventoryABCDao = new InventoryABCDao();
 $companiesLicenseDao = new CompaniesLicenseStatusDao();
 $generalUnitSalesDao = new GeneralUnitSalesDao();
 $classificationDao = new ClassificationDao();
+$productsDao = new ProductsDao();
 $generalProductsDao = new GeneralProductsDao();
 
 use Psr\Http\Message\ResponseInterface as Response;
@@ -96,7 +98,7 @@ $app->get('/inventoryABC', function (Request $request, Response $response, $args
 $app->post('/updateInventoryABC', function (Request $request, Response $response, $args) use (
     $inventoryABCDao,
     $companiesLicenseDao,
-    $generalUnitSalesDao,
+    $productsDao,
     $classificationDao,
     $generalProductsDao
 ) {
@@ -110,7 +112,7 @@ $app->post('/updateInventoryABC', function (Request $request, Response $response
         $license = $companiesLicenseDao->status($id_company);
 
         if ($license['months'] > 0) {
-            $products = $generalUnitSalesDao->findAllProductsUnitSalesByCompany($id_company);
+            $products = $productsDao->findAllProductsByCompany($id_company);
 
             $resolution = $generalProductsDao->updateGeneralClassification($id_company);
 

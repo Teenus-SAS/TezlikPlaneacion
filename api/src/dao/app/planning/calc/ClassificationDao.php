@@ -21,11 +21,12 @@ class ClassificationDao
         $connection = Connection::getInstance()->getConnection();
 
         // Calcular rotación, ventas al año y promedio unidades 
-        $stmt = $connection->prepare("SELECT ((IF(jan > 0, 1, 0) + IF(feb > 0, 1, 0) + IF(mar > 0, 1, 0) + IF(apr > 0, 1, 0) + 
-                                               IF(may > 0, 1, 0) + IF(jun > 0, 1, 0) + IF(jul > 0, 1, 0) + IF(aug > 0, 1, 0) + 
-                                               IF(sept > 0, 1, 0) + IF(oct > 0, 1, 0) + IF(nov > 0, 1, 0) + IF(dece > 0, 1, 0)) / :cant_months) AS year_sales                                             
-                                      FROM plan_unit_sales 
-                                      WHERE id_product = :id_product");
+        $stmt = $connection->prepare("SELECT ((IF(IFNULL(u.jan, 0) > 0, 1, 0) + IF(IFNULL(u.feb, 0) > 0, 1, 0) + IF(IFNULL(u.mar, 0) > 0, 1, 0) + IF(IFNULL(u.apr, 0) > 0, 1, 0) + 
+                                               IF(IFNULL(u.may, 0) > 0, 1, 0) + IF(IFNULL(u.jun, 0) > 0, 1, 0) + IF(IFNULL(u.jul, 0) > 0, 1, 0) + IF(IFNULL(u.aug, 0) > 0, 1, 0) + 
+                                               IF(IFNULL(u.sept, 0) > 0, 1, 0) + IF(IFNULL(u.oct, 0) > 0, 1, 0) + IF(IFNULL(u.nov, 0) > 0, 1, 0) + IF(IFNULL(u.dece, 0) > 0, 1, 0)) / :cant_months) AS year_sales                                             
+                                      FROM products p
+                                      LEFT JOIN plan_unit_sales u ON u.id_product = p.id_product
+                                      WHERE p.id_product = :id_product");
         $stmt->execute([
             'cant_months' => $months,
             'id_product' => $id_product

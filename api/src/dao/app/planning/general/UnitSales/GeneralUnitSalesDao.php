@@ -16,19 +16,19 @@ class GeneralUnitSalesDao
         $this->logger->pushHandler(new RotatingFileHandler(Constants::LOGS_PATH . 'querys.log', 20, Logger::DEBUG));
     }
 
-    public function findAllProductsUnitSalesByCompany($id_company)
-    {
-        $connection = Connection::getInstance()->getConnection();
-        $stmt = $connection->prepare("SELECT p.id_product FROM products p
-                                      INNER JOIN plan_unit_sales u ON u.id_product = p.id_product 
-                                      WHERE p.id_company = :id_company");
-        $stmt->execute(['id_company' => $id_company]);
+    // public function findAllProductsUnitSalesByCompany($id_company)
+    // {
+    //     $connection = Connection::getInstance()->getConnection();
+    //     $stmt = $connection->prepare("SELECT p.id_product FROM products p
+    //                                   INNER JOIN plan_unit_sales u ON u.id_product = p.id_product 
+    //                                   WHERE p.id_company = :id_company");
+    //     $stmt->execute(['id_company' => $id_company]);
 
-        $this->logger->info(__FUNCTION__, array('query' => $stmt->queryString, 'errors' => $stmt->errorInfo()));
-        $products = $stmt->fetchAll($connection::FETCH_ASSOC);
-        $this->logger->notice("products", array('products' => $products));
-        return $products;
-    }
+    //     $this->logger->info(__FUNCTION__, array('query' => $stmt->queryString, 'errors' => $stmt->errorInfo()));
+    //     $products = $stmt->fetchAll($connection::FETCH_ASSOC);
+    //     $this->logger->notice("products", array('products' => $products));
+    //     return $products;
+    // }
 
     public function findSales($dataSale, $id_company)
     {
