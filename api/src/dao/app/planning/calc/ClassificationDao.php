@@ -42,7 +42,7 @@ class ClassificationDao
         try {
             $connection = Connection::getInstance()->getConnection();
 
-            $stmt = $connection->prepare("SELECT (IF(:years > (a / 100), 'A', IF(:years <= (b / 100), 'B', 'C'))) AS classification
+            $stmt = $connection->prepare("SELECT (IF(:years > (a / 100), 'A', IF(:years >= (b / 100), 'B', 'C'))) AS classification
                                           FROM inventory_abc
                                           WHERE id_company = :id_company");
             $stmt->execute([
