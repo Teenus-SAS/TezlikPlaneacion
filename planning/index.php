@@ -273,7 +273,7 @@ if (sizeof($_SESSION) == 0)
                                     </div>
                                     <div class="card-body pt-2">
                                         <!-- <canvas id="chartTimeProcessProducts"></canvas> -->
-                                        <canvas id="chartProductsCost"></canvas>
+                                        <canvas id="chartClasificationABC"></canvas>
                                     </div>
                                 </div>
                             </div>
@@ -395,7 +395,8 @@ if (sizeof($_SESSION) == 0)
     </div>
     <!-- Page End -->
     <?php include_once dirname(__DIR__) . '/global/partials/scriptsJS.php'; ?>
-
+    <script src="/planning/js/dashboard/indicatiorsGeneral.js"></script>
+    <script src="/planning/js/dashboard/graphicsGeneral.js"></script>
     <!-- <script src="/planning/js/users/usersAccess.js"></script> -->
 
     <!-- <script src="/global/js/global/loadContent.js"></script> -->

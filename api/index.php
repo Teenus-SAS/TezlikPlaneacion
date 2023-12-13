@@ -62,6 +62,8 @@ require_once('../api/src/routes/app/users/routeQuantityUsers.php');
 require_once('../api/src/routes/app/users/routeUsersStatus.php');
 
 /* App Planning */
+// Dashboard
+require_once('../api/src/routes/app/planning/dashboard/routeDashboard.php');
 // Basic
 require_once('../api/src/routes/app/planning/basic/routeInvMolds.php');
 require_once('../api/src/routes/app/planning/basic/routeMachines.php');
