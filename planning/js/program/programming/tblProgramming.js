@@ -137,7 +137,7 @@ $(document).ready(function () {
           className: 'uniqueClassName',
           render: function (data) {
             return `
-                <a href="javascript:;" <i id="${data}" class="bi bi-card-checklist changeStatus" data-toggle='tooltip' title='Crear Orden de Produccion' style="font-size: 30px;"></i></a>`;
+            <button class="btn btn-warning changeStatus " id="${data}" name="${data}">Crear OP</button>`;
           },
         },
         {

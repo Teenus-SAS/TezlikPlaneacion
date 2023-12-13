@@ -52,11 +52,11 @@ $(document).ready(function () {
                 render: $.fn.dataTable.render.number('.', ',', 2),
             },
             {
-                title: 'Entregar',
+                title: 'Acción',
                 data: 'id_material',
                 className: 'uniqueClassName',
                 render: function (data) {
-                    return `<a href="javascript:;" <i id="${data}" class="bi bi-box-seam-fill deliver" data-toggle='tooltip' title='Entregar' style="font-size: 30px;"></i></a>`;
+                    return `<button class="btn btn-warning deliver " id="${data}" name="${data}">Entregar MP</button>`;
                 },
             },
         ],

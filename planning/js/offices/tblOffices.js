@@ -100,7 +100,7 @@ $(document).ready(function () {
           data: null,
           className: 'classCenter',
           render: function (data) {
-            data.status == 'Despacho' ? action = `<a href="javascript:;" <i class="bi bi-calendar-plus-fill changeDate" id="${data.id_order}" data-toggle='tooltip' title='Actualizar Fecha' style="font-size: 30px;"></i></a>`
+            data.status == 'Despacho' ? action = `<button class="btn btn-warning changeDate" id="${ data.id_order }" name="${ data.id_order }">Entregar</button>`
               : action = data.delivery_date;
             
             return action;
