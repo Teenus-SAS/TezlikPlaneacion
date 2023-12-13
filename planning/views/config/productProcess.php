@@ -163,7 +163,7 @@ if (sizeof($_SESSION) == 0)
                                 <div class="card">
                                     <div class="card-body">
                                         <div class="table-responsive">
-                                            <table class="table table-striped text-center" id="tblConfigProcess" name="tblConfigProcess">
+                                            <table class="fixed-table-loading table table-hover text-center" id="tblConfigProcess" name="tblConfigProcess">
                                                 <tfoot>
                                                     <tr>
                                                         <th></th>

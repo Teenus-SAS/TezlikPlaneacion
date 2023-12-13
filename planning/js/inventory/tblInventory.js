@@ -7,7 +7,7 @@ $(document).ready(function () {
       .then((data) => {
         data = JSON.parse(data);
         // Guardar productos
-        dataProducts = JSON.stringify(data.products); 
+        dataProducts = JSON.stringify(data.products);
 
         let $select = $("#category");
         $select.empty();
@@ -114,7 +114,7 @@ $(document).ready(function () {
           title: "Existencia",
           data: "quantity",
           className: "uniqueClassName",
-          render: $.fn.dataTable.render.number('.', ',', 0),
+          render: $.fn.dataTable.render.number(".", ",", 0),
         },
         {
           title: "Medida",
@@ -164,7 +164,12 @@ $(document).ready(function () {
           className: "uniqueClassName",
           visible: data["visible"],
           render: function (data) {
-            return `<p>${data.classification}</p>`;
+            if (data == "A") badge = "badge-success";
+            else if (data == "B") badge = "badge-Info";
+            else badge = "badge-danger";
+            //else badge = "badge-light";
+            return `<span class="badge ${badge}">${data.classification}</span>`;
+            //return `<p>${data.classification}</p>`;
           },
         },
       ],

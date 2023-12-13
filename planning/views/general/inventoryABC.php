@@ -106,7 +106,7 @@ if (sizeof($_SESSION) == 0)
                                     </div> -->
                                     <div class="card-body">
                                         <div class="table-responsive">
-                                            <table class="table table-striped" id="tblInventoryABC">
+                                            <table class="fixed-table-loading table-hover" id="tblInventoryABC">
 
                                             </table>
                                         </div>

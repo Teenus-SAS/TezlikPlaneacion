@@ -150,7 +150,7 @@ if (sizeof($_SESSION) == 0)
                                     </div> -->
                                     <div class="card-body">
                                         <div class="table-responsive">
-                                            <table class="table table-striped" id="tblSales">
+                                            <table class="fixed-table-loading table table-hover" id="tblSales">
 
                                             </table>
                                         </div>
@@ -166,7 +166,7 @@ if (sizeof($_SESSION) == 0)
                                     </div>
                                     <div class="card-body">
                                         <div class="table-responsive">
-                                            <table class="table table-striped" id="tblSalesDays">
+                                            <table class="fixed-table-loading table table-hover" id="tblSalesDays">
 
                                             </table>
                                         </div>

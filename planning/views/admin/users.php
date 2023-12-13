@@ -67,7 +67,7 @@ if (sizeof($_SESSION) == 0)
                                 <div class="card">
                                     <div class="card-body">
                                         <div class="table-responsive">
-                                            <table class="table table-striped" id="tblUsers">
+                                            <table class="fixed-table-loading table table-hover" id="tblUsers">
 
                                             </table>
                                         </div>

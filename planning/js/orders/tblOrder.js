@@ -19,7 +19,7 @@ $(document).ready(function () {
         },
       },
       {
-        title: 'Fecha Pedido',
+        title: 'F.Pedido',
         data: 'date_order',
         className: 'uniqueClassName',
       },
@@ -45,7 +45,7 @@ $(document).ready(function () {
         render: $.fn.dataTable.render.number('.', ',', 0, ''),
       },
       {
-        title: 'Fecha Maxima',
+        title: 'F.Maxima',
         data: 'max_date',
         className: 'classCenter',
       },

@@ -103,7 +103,7 @@ $fechaActual = date("Y-m-d");
                                     </div>
                                     <div class="card-body">
                                         <div class="table-responsive">
-                                            <table class="table table-striped" id="tblOffices">
+                                            <table class="fixed-table-loading table table-hover" id="tblOffices">
 
                                             </table>
                                         </div>
