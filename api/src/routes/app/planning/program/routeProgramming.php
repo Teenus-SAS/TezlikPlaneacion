@@ -206,25 +206,28 @@ $app->post('/addProgramming', function (Request $request, Response $response, $a
         $result = $generalOrdersDao->changeStatus($dataProgramming['order'], 'Programado');
 
     if ($result == null) {
+        $productsMaterials = $productsMaterialsDao->findAllProductsmaterials($dataProgramming['idProduct'], $id_company);
+
+        if (sizeof($productsMaterials) == 0) {
+            $generalOrdersDao->changeStatus($dataProgramming['order'], 'Sin Ficha Tecnica');
+        } else {
+            foreach ($productsMaterials as $k) {
+                if (isset($result['info'])) break;
+
+                $j = $generalMaterialsDao->findReservedMaterial($k['id_material']);
+
+                !isset($j['reserved']) ? $j['reserved'] = 0 : $j;
+
+                $result = $generalMaterialsDao->updateReservedMaterial($k['id_material'], $j['reserved']);
+            }
+        }
+    }
+
+    if ($result == null) {
         $orders = $ordersDao->findAllOrdersByCompany($id_company);
 
         foreach ($orders as $arr) {
-            if ($arr['status'] != 'En Produccion' && $arr['status'] != 'Entregado' && $arr['status'] != 'Programado') {
-                if ($arr['id_product'] == $dataProgramming['idProduct'] && $arr['num_order'] == $dataProgramming['num_order']) {
-                    $data = [];
-                    $data['order'] = $arr['id_order'];
-
-                    $order = $generalProgrammingDao->checkAccumulatedQuantityOrder($arr['id_order']);
-
-                    if ($order['quantity_programming'] < $order['original_quantity'])
-                        $data['accumulatedQuantity'] = $order['original_quantity'] - $order['quantity_programming'];
-                    else
-                        $data['accumulatedQuantity'] = 0;
-
-                    $result = $generalOrdersDao->updateAccumulatedOrder($data);
-                    $result = $generalOrdersDao->changeStatus($arr['id_order'], 'Programado');
-                }
-
+            if ($arr['status'] != 'En Produccion' && $arr['status'] != 'Entregado' && $arr['status'] != 'Programado' && $arr['id_product'] == $dataProgramming['idProduct']) {
                 // Ficha tecnica
                 $productsMaterials = $productsMaterialsDao->findAllProductsmaterials($arr['id_product'], $id_company);
 
@@ -232,16 +235,6 @@ $app->post('/addProgramming', function (Request $request, Response $response, $a
                     $generalOrdersDao->changeStatus($arr['id_order'], 'Sin Ficha Tecnica');
                 } else {
                     foreach ($productsMaterials as $k) {
-                        if ($k['id_product'] == $dataProgramming['idProduct'] && $arr['num_order'] == $dataProgramming['num_order']) {
-                            if (isset($result['info'])) break;
-
-                            $j = $generalMaterialsDao->findReservedMaterial($k['id_material']);
-
-                            !isset($j['reserved']) ? $j['reserved'] = 0 : $j;
-
-                            $result = $generalMaterialsDao->updateReservedMaterial($k['id_material'], $j['reserved']);
-                        }
-
                         if (($k['quantity_material'] - $k['reserved']) <= 0) {
                             $result = $generalOrdersDao->changeStatus($arr['id_order'], 'Sin Materia Prima');
                             break;
@@ -289,25 +282,28 @@ $app->post('/updateProgramming', function (Request $request, Response $response,
     }
 
     if ($result == null) {
+        $productsMaterials = $productsMaterialsDao->findAllProductsmaterials($dataProgramming['idProduct'], $id_company);
+
+        if (sizeof($productsMaterials) == 0) {
+            $generalOrdersDao->changeStatus($dataProgramming['order'], 'Sin Ficha Tecnica');
+        } else {
+            foreach ($productsMaterials as $k) {
+                if (isset($result['info'])) break;
+
+                $j = $generalMaterialsDao->findReservedMaterial($k['id_material']);
+
+                !isset($j['reserved']) ? $j['reserved'] = 0 : $j;
+
+                $result = $generalMaterialsDao->updateReservedMaterial($k['id_material'], $j['reserved']);
+            }
+        }
+    }
+
+    if ($result == null) {
         $orders = $ordersDao->findAllOrdersByCompany($id_company);
 
         foreach ($orders as $arr) {
-            if ($arr['status'] != 'En Produccion' && $arr['status'] != 'Entregado' && $arr['status'] != 'Programado') {
-                if ($arr['id_product'] == $dataProgramming['idProduct'] && $arr['num_order'] == $dataProgramming['num_order']) {
-                    $data = [];
-                    $data['order'] = $arr['id_order'];
-
-                    $order = $generalProgrammingDao->checkAccumulatedQuantityOrder($arr['id_order']);
-
-                    if ($order['quantity_programming'] < $order['original_quantity'])
-                        $data['accumulatedQuantity'] = $order['original_quantity'] - $order['quantity_programming'];
-                    else
-                        $data['accumulatedQuantity'] = 0;
-
-                    $result = $generalOrdersDao->updateAccumulatedOrder($data);
-                    $result = $generalOrdersDao->changeStatus($arr['id_order'], 'Programado');
-                }
-
+            if ($arr['status'] != 'En Produccion' && $arr['status'] != 'Entregado' && $arr['status'] != 'Programado' && $arr['id_product'] == $dataProgramming['idProduct']) {
                 // Ficha tecnica
                 $productsMaterials = $productsMaterialsDao->findAllProductsmaterials($arr['id_product'], $id_company);
 
@@ -315,16 +311,6 @@ $app->post('/updateProgramming', function (Request $request, Response $response,
                     $generalOrdersDao->changeStatus($arr['id_order'], 'Sin Ficha Tecnica');
                 } else {
                     foreach ($productsMaterials as $k) {
-                        if ($k['id_product'] == $dataProgramming['idProduct'] && $arr['num_order'] == $dataProgramming['num_order']) {
-                            if (isset($result['info'])) break;
-
-                            $j = $generalMaterialsDao->findReservedMaterial($k['id_material']);
-
-                            !isset($j['reserved']) ? $j['reserved'] = 0 : $j;
-
-                            $result = $generalMaterialsDao->updateReservedMaterial($k['id_material'], $j['reserved']);
-                        }
-
                         if (($k['quantity_material'] - $k['reserved']) <= 0) {
                             $result = $generalOrdersDao->changeStatus($arr['id_order'], 'Sin Materia Prima');
                             break;
@@ -385,20 +371,7 @@ $app->post('/deleteProgramming', function (Request $request, Response $response,
 
         foreach ($orders as $arr) {
             if ($arr['status'] != 'En Produccion' && $arr['status'] != 'Entregado' && $arr['status'] != 'Programado') {
-                if ($arr['id_product'] == $dataProgramming['idProduct'] && $arr['num_order'] == $dataProgramming['num_order']) {
-                    $data = [];
-                    $data['order'] = $arr['id_order'];
-
-                    $order = $generalProgrammingDao->checkAccumulatedQuantityOrder($arr['id_order']);
-
-                    if ($order['quantity_programming'] < $order['original_quantity'])
-                        $data['accumulatedQuantity'] = $order['original_quantity'] - $order['quantity_programming'];
-                    else
-                        $data['accumulatedQuantity'] = 0;
-
-                    $result = $generalOrdersDao->updateAccumulatedOrder($data);
-                    $result = $generalOrdersDao->changeStatus($arr['id_order'], 'Programado');
-                }
+                $result = $generalOrdersDao->changeStatus($arr['id_order'], 'Programar');
 
                 // Ficha tecnica
                 $productsMaterials = $productsMaterialsDao->findAllProductsmaterials($arr['id_product'], $id_company);
@@ -407,20 +380,13 @@ $app->post('/deleteProgramming', function (Request $request, Response $response,
                     $generalOrdersDao->changeStatus($arr['id_order'], 'Sin Ficha Tecnica');
                 } else {
                     foreach ($productsMaterials as $k) {
-                        if ($k['id_product'] == $dataProgramming['idProduct'] && $arr['num_order'] == $dataProgramming['num_order']) {
-                            if (isset($result['info'])) break;
+                        if (isset($result['info'])) break;
 
-                            $j = $generalMaterialsDao->findReservedMaterial($k['id_material']);
+                        $j = $generalMaterialsDao->findReservedMaterial($k['id_material']);
 
-                            !isset($j['reserved']) ? $j['reserved'] = 0 : $j;
+                        !isset($j['reserved']) ? $j['reserved'] = 0 : $j;
 
-                            $result = $generalMaterialsDao->updateReservedMaterial($k['id_material'], $j['reserved']);
-                        }
-
-                        // if (($k['quantity_material'] - $k['reserved']) <= 0) {
-                        //     $result = $generalOrdersDao->changeStatus($arr['id_order'], 'Sin Materia Prima');
-                        //     break;
-                        // }
+                        $result = $generalMaterialsDao->updateReservedMaterial($k['id_material'], $j['reserved']);
                     }
                 }
             }
