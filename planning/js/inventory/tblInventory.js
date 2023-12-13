@@ -164,8 +164,8 @@ $(document).ready(function () {
           className: "uniqueClassName",
           visible: data["visible"],
           render: function (data) {
-            if (data == "A") badge = "badge-success";
-            else if (data == "B") badge = "badge-Info";
+            if (data.classification == "A") badge = "badge-success";
+            else if (data.classification == "B") badge = "badge-info";
             else badge = "badge-danger";
             //else badge = "badge-light";
             return `<span class="badge ${badge}">${data.classification}</span>`;
