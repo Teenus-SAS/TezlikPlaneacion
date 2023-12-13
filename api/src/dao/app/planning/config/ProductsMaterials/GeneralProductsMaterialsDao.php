@@ -19,7 +19,7 @@ class GeneralProductsMaterialsDao
     public function findAllProductsMaterials($id_company)
     {
         $connection = Connection::getInstance()->getConnection();
-        $stmt = $connection->prepare("SELECT p.id_product, p.reference AS reference_product, p.product, m.id_material, m.reference AS reference_material, m.material, (1*m.quantity/pm.quantity) AS quantity
+        $stmt = $connection->prepare("SELECT p.id_product, p.reference AS reference_product, p.product, m.id_material, m.reference AS reference_material, m.material, ((1*m.quantity/pm.quantity) - m.reserved) AS quantity
                                       FROM products p
                                         INNER JOIN products_materials pm ON pm.id_product = p.id_product
                                         INNER JOIN materials m ON m.id_material = pm.id_material

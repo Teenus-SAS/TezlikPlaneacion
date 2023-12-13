@@ -91,6 +91,7 @@ $(document).ready(function () {
     $("#maxDate").val(max_date);
 
     dataProgramming = new FormData(formCreateProgramming);
+    dataProgramming.append('num_order', data.num_order);
 
     $(document).one("click", "#minDate", function (e) {
       e.preventDefault();
@@ -168,8 +169,10 @@ $(document).ready(function () {
       callback: function (result) {
         if (result == true) {
           dataProgramming["idProgramming"] = data.id_programming;
+          dataProgramming["idProduct"] = data.id_product;
           dataProgramming["order"] = data.id_order;
-          dataProgramming["accumulatedQuantity"] = null;
+          dataProgramming["num_order"] = data.num_order;
+          dataProgramming["quantity"] = data.quantity_programming;
 
           $.post(
             `/api/deleteProgramming`,

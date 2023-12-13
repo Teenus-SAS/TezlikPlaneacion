@@ -216,26 +216,26 @@ $app->post('/addProgramming', function (Request $request, Response $response, $a
 
             $result = $generalMaterialsDao->updateReservedMaterial($arr['id_material'], $k['reserved']);
 
-            if ($k['reserved'] == $dataProgramming['quantity']) {
-                $orders = $ordersDao->findAllOrdersByCompany($id_company);
+            // if ($k['reserved'] == $dataProgramming['quantity']) {
+            $orders = $ordersDao->findAllOrdersByCompany($id_company);
 
-                foreach ($orders as $arr) {
-                    if ($arr['id_product'] == $dataProgramming['idProduct'] && $arr['num_order'] == $dataProgramming['num_order']) {
-                        $data = [];
-                        $data['order'] = $arr['id_order'];
+            foreach ($orders as $arr) {
+                if ($arr['id_product'] == $dataProgramming['idProduct'] && $arr['num_order'] == $dataProgramming['num_order']) {
+                    $data = [];
+                    $data['order'] = $arr['id_order'];
 
-                        $order = $generalProgrammingDao->checkAccumulatedQuantityOrder($arr['id_order']);
+                    $order = $generalProgrammingDao->checkAccumulatedQuantityOrder($arr['id_order']);
 
-                        if ($order['quantity_programming'] < $order['original_quantity'])
-                            $data['accumulatedQuantity'] = $order['original_quantity'] - $order['quantity_programming'];
-                        else
-                            $data['accumulatedQuantity'] = 0;
+                    if ($order['quantity_programming'] < $order['original_quantity'])
+                        $data['accumulatedQuantity'] = $order['original_quantity'] - $order['quantity_programming'];
+                    else
+                        $data['accumulatedQuantity'] = 0;
 
-                        $result = $generalOrdersDao->updateAccumulatedOrder($data);
-                        $result = $generalOrdersDao->changeStatus($arr['id_order'], 'Programado');
-                    }
+                    $result = $generalOrdersDao->updateAccumulatedOrder($data);
+                    $result = $generalOrdersDao->changeStatus($arr['id_order'], 'Programado');
                 }
             }
+            // }
         }
     }
 
@@ -254,8 +254,12 @@ $app->post('/updateProgramming', function (Request $request, Response $response,
     $programmingDao,
     $generalProgrammingDao,
     $generalOrdersDao,
-    $finalDateDao
+    $productsMaterialsDao,
+    $generalMaterialsDao,
+    $ordersDao
 ) {
+    session_start();
+    $id_company = $_SESSION['id_company'];
     $dataProgramming = $request->getParsedBody();
 
     $result = $programmingDao->updateProgramming($dataProgramming);
@@ -269,6 +273,40 @@ $app->post('/updateProgramming', function (Request $request, Response $response,
             $dataProgramming['accumulatedQuantity'] = 0;
 
         $result = $generalOrdersDao->updateAccumulatedOrder($dataProgramming);
+    }
+
+    if ($result == null) {
+        $productsMaterials = $productsMaterialsDao->findAllProductsmaterials($dataProgramming['idProduct'], $id_company);
+
+        foreach ($productsMaterials as $arr) {
+            if (isset($result['info'])) break;
+
+            $k = $generalMaterialsDao->findReservedMaterial($arr['id_material']);
+            !$k['reserved'] ? $k['reserved'] = 0 : $k['reserved'];
+
+            $result = $generalMaterialsDao->updateReservedMaterial($arr['id_material'], $k['reserved']);
+
+            // if ($k['reserved'] == $dataProgramming['quantity']) {
+            $orders = $ordersDao->findAllOrdersByCompany($id_company);
+
+            foreach ($orders as $arr) {
+                if ($arr['id_product'] == $dataProgramming['idProduct'] && $arr['num_order'] == $dataProgramming['num_order']) {
+                    $data = [];
+                    $data['order'] = $arr['id_order'];
+
+                    $order = $generalProgrammingDao->checkAccumulatedQuantityOrder($arr['id_order']);
+
+                    if ($order['quantity_programming'] < $order['original_quantity'])
+                        $data['accumulatedQuantity'] = $order['original_quantity'] - $order['quantity_programming'];
+                    else
+                        $data['accumulatedQuantity'] = 0;
+
+                    $result = $generalOrdersDao->updateAccumulatedOrder($data);
+                    $result = $generalOrdersDao->changeStatus($arr['id_order'], 'Programado');
+                }
+            }
+            // }
+        }
     }
 
     if ($result == null)
@@ -285,7 +323,10 @@ $app->post('/updateProgramming', function (Request $request, Response $response,
 $app->post('/deleteProgramming', function (Request $request, Response $response, $args) use (
     $programmingDao,
     $generalOrdersDao,
-    $generalProgrammingDao
+    $generalProgrammingDao,
+    $productsMaterialsDao,
+    $generalMaterialsDao,
+    $ordersDao
 ) {
     session_start();
     $id_company = $_SESSION['id_company'];
@@ -312,6 +353,41 @@ $app->post('/deleteProgramming', function (Request $request, Response $response,
 
     if ($result == null)
         $result = $generalOrdersDao->changeStatus($dataProgramming['order'], 'Programar');
+
+    if ($result == null) {
+        $productsMaterials = $productsMaterialsDao->findAllProductsmaterials($dataProgramming['idProduct'], $id_company);
+
+        foreach ($productsMaterials as $arr) {
+            if (isset($result['info'])) break;
+
+            $k = $generalMaterialsDao->findMaterialById($arr['id_material']);
+
+            $reserved = $k['reserved'] - $dataProgramming['quantity'];
+
+            $result = $generalMaterialsDao->updateReservedMaterial($arr['id_material'], $reserved);
+
+            // if ($k['reserved'] == $dataProgramming['quantity']) {
+            $orders = $ordersDao->findAllOrdersByCompany($id_company);
+
+            foreach ($orders as $arr) {
+                if ($arr['id_product'] == $dataProgramming['idProduct'] && $arr['num_order'] == $dataProgramming['num_order']) {
+                    $data = [];
+                    $data['order'] = $arr['id_order'];
+
+                    $order = $generalProgrammingDao->checkAccumulatedQuantityOrder($arr['id_order']);
+
+                    if ($order['quantity_programming'] < $order['original_quantity'])
+                        $data['accumulatedQuantity'] = $order['original_quantity'] - $order['quantity_programming'];
+                    else
+                        $data['accumulatedQuantity'] = 0;
+
+                    $result = $generalOrdersDao->updateAccumulatedOrder($data);
+                    $result = $generalOrdersDao->changeStatus($arr['id_order'], 'Programado');
+                }
+            }
+            // }
+        }
+    }
 
     if ($result == null)
         $resp = array('success' => true, 'message' => 'Orden de Producción creada correctamente');

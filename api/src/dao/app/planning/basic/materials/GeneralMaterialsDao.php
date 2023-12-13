@@ -40,7 +40,7 @@ class GeneralMaterialsDao
     {
         $connection = Connection::getInstance()->getConnection();
 
-        $stmt = $connection->prepare("SELECT IFNULL(SUM(pg.quantity*pm.quantity), 0) AS reserved
+        $stmt = $connection->prepare("SELECT pg.quantity AS reserved
                                       FROM programming pg 
                                         LEFT JOIN plan_orders o ON o.id_order = pg.id_order
                                         LEFT JOIN products_materials pm ON pm.id_product = o.id_product 
@@ -64,6 +64,16 @@ class GeneralMaterialsDao
             'material' => strtoupper(trim($dataMaterial['nameRawMaterial'])),
             'id_company' => $id_company,
         ]);
+        $findMaterial = $stmt->fetch($connection::FETCH_ASSOC);
+        return $findMaterial;
+    }
+
+    public function findMaterialById($id_material)
+    {
+        $connection = Connection::getInstance()->getConnection();
+
+        $stmt = $connection->prepare("SELECT * FROM materials WHERE id_material = :id_material");
+        $stmt->execute(['id_material' => $id_material]);
         $findMaterial = $stmt->fetch($connection::FETCH_ASSOC);
         return $findMaterial;
     }
