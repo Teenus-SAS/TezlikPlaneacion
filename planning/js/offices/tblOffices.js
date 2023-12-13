@@ -83,8 +83,16 @@ $(document).ready(function () {
           data: 'status',
           className: 'classCenter',
           render: function (data) {
-            data == 'Entregado' ? statusa = '' : statusa = data;
-            return statusa;
+            if (data == 'Entregado')
+            badge = 'badge-success';
+          else if (data == 'Sin Ficha Tecnica' || data == 'Sin Materia Prima')
+            badge = 'badge-danger';
+          else if (data == 'Despacho')
+            badge = 'badge-info';
+          else
+            badge = 'badge-light';
+            
+          return `<span class="badge ${badge}">${data}</span>`
           }
         },
         {

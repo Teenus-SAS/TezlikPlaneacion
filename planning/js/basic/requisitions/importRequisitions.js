@@ -24,6 +24,18 @@ $(document).ready(function () {
       return false;
     }
 
+    $('.cardBottons').hide();
+    
+    let form = document.getElementById('formRequisitions');
+    form.insertAdjacentHTML(
+      'beforeend',
+      `<div class="col-sm-1 cardLoading" style="margin-top: 7px; margin-left: 15px">
+        <div class="spinner-border text-secondary" role="status">
+            <span class="sr-only">Loading...</span>
+        </div>
+      </div>`
+    );
+
     importFile(selectedFile)
       .then((data) => {
         let requisitionToImport = data.map((item) => {
@@ -39,6 +51,10 @@ $(document).ready(function () {
         checkRequisition(requisitionToImport);
       })
       .catch(() => {
+        $('.cardLoading').remove();
+        $('.cardBottons').show(400);
+        $('#fileRequisitions').val('');
+
         toastr.error('Ocurrio un error. Intente Nuevamente');
       });
   });
@@ -51,6 +67,10 @@ $(document).ready(function () {
       data: { importRequisition: data },
       success: function (resp) {
         if (resp.error == true) {
+          $('.cardLoading').remove();
+        $('.cardBottons').show(400);
+          $('#fileRequisitions').val('');
+          
           $('#formImportRequisitions').trigger('reset');
           toastr.error(resp.message);
           return false;
@@ -73,7 +93,11 @@ $(document).ready(function () {
           callback: function (result) {
             if (result == true) {
               saveMachineTable(data);
-            } else $('#fileRequisitions').val('');
+            } else {
+              $('.cardLoading').remove();
+        $('.cardBottons').show(400);
+        $('#fileRequisitions').val('');
+            }
           },
         });
       },
@@ -86,21 +110,11 @@ $(document).ready(function () {
       url: '/api/addRequisition',
       data: { importRequisition: data },
       success: function (r) {
-        /* Mensaje de exito */
-        if (r.success == true) {
-          $('.cardImportRequisitions').hide(800);
-          $('#formImportRequisitions').trigger('reset');
-          updateTable();
-          toastr.success(r.message);
-          return false;
-        } else if (r.error == true) toastr.error(r.message);
-        else if (r.info == true) toastr.info(r.message);
+        $('.cardLoading').remove();
+        $('.cardBottons').show(400);
+        $('#fileRequisitions').val('');
 
-        /* Actualizar tabla */
-        function updateTable() {
-          $('#tblRequisitions').DataTable().clear();
-          $('#tblRequisitions').DataTable().ajax.reload();
-        }
+        message(r);
       },
     });
   };

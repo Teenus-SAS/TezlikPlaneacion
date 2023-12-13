@@ -206,6 +206,8 @@ $(document).ready(function () {
 
   message = (data) => {
     if (data.success == true) {
+      $('.cardImportRequisitions').hide(800);
+      $('#formImportRequisitions').trigger('reset');
       $('.cardAddRequisitions').hide(800);
       $('#formAddRequisition').trigger('reset');
       loadTblRequisitions(null, null);

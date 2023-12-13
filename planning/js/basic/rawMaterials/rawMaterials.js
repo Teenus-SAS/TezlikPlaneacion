@@ -138,6 +138,8 @@ $(document).ready(function () {
 
   message = (data) => {
     if (data.success == true) {
+      $('.cardImportMaterials').hide(800);
+      $('#formImportMaterials').trigger('reset');
       $('.cardRawMaterials').hide(800);
       $('#formCreateMaterial').trigger('reset');
       toastr.success(data.message);
