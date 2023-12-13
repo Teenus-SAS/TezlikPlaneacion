@@ -7,7 +7,21 @@ $(document).ready(function () {
 
     anchura <= 480 ? (length = 5) : (length = 10);
     
-    graphicClassification = (data) => { 
+    graphicClassification = (data) => {
+        let inventory = [];
+        let name = [];
+        let value = [];
+
+        inventory.push({ name: 'A', value: data.A }, { name: 'B', value: data.B }, { name: 'C', value: data.C });
+        inventory.sort(function (a, b) {
+            return b["value"] - a["value"];
+        });
+
+        for (let i = 0; i < inventory.length; i++) {
+            name.push(inventory[i].name);
+            value.push(inventory[i].value);
+        }
+
         // let maxDataValue = Math.max(...cost);
         // let minDataValue = Math.min(...cost);
         // let valueRange = maxDataValue - minDataValue;
@@ -25,13 +39,13 @@ $(document).ready(function () {
             plugins: [ChartDataLabels],
             type: "bar",
             data: {
-                labels: ['A', 'B', 'C'],
+                labels: name,
                 // formatter: function (value, context) {
                 //     return context.chart.data.labels[context.dataIndex];
                 // },
                 datasets: [
                     {
-                        data: [data.A, data.B, data.C],
+                        data: value,
                         backgroundColor: getRandomColor(3),
                         borderWidth: 1,
                     },
@@ -46,7 +60,7 @@ $(document).ready(function () {
                     x: {
                         display: false,
                     },
-                }, 
+                },
                 plugins: {
                     legend: {
                         display: false,
