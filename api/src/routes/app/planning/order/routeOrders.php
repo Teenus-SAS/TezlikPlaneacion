@@ -201,7 +201,7 @@ $app->post('/addOrder', function (Request $request, Response $response, $args) u
                 }
 
                 $arr = $generalProductsDao->findProductReserved($orders[$i]['id_product']);
-                !$arr['reserved'] ? $arr['reserved'] = 0 : $arr;
+                !isset($arr['reserved']) ? $arr['reserved'] = 0 : $arr;
                 $generalProductsDao->updateReservedByProduct($orders[$i]['id_product'], $arr['reserved']);
 
                 $generalProductsDao->updateAccumulatedQuantity($orders[$i]['id_product'], $accumulated_quantity, 1);
@@ -293,7 +293,7 @@ $app->post('/updateOrder', function (Request $request, Response $response, $args
                 }
 
                 $arr = $generalProductsDao->findProductReserved($dataOrder['idProduct']);
-                !$arr['reserved'] ? $arr['reserved'] = 0 : $arr;
+                !isset($arr['reserved']) ? $arr['reserved'] = 0 : $arr;
                 $generalProductsDao->updateReservedByProduct($dataOrder['idProduct'], $arr['reserved']);
 
                 $generalProductsDao->updateAccumulatedQuantity($dataOrder['idProduct'], $accumulated_quantity, 1);

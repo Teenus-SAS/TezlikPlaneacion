@@ -57,7 +57,7 @@ $app->post('/cancelOffice', function (Request $request, Response $response, $arg
     $order = $generalOrdersDao->changeStatus($dataOrder['idOrder'], 'Programar');
 
     $arr = $generalProductsDao->findProductReserved($dataOrder['idProduct']);
-    !$arr['reserved'] ? $arr['reserved'] = 0 : $arr;
+    !isset($arr['reserved']) ? $arr['reserved'] = 0 : $arr;
     $generalProductsDao->updateReservedByProduct($dataOrder['idProduct'], $arr['reserved']);
 
     if ($order == null)
@@ -87,7 +87,7 @@ $app->post('/changeOffices', function (Request $request, Response $response, $ar
 
     $generalOrdersDao->changeStatus($dataOrder['idOrder'], 'Entregado');
     $arr = $generalProductsDao->findProductReserved($dataOrder['idProduct']);
-    !$arr['reserved'] ? $arr['reserved'] = 0 : $arr;
+    !isset($arr['reserved']) ? $arr['reserved'] = 0 : $arr;
     $generalProductsDao->updateReservedByProduct($dataOrder['idProduct'], $arr['reserved']);
 
     if ($dataOrder['stock'] > ($dataOrder['quantity'] - $dataOrder['originalQuantity'])) {

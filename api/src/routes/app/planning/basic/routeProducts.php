@@ -167,7 +167,7 @@ $app->post('/addProduct', function (Request $request, Response $response, $args)
                     }
 
                     $arr = $generalProductsDao->findProductReserved($orders[$i]['id_product']);
-                    !$arr['reserved'] ? $arr['reserved'] = 0 : $arr;
+                    !isset($arr['reserved']) ? $arr['reserved'] = 0 : $arr;
                     $generalProductsDao->updateReservedByProduct($orders[$i]['id_product'], $arr['reserved']);
 
                     $generalProductsDao->updateAccumulatedQuantity($orders[$i]['id_product'], $accumulated_quantity, 1);
@@ -179,7 +179,7 @@ $app->post('/addProduct', function (Request $request, Response $response, $args)
 
                         foreach ($productsMaterials as $arr) {
                             $k = $generalMaterialsDao->findReservedMaterial($arr['id_material']);
-                            !$k['reserved'] ? $k['reserved'] = 0 : $k;
+                            !isset($k['reserved']) ? $k['reserved'] = 0 : $k;
                             $generalMaterialsDao->updateReservedMaterial($arr['id_material'], $k['reserved']);
                         }
                     }
@@ -257,7 +257,7 @@ $app->post('/updatePlanProduct', function (Request $request, Response $response,
                     }
 
                     $arr = $generalProductsDao->findProductReserved($orders[$i]['id_product']);
-                    !$arr['reserved'] ? $arr['reserved'] = 0 : $arr;
+                    !isset($arr['reserved']) ? $arr['reserved'] = 0 : $arr;
                     $generalProductsDao->updateReservedByProduct($orders[$i]['id_product'], $arr['reserved']);
 
                     $generalProductsDao->updateAccumulatedQuantity($orders[$i]['id_product'], $accumulated_quantity, 1);
@@ -269,7 +269,7 @@ $app->post('/updatePlanProduct', function (Request $request, Response $response,
 
                         foreach ($productsMaterials as $arr) {
                             $k = $generalMaterialsDao->findReservedMaterial($arr['id_material']);
-                            !$k['reserved'] ? $k['reserved'] = 0 : $k;
+                            !isset($k['reserved']) ? $k['reserved'] = 0 : $k;
                             $generalMaterialsDao->updateReservedMaterial($arr['id_material'], $k['reserved']);
                         }
                     }

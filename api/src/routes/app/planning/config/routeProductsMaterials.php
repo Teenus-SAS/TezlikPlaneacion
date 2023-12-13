@@ -283,7 +283,7 @@ $app->post('/addProductsMaterials', function (Request $request, Response $respon
                 }
 
                 $arr = $productsDao->findProductReserved($orders[$i]['id_product']);
-                !$arr['reserved'] ? $arr['reserved'] = 0 : $arr;
+                !isset($arr['reserved']) ? $arr['reserved'] = 0 : $arr;
                 $productsDao->updateReservedByProduct($orders[$i]['id_product'], $arr['reserved']);
 
                 $productsDao->updateAccumulatedQuantity($orders[$i]['id_product'], $accumulated_quantity, 1);
@@ -295,7 +295,7 @@ $app->post('/addProductsMaterials', function (Request $request, Response $respon
 
                     foreach ($productsMaterials as $arr) {
                         $k = $generalMaterialsDao->findReservedMaterial($arr['id_material']);
-                        !$k['reserved'] ? $k['reserved'] = 0 : $k;
+                        !isset($k['reserved']) ? $k['reserved'] = 0 : $k;
                         $generalMaterialsDao->updateReservedMaterial($arr['id_material'], $k['reserved']);
                     }
                 }
