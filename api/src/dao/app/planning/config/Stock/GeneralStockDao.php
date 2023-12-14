@@ -19,8 +19,11 @@ class GeneralStockDao
     public function findStock($dataStock)
     {
         $connection = Connection::getInstance()->getConnection();
-        $stmt = $connection->prepare("SELECT * FROM stock WHERE id_material = :id_material");
-        $stmt->execute(['id_material' => $dataStock['idMaterial']]);
+        $stmt = $connection->prepare("SELECT * FROM stock WHERE id_material = :id_material AND id_provider = :id_provider");
+        $stmt->execute([
+            'id_material' => $dataStock['idMaterial'],
+            'id_provider' => $dataStock['idProvider']
+        ]);
 
         $this->logger->info(__FUNCTION__, array('query' => $stmt->queryString, 'errors' => $stmt->errorInfo()));
 

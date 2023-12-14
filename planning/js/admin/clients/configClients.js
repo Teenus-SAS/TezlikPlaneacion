@@ -1,16 +1,19 @@
 $(document).ready(function () {
-  $.ajax({
-    url: '/api/clients',
-    success: function (r) {
-      let $select = $(`#client`);
-      $select.empty();
+  loadClients = async (op) => {
+    let data = await searchData('/api/clients');
 
-      $select.append(`<option disabled selected>Seleccionar</option>`);
-      $.each(r, function (i, value) {
-        $select.append(
-          `<option value = ${value.id_client}> ${value.client} </option>`
-        );
-      });
-    },
-  });
+    if (op == 1)
+      data = data.filter(item => item.type_client == 1);
+    else
+      data = data.filter(item => item.type_client == 2);
+    let $select = $(`#client`);
+    $select.empty();
+
+    $select.append(`<option disabled selected>Seleccionar</option>`);
+    $.each(data, function (i, value) {
+      $select.append(
+        `<option value = ${value.id_client}> ${value.client} </option>`
+      );
+    });
+  }
 });

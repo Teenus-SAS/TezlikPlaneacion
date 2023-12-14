@@ -47,16 +47,6 @@ if (sizeof($_SESSION) == 0)
                                     </ol>
                                 </div>
                             </div>
-                            <!-- <div class="col-sm-7 col-xl-10 form-inline justify-content-sm-end">
-                                <div class="col-sm-2">
-                                    <label for="firtsDate" class="form-label text-dark">Fecha Inicial</label>
-                                    <input class="form-control dateOrders" id="firtsDate" type="date">
-                                </div>
-                                <div class="col-sm-2">
-                                    <label for="lastDate" class="form-label text-dark">Fecha Final</label>
-                                    <input class="form-control dateOrders" id="lastDate" type="date">
-                                </div>
-                            </div> -->
                             <div class="col-sm-7 col-xl-10 mt-4 form-inline justify-content-sm-end">
                                 <div class="col-xs-2 mr-2">
                                     <button class="btn btn-warning" id="btnNewRequisition" name="btnNewRequisition">Nueva Requisicion</button>
@@ -108,13 +98,13 @@ if (sizeof($_SESSION) == 0)
                                     <div class="card-body">
                                         <form id="formAddRequisition">
                                             <div class="form-row">
-                                                <!-- <div class="col-sm-4 floating-label enable-floating-label show-label" style="margin-bottom:20px">
-                                                    <label for="">Referencia</label>
-                                                    <select class="form-control refProduct" name="idProduct" id="refProduct"></select>
-                                                </div> -->
-                                                <div class="col-sm-8 floating-label enable-floating-label show-label" style="margin-bottom:5px">
+                                                <div class="col-sm-5 floating-label enable-floating-label show-label" style="margin-bottom:5px">
                                                     <label for="">Material</label>
                                                     <select class="form-control" name="idMaterial" id="material"></select>
+                                                </div>
+                                                <div class="col-sm-3 floating-label enable-floating-label show-label" style="margin-bottom:5px">
+                                                    <label for="">Provedoores</label>
+                                                    <select class="form-control" name="idProvider" id="client"></select>
                                                 </div>
                                                 <div class="col-sm-2 floating-label enable-floating-label show-label" style="margin-bottom:5px">
                                                     <label for="">Fecha Solicitud</label>
@@ -205,6 +195,7 @@ if (sizeof($_SESSION) == 0)
     <!-- <script src="/planning/js/users/usersAccess.js"></script> -->
 
     <script src="../global/js/global/number.js"></script>
+    <script src="/planning/js/admin/clients/configClients.js"></script>
     <script src="/planning/js/basic/rawMaterials/configRawMaterials.js"></script>
     <script src="/planning/js/basic/requisitions/tblRequisitions.js"></script>
     <script src="/planning/js/basic/requisitions/requisitions.js"></script>

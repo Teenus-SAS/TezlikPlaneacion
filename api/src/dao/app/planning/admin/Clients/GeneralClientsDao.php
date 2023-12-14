@@ -20,10 +20,11 @@ class GeneralClientsDao
     {
         $connection = Connection::getInstance()->getConnection();
 
-        $stmt = $connection->prepare("SELECT * FROM plan_clients WHERE nit = :nit AND id_company = :id_company");
+        $stmt = $connection->prepare("SELECT * FROM plan_clients WHERE nit = :nit AND id_company = :id_company -- AND type_client = :type_client");
         $stmt->execute([
             'nit' => trim($dataClient['nit']),
-            'id_company' => $id_company
+            'id_company' => $id_company,
+            //'type_client' => $type
         ]);
         $this->logger->info(__FUNCTION__, array('query' => $stmt->queryString, 'errors' => $stmt->errorInfo()));
 
@@ -31,14 +32,15 @@ class GeneralClientsDao
         return $client;
     }
 
-    public function findClientByName($dataClient, $id_company)
+    public function findClientByName($dataClient, $id_company, $type)
     {
         $connection = Connection::getInstance()->getConnection();
 
-        $stmt = $connection->prepare("SELECT * FROM plan_clients WHERE client = :client AND id_company = :id_company");
+        $stmt = $connection->prepare("SELECT * FROM plan_clients WHERE client = :client AND id_company = :id_company AND type_client = :type_client");
         $stmt->execute([
             'client' => strtoupper(trim($dataClient['client'])),
-            'id_company' => $id_company
+            'id_company' => $id_company,
+            'type_client' => $type
         ]);
         $this->logger->info(__FUNCTION__, array('query' => $stmt->queryString, 'errors' => $stmt->errorInfo()));
 

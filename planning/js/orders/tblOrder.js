@@ -1,4 +1,6 @@
 $(document).ready(function () {
+  loadClients(1);
+
   /* Cargar pedidos */
   tblOrder = $('#tblOrder').dataTable({
     pageLength: 50,

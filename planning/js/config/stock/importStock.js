@@ -42,6 +42,7 @@ $(document).ready(function () {
           return {
             refRawMaterial: item.referencia_material,
             nameRawMaterial: item.material,
+            client: item.proveedor,
             max: item.plazo_maximo,
             usual: item.plazo_habitual,
           };
@@ -146,6 +147,7 @@ $('#fileStock').val('');
         data.push({
           referencia_material: stock[i].reference,
           material: stock[i].material,
+          proveedor: stock[i].client,
           plazo_maximo: parseFloat(stock[i].max_term),
           plazo_habitual: parseFloat(stock[i].usual_term),
         });

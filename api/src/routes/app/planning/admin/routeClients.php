@@ -22,6 +22,14 @@ $app->get('/clients', function (Request $request, Response $response, $args) use
     return $response->withHeader('Content-Type', 'application/json');
 });
 
+// $app->get('/providers', function (Request $request, Response $response, $args) use ($clientsDao) {
+//     session_start();
+//     $id_company = $_SESSION['id_company'];
+//     $clients = $clientsDao->findAllClientByCompany($id_company);
+//     $response->getBody()->write(json_encode($clients, JSON_NUMERIC_CHECK));
+//     return $response->withHeader('Content-Type', 'application/json');
+// });
+
 $app->post('/clientsDataValidation', function (Request $request, Response $response, $args) use ($generalClientsDao) {
     $dataClient = $request->getParsedBody();
 
@@ -36,7 +44,16 @@ $app->post('/clientsDataValidation', function (Request $request, Response $respo
         for ($i = 0; $i < sizeof($clients); $i++) {
             if (
                 empty($clients[$i]['nit']) || empty($clients[$i]['client']) || empty($clients[$i]['address']) ||
-                empty($clients[$i]['phone']) || empty($clients[$i]['city'])
+                empty($clients[$i]['phone']) || empty($clients[$i]['city']) || empty($clients[$i]['type'])
+            ) {
+                $i = $i + 2;
+                $dataImportClients = array('error' => true, 'message' => "Campos vacios en la fila: {$i}");
+                break;
+            }
+
+            if (
+                trim(empty($clients[$i]['nit'])) || trim(empty($clients[$i]['client'])) || trim(empty($clients[$i]['address'])) ||
+                trim(empty($clients[$i]['phone'])) || trim(empty($clients[$i]['city'])) || trim(empty($clients[$i]['type']))
             ) {
                 $i = $i + 2;
                 $dataImportClients = array('error' => true, 'message' => "Campos vacios en la fila: {$i}");
@@ -74,10 +91,10 @@ $app->post('/addClient', function (Request $request, Response $response, $args) 
             $client = $clientsDao->insertClient($dataClient, $id_company);
 
             if (sizeof($_FILES) > 0) {
-                $lastCompany = $lastDataDao->findLastInsertedClient();
+                $lastClient = $lastDataDao->findLastInsertedClient();
 
                 // Insertar imagen
-                $FilesDao->imageClient($lastCompany['id_client'], $id_company);
+                $FilesDao->imageClient($lastClient['id_client'], $id_company);
             }
 
             if ($client == null)
@@ -94,11 +111,19 @@ $app->post('/addClient', function (Request $request, Response $response, $args) 
         for ($i = 0; $i < sizeof($clients); $i++) {
             $findClient = $generalClientsDao->findClient($clients[$i], $id_company);
 
-            if (!$findClient) $resolution = $clientsDao->insertClient($clients[$i], $id_company);
-            else {
+            if (!$findClient) {
+                $resolution = $clientsDao->insertClient($clients[$i], $id_company);
+
+                $lastClient = $lastDataDao->findLastInsertedClient();
+                $clients[$i]['idClient'] = $lastClient['id_client'];
+            } else {
                 $clients[$i]['idClient'] = $findClient['id_client'];
                 $resolution = $clientsDao->updateClient($clients[$i]);
             }
+
+            $clients[$i]['type'] == 'CLIENTE' ? $type = 1 : $type = 2;
+
+            $resolution = $generalClientsDao->changeTypeClient($clients[$i]['idClient'], $type);
         }
         if ($resolution == null)
             $resp = array('success' => true, 'message' => 'Clientes importados correctamente');

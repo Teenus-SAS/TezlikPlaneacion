@@ -84,10 +84,10 @@ $app->post('/orderDataValidation', function (Request $request, Response $respons
             } else $order[$i]['idProduct'] = $findProduct['id_product'];
 
             // Obtener id cliente
-            $findClient = $generalClientsDao->findClientByName($order[$i], $id_company);
+            $findClient = $generalClientsDao->findClientByName($order[$i], $id_company, 1);
             if (!$findClient) {
                 $i = $i + 2;
-                $dataImportOrder = array('error' => true, 'message' => "Cliente no existe en la base de datos.<br>Fila: {$i}");
+                $dataImportOrder = array('error' => true, 'message' => "Cliente no existe en la base de datos o es tipo proveedor.<br>Fila: {$i}");
                 break;
             } else $order[$i]['idClient'] = $findClient['id_client'];
 
@@ -142,7 +142,7 @@ $app->post('/addOrder', function (Request $request, Response $response, $args) u
             $order[$i]['idProduct'] = $findProduct['id_product'];
 
             // Obtener id cliente
-            $findClient = $generalClientsDao->findClientByName($order[$i], $id_company);
+            $findClient = $generalClientsDao->findClientByName($order[$i], $id_company, 1);
             $order[$i]['idClient'] = $findClient['id_client'];
 
             $order[$i] = $convertDataDao->changeDateOrder($order[$i]);

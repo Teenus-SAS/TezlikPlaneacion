@@ -32,6 +32,7 @@ $(document).ready(function () {
             address: item.direccion,
             phone: item.telefono,
             city: item.ciudad,
+            type: item.tipo,
           };
         });
         checkClients(ClientsToImport);

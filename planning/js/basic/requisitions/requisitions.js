@@ -1,4 +1,6 @@
 $(document).ready(function () {
+  loadClients(2);
+
   /* Ocultar panel crear producto */
 
   $('.cardAddRequisitions').hide();
@@ -77,6 +79,7 @@ $(document).ready(function () {
     sessionStorage.setItem('id_requisition', data.id_requisition);
  
     $(`#material option[value=${data.id_material}]`).prop('selected', true);
+    $(`#client option[value=${data.id_provider}]`).prop('selected', true);
     $('#applicationDate').val(data.application_date);
     $('#deliveryDate').val(data.delivery_date);
     $('#purchaseOrder').val(data.purchase_order); 
@@ -92,11 +95,12 @@ $(document).ready(function () {
 
   checkDataRequisition = async (url, idRequisition) => {
     let material = $('#material').val();
+    let provider = $('#client').val();
     let applicationDate = $('#applicationDate').val();
     let deliveryDate = $('#deliveryDate').val();
     let quan = $('#quantity').val();
 
-    let data = quan * material;
+    let data = quan * material * provider;
 
     if (!data || applicationDate == '' || deliveryDate == '' || quan == '') {
       toastr.error('Ingrese todos los campos');

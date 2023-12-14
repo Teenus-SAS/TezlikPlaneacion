@@ -30,6 +30,11 @@ $(document).ready(function () {
         className: "uniqueClassName",
       },
       {
+        title: "Provedoor",
+        data: "client",
+        className: "uniqueClassName",
+      },
+      {
         title: "Plazo Max",
         data: "max_term",
         className: "uniqueClassName",

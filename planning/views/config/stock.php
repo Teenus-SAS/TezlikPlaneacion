@@ -67,15 +67,19 @@ if (sizeof($_SESSION) == 0)
                                     <form id="formCreateStock">
                                         <div class="card-body">
                                             <div class="form-row">
-                                                <div class="col-sm-7 floating-label enable-floating-label show-label" style="margin-bottom:20px">
+                                                <div class="col-sm-4 floating-label enable-floating-label show-label" style="margin-bottom:20px">
                                                     <label for="">Materia Prima</label>
                                                     <select class="form-control" name="material" id="material"></select>
                                                 </div>
-                                                <div class="col-sm-2 floating-label enable-floating-label show-label" style="margin-bottom:0px">
+                                                <div class="col-sm-3 floating-label enable-floating-label show-label" style="margin-bottom:20px">
+                                                    <label for="">Provedoores</label>
+                                                    <select class="form-control" name="idProvider" id="client"></select>
+                                                </div>
+                                                <div class="col-xs-1 floating-label enable-floating-label show-label" style="margin-bottom:0px">
                                                     <label for="">Plazo Max</label>
                                                     <input type="number" class="form-control text-center" id="max" name="max">
                                                 </div>
-                                                <div class="col-sm-2 floating-label enable-floating-label show-label" style="margin-bottom:0px">
+                                                <div class="col-xs-1 floating-label enable-floating-label show-label" style="margin-bottom:0px">
                                                     <label for="">Plazo Habitual</label>
                                                     <input type="number" class="form-control text-center" id="usual" name="usual">
                                                 </div>
@@ -149,6 +153,7 @@ if (sizeof($_SESSION) == 0)
 
     <?php include_once dirname(dirname(dirname(__DIR__))) . '/global/partials/scriptsJS.php'; ?>
     <script src="/planning/js/basic/rawMaterials/configRawMaterials.js"></script>
+    <script src="/planning/js/admin/clients/configClients.js"></script>
     <script src="/planning/js/config/stock/stock.js"></script>
     <script src="/planning/js/config/stock/tblStock.js"></script>
     <script src="../global/js/import/import.js"></script>
