@@ -76,10 +76,10 @@ $(document).ready(function () {
                         if (!data.admission_date)
                             action = `<button class="btn btn-warning changeDate" id="delivery">Recibir MP</button>`;
                         else {
-                            let fechaHora = new Date(data.admission_date);
-                            let fechaHoraFormateada = fechaHora.toLocaleDateString("es-CO", { day: "2-digit", month: "2-digit", year: "numeric" });
+                            // let fechaHora = new Date(data.admission_date);
+                            // let fechaHoraFormateada = fechaHora.toLocaleDateString("es-CO", { day: "2-digit", month: "2-digit", year: "numeric" });
 
-                            action = `Recibido: <br>${fechaHoraFormateada}`;
+                            action = `Recibido: <br>${data.admission_date}`;
                         }
 
                         return action;
