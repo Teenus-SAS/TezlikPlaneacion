@@ -1,5 +1,6 @@
 <?php
 
+use TezlikPlaneacion\dao\GeneralClientsDao;
 use TezlikPlaneacion\dao\GeneralMaterialsDao;
 use TezlikPlaneacion\dao\GeneralRequisitionsDao;
 use TezlikPlaneacion\dao\requisitionsDao;
@@ -7,6 +8,7 @@ use TezlikPlaneacion\dao\requisitionsDao;
 $requisitionsDao = new requisitionsDao();
 $generalRequisitionsDao = new GeneralRequisitionsDao();
 $generalMaterialsDao = new GeneralMaterialsDao();
+$generalClientsDao = new GeneralClientsDao();
 
 use Psr\Http\Message\ResponseInterface as Response;
 use Psr\Http\Message\ServerRequestInterface as Request;
@@ -30,7 +32,8 @@ $app->get('/requisitions/{min_date}/{max_date}', function (Request $request, Res
 
 $app->post('/requisitionDataValidation', function (Request $request, Response $response, $args) use (
     $generalMaterialsDao,
-    $generalRequisitionsDao
+    $generalRequisitionsDao,
+    $generalClientsDao
 ) {
     $dataRequisition = $request->getParsedBody();
 
@@ -52,6 +55,14 @@ $app->post('/requisitionDataValidation', function (Request $request, Response $r
                 $dataImportRequisition = array('error' => true, 'message' => "Campos vacios. Fila: {$i}");
                 break;
             }
+            if (
+                trim(empty($requisition[$i]['refRawMaterial'])) || trim(empty($requisition[$i]['nameRawMaterial'])) || trim(empty($requisition[$i]['applicationDate'])) ||
+                trim(empty($requisition[$i]['deliveryDate'])) || trim(empty($requisition[$i]['quantity']))
+            ) {
+                $i = $i + 2;
+                $dataImportRequisition = array('error' => true, 'message' => "Campos vacios. Fila: {$i}");
+                break;
+            }
 
             // Obtener id material
             $findMaterial = $generalMaterialsDao->findMaterial($requisition[$i], $id_company);
@@ -61,6 +72,13 @@ $app->post('/requisitionDataValidation', function (Request $request, Response $r
                 break;
             } else $requisition[$i]['idMaterial'] = $findMaterial['id_material'];
 
+            // Obtener id proveedor
+            $findClient = $generalClientsDao->findClientByName($requisition[$i], $id_company, 2);
+            if (!$findClient) {
+                $i = $i + 2;
+                $dataImportRequisition = array('error' => true, 'message' => "Cliente no existe en la base de datos o es tipo cliente.<br>Fila: {$i}");
+                break;
+            } else $requisition[$i]['idProvider'] = $findClient['id_client'];
 
             $findRequisition = $generalRequisitionsDao->findRequisition($requisition[$i], $id_company);
             !$findRequisition ? $insert = $insert + 1 : $update = $update + 1;
@@ -77,7 +95,8 @@ $app->post('/requisitionDataValidation', function (Request $request, Response $r
 $app->post('/addRequisition', function (Request $request, Response $response, $args) use (
     $requisitionsDao,
     $generalRequisitionsDao,
-    $generalMaterialsDao
+    $generalMaterialsDao,
+    $generalClientsDao
 ) {
     session_start();
     $id_company = $_SESSION['id_company'];
@@ -104,6 +123,8 @@ $app->post('/addRequisition', function (Request $request, Response $response, $a
         for ($i = 0; $i < sizeof($requisition); $i++) {
             $findMaterial = $generalMaterialsDao->findMaterial($requisition[$i], $id_company);
             $requisition[$i]['idMaterial'] = $findMaterial['id_material'];
+            $findClient = $generalClientsDao->findClientByName($requisition[$i], $id_company, 2);
+            $requisition[$i]['idProvider'] = $findClient['id_client'];
 
             !isset($requisition[$i]['purchaseOrder']) ? $requisition[$i]['purchaseOrder'] = '' : $requisition[$i]['purchaseOrder'];
 

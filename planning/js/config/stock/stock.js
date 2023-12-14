@@ -1,4 +1,5 @@
 $(document).ready(function () {
+    loadClients(2);
     /* Ocultar panel crear stock */
 
     $('.cardCreateStock').hide();
@@ -40,6 +41,7 @@ $(document).ready(function () {
 
         sessionStorage.setItem('idStock', data.id_stock);
         $(`#material option[value=${data.id_material}]`).prop('selected', true);
+        $(`#client option[value=${data.id_provider}]`).prop('selected', true);
         $('#max').val(data.max_term);
         $('#usual').val(data.usual_term);
 
@@ -53,10 +55,11 @@ $(document).ready(function () {
 
     checkDataStock = async (url, idStock) => {
         let material = parseFloat($('#material').val());
+        let provider = parseFloat($('#client').val());
         let max = parseFloat($('#max').val());
         let usual = parseFloat($('#usual').val());
 
-        let data = material * max * usual;
+        let data = material * provider * max * usual;
 
         if (isNaN(data) || data <= 0) {
             toastr.error('Ingrese todos los campos');

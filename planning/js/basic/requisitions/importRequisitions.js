@@ -42,6 +42,7 @@ $(document).ready(function () {
           return {
             refRawMaterial: item.referencia_material,
             nameRawMaterial: item.material,
+            client: item.proveedor,
             applicationDate: item.fecha_solicitud,
             deliveryDate: item.fecha_entrega,
             quantity: item.cantidad,

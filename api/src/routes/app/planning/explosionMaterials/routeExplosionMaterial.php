@@ -24,6 +24,7 @@ $app->get('/explosionMaterials', function (Request $request, Response $response,
         if ($materials[$i]['available'] < 0) {
             $data = [];
             $data['idMaterial'] = $materials[$i]['id_material'];
+            $data['idProvider'] = '';
             $data['applicationDate'] = '';
             $data['deliveryDate'] = '';
             $data['quantity'] = abs($materials[$i]['available']);

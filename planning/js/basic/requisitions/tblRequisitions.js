@@ -45,6 +45,11 @@ $(document).ready(function () {
           className: "classCenter",
         },
         {
+          title: "Proveedor",
+          data: "provider",
+          className: "classCenter",
+        },
+        {
           title: "Fecha Solicitud",
           data: "application_date",
           className: "classCenter",

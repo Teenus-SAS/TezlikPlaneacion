@@ -1,5 +1,6 @@
 <?php
 
+use TezlikPlaneacion\dao\GeneralClientsDao;
 use TezlikPlaneacion\dao\GeneralMaterialsDao;
 use TezlikPlaneacion\dao\GeneralProductsDao;
 use TezlikPlaneacion\dao\GeneralProductsMaterialsDao;
@@ -15,6 +16,7 @@ $generalProductsDao = new GeneralProductsDao();
 $minimumStockDao = new MinimumStockDao();
 $productMaterialsDao = new ProductsMaterialsDao();
 $generalProductsMaterialsDao = new GeneralProductsMaterialsDao();
+$generalClientsDao = new GeneralClientsDao();
 
 use Psr\Http\Message\ResponseInterface as Response;
 use Psr\Http\Message\ServerRequestInterface as Request;
@@ -39,7 +41,8 @@ $app->get('/stockMaterials', function (Request $request, Response $response, $ar
 
 $app->post('/stockDataValidation', function (Request $request, Response $response, $args) use (
     $generalStockDao,
-    $generalMaterialsDao
+    $generalMaterialsDao,
+    $generalClientsDao
 ) {
     $dataStock = $request->getParsedBody();
 
@@ -90,6 +93,14 @@ $app->post('/stockDataValidation', function (Request $request, Response $respons
                 break;
             } else $stock[$i]['idMaterial'] = $findMaterial['id_material'];
 
+            // Obtener id proveedor
+            $findClient = $generalClientsDao->findClientByName($stock[$i], $id_company, 2);
+            if (!$findClient) {
+                $i = $i + 2;
+                $dataImportStock = array('error' => true, 'message' => "Cliente no existe en la base de datos o es tipo cliente.<br>Fila: {$i}");
+                break;
+            } else $stock[$i]['idProvider'] = $findClient['id_client'];
+
             $findstock = $generalStockDao->findStock($stock[$i]);
             if (!$findstock) $insert = $insert + 1;
             else $update = $update + 1;
@@ -107,6 +118,7 @@ $app->post('/addStock', function (Request $request, Response $response, $args) u
     $stockDao,
     $generalStockDao,
     $generalMaterialsDao,
+    $generalClientsDao,
     $generalProductsMaterialsDao,
     $generalProductsDao,
     $minimumStockDao,
@@ -159,6 +171,10 @@ $app->post('/addStock', function (Request $request, Response $response, $args) u
             // Obtener id materia prima
             $findMaterial = $generalMaterialsDao->findMaterial($stock[$i], $id_company);
             $stock[$i]['idMaterial'] = $findMaterial['id_material'];
+
+            // Obtener id proveedor
+            $findClient = $generalClientsDao->findClientByName($stock[$i], $id_company, 2);
+            $stock[$i]['idProvider'] = $findClient['id_client'];
 
             $findstock = $generalStockDao->findstock($stock[$i], $id_company);
             if (!$findstock)
