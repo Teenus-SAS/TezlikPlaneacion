@@ -1,4 +1,4 @@
-$(document).ready(function () {
+$(document).ready(function () {       
     tblStore = $('#tblStore').dataTable({
         destroy: true,
         pageLength: 50,
@@ -70,7 +70,13 @@ $(document).ready(function () {
                     if (!data.delivery_date)
                         action = `<button class="btn btn-warning deliver" id="delivery">Entregar MP</button>`;
                     else 
-                        action = `Entregado: ${data.delivery_date}`;
+                    {
+                        let fechaHora = new Date(data.delivery_date);
+                        let fechaHoraFormateada = fechaHora.toLocaleDateString("es-CO", { day: "2-digit", month: "2-digit", year: "numeric" }) + '<br>' +
+                          fechaHora.toLocaleTimeString("es-CO", { hour: "2-digit", minute: "2-digit", hour12: true});
+
+                        action = `Entregado: <br>${fechaHoraFormateada}`;
+                    }
 
                     return action;
                 },

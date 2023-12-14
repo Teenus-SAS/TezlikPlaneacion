@@ -18,7 +18,7 @@ $(document).ready(function () {
         let data = tblStore.fnGetData(row); 
         let id_material = data.id_material;
         let quantity = data.quantity;
-        let reserved = data.reserved;
+        let reserved = data.reserved1;
 
         bootbox.confirm({
             title: 'Entrega Material',

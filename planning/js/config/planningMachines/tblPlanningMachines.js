@@ -1,4 +1,13 @@
 $(document).ready(function () {
+  let = opcionesDeFormato = {
+  day: "2-digit",
+  month: "2-digit",
+  year: "numeric",
+  hour: "2-digit",
+  minute: "2-digit",
+  hour12: true,
+  };
+  
   // Mostrar Tabla planeacion maquinas
   tblPlanMachines = $("#tblPlanMachines").dataTable({
     pageLength: 50,
