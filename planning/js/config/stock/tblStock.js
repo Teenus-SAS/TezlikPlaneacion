@@ -30,7 +30,7 @@ $(document).ready(function () {
         className: "uniqueClassName",
       },
       {
-        title: "Provedoor",
+        title: "Proveedor",
         data: "client",
         className: "uniqueClassName",
       },
