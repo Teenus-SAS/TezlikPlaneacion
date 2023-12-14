@@ -41,7 +41,7 @@ class GeneralMaterialsDao
     {
         $connection = Connection::getInstance()->getConnection();
 
-        $stmt = $connection->prepare("SELECT SUM(pg.quantity) AS reserved
+        $stmt = $connection->prepare("SELECT SUM(pg.quantity * pm.quantity) AS reserved
                                       FROM programming pg 
                                         LEFT JOIN plan_orders o ON o.id_order = pg.id_order
                                         LEFT JOIN products_materials pm ON pm.id_product = o.id_product 
@@ -112,6 +112,26 @@ class GeneralMaterialsDao
         }
     }
 
+    public function updateStoreMaterial($dataMaterial)
+    {
+        try {
+            $connection = Connection::getInstance()->getConnection();
+
+            $stmt = $connection->prepare("UPDATE materials SET quantity = :quantity, delivery_store =  delivery_store + :delivery_store, delivery_pending = :delivery_pending
+                                          WHERE id_material = :id_material");
+            $stmt->execute([
+                'id_material' => $dataMaterial['idMaterial'],
+                'quantity' => $dataMaterial['stored'],
+                'delivery_store' => $dataMaterial['delivered'],
+                'delivery_pending' => $dataMaterial['pending']
+            ]);
+        } catch (\Exception $e) {
+            $message = $e->getMessage();
+            $error = array('info' => true, 'message' => $message);
+            return $error;
+        }
+    }
+
     public function updateReservedMaterial($id_material, $reserved)
     {
         try {
@@ -138,6 +158,23 @@ class GeneralMaterialsDao
             $stmt->execute([
                 'id_material' => $id_material,
                 'minimum_stock' => $stock
+            ]);
+        } catch (\Exception $e) {
+            $message = $e->getMessage();
+            $error = array('info' => true, 'message' => $message);
+            return $error;
+        }
+    }
+
+    public function updateDeliveryDateMaterial($id_material, $date)
+    {
+        try {
+            $connection = Connection::getInstance()->getConnection();
+
+            $stmt = $connection->prepare("UPDATE materials SET delivery_date = :delivery_date WHERE id_material = :id_material");
+            $stmt->execute([
+                'id_material' => $id_material,
+                'delivery_date' => $date
             ]);
         } catch (\Exception $e) {
             $message = $e->getMessage();

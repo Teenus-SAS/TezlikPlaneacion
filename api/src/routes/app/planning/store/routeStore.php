@@ -18,7 +18,8 @@ use Psr\Http\Message\ServerRequestInterface as Request;
 $app->get('/store', function (Request $request, Response $response, $args) use (
     $storeDao,
     $programmingDao,
-    $productsMaterialsDao
+    $productsMaterialsDao,
+    $generalMaterialsDao
 ) {
     session_start();
     $id_company = $_SESSION['id_company'];
@@ -43,6 +44,7 @@ $app->get('/store', function (Request $request, Response $response, $args) use (
                 $data = [];
                 $data['idMaterial'] = $materials[$j]['id_material'];
                 $storeDao->saveDelivery($data, 0);
+                $generalMaterialsDao->updateDeliveryDateMaterial($data['idMaterial'], NULL);
             } else break;
         }
     }
@@ -80,8 +82,17 @@ $app->post('/deliverStore', function (Request $request, Response $response, $arg
     // }
 
     $store = $storeDao->saveDelivery($dataStore, 1);
-    if ($store == null)
-        $store = $generalMaterialsDao->updateQuantityMaterial($dataStore['idMaterial'], $dataStore['stored']);
+    if ($store == null) {
+        $store = $generalMaterialsDao->updateStoreMaterial($dataStore);
+
+        if ($dataStore['pending'] == 0) {
+            date_default_timezone_set('America/Bogota');
+
+            $date = date('Y-m-d H:i:s');
+
+            $store = $generalMaterialsDao->updateDeliveryDateMaterial($dataStore['idMaterial'], $date);
+        }
+    }
 
     if ($store == null)
         $resp = array('success' => true, 'message' => 'Materia prima entregada correctamente');
