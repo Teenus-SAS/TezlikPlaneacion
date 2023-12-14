@@ -58,7 +58,7 @@ $(document).ready(function () {
                     className: "classCenter",
                 },
                 {
-                    title: 'Existencias',
+                    title: 'Cantidad',
                     data: 'quantity',
                     className: 'uniqueClassName',
                     render: $.fn.dataTable.render.number('.', ',', 0),
