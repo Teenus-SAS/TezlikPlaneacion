@@ -240,6 +240,8 @@ $('#btnCloseClient').click(function (e) {
 
   message = (data) => {
     if (data.success == true) { 
+      $('.cardImportClients').hide(800);
+      $('#formImportClients').trigger('reset');
       $('#formCreateClient').trigger('reset');
       updateTable();
       toastr.success(data.message);

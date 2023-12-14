@@ -24,8 +24,33 @@ $(document).ready(function () {
       return false;
     }
 
+    $('.cardBottons').hide();
+
+    let form = document.getElementById('formClients');
+    form.insertAdjacentHTML(
+      'beforeend',
+      `<div class="col-sm-1 cardLoading" style="margin-top: 7px; margin-left: 15px">
+        <div class="spinner-border text-secondary" role="status">
+            <span class="sr-only">Loading...</span>
+        </div>
+      </div>`
+    );
+
     importFile(selectedFile)
       .then((data) => {
+        const expectedHeaders = ['pedido','fecha_pedido','fecha_minima','fecha_maxima','referencia_producto','producto','cliente','cantidad_original'];
+        const actualHeaders = Object.keys(data[0]);
+
+        const missingHeaders = expectedHeaders.filter(header => !actualHeaders.includes(header));
+
+        if (missingHeaders.length > 0) {
+          $('.cardLoading').remove();
+          $('.cardBottons').show(400);
+          $('#fileOrder').val('');
+          toastr.error('Archivo no corresponde a el formato. Verifique nuevamente');
+          return false;
+        }
+
         let OrderToImport = data.map((item) => {
           return {
             order: item.pedido,
@@ -34,13 +59,16 @@ $(document).ready(function () {
             maxDate: item.fecha_maxima,
             referenceProduct: item.referencia_producto,
             product: item.producto,
-            client: item.cliente, 
-            originalQuantity: item.cantidad_original, 
+            client: item.cliente,
+            originalQuantity: item.cantidad_original,
           };
         });
         checkOrder(OrderToImport);
       })
       .catch(() => {
+        $('.cardLoading').remove();
+        $('.cardBottons').show(400);
+        $('#fileOrder').val('');
         toastr.error('Ocurrio un error. Intente Nuevamente');
       });
   });
@@ -53,6 +81,9 @@ $(document).ready(function () {
       data: { importOrder: data },
       success: function (resp) {
         if (resp.error == true) {
+          $('.cardLoading').remove();
+          $('.cardBottons').show(400);
+          $('#fileOrder').val('');
           $('#formImportOrder').trigger('reset');
           toastr.error(resp.message);
           return false;
@@ -74,7 +105,11 @@ $(document).ready(function () {
           callback: function (result) {
             if (result == true) {
               saveOrderTable(data);
-            } else $('#fileOrder').val('');
+            } else {
+              $('.cardLoading').remove();
+              $('.cardBottons').show(400);
+              $('#fileOrder').val('');
+            }
           },
         });
       },
@@ -87,21 +122,11 @@ $(document).ready(function () {
       url: '../../api/addOrder',
       data: { importOrder: data },
       success: function (r) {
-        /* Mensaje de exito */
-        if (r.success == true) {
-          $('.cardImportOrder').hide(800);
-          $('#formImportOrder').trigger('reset');
-          updateTable();
-          toastr.success(r.message);
-          return false;
-        } else if (r.error == true) toastr.error(r.message);
-        else if (r.info == true) toastr.info(r.message);
+        $('.cardLoading').remove();
+        $('.cardBottons').show(400);
+        $('#fileOrder').val('');
 
-        /* Actualizar tabla */
-        function updateTable() {
-          $('#tblOrder').DataTable().clear();
-          $('#tblOrder').DataTable().ajax.reload();
-        }
+        message(r);
       },
     });
   };

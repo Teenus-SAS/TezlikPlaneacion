@@ -36,6 +36,19 @@ $(document).ready(function () {
 
     importFile(selectedFile)
       .then((data) => {
+        const expectedHeaders = ['maquina', 'no_trabajadores', 'hora_dia', 'hora_inicio', 'hora_fin', 'enero', 'febrero', 'marzo', 'abril', 'mayo', 'junio', 'julio', 'agosto', 'septiembre', 'octubre', 'noviembre', 'diciembre'];
+        const actualHeaders = Object.keys(data[0]);
+
+        const missingHeaders = expectedHeaders.filter(header => !actualHeaders.includes(header));
+
+        if (missingHeaders.length > 0) {
+          $('.cardLoading').remove();
+          $('.cardBottons').show(400);
+          $('#filePlanMachines').val('');
+          toastr.error('Archivo no corresponde a el formato. Verifique nuevamente');
+          return false;
+        }
+
         let machinesToImport = data.map((item) => {
           return {
             machine: item.maquina,

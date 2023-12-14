@@ -55,6 +55,7 @@ $(document).ready(function () {
   /* Mensaje de exito */
   message = async (data) => {
     if (data.success == true) {
+      $('.cardImportInventory').hide(800);
       $('.cardAddMonths').hide(800);
       $('#formAddMonths').trigger('reset');
 

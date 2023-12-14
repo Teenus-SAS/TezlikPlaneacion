@@ -38,6 +38,19 @@ $(document).ready(function () {
 
     importFile(selectedFile)
       .then((data) => {
+        const expectedHeaders = ['maquina'];
+        const actualHeaders = Object.keys(data[0]);
+
+        const missingHeaders = expectedHeaders.filter(header => !actualHeaders.includes(header));
+
+        if (missingHeaders.length > 0) {
+          $('.cardLoading').remove();
+          $('.cardBottons').show(400);
+          $('#fileMachines').val('');
+          toastr.error('Archivo no corresponde a el formato. Verifique nuevamente');
+          return false;
+        }
+
         let machinesToImport = data.map((item) => {
           return {
             machine: item.maquina,
@@ -47,8 +60,9 @@ $(document).ready(function () {
       })
       .catch(() => {
         $('.cardLoading').remove();
-    $('.cardBottons').show(400);
-    $('#fileMachines').val('');
+        $('.cardBottons').show(400);
+        $('#fileMachines').val('');
+        
         toastr.error('Ocurrio un error. Intente Nuevamente');
       });
   });
@@ -62,8 +76,8 @@ $(document).ready(function () {
       success: function (resp) {
         if (resp.error == true) {
           $('.cardLoading').remove();
-    $('.cardBottons').show(400);
-    $('#fileMachines').val('');
+          $('.cardBottons').show(400);
+          $('#fileMachines').val('');
           $('#formImportMachines').trigger('reset');
           toastr.error(resp.message);
           return false;
@@ -87,8 +101,8 @@ $(document).ready(function () {
               saveMachineTable(data);
             } else {
               $('.cardLoading').remove();
-    $('.cardBottons').show(400);
-    $('#fileMachines').val('');
+              $('.cardBottons').show(400);
+              $('#fileMachines').val('');
             }
           },
         });
@@ -103,8 +117,8 @@ $(document).ready(function () {
       data: { importMachines: data },
       success: function (r) {
         $('.cardLoading').remove();
-    $('.cardBottons').show(400);
-    $('#fileMachines').val('');
+        $('.cardBottons').show(400);
+        $('#fileMachines').val('');
         message(r);
       },
     });

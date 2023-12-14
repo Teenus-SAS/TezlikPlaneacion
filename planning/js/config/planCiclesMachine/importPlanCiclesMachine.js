@@ -37,6 +37,19 @@ $(document).ready(function () {
 
     importFile(selectedFile)
       .then((data) => {
+        const expectedHeaders = ['referencia_producto', 'producto', 'maquina', 'ciclo_hora'];
+        const actualHeaders = Object.keys(data[0]);
+
+        const missingHeaders = expectedHeaders.filter(header => !actualHeaders.includes(header));
+
+        if (missingHeaders.length > 0) {
+          $('.cardLoading').remove();
+          $('.cardBottons').show(400);
+          $('#filePlanCiclesMachine').val('');
+          toastr.error('Archivo no corresponde a el formato. Verifique nuevamente');
+          return false;
+        }
+
         let planCiclesMachineToImport = data.map((item) => {
           return {
             referenceProduct: item.referencia_producto,

@@ -38,6 +38,19 @@ $(document).ready(function () {
 
     importFile(selectedFile)
       .then((data) => {
+        const expectedHeaders = ['referencia', 'material', 'magnitud', 'unidad', 'existencia'];
+        const actualHeaders = Object.keys(data[0]);
+
+        const missingHeaders = expectedHeaders.filter(header => !actualHeaders.includes(header));
+
+        if (missingHeaders.length > 0) {
+          $('.cardLoading').remove();
+          $('.cardBottons').show(400);
+          $('#fileMaterials').val('');
+          toastr.error('Archivo no corresponde a el formato. Verifique nuevamente');
+          return false;
+        }
+
         let materialsToImport = data.map((item) => {
           return {
             refRawMaterial: item.referencia,

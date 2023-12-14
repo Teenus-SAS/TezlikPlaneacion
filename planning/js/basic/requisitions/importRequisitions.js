@@ -38,6 +38,19 @@ $(document).ready(function () {
 
     importFile(selectedFile)
       .then((data) => {
+        const expectedHeaders = ['referencia_material', 'material', 'proveedor', 'fecha_solicitud', 'fecha_entrega','cantidad','orden_compra'];
+        const actualHeaders = Object.keys(data[0]);
+
+        const missingHeaders = expectedHeaders.filter(header => !actualHeaders.includes(header));
+
+        if (missingHeaders.length > 0) {
+          $('.cardLoading').remove();
+          $('.cardBottons').show(400);
+          $('#fileRequisitions').val('');
+          toastr.error('Archivo no corresponde a el formato. Verifique nuevamente');
+          return false;
+        }
+
         let requisitionToImport = data.map((item) => {
           return {
             refRawMaterial: item.referencia_material,

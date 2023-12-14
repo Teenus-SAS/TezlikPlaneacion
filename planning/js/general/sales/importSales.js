@@ -37,20 +37,22 @@ $(document).ready(function () {
 
     importFile(selectedFile)
       .then((data) => {
-        let SalesToImport = data.map((item) => {
-          // !item.enero ? (item.enero = '') : item.enero;
-          // !item.febrero ? (item.febrero = '') : item.febrero;
-          // !item.marzo ? (item.marzo = '') : item.marzo;
-          // !item.abril ? (item.abril = '') : item.abril;
-          // !item.mayo ? (item.mayo = '') : item.mayo;
-          // !item.junio ? (item.junio = '') : item.junio;
-          // !item.julio ? (item.julio = '') : item.julio;
-          // !item.agosto ? (item.agosto = '') : item.agosto;
-          // !item.septiembre ? (item.septiembre = '') : item.septiembre;
-          // !item.octubre ? (item.octubre = '') : item.octubre;
-          // !item.noviembre ? (item.noviembre = '') : item.noviembre;
-          // !item.diciembre ? (item.diciembre = '') : item.diciembre;
+        const expectedHeaders = ['referencia','producto','enero','febrero','marzo','abril','mayo','junio','julio','agosto','septiembre','octubre','noviembre','diciembre'];
+        const actualHeaders = Object.keys(data[0]);
 
+        const missingHeaders = expectedHeaders.filter(header => !actualHeaders.includes(header));
+
+        if (missingHeaders.length > 0) {
+          $('.cardLoading').remove();
+          $('.cardBottons').show(400);
+          $('#fileSales').val('');
+
+          toastr.error('Archivo no corresponde a el formato. Verifique nuevamente');
+          return false;
+        }
+
+
+        let SalesToImport = data.map((item) => {
           return {
             referenceProduct: item.referencia,
             product: item.producto,
@@ -73,6 +75,7 @@ $(document).ready(function () {
       .catch(() => {
           $('.cardLoading').remove();
           $('.cardBottons').show(400);
+          $('#fileSales').val('');
 
         toastr.error('Ocurrio un error. Intente Nuevamente');
       });

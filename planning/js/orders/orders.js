@@ -156,6 +156,9 @@ $(document).ready(function () {
   /* Mensaje de exito */
   message = (data) => {
     if (data.success == true) {
+      $('.cardImportOrder').hide(800);
+      $('#formImportOrder').trigger('reset');
+
       $('#createOrder').modal('hide');
       $('#formCreateOrder').trigger('reset');
       updateTable();

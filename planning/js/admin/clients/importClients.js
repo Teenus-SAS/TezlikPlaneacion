@@ -23,8 +23,33 @@ $(document).ready(function () {
       return false;
     }
 
+    $('.cardBottons').hide();
+
+    let form = document.getElementById('formClients');
+    form.insertAdjacentHTML(
+      'beforeend',
+      `<div class="col-sm-1 cardLoading" style="margin-top: 7px; margin-left: 15px">
+        <div class="spinner-border text-secondary" role="status">
+            <span class="sr-only">Loading...</span>
+        </div>
+      </div>`
+    );
+
     importFile(selectedFile)
       .then((data) => {
+        const expectedHeaders = ['nit', 'cliente', 'direccion', 'telefono', 'ciudad','tipo'];
+        const actualHeaders = Object.keys(data[0]);
+
+        const missingHeaders = expectedHeaders.filter(header => !actualHeaders.includes(header));
+
+        if (missingHeaders.length > 0) {
+          $('.cardLoading').remove();
+          $('.cardBottons').show(400);
+          $('#fileClients').val('');
+          toastr.error('Archivo no corresponde a el formato. Verifique nuevamente');
+          return false;
+        }
+
         let ClientsToImport = data.map((item) => {
           return {
             nit: item.nit,
@@ -38,6 +63,10 @@ $(document).ready(function () {
         checkClients(ClientsToImport);
       })
       .catch(() => {
+        $('.cardLoading').remove();
+        $('.cardBottons').show(400);
+        $('#fileClients').val('');
+        
         toastr.error('Ocurrio un error. Intente Nuevamente');
       });
   });
@@ -50,6 +79,10 @@ $(document).ready(function () {
       data: { importClients: data },
       success: function (resp) {
         if (resp.error == true) {
+          $('.cardLoading').remove();
+          $('.cardBottons').show(400);
+          $('#fileClients').val('');
+          
           $('#formImportClients').trigger('reset');
           toastr.error(resp.message);
           return false;
@@ -71,7 +104,11 @@ $(document).ready(function () {
           callback: function (result) {
             if (result == true) {
               saveClientTable(data);
-            } else $('#fileClients').val('');
+            } else {
+              $('.cardLoading').remove();
+              $('.cardBottons').show(400);
+              $('#fileClients').val('');
+            }
           },
         });
       },
@@ -84,21 +121,10 @@ $(document).ready(function () {
       url: '../../api/addClient',
       data: { importClients: data },
       success: function (r) {
-        /* Mensaje de exito */
-        if (r.success == true) {
-          $('.cardImportClients').hide(800);
-          $('#formImportClients').trigger('reset');
-          updateTable();
-          toastr.success(r.message);
-          return false;
-        } else if (r.error == true) toastr.error(r.message);
-        else if (r.info == true) toastr.info(r.message);
-
-        /* Actualizar tabla */
-        function updateTable() {
-          $('#tblClients').DataTable().clear();
-          $('#tblClients').DataTable().ajax.reload();
-        }
+        $('.cardLoading').remove();
+        $('.cardBottons').show(400);
+        $('#fileClients').val('');
+        message(r);
       },
     });
   };
