@@ -19,12 +19,12 @@ $(document).ready(function () {
         },
       },
       {
-        title: 'F.Pedido',
+        title: 'Fecha',
         data: 'date_order',
         className: 'uniqueClassName',
       },
       {
-        title: 'No Pedido',
+        title: 'Pedido',
         data: 'num_order',
         className: 'uniqueClassName',
       },

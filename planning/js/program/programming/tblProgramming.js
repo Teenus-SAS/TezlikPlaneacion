@@ -11,40 +11,38 @@ function dragover(e) {
   else e.target.parentNode.before(shadow);
 }*/
 $(document).ready(function () {
-  sessionStorage.removeItem('id_programming'); 
-  
-  $('#searchMachine').change(function (e) { 
+  sessionStorage.removeItem("id_programming");
+
+  $("#searchMachine").change(function (e) {
     e.preventDefault();
-    
+
     loadTblProgramming(this.value);
   });
-  
+
   loadTblProgramming = async (machine) => {
     let data;
 
     if (machine == 0) {
-      data = await searchData('/api/programming');
+      data = await searchData("/api/programming");
+    } else data = await searchData(`/api/programmingByMachine/${machine}/0`);
+
+    if ($.fn.dataTable.isDataTable("#tblProgramming")) {
+      $("#tblProgramming").DataTable().clear();
+      $("#tblProgramming").DataTable().rows.add(data).draw();
+      return;
     }
-    else
-      data = await searchData(`/api/programmingByMachine/${machine}/0`);
-      
-    if ($.fn.dataTable.isDataTable('#tblProgramming')) { 
-        $('#tblProgramming').DataTable().clear(); 
-        $('#tblProgramming').DataTable().rows.add(data).draw();
-        return;
-    }
-    
-    tblProgramming = $('#tblProgramming').dataTable({
+
+    tblProgramming = $("#tblProgramming").dataTable({
       // destroy: true,
       pageLength: 50,
       data: data,
       language: {
-        url: '//cdn.datatables.net/plug-ins/1.10.20/i18n/Spanish.json',
+        url: "//cdn.datatables.net/plug-ins/1.10.20/i18n/Spanish.json",
       },
-      dom: 'Bfrtip',
+      dom: "Bfrtip",
       buttons: [
         {
-          extend: 'excel',
+          extend: "excel",
           exportOptions: {
             columns: [0, 1, 2, 3, 4, 5, 6, 7, 8],
           },
@@ -52,98 +50,78 @@ $(document).ready(function () {
       ],
       columns: [
         {
-          title: 'No.',
+          title: "No.",
           data: null,
-          className: 'uniqueClassName',
+          className: "uniqueClassName",
           render: function (data, type, full, meta) {
             return meta.row + 1;
           },
         },
         {
-          title: 'Pedido',
-          data: 'num_order',
-          className: 'uniqueClassName',
+          title: "Pedido",
+          data: "num_order",
+          className: "uniqueClassName",
         },
         {
-          title: 'Referencia',
-          data: 'reference',
-          className: 'uniqueClassName',
+          title: "Referencia",
+          data: "reference",
+          className: "uniqueClassName",
         },
         {
-          title: 'Producto',
-          data: 'product',
-          className: 'uniqueClassName',
+          title: "Producto",
+          data: "product",
+          className: "uniqueClassName",
         },
         {
-          title: 'Maquina',
-          data: 'machine',
-          className: 'uniqueClassName',
+          title: "Maquina",
+          data: "machine",
+          className: "uniqueClassName",
         },
         {
-          title: 'Cant.Pedido',
-          data: 'quantity_order',
-          className: 'uniqueClassName',
-          render: $.fn.dataTable.render.number('.', ',', 2, ''),
-        },
-        {
-          title: 'Cant.Fabricar',
-          data: 'quantity_programming',
-          className: 'uniqueClassName',
-          render: $.fn.dataTable.render.number('.', ',', 2, ''),
-        },
-        {
-          title: 'Cant.Pendiente',
-          data: 'accumulated_quantity',
-          className: 'uniqueClassName',
-          render: $.fn.dataTable.render.number('.', ',', 2, ''),
-        },
-        {
-          title: 'Cliente',
-          data: 'client',
-          className: 'uniqueClassName',
-        },
-        // {
-        //   title: 'Lote Economico',
-        //   data: 'process',
-        //   className: 'uniqueClassName',
-        // },
-        {
-          title: 'Fecha Inicio',
+          title: "Cantidades",
           data: null,
-          className: 'uniqueClassName',
-          render: function (data) {
-            let min_date = getFirstText(data.min_date);
-            let hour = getLastText(data.min_date);
-            let hourStart = moment(hour, ['HH:mm']).format('h:mm A');
+          className: "uniqueClassName",
+          render: function (data, type, full, meta) {
+            const quantityOrder = full.quantity_order;
+            const quantityProgramming = full.quantity_programming;
+            const accumulatedQuantity = full.accumulated_quantity;
 
-            return `<p>${min_date}</p><p>${hourStart}</p>`;
+            return `Pedido: ${quantityOrder}<br>Fabricar: ${quantityProgramming}<br>Pendiente: ${accumulatedQuantity}`;
           },
         },
         {
-          title: 'Fecha Final',
-          data: null,
-          className: 'uniqueClassName',
-          render: function (data) {
-            let max_date = getFirstText(data.max_date);
-            let hour = getLastText(data.max_date);
-
-            let hourStart = moment(hour, ['HH:mm']).format('h:mm A');
-            return `<p>${max_date}</p><p>${hourStart}</p>`;
-          },
+          title: "Cliente",
+          data: "client",
+          className: "uniqueClassName",
         },
         {
-          title: 'Orden Produccion',
-          data: 'id_programming',
-          className: 'uniqueClassName',
+          title: "Fecha y Hora",
+          data: null,
+          className: "uniqueClassName",
+          width: "200px",
+          render: function (data, type, full, meta) {
+            const minDate = full.min_date;
+            const maxDate = full.max_date;
+
+            return `Inicio: ${moment(minDate).format(
+              "DD/MM/YYYY HH:mm A"
+            )}<br>Fin: ${moment(maxDate).format("DD/MM/YYYY HH:mm A")}`;
+          },
+        },
+
+        {
+          title: "Orden Produccion",
+          data: "id_programming",
+          className: "uniqueClassName",
           render: function (data) {
             return `
             <button class="btn btn-warning changeStatus " id="${data}" name="${data}">Crear OP</button>`;
           },
         },
         {
-          title: 'Acciones',
-          data: 'id_programming',
-          className: 'uniqueClassName',
+          title: "Acciones",
+          data: "id_programming",
+          className: "uniqueClassName",
           render: function (data) {
             return `
                 <a href="javascript:;" <i id="${data}" class="bx bx-edit-alt updateProgramming" data-toggle='tooltip' title='Actualizar Programa' style="font-size: 30px;"></i></a>
@@ -153,7 +131,6 @@ $(document).ready(function () {
       ],
     });
   };
- 
 
   loadTblProgramming(0);
 });
