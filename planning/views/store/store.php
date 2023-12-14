@@ -50,9 +50,14 @@ if (sizeof($_SESSION) == 0)
                                 </div>
                             </div>
                             <div class="col-sm-7 col-xl-6 form-inline justify-content-sm-end">
-                                <!-- <div class="col-xs-2 py-2 mr-2">
-                                    <button class="btn btn-info" id="btnDelivery">Entregar</button>
-                                </div> -->
+                                <div class="col-xs-2 py-2 mr-2">
+                                    <select id="typeStore" class="form-control">
+                                        <option disabled selected>Seleccionar</option>
+                                        <option value="1">Recibir</option>
+                                        <option value="2">Entregar</option>
+                                    </select>
+                                    <!-- <button class="btn btn-info" id="btnDelivery">Entregar</button> -->
+                                </div>
                             </div>
                         </div>
                     </div>

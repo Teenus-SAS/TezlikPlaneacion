@@ -1,4 +1,59 @@
 $(document).ready(function () {
+    // Recibir MP
+    $(document).on('click', '.changeDate', function (e) {
+        e.preventDefault();
+
+        let date = new Date().toISOString().split('T')[0];
+        let row = $(this).parent().parent()[0];
+        let data = tblStore.fnGetData(row);
+
+        bootbox.confirm({
+            title: 'Ingrese Fecha De Ingreso!',
+            message: `<div class="col-sm-12 floating-label enable-floating-label">
+                        <input class="form-control" type="date" name="date" id="date" max="${date}"></input>
+                        <label for="date">Fecha</span></label>
+                      </div>`,
+            buttons: {
+                confirm: {
+                    label: 'Agregar',
+                    className: 'btn-success',
+                },
+                cancel: {
+                    label: 'Cancelar',
+                    className: 'btn-danger',
+                },
+            },
+            callback: function (result) {
+                if (result == true) {
+                    let date = $('#date').val();
+
+                    if (!date) {
+                        toastr.error('Ingrese los campos');
+                        return false;
+                    }
+
+                    let form = new FormData();
+                    form.append('idRequisition', data.id_requisition);
+                    form.append('idMaterial', data.id_material);
+                    form.append('date', date);
+
+                    $.ajax({
+                        type: "POST",
+                        url: '/api/saveAdmissionDate',
+                        data: form,
+                        contentType: false,
+                        cache: false,
+                        processData: false,
+                        success: function (resp) {
+                            message(resp, 1);
+                        }
+                    });
+                }
+            },
+        });
+    });
+    
+    // Entregar MP
     sessionStorage.removeItem('idMaterial');
     sessionStorage.removeItem('stored');
     sessionStorage.removeItem('pending');
@@ -15,7 +70,7 @@ $(document).ready(function () {
 
     $(document).on('click', '.deliver', function () {
         let row = $(this).parent().parent()[0];
-        let data = tblStore.fnGetData(row); 
+        let data = tblStore.fnGetData(row);
         let id_material = data.id_material;
         let quantity = data.quantity;
         let reserved = data.reserved1;
@@ -97,12 +152,12 @@ $(document).ready(function () {
             url: '/api/deliverStore',
             data: dataStore,
             success: function (resp) {
-                message(resp);
+                message(resp, 2);
             }
         });
     });
 
-    message = (data) => {
+    message = (data, op) => {
         if (data.success == true) {
             sessionStorage.removeItem('idMaterial');
             sessionStorage.removeItem('stored');
@@ -112,8 +167,8 @@ $(document).ready(function () {
             $('#formDeliverMaterial').trigger('reset');
             $('#deliverMaterial').modal('hide');
             toastr.success(data.message);
-            $('#tblStore').DataTable().clear();
-            $('#tblStore').DataTable().ajax.reload();
+
+            $('#typeStore').val(op).trigger('change');
             return false;
         } else if (data.error == true) toastr.error(data.message);
         else if (data.info == true) toastr.info(data.message);

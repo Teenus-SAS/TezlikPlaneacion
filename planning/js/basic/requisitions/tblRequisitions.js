@@ -65,27 +65,26 @@ $(document).ready(function () {
           className: "classCenter",
           render: $.fn.dataTable.render.number(".", ",", 2, ""),
         },
-
         {
           title: "Orden de Compra",
           data: "purchase_order",
           className: "classCenter",
         },
         {
-          title: "Recibir Material",
+          title: "",
           data: null,
           className: "classCenter",
           render: function (data, type, full, meta) {
             if (
-              data.application_date == "0000-00-00" &&
+              (data.application_date == "0000-00-00" &&
               data.delivery_date == "0000-00-00" &&
-              data.purchase_order == ""
+              data.purchase_order == "" ) || !data.admission_date
             )
               date = "";
-            else if (!data.admission_date)
-              date = `<button class="btn btn-warning changeDate " id="${
-                meta.row + 1
-              }" name="${meta.row + 1}">Recibir</button>`;
+            // else if ()
+            //   date = `<button class="btn btn-warning changeDate " id="${
+            //     meta.row + 1
+            //   }" name="${meta.row + 1}">Recibir</button>`;
             else date = `Recibido<br>${data.admission_date}`;
 
             return date;
