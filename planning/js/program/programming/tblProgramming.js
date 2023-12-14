@@ -94,20 +94,21 @@ $(document).ready(function () {
           data: "client",
           className: "uniqueClassName",
         },
-
         {
-          title: "Fechas",
+          title: "Fecha y Hora",
           data: null,
           className: "uniqueClassName",
+          width: "200px",
           render: function (data, type, full, meta) {
             const minDate = full.min_date;
             const maxDate = full.max_date;
 
             return `Inicio: ${moment(minDate).format(
-              "DD/MM/YYYY"
-            )}<br>Fin: ${moment(maxDate).format("DD/MM/YYYY")}`;
+              "DD/MM/YYYY HH:mm A"
+            )}<br>Fin: ${moment(maxDate).format("DD/MM/YYYY HH:mm A")}`;
           },
         },
+
         {
           title: "Orden Produccion",
           data: "id_programming",
