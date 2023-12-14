@@ -13,6 +13,7 @@ $(document).ready(function () {
     tblRequisitions = $("#tblRequisitions").dataTable({
       // destroy: true,
       pageLength: 50,
+      order: [[9, 'asc']],
       ajax: {
         url: url,
         dataSrc: "",
