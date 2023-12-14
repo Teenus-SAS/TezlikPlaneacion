@@ -53,6 +53,23 @@ $(document).ready(function () {
         },
       },
       {
+        title: 'Tipo',
+        data: null,
+        className: 'classCenter',
+        render: function (data) {
+          if (data.type_client == '1') {
+            name = 'Cliente';
+            badge = 'badge-success';
+          }
+          else if (data.type_client == '2') {
+            name = 'Proveedor';
+            badge = 'badge-info';
+          }
+            
+          return `<a href="javascript:;" <span id="type-${data.id_client}" class="badge ${badge} changeType">${name}</span></a>`;
+        }
+      },
+      {
         title: '',
         data: null,
         className: 'uniqueClassName',

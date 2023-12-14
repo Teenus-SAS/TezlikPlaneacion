@@ -198,6 +198,44 @@ $('#btnCloseClient').click(function (e) {
     }
   });
 
+  $(document).on('click', '.changeType', function () {
+    let row = $(this).parent().parent()[0];
+    let data = tblClients.fnGetData(row);
+
+    let id_client = data.id_client;
+    let type_client = data.type_client;
+
+    type_client == 1 ? msg = 'Proveedor' : msg = 'Cliente';
+
+    bootbox.confirm({
+      title: 'Tipo de Cliente',
+      message: `Está seguro de cambiar a ${msg}?`,
+      buttons: {
+        confirm: {
+          label: 'Si',
+          className: 'btn-success',
+        },
+        cancel: {
+          label: 'No',
+          className: 'btn-danger',
+        },
+      },
+      callback: function (result) {
+        if (result == true) {
+          type_client == 1 ? op = 2 : op = 1;
+
+          $.get(
+            `../../api/changeTypeClient/${id_client}/${op}`,
+            function (data, textStatus, jqXHR) {
+              message(data);
+            }
+          );
+        } 
+      },
+    });
+    
+  });
+
   /* Mensaje de exito */
 
   message = (data) => {

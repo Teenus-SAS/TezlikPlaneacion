@@ -164,6 +164,17 @@ $app->get('/changeStatus/{id_client}', function (Request $request, Response $res
     return $response->withStatus(200)->withHeader('Content-Type', 'application/json');
 });
 
+$app->get('/changeTypeClient/{id_client}/{op}', function (Request $request, Response $response, $args) use ($generalClientsDao) {
+    $client = $generalClientsDao->changeTypeClient($args['id_client'], $args['op']);
+
+    if ($client == null)
+        $resp = array('success' => true, 'message' => 'Cliente modificado correctamente');
+    else
+        $resp = array('error' => true, 'message' => 'No es posible modificar el cliente, existe información asociada a él');
+    $response->getBody()->write(json_encode($resp));
+    return $response->withStatus(200)->withHeader('Content-Type', 'application/json');
+});
+
 $app->get('/deleteClient/{id_client}', function (Request $request, Response $response, $args) use ($clientsDao) {
     $client = $clientsDao->deleteClient($args['id_client']);
 

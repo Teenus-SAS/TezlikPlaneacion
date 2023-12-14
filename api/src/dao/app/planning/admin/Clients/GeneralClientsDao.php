@@ -62,7 +62,7 @@ class GeneralClientsDao
     {
         try {
             $connection = Connection::getInstance()->getConnection();
-            $stmt = $connection->prepare("UPDATE plan_clients SET status = :status AND id_company = :id_company");
+            $stmt = $connection->prepare("UPDATE plan_clients SET status = :status WHERE id_company = :id_company");
             $stmt->execute([
                 'id_company' => $id_company,
                 'status' => 0
@@ -76,10 +76,24 @@ class GeneralClientsDao
     {
         try {
             $connection = Connection::getInstance()->getConnection();
-            $stmt = $connection->prepare("UPDATE plan_clients SET status = :status AND id_client = :id_client");
+            $stmt = $connection->prepare("UPDATE plan_clients SET status = :status WHERE id_client = :id_client");
             $stmt->execute([
                 'id_client' => $id_client,
                 'status' => $status
+            ]);
+        } catch (\Exception $e) {
+            return array('info' => true, 'message' => $e->getMessage());
+        }
+    }
+
+    public function changeTypeClient($id_client, $type)
+    {
+        try {
+            $connection = Connection::getInstance()->getConnection();
+            $stmt = $connection->prepare("UPDATE plan_clients SET type_client = :type_client WHERE id_client = :id_client");
+            $stmt->execute([
+                'id_client' => $id_client,
+                'type_client' => $type
             ]);
         } catch (\Exception $e) {
             return array('info' => true, 'message' => $e->getMessage());
