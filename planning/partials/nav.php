@@ -5,7 +5,7 @@
                 <ul class="navbar-nav mr-auto">
                     <li class="nav-item active">
                         <a class="nav-link" href="/planning">
-                            <i class="bx bxs-dashboard mr-1"></i> Dashboards
+                            <i class="bi bi-bar-chart-line-fill mr-1"></i> Dashboards
                             <i class="bx bx-chevron-down"></i>
                         </a>
                     </li>
@@ -94,9 +94,9 @@
                                                 <li class="nav-item planOffices" style="display: none;">
                                                 <?php } ?>
                                                 <a class="nav-link" href="/planning/store">
-                                                        <i class="bx bxs-package mr-1"></i> Almacen
-                                                        <i class="bx bx-chevron-down"></i>
-                                                    </a>
+                                                    <i class="bx bxs-package mr-1"></i> Almacen
+                                                    <i class="bx bx-chevron-down"></i>
+                                                </a>
                                                 </li>
 
                                                 <?php if ($_SESSION['store'] == 1 && $_SESSION['plan_store'] == 1) { ?>
@@ -105,10 +105,10 @@
                                                     <li class="nav-item planStore" style="display: none;">
                                                     <?php } ?>
                                                     <a class="nav-link" href="/planning/offices">
-                                                    <i class="bx bxs-truck mr-1"></i> Despachos
-                                                    <i class="bx bx-chevron-down"></i>
-                                                </a>
-                                                    
+                                                        <i class="bx bxs-truck mr-1"></i> Despachos
+                                                        <i class="bx bx-chevron-down"></i>
+                                                    </a>
+
                                                     </li>
 
                 </ul>

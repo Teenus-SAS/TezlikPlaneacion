@@ -49,13 +49,13 @@ if (sizeof($_SESSION) == 0)
                             </div>
                             <div class="col-sm-7 col-xl-10 mt-4 form-inline justify-content-sm-end">
                                 <div class="col-xs-2 mr-2">
-                                    <button class="btn btn-warning" id="btnNewRequisition" name="btnNewRequisition">Nueva Requisicion</button>
+                                    <button class="btn btn-warning" id="btnNewRequisition" name="btnNewRequisition"><i class="bi bi-plus-circle"></i> Nueva Requisicion</button>
                                 </div>
                                 <div class="col-xs-2 py-2 mr-2">
-                                    <button class="btn btn-info" id="btnImportNewRequisitions" name="btnNewImportRequisitions">Importar Requisiciones</button>
+                                    <button class="btn btn-info" id="btnImportNewRequisitions" name="btnNewImportRequisitions"><i class="bi bi-cloud-arrow-up"></i> Importar</button>
                                 </div>
                                 <div class="col-xs-2 py-2 mr-2">
-                                    <button class="btn btn-secondary" id="btnOpenSearchDate" name="btnOpenSearchDate">Buscar Fecha</button>
+                                    <button class="btn btn-success" id="btnOpenSearchDate" name="btnOpenSearchDate"> <i class="bi bi-search"></i></button>
                                 </div>
                             </div>
                         </div>

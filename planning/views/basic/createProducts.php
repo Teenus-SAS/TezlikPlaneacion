@@ -50,10 +50,10 @@ if (sizeof($_SESSION) == 0)
                             </div>
                             <div class="col-sm-7 col-xl-6 form-inline justify-content-sm-end">
                                 <div class="col-xs-2 mr-2">
-                                    <button class="btn btn-warning" id="btnNewProduct">Nuevo Producto</button>
+                                    <button class="btn btn-warning" id="btnNewProduct"><i class="bi bi-plus-circle"></i> Nuevo Producto</button>
                                 </div>
                                 <div class="col-xs-2 py-2 mr-2">
-                                    <button class="btn btn-info" id="btnImportNewProducts">Importar Productos</button>
+                                    <button class="btn btn-info" id="btnImportNewProducts"><i class="bi bi-cloud-arrow-up-fill"></i> Importar</button>
                                 </div>
                             </div>
                         </div>

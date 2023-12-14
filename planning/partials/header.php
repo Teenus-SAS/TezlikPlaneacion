@@ -56,6 +56,7 @@
                                                 <?php } else { ?>
                                                 <li class="planProducts" style="display: none;">
                                                 <?php } ?>
+                                                <i class="fas fa-cube"></i>
                                                 <a href="/planning/products">Inventario Productos</a>
                                                 </li>
                                                 <?php if ($_SESSION['planning_material'] == 1) { ?>
@@ -63,6 +64,7 @@
                                                     <?php } else { ?>
                                                     <li class="planMaterials" style="display: none;">
                                                     <?php } ?>
+                                                    <i class="fas fa-flask"></i>
                                                     <a href="/planning/materials">Inventario Materias Prima</a>
                                                     </li>
                                                     <?php if ($_SESSION['planning_machine'] == 1) { ?>
@@ -70,6 +72,7 @@
                                                         <?php } else { ?>
                                                         <li class="planMachines" style="display: none;">
                                                         <?php } ?>
+                                                        <i class="fas fa-cogs"></i>
                                                         <a href="/planning/machines">Máquinas y/o Procesos</a>
                                                         </li>
                                                         <?php if ($_SESSION['requisition'] == 1) { ?>
@@ -77,6 +80,7 @@
                                                             <?php } else { ?>
                                                             <li class="planRequisitions" style="display: none;">
                                                             <?php } ?>
+                                                            <i class="fas fa-clipboard-list"></i>
                                                             <a href="/planning/requisitions">Control Requisiciones</a>
                                                             </li>
                                         </ul>
@@ -86,9 +90,9 @@
                                             $_SESSION['planning_products_material'] == 0 && $_SESSION['stock'] == 0 &&
                                             $_SESSION['programs_machine'] == 0 && $_SESSION['cicles_machine'] == 0
                                         ) { ?>
-                                            <div class="col-md-3" id="navPlanSetting" style="display: none;">
+                                            <div class="col-md-4" id="navPlanSetting" style="display: none;">
                                             <?php } else { ?>
-                                                <div class="col-md-3" id="navPlanSetting">
+                                                <div class="col-md-4" id="navPlanSetting">
                                                 <?php } ?>
                                                 <h5 class="font-size-14 font-weight-600">Configuración</h5>
                                                 <ul class="list-unstyled megamenu-list">
@@ -97,6 +101,7 @@
                                                         <?php } else { ?>
                                                         <li class="planProductsMaterials" style="display: none;">
                                                         <?php } ?>
+                                                        <i class="fas fa-file-alt"></i>
                                                         <a href="/planning/product-materials">Ficha Técnica Productos</a>
                                                         </li>
                                                         <?php if ($_SESSION['programs_machine'] == 1) { ?>
@@ -104,6 +109,7 @@
                                                             <?php } else { ?>
                                                             <li class="planningMachines" style="display: none;">
                                                             <?php } ?>
+                                                            <i class="fas fa-cog"></i>
                                                             <a href="/planning/planning-machines">Programación Máquinas</a>
                                                             </li>
                                                             <?php if ($_SESSION['cicles_machine'] == 1) { ?>
@@ -111,6 +117,7 @@
                                                                 <?php } else { ?>
                                                                 <li class="planCiclesMachine" style="display: none;">
                                                                 <?php } ?>
+                                                                <i class="fas fa-recycle"></i>
                                                                 <a href="/planning/cicles-machines">Ciclos Maquinas x Producto</a>
                                                                 </li>
                                                                 <?php if ($_SESSION['stock'] == 1) { ?>
@@ -118,6 +125,7 @@
                                                                     <?php } else { ?>
                                                                     <li class="planStock" style="display: none;">
                                                                     <?php } ?>
+                                                                    <i class="fas fa-truck"></i>
                                                                     <a href="/planning/stock">Tiempos Proveedores Stock Mínimo</a>
                                                                     </li>
                                                 </ul>
@@ -135,6 +143,7 @@
                                                                 <?php } else { ?>
                                                                 <li class="planClients" style="display: none;">
                                                                 <?php } ?>
+                                                                <i class="fas fa-users"></i>
                                                                 <a href="/planning/clients">Clientes y Proveedores</a>
                                                                 </li>
                                                                 <?php if ($_SESSION['sale'] == 1) { ?>
@@ -142,6 +151,7 @@
                                                                     <?php } else { ?>
                                                                     <li class="planSales" style="display: none;">
                                                                     <?php } ?>
+                                                                    <i class="fas fa-balance-scale"></i>
                                                                     <a href="/planning/sales">Ventas por Producto en Unidades</a>
                                                                     </li>
                                                                     <?php //if ($_SESSION['sale'] == 1) { 
@@ -152,15 +162,16 @@
                                                                     <li class="inventoryABC">
                                                                         <?php //} 
                                                                         ?>
+                                                                        <i class="fas fa-clipboard-list"></i>
                                                                         <a href="/planning/inventoryABC">Inventario ABC</a>
                                                                     </li>
                                                         </ul>
                                                         </div>
 
                                                         <?php if ($_SESSION['planning_user'] == 0 && $_SESSION['orders_type'] == 0) { ?>
-                                                            <div class="col-md-3" id="navPlanAdmin" style="display: none;">
+                                                            <div class="col-md-2" id="navPlanAdmin" style="display: none;">
                                                             <?php } else { ?>
-                                                                <div class="col-md-3" id="navPlanAdmin">
+                                                                <div class="col-md-2" id="navPlanAdmin">
                                                                 <?php } ?>
                                                                 <h5 class="font-size-14 font-weight-600">Administrador</h5>
                                                                 <ul class="list-unstyled megamenu-list">
@@ -169,6 +180,7 @@
                                                                         <?php } else { ?>
                                                                         <li class="planUsers" style="display: none;">
                                                                         <?php } ?>
+                                                                        <i class="fas fa-lock"></i>
                                                                         <a href="/planning/users">Usuarios y Accesos</a>
                                                                         </li>
                                                                         <?php //if ($_SESSION['orders_type'] == 1) { 

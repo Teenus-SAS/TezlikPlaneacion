@@ -52,13 +52,13 @@ if (sizeof($_SESSION) == 0)
                             </div>
                             <div class="col-sm-7 col-xl-6 form-inline justify-content-sm-end">
                                 <div class="col-xs-2 mr-2">
-                                    <button class="btn btn-secondary" id="btnNewAddDays" name="btnNewAddDays">Dias de Ventas</button>
+                                    <button class="btn btn-warning" id="btnNewSale" name="btnNewSale"><i class="bi bi-cash-coin"></i> Nueva Venta</button>
                                 </div>
                                 <div class="col-xs-2 mr-2">
-                                    <button class="btn btn-warning" id="btnNewSale" name="btnNewSale">Nueva Venta</button>
+                                    <button class="btn btn-secondary" id="btnNewAddDays" name="btnNewAddDays"><i class="bi bi-calendar2-plus-fill"></i> Dias de Ventas</button>
                                 </div>
                                 <div class="col-xs-2 py-2 mr-2">
-                                    <button class="btn btn-info" id="btnImportNewSales">Importar Venta</button>
+                                    <button class="btn btn-info" id="btnImportNewSales"><i class="bi bi-cloud-arrow-up-fill"></i> Importar</button>
                                 </div>
                             </div>
                         </div>
