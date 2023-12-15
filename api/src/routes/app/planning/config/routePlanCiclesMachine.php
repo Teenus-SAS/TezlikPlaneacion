@@ -42,6 +42,18 @@ $app->get('/planCiclesMachine/{id_product}', function (Request $request, Respons
     return $response->withHeader('Content-Type', 'application/json');
 });
 
+$app->get('/routesCiclesMachine/{id_product}', function (Request $request, Response $response, $args) use (
+    $generalPlanCiclesMachinesDao
+) {
+    session_start();
+    $id_company = $_SESSION['id_company'];
+
+    $planCiclesMachine = $generalPlanCiclesMachinesDao->findAllRoutes($args['id_product'], $id_company);
+
+    $response->getBody()->write(json_encode($planCiclesMachine, JSON_NUMERIC_CHECK));
+    return $response->withHeader('Content-Type', 'application/json');
+});
+
 $app->get('/planCiclesMachine/{id_product}/{id_machine}', function (Request $request, Response $response, $args) use (
     $generalPlanCiclesMachinesDao
 ) {
@@ -236,6 +248,22 @@ $app->get('/deletePlanCiclesMachine/{id_cicles_machine}', function (Request $req
 
     if ($planCiclesMachine == null) $resp = array('success' => true, 'message' => 'Ciclo de maquina eliminado correctamente');
     else $resp = array('error' => true, 'message' => 'No se pudo eliminar ciclo de maquina, existe informacion asociada a él');
+    $response->getBody()->write(json_encode($resp, JSON_NUMERIC_CHECK));
+    return $response->withHeader('Content-Type', 'application/json');
+});
+
+$app->post('/saveRoute', function (Request $request, Response $response, $args) use ($generalPlanCiclesMachinesDao) {
+    $dataRoute = $request->getParsedBody();
+
+    $resolution = $generalPlanCiclesMachinesDao->changeRouteById($dataRoute);
+
+    if ($resolution == null)
+        $resp = array('success' => true, 'message' => 'Ciclo de maquina eliminado correctamente');
+    else if (isset($resolution['info']))
+        $resp = array('info' => true, 'message' => $resolution['message']);
+    else
+        $resp = array('error' => true, 'message' => 'No se pudo eliminar ciclo de maquina, existe informacion asociada a él');
+
     $response->getBody()->write(json_encode($resp, JSON_NUMERIC_CHECK));
     return $response->withHeader('Content-Type', 'application/json');
 });

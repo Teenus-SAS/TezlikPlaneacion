@@ -137,6 +137,8 @@ $(document).ready(function () {
   function updateTable() {
     $('#tblPlanCiclesMachine').DataTable().clear();
     $('#tblPlanCiclesMachine').DataTable().ajax.reload();
+    $('#tblRoutes').DataTable().clear();
+    $('#tblRoutes').DataTable().ajax.reload();
   }
 
   loadDataMachines(2);
