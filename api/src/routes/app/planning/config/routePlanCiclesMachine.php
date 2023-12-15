@@ -30,6 +30,18 @@ $app->get('/planCiclesMachine', function (Request $request, Response $response, 
     return $response->withHeader('Content-Type', 'application/json');
 });
 
+$app->get('/planCiclesMachine/{id_product}', function (Request $request, Response $response, $args) use (
+    $generalPlanCiclesMachinesDao
+) {
+    session_start();
+    $id_company = $_SESSION['id_company'];
+
+    $planCiclesMachine = $generalPlanCiclesMachinesDao->findAllPlanCiclesMachineByProduct($args['id_product'], $id_company);
+
+    $response->getBody()->write(json_encode($planCiclesMachine, JSON_NUMERIC_CHECK));
+    return $response->withHeader('Content-Type', 'application/json');
+});
+
 $app->get('/planCiclesMachine/{id_product}/{id_machine}', function (Request $request, Response $response, $args) use (
     $generalPlanCiclesMachinesDao
 ) {

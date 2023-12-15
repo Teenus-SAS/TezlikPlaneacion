@@ -1,6 +1,37 @@
 $(document).ready(function () { 
   /* Ocultar panel crear producto */
 
+  $('.selectNavigation').click(function (e) {
+    e.preventDefault();
+
+    if (this.id == 'materials') {
+      $('.cardProductsMaterials').show(800);
+      $('.cardPlanCicles').hide(800);
+      
+      // $('.').hide(800);
+    } else if (this.id == 'planCicles') {
+      $('.cardPlanCicles').show(800);
+      $('.cardProductsMaterials').hide(800);
+      // $('.cardProductsMaterials').hide(800);
+    }
+    // else {
+    //   $('.').show(800);
+    //   $('.cardPlanCicles').hide(800);
+    //   // $('.cardProductsMaterials').hide(800);
+      
+    // }
+    let tables = document.getElementsByClassName(
+      'dataTable'
+    );
+
+    for (let i = 0; i < tables.length; i++) {
+      let attr = tables[i];
+      attr.style.width = '100%';
+      attr = tables[i].firstElementChild;
+      attr.style.width = '100%';
+    }
+  });
+
   $('.cardAddMaterials').hide();
 
   /* Abrir panel crear producto */
@@ -97,12 +128,12 @@ $(document).ready(function () {
 
     let resp = await sendDataPOST(url, dataMaterials);
 
-    message(resp);
+    messageMaterial(resp);
   } 
 
   /* Eliminar materia prima */
 
-  deleteFunction = () => {
+  deleteMaterial = () => {
     let row = $(this.activeElement).parent().parent()[0];
 
     let data = tblConfigMaterials.fnGetData(row);
@@ -130,7 +161,7 @@ $(document).ready(function () {
         if (result == true) {
           $.post('/api/deletePlanProductMaterial', dataMaterials,
             function (data, textStatus, jqXHR) {
-              message(data);
+              messageMaterial(data);
             }, 
           ); 
         }
@@ -140,7 +171,7 @@ $(document).ready(function () {
 
   /* Mensaje de exito */
 
-  message = (data) => {
+  messageMaterial = (data) => {
     if (data.success == true) {
       $('.cardImport').hide(800);
       $('.cardAddMaterials').hide(800);

@@ -79,12 +79,12 @@ $(document).ready(function () {
 
     let resp = await sendDataPOST(url, dataPlanCiclesMachine);
 
-    message(resp);
+    messageMachine(resp);
   } 
 
   // Eliminar plan ciclo maquina
 
-  deleteFunction = () => {
+  deleteMachine = () => {
     let row = $(this.activeElement).parent().parent()[0];
     let data = tblPlanCiclesMachine.fnGetData(row);
 
@@ -109,7 +109,7 @@ $(document).ready(function () {
           $.get(
             `/api/deletePlanCiclesMachine/${id_cicles_machine}`,
             function (data, textStatus, jqXHR) {
-              message(data);
+              messageMachine(data);
             }
           );
         }
@@ -119,7 +119,7 @@ $(document).ready(function () {
 
   /* Mensaje de exito */
 
-  message = (data) => {
+  messageMachine = (data) => {
     if (data.success == true) {
       $('.cardCreatePlanCiclesMachine').hide(800);
       $('#formCreatePlanCiclesMachine').trigger('reset');

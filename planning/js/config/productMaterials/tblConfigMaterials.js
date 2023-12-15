@@ -7,6 +7,7 @@ $(document).ready(function () {
     $('#selectNameProduct option').removeAttr('selected');
     $(`#selectNameProduct option[value=${id}]`).prop('selected', true);
     loadtableMaterials(id); 
+    loadTblPlanCiclesMachine(id);
   });
 
   $('#selectNameProduct').change(function (e) {
@@ -15,6 +16,7 @@ $(document).ready(function () {
     $('#refProduct option').removeAttr('selected');
     $(`#refProduct option[value=${id}]`).prop('selected', true);
     loadtableMaterials(id); 
+    loadTblPlanCiclesMachine(id);
     // loadTableProcess(id)
   });
 
@@ -74,7 +76,7 @@ $(document).ready(function () {
           render: function (data) {
             return `
                 <a href="javascript:;" <i id="${data}" class="bx bx-edit-alt updateMaterials" data-toggle='tooltip' title='Actualizar Materia Prima' style="font-size: 30px;"></i></a>
-                <a href="javascript:;" <i id="${data}" class="mdi mdi-delete-forever" data-toggle='tooltip' title='Eliminar Materia Prima' style="font-size: 30px;color:red" onclick="deleteFunction()"></i></a>`;
+                <a href="javascript:;" <i id="${data}" class="mdi mdi-delete-forever" data-toggle='tooltip' title='Eliminar Materia Prima' style="font-size: 30px;color:red" onclick="deleteMaterial()"></i></a>`;
           },
         },
       ],

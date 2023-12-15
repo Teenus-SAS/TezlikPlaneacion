@@ -42,6 +42,23 @@ class GeneralPlanCiclesMachinesDao
         return $machines;
     }
 
+    public function findAllPlanCiclesMachineByProduct($id_product, $id_company)
+    {
+        $connection = Connection::getInstance()->getConnection();
+
+        $stmt = $connection->prepare("SELECT pc.id_cicles_machine, pc.cicles_hour, pc.units_turn, pc.units_month, p.id_product, p.reference, p.product, m.id_machine, m.machine
+                                      FROM plan_cicles_machine pc
+                                        INNER JOIN products p ON p.id_product = pc.id_product
+                                        INNER JOIN machines m ON m.id_machine = pc.id_machine
+                                      WHERE pc.id_product = :id_product AND pc.id_company = :id_company");
+        $stmt->execute([
+            'id_product' => $id_product,
+            'id_company' => $id_company
+        ]);
+        $machines = $stmt->fetchAll($connection::FETCH_ASSOC);
+        return $machines;
+    }
+
     public function findPlanCiclesMachineByProductAndMachine($id_product, $id_machine, $id_company)
     {
         $connection = Connection::getInstance()->getConnection();
