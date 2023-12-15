@@ -8,6 +8,7 @@ $(document).ready(function () {
     $(`#selectNameProduct option[value=${id}]`).prop('selected', true);
     loadtableMaterials(id); 
     loadTblPlanCiclesMachine(id);
+    loadTblRoutes(id);
   });
 
   $('#selectNameProduct').change(function (e) {
@@ -17,7 +18,7 @@ $(document).ready(function () {
     $(`#refProduct option[value=${id}]`).prop('selected', true);
     loadtableMaterials(id); 
     loadTblPlanCiclesMachine(id);
-    // loadTableProcess(id)
+    loadTblRoutes(id);
   });
 
   /* Cargue tabla de Productos Materiales */

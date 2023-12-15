@@ -7,19 +7,17 @@ $(document).ready(function () {
     if (this.id == 'materials') {
       $('.cardProductsMaterials').show(800);
       $('.cardPlanCicles').hide(800);
-      
-      // $('.').hide(800);
+      $('.cardRoutes').hide(800);
     } else if (this.id == 'planCicles') {
       $('.cardPlanCicles').show(800);
       $('.cardProductsMaterials').hide(800);
-      // $('.cardProductsMaterials').hide(800);
-    }
-    // else {
-    //   $('.').show(800);
-    //   $('.cardPlanCicles').hide(800);
-    //   // $('.cardProductsMaterials').hide(800);
+      $('.cardRoutes').hide(800);
+    } else {
+      $('.cardRoutes').show(800);
+      $('.cardPlanCicles').hide(800);
+      $('.cardProductsMaterials').hide(800);
       
-    // }
+    }
     let tables = document.getElementsByClassName(
       'dataTable'
     );

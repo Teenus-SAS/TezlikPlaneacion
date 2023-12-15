@@ -112,22 +112,14 @@
                                                             <i class="fas fa-cog"></i>
                                                             <a href="/planning/planning-machines">Programación Máquinas</a>
                                                             </li>
-                                                            <?php if ($_SESSION['cicles_machine'] == 1) { ?>
-                                                                <li class="planCiclesMachine">
+                                                            <?php if ($_SESSION['stock'] == 1) { ?>
+                                                                <li class="planStock">
                                                                 <?php } else { ?>
-                                                                <li class="planCiclesMachine" style="display: none;">
+                                                                <li class="planStock" style="display: none;">
                                                                 <?php } ?>
-                                                                <i class="fas fa-recycle"></i>
-                                                                <a href="/planning/cicles-machines">Ciclos Maquinas x Producto</a>
+                                                                <i class="fas fa-truck"></i>
+                                                                <a href="/planning/stock">Tiempos Proveedores Stock Mínimo</a>
                                                                 </li>
-                                                                <?php if ($_SESSION['stock'] == 1) { ?>
-                                                                    <li class="planStock">
-                                                                    <?php } else { ?>
-                                                                    <li class="planStock" style="display: none;">
-                                                                    <?php } ?>
-                                                                    <i class="fas fa-truck"></i>
-                                                                    <a href="/planning/stock">Tiempos Proveedores Stock Mínimo</a>
-                                                                    </li>
                                                 </ul>
                                                 </div>
 

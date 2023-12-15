@@ -46,7 +46,7 @@ get('/planning/requisitions', '/planning/views/basic/requisitions.php');
 //Config
 get('/planning/product-materials', '/planning/views/config/productMaterials.php');
 get('/planning/product-process', '/planning/views/config/productProcess.php');
-get('/planning/cicles-machines', '/planning/views/config/planCiclesMachine.php');
+// get('/planning/cicles-machines', '/planning/views/config/planCiclesMachine.php');
 get('/planning/planning-machines', '/planning/views/config/planningMachines.php');
 get('/planning/stock', '/planning/views/config/stock.php');
 //General

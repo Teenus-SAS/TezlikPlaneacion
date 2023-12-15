@@ -82,6 +82,26 @@ if (sizeof($_SESSION) == 0)
                                 </div>
                             </div>
                         </div>
+                        <div class="tab-pane cardRoutes" style="display: none;">
+                            <div class="row align-items-center">
+                                <div class="col-sm-5 col-xl-6">
+                                    <div class="page-title">
+                                        <h3 class="mb-1 font-weight-bold text-dark">Rutas</h3>
+                                        <ol class="breadcrumb mb-3 mb-md-0">
+                                            <li class="breadcrumb-item active"></li>
+                                        </ol>
+                                    </div>
+                                </div>
+                                <!-- <div class="col-sm-7 col-xl-6 form-inline justify-content-sm-end">
+                                    <div class="col-xs-2 mr-2">
+                                        <button class="btn btn-warning" id="btnNewPlanCiclesMachine" name="btnNewPlanCiclesMachine"><i class="bi bi-plus-circle"></i> Nuevo Ciclo Máquina</button>
+                                    </div>
+                                    <div class="col-xs-2 py-2 mr-2">
+                                        <button class="btn btn-info" id="btnImportNewPlanCiclesMachine" name="btnImportNewPlanCiclesMachine"> <i class="bi bi-cloud-arrow-up-fill"></i> Importar</button>
+                                    </div>
+                                </div> -->
+                            </div>
+                        </div>
                     </div>
                 </div>
 
@@ -279,6 +299,15 @@ if (sizeof($_SESSION) == 0)
                                             </div>
                                         </div>
                                     </div>
+                                    <div class="tab-pane cardRoutes" style="display: none;">
+                                        <div class="card-body">
+                                            <div class="table-responsive">
+                                                <table class="fixed-table-loading table table-hover text-center" id="tblRoutes" name="tblRoutes">
+
+                                                </table>
+                                            </div>
+                                        </div>
+                                    </div>
 
                                 </div>
                             </div>
@@ -317,6 +346,8 @@ if (sizeof($_SESSION) == 0)
     <script src="/planning/js/config/planCiclesMachine/importPlanCiclesMachine.js"></script>
     <script src="/planning/js/config/planCiclesMachine/planCiclesMachine.js"></script>
     <script src="/planning/js/config/planCiclesMachine/tblPlanCiclesMachine.js"></script>
+    <script src="/planning/js/config/routes/routes.js"></script>
+    <script src="/planning/js/config/routes/tblRoutes.js"></script>
     <script src="../global/js/import/import.js"></script>
     <script src="/planning/js/config/productMaterials/importProductMaterials.js"></script>
     <script src="../global/js/import/file.js"></script>
