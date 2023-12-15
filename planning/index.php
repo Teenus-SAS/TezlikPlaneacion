@@ -67,7 +67,7 @@ if (sizeof($_SESSION) == 0)
                                             <div class="text-center">
                                                 <div id="t-rev"></div>
                                                 <span class="text-danger font-weight-bold font-size-23">
-                                                    <i class='bi bi-paint-bucket fs-lg'></i>
+                                                    <i class='fas fa-times-circle fs-lg'></i>
                                                 </span>
                                             </div>
                                         </div>
@@ -85,7 +85,7 @@ if (sizeof($_SESSION) == 0)
                                             <div class="text-center">
                                                 <div id="t-rev"></div>
                                                 <span class="text-warning font-weight-bold font-size-13">
-                                                    <i class='bi bi-phone-vibrate-fill fs-lg'></i>
+                                                    <i class='fas fa-calendar-times fs-lg'></i>
                                                 </span>
                                             </div>
                                         </div>
@@ -103,7 +103,7 @@ if (sizeof($_SESSION) == 0)
                                             <div class="text-center">
                                                 <div id="t-order"></div>
                                                 <span class="text-info font-weight-bold font-size-13">
-                                                    <i class="bi bi-boxes fs-lg"></i>
+                                                    <i class="fas fa-calendar-check fs-lg"></i>
                                                 </span>
                                             </div>
                                         </div>
@@ -121,7 +121,7 @@ if (sizeof($_SESSION) == 0)
                                             <div class="text-center">
                                                 <div id="t-user"></div>
                                                 <span class="text-success font-weight-bold font-size-13">
-                                                    <i class='bi bi-border-style fs-lg'></i>
+                                                    <i class='fas fa-truck-loading fs-lg'></i>
                                                 </span>
                                             </div>
                                         </div>

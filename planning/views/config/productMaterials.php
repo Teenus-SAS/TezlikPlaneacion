@@ -67,7 +67,7 @@ if (sizeof($_SESSION) == 0)
                     <div class="container-fluid">
                         <div class="row">
                             <div class="col-12">
-                                <div class="card">
+                                <div class="card" style="height: 80px;">
                                     <div class="card-body">
                                         <div class="form-row">
                                             <div class="col-sm-4 floating-label enable-floating-label show-label" style="margin-bottom:20px">
@@ -171,17 +171,51 @@ if (sizeof($_SESSION) == 0)
                 <div class="page-content-wrapper mt--45">
                     <div class="container-fluid">
                         <!-- Row 5 -->
+                        <div class="row mb-3">
+                            <div class="col-12">
+                                <ul class="nav nav-pills bg-light nav-justified" id="pills-tab" role="tablist">
+                                    <li class="nav-item">
+                                        <a class="nav-link active" id="pills-activity-tab" data-toggle="pill" href="#pills-activity" role="tab" aria-controls="pills-activity" aria-selected="true">
+                                            Materias Primas
+                                        </a>
+                                    </li>
+                                    <li class="nav-item">
+                                        <a class="nav-link" id="pills-projects-tab" data-toggle="pill" href="#pills-projects" role="tab" aria-controls="pills-projects" aria-selected="false">
+                                            Ciclos y Procesos
+                                        </a>
+                                    </li>
+                                    <li class="nav-item">
+                                        <a class="nav-link" id="pills-tasks-tab" data-toggle="pill" href="#pills-tasks" role="tab" aria-controls="pills-tasks" aria-selected="false">
+                                            Ruta
+                                        </a>
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
                         <div class="row">
                             <div class="col-12">
                                 <div class="card">
                                     <!-- <div class="card-header">
                                         <h5 class="card-title">Materias Primas</h5>
                                     </div> -->
-                                    <div class="card-body">
-                                        <div class="table-responsive">
-                                            <table class="fixed-table-loading table table-hover text-center" id="tblConfigMaterials" name="tblConfigMaterials">
+                                    <div class="tab-content mt-4 pt-3" id="pills-tabContent">
+                                        <div class="tab-pane fade show active" id="pills-activity" role="tabpanel" aria-labelledby="pills-activity-tab">
+                                            <div class="card-body">
+                                                <div class="table-responsive">
+                                                    <table class="fixed-table-loading table table-hover text-center" id="tblConfigMaterials" name="tblConfigMaterials">
 
-                                            </table>
+                                                    </table>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="tab-pane fade show active" id="pills-projects" role="tabpanel" aria-labelledby="pills-projects-tab">
+                                            <div class="card-body">
+                                                <div class="table-responsive">
+                                                    <table class="fixed-table-loading table table-hover text-center" id="tblConfigMachines" name="tblConfigMaterials">
+
+                                                    </table>
+                                                </div>
+                                            </div>
                                         </div>
                                     </div>
                                 </div>

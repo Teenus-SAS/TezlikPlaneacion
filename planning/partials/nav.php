@@ -27,7 +27,7 @@
                             <li class="nav-item planOrders" style="display: none;">
                             <?php } ?>
                             <a class="nav-link" href="/planning/orders">
-                                <i class="bx bxs-edit mr-1"></i> Pedidos
+                                <i class="fas fa-clipboard-check mr-1"></i> Pedidos
                                 <i class="bx bx-chevron-down"></i>
                             </a>
                             </li>
@@ -71,7 +71,7 @@
                                         <li class="nav-item planExplosionMaterials" style="display: none;">
                                         <?php } ?>
                                         <a class="nav-link" href="/planning/explosion-materials">
-                                            <i class="bx bx-expand mr-1"></i> Explosión Materiales
+                                            <i class="fas fa-fire mr-1"></i> Explosión Materiales
                                             <i class="bx bx-chevron-down"></i>
                                         </a>
                                         </li>
@@ -83,7 +83,7 @@
                                             <li class="nav-item planProductionOrder" style="display: none;">
                                             <?php } ?>
                                             <a class="nav-link" href="/planning/production-order">
-                                                <i class="bx bxs-notepad mr-1"></i> Order Producción
+                                                <i class="fas fa-tasks mr-1"></i> Order Producción
                                                 <i class="bx bx-chevron-down"></i>
                                             </a>
                                             </li>
@@ -94,7 +94,7 @@
                                                 <li class="nav-item planOffices" style="display: none;">
                                                 <?php } ?>
                                                 <a class="nav-link" href="/planning/store">
-                                                    <i class="bx bxs-package mr-1"></i> Almacen
+                                                    <i class="fas fa-warehouse mr-1"></i> Almacen
                                                     <i class="bx bx-chevron-down"></i>
                                                 </a>
                                                 </li>
