@@ -17,12 +17,13 @@
 
 <!-- page JS -->
 <script src="/assets/js/app.js"></script>
-<!-- <script src="/global/js/global/sessionUser.js"></script> -->
+<script src="/global/js/global/sessionUser.js"></script>
 
 <!-- Datatables -->
 <script src="https://cdn.datatables.net/1.11.4/js/jquery.dataTables.min.js"></script>
 <script src="https://cdn.datatables.net/1.11.4/js/dataTables.bootstrap5.min.js"></script>
 <script src="https://cdn.datatables.net/rowgroup/1.2.0/js/dataTables.rowGroup.min.js"></script>
+<script src="https://cdn.datatables.net/rowreorder/1.4.1/js/dataTables.rowReorder.min.js"></script>
 <script src="https://unpkg.com/file-saverjs@latest/FileSaver.min.js"></script>
 <!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/0.19.2/axios.min.js"></script> -->
 <script src="https://unpkg.com/xlsx@latest/dist/xlsx.full.min.js"></script>
@@ -59,3 +60,4 @@
 <script src="/global/js/global/searchData.js"></script>
 <script src="/global/js/global/orderData.js"></script>
 <script src="/global/js/global/number.js"></script>
+<script src="/global/js/global/lastText.js"></script>
