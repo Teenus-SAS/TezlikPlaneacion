@@ -60,7 +60,7 @@ if (sizeof($_SESSION) == 0)
                     </div>
                 </div>
 
-                <div class="page-content-wrapper mt--45 mb-5 cardCreatePlanCiclesMachine">
+                <!-- <div class="page-content-wrapper mt--45 mb-5 cardCreatePlanCiclesMachine">
                     <div class="container-fluid">
                         <div class="row">
                             <div class="col-12">
@@ -121,7 +121,7 @@ if (sizeof($_SESSION) == 0)
                             </div>
                         </div>
                     </div>
-                </div>
+                </div> -->
 
                 <!-- page content -->
                 <div class="page-content-wrapper mt--45">
@@ -159,11 +159,11 @@ if (sizeof($_SESSION) == 0)
     <!-- <script src="/global/js/global/number.js"></script> -->
     <script src="/planning/js/basic/products/configProducts.js"></script>
     <script src="/planning/js/basic/machines/configMachines.js"></script>
-    <script src="/planning/js/config/planCiclesMachine/tblPlanCiclesMachine.js"></script>
-    <script src="/planning/js/config/planCiclesMachine/planCiclesMachine.js"></script>
+    <!-- <script src="/planning/js/config/planCiclesMachine/tblPlanCiclesMachine.js"></script> -->
+    <!-- <script src="/planning/js/config/planCiclesMachine/planCiclesMachine.js"></script> -->
     <script src="/global/js/import/file.js"></script>
     <script src="/global/js/import/import.js"></script>
-    <script src="/planning/js/config/planCiclesMachine/importPlanCiclesMachine.js"></script>
+    <!-- <script src="/planning/js/config/planCiclesMachine/importPlanCiclesMachine.js"></script> -->
 </body>
 
 </html>
