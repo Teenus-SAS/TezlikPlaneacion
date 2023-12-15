@@ -69,17 +69,30 @@ $(document).ready(function () {
           )}<br>Fin: ${moment(maxDate).format("DD/MM/YYYY HH:mm A")}`;
         },
       },
-      // {
-      //   title: 'Acciones',
-      //   data: 'id_programming',
-      //   className: 'uniqueClassName',
-      //   render: function (data) {
-      //     return `
-      //         <a href="javascript:;" <i id="${data}" class="bi bi-bookmark-plus-fill changeStatus" data-toggle='tooltip' title='Crear Orden de Produccion' style="font-size: 30px;"></i></a>
-      //         <a href="javascript:;" <i id="${data}" class="bx bx-edit-alt updateProgramming" data-toggle='tooltip' title='Actualizar Programa' style="font-size: 30px;"></i></a>
-      //         <a href="javascript:;" <i id="${data}" class="mdi mdi-delete-forever" data-toggle='tooltip' title='Eliminar Programa' style="font-size: 30px;color:red" onclick="deleteFunction()"></i></a>`;
-      //   },
-      // },
+      {
+        title: 'Estado',
+        data: 'status',
+        className: 'classCenter',
+        render: function (data) {
+          if (data == 'En Produccion')
+            badge = 'badge-info';
+          else if (data == 'Fabricado')
+            badge = 'badge-warning';
+            
+          return `<span class="badge ${badge}">${data}</span>`
+        }
+      },
+      {
+        title: 'Acciones',
+        data: 'status',
+        className: 'uniqueClassName',
+        render: function (data) {
+          if (data == 'En Produccion')
+            return `<a href="javascript:;" <i id="${data}" class="bi bi-bookmark-plus-fill changeStatus" data-toggle='tooltip' title='Fabricado' style="font-size: 30px;"></i></a>`;
+          else
+            return '';
+        },
+      },
     ],
   });
 });

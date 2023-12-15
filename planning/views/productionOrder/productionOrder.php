@@ -140,6 +140,7 @@ if (sizeof($_SESSION) == 0)
     <!-- <script src="/planning/js/users/usersAccess.js"></script> -->
 
     <script src="/planning/js/productionOrder/tblProductionOrders.js"></script>
+    <script src="/planning/js/productionOrder/productionOrder.js"></script>
     <script src="/global/js/global/lastText.js"></script>
     <!-- <script src="/planning/js/explosionMaterials/process/process.js"></script> -->
 </body>

@@ -254,7 +254,7 @@ $app->post('/addProductsMaterials', function (Request $request, Response $respon
         $status = true;
         // Checkear cantidades
         $order = $generalOrdersDao->checkAccumulatedQuantityOrder($orders[$i]['id_order']);
-        if ($order['status'] != 'En Produccion' && $order['status'] = 'Entregado') {
+        if ($order['status'] != 'En Produccion' && $order['status'] != 'Entregado' && $order['status'] != 'Fabricado') {
             if ($order['original_quantity'] > $order['accumulated_quantity']) {
                 // Ficha tecnica
                 $productsMaterials = $productsMaterialsDao->findAllProductsmaterials($orders[$i]['id_product'], $id_company);
