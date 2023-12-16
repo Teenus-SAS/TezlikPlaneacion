@@ -50,14 +50,14 @@ if (sizeof($_SESSION) == 0)
                                 </div>
                             </div>
                             <div class="col-sm-7 col-xl-6 form-inline justify-content-sm-end">
-                                <div class="col-xs-2 py-2 mr-2">
+                                <!-- <div class="col-xs-2 py-2 mr-2">
                                     <select id="typeStore" class="form-control">
                                         <option disabled selected>Seleccionar</option>
                                         <option value="1">Recibir</option>
                                         <option value="2">Entregar</option>
                                     </select>
-                                    <!-- <button class="btn btn-info" id="btnDelivery">Entregar</button> -->
-                                </div>
+                                    <button class="btn btn-info" id="btnDelivery">Entregar</button>
+                                </div> -->
                             </div>
                         </div>
                     </div>
@@ -121,12 +121,12 @@ if (sizeof($_SESSION) == 0)
 
                                 <ul class="nav nav-tabs" id="pills-tab" role="tablist">
                                     <li class="nav-item">
-                                        <a class="nav-link active" id="pills-activity-tab" data-toggle="pill" href="#pills-activity" role="tab" aria-controls="pills-activity" aria-selected="true">
+                                        <a class="nav-link active selectNavigation" id="receive" data-toggle="pill" href="javascript:;" role="tab" aria-controls="pills-activity" aria-selected="true">
                                             <i class="bi bi-download mr-1"></i>Recibir Materia Prima
                                         </a>
                                     </li>
                                     <li class="nav-item">
-                                        <a class="nav-link" id="pills-projects-tab" data-toggle="pill" href="#pills-projects" role="tab" aria-controls="pills-projects" aria-selected="false">
+                                        <a class="nav-link selectNavigation" id="deliver" data-toggle="pill" href="javascript:;" role="tab" aria-controls="pills-projects" aria-selected="false">
                                             <i class="bi bi-upload mr-1"></i>Entregar Materia Prima
                                         </a>
                                     </li>
@@ -139,20 +139,20 @@ if (sizeof($_SESSION) == 0)
                             <div class="col-12">
                                 <div class="card">
                                     <div class="card-body">
-                                        <div class="tab-content mt-4 pt-3" id="pills-tabContent">
-                                            <div class="tab-pane fade show active" id="pills-activity" role="tabpanel" aria-labelledby="pills-activity-tab">
-                                                <div class="table-responsive">
-                                                    <table class="fixed-table-loading table table-hover" id="tblStore">
+                                        <!-- <div class="tab-content mt-4 pt-3" id="pills-tabContent"> -->
+                                        <div class="tab-pane fade show active" role="tabpanel" aria-labelledby="pills-activity-tab">
+                                            <div class="table-responsive">
+                                                <table class="fixed-table-loading table table-hover" id="tblStore">
 
-                                                    </table>
-                                                </div>
+                                                </table>
                                             </div>
                                         </div>
-                                        <div class="tab-pane fade" id="pills-projects" role="tabpanel" aria-labelledby="pills-projects-tab">
+                                        <!-- </div> -->
+                                        <!-- <div class="tab-pane fade" id="pills-projects" role="tabpanel" aria-labelledby="pills-projects-tab">
                                             <table class="fixed-table-loading table table-hover" id="tblStore">
 
                                             </table>
-                                        </div>
+                                        </div> -->
                                     </div>
                                 </div>
                             </div>

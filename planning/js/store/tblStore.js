@@ -1,17 +1,12 @@
-$(document).ready(function () { 
-    $('#typeStore').change(function (e) {
+$(document).ready(function () {
+    $('.selectNavigation').click(function (e) {
         e.preventDefault();
-
-        if ($.fn.dataTable.isDataTable("#tblStore")) {
-            $("#tblStore").DataTable().destroy();
-            $("#tblStore").empty();
-        }
         
-        if (this.value == '1')
+        if (this.id == 'receive')
             loadTblStoreMaterial();
-        else
+        else if (this.id == 'deliver')
             loadTblStoreOrder();
-    }); 
+    });
 
     // Recibir
     loadTblStoreMaterial = async () => {
@@ -20,6 +15,12 @@ $(document).ready(function () {
         data = data.filter(item => item.application_date != "0000-00-00" &&
             item.delivery_date != "0000-00-00" &&
             item.purchase_order != "");
+        
+        if ($.fn.dataTable.isDataTable("#tblStore")) {
+            $("#tblStore").DataTable().clear();
+            $("#tblStore").DataTable().rows.add(data).draw();
+            return;
+        }
 
         tblStore = $('#tblStore').dataTable({
             destroy: true,
@@ -62,7 +63,7 @@ $(document).ready(function () {
                     data: 'quantity',
                     className: 'uniqueClassName',
                     render: $.fn.dataTable.render.number('.', ',', 0),
-                }, 
+                },
                 {
                     title: "Orden de Compra",
                     data: "purchase_order",
@@ -182,6 +183,8 @@ $(document).ready(function () {
                 },
                 className: 'odd',
             },
-        }); 
+        });
     }
+
+    loadTblStoreMaterial();
 });

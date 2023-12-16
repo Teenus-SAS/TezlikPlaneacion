@@ -135,12 +135,12 @@ if (sizeof($_SESSION) == 0)
 
                                 <ul class="nav nav-tabs" id="pills-tab" role="tablist">
                                     <li class="nav-item">
-                                        <a class="nav-link active" id="pills-activity-tab" data-toggle="pill" href="#pills-activity" role="tab" aria-controls="pills-activity" aria-selected="true">
+                                        <a class="nav-link active selectNavigation" id="processOP" data-toggle="pill" href="javascript:;" role="tab" aria-controls="pills-activity" aria-selected="true">
                                             <i class="bi bi-lightning mr-1"></i>OP Proceso
                                         </a>
                                     </li>
                                     <li class="nav-item">
-                                        <a class="nav-link" id="pills-projects-tab" data-toggle="pill" href="#pills-projects" role="tab" aria-controls="pills-projects" aria-selected="false">
+                                        <a class="nav-link selectNavigation" id="completeOP" data-toggle="pill" href="javascript:;" role="tab" aria-controls="pills-projects" aria-selected="false">
                                             <i class="bi bi-check-square-fill mr-1"></i>OP Ejecutadas
                                         </a>
                                     </li>
@@ -153,24 +153,24 @@ if (sizeof($_SESSION) == 0)
                             <div class="col-12">
                                 <div class="card">
                                     <div class="card-body">
-                                        <div class="tab-content mt-4 pt-3" id="pills-tabContent">
-                                            <div class="tab-pane fade show active" id="pills-activity" role="tabpanel" aria-labelledby="pills-activity-tab">
+                                        <!-- <div class="tab-content mt-4 pt-3" id="pills-tabContent"> -->
+                                        <div class="tab-pane fade show active" role="tabpanel" aria-labelledby="pills-activity-tab">
+                                            <div class="table-responsive">
                                                 <div class="table-responsive">
-                                                    <div class="table-responsive">
-                                                        <table class="fixed-table-loading table table-hover" id="tblProductionOrders">
+                                                    <table class="fixed-table-loading table table-hover" id="tblProductionOrders">
 
-                                                        </table>
-                                                    </div>
+                                                    </table>
                                                 </div>
                                             </div>
                                         </div>
-                                        <div class="tab-pane fade" id="pills-projects" role="tabpanel" aria-labelledby="pills-projects-tab">
+                                        <!-- </div> -->
+                                        <!-- <div class="tab-pane fade" id="pills-projects" role="tabpanel" aria-labelledby="pills-projects-tab">
                                             <div class="table-responsive">
                                                 <table class="fixed-table-loading table table-hover" id="tblInventories">
 
                                                 </table>
                                             </div>
-                                        </div>
+                                        </div> -->
                                     </div>
                                 </div>
                             </div>
