@@ -253,23 +253,22 @@ if (sizeof($_SESSION) == 0)
                 <!-- page content -->
                 <div class="page-content-wrapper mt--45">
                     <div class="container-fluid">
-                        <!-- Row 5 -->
-                        <div class="row mb-3">
+                        <div class="row">
                             <div class="col-12">
-                                <ul class="nav nav-pills bg-light nav-justified" id="pills-tab" role="tablist">
+                                <ul class="nav nav-tabs" id="pills-tab" role="tablist">
                                     <li class="nav-item">
                                         <a class="nav-link active selectNavigation" id="materials" data-toggle="pill" href="#pills-activity" role="tab" aria-controls="pills-activity" aria-selected="true">
-                                            Materias Primas
+                                            <i class="fas fa-flask mr-1"></i>Materias Primas
                                         </a>
                                     </li>
                                     <li class="nav-item">
                                         <a class="nav-link selectNavigation" id="planCicles" data-toggle="pill" href="#pills-projects" role="tab" aria-controls="pills-projects" aria-selected="false">
-                                            Ciclos y Procesos
+                                            <i class="bi bi-arrow-repeat mr-1"></i>Ciclos y Procesos
                                         </a>
                                     </li>
                                     <li class="nav-item">
                                         <a class="nav-link selectNavigation" id="route" data-toggle="pill" href="#pills-tasks" role="tab" aria-controls="pills-tasks" aria-selected="false">
-                                            Ruta
+                                            <i class="bi bi-diagram-3 mr-1"></i>Ruta
                                         </a>
                                     </li>
                                 </ul>

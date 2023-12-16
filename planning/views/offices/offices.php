@@ -92,20 +92,63 @@ $fechaActual = date("Y-m-d");
                 </div>
 
                 <!-- page content -->
-                <div class="page-content-wrapper mt--45">
+                <!-- <div class="page-content-wrapper mt--45">
                     <div class="container-fluid">
-                        <!-- Row 5 -->
                         <div class="row">
                             <div class="col-12">
                                 <div class="card">
-                                    <div class="card-header">
-                                        <h5 class="card-title">Despachos</h5>
-                                    </div>
                                     <div class="card-body">
                                         <div class="table-responsive">
                                             <table class="fixed-table-loading table table-hover" id="tblOffices">
 
                                             </table>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div> -->
+                <div class="page-content-wrapper mt--45">
+                    <div class="container-fluid">
+                        <div class="row">
+                            <div class="col-12">
+                                <ul class="nav nav-tabs" id="pills-tab" role="tablist">
+                                    <li class="nav-item">
+                                        <a class="nav-link active selectNavigation" id="materials" data-toggle="pill" href="#pills-activity" role="tab" aria-controls="pills-activity" aria-selected="true">
+                                        <i class="bi bi-truck mr-1"></i>x Entregar
+                                        </a>
+                                    </li>
+                                    <li class="nav-item">
+                                        <a class="nav-link selectNavigation" id="planCicles" data-toggle="pill" href="#pills-projects" role="tab" aria-controls="pills-projects" aria-selected="false">
+                                            <i class="bi bi-check-circle mr-1"></i>Entregado
+                                        </a>
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-12">
+                                <div class="card">
+                                    <!-- <div class="card-header">
+                                        <h5 class="card-title">Materias Primas</h5>
+                                    </div> -->
+                                    <div class="tab-pane cardProductsMaterials">
+                                        <div class="card-body">
+                                            <div class="table-responsive">
+                                                <table class="fixed-table-loading table table-hover" id="tblOffices">
+
+                                                </table>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="tab-pane cardPlanCicles" style="display: none;">
+                                        <div class="card-body">
+                                            <div class="table-responsive">
+                                                <table class="fixed-table-loading table table-hover" id="tblOffices">
+
+                                                </table>
+                                            </div>
                                         </div>
                                     </div>
                                 </div>

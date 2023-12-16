@@ -115,18 +115,13 @@ if (sizeof($_SESSION) == 0)
                 </div>
 
                 <!-- page content -->
-                <div class="page-content-wrapper mt--45">
+                <!-- <div class="page-content-wrapper mt--45">
                     <div class="container-fluid">
-                        <!-- Row 5 -->
-                        <div class="row">
+                                                <div class="row">
                             <div class="col-12">
                                 <div class="card">
                                     <div class="card-header">
                                         <div class="row justify-content-around">
-                                            <!--  <div class="col">
-                                                <h5 class="card-title">Inventarios</h5>
-                                            </div> -->
-
                                         </div>
                                     </div>
                                     <div class="card-body">
@@ -140,7 +135,60 @@ if (sizeof($_SESSION) == 0)
                             </div>
                         </div>
                     </div>
+                </div> -->
+
+                <div class="page-content-wrapper mt--45">
+                    <div class="container-fluid">
+                        <!-- Row 5 -->
+                        <div class="row">
+                            <div class="col-12">
+
+                                <ul class="nav nav-tabs" id="pills-tab" role="tablist">
+                                    <li class="nav-item">
+                                        <a class="nav-link active" id="pills-activity-tab" data-toggle="pill" href="#pills-activity" role="tab" aria-controls="pills-activity" aria-selected="true">
+                                            <i class="fas fa-cube mr-1"></i>Inventario Productos
+                                        </a>
+                                    </li>
+                                    <li class="nav-item">
+                                        <a class="nav-link" id="pills-projects-tab" data-toggle="pill" href="#pills-projects" role="tab" aria-controls="pills-projects" aria-selected="false">
+                                            <i class="fas fa-flask mr-1"></i>Inventario Materia Prima
+                                        </a>
+                                    </li>
+                                </ul>
+
+
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-12">
+                                <div class="card">
+                                    <div class="card-body">
+                                        <div class="tab-content mt-4 pt-3" id="pills-tabContent">
+                                            <div class="tab-pane fade show active" id="pills-activity" role="tabpanel" aria-labelledby="pills-activity-tab">
+                                                <div class="table-responsive">
+                                                    <div class="table-responsive">
+                                                        <table class="fixed-table-loading table table-hover" id="tblInventories">
+
+                                                        </table>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="tab-pane fade" id="pills-projects" role="tabpanel" aria-labelledby="pills-projects-tab">
+                                            <div class="table-responsive">
+                                                <table class="fixed-table-loading table table-hover" id="tblInventories">
+
+                                                </table>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                 </div>
+
+
             </div>
         </div>
         <!-- main content End -->

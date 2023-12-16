@@ -118,23 +118,21 @@ if (sizeof($_SESSION) == 0)
                         <!-- Row 5 -->
                         <div class="row">
                             <div class="col-12">
-                                <div class="card">
-                                    <div class="card-body">
-                                        <ul class="nav nav-pills bg-light nav-justified" id="pills-tab" role="tablist">
-                                            <li class="nav-item">
-                                                <a class="nav-link active" id="pills-activity-tab" data-toggle="pill" href="#pills-activity" role="tab" aria-controls="pills-activity" aria-selected="true">
-                                                    <i class="bi bi-download mr-1"></i>Recibir Materia Prima
-                                                </a>
-                                            </li>
-                                            <li class="nav-item">
-                                                <a class="nav-link" id="pills-projects-tab" data-toggle="pill" href="#pills-projects" role="tab" aria-controls="pills-projects" aria-selected="false">
-                                                    <i class="bi bi-cloud-download mr-1"></i>Entregar Materia Prima
-                                                </a>
-                                            </li>
-                                        </ul>
 
-                                    </div>
-                                </div>
+                                <ul class="nav nav-tabs" id="pills-tab" role="tablist">
+                                    <li class="nav-item">
+                                        <a class="nav-link active" id="pills-activity-tab" data-toggle="pill" href="#pills-activity" role="tab" aria-controls="pills-activity" aria-selected="true">
+                                            <i class="bi bi-download mr-1"></i>Recibir Materia Prima
+                                        </a>
+                                    </li>
+                                    <li class="nav-item">
+                                        <a class="nav-link" id="pills-projects-tab" data-toggle="pill" href="#pills-projects" role="tab" aria-controls="pills-projects" aria-selected="false">
+                                            <i class="bi bi-upload mr-1"></i>Entregar Materia Prima
+                                        </a>
+                                    </li>
+                                </ul>
+
+
                             </div>
                         </div>
                         <div class="row">

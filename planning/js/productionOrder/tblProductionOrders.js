@@ -70,27 +70,26 @@ $(document).ready(function () {
         },
       },
       {
-        title: 'Estado',
-        data: 'status',
-        className: 'classCenter',
+        title: "Estado",
+        data: "status",
+        className: "classCenter",
         render: function (data) {
-          if (data == 'En Produccion')
-            badge = 'badge-info';
-          else if (data == 'Fabricado')
-            badge = 'badge-warning';
-            
-          return `<span class="badge ${badge}">${data}</span>`
-        }
+          if (data == "En Produccion") badge = "badge-info";
+          else if (data == "Fabricado") badge = "badge-warning";
+
+          return `<span class="badge ${badge}">${data}</span>`;
+        },
       },
       {
-        title: 'Acciones',
-        data: 'status',
-        className: 'uniqueClassName',
+        title: "Acciones",
+        data: "status",
+        className: "uniqueClassName",
         render: function (data) {
-          if (data == 'En Produccion')
-            return `<a href="javascript:;" <i id="${data}" class="bi bi-bookmark-plus-fill changeStatus" data-toggle='tooltip' title='Fabricado' style="font-size: 30px;"></i></a>`;
-          else
-            return '';
+          if (data == "En Produccion") {
+            return `<button type="button" id="${data}" class="btn btn-sm btn-warning changeStatus" style="font-size: 12px;">Fabricado</button>`;
+          } else {
+            return "";
+          }
         },
       },
     ],
