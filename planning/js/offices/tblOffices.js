@@ -1,22 +1,63 @@
 $(document).ready(function () {
-  /* Cargar pedidos */
-  loadTblOffices = (min_date, max_date) => {
-    if (min_date == null && max_date == null) url = "/api/actualOffices";
-    else url = `/api/offices/${min_date}/${max_date}`;
+  $('.selectNavigation').click(function (e) {
+    e.preventDefault();
+    
+    if (this.id == 'deliver')
+      loadTblOffices(pendingStore, true);
+    else if (this.id == 'delivered')
+      loadTblOffices(deliveredStore, false);
+  });
 
+  loadAllData = async (op, min_date, max_date) => {
+    try {
+      const [dataActualOffices, dataOffices] = await Promise.all([
+        searchData('/api/actualOffices'),
+        op == 3 ? searchData(`/api/offices/${min_date}/${max_date}`) : null
+      ]);
+
+      let card = document.getElementsByClassName('selectNavigation');
+
+      if (card[0].className.includes('active'))
+        pending = 1;
+      else
+        pending = 0;
+
+      pendingStore = dataActualOffices.filter(item => item.status !== 'Entregado');
+      deliveredStore = dataActualOffices.filter(item => item.status === 'Entregado');
+      
+      let visible = true;
+      if (op === 1)
+        dataToLoad = pendingStore;
+      else if (op === 2) {
+        dataToLoad = deliveredStore
+        visible = false;
+      } else {
+        if (pending == 1)
+          dataToLoad = dataOffices.filter(item => item.status !== 'Entregado');
+        else
+          dataToLoad = dataOffices.filter(item => item.status === 'Entregado');
+      }
+
+      if (dataToLoad) {
+        loadTblOffices(dataToLoad, visible);
+      }
+    } catch (error) {
+      console.error('Error loading data:', error);
+    }
+  };
+
+  /* Cargar pedidos */
+  loadTblOffices = (data, visible) => {
     if ($.fn.dataTable.isDataTable("#tblOffices")) {
       $("#tblOffices").DataTable().clear();
-      $("#tblOffices").DataTable().ajax.url(url).load();
+      $("#tblOffices").DataTable().rows.add(data).draw();
       return;
     }
 
     tblOffices = $("#tblOffices").dataTable({
       // destroy: true,
       pageLength: 50,
-      ajax: {
-        url: url,
-        dataSrc: "",
-      },
+      data: data,
       language: {
         url: "//cdn.datatables.net/plug-ins/1.10.20/i18n/Spanish.json",
       },
@@ -109,6 +150,7 @@ $(document).ready(function () {
           title: "Cancelar",
           data: null,
           className: "classCenter",
+          visible: visible,
           render: function (data) {
             return data.status == "Despacho"
               ? `<a href="javascript:;" <i class="bi bi-x-octagon-fill cancelOrder" id="${data.id_order}" data-toggle='tooltip' title='Cancelar Despacho' style="font-size: 30px;color:red;"></i></a>`
@@ -119,5 +161,5 @@ $(document).ready(function () {
     });
   };
 
-  loadTblOffices(null, null);
+  loadAllData(1, null, null);
 });

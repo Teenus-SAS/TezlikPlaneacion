@@ -2,16 +2,41 @@ $(document).ready(function () {
     $('.selectNavigation').click(function (e) {
         e.preventDefault();
         
+        if ($.fn.dataTable.isDataTable("#tblStore")) {
+            $("#tblStore").DataTable().destroy();
+            $("#tblStore").empty();
+        }
+        
         if (this.id == 'receive')
-            loadTblStoreMaterial();
+            loadTblStoreMaterial(requisitions);
         else if (this.id == 'deliver')
-            loadTblStoreOrder();
+            loadTblStoreOrder(store);
     });
 
-    // Recibir
-    loadTblStoreMaterial = async () => {
-        let data = await searchData('/api/requisitions');
+    loadAllData = async (op) => {
+        try {
+            const [
+                dataRequisitions,
+                dataStore
+            ] = await Promise.all([
+                searchData('/api/requisitions'),
+                searchData('/api/store')
+            ]);
 
+            if (op == 1)
+                loadTblStoreMaterial(dataRequisitions);
+            else
+                loadTblStoreOrder(dataStore);
+
+            requisitions = dataRequisitions;
+            store = dataStore;
+        } catch (error) {
+            console.error('Error loading data:', error);
+        }
+    };
+
+    // Recibir
+    loadTblStoreMaterial = async (data) => {
         data = data.filter(item => item.application_date != "0000-00-00" &&
             item.delivery_date != "0000-00-00" &&
             item.purchase_order != "");
@@ -91,14 +116,11 @@ $(document).ready(function () {
     }
 
     // Entregar
-    loadTblStoreOrder = () => {
+    loadTblStoreOrder = (data) => {
         tblStore = $('#tblStore').dataTable({
             destroy: true,
             pageLength: 50,
-            ajax: {
-                url: '/api/store',
-                dataSrc: '',
-            },
+            data: data,
             language: {
                 url: '//cdn.datatables.net/plug-ins/1.10.20/i18n/Spanish.json',
             },
@@ -186,5 +208,5 @@ $(document).ready(function () {
         });
     }
 
-    loadTblStoreMaterial();
+    loadAllData(1);
 });

@@ -8,14 +8,20 @@ $(document).ready(function () {
       $('.cardProductsMaterials').show(800);
       $('.cardPlanCicles').hide(800);
       $('.cardRoutes').hide(800);
+      $('.cardCreatePlanCiclesMachine').hide(800);
+      $('.cardImportPlanCiclesMachine').hide(800);
     } else if (this.id == 'planCicles') {
       $('.cardPlanCicles').show(800);
       $('.cardProductsMaterials').hide(800);
       $('.cardRoutes').hide(800);
+      $('.cardAddMaterials').hide(800);
+      $('.cardImport').hide(800);
     } else {
       $('.cardRoutes').show(800);
       $('.cardPlanCicles').hide(800);
       $('.cardProductsMaterials').hide(800);
+      $('.cardAddMaterials').hide(800);
+      $('.cardImport').hide(800);
       
     }
     let tables = document.getElementsByClassName(

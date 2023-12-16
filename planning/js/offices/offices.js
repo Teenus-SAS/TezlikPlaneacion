@@ -84,7 +84,7 @@ $(document).ready(function () {
             return false;
         }
 
-        loadTblOffices(firtsDate, lastDate);
+        loadAllData(3, firtsDate, lastDate);
     });
 
     $(document).on('click', '.cancelOrder', function (e) {

@@ -115,12 +115,12 @@ $fechaActual = date("Y-m-d");
                             <div class="col-12">
                                 <ul class="nav nav-tabs" id="pills-tab" role="tablist">
                                     <li class="nav-item">
-                                        <a class="nav-link active selectNavigation" id="materials" data-toggle="pill" href="#pills-activity" role="tab" aria-controls="pills-activity" aria-selected="true">
-                                        <i class="bi bi-truck mr-1"></i>Entregar
+                                        <a class="nav-link active selectNavigation" id="deliver" data-toggle="pill" href="javascript:;" role="tab" aria-controls="pills-activity" aria-selected="true">
+                                            <i class="bi bi-truck mr-1"></i>Entregar
                                         </a>
                                     </li>
                                     <li class="nav-item">
-                                        <a class="nav-link selectNavigation" id="planCicles" data-toggle="pill" href="#pills-projects" role="tab" aria-controls="pills-projects" aria-selected="false">
+                                        <a class="nav-link selectNavigation" id="delivered" data-toggle="pill" href="javascript:;" role="tab" aria-controls="pills-projects" aria-selected="false">
                                             <i class="bi bi-check-square-fill mr-1"></i>Entregado
                                         </a>
                                     </li>
@@ -130,22 +130,11 @@ $fechaActual = date("Y-m-d");
                         <div class="row">
                             <div class="col-12">
                                 <div class="card">
-                                    <div class="tab-pane cardProductsMaterials">
-                                        <div class="card-body">
-                                            <div class="table-responsive">
-                                                <table class="fixed-table-loading table table-hover" id="tblOffices">
+                                    <div class="card-body">
+                                        <div class="table-responsive">
+                                            <table class="fixed-table-loading table table-hover" id="tblOffices">
 
-                                                </table>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="tab-pane cardPlanCicles" style="display: none;">
-                                        <div class="card-body">
-                                            <div class="table-responsive">
-                                                <table class="fixed-table-loading table table-hover" id="tblOffices">
-
-                                                </table>
-                                            </div>
+                                            </table>
                                         </div>
                                     </div>
                                 </div>
@@ -161,16 +150,10 @@ $fechaActual = date("Y-m-d");
     </div>
 
     <?php include_once dirname(dirname(dirname(__DIR__))) . '/global/partials/scriptsJS.php'; ?>
-    <!-- <script src="/planning/js/users/usersAccess.js"></script> -->
 
-    <!-- <script src="/planning/js/basic/products/configProducts.js"></script> -->
-    <!-- <script src="/planning/js/admin/clients/configClients.js"></script> -->
     <script src="/planning/js/offices/configOffices.js"></script>
     <script src="/planning/js/offices/tblOffices.js"></script>
     <script src="/planning/js/offices/offices.js"></script>
-    <!-- <script src="../global/js/import/import.js"></script> -->
-    <!-- <script src="../planning/js/offices/importOffices.js"></script> -->
-    <!-- <script src="../global/js/import/file.js"></script> -->
 </body>
 
 </html>

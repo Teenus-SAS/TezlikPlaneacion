@@ -26,7 +26,8 @@ class GeneralRequisitionsDao
                                         INNER JOIN convert_units u ON u.id_unit = m.unit
                                         LEFT JOIN plan_clients c ON c.id_client = r.id_provider
                                       WHERE r.id_company = :id_company 
-                                      AND (r.admission_date IS NULL OR MONTH(r.admission_date) = MONTH(CURRENT_DATE))");
+                                      AND (r.admission_date IS NULL OR MONTH(r.admission_date) = MONTH(CURRENT_DATE))
+                                      ORDER BY r.admission_date ASC");
         $stmt->execute(['id_company' => $id_company]);
 
         $this->logger->info(__FUNCTION__, array('query' => $stmt->queryString, 'errors' => $stmt->errorInfo()));

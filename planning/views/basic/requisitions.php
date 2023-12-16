@@ -218,12 +218,12 @@ if (sizeof($_SESSION) == 0)
                             <div class="col-12">
                                 <ul class="nav nav-tabs" id="pills-tab" role="tablist">
                                     <li class="nav-item">
-                                        <a class="nav-link active selectNavigation" id="materials" data-toggle="pill" href="#pills-activity" role="tab" aria-controls="pills-activity" aria-selected="true">
+                                        <a class="nav-link active selectNavigation" id="pending" data-toggle="pill" href="javascript:;" role="tab" aria-controls="pills-activity" aria-selected="true">
                                             <i class="bi bi-clock-history mr-1"></i>Pendiente
                                         </a>
                                     </li>
                                     <li class="nav-item">
-                                        <a class="nav-link selectNavigation" id="planCicles" data-toggle="pill" href="#pills-projects" role="tab" aria-controls="pills-projects" aria-selected="false">
+                                        <a class="nav-link selectNavigation" id="done" data-toggle="pill" href="javascript:;" role="tab" aria-controls="pills-projects" aria-selected="false">
                                             <i class="bi bi-check-square-fill mr-1"></i>Ejecutado
                                         </a>
                                     </li>
@@ -233,7 +233,16 @@ if (sizeof($_SESSION) == 0)
                         <div class="row">
                             <div class="col-12">
                                 <div class="card">
-                                    <div class="tab-pane cardProductsMaterials">
+                                    <!-- <div class="tab-pane cardProductsMaterials"> -->
+                                    <div class="card-body">
+                                        <div class="table-responsive">
+                                            <table class="fixed-table-loading table table-hover" id="tblRequisitions">
+
+                                            </table>
+                                        </div>
+                                    </div>
+                                    <!-- </div> -->
+                                    <!-- <div class="tab-pane cardPlanCicles" style="display: none;">
                                         <div class="card-body">
                                             <div class="table-responsive">
                                                 <table class="fixed-table-loading table table-hover" id="tblRequisitions">
@@ -241,16 +250,7 @@ if (sizeof($_SESSION) == 0)
                                                 </table>
                                             </div>
                                         </div>
-                                    </div>
-                                    <div class="tab-pane cardPlanCicles" style="display: none;">
-                                        <div class="card-body">
-                                            <div class="table-responsive">
-                                                <table class="fixed-table-loading table table-hover" id="tblRequisitions">
-
-                                                </table>
-                                            </div>
-                                        </div>
-                                    </div>
+                                    </div> -->
                                 </div>
                             </div>
                         </div>
