@@ -57,7 +57,7 @@
                                                 <li class="planProducts" style="display: none;">
                                                 <?php } ?>
                                                 <i class="fas fa-cube"></i>
-                                                <a href="/planning/products">Inventario Productos</a>
+                                                <a href="/planning/products">Inventarios</a>
                                                 </li>
                                                 <?php if ($_SESSION['planning_material'] == 1) { ?>
                                                     <li class="planMaterials">
@@ -73,7 +73,7 @@
                                                         <li class="planMachines" style="display: none;">
                                                         <?php } ?>
                                                         <i class="fas fa-cogs"></i>
-                                                        <a href="/planning/machines">Máquinas y/o Procesos</a>
+                                                        <a href="/planning/machines">Procesos y Máquinas</a>
                                                         </li>
                                                         <?php if ($_SESSION['requisition'] == 1) { ?>
                                                             <li class="planRequisitions">

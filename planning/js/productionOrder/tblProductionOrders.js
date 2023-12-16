@@ -69,7 +69,7 @@ $(document).ready(function () {
           )}<br>Fin: ${moment(maxDate).format("DD/MM/YYYY HH:mm A")}`;
         },
       },
-      {
+      /* {
         title: "Estado",
         data: "status",
         className: "classCenter",
@@ -79,7 +79,7 @@ $(document).ready(function () {
 
           return `<span class="badge ${badge}">${data}</span>`;
         },
-      },
+      }, */
       {
         title: "Acciones",
         data: "status",

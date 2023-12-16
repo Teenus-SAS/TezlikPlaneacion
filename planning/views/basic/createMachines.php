@@ -41,9 +41,9 @@ if (sizeof($_SESSION) == 0)
                         <div class="row align-items-center">
                             <div class="col-sm-5 col-xl-6">
                                 <div class="page-title">
-                                    <h3 class="mb-1 font-weight-bold text-dark">Máquinas y/o Procesos</h3>
+                                    <h3 class="mb-1 font-weight-bold text-dark">Procesos y Máquinas</h3>
                                     <ol class="breadcrumb mb-3 mb-md-0">
-                                        <li class="breadcrumb-item active">Creación de Máquinas y/o Procesos</li>
+                                        <li class="breadcrumb-item active">Creación de Procesos y Máquinas</li>
                                     </ol>
                                 </div>
                             </div>
@@ -109,17 +109,60 @@ if (sizeof($_SESSION) == 0)
                 </div>
 
                 <!-- page content -->
+                <!-- <div class="page-content-wrapper mt--45">
+                    <div class="container-fluid">
+                        <div class="row">
+                            <div class="col-12">
+                                <div class="card">
+                                    <div class="card-body">
+                                        <div class="table-responsive">
+                                            <table class="fixed-table-loading table table-hover" id="tblMachines">
+
+                                            </table>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div> -->
+
                 <div class="page-content-wrapper mt--45">
                     <div class="container-fluid">
                         <!-- Row 5 -->
                         <div class="row">
                             <div class="col-12">
+
+                                <ul class="nav nav-tabs" id="pills-tab" role="tablist">
+                                    <li class="nav-item">
+                                        <a class="nav-link active" id="pills-activity-tab" data-toggle="pill" href="#pills-activity" role="tab" aria-controls="pills-activity" aria-selected="true">
+                                            <i class="bi bi-diagram-3 mr-1"></i>Procesos
+                                        </a>
+                                    </li>
+                                    <li class="nav-item">
+                                        <a class="nav-link" id="pills-projects-tab" data-toggle="pill" href="#pills-projects" role="tab" aria-controls="pills-projects" aria-selected="false">
+                                            <i class="bi bi-gear-wide mr-1"></i>Máquinas
+                                        </a>
+                                    </li>
+                                </ul>
+
+
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-12">
                                 <div class="card">
-                                    <!-- <div class="card-header">
-                                        <h5 class="card-title">Máquinas</h5>
-                                    </div> -->
                                     <div class="card-body">
-                                        <div class="table-responsive">
+                                        <div class="tab-content mt-4 pt-3" id="pills-tabContent">
+                                            <div class="tab-pane fade show active" id="pills-activity" role="tabpanel" aria-labelledby="pills-activity-tab">
+                                                <div class="table-responsive">
+                                                    <table class="fixed-table-loading table table-hover" id="tblStore">
+
+                                                    </table>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="tab-pane fade" id="pills-projects" role="tabpanel" aria-labelledby="pills-projects-tab">
                                             <table class="fixed-table-loading table table-hover" id="tblMachines">
 
                                             </table>

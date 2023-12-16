@@ -161,20 +161,60 @@ if (sizeof($_SESSION) == 0)
                 </div>
 
                 <!-- page content -->
-                <div class="page-content-wrapper mt--45">
+                <!-- <div class="page-content-wrapper mt--45">
                     <div class="container-fluid">
-                        <!-- Row 5 -->
                         <div class="row">
                             <div class="col-12">
                                 <div class="card">
-                                    <!-- <div class="card-header">
-                                        <h5 class="card-title">Requisiciones</h5>
-                                    </div> -->
                                     <div class="card-body">
                                         <div class="table-responsive">
                                             <table class="fixed-table-loading table table-hover" id="tblRequisitions">
 
                                             </table>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div> -->
+                <div class="page-content-wrapper mt--45">
+                    <div class="container-fluid">
+                        <div class="row">
+                            <div class="col-12">
+                                <ul class="nav nav-tabs" id="pills-tab" role="tablist">
+                                    <li class="nav-item">
+                                        <a class="nav-link active selectNavigation" id="materials" data-toggle="pill" href="#pills-activity" role="tab" aria-controls="pills-activity" aria-selected="true">
+                                            <i class="bi bi-clock-history mr-1"></i>Pendiente
+                                        </a>
+                                    </li>
+                                    <li class="nav-item">
+                                        <a class="nav-link selectNavigation" id="planCicles" data-toggle="pill" href="#pills-projects" role="tab" aria-controls="pills-projects" aria-selected="false">
+                                            <i class="bi bi-check-square-fill mr-1"></i>Ejecutado
+                                        </a>
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-12">
+                                <div class="card">
+                                    <div class="tab-pane cardProductsMaterials">
+                                        <div class="card-body">
+                                            <div class="table-responsive">
+                                                <table class="fixed-table-loading table table-hover" id="tblRequisitions">
+
+                                                </table>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="tab-pane cardPlanCicles" style="display: none;">
+                                        <div class="card-body">
+                                            <div class="table-responsive">
+                                                <table class="fixed-table-loading table table-hover" id="tblRequisitions">
+
+                                                </table>
+                                            </div>
                                         </div>
                                     </div>
                                 </div>

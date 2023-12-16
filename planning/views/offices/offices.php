@@ -116,12 +116,12 @@ $fechaActual = date("Y-m-d");
                                 <ul class="nav nav-tabs" id="pills-tab" role="tablist">
                                     <li class="nav-item">
                                         <a class="nav-link active selectNavigation" id="materials" data-toggle="pill" href="#pills-activity" role="tab" aria-controls="pills-activity" aria-selected="true">
-                                        <i class="bi bi-truck mr-1"></i>x Entregar
+                                        <i class="bi bi-truck mr-1"></i>Entregar
                                         </a>
                                     </li>
                                     <li class="nav-item">
                                         <a class="nav-link selectNavigation" id="planCicles" data-toggle="pill" href="#pills-projects" role="tab" aria-controls="pills-projects" aria-selected="false">
-                                            <i class="bi bi-check-circle mr-1"></i>Entregado
+                                            <i class="bi bi-check-square-fill mr-1"></i>Entregado
                                         </a>
                                     </li>
                                 </ul>
@@ -130,9 +130,6 @@ $fechaActual = date("Y-m-d");
                         <div class="row">
                             <div class="col-12">
                                 <div class="card">
-                                    <!-- <div class="card-header">
-                                        <h5 class="card-title">Materias Primas</h5>
-                                    </div> -->
                                     <div class="tab-pane cardProductsMaterials">
                                         <div class="card-body">
                                             <div class="table-responsive">

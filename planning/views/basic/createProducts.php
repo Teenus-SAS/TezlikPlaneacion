@@ -42,9 +42,9 @@ if (sizeof($_SESSION) == 0)
                         <div class="row align-items-center">
                             <div class="col-sm-5 col-xl-6">
                                 <div class="page-title">
-                                    <h3 class="mb-1 font-weight-bold text-dark">Inventario de Productos</h3>
+                                    <h3 class="mb-1 font-weight-bold text-dark">Inventarios</h3>
                                     <ol class="breadcrumb mb-3 mb-md-0">
-                                        <li class="breadcrumb-item active">Productos Terminados</li>
+                                        <li class="breadcrumb-item active">Productos Terminados y Materia Prima</li>
                                     </ol>
                                 </div>
                             </div>
@@ -129,15 +129,11 @@ if (sizeof($_SESSION) == 0)
                 </div>
 
                 <!-- page content -->
-                <div class="page-content-wrapper mt--45">
+                <!-- <div class="page-content-wrapper mt--45">
                     <div class="container-fluid">
-                        <!-- Row 5 -->
                         <div class="row">
                             <div class="col-12">
                                 <div class="card">
-                                    <!-- <div class="card-header">
-                                        <h5 class="card-title">Productos</h5>
-                                    </div> -->
                                     <div class="card-body">
                                         <div class="table-responsive">
                                             <table class="fixed-table-loading table table-hover" id="tblProducts">
@@ -149,8 +145,51 @@ if (sizeof($_SESSION) == 0)
                             </div>
                         </div>
                     </div>
-                </div>
+                </div> -->
+                <div class="page-content-wrapper mt--45">
+                    <div class="container-fluid">
+                        <div class="row">
+                            <div class="col-12">
+                                <ul class="nav nav-tabs" id="pills-tab" role="tablist">
+                                    <li class="nav-item">
+                                        <a class="nav-link active selectNavigation" id="materials" data-toggle="pill" href="#pills-activity" role="tab" aria-controls="pills-activity" aria-selected="true">
+                                            <i class="fas fa-cube mr-1"></i>Productos
+                                        </a>
+                                    </li>
+                                    <li class="nav-item">
+                                        <a class="nav-link selectNavigation" id="planCicles" data-toggle="pill" href="#pills-projects" role="tab" aria-controls="pills-projects" aria-selected="false">
+                                            <i class="fas fa-flask mr-1"></i>Materia Prima
+                                        </a>
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-12">
+                                <div class="card">
+                                    <div class="tab-pane cardProductsMaterials">
+                                        <div class="card-body">
+                                            <div class="table-responsive">
+                                                <table class="fixed-table-loading table table-hover" id="tblProducts">
 
+                                                </table>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="tab-pane cardPlanCicles" style="display: none;">
+                                        <div class="card-body">
+                                            <div class="table-responsive">
+                                                <table class="fixed-table-loading table table-hover" id="tblRawMaterials">
+
+                                                </table>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
         <!-- main content End -->
