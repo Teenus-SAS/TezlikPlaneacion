@@ -118,7 +118,7 @@
                                                                 <li class="planStock" style="display: none;">
                                                                 <?php } ?>
                                                                 <i class="fas fa-truck"></i>
-                                                                <a href="/planning/stock">Tiempos Proveedores Stock Mínimo</a>
+                                                                <a href="/planning/stock">Tiempos Recepción MP</a>
                                                                 </li>
                                                 </ul>
                                                 </div>
@@ -144,7 +144,7 @@
                                                                     <li class="planSales" style="display: none;">
                                                                     <?php } ?>
                                                                     <i class="fas fa-balance-scale"></i>
-                                                                    <a href="/planning/sales">Ventas por Producto en Unidades</a>
+                                                                    <a href="/planning/sales">Ventas Unidades</a>
                                                                     </li>
                                                                     <?php //if ($_SESSION['sale'] == 1) { 
                                                                     ?>

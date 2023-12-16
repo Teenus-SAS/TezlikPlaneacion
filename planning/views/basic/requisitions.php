@@ -36,10 +36,10 @@ if (sizeof($_SESSION) == 0)
             <!-- Content -->
             <div class="page-content">
                 <!-- Page header -->
-                <div class="page-title-box">
+                <div class="page-title-box" style="padding-bottom: 10px;">
                     <div class="container-fluid">
-                        <div class="row align-items-center">
-                            <div class="col-sm-5 col-xl-2">
+                        <div class="row">
+                            <div class="col-sm-5 col-xl-8">
                                 <div class="page-title">
                                     <h3 class="mb-1 font-weight-bold text-dark">Requisiciones</h3>
                                     <ol class="breadcrumb mb-3 mb-md-0">
@@ -47,7 +47,58 @@ if (sizeof($_SESSION) == 0)
                                     </ol>
                                 </div>
                             </div>
-                            <div class="col-sm-7 col-xl-10 mt-4 form-inline justify-content-sm-end">
+                            <div class="col-sm-7 col-xl-4">
+                                <div class="row">
+                                    <div class="col-md-6 col-xl-4" style="padding-right: 0px;">
+                                        <div class="card bg-info">
+                                            <div class="card-body" style="padding: 10px;">
+                                                <div class="media text-white">
+                                                    <div class="media-body" style="text-align: center;">
+                                                        <span class="text-uppercase font-size-12 font-weight-bold" style="font-size: smaller;">Pendientes</span>
+                                                        <h2 class="mb-0 mt-1 text-white text-center" style="font-size: large;"><i class="bi bi-exclamation-circle mr-1"></i>3</h2>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6 col-xl-4" style="padding-right: 0px;">
+                                        <div class="card bg-warning">
+                                            <div class="card-body" style="padding: 10px;">
+                                                <div class="media text-white">
+                                                    <div class="media-body" style="text-align: center;">
+                                                        <span class="text-uppercase font-size-12 font-weight-bold" style="font-size: smaller;">Proceso</span>
+                                                        <h2 class="mb-0 mt-1 text-white text-center" style="font-size: large;"><i class="bi bi-arrow-clockwise mr-1"></i>2</h2>
+                                                    </div>
+
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="col-md-6 col-xl-4" style="padding-right: 0px;">
+                                        <div class="card bg-danger">
+                                            <div class="card-body" style="padding: 10px;">
+                                                <div class="media text-white">
+                                                    <div class="media-body" style="text-align: center;">
+                                                        <span class="text-uppercase font-size-12 font-weight-bold" style="font-size: smaller;">Retrasadas</span>
+                                                        <h2 class="mb-0 mt-1 text-white text-center" style="font-size: large;"><i class="bi bi-hourglass-bottom mr-1"></i>10</h2>
+                                                    </div>
+
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="page-content-wrapper mt--45 mb-5">
+                    <div class="container-fluid">
+                        <div class="row align-items-center">
+                            <div class="col-sm-7 col-xl-12 mt-4 form-inline justify-content-sm-end">
                                 <div class="col-xs-2 mr-2">
                                     <button class="btn btn-warning" id="btnNewRequisition" name="btnNewRequisition"><i class="bi bi-plus-circle"></i> Nueva Requisicion</button>
                                 </div>
@@ -61,6 +112,8 @@ if (sizeof($_SESSION) == 0)
                         </div>
                     </div>
                 </div>
+
+
 
                 <div class="page-content-wrapper mt--45 mb-5 cardSearchDate">
                     <div class="container-fluid">
@@ -79,7 +132,7 @@ if (sizeof($_SESSION) == 0)
                                                     <input class="form-control dateOrders" id="lastDate" type="date">
                                                 </div>
                                                 <div class="col-xs-2" style="margin-top:33px">
-                                                    <button type="text" class="btn btn-info" id="btnSearchDate">Buscar Fecha</button>
+                                                    <button type="text" class="btn btn-info" id="btnSearchDate">Buscar</button>
                                                 </div>
                                             </div>
                                         </div>
@@ -159,25 +212,6 @@ if (sizeof($_SESSION) == 0)
                         </div>
                     </div>
                 </div>
-
-                <!-- page content -->
-                <!-- <div class="page-content-wrapper mt--45">
-                    <div class="container-fluid">
-                        <div class="row">
-                            <div class="col-12">
-                                <div class="card">
-                                    <div class="card-body">
-                                        <div class="table-responsive">
-                                            <table class="fixed-table-loading table table-hover" id="tblRequisitions">
-
-                                            </table>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div> -->
                 <div class="page-content-wrapper mt--45">
                     <div class="container-fluid">
                         <div class="row">
