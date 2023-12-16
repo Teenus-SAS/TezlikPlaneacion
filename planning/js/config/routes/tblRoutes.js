@@ -21,6 +21,11 @@ $(document).ready(function () {
                     },
                 },
                 {
+                    title: 'Id Maquina',
+                    data: 'id_machine',
+                    className: 'uniqueClassName',
+                },
+                {
                     title: 'Máquina',
                     data: 'machine',
                     className: 'uniqueClassName',
@@ -29,18 +34,6 @@ $(document).ready(function () {
                     title: '',
                     data: 'id_cicles_machine',
                     className: 'text-center',
-                    // render: function (data, type, full, meta) { 
-                    //     const moveUpBtn = meta.row > 0 ? `<a href="javascript:;"><i class="bi bi-arrow-up-circle-fill move mt-1 ml-1" id="up" data-index="${meta.row}" style="color: black;"></i></a>` : '';
-                    //     const moveDownBtn = meta.row < meta.settings.fnRecordsDisplay() - 1  || meta.row === 0 ?
-                    //         `<a href="javascript:;"><i class="bi bi-arrow-down-circle-fill move mt-1 ml-1" id="down" data-index="${meta.row}" style="color: black;"></i></a>` : '';
-                        
-
-                    //     return `<div class="btn-group" id="actionRoute" role="group" style="color: black;">
-                    //         <h3>${String.fromCharCode(65 + meta.row)}</h3>
-                    //         ${moveUpBtn}
-                    //         ${moveDownBtn}
-                    //     </div>`;
-                    // },
                 },
             ],
             drawCallback: function (settings) {
@@ -60,8 +53,7 @@ $(document).ready(function () {
                                 ${moveDownBtn}
                             </div>`);
                 });
-            },
-
+            }, 
         });
     };
 });

@@ -286,7 +286,15 @@ $app->get('/deletePlanCiclesMachine/{id_cicles_machine}', function (Request $req
 $app->post('/saveRoute', function (Request $request, Response $response, $args) use ($generalPlanCiclesMachinesDao) {
     $dataRoute = $request->getParsedBody();
 
-    $resolution = $generalPlanCiclesMachinesDao->changeRouteById($dataRoute);
+    $routes = $dataRoute['data'];
+
+    $resolution = null;
+
+    foreach ($routes as $arr) {
+        $resolution = $generalPlanCiclesMachinesDao->changeRouteById($arr);
+
+        if (isset($resolution['info'])) break;
+    }
 
     if ($resolution == null)
         $resp = array('success' => true, 'message' => 'Ciclo de maquina modificado correctamente');

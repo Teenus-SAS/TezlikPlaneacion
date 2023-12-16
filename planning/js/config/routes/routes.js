@@ -2,32 +2,40 @@ $(document).ready(function () {
     $(document).on('click', '.move', function (e) {
         let row = $(this).parent().parent().parent().parent()[0];
         let data = tblRoutes.fnGetData(row);
-        // let allData = tblRoutes.fnGetData();
+        let allData = tblRoutes.fnGetData();
         let type = getLastText(this.className);
-        let index = getFirstText(this.className);
+        let index = parseInt(getFirstText(this.className));
 
         $(this).hide(200);
 
         let form = document.getElementById(`actionRoute-${index}`);
         form.insertAdjacentHTML(
-        'beforeend',
-        `<div class="spinner-border spinner-border-sm text-secondary" role="status">
+            'beforeend',
+            `<div class="spinner-border spinner-border-sm text-secondary" role="status">
                 <span class="sr-only">Loading...</span>
-        </div>`
-        );
-
+                </div>`
+                );
+                
+        let dataRoute = []; 
+        
         // obtener el nuevo valor de route
-        type == 'up' ? route = data.route - 1 : route = data.route + 1; 
+        if (type == 'up') {
+            dataRoute.push({ 'idCiclesMachine': data.id_cicles_machine, 'route': data.route - 1 });
+            dataRoute.push({ 'idCiclesMachine': allData[index - 1].id_cicles_machine, 'route': allData[index - 1].route + 1 });
+        }
+        else {
+            dataRoute.push({ 'idCiclesMachine': data.id_cicles_machine, 'route': data.route + 1 });
+            dataRoute.push({ 'idCiclesMachine': allData[index + 1].id_cicles_machine, 'route': allData[index + 1].route - 1 });
+        }
 
-        let dataRoute = {};
-        dataRoute['idCiclesMachine'] = data.id_cicles_machine;
-        dataRoute['route'] = route;
-
-        $.post('/api/saveRoute', dataRoute,
-            function (data, textStatus, jqXHR) {
-                messageRoutes(data);
-            },
-        );
+        $.ajax({
+            type: "POST",
+            url: "/api/saveRoute",
+            data: {data: dataRoute},
+            success: function (data) {
+                messageRoutes(data); 
+            }
+        }); 
 
     });
 
