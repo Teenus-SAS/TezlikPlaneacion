@@ -36,7 +36,6 @@ $(document).ready(function () {
     }
   };
 
-
   loadAllDataProgramming();
 
   $(document).on('change', '#order', function (e) {

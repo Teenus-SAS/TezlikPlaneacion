@@ -4,9 +4,7 @@ $(document).ready(function () {
   $('.cardRawMaterials').hide();
 
   /* Abrir panel para crear materiales */
-
-  $('#btnNewMaterial').click(function (e) {
-    e.preventDefault();
+  $(document).on('click', '#btnNewMaterial', function () {
     $('.cardImportMaterials').hide(800);
     $('.cardRawMaterials').toggle(800);
     $('#btnCreateMaterial').html('Crear');
@@ -18,9 +16,7 @@ $(document).ready(function () {
   });
 
   /* Crear producto */
-
-  $('#btnCreateMaterial').click(function (e) {
-    e.preventDefault();
+  $(document).on('click', '#btnCreateMaterial', function () {
     let idMaterial = sessionStorage.getItem('id_material');
 
     if (idMaterial == '' || idMaterial == null) {
@@ -58,7 +54,7 @@ $(document).ready(function () {
         minimumFractionDigits: 2,
         maximumFractionDigits: 2,
       });
-    $('#quantity').val(quantity);
+    $('#mQuantity').val(quantity);
 
     $('html, body').animate(
       {
@@ -73,7 +69,7 @@ $(document).ready(function () {
     let ref = $('#refRawMaterial').val();
     let material = $('#nameRawMaterial').val();
     let unity = $('#unit').val();
-    let quantity = $('#quantity').val();
+    let quantity = $('#mQuantity').val();
 
     if (ref == '' || material == '' || unity == '') {
       toastr.error('Ingrese todos los campos');
@@ -96,7 +92,7 @@ $(document).ready(function () {
 
     let resp = await sendDataPOST(url, dataMaterial);
 
-    message(resp);
+    messageMaterials(resp);
   };
 
   /* Eliminar productos */
@@ -126,7 +122,7 @@ $(document).ready(function () {
           $.get(
             `../../api/deleteMaterial/${idMaterial}`,
             function (data, textStatus, jqXHR) {
-              message(data);
+              messageMaterials(data);
             }
           );
         }
@@ -136,7 +132,7 @@ $(document).ready(function () {
 
   /* Mensaje de exito */
 
-  message = (data) => {
+  messageMaterials = (data) => {
     if (data.success == true) {
       $('.cardImportMaterials').hide(800);
       $('#formImportMaterials').trigger('reset');

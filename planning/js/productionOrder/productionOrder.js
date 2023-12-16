@@ -39,16 +39,10 @@ $(document).ready(function () {
     /* Mensaje de exito */
     message = (data) => {
         if (data.success == true) {
-            loadTblProductionOrders(2);
+            loadData();
             toastr.success(data.message);
             return false;
         } else if (data.error == true) toastr.error(data.message);
         else if (data.info == true) toastr.info(data.message);
     };
-
-    /* Actualizar tabla */
-    // function updateTable() {
-    //     $('#tblProductionOrders').DataTable().clear();
-    //     $('#tblProductionOrders').DataTable().ajax.reload();
-    // }
 });

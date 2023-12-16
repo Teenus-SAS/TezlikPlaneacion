@@ -123,7 +123,7 @@ $(document).ready(function () {
         $('.cardBottons').show(400);
         $('#filePlanCiclesMachine').val('');
 
-        message(r);
+        messageMachine(r);
       },
     });
   };

@@ -59,30 +59,22 @@
                                                 <i class="fas fa-cube"></i>
                                                 <a href="/planning/products">Inventarios</a>
                                                 </li>
-                                                <?php if ($_SESSION['planning_material'] == 1) { ?>
-                                                    <li class="planMaterials">
+                                                <?php if ($_SESSION['planning_machine'] == 1) { ?>
+                                                    <li class="planMachines">
                                                     <?php } else { ?>
-                                                    <li class="planMaterials" style="display: none;">
+                                                    <li class="planMachines" style="display: none;">
                                                     <?php } ?>
-                                                    <i class="fas fa-flask"></i>
-                                                    <a href="/planning/materials">Inventario Materias Prima</a>
+                                                    <i class="fas fa-cogs"></i>
+                                                    <a href="/planning/machines">Procesos y Máquinas</a>
                                                     </li>
-                                                    <?php if ($_SESSION['planning_machine'] == 1) { ?>
-                                                        <li class="planMachines">
+                                                    <?php if ($_SESSION['requisition'] == 1) { ?>
+                                                        <li class="planRequisitions">
                                                         <?php } else { ?>
-                                                        <li class="planMachines" style="display: none;">
+                                                        <li class="planRequisitions" style="display: none;">
                                                         <?php } ?>
-                                                        <i class="fas fa-cogs"></i>
-                                                        <a href="/planning/machines">Procesos y Máquinas</a>
+                                                        <i class="fas fa-clipboard-list"></i>
+                                                        <a href="/planning/requisitions">Control Requisiciones</a>
                                                         </li>
-                                                        <?php if ($_SESSION['requisition'] == 1) { ?>
-                                                            <li class="planRequisitions">
-                                                            <?php } else { ?>
-                                                            <li class="planRequisitions" style="display: none;">
-                                                            <?php } ?>
-                                                            <i class="fas fa-clipboard-list"></i>
-                                                            <a href="/planning/requisitions">Control Requisiciones</a>
-                                                            </li>
                                         </ul>
                                         </div>
 

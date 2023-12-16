@@ -1,12 +1,68 @@
 $(document).ready(function () {
-  /* Cargue tabla de Productos Materiales */
-  loadTblRequisitions = (min_date, max_date) => {
-    if (min_date == null && max_date == null) url = "/api/requisitions";
-    else url = `/api/requisitions/${min_date}/${max_date}`;
+  $('.selectNavigation').click(function (e) {
+    e.preventDefault();
+    
+    if (this.id == 'pending')
+      loadTblRequisitions(pending, true);
+    else if (this.id == 'done')
+      loadTblRequisitions(done, false);
+  });
 
+  loadAllData = async (op, min_date, max_date) => {
+    try {
+      const [dataRequisitions, dateRequisitions] = await Promise.all([
+        searchData('/api/requisitions'),
+        op == 3 ? searchData(`/api/requisitions/${min_date}/${max_date}`) : null
+      ]);
+
+      let card = document.getElementsByClassName('selectNavigation');
+
+      if (card[0].className.includes('active')) {
+        pending = 1;
+        op = 1;
+      }
+      else {
+        pending = 1;
+        op = 2;
+      }
+
+      pending = dataRequisitions.filter(item => item.application_date == "0000-00-00" &&
+        item.delivery_date == "0000-00-00" &&
+        item.purchase_order == "");
+      done = dataRequisitions.filter(item => item.application_date != "0000-00-00" &&
+        item.delivery_date != "0000-00-00" &&
+        item.purchase_order != "");
+      
+      let visible = true;
+      if (op === 1)
+        dataToLoad = pending;
+      else if (op === 2) {
+        dataToLoad = deliveredStore
+        visible = false;
+      } else {
+        if (pending == 1)
+          dataToLoad = dateRequisitions.filter(item => item.application_date == "0000-00-00" &&
+            item.delivery_date == "0000-00-00" &&
+            item.purchase_order == "");
+        else
+          dataToLoad = dateRequisitions.filter(item => item.application_date != "0000-00-00" &&
+            item.delivery_date != "0000-00-00" &&
+            item.purchase_order != "");
+      }
+
+      if (dataToLoad) {
+        loadTblRequisitions(dataToLoad, visible);
+      }
+    } catch (error) {
+      console.error('Error loading data:', error);
+    }
+  };
+
+  /* Cargue tabla de Productos Materiales */
+  loadTblRequisitions = (data,visible) => { 
     if ($.fn.dataTable.isDataTable("#tblRequisitions")) {
       $("#tblRequisitions").DataTable().clear();
-      $("#tblRequisitions").DataTable().ajax.url(url).load();
+      $("#tblRequisitions").DataTable().rows.add(data).draw();
       return;
     }
 
@@ -14,10 +70,7 @@ $(document).ready(function () {
       // destroy: true,
       pageLength: 50,
       order: [[9, 'asc']],
-      ajax: {
-        url: url,
-        dataSrc: "",
-      },
+      data:data,
       language: {
         url: "//cdn.datatables.net/plug-ins/1.10.20/i18n/Spanish.json",
       },
@@ -82,10 +135,6 @@ $(document).ready(function () {
               data.purchase_order == "" ) || !data.admission_date
             )
               date = "";
-            // else if ()
-            //   date = `<button class="btn btn-warning changeDate " id="${
-            //     meta.row + 1
-            //   }" name="${meta.row + 1}">Recibir</button>`;
             else date = `Recibido<br>${data.admission_date}`;
 
             return date;
@@ -107,5 +156,5 @@ $(document).ready(function () {
     });
   };
 
-  loadTblRequisitions(null, null);
+  loadAllData(1, null, null);
 });

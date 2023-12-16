@@ -3,20 +3,16 @@ $(document).ready(function () {
 
   $('.cardImportProducts').hide();
 
-  $('#btnImportNewProducts').click(function (e) {
-    e.preventDefault();
+  $(document).on('click', '#btnImportNewProducts', function () {
     $('.cardCreateProduct').hide(800);
     $('.cardImportProducts').toggle(800);
   });
 
-  $('#fileProducts').change(function (e) {
-    e.preventDefault();
+  $(document).on('change', '#fileProducts', function () {
     selectedFile = e.target.files[0];
   });
 
-  $('#btnImportProducts').click(function (e) {
-    e.preventDefault();
-
+  $(document).on('click', '#btnImportProducts', function () {
     file = $('#fileProducts').val();
 
     if (!file) {
@@ -52,19 +48,19 @@ $(document).ready(function () {
           return false;
         }
 
-        let productsToImport = data.map((item) => {          
+        let productsToImport = data.map((item) => {
           return {
             referenceProduct: item.referencia_producto,
-            product: item.producto, 
-            quantity: item.existencias, 
+            product: item.producto,
+            quantity: item.existencias,
           };
         });
         checkProduct(productsToImport);
       })
       .catch(() => {
         $('.cardLoading').remove();
-    $('.cardBottons').show(400);
-    $('#fileProducts').val('');
+        $('.cardBottons').show(400);
+        $('#fileProducts').val('');
         toastr.error('Ocurrio un error. Intente Nuevamente');
       });
   });
@@ -78,8 +74,8 @@ $(document).ready(function () {
       success: function (resp) {
         if (resp.error == true) {
           $('.cardLoading').remove();
-    $('.cardBottons').show(400);
-    $('#fileProducts').val('');
+          $('.cardBottons').show(400);
+          $('#fileProducts').val('');
           toastr.error(resp.message);
           $('#formImportProduct').trigger('reset');
           return false;
@@ -102,8 +98,8 @@ $(document).ready(function () {
               saveProductTable(data);
             } else {
               $('.cardLoading').remove();
-    $('.cardBottons').show(400);
-    $('#fileProducts').val(''); 
+              $('.cardBottons').show(400);
+              $('#fileProducts').val('');
             }
           },
         });
@@ -122,15 +118,13 @@ $(document).ready(function () {
         $('.cardLoading').remove();
         $('.cardBottons').show(400);
         $('#fileProducts').val('');
-        message(r);
+        messageProducts(r);
       },
     });
   };
 
   /* Descargar formato */
-  $('#btnDownloadImportsProducts').click(function (e) {
-    e.preventDefault();
-
+  $(document).on('click', '#btnDownloadImportsProducts', function () {
     url = 'assets/formatsXlsx/Productos.xlsx';
 
     link = document.createElement('a');

@@ -3,20 +3,16 @@ $(document).ready(function () {
 
   $('.cardImportMaterials').hide();
 
-  $('#btnImportNewMaterials').click(function (e) {
-    e.preventDefault();
+  $(document).on('click', '#btnImportNewMaterials', function () {
     $('.cardRawMaterials').hide(800);
     $('.cardImportMaterials').toggle(800);
   });
 
-  $('#fileMaterials').change(function (e) {
-    e.preventDefault();
+  $(document).on('change', '#fileMaterials', function () {
     selectedFile = e.target.files[0];
   });
 
-  $('#btnImportMaterials').click(function (e) {
-    e.preventDefault();
-
+  $(document).on('click', '#btnImportMaterials', function () {
     file = $('#fileMaterials').val();
 
     if (!file) {
@@ -80,8 +76,8 @@ $(document).ready(function () {
       success: function (resp) {
         if (resp.error == true) {
           $('.cardLoading').remove();
-        $('.cardBottons').show(400);
-        $('#fileMaterials').val('');
+          $('.cardBottons').show(400);
+          $('#fileMaterials').val('');
           $('#formImportMaterials').trigger('reset');
           toastr.error(resp.message);
           return false;
@@ -104,8 +100,8 @@ $(document).ready(function () {
               saveMaterialTable(data);
             } else {
               $('.cardLoading').remove();
-        $('.cardBottons').show(400);
-        $('#fileMaterials').val('');
+              $('.cardBottons').show(400);
+              $('#fileMaterials').val('');
             }
           },
         });
@@ -123,15 +119,13 @@ $(document).ready(function () {
         $('.cardBottons').show(400);
         $('#fileMaterials').val('');
 
-        message(r);
+        messageMaterials(r);
       },
     });
   };
 
   /* Descargar formato */
-  $('#btnDownloadImportsMaterials').click(async function (e) {
-    e.preventDefault();
-
+  $(document).on('click', '#btnDownloadImportsMaterials', async function () {
     $('.cardBottons').hide();
     
     let form = document.getElementById('formMaterials');

@@ -1,11 +1,60 @@
 $(document).ready(function () {
+  $('.selectNavigation').click(function (e) {
+    e.preventDefault();
+
+    let card = document.getElementsByClassName('cardHeader')[0];
+    $('#card').remove();
+    if (this.id == 'products') {
+      $('.cardProducts').show(800);
+      $('.cardMaterials').hide(800);
+      $('.cardRawMaterials').hide(800);
+      $('.cardImportMaterials').hide(800);
+
+      card.insertAdjacentHTML('beforeend', `
+                                <div class="col-sm-7 col-xl-6 form-inline justify-content-sm-end" id="card">
+                                    <div class="col-xs-2 mr-2">
+                                        <button class="btn btn-warning" id="btnNewProduct"><i class="bi bi-plus-circle"></i> Nuevo Producto</button>
+                                    </div>
+                                    <div class="col-xs-2 py-2 mr-2">
+                                        <button class="btn btn-info" id="btnImportNewProducts"><i class="bi bi-cloud-arrow-up-fill"></i> Importar</button>
+                                    </div>
+                                </div>`);
+    } else if (this.id == 'materials') {
+      $('.cardMaterials').show(800);
+      $('.cardProducts').hide(800);
+      $('.cardCreateProduct').hide(800);
+      $('.cardImportProducts').hide(800);
+
+      card.insertAdjacentHTML('beforeend', `
+                                <div class="col-sm-7 col-xl-6 form-inline justify-content-sm-end" id="card">
+                                    <div class="col-xs-2 mr-2">
+                                        <button class="btn btn-warning" id="btnNewMaterial" name="btnNewMaterial"><i class="bi bi-plus-circle"></i> Nueva Materia Prima</button>
+                                    </div>
+                                    <div class="col-xs-2 py-2 mr-2">
+                                        <button class="btn btn-info" id="btnImportNewMaterials" name="btnNewImportMaterials"><i class="bi bi-cloud-arrow-up-fill"></i> Importar</button>
+                                    </div>
+                                </div>`);
+    }
+
+    let tables = document.getElementsByClassName(
+      'dataTable'
+    );
+
+    for (let i = 0; i < tables.length; i++) {
+      let attr = tables[i];
+      attr.style.width = '100%';
+      attr = tables[i].firstElementChild;
+      attr.style.width = '100%';
+    }
+  });
+
   /* Ocultar panel crear producto */
 
   $('.cardCreateProduct').hide();
 
   /* Cargar imagen de producto */
   $('#formFile').change(function (e) {
-    e.preventDefault();
+    // e.preventDefault();
 
     $('#preview').html(
       `<img id="img" src="${URL.createObjectURL(
@@ -15,10 +64,7 @@ $(document).ready(function () {
   });
 
   /* Abrir panel crear producto */
-
-  $('#btnNewProduct').click(function (e) {
-    e.preventDefault();
-
+  $(document).on('click', '#btnNewProduct', function () { 
     $('.cardCreateProduct').toggle(800);
     $('.cardImportProducts').hide(800);
     $('#btnCreateProduct').html('Crear Producto');
@@ -30,9 +76,7 @@ $(document).ready(function () {
   });
 
   /* Crear producto */
-
-  $('#btnCreateProduct').click(function (e) {
-    e.preventDefault();
+$(document).on('click','#btnCreateProduct', function () { 
     let idProduct = sessionStorage.getItem('id_product');
 
     if (idProduct == '' || idProduct == null) {
@@ -56,7 +100,7 @@ $(document).ready(function () {
     let data = tblProducts.fnGetData(row);
     $('#referenceProduct').val(data.reference);
     $('#product').val(data.product);
-    $('#quantity').val(data.quantity); 
+    $('#pQuantity').val(data.quantity); 
     
     if(data.img)
       $('#preview').html(
@@ -87,7 +131,7 @@ $(document).ready(function () {
 
     let resp = await sendDataPOST(url, dataProduct);
 
-    message(resp);
+    messageProducts(resp);
   }; 
 
   /* Eliminar productos */
@@ -117,7 +161,7 @@ $(document).ready(function () {
           $.get(
             `/api/deletePlanProduct/${idProduct}`,
             function (data, textStatus, jqXHR) {
-              message(data);
+              messageProducts(data);
             }
           );
         }
@@ -127,7 +171,7 @@ $(document).ready(function () {
  
   /* Mensaje de exito */
 
-  message = (data) => {
+  messageProducts = (data) => {
     if (data.success == true) {
       $('#formImportProduct').trigger('reset');
       $('.cardCreateProduct').hide(800);
