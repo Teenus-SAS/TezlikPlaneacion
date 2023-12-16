@@ -133,7 +133,8 @@ $(document).ready(function () {
     /* Mensaje de exito */
     message = (data) => {
         if (data.success == true) {
-            loadTblOffices(null, null);
+            // loadTblOffices(null, null);
+            loadAllData(2, null, null);
             $('.cardAddDate').hide(800);
             $('#formAddDate').trigger('reset');
             toastr.success(data.message);
