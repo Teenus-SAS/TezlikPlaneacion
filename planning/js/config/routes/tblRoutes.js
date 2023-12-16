@@ -48,13 +48,13 @@ $(document).ready(function () {
                 const recordsDisplay = tblRoutes.fnSettings().fnRecordsDisplay();
 
                 $('#tblRoutes tbody tr').each(function (index) {
-                    const moveUpBtn = index > 0 ? `<a href="javascript:;" data-index="${index}"><i class="bi bi-arrow-up-circle-fill move mt-1 ml-1 up" style="color: black;"></i></a>` : '';
+                    const moveUpBtn = index > 0 ? `<a href="javascript:;" data-index="${index}"><i class="${index} bi bi-arrow-up-circle-fill move mt-1 ml-1 up" style="color: black;"></i></a>` : '';
 
                     const moveDownBtn = index < recordsDisplay - 1 && index < recordsTotal - 1
-                        ? `<a href="javascript:;" data-index="${index}"><i class="bi bi-arrow-down-circle-fill move mt-1 ml-1 down" style="color: black;"></i></a>`
+                        ? `<a href="javascript:;" data-index="${index}"><i class="${index} bi bi-arrow-down-circle-fill move mt-1 ml-1 down" style="color: black;"></i></a>`
                         : '';
         
-                    $(this).find('td:last-child').html(`<div class="btn-group" role="group" style="color: black;">
+                    $(this).find('td:last-child').html(`<div class="btn-group" id="actionRoute-${index}" role="group" style="color: black;">
                                 <h3>${String.fromCharCode(65 + index)}</h3>
                                 ${moveUpBtn}
                                 ${moveDownBtn}

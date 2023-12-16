@@ -143,13 +143,21 @@ $app->post('/addPlanCiclesMachine', function (Request $request, Response $respon
                 $machine = $lastDataDao->findLastInsertedCiclesMachine($id_company);
                 $data['idCiclesMachine'] = $machine['id_cicles_machine'];
 
-                $arr = $ciclesMachinesDao->calcUnitsTurn($machine['id_cicles_machine']);
-                $data['units_turn'] = $arr['units_turn'];
+                // Agregar ruta siguiente
+                $arr = $generalPlanCiclesMachinesDao->findNextRouteByProduct($dataPlanCiclesMachine['idProduct']);
+                $data['route'] = $arr['route'];
+                $planCiclesMachine = $generalPlanCiclesMachinesDao->changeRouteById($data);
 
-                $arr = $ciclesMachinesDao->calcUnitsMonth($machine['id_cicles_machine']);
-                $data['units_month'] = $arr['units_month'];
+                if ($planCiclesMachine == null) {
+                    // Calcular unidades
+                    $arr = $ciclesMachinesDao->calcUnitsTurn($machine['id_cicles_machine']);
+                    $data['units_turn'] = $arr['units_turn'];
 
-                $planCiclesMachine = $generalPlanCiclesMachinesDao->updateUnits($data);
+                    $arr = $ciclesMachinesDao->calcUnitsMonth($machine['id_cicles_machine']);
+                    $data['units_month'] = $arr['units_month'];
+
+                    $planCiclesMachine = $generalPlanCiclesMachinesDao->updateUnits($data);
+                }
             }
 
             if ($planCiclesMachine == null)
@@ -183,6 +191,7 @@ $app->post('/addPlanCiclesMachine', function (Request $request, Response $respon
 
             if (isset($resolution)) break;
 
+
             $data = [];
             if (!$findPlanCiclesMachine) {
                 $machine = $lastDataDao->findLastInsertedCiclesMachine($id_company);
@@ -190,6 +199,13 @@ $app->post('/addPlanCiclesMachine', function (Request $request, Response $respon
             } else
                 $data['idCiclesMachine'] = $findPlanCiclesMachine['idCiclesMachine'];
 
+            // Añadir siguiente ruta
+            $arr = $generalPlanCiclesMachinesDao->findNextRouteByProduct($planCiclesMachine[$i]['idProduct']);
+            $data['route'] = $arr['route'];
+            $resolution = $generalPlanCiclesMachinesDao->changeRouteById($data);
+
+            if (isset($resolution)) break;
+            // Calcular unidades
             $arr = $ciclesMachinesDao->calcUnitsTurn($machine['id_cicles_machine']);
             $data['units_turn'] = $arr['units_turn'];
 
@@ -243,11 +259,26 @@ $app->post('/updatePlanCiclesMachine', function (Request $request, Response $res
     return $response->withHeader('Content-Type', 'application/json');
 });
 
-$app->get('/deletePlanCiclesMachine/{id_cicles_machine}', function (Request $request, Response $response, $args) use ($planCiclesMachineDao) {
-    $planCiclesMachine = $planCiclesMachineDao->deletePlanCiclesMachine($args['id_cicles_machine']);
+$app->get('/deletePlanCiclesMachine/{id_cicles_machine}', function (Request $request, Response $response, $args) use (
+    $planCiclesMachineDao,
+    $generalPlanCiclesMachinesDao
+) {
 
-    if ($planCiclesMachine == null) $resp = array('success' => true, 'message' => 'Ciclo de maquina eliminado correctamente');
-    else $resp = array('error' => true, 'message' => 'No se pudo eliminar ciclo de maquina, existe informacion asociada a él');
+    // $planCiclesMachine = $generalPlanCiclesMachinesDao->findPlanCiclesMachine($args['id_cicles_machine']);
+
+    $resolution = $planCiclesMachineDao->deletePlanCiclesMachine($args['id_cicles_machine']);
+
+    // if ($resolution == null){
+
+    // }
+
+    if ($resolution == null)
+        $resp = array('success' => true, 'message' => 'Ciclo de maquina eliminado correctamente');
+    else if (isset($resolution['info']))
+        $resp = array('info' => true, 'message' => $resolution['message']);
+    else
+        $resp = array('error' => true, 'message' => 'No se pudo eliminar ciclo de maquina, existe informacion asociada a él');
+
     $response->getBody()->write(json_encode($resp, JSON_NUMERIC_CHECK));
     return $response->withHeader('Content-Type', 'application/json');
 });
@@ -258,11 +289,11 @@ $app->post('/saveRoute', function (Request $request, Response $response, $args) 
     $resolution = $generalPlanCiclesMachinesDao->changeRouteById($dataRoute);
 
     if ($resolution == null)
-        $resp = array('success' => true, 'message' => 'Ciclo de maquina eliminado correctamente');
+        $resp = array('success' => true, 'message' => 'Ciclo de maquina modificado correctamente');
     else if (isset($resolution['info']))
         $resp = array('info' => true, 'message' => $resolution['message']);
     else
-        $resp = array('error' => true, 'message' => 'No se pudo eliminar ciclo de maquina, existe informacion asociada a él');
+        $resp = array('error' => true, 'message' => 'No se pudo modificar la información. Intente nuevamente');
 
     $response->getBody()->write(json_encode($resp, JSON_NUMERIC_CHECK));
     return $response->withHeader('Content-Type', 'application/json');

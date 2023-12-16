@@ -17,19 +17,29 @@ class GeneralPlanCiclesMachinesDao
     }
 
     // Buscar si existe en la BD
-    public function findPlanCiclesMachine($dataCiclesMachine, $id_company)
+    public function findPlanCiclesMachine($id_cicles_machine)
     {
         $connection = Connection::getInstance()->getConnection();
 
-        $stmt = $connection->prepare("SELECT *  FROM plan_cicles_machine
-                                      WHERE id_product = :id_product AND id_company = :id_company");
-        $stmt->execute([
-            'id_product' => $dataCiclesMachine['idProduct'],
-            'id_company' => $id_company
-        ]);
+        $stmt = $connection->prepare("SELECT *  FROM plan_cicles_machine WHERE id_cicles_machine = :id_cicles_machine");
+        $stmt->execute(['id_cicles_machine' => $id_cicles_machine]);
         $planCiclesMachine = $stmt->fetch($connection::FETCH_ASSOC);
         return $planCiclesMachine;
     }
+
+    // public function findPlansCiclesMachine($dataCiclesMachine, $id_company)
+    // {
+    //     $connection = Connection::getInstance()->getConnection();
+
+    //     $stmt = $connection->prepare("SELECT *  FROM plan_cicles_machine
+    //                                   WHERE id_product = :id_product AND id_company = :id_company");
+    //     $stmt->execute([
+    //         'id_product' => $dataCiclesMachine['idProduct'],
+    //         'id_company' => $id_company
+    //     ]);
+    //     $planCiclesMachine = $stmt->fetch($connection::FETCH_ASSOC);
+    //     return $planCiclesMachine;
+    // }
 
     public function findAllPlanCiclesMachine($id_machine)
     {
@@ -87,6 +97,20 @@ class GeneralPlanCiclesMachinesDao
             'id_product' => $id_product,
             'id_machine' => $id_machine,
             'id_company' => $id_company
+        ]);
+        $planCiclesMachine = $stmt->fetch($connection::FETCH_ASSOC);
+        return $planCiclesMachine;
+    }
+
+    public function findNextRouteByProduct($id_product)
+    {
+        $connection = Connection::getInstance()->getConnection();
+
+        $stmt = $connection->prepare("SELECT MAX(route) + 1 AS route
+                                      FROM plan_cicles_machine
+                                      WHERE id_product = :id_product");
+        $stmt->execute([
+            'id_product' => $id_product,
         ]);
         $planCiclesMachine = $stmt->fetch($connection::FETCH_ASSOC);
         return $planCiclesMachine;

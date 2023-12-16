@@ -2,19 +2,22 @@ $(document).ready(function () {
     $(document).on('click', '.move', function (e) {
         let row = $(this).parent().parent().parent().parent()[0];
         let data = tblRoutes.fnGetData(row);
+        // let allData = tblRoutes.fnGetData();
         let type = getLastText(this.className);
+        let index = getFirstText(this.className);
 
-        // $(this).hide(200);
+        $(this).hide(200);
 
-        // let form = document.getElementById('actionRoute');
-        // form.insertAdjacentHTML(
-        // 'beforeend',
-        // `<div class="spinner-border spinner-border-sm text-secondary" role="status">
-        //         <span class="sr-only">Loading...</span>
-        // </div>`
-        // );
+        let form = document.getElementById(`actionRoute-${index}`);
+        form.insertAdjacentHTML(
+        'beforeend',
+        `<div class="spinner-border spinner-border-sm text-secondary" role="status">
+                <span class="sr-only">Loading...</span>
+        </div>`
+        );
 
-        type == 'up' ? route = data.route - 1 : route = data.route + 1;
+        // obtener el nuevo valor de route
+        type == 'up' ? route = data.route - 1 : route = data.route + 1; 
 
         let dataRoute = {};
         dataRoute['idCiclesMachine'] = data.id_cicles_machine;

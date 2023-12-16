@@ -1,10 +1,10 @@
 $(document).ready(function () {
   getFirstText = (str) => {
-    let lastSpace = str.lastIndexOf(' ');
+    let firstSpace = str.indexOf(' ');
 
-    let lastText = str.slice(0, lastSpace);
+    let firstText = str.substring(0, firstSpace);
 
-    return lastText;
+    return firstText;
   };
 
   getLastText = (str) => {
