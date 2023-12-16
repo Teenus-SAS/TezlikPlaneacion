@@ -1,11 +1,32 @@
 $(document).ready(function () {
-  tblProductionOrders = $("#tblProductionOrders").dataTable({
-    destroy: true,
+
+  $('.selectNavigation').click(function (e) {
+    e.preventDefault();
+    
+    if (this.id == 'processOP')
+      loadTblProductionOrders(1);
+    else if (this.id == 'completeOP')
+      loadTblProductionOrders(2);
+  });
+
+  loadTblProductionOrders = async (op) => {
+    let data = await searchData('/api/productionOrder');
+
+    if (op == 1) 
+      data = data.filter(item => item.status == 'En Produccion'); 
+    else 
+      data = data.filter(item => item.status != 'En Produccion'); 
+
+    if ($.fn.dataTable.isDataTable("#tblProductionOrders")) {
+      $("#tblProductionOrders").DataTable().clear();
+      $("#tblProductionOrders").DataTable().rows.add(data).draw();
+      return;
+    }
+
+    tblProductionOrders = $("#tblProductionOrders").dataTable({
+    // destroy: true,
     pageLength: 50,
-    ajax: {
-      url: "/api/productionOrder",
-      dataSrc: "",
-    },
+    data:data,
     language: {
       url: "//cdn.datatables.net/plug-ins/1.10.20/i18n/Spanish.json",
     },
@@ -68,18 +89,7 @@ $(document).ready(function () {
             "DD/MM/YYYY HH:mm A"
           )}<br>Fin: ${moment(maxDate).format("DD/MM/YYYY HH:mm A")}`;
         },
-      },
-      /* {
-        title: "Estado",
-        data: "status",
-        className: "classCenter",
-        render: function (data) {
-          if (data == "En Produccion") badge = "badge-info";
-          else if (data == "Fabricado") badge = "badge-warning";
-
-          return `<span class="badge ${badge}">${data}</span>`;
-        },
-      }, */
+      }, 
       {
         title: "Acciones",
         data: "status",
@@ -94,4 +104,7 @@ $(document).ready(function () {
       },
     ],
   });
+  }
+
+  loadTblProductionOrders(1);
 });

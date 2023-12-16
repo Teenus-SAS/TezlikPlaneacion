@@ -39,7 +39,7 @@ $(document).ready(function () {
     /* Mensaje de exito */
     message = (data) => {
         if (data.success == true) {
-            updateTable();
+            loadTblProductionOrders(2);
             toastr.success(data.message);
             return false;
         } else if (data.error == true) toastr.error(data.message);
@@ -47,8 +47,8 @@ $(document).ready(function () {
     };
 
     /* Actualizar tabla */
-    function updateTable() {
-        $('#tblProductionOrders').DataTable().clear();
-        $('#tblProductionOrders').DataTable().ajax.reload();
-    }
+    // function updateTable() {
+    //     $('#tblProductionOrders').DataTable().clear();
+    //     $('#tblProductionOrders').DataTable().ajax.reload();
+    // }
 });

@@ -7,53 +7,45 @@ $(document).ready(function () {
       .then((data) => {
         data = JSON.parse(data);
         // Guardar productos
-        dataProducts = JSON.stringify(data.products);
-
-        let $select = $("#category");
-        $select.empty();
-        $select.append(`<option disabled selected>Seleccionar</option>`);
-        $select.append(`<option value="1">Productos</option>`);
-        $select.append(`<option value="2">Materiales</option>`);
-        $select.append(`<option value="3">Todos</option>`);
+        dataProducts = JSON.stringify(data.products);  
 
         products = data.products;
         materials = data.rawMaterials;
+
+        $('#products').click();
       });
   };
 
   loadInventory();
 
   // Seleccionar Categoria
-  $("#category").change(function (e) {
+  $(".selectNavigation").click(function (e) {
     e.preventDefault();
 
     // Ocultar card formulario Analisis Inventario ABC
     $(".cardAddMonths").hide(800);
     $(".cardBtnAddMonths").hide(800);
 
-    value = this.value;
-    if (value != 0) {
-      // Productos
-      if (value == 1) {
-        $(".cardBtnAddMonths").show(800);
-        data = getInventory(products);
-        data["visible"] = true;
-      }
-      // Materias Prima
-      else if (value == 2) {
-        data = getInventory(materials);
-        data["visible"] = false;
-      }
-      // Todos
-      else if (value == 3) {
-        dataProducts = getInventory(products);
-        dataMaterials = getInventory(materials);
-
-        data = dataProducts.concat(dataMaterials);
-        data["visible"] = false;
-      }
-      loadTable(data);
+    // Productos
+    if (this.id == 'products') {
+      $(".cardBtnAddMonths").show(800);
+      data = getInventory(products);
+      data["visible"] = true;
     }
+    // Materias Prima
+    else if (this.id == 'materials') {
+      data = getInventory(materials);
+      data["visible"] = false;
+    }
+    // Todos
+    // else if (value == 3) {
+    //   dataProducts = getInventory(products);
+    //   dataMaterials = getInventory(materials);
+
+    //   data = dataProducts.concat(dataMaterials);
+    //   data["visible"] = false;
+    // }
+    loadTable(data);
   });
 
   getInventory = (data) => {
