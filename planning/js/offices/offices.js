@@ -134,7 +134,7 @@ $(document).ready(function () {
     message = (data) => {
         if (data.success == true) {
             // loadTblOffices(null, null);
-            loadAllData(2, null, null);
+            loadAllData(1, null, null);
             $('.cardAddDate').hide(800);
             $('#formAddDate').trigger('reset');
             toastr.success(data.message);
