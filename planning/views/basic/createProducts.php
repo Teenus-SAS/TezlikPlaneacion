@@ -50,10 +50,10 @@ if (sizeof($_SESSION) == 0)
                             </div>
                             <div class="col-sm-7 col-xl-6 form-inline justify-content-sm-end" id="card">
                                 <div class="col-xs-2 mr-2">
-                                    <button class="btn btn-warning" id="btnNewProduct"><i class="bi bi-plus-circle"></i> Nuevo Producto</button>
+                                    <button class="btn btn-warning" id="btnNewProduct"><i class="bi bi-plus-circle mr-1"></i>Adicionar</button>
                                 </div>
                                 <div class="col-xs-2 py-2 mr-2">
-                                    <button class="btn btn-info" id="btnImportNewProducts"><i class="bi bi-cloud-arrow-up-fill"></i> Importar</button>
+                                    <button class="btn btn-info" id="btnImportNewProducts"><i class="bi bi-cloud-arrow-up-fill"></i></button>
                                 </div>
                             </div>
                         </div>
@@ -85,11 +85,11 @@ if (sizeof($_SESSION) == 0)
                                                 <div class="col-sm-8">
                                                     <div class="form-row">
                                                         <div class="col-sm-6 floating-label enable-floating-label show-label">
-                                                            <label for="formFile" class="form-label"> Cargar imagen producto</label>
+                                                            <label for="formFile" class="form-label"> Cargar imagen</label>
                                                             <input class="form-control" type="file" id="formFile">
                                                         </div>
                                                         <div class="col-sm-4 mt-1">
-                                                            <button type="text" class="btn btn-success" id="btnCreateProduct">Crear Producto</button>
+                                                            <button type="text" class="btn btn-success" id="btnCreateProduct">Crear</button>
                                                         </div>
                                                     </div>
                                                 </div>
@@ -112,13 +112,13 @@ if (sizeof($_SESSION) == 0)
                                         <div class="form-row" id="formProducts">
                                             <div class="col-sm-6 floating-label enable-floating-label show-label drag-area" style="margin-bottom:10px!important">
                                                 <input class="form-control" type="file" id="fileProducts" accept=".xls,.xlsx">
-                                                <label for="formFile" class="form-label"> Importar Productos</label>
+                                                <label for="formFile" class="form-label"> Importar</label>
                                             </div>
                                             <div class="col-xs-2 cardBottons" style="margin-top:7px">
                                                 <button type="text" class="btn btn-success" id="btnImportProducts">Importar</button>
                                             </div>
                                             <div class="col-xs-2 cardBottons" style="margin-top:7px">
-                                                <button type="text" class="btn btn-info" id="btnDownloadImportsProducts">Descarga Formato</button>
+                                                <button type="text" class="btn btn-info" id="btnDownloadImportsProducts">Descargar Formato</button>
                                             </div>
                                         </div>
                                     </div>

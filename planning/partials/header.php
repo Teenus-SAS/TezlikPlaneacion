@@ -72,7 +72,7 @@
                                                         <?php } else { ?>
                                                         <li class="planRequisitions" style="display: none;">
                                                         <?php } ?>
-                                                        <i class="fas fa-clipboard-list"></i>
+                                                        <i class="fas fa-file-upload"></i>
                                                         <a href="/planning/requisitions">Control Requisiciones</a>
                                                         </li>
                                         </ul>
@@ -110,7 +110,7 @@
                                                                 <li class="planStock" style="display: none;">
                                                                 <?php } ?>
                                                                 <i class="fas fa-truck"></i>
-                                                                <a href="/planning/stock">Tiempos Recepción MP</a>
+                                                                <a href="/planning/stock">Tiempos Entrega MP</a>
                                                                 </li>
                                                 </ul>
                                                 </div>

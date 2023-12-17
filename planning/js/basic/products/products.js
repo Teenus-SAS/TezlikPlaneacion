@@ -13,10 +13,10 @@ $(document).ready(function () {
       card.insertAdjacentHTML('beforeend', `
                                 <div class="col-sm-7 col-xl-6 form-inline justify-content-sm-end" id="card">
                                     <div class="col-xs-2 mr-2">
-                                        <button class="btn btn-warning" id="btnNewProduct"><i class="bi bi-plus-circle"></i> Nuevo Producto</button>
+                                        <button class="btn btn-warning" id="btnNewProduct"><i class="bi bi-plus-circle mr-1"></i>Adicionar</button>
                                     </div>
                                     <div class="col-xs-2 py-2 mr-2">
-                                        <button class="btn btn-info" id="btnImportNewProducts"><i class="bi bi-cloud-arrow-up-fill"></i> Importar</button>
+                                        <button class="btn btn-info" id="btnImportNewProducts"><i class="bi bi-cloud-arrow-up-fill mr-1"></i></button>
                                     </div>
                                 </div>`);
     } else if (this.id == 'materials') {
@@ -28,10 +28,10 @@ $(document).ready(function () {
       card.insertAdjacentHTML('beforeend', `
                                 <div class="col-sm-7 col-xl-6 form-inline justify-content-sm-end" id="card">
                                     <div class="col-xs-2 mr-2">
-                                        <button class="btn btn-warning" id="btnNewMaterial" name="btnNewMaterial"><i class="bi bi-plus-circle"></i> Nueva Materia Prima</button>
+                                        <button class="btn btn-warning" id="btnNewMaterial" name="btnNewMaterial"><i class="bi bi-plus-circle mr-1"></i>Adicionar</button>
                                     </div>
                                     <div class="col-xs-2 py-2 mr-2">
-                                        <button class="btn btn-info" id="btnImportNewMaterials" name="btnNewImportMaterials"><i class="bi bi-cloud-arrow-up-fill"></i> Importar</button>
+                                        <button class="btn btn-info" id="btnImportNewMaterials" name="btnNewImportMaterials"><i class="bi bi-cloud-arrow-up-fill mr-1"></i></button>
                                     </div>
                                 </div>`);
     }

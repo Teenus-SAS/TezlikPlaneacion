@@ -41,7 +41,7 @@ if (sizeof($_SESSION) == 0)
                         <div class="row align-items-center">
                             <div class="col-sm-5 col-xl-6">
                                 <div class="page-title">
-                                    <h3 class="mb-1 font-weight-bold text-dark">Procesos y Máquinas</h3>
+                                    <h3 class="mb-1 font-weight-bold text-dark"><i class="fas fa-cogs mr-1"></i>Procesos y Máquinas</h3>
                                     <ol class="breadcrumb mb-3 mb-md-0">
                                         <li class="breadcrumb-item active">Creación de Procesos y Máquinas</li>
                                     </ol>
@@ -49,10 +49,10 @@ if (sizeof($_SESSION) == 0)
                             </div>
                             <div class="col-sm-7 col-xl-6 form-inline justify-content-sm-end">
                                 <div class="col-xs-2 mr-2">
-                                    <button class="btn btn-warning" id="btnNewMachine" name="btnNewMachine"><i class="bi bi-plus-circle"></i> Nueva Máquina</button>
+                                    <button class="btn btn-warning" id="btnNewMachine" name="btnNewMachine"><i class="bi bi-plus-circle mr-1"></i>Adicionar</button>
                                 </div>
                                 <div class="col-xs-2 py-2 mr-2">
-                                    <button class="btn btn-info" id="btnImportNewMachines" name="btnNewImportMachines"><i class="bi bi-cloud-arrow-up-fill"></i> Importar</button>
+                                    <button class="btn btn-info" id="btnImportNewMachines" name="btnNewImportMachines"><i class="bi bi-cloud-arrow-up-fill"></i></button>
                                 </div>
                             </div>
                         </div>

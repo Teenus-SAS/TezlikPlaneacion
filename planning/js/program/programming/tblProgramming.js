@@ -85,8 +85,10 @@ $(document).ready(function () {
             const quantityOrder = full.quantity_order;
             const quantityProgramming = full.quantity_programming;
             const accumulatedQuantity = full.accumulated_quantity;
-
-            return `Pedido: ${quantityOrder}<br>Fabricar: ${quantityProgramming}<br>Pendiente: ${accumulatedQuantity}`;
+            if (accumulatedQuantity > 0)
+              return `Pedido: ${quantityOrder}<br>Fabricar: ${quantityProgramming}<br><span class="badge badge-danger">Pendiente: ${accumulatedQuantity}</span>`;
+            else
+              return `Pedido: ${quantityOrder}<br>Fabricar: ${quantityProgramming}<br>Pendiente: ${accumulatedQuantity}`;
           },
         },
         {
