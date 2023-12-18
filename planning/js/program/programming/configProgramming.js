@@ -156,7 +156,17 @@ $(document).ready(function () {
       if (machines.length > 0) {
         dataProgramming.append('minDate', machines[machines.length - 1].max_date);
         let hour = new Date(machines[machines.length - 1].max_date).getHours();
-        calcMaxDate(machines[machines.length - 1].max_date, hour, 1);
+        let min_date = machines[machines.length - 1].max_date;
+        let date = new Date();
+        let dateFormat = convetFormatDate(date);
+
+        if (machines[machines.length - 1].max_date < dateFormat) {
+          date.setDate(date.getDate() + 1);
+
+          min_date = convetFormatDate(date);
+        }
+
+        calcMaxDate(min_date, hour, 1);
       } else {
         let date = sessionStorage.getItem('minDate');
 
