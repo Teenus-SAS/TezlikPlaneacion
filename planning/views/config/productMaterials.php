@@ -198,11 +198,11 @@ if (sizeof($_SESSION) == 0)
                                                 <!-- <div class="col-sm-2 floating-label enable-floating-label show-label" style="margin-bottom:20px">
                                                     <label for="">Referencia</label>
                                                     <select class="form-control refProduct" name="refProduct" id="refProduct"></select>
+                                                </div>-->
+                                                <div class="col-sm-4 floating-label enable-floating-label show-label" style="margin-bottom:0px">
+                                                    <select class="form-control" name="idProcess" id="idProcess"></select>
+                                                    <label for="">Proceso</label>
                                                 </div>
-                                                <div class="col-sm-10 floating-label enable-floating-label show-label" style="margin-bottom:0px">
-                                                    <select class="form-control" name="selectNameProduct" id="selectNameProduct"></select>
-                                                    <label for="">Producto</label>
-                                                </div> -->
                                                 <div class="col-sm-4 floating-label enable-floating-label show-label" style="margin-bottom:0px">
                                                     <select class="form-control idMachine" name="idMachine" id="idMachine"></select>
                                                     <label for="">Maquina</label>
@@ -307,22 +307,8 @@ if (sizeof($_SESSION) == 0)
                                             </div>
                                         </div>
                                     </div>
-
                                 </div>
                             </div>
-                            <!-- <div class="col-12 cardTableProductsInProcess">
-                                <div class="card">
-                                    <div class="card-header">
-                                        <h5 class="card-title">Productos En Proceso</h5>
-                                    </div>
-                                    <div class="card-body">
-                                        <div class="table-responsive">
-                                            <table class="table table-striped text-center" id="tblProductsInProcess" name="tblProductsInProcess">
-                                            </table>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div> -->
                         </div>
                     </div>
                 </div>
@@ -341,6 +327,7 @@ if (sizeof($_SESSION) == 0)
     <script src="/planning/js/basic/products/configProducts.js"></script>
     <script src="/planning/js/basic/rawMaterials/configRawMaterials.js"></script>
     <script src="/planning/js/config/productMaterials/productMaterials.js"></script>
+    <script src="/planning/js/basic/process/configProcess.js"></script>
     <script src="/planning/js/basic/machines/configMachines.js"></script>
     <script src="/planning/js/config/planCiclesMachine/importPlanCiclesMachine.js"></script>
     <script src="/planning/js/config/planCiclesMachine/planCiclesMachine.js"></script>

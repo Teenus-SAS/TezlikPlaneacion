@@ -56,11 +56,12 @@ class GeneralPlanCiclesMachinesDao
     {
         $connection = Connection::getInstance()->getConnection();
 
-        $stmt = $connection->prepare("SELECT pc.id_cicles_machine, pc.cicles_hour, pc.units_turn, pc.units_month, p.id_product, p.reference, p.product, m.id_machine, m.machine
-                                      FROM plan_cicles_machine pc
-                                        INNER JOIN products p ON p.id_product = pc.id_product
-                                        INNER JOIN machines m ON m.id_machine = pc.id_machine
-                                      WHERE pc.id_product = :id_product AND pc.id_company = :id_company");
+        $stmt = $connection->prepare("SELECT pcm.id_cicles_machine, pcm.cicles_hour, pcm.units_turn, pcm.units_month, p.id_product, p.reference, p.product, IFNULL(pc.id_process, 0) AS id_process, IFNULL(pc.process, '') AS process, m.id_machine, m.machine
+                                      FROM plan_cicles_machine pcm
+                                        INNER JOIN products p ON p.id_product = pcm.id_product
+                                        INNER JOIN machines m ON m.id_machine = pcm.id_machine
+                                        LEFT JOIN process pc ON pc.id_process = pcm.id_process
+                                      WHERE pcm.id_product = :id_product AND pcm.id_company = :id_company");
         $stmt->execute([
             'id_product' => $id_product,
             'id_company' => $id_company
@@ -96,6 +97,22 @@ class GeneralPlanCiclesMachinesDao
         $stmt->execute([
             'id_product' => $id_product,
             'id_machine' => $id_machine,
+            'id_company' => $id_company
+        ]);
+        $planCiclesMachine = $stmt->fetch($connection::FETCH_ASSOC);
+        return $planCiclesMachine;
+    }
+
+    public function findPlansCiclesMachine($dataCiclesMachine, $id_company)
+    {
+        $connection = Connection::getInstance()->getConnection();
+
+        $stmt = $connection->prepare("SELECT * FROM plan_cicles_machine
+                                      WHERE id_product = :id_product AND id_process = :id_process AND id_machine = :id_machine AND id_company = :id_company");
+        $stmt->execute([
+            'id_product' => $dataCiclesMachine['idProduct'],
+            'id_process' => $dataCiclesMachine['idProcess'],
+            'id_machine' => $dataCiclesMachine['idMachine'],
             'id_company' => $id_company
         ]);
         $planCiclesMachine = $stmt->fetch($connection::FETCH_ASSOC);

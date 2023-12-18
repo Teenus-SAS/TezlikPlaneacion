@@ -37,10 +37,11 @@ class PlanCiclesMachineDao
         $ciclesHour = str_replace('.', '', $dataCiclesMachine['ciclesHour']);
 
         try {
-            $stmt = $connection->prepare("INSERT INTO plan_cicles_machine (id_product, id_machine, id_company, cicles_hour) 
-                                          VALUES(:id_product, :id_machine, :id_company, :cicles_hour)");
+            $stmt = $connection->prepare("INSERT INTO plan_cicles_machine (id_product, id_process, id_machine, id_company, cicles_hour) 
+                                          VALUES(:id_product, :id_process, :id_machine, :id_company, :cicles_hour)");
             $stmt->execute([
                 'id_product' => $dataCiclesMachine['idProduct'],
+                'id_process' => $dataCiclesMachine['idProcess'],
                 'id_machine' => $dataCiclesMachine['idMachine'],
                 'id_company' => $id_company,
                 'cicles_hour' => $ciclesHour
@@ -60,11 +61,12 @@ class PlanCiclesMachineDao
         $ciclesHour = str_replace('.', '', $dataCiclesMachine['ciclesHour']);
 
         try {
-            $stmt = $connection->prepare("UPDATE plan_cicles_machine SET id_product = :id_product, id_machine = :id_machine, cicles_hour = :cicles_hour 
+            $stmt = $connection->prepare("UPDATE plan_cicles_machine SET id_product = :id_product, id_process = :id_process, id_machine = :id_machine, cicles_hour = :cicles_hour 
                                           WHERE id_cicles_machine = :id_cicles_machine");
             $stmt->execute([
                 'id_cicles_machine' => $dataCiclesMachine['idCiclesMachine'],
                 'id_product' => $dataCiclesMachine['idProduct'],
+                'id_process' => $dataCiclesMachine['idProcess'],
                 'id_machine' => $dataCiclesMachine['idMachine'],
                 'cicles_hour' => $ciclesHour
             ]);

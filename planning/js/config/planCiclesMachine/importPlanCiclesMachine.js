@@ -37,7 +37,7 @@ $(document).ready(function () {
 
     importFile(selectedFile)
       .then((data) => {
-        const expectedHeaders = ['referencia_producto', 'producto', 'maquina', 'ciclo_hora'];
+        const expectedHeaders = ['referencia_producto', 'producto', 'proceso', 'maquina', 'ciclo_hora'];
         const actualHeaders = Object.keys(data[0]);
 
         const missingHeaders = expectedHeaders.filter(header => !actualHeaders.includes(header));
@@ -54,6 +54,7 @@ $(document).ready(function () {
           return {
             referenceProduct: item.referencia_producto,
             product: item.producto,
+            process: item.proceso,
             machine: item.maquina,
             ciclesHour: item.ciclo_hora,
           };

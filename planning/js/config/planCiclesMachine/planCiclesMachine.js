@@ -40,15 +40,8 @@ $(document).ready(function () {
     let row = $(this).parent().parent()[0];
     let data = tblPlanCiclesMachine.fnGetData(row);
 
-    $(`#idMachine option:contains(${data.machine})`).prop('selected', true);
-    $(`#refProduct option:contains(${data.reference})`).prop(
-      'selected',
-      true
-    );
-    $(`#selectNameProduct option:contains(${data.product})`).prop(
-      'selected',
-      true
-    );
+    $(`#idProcess option[value=${data.id_process}]`).prop('selected', true);
+    $(`#idMachine option[value=${data.id_machine}]`).prop('selected', true);
     $('#ciclesHour').val(data.cicles_hour.toLocaleString('es-CO'));
 
     $('html, body').animate(
@@ -60,11 +53,12 @@ $(document).ready(function () {
   });
 
   checkPlanCiclesMachine = async (url, idCiclesMachine) => {
+    let idProcess = parseInt($('#idProcess').val());
     let idMachine = parseInt($('#idMachine').val());
     let idProduct = parseInt($('#selectNameProduct').val());
     let ciclesHour = $('#ciclesHour').val();
 
-    let data = idMachine * idProduct * ciclesHour;
+    let data = idProcess * idMachine * idProduct * ciclesHour;
 
     if (!data || data == '' || data == null || data == 0) {
       toastr.error('Ingrese todos los campos');

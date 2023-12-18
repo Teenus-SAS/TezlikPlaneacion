@@ -1,11 +1,4 @@
 $(document).ready(function () {
-  $('.cardCreateProcess').hide();
-
-  $('#btnNewProcess').click(function (e) {
-    e.preventDefault();
-    $('.cardCreateProcess').toggle(800);
-  });
-
   $.ajax({
     type: 'GET',
     url: '/api/process',

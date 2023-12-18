@@ -3,6 +3,7 @@
 use TezlikPlaneacion\dao\CiclesMachineDao;
 use TezlikPlaneacion\dao\GeneralMachinesDao;
 use TezlikPlaneacion\dao\GeneralPlanCiclesMachinesDao;
+use TezlikPlaneacion\dao\GeneralProcessDao;
 use TezlikPlaneacion\dao\GeneralProductsDao;
 use TezlikPlaneacion\dao\LastDataDao;
 use TezlikPlaneacion\dao\LotsProductsDao;
@@ -12,6 +13,7 @@ $planCiclesMachineDao = new PlanCiclesMachineDao();
 $generalPlanCiclesMachinesDao = new GeneralPlanCiclesMachinesDao();
 $lastDataDao = new LastDataDao();
 $ciclesMachinesDao = new CiclesMachineDao();
+$processDao = new GeneralProcessDao();
 $machinesDao = new GeneralMachinesDao();
 $productsDao = new GeneralProductsDao();
 $economicLotDao = new LotsProductsDao();
@@ -68,6 +70,7 @@ $app->get('/planCiclesMachine/{id_product}/{id_machine}', function (Request $req
 
 $app->post('/planCiclesMachineDataValidation', function (Request $request, Response $response, $args) use (
     $generalPlanCiclesMachinesDao,
+    $processDao,
     $machinesDao,
     $productsDao
 ) {
@@ -83,7 +86,19 @@ $app->post('/planCiclesMachineDataValidation', function (Request $request, Respo
         $planCiclesMachine = $dataPlanCiclesMachine['importPlanCiclesMachine'];
 
         for ($i = 0; $i < sizeof($planCiclesMachine); $i++) {
-            if (empty($planCiclesMachine[$i]['ciclesHour'])) {
+            if (
+                empty($planCiclesMachine[$i]['referenceProduct']) || empty($planCiclesMachine[$i]['product']) || empty($planCiclesMachine[$i]['process']) ||
+                empty($planCiclesMachine[$i]['machine']) || empty($planCiclesMachine[$i]['ciclesHour'])
+            ) {
+                $i = $i + 2;
+                $dataImportPlanCiclesMachine = array('error' => true, 'message' => "Columna vacia en la fila: {$i}");
+                break;
+            }
+
+            if (
+                empty(trim($planCiclesMachine[$i]['referenceProduct'])) || empty(trim($planCiclesMachine[$i]['product'])) || empty(trim($planCiclesMachine[$i]['process'])) ||
+                empty(trim($planCiclesMachine[$i]['machine'])) || empty(trim($planCiclesMachine[$i]['ciclesHour']))
+            ) {
                 $i = $i + 2;
                 $dataImportPlanCiclesMachine = array('error' => true, 'message' => "Columna vacia en la fila: {$i}");
                 break;
@@ -97,6 +112,14 @@ $app->post('/planCiclesMachineDataValidation', function (Request $request, Respo
                 break;
             } else $planCiclesMachine[$i]['idProduct'] = $findProduct['id_product'];
 
+            // Obtener id proceso
+            $findProcess = $processDao->findProcess($planCiclesMachine[$i], $id_company);
+            if (!$findProcess) {
+                $i = $i + 2;
+                $dataImportPlanCiclesMachine = array('error' => true, 'message' => "No existe el proceso en la base de datos<br>Fila: {$i}");
+                break;
+            } else $planCiclesMachine[$i]['idProcess'] = $findProcess['id_process'];
+
             // Obtener id maquina
             $findMachine = $machinesDao->findMachine($planCiclesMachine[$i], $id_company);
             if (!$findMachine) {
@@ -105,7 +128,7 @@ $app->post('/planCiclesMachineDataValidation', function (Request $request, Respo
                 break;
             } else $planCiclesMachine[$i]['idMachine'] = $findMachine['id_machine'];
 
-            $findPlanCiclesMachine = $generalPlanCiclesMachinesDao->findPlanCiclesMachineByProductAndMachine($planCiclesMachine[$i]['idProduct'], $planCiclesMachine[$i]['idMachine'], $id_company);
+            $findPlanCiclesMachine = $generalPlanCiclesMachinesDao->findPlansCiclesMachine($planCiclesMachine[$i], $id_company);
 
             if (!$findPlanCiclesMachine) $insert = $insert + 1;
             else $update = $update + 1;
@@ -124,6 +147,7 @@ $app->post('/addPlanCiclesMachine', function (Request $request, Response $respon
     $ciclesMachinesDao,
     $lastDataDao,
     $productsDao,
+    $processDao,
     $machinesDao
 ) {
     session_start();
@@ -153,7 +177,7 @@ $app->post('/addPlanCiclesMachine', function (Request $request, Response $respon
                     $arr = $ciclesMachinesDao->calcUnitsTurn($machine['id_cicles_machine']);
                     $data['units_turn'] = $arr['units_turn'];
 
-                    $arr = $ciclesMachinesDao->calcUnitsMonth($machine['id_cicles_machine']);
+                    $arr = $ciclesMachinesDao->calcUnitsMonth($data, 2);
                     $data['units_month'] = $arr['units_month'];
 
                     $planCiclesMachine = $generalPlanCiclesMachinesDao->updateUnits($data);
@@ -178,11 +202,15 @@ $app->post('/addPlanCiclesMachine', function (Request $request, Response $respon
             $findProduct = $productsDao->findProduct($planCiclesMachine[$i], $id_company);
             $planCiclesMachine[$i]['idProduct'] = $findProduct['id_product'];
 
+            // Obtener id proceso
+            $findProcess = $processDao->findProcess($planCiclesMachine[$i], $id_company);
+            $planCiclesMachine[$i]['idProcess'] = $findProcess['id_process'];
+
             // Obtener id maquina
             $findMachine = $machinesDao->findMachine($planCiclesMachine[$i], $id_company);
             $planCiclesMachine[$i]['idMachine'] = $findMachine['id_machine'];
 
-            $findPlanCiclesMachine = $generalPlanCiclesMachinesDao->findPlanCiclesMachineByProductAndMachine($planCiclesMachine[$i]['idProduct'], $planCiclesMachine[$i]['idMachine'], $id_company);
+            $findPlanCiclesMachine = $generalPlanCiclesMachinesDao->findPlansCiclesMachine($planCiclesMachine[$i], $id_company);
             if (!$findPlanCiclesMachine) $resolution = $planCiclesMachineDao->addPlanCiclesMachines($planCiclesMachine[$i], $id_company);
             else {
                 $planCiclesMachine[$i]['idCiclesMachine'] = $findPlanCiclesMachine['id_cicles_machine'];
@@ -209,7 +237,7 @@ $app->post('/addPlanCiclesMachine', function (Request $request, Response $respon
             $arr = $ciclesMachinesDao->calcUnitsTurn($machine['id_cicles_machine']);
             $data['units_turn'] = $arr['units_turn'];
 
-            $arr = $ciclesMachinesDao->calcUnitsMonth($machine['id_cicles_machine']);
+            $arr = $ciclesMachinesDao->calcUnitsMonth($data, 2);
             $data['units_month'] = $arr['units_month'];
 
             $resolution = $generalPlanCiclesMachinesDao->updateUnits($data);
@@ -245,7 +273,7 @@ $app->post('/updatePlanCiclesMachine', function (Request $request, Response $res
         $arr = $ciclesMachinesDao->calcUnitsTurn($machine['id_cicles_machine']);
         $data['units_turn'] = $arr['units_turn'];
 
-        $arr = $ciclesMachinesDao->calcUnitsMonth($machine['id_cicles_machine']);
+        $arr = $ciclesMachinesDao->calcUnitsMonth($data, 1);
         $data['units_month'] = $arr['units_month'];
 
         $planCiclesMachine = $generalPlanCiclesMachinesDao->updateUnits($data);

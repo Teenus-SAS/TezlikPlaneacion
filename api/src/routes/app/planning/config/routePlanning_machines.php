@@ -146,7 +146,7 @@ $app->post('/addPlanningMachines', function (Request $request, Response $respons
                     $arr = $ciclesMachinesDao->calcUnitsTurn($k['id_cicles_machine']);
                     $data['units_turn'] = $arr['units_turn'];
 
-                    $arr = $ciclesMachinesDao->calcUnitsMonth($k['id_cicles_machine']);
+                    $arr = $ciclesMachinesDao->calcUnitsMonth($data, 1);
                     $data['units_month'] = $arr['units_month'];
 
                     $resolution = $generalPlanCiclesMachinesDao->updateUnits($data);
@@ -189,7 +189,7 @@ $app->post('/updatePlanningMachines', function (Request $request, Response $resp
             $arr = $ciclesMachinesDao->calcUnitsTurn($k['id_cicles_machine']);
             $data['units_turn'] = $arr['units_turn'];
 
-            $arr = $ciclesMachinesDao->calcUnitsMonth($k['id_cicles_machine']);
+            $arr = $ciclesMachinesDao->calcUnitsMonth($data, 1);
             $data['units_month'] = $arr['units_month'];
 
             $planningMachines = $generalPlanCiclesMachinesDao->updateUnits($data);
@@ -225,7 +225,7 @@ $app->get('/deletePlanningMachines/{id_program_machine}/{id}', function (Request
         $arr = $ciclesMachinesDao->calcUnitsTurn($k['id_cicles_machine']);
         $data['units_turn'] = $arr['units_turn'];
 
-        $arr = $ciclesMachinesDao->calcUnitsMonth($k['id_cicles_machine']);
+        $arr = $ciclesMachinesDao->calcUnitsMonth($data, 1);
         $data['units_month'] = $arr['units_month'];
 
         $resolution = $generalPlanCiclesMachinesDao->updateUnits($data);

@@ -1,18 +1,4 @@
 $(document).ready(function () {
-  // $('#refProduct').change(function (e) {
-  //   e.preventDefault();
-  //   id = this.value;
-  //   $('#selectNameProduct option').removeAttr('selected');
-  //   $(`#selectNameProduct option[value=${id}]`).prop('selected', true); 
-  // });
-
-  // $('#selectNameProduct').change(function (e) {
-  //   e.preventDefault();
-  //   id = this.value;
-  //   $('#refProduct option').removeAttr('selected');
-  //   $(`#refProduct option[value=${id}]`).prop('selected', true); 
-  // });
-
   // Mostrar Tabla planeacion maquinas
   loadTblPlanCiclesMachine = (idProduct) => {
     tblPlanCiclesMachine = $('#tblPlanCiclesMachine').dataTable({
@@ -34,16 +20,11 @@ $(document).ready(function () {
             return meta.row + 1;
           },
         },
-        // {
-        //   title: 'Referencia',
-        //   data: 'reference',
-        //   className: 'uniqueClassName dt-head-center',
-        // },
-        // {
-        //   title: 'Producto',
-        //   data: 'product',
-        //   className: 'text-center',
-        // },
+        {
+          title: 'Proceso',
+          data: 'process',
+          className: 'text-center',
+        },
         {
           title: 'Máquina',
           data: 'machine',
