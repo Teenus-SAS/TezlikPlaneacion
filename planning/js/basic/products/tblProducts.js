@@ -38,7 +38,7 @@ $(document).ready(function () {
       {
         title: 'Medida',
         data: 'abbreviation',
-        className: 'uniqueuniqueClassName dt-head-center', 
+        className: 'uniqueClassName dt-head-center', 
       },
       /* {
         title: 'Reservado',
