@@ -43,7 +43,7 @@ $(document).ready(function () {
       {
         title: 'No.',
         data: null,
-        className: 'uniqueClassName',
+        className: 'uniqueClassName dt-head-center',
         render: function (data, type, full, meta) {
           return meta.row + 1;
         },
@@ -51,95 +51,95 @@ $(document).ready(function () {
       {
         title: 'Producto',
         data: 'product',
-        className: 'uniqueClassName',
+        className: 'uniqueClassName dt-head-center',
       },
       {
         title: 'Año',
         data: 'year',
-        className: 'uniqueClassName',
+        className: 'uniqueClassName dt-head-center',
       },
       {
         title: 'Enero',
         data: 'jan',
-        className: 'uniqueClassName',
+        className: 'uniqueClassName dt-head-center',
         render: $.fn.dataTable.render.number('.', ',', 0, ''),
       },
       {
         title: 'Febrero',
         data: 'feb',
-        className: 'uniqueClassName',
+        className: 'uniqueClassName dt-head-center',
         render: $.fn.dataTable.render.number('.', ',', 0, ''),
       },
       {
         title: 'Marzo',
         data: 'mar',
-        className: 'uniqueClassName',
+        className: 'uniqueClassName dt-head-center',
         render: $.fn.dataTable.render.number('.', ',', 0, ''),
       },
       {
         title: 'Abril',
         data: 'apr',
-        className: 'uniqueClassName',
+        className: 'uniqueClassName dt-head-center',
         render: $.fn.dataTable.render.number('.', ',', 0, ''),
       },
       {
         title: 'Mayo',
         data: 'may',
-        className: 'uniqueClassName',
+        className: 'uniqueClassName dt-head-center',
         render: $.fn.dataTable.render.number('.', ',', 0, ''),
       },
       {
         title: 'Junio',
         data: 'jun',
-        className: 'uniqueClassName',
+        className: 'uniqueClassName dt-head-center',
         render: $.fn.dataTable.render.number('.', ',', 0, ''),
       },
       {
         title: 'Julio',
         data: 'jul',
-        className: 'uniqueClassName',
+        className: 'uniqueClassName dt-head-center',
         render: $.fn.dataTable.render.number('.', ',', 0, ''),
       },
       {
         title: 'Agosto',
         data: 'aug',
-        className: 'uniqueClassName',
+        className: 'uniqueClassName dt-head-center',
         render: $.fn.dataTable.render.number('.', ',', 0, ''),
       },
       {
         title: 'Septiembre',
         data: 'sept',
-        className: 'uniqueClassName',
+        className: 'uniqueClassName dt-head-center',
         render: $.fn.dataTable.render.number('.', ',', 0, ''),
       },
       {
         title: 'Octubre',
         data: 'oct',
-        className: 'uniqueClassName',
+        className: 'uniqueClassName dt-head-center',
         render: $.fn.dataTable.render.number('.', ',', 0, ''),
       },
       {
         title: 'Noviembre',
         data: 'nov',
-        className: 'uniqueClassName',
+        className: 'uniqueClassName dt-head-center',
         render: $.fn.dataTable.render.number('.', ',', 0, ''),
       },
       {
         title: 'Diciembre',
         data: 'dece',
-        className: 'uniqueClassName',
+        className: 'uniqueClassName dt-head-center',
         render: $.fn.dataTable.render.number('.', ',', 0, ''),
       },
       {
         title: 'Promedio',
         data: 'average',
-        className: 'uniqueClassName',
+        className: 'uniqueClassName dt-head-center',
         render: $.fn.dataTable.render.number('.', ',', 0, ''),
       },
       {
         title: 'Acciones',
         data: 'id_unit_sales',
-        className: 'uniqueClassName',
+        className: 'uniqueClassName dt-head-center',
         render: function (data) {
           return `
                 <a href="javascript:;" <i id="${data}" class="bx bx-edit-alt updateSale" data-toggle='tooltip' title='Actualizar Venta' style="font-size: 30px;"></i></a>
@@ -163,7 +163,7 @@ $(document).ready(function () {
       {
         title: 'No.',
         data: null,
-        className: 'uniqueClassName',
+        className: 'uniqueClassName dt-head-center',
         render: function (data, type, full, meta) {
           return meta.row + 1;
         },
@@ -171,12 +171,12 @@ $(document).ready(function () {
       {
         title: 'Año',
         data: 'year',
-        className: 'uniqueClassName',
+        className: 'uniqueClassName dt-head-center',
       },
       {
         title: 'Mes',
         data: 'month',
-        className: 'uniqueClassName',
+        className: 'uniqueClassName dt-head-center',
         render: function(data, type, row) {
           return nombresMeses[data]; 
         }
@@ -184,13 +184,13 @@ $(document).ready(function () {
       {
         title: 'Dias',
         data: 'days',
-        className: 'uniqueClassName',
+        className: 'uniqueClassName dt-head-center',
         render: $.fn.dataTable.render.number('.', ',', 0, ''),
       },
       {
         title: 'Acciones',
         data: 'id_sale_day',
-        className: 'uniqueClassName',
+        className: 'uniqueClassName dt-head-center',
         render: function (data) {
           return `<a href="javascript:;" <i id="${data}" class="bx bx-edit-alt updateDays" data-toggle='tooltip' title='Actualizar Dias' style="font-size: 30px;"></i></a>`;
           // <a href="javascript:;" <i id="${data}" class="mdi mdi-delete-forever" data-toggle='tooltip' title='Eliminar Venta' style="font-size: 30px;color:red" onclick="deleteFunction()"></i></a>

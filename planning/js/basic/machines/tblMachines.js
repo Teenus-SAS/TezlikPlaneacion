@@ -14,7 +14,7 @@ $(document).ready(function () {
       {
         title: "No.",
         data: null,
-        className: "uniqueClassName",
+        className: "uniqueClassName dt-head-center ",
         render: function (data, type, full, meta) {
           return meta.row + 1;
         },
@@ -22,12 +22,12 @@ $(document).ready(function () {
       {
         title: "Máquina",
         data: "machine",
-        className: "uniqueClassName",
+        className: "uniqueClassName dt-head-center ",
       },
       {
         title: "Acciones",
         data: "id_machine",
-        className: "uniqueClassName",
+        className: "uniqueClassName dt-head-center ",
         render: function (data) {
           return `
                 <a href="javascript:;" <i id="${data}" class="bx bx-edit-alt updateMachines" data-toggle='tooltip' title='Actualizar Maquina' style="font-size: 30px;"></i></a>

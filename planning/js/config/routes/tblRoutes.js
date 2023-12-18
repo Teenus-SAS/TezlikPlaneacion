@@ -15,7 +15,7 @@ $(document).ready(function () {
         {
           title: "No.",
           data: null,
-          className: "uniqueClassName",
+          className: "uniqueClassName dt-head-center",
           render: function (data, type, full, meta) {
             return meta.row + 1;
           },
@@ -23,12 +23,12 @@ $(document).ready(function () {
         // {
         //     title: 'Id Maquina',
         //     data: 'id_machine',
-        //     className: 'uniqueClassName',
+        //     className: 'uniqueClassName dt-head-center',
         // },
         {
           title: "Máquina",
           data: "machine",
-          className: "uniqueClassName",
+          className: "uniqueClassName dt-head-center",
         },
         {
           title: "",

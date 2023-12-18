@@ -34,7 +34,7 @@ $(document).ready(function () {
         {
           title: 'No.',
           data: null,
-          className: 'uniqueClassName',
+          className: 'uniqueClassName dt-head-center',
           render: function (data, type, full, meta) {
             return meta.row + 1;
           },
@@ -57,19 +57,19 @@ $(document).ready(function () {
         {
           title: 'Tiempo Alistamiento (min)',
           data: 'enlistment_time',
-          className: 'classCenter',
+          className: 'uniqueClassName dt-head-center',
           render: $.fn.dataTable.render.number('.', ',', 2, ''),
         },
         {
           title: 'Tiempo Operación  (min)',
           data: 'operation_time',
-          className: 'classCenter',
+          className: 'uniqueClassName dt-head-center',
           render: $.fn.dataTable.render.number('.', ',', 2, ''),
         },
         {
           title: 'Acciones',
           data: 'id_product_process',
-          className: 'uniqueClassName',
+          className: 'uniqueClassName dt-head-center',
           render: function (data) {
             return `
                 <a href="javascript:;" <i id="${data}" class="bx bx-edit-alt updateProcess" data-toggle='tooltip' title='Actualizar Proceso' style="font-size: 30px;"></i></a>

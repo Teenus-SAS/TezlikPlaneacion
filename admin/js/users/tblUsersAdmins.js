@@ -14,7 +14,7 @@ $(document).ready(function () {
       {
         title: 'No.',
         data: null,
-        className: 'uniqueClassName',
+        className: 'uniqueClassName dt-head-center',
         render: function (data, type, full, meta) {
           return meta.row + 1;
         },
@@ -22,22 +22,22 @@ $(document).ready(function () {
       {
         title: 'Nombres',
         data: 'firstname',
-        className: 'uniqueClassName',
+        className: 'uniqueClassName dt-head-center',
       },
       {
         title: 'Apellidos',
         data: 'lastname',
-        className: 'uniqueClassName',
+        className: 'uniqueClassName dt-head-center',
       },
       {
         title: 'Email',
         data: 'email',
-        className: 'uniqueClassName',
+        className: 'uniqueClassName dt-head-center',
       },
       {
         title: 'Acciones',
         data: 'id_admin',
-        className: 'uniqueClassName',
+        className: 'uniqueClassName dt-head-center',
         render: function (data) {
           return `
                 <a href="javascript:;" <i id="${data}" class="bx bx-edit-alt updateUser" data-toggle='tooltip' title='Actualizar Usuario' style="font-size: 30px;"></i></a>

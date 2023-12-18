@@ -13,7 +13,7 @@ $(document).ready(function () {
       {
         title: "No.",
         data: null,
-        className: "uniqueClassName",
+        className: "uniqueClassName dt-head-center",
         render: function (data, type, full, meta) {
           return meta.row + 1;
         },
@@ -21,46 +21,46 @@ $(document).ready(function () {
       {
         title: "Referencia",
         data: "reference_material",
-        className: "uniqueClassName",
+        className: "uniqueClassName dt-head-center",
       },
       {
         title: "Materia Prima",
         data: "material",
-        className: "uniqueClassName",
+        className: "uniqueClassName dt-head-center",
       },
       {
         title: "Medida",
         data: "abbreviation",
-        className: "uniqueClassName",
+        className: "uniqueClassName dt-head-center",
       },
       {
         title: "Inventario",
         data: "quantity_material",
-        className: "uniqueClassName",
+        className: "uniqueClassName dt-head-center",
         render: $.fn.dataTable.render.number(".", ",", 2, ""),
       },
       {
         title: "Stock Min",
         data: "minimum_stock",
-        className: "uniqueClassName",
+        className: "uniqueClassName dt-head-center",
         render: $.fn.dataTable.render.number(".", ",", 2, ""),
       },
       {
         title: "En Transito",
         data: "transit",
-        className: "uniqueClassName",
+        className: "uniqueClassName dt-head-center",
         render: $.fn.dataTable.render.number(".", ",", 2, ""),
       },
       {
         title: "Necesidad",
         data: "need",
-        className: "uniqueClassName",
+        className: "uniqueClassName dt-head-center",
         render: $.fn.dataTable.render.number(".", ",", 2, ""),
       },
       {
         title: "Disponible",
         data: "available",
-        className: "uniqueClassName",
+        className: "uniqueClassName dt-head-center",
         render: function (data, type, full, meta) {
           const available = full.available;
 

@@ -12,7 +12,7 @@ $(document).ready(function () {
       {
         title: 'No.',
         data: null,
-        className: 'uniqueClassName',
+        className: 'uniqueClassName dt-head-center',
         render: function (data, type, full, meta) {
           return meta.row + 1;
         },
@@ -20,12 +20,12 @@ $(document).ready(function () {
       {
         title: 'Tipo de pedido',
         data: 'order_type',
-        className: 'uniqueClassName',
+        className: 'uniqueClassName dt-head-center',
       },
       {
         title: 'Acciones',
         data: 'id_order_type',
-        className: 'uniqueClassName',
+        className: 'uniqueClassName dt-head-center',
         render: function (data) {
           return `
                   <a href="javascript:;" <i class="bx bx-edit-alt updateOrderType" id="${data}" data-toggle='tooltip' title='Actualizar Tipo Pedido' style="font-size: 30px;"></i></a>

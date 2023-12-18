@@ -16,7 +16,7 @@ $(document).ready(function () {
         {
           title: "No.",
           data: null,
-          className: "uniqueClassName",
+          className: "uniqueClassName dt-head-center",
           render: function (data, type, full, meta) {
             return meta.row + 1;
           },
@@ -40,7 +40,7 @@ $(document).ready(function () {
         {
           title: "Acciones",
           data: "id_user",
-          className: "uniqueClassName",
+          className: "uniqueClassName dt-head-center",
           render: function (data) {
             return `<a href="javascript:;" <i id="${data}" class="bx bx-user-x text-danger closeSession" data-toggle='tooltip' title='Cerrar Sesión' style="font-size: 30px;"></i></a>`;
           },

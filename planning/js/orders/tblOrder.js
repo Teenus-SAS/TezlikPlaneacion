@@ -15,7 +15,7 @@ $(document).ready(function () {
       {
         title: 'No.',
         data: null,
-        className: 'uniqueClassName',
+        className: 'uniqueClassName dt-head-center',
         render: function (data, type, full, meta) {
           return meta.row + 1;
         },
@@ -23,38 +23,38 @@ $(document).ready(function () {
       {
         title: 'Fecha',
         data: 'date_order',
-        className: 'uniqueClassName',
+        className: 'uniqueClassName dt-head-center',
       },
       {
         title: 'Pedido',
         data: 'num_order',
-        className: 'uniqueClassName',
+        className: 'uniqueClassName dt-head-center',
       },
       {
         title: 'Cliente',
         data: 'client',
-        className: 'uniqueClassName',
+        className: 'uniqueuniqueClassName dt-head-center',
       },
       {
         title: 'Producto',
         data: 'product',
-        className: 'uniqueClassName',
+        className: 'uniqueClassName dt-head-center',
       },
       {
         title: 'Cantidad',
         data: 'original_quantity',
-        className: 'classCenter',
+        className: 'uniqueClassName dt-head-center',
         render: $.fn.dataTable.render.number('.', ',', 0, ''),
       },
       {
         title: 'F.Maxima',
         data: 'max_date',
-        className: 'classCenter',
+        className: 'uniqueClassName dt-head-center',
       },
       {
         title: 'Estado',
         data: 'status',
-        className: 'classCenter',
+        className: 'uniqueClassName dt-head-center',
         render: function (data) {
           if (data == 'Entregado')
             badge = 'badge-success';
@@ -71,7 +71,7 @@ $(document).ready(function () {
       {
         title: 'Acciones',
         data: null,
-        className: 'classCenter',
+        className: 'uniqueClassName dt-head-center',
         render: function (data) {
           !data.delivery_date && data.status == 'Programar' ? action = `<a href="javascript:;" <i class="bx bx-edit-alt updateOrder" id="${data.id_order}" data-toggle='tooltip' title='Actualizar Pedido' style="font-size: 30px;"></i></a><a href="javascript:;" <i class="mdi mdi-delete-forever" id="${data.id_order}" data-toggle='tooltip' title='Eliminar Pedido' style="font-size: 30px;color:red" onclick="deleteFunction()"></i></a>`
             : action = '';

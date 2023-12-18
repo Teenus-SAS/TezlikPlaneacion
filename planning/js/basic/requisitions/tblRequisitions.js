@@ -78,7 +78,7 @@ $(document).ready(function () {
         {
           title: "No.",
           data: null,
-          className: "uniqueClassName",
+          className: "uniqueClassName dt-head-center",
           render: function (data, type, full, meta) {
             return meta.row + 1;
           },
@@ -86,48 +86,48 @@ $(document).ready(function () {
         {
           title: "Referencia",
           data: "reference",
-          className: "uniqueClassName",
+          className: "uniqueClassName dt-head-center",
         },
         {
           title: "Descripción",
           data: "material",
-          className: "classCenter",
+          className: "uniqueClassName dt-head-center",
         },
         {
           title: "Medida",
           data: "abbreviation",
-          className: "classCenter",
+          className: "uniqueClassName dt-head-center",
         },
         {
           title: "Proveedor",
           data: "provider",
-          className: "classCenter",
+          className: "uniqueClassName dt-head-center",
         },
         {
           title: "Fecha Solicitud",
           data: "application_date",
-          className: "classCenter",
+          className: "uniqueClassName dt-head-center",
         },
         {
           title: "Fecha Entrega",
           data: "delivery_date",
-          className: "classCenter",
+          className: "uniqueClassName dt-head-center",
         },
         {
           title: "Cantidad",
           data: "quantity",
-          className: "classCenter",
+          className: "uniqueClassName dt-head-center",
           render: $.fn.dataTable.render.number(".", ",", 2, ""),
         },
         {
           title: "Orden de Compra",
           data: "purchase_order",
-          className: "classCenter",
+          className: "uniqueClassName dt-head-center",
         },
         {
           title: "",
           data: null,
-          className: "classCenter",
+          className: "uniqueClassName dt-head-center",
           render: function (data, type, full, meta) {
             if (
               (data.application_date == "0000-00-00" &&
@@ -143,7 +143,7 @@ $(document).ready(function () {
         {
           title: "Acciones",
           data: null,
-          className: "uniqueClassName",
+          className: "uniqueClassName dt-head-center",
           render: function (data) {
             !data.admission_date
               ? (action = `<a href="javascript:;" <i id="${data.id_requisition}" class="bx bx-edit-alt updateRequisition" data-toggle='tooltip' title='Actualizar Requisicion' style="font-size: 30px;"></i></a>

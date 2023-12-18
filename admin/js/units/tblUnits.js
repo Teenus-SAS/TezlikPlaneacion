@@ -15,7 +15,7 @@ $(document).ready(function () {
       {
         title: 'No.',
         data: null,
-        className: 'uniqueClassName',
+        className: 'uniqueClassName dt-head-center',
         render: function (data, type, full, meta) {
           return meta.row + 1;
         },
@@ -28,17 +28,17 @@ $(document).ready(function () {
       {
         title: 'Unidad',
         data: 'unit',
-        className: 'uniqueClassName',
+        className: 'uniqueClassName dt-head-center',
       },
       {
         title: 'Abreviación',
         data: 'abbreviation',
-        className: 'uniqueClassName',
+        className: 'uniqueClassName dt-head-center',
       },
       {
         title: 'Acciones',
         data: 'id_unit',
-        className: 'uniqueClassName',
+        className: 'uniqueClassName dt-head-center',
         render: function (data) {
           return `
                 <a href="javascript:;" <i id="${data}" class="bx bx-edit-alt updateUnit" data-toggle='tooltip' title='Actualizar Unidad' style="font-size: 30px;"></i></a>

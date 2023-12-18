@@ -15,7 +15,7 @@ $(document).ready(function () {
       {
         title: 'No.',
         data: null,
-        className: 'uniqueClassName',
+        className: 'uniqueClassName dt-head-center',
         render: function (data, type, full, meta) {
           return meta.row + 1;
         },
@@ -23,12 +23,12 @@ $(document).ready(function () {
       {
         title: 'Magnitud',
         data: 'magnitude',
-        className: 'uniqueClassName',
+        className: 'uniqueClassName dt-head-center',
       },
       {
         title: 'Acciones',
         data: 'id_magnitude',
-        className: 'uniqueClassName',
+        className: 'uniqueClassName dt-head-center',
         render: function (data) {
           return `
                 <a href="javascript:;" <i id="${data}" class="bx bx-edit-alt updateMagnitude" data-toggle='tooltip' title='Actualizar Magnitud' style="font-size: 30px;"></i></a>

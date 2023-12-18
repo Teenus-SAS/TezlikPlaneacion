@@ -15,7 +15,7 @@ $(document).ready(function () {
       {
         title: 'No.',
         data: null,
-        className: 'uniqueClassName',
+        className: 'uniqueClassName dt-head-center',
         render: function (data, type, full, meta) {
           return meta.row + 1;
         },
@@ -23,27 +23,27 @@ $(document).ready(function () {
       {
         title: 'Usuario',
         data: 'user',
-        className: 'uniqueClassName',
+        className: 'uniqueClassName dt-head-center',
       },
       {
         title: 'Fecha Creación',
         data: 'date_binnacle',
-        className: 'uniqueClassName',
+        className: 'uniqueClassName dt-head-center',
       },
       {
         title: 'Actividad Realizada',
         data: 'activity_performed',
-        className: 'uniqueClassName',
+        className: 'uniqueClassName dt-head-center',
       },
       {
         title: 'Información Actual',
         data: 'actual_information',
-        className: 'uniqueClassName',
+        className: 'uniqueClassName dt-head-center',
       },
       {
         title: 'Información Anterior',
         data: 'previous_information',
-        className: 'uniqueClassName',
+        className: 'uniqueClassName dt-head-center',
       },
     ],
   });

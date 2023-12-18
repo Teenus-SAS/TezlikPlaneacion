@@ -54,7 +54,7 @@ $(document).ready(function () {
         {
           title: "No.",
           data: null,
-          className: "uniqueClassName",
+          className: "uniqueClassName dt-head-center",
           render: function (data, type, full, meta) {
             return meta.row + 1;
           },
@@ -62,38 +62,38 @@ $(document).ready(function () {
         {
           title: "Referencia",
           data: "reference",
-          className: "uniqueClassName",
+          className: "uniqueClassName dt-head-center",
         },
         {
           title: "Materia Prima",
           data: "material",
-          className: "uniqueClassName",
+          className: "uniqueClassName dt-head-center",
         },
         {
           title: "Unidad",
           data: "abbreviation",
-          className: "uniqueClassName",
+          className: "uniqueClassName dt-head-center",
         },
         {
           title: "Proveedor",
           data: "provider",
-          className: "classCenter",
+          className: "uniqueClassName dt-head-center",
         },
         {
           title: "Cantidad",
           data: "quantity",
-          className: "uniqueClassName",
+          className: "uniqueClassName dt-head-center",
           render: $.fn.dataTable.render.number(".", ",", 0),
         },
         {
           title: "Orden de Compra",
           data: "purchase_order",
-          className: "classCenter",
+          className: "uniqueClassName dt-head-center",
         },
         {
           title: "Acción",
           data: null,
-          className: "uniqueClassName",
+          className: "uniqueClassName dt-head-center",
           render: function (data) {
             if (!data.admission_date)
               action = `<button class="btn btn-info changeDate" id="delivery">Recibir MP</button>`;
@@ -124,7 +124,7 @@ $(document).ready(function () {
         {
           title: "No.",
           data: null,
-          className: "uniqueClassName",
+          className: "uniqueClassName dt-head-center",
           render: function (data, type, full, meta) {
             return meta.row + 1;
           },
@@ -132,40 +132,40 @@ $(document).ready(function () {
         {
           title: "No Pedido",
           data: "num_order",
-          className: "uniqueClassName",
+          className: "uniqueClassName dt-head-center",
           visible: false,
         },
         {
           title: "Referencia",
           data: "reference",
-          className: "uniqueClassName",
+          className: "uniqueClassName dt-head-center",
         },
         {
           title: "Materia Prima",
           data: "material",
-          className: "uniqueClassName",
+          className: "uniqueClassName dt-head-center",
         },
         {
           title: "Unidad",
           data: "abbreviation",
-          className: "uniqueClassName",
+          className: "uniqueClassName dt-head-center",
         },
         {
           title: "Existencias",
           data: "quantity",
-          className: "uniqueClassName",
+          className: "uniqueClassName dt-head-center",
           render: $.fn.dataTable.render.number(".", ",", 0),
         },
         {
           title: "Reservado",
           data: "reserved",
-          className: "uniqueClassName",
+          className: "uniqueClassName dt-head-center",
           render: $.fn.dataTable.render.number(".", ",", 0),
         },
         {
           title: "Cantidades",
           data: null,
-          className: "uniqueClassName",
+          className: "uniqueClassName dt-head-center",
           render: function (data, type, full, meta) {
             const store = full.delivery_store;
             const pending = full.delivery_pending;
@@ -177,7 +177,7 @@ $(document).ready(function () {
         {
           title: "Acción",
           data: null,
-          className: "uniqueClassName",
+          className: "uniqueClassName dt-head-center",
           render: function (data) {
             if (!data.delivery_date)
               action = `<button class="btn btn-info deliver" id="delivery">Entregar MP</button>`;

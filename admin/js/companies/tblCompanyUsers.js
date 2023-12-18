@@ -16,7 +16,7 @@ $(document).ready(function () {
       {
         title: 'No.',
         data: null,
-        className: 'uniqueClassName',
+        className: 'uniqueClassName dt-head-center',
         render: function (data, type, full, meta) {
           return meta.row + 1;
         },
@@ -51,7 +51,7 @@ $(document).ready(function () {
       {
         title: 'Acciones',
         data: 'id_user',
-        className: 'uniqueClassName',
+        className: 'uniqueClassName dt-head-center',
         render: function (data) {
           return `
                     <a href="javascript:;" <i id="${data}" class="bx bx-x-circle userStatus" data-toggle='tooltip' title='Estado Usuario' style="font-size: 30px;"></i></a>

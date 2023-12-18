@@ -14,7 +14,7 @@ $(document).ready(function () {
       {
         title: 'No.',
         data: null,
-        className: 'uniqueClassName',
+        className: 'uniqueClassName  dt-head-center',
         render: function (data, type, full, meta) {
           return meta.row + 1;
         },
@@ -22,46 +22,46 @@ $(document).ready(function () {
       {
         title: 'Referencia',
         data: 'reference',
-        className: 'uniqueClassName',
+        className: 'uniqueClassName dt-head-center',
       },
       {
         title: 'Producto',
         data: 'product',
-        className: 'uniqueClassName',
+        className: 'uniqueClassName dt-head-center',
       }, 
       {
         title: 'Existencia',
         data: 'quantity',
-        className: 'uniqueClassName',
+        className: 'uniqueClassName dt-head-center',
         render: $.fn.dataTable.render.number('.', ',', 0),
       }, 
       {
         title: 'Medida',
         data: 'abbreviation',
-        className: 'classCenter', 
+        className: 'uniqueuniqueClassName dt-head-center', 
       },
-      {
+      /* {
         title: 'Reservado',
         data: 'reserved',
         className: 'uniqueClassName', 
-      }, 
+      },  */
       {
         title: 'Stock Min',
         data: 'minimum_stock',
-        className: 'uniqueClassName', 
+        className: 'uniqueClassName dt-head-center', 
         render: $.fn.dataTable.render.number('.', ',', 0),
       }, 
       {
           title: "Dias Inv",
           data: "days",
-          className: "uniqueClassName",
+          className: "uniqueClassName dt-head-center",
           render: $.fn.dataTable.render.number('.', ',', 0),
         },
       
       {
         title: 'Img',
         data: 'img',
-        className: 'uniqueClassName',
+        className: 'uniqueClassName dt-head-center',
         render: (data, type, row) => {
           data ? img = `<img src="${data}" alt="" style="width:80px;border-radius:100px">` : (img = ''); 
           return img;
@@ -70,7 +70,7 @@ $(document).ready(function () {
       {
         title: 'Acciones',
         data: 'id_product',
-        className: 'uniqueClassName',
+        className: 'uniqueClassName dt-head-center',
         render: function (data) {
           return `
                 <a href="javascript:;" <i id="${data}" class="bx bx-edit-alt updateProducts" data-toggle='tooltip' title='Actualizar Producto' style="font-size: 30px;"></i></a>

@@ -12,7 +12,7 @@ $(document).ready(function () {
       {
         title: 'No.',
         data: null,
-        className: 'uniqueClassName',
+        className: 'uniqueClassName dt-head-center',
         render: function (data, type, full, meta) {
           return meta.row + 1;
         },
@@ -37,7 +37,7 @@ $(document).ready(function () {
       {
         title: 'Inventarios',
         data: 'plan_inventory',
-        className: 'uniqueClassName',
+        className: 'uniqueClassName dt-head-center',
         render: function (data, type, row) {
           return data == 1
             ? '<i class="bx bx-check text-success fs-lg align-middle"></i>'
@@ -47,7 +47,7 @@ $(document).ready(function () {
       {
         title: 'Pedidos',
         data: 'plan_order',
-        className: 'uniqueClassName',
+        className: 'uniqueClassName dt-head-center',
         render: function (data, type, row) {
           return data == 1
             ? '<i class="bx bx-check text-success fs-lg align-middle"></i>'
@@ -57,7 +57,7 @@ $(document).ready(function () {
       {
         title: 'Programación',
         data: 'plan_program',
-        className: 'uniqueClassName',
+        className: 'uniqueClassName dt-head-center',
         render: function (data, type, row) {
           return data == 1
             ? '<i class="bx bx-check text-success fs-lg align-middle"></i>'
@@ -67,7 +67,7 @@ $(document).ready(function () {
       {
         title: 'Cargues',
         data: 'plan_load',
-        className: 'uniqueClassName',
+        className: 'uniqueClassName dt-head-center',
         render: function (data, type, row) {
           return data == 1
             ? '<i class="bx bx-check text-success fs-lg align-middle"></i>'
@@ -77,7 +77,7 @@ $(document).ready(function () {
       {
         title: 'Explosión de Materiales',
         data: 'plan_explosion_of_material',
-        className: 'uniqueClassName',
+        className: 'uniqueClassName dt-head-center',
         render: function (data, type, row) {
           return data == 1
             ? '<i class="bx bx-check text-success fs-lg align-middle"></i>'
@@ -87,7 +87,7 @@ $(document).ready(function () {
       {
         title: 'O. Produccion',
         data: 'plan_production_order',
-        className: 'uniqueClassName',
+        className: 'uniqueClassName dt-head-center',
         render: function (data, type, row) {
           return data == 1
             ? '<i class="bx bx-check text-success fs-lg align-middle"></i>'
@@ -97,7 +97,7 @@ $(document).ready(function () {
       {
         title: 'Despachos',
         data: 'plan_office',
-        className: 'uniqueClassName',
+        className: 'uniqueClassName dt-head-center',
         render: function (data, type, row) {
           return data == 1
             ? '<i class="bx bx-check text-success fs-lg align-middle"></i>'
@@ -107,7 +107,7 @@ $(document).ready(function () {
       {
         title: 'Almacen',
         data: 'plan_store',
-        className: 'uniqueClassName',
+        className: 'uniqueClassName dt-head-center',
         render: function (data, type, row) {
           return data == 1
             ? '<i class="bx bx-check text-success fs-lg align-middle"></i>'
@@ -117,7 +117,7 @@ $(document).ready(function () {
       {
         title: 'Acciones',
         data: 'id_plan',
-        className: 'uniqueClassName',
+        className: 'uniqueClassName dt-head-center',
         render: function (data) {
           return `
                     <a href="javascript:;" <i id="${data}" class="bx bx-edit-alt updatePlanAccess" data-toggle='tooltip' title='Actualizar Plan' style="font-size: 30px;"></i></a>`;

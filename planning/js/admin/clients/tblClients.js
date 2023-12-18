@@ -12,7 +12,7 @@ $(document).ready(function () {
       {
         title: 'No.',
         data: null,
-        className: 'uniqueClassName',
+        className: 'uniqueClassName dt-head-center',
         render: function (data, type, full, meta) {
           return meta.row + 1;
         },
@@ -20,32 +20,32 @@ $(document).ready(function () {
       {
         title: 'NIT',
         data: 'nit',
-        className: 'uniqueClassName',
+        className: 'uniqueClassName dt-head-center',
       },
       {
         title: 'Cliente',
         data: 'client',
-        className: 'uniqueClassName',
+        className: 'uniqueClassName dt-head-center',
       },
       {
         title: 'Dirección',
         data: 'address',
-        className: 'uniqueClassName',
+        className: 'uniqueClassName dt-head-center',
       },
       {
         title: 'Telefono',
         data: 'phone',
-        className: 'uniqueClassName',
+        className: 'uniqueClassName dt-head-center',
       },
       {
         title: 'Ciudad',
         data: 'city',
-        className: 'uniqueClassName',
+        className: 'uniqueClassName dt-head-center',
       },
       {
         title: 'Img',
         data: 'img',
-        className: 'uniqueClassName',
+        className: 'uniqueClassName dt-head-center',
         render: (data, type, row) => {
           return data
             ? `<img src="${data}" alt="" style="width:50px;border-radius:100px">`
@@ -55,7 +55,7 @@ $(document).ready(function () {
       {
         title: 'Tipo',
         data: null,
-        className: 'classCenter',
+        className: 'uniqueClassName dt-head-center',
         render: function (data) {
           if (data.type_client == '1') {
             name = 'Cliente';
@@ -72,7 +72,7 @@ $(document).ready(function () {
       {
         title: '',
         data: null,
-        className: 'uniqueClassName',
+        className: 'uniqueClassName dt-head-center',
         render: (data, type, row) => {
           return `<input type="checkbox" class="form-control-updated checkClient" id="check-${data.id_client}" ${data.status == 1 ? 'checked' : ''}>`;
         },
@@ -80,7 +80,7 @@ $(document).ready(function () {
       {
         title: 'Acciones',
         data: 'id_client',
-        className: 'uniqueClassName',
+        className: 'uniqueClassName dt-head-center',
         render: function (data) {
           return `
                 <a href="javascript:;" <i class="bx bx-edit-alt updateClient" id="${data}" data-toggle='tooltip' title='Actualizar Cliente' style="font-size: 30px;"></i></a>

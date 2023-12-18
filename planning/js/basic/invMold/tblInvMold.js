@@ -25,46 +25,46 @@ $(document).ready(function () {
       {
         title: 'Referencia',
         data: 'reference',
-        className: 'uniqueClassName',
+        className: 'uniqueClassName dt-head-center',
       },
       {
         title: 'Molde',
         data: 'mold',
-        className: 'uniqueClassName',
+        className: 'uniqueClassName dt-head-center',
       },
       {
         title: 'Tiempo Montaje en Produccion (Horas)',
         data: 'assembly_production',
-        className: 'uniqueClassName',
+        className: 'uniqueClassName dt-head-center',
         render: $.fn.dataTable.render.number('.', ',', 0, ''),
       },
       {
         title: 'Tiempo Montaje (Minutos)',
         data: 'assembly_time',
-        className: 'uniqueClassName',
+        className: 'uniqueClassName dt-head-center',
         render: $.fn.dataTable.render.number('.', ',', 0, ''),
       },
       {
         title: 'N° Cavidades',
         data: 'cavity',
-        className: 'uniqueClassName',
+        className: 'uniqueClassName dt-head-center',
         render: $.fn.dataTable.render.number('.', ',', 0, ''),
       },
       {
         title: 'N° Cavidades Disponibles',
         data: 'cavity_available',
-        className: 'uniqueClassName',
+        className: 'uniqueClassName dt-head-center',
         render: $.fn.dataTable.render.number('.', ',', 0, ''),
       },
       // {
       //   title: 'Tiempo Montaje (Minutos)',
       //   data: 'assembly_time',
-      //   className: 'uniqueClassName',
+      //   className: 'uniqueClassName dt-head-center',
       // },
       {
         title: 'Acciones',
         data: 'id_mold',
-        className: 'uniqueClassName',
+        className: 'uniqueClassName dt-head-center',
         render: function (data) {
           return `
                 <a href="javascript:;" <i class="bx bx-edit-alt updateMold" id="${data}" data-toggle='tooltip' title='Actualizar Molde' style="font-size: 30px;"></i></a>

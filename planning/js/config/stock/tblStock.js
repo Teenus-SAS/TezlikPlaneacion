@@ -14,7 +14,7 @@ $(document).ready(function () {
       {
         title: "No.",
         data: null,
-        className: "uniqueClassName",
+        className: "uniqueClassName dt-head-center",
         render: function (data, type, full, meta) {
           return meta.row + 1;
         },
@@ -22,32 +22,32 @@ $(document).ready(function () {
       {
         title: "Referencia",
         data: "reference",
-        className: "uniqueClassName",
+        className: "uniqueClassName dt-head-center",
       },
       {
         title: "Materia Prima",
         data: "material",
-        className: "uniqueClassName",
+        className: "uniqueClassName dt-head-center",
       },
       {
         title: "Proveedor",
         data: "client",
-        className: "uniqueClassName",
+        className: "uniqueClassName dt-head-center",
       },
       {
         title: "Plazo Max",
         data: "max_term",
-        className: "uniqueClassName",
+        className: "uniqueClassName dt-head-center",
       },
       {
         title: "Plazo Habitual",
         data: "usual_term",
-        className: "uniqueClassName",
+        className: "uniqueClassName dt-head-center",
       },
       {
         title: "Acciones",
         data: "id_stock",
-        className: "uniqueClassName",
+        className: "uniqueClassName dt-head-center",
         render: function (data) {
           return `<a href="javascript:;" <i id="${data}" class="bx bx-edit-alt updateStock" data-toggle='tooltip' title='Actualizar Stock' style="font-size: 30px;"></i></a>`;
         },

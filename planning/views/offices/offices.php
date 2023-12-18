@@ -43,7 +43,7 @@ $fechaActual = date("Y-m-d");
                 <div class="page-title-box">
                     <div class="container-fluid">
                         <div class="row align-items-center">
-                            <div class="col-sm-5 col-xl-2">
+                            <div class="col-sm-5 col-xl-7">
                                 <div class="page-title">
                                     <h3 class="mb-1 font-weight-bold text-dark">Despachos</h3>
                                     <ol class="breadcrumb mb-3 mb-md-0">
@@ -51,15 +51,48 @@ $fechaActual = date("Y-m-d");
                                     </ol>
                                 </div>
                             </div>
-                            <div class="col-sm-7 col-xl-10 form-inline justify-content-sm-end">
-                                <div class="col-xs-2 mt-3">
-                                    <button class="btn btn-warning" id="btnOpenSearchDate" name="btnOpenSearchDate">Buscar Fecha</button>
+                            <div class="col-sm-7 col-xl-5">
+                                <div class="row">
+                                    <div class="col-md-6 col-xl-3" style="padding-right: 0px;">
+                                        <div class="card bg-success">
+                                            <div class="card-body" style="padding: 10px;">
+                                                <div class="media text-white">
+                                                    <div class="media-body" style="text-align: center;">
+                                                        <span class="text-uppercase font-size-12 font-weight-bold" style="font-size: smaller;"><i class="bi bi-calendar-event mr-1"></i> Total: 310</span>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6 col-xl-4" style="padding-right: 0px;">
+                                        <div class="card bg-warning">
+                                            <div class="card-body" style="padding: 10px;">
+                                                <div class="media text-white">
+                                                    <div class="media-body" style="text-align: center;">
+                                                        <span class="text-uppercase font-size-12 font-weight-bold" style="font-size: smaller;"><i class="bi bi-file-earmark-x mr-1"></i>Completados: 95%</span>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="col-md-6 col-xl-4" style="padding-right: 0px;">
+                                        <div class="card bg-danger">
+                                            <div class="card-body" style="padding: 10px;">
+                                                <div class="media text-white">
+                                                    <div class="media-body" style="text-align: center;">
+                                                        <span class="text-uppercase font-size-12 font-weight-bold" style="font-size: smaller;"><i class="fas fa-arrow-down mr-1"></i>Atrasados: 5%</span>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6 col-xl-1" style="padding-right: 0px;">
+                                        <button class="btn btn-warning" id="btnOpenSearchDate" name="btnOpenSearchDate"><i class="fas fa-search"></i></button>
+                                    </div>
                                 </div>
-                                <!-- <div class="col-xs-2 py-2 mr-2">
-                                    <button class="btn btn-info" id="btnImportNewOffices">Importar Despachos</button>
-                                </div> -->
                             </div>
-                        </div>
+                                                    </div>
                     </div>
                 </div>
 

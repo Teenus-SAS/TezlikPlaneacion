@@ -88,7 +88,7 @@ $(document).ready(function () {
         {
           title: "No.",
           data: null,
-          className: "uniqueClassName",
+          className: "uniqueClassName dt-head-center",
           render: function (data, type, full, meta) {
             return meta.row + 1;
           },
@@ -96,28 +96,28 @@ $(document).ready(function () {
         {
           title: "Referencia",
           data: "reference",
-          className: "uniqueClassName",
+          className: "uniqueClassName dt-head-center",
         },
         {
           title: "Descripción",
           data: "description",
-          className: "uniqueClassName",
+          className: "uniqueClassName dt-head-center",
         },
         {
           title: "Existencia",
           data: "quantity",
-          className: "uniqueClassName",
+          className: "uniqueClassName dt-head-center",
           render: $.fn.dataTable.render.number(".", ",", 0),
         },
         {
           title: "Medida",
           data: "abbreviation",
-          className: "classCenter",
+          className: "uniqueClassName dt-head-center",
         },
         {
           title: "Reservado",
           data: null,
-          className: "uniqueClassName",
+          className: "uniqueClassName dt-head-center",
           render: function (data) {
             data.unit == "UNIDAD"
               ? (number = data.reserved.toLocaleString("es-CO", {
@@ -132,7 +132,7 @@ $(document).ready(function () {
         {
           title: "Stock",
           data: null,
-          className: "uniqueClassName",
+          className: "uniqueClassName dt-head-center",
           render: function (data) {
             data.unit == "UNIDAD"
               ? (number = data.minimum_stock.toLocaleString("es-CO", {
@@ -148,13 +148,13 @@ $(document).ready(function () {
         //   title: "Dias",
         //   data: "days",
         //   visible: visible,
-        //   className: "uniqueClassName",
+        //   className: "uniqueClassName dt-head-center",
         //   render: $.fn.dataTable.render.number('.', ',', 0),
         // },
         {
           title: "Clasificación",
           data: null,
-          className: "uniqueClassName",
+          className: "uniqueClassName dt-head-center",
           visible: data["visible"],
           render: function (data) {
             if (data.classification == "A") badge = "badge-success";

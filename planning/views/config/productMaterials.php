@@ -43,21 +43,21 @@ if (sizeof($_SESSION) == 0)
                             <div class="row align-items-center">
                                 <div class="col-sm-5 col-xl-6">
                                     <div class="page-title">
-                                        <h3 class="mb-1 font-weight-bold text-dark">Ficha Técnica Productos</h3>
+                                        <h3 class="mb-1 font-weight-bold text-dark"><i class="fas fa-file-alt mr-1"></i>Ficha Técnica Productos</h3>
                                         <ol class="breadcrumb mb-3 mb-md-0">
-                                            <li class="breadcrumb-item active" id="comment">Asignación de materias primas al producto</li>
+                                            <li class="breadcrumb-item active" id="comment">Asignación de Materias Primas, Máquinas y Procesos</li>
                                         </ol>
                                     </div>
                                 </div>
                                 <div class="col-sm-7 col-xl-6 form-inline justify-content-sm-end">
                                     <div class="col-xs-2 mr-2">
-                                        <button class="btn btn-warning" id="btnCreateProduct"><i class="bi bi-plus-circle"></i> Nueva Materia Prima</button>
+                                        <button class="btn btn-warning" id="btnCreateProduct"><i class="bi bi-plus-circle mr-1"></i>Adicionar</button>
                                     </div>
                                     <!-- <div class="col-xs-2 py-2 mr-2">
                                         <button class="btn btn-secondary" id="btnCreateProductInProcess">Adicionar Producto En Proceso</button>
                                 </div> -->
                                     <div class="col-xs-2 py-2 mr-2">
-                                        <button class="btn btn-info" id="btnImportProduct"><i class="bi bi-cloud-arrow-up-fill"></i> Importar</button>
+                                        <button class="btn btn-info" id="btnImportProduct"><i class="bi bi-cloud-arrow-up-fill"></i></button>
                                     </div>
                                 </div>
                             </div>
@@ -66,18 +66,18 @@ if (sizeof($_SESSION) == 0)
                             <div class="row align-items-center">
                                 <div class="col-sm-5 col-xl-6">
                                     <div class="page-title">
-                                        <h3 class="mb-1 font-weight-bold text-dark">Ciclos x Maquina y/o Proceso</h3>
+                                        <h3 class="mb-1 font-weight-bold text-dark"><i class="bi bi-arrow-repeat mr-1"></i>Procesos y Ciclos x Maquina</h3>
                                         <ol class="breadcrumb mb-3 mb-md-0">
-                                            <li class="breadcrumb-item active">Unidades x Maquina y/o Proceso</li>
+                                            <li class="breadcrumb-item active">Procesos y Cantidad de Unidades en un Ciclo</li>
                                         </ol>
                                     </div>
                                 </div>
                                 <div class="col-sm-7 col-xl-6 form-inline justify-content-sm-end">
                                     <div class="col-xs-2 mr-2">
-                                        <button class="btn btn-warning" id="btnNewPlanCiclesMachine" name="btnNewPlanCiclesMachine"><i class="bi bi-plus-circle"></i> Nuevo Ciclo Máquina</button>
+                                        <button class="btn btn-warning" id="btnNewPlanCiclesMachine" name="btnNewPlanCiclesMachine"><i class="bi bi-plus-circle mr-1"></i>Adicionar</button>
                                     </div>
                                     <div class="col-xs-2 py-2 mr-2">
-                                        <button class="btn btn-info" id="btnImportNewPlanCiclesMachine" name="btnImportNewPlanCiclesMachine"> <i class="bi bi-cloud-arrow-up-fill"></i> Importar</button>
+                                        <button class="btn btn-info" id="btnImportNewPlanCiclesMachine" name="btnImportNewPlanCiclesMachine"><i class="bi bi-cloud-arrow-up-fill mr-1"></i></button>
                                     </div>
                                 </div>
                             </div>
@@ -86,9 +86,9 @@ if (sizeof($_SESSION) == 0)
                             <div class="row align-items-center">
                                 <div class="col-sm-5 col-xl-6">
                                     <div class="page-title">
-                                        <h3 class="mb-1 font-weight-bold text-dark">Rutas</h3>
+                                        <h3 class="mb-1 font-weight-bold text-dark"><i class="bi bi-diagram-2 mr-1"></i>Rutas</h3>
                                         <ol class="breadcrumb mb-3 mb-md-0">
-                                            <li class="breadcrumb-item active"></li>
+                                            <li class="breadcrumb-item active">Secuencia de Procesos y Maquinas para la fabricacion del producto</li>
                                         </ol>
                                     </div>
                                 </div>

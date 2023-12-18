@@ -14,7 +14,7 @@ $(document).ready(function () {
       {
         title: "No.",
         data: null,
-        className: "uniqueClassName",
+        className: "uniqueClassName dt-head-center",
         render: function (data, type, full, meta) {
           return meta.row + 1;
         },
@@ -22,17 +22,17 @@ $(document).ready(function () {
       {
         title: "Referencia",
         data: "reference",
-        className: "classCenter",
+        className: "uniqueClassName dt-head-center",
       },
       {
         title: "Materia Prima",
         data: "material",
-        className: "classCenter",
+        className: "uniqueClassName dt-head-center",
       },
       {
         title: "Existencia",
         data: null,
-        className: "classCenter",
+        className: "uniqueClassName dt-head-center",
         render: function (data) {
           data.unit == "UNIDAD"
             ? (number = data.quantity.toLocaleString("es-CO", {
@@ -45,14 +45,14 @@ $(document).ready(function () {
         },
       },
       {
-        title: "Unidad",
+        title: "Medida",
         data: "abbreviation",
-        className: "classCenter",
+        className: "uniqueClassName dt-head-center",
       },
       {
         title: "Reservado",
         data: null,
-        className: "uniqueClassName",
+        className: "uniqueClassName dt-head-center",
         render: function (data) {
           data.unit == "UNIDAD"
             ? (number = data.reserved.toLocaleString("es-CO", {
@@ -67,7 +67,7 @@ $(document).ready(function () {
       {
         title: "Stock Min",
         data: null,
-        className: "uniqueClassName",
+        className: "uniqueClassName dt-head-center",
         render: function (data) {
           data.unit == "UNIDAD"
             ? (number = data.minimum_stock.toLocaleString("es-CO", {
@@ -82,7 +82,7 @@ $(document).ready(function () {
       {
         title: "Acciones",
         data: "id_material",
-        className: "uniqueClassName",
+        className: "uniqueClassName dt-head-center",
         render: function (data) {
           return `
                 <a href="javascript:;" <i id="${data}" class="bx bx-edit-alt updateRawMaterials" data-toggle='tooltip' title='Actualizar Materia Prima' style="font-size: 30px;"></i></a>

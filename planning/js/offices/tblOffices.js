@@ -68,7 +68,7 @@ $(document).ready(function () {
         {
           title: "No.",
           data: null,
-          className: "uniqueClassName",
+          className: "uniqueClassName dt-head-center",
           render: function (data, type, full, meta) {
             return meta.row + 1;
           },
@@ -76,23 +76,23 @@ $(document).ready(function () {
         {
           title: "Fecha",
           data: "date_order",
-          className: "uniqueClassName",
+          className: "uniqueClassName dt-head-center",
         },
         {
           title: "Pedido",
           data: "num_order",
-          className: "uniqueClassName",
+          className: "uniqueClassName dt-head-center",
         },
 
         {
           title: "Cliente",
           data: "client",
-          className: "uniqueClassName",
+          className: "uniqueClassName dt-head-center",
         },
         {
           title: "Fechas",
           data: null,
-          className: "classCenter",
+          className: "uniqueClassName dt-head-center",
           render: function (data, type, full, meta) {
             const minDate = full.min_date;
             const maxDate = full.max_date;
@@ -117,29 +117,29 @@ $(document).ready(function () {
         {
           title: "Ref",
           data: "reference",
-          className: "uniqueClassName",
+          className: "uniqueClassName dt-head-center",
         },
         {
           title: "Producto",
           data: "product",
-          className: "uniqueClassName",
+          className: "uniqueClassName dt-head-center",
         },
         {
           title: "Cantidad",
           data: "original_quantity",
-          className: "classCenter",
+          className: "uniqueClassName dt-head-center",
           render: $.fn.dataTable.render.number(".", ",", 0, ""),
         },
         {
           title: "Existencias",
           data: "quantity",
-          className: "classCenter",
+          className: "uniqueClassName dt-head-center",
           render: $.fn.dataTable.render.number(".", ",", 0),
         },
         /* {
           title: "Estado",
           data: "status",
-          className: "classCenter",
+          className: "uniqueClassName dt-head-center",
           render: function (data) {
             if (data == "Entregado") badge = "badge-success";
             else if (data == "Sin Ficha Tecnica" || data == "Sin Materia Prima")
@@ -153,7 +153,7 @@ $(document).ready(function () {
         {
           title: "F.Entrega",
           data: null,
-          className: "classCenter",
+          className: "uniqueClassName dt-head-center",
           render: function (data) {
             data.status == "Despacho"
               ? (action = `<button class="btn btn-info changeDate" id="${data.id_order}" name="${data.id_order}">Entregar</button>`)
@@ -165,7 +165,7 @@ $(document).ready(function () {
         {
           title: "Cancelar",
           data: null,
-          className: "classCenter",
+          className: "uniqueClassName dt-head-center",
           visible: visible,
           render: function (data) {
             return data.status == "Despacho"

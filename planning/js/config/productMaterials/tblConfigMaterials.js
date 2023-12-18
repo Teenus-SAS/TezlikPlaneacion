@@ -1,79 +1,86 @@
 $(document).ready(function () {
   /* Seleccion producto */
 
-  $('#refProduct').change(function (e) {
+  $("#refProduct").change(function (e) {
     e.preventDefault();
     id = this.value;
-    $('#selectNameProduct option').removeAttr('selected');
-    $(`#selectNameProduct option[value=${id}]`).prop('selected', true);
-    loadtableMaterials(id); 
+    $("#selectNameProduct option").removeAttr("selected");
+    $(`#selectNameProduct option[value=${id}]`).prop("selected", true);
+    loadtableMaterials(id);
     loadTblPlanCiclesMachine(id);
     loadTblRoutes(id);
   });
 
-  $('#selectNameProduct').change(function (e) {
+  $("#selectNameProduct").change(function (e) {
     e.preventDefault();
     id = this.value;
-    $('#refProduct option').removeAttr('selected');
-    $(`#refProduct option[value=${id}]`).prop('selected', true);
-    loadtableMaterials(id); 
+    $("#refProduct option").removeAttr("selected");
+    $(`#refProduct option[value=${id}]`).prop("selected", true);
+    loadtableMaterials(id);
     loadTblPlanCiclesMachine(id);
     loadTblRoutes(id);
   });
 
   /* Cargue tabla de Productos Materiales */
 
-  loadtableMaterials = (idProduct) => { 
-    tblConfigMaterials = $('#tblConfigMaterials').dataTable({
+  loadtableMaterials = (idProduct) => {
+    tblConfigMaterials = $("#tblConfigMaterials").dataTable({
       destroy: true,
       pageLength: 50,
       ajax: {
         url: `/api/productsMaterials/${idProduct}`,
-        dataSrc: '',
+        dataSrc: "",
       },
       dom: '<"datatable-error-console">frtip',
       language: {
-        url: '//cdn.datatables.net/plug-ins/1.10.20/i18n/Spanish.json',
+        url: "//cdn.datatables.net/plug-ins/1.10.20/i18n/Spanish.json",
       },
       fnInfoCallback: function (oSettings, iStart, iEnd, iMax, iTotal, sPre) {
-        if (oSettings.json && oSettings.json.hasOwnProperty('error')) {
+        if (oSettings.json && oSettings.json.hasOwnProperty("error")) {
           console.error(oSettings.json.error);
         }
       },
+      columnDefs: [
+        {
+          //targets: 0,
+          // Centra los títulos del header
+          className: "",
+        },
+      ],
       columns: [
         {
-          title: 'No.',
+          title: "No.",
           data: null,
-          className: 'uniqueClassName',
+          className: "uniqueClassName dt-head-center",
           render: function (data, type, full, meta) {
             return meta.row + 1;
           },
         },
         {
-          title: 'Referencia',
-          data: 'reference',
-          className: 'uniqueClassName',
+          title: "Referencia",
+          data: "reference",
+          className: "uniqueClassName dt-head-center",
         },
         {
-          title: 'Materia Prima',
-          data: 'material',
-          className: 'classCenter',
+          title: "Materia Prima",
+          data: "material",
+          className: "uniqueClassName dt-head-center",
         },
         {
-          title: 'Unidad',
-          data: 'abbreviation',
-          className: 'classCenter',
+          title: "Unidad",
+          data: "abbreviation",
+          className: "uniqueClassName dt-head-center",
         },
         {
-          title: 'Cantidad',
-          data: 'quantity',
-          className: 'classCenter',
-          render: $.fn.dataTable.render.number('.', ',', 4, ''),
+          title: "Cantidad",
+          data: "quantity",
+          className: "uniqueClassName dt-head-center",
+          render: $.fn.dataTable.render.number(".", ",", 4, ""),
         },
         {
-          title: 'Acciones',
-          data: 'id_product_material',
-          className: 'uniqueClassName',
+          title: "Acciones",
+          data: "id_product_material",
+          className: "uniqueClassName dt-head-center",
           render: function (data) {
             return `
                 <a href="javascript:;" <i id="${data}" class="bx bx-edit-alt updateMaterials" data-toggle='tooltip' title='Actualizar Materia Prima' style="font-size: 30px;"></i></a>
@@ -102,7 +109,7 @@ $(document).ready(function () {
         {
           title: 'No.',
           data: null,
-          className: 'uniqueClassName',
+          className: 'uniqueClassName dt-head-center',
           render: function (data, type, full, meta) {
             return meta.row + 1;
           },
@@ -110,17 +117,17 @@ $(document).ready(function () {
         {
           title: 'Referencia',
           data: 'reference',
-          className: 'uniqueClassName',
+          className: 'uniqueClassName dt-head-center',
         },
         {
           title: 'Producto',
           data: 'product',
-          className: 'classCenter',
+          className: 'uniqueClassName dt-head-center',
         },
         {
           title: 'Acciones',
           data: 'id_product_category',
-          className: 'uniqueClassName',
+          className: 'uniqueClassName dt-head-center',
           render: function (data) {
             return `
               <a href="javascript:;" <i id="${data}" class="mdi mdi-delete-forever" data-toggle='tooltip' title='Eliminar Producto' style="font-size: 30px;color:red" onclick="deleteProduct()"></i></a>`;

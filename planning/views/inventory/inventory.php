@@ -36,10 +36,10 @@ if (sizeof($_SESSION) == 0)
             <!-- content -->
             <div class="page-content">
                 <!-- page header -->
-                <div class="page-title-box">
+                <div class="page-title-box" style="padding-bottom: 15px;">
                     <div class="container-fluid">
                         <div class="row align-items-center">
-                            <div class="col-sm-5 col-xl-6">
+                            <div class="col-sm-5 col-xl-5">
                                 <div class="page-title">
                                     <h3 class="mb-1 font-weight-bold text-dark">Inventarios</h3>
                                     <ol class="breadcrumb mb-3 mb-md-0">
@@ -47,17 +47,71 @@ if (sizeof($_SESSION) == 0)
                                     </ol>
                                 </div>
                             </div>
-                            <div class="col-sm-7 col-xl-6 form-inline justify-content-sm-end">
-                                <!-- <div class="col-xs-2 mr-2">
-                                    <select class="form-control" name="category" id="category">
-                                    </select>
+                            <div class="col-sm-7 col-xl-7">
+                                <div class="row">
+                                    <div class="col-md-6 col-xl-3" style="padding-right: 0px;">
+                                        <div class="card bg-info">
+                                            <div class="card-body" style="padding: 10px;">
+                                                <div class="media text-white">
+                                                    <div class="media-body" style="text-align: center;">
+                                                        <span class="text-uppercase font-size-12 font-weight-bold" style="font-size: smaller;"><i class="bi bi-exclamation-circle mr-1"></i> Inv Total: 30.000</span>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6 col-xl-3" style="padding-right: 0px;">
+                                        <div class="card bg-warning">
+                                            <div class="card-body" style="padding: 10px;">
+                                                <div class="media text-white">
+                                                    <div class="media-body" style="text-align: center;">
+                                                        <span class="text-uppercase font-size-12 font-weight-bold" style="font-size: smaller;"><i class="bi bi-arrow-clockwise mr-1"></i>Rotación: 20.000</span>
+                                                    </div>
+
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="col-md-6 col-xl-3" style="padding-right: 0px;">
+                                        <div class="card bg-danger">
+                                            <div class="card-body" style="padding: 10px;">
+                                                <div class="media text-white">
+                                                    <div class="media-body" style="text-align: center;">
+                                                        <span class="text-uppercase font-size-12 font-weight-bold" style="font-size: smaller;"><i class="bi bi-hourglass-bottom mr-1"></i> Cobertura: 10.000</span>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="col-md-6 col-xl-3" style="padding-right: 0px;">
+                                        <div class="card bg-danger">
+                                            <div class="card-body" style="padding: 10px;">
+                                                <div class="media text-white">
+                                                    <div class="media-body" style="text-align: center;">
+                                                        <span class="text-uppercase font-size-12 font-weight-bold" style="font-size: smaller;"><i class="bi bi-hourglass-bottom mr-1"></i> Disponib: 10.000</span>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="page-content-wrapper mt--45 mb-5">
+                    <div class="container-fluid">
+                        <div class="row">
+                            <div class="col-sm-7 col-xl-12 mt-4 form-inline justify-content-sm-end">
+                                <div class="col-xs-4 cardBtnAddMonths  mr-2">
+                                    <button class="btn btn-warning" id="btnInvetoryABC" name="btnInvetoryABC"><i class="bi bi-folder mr-1"></i>Reclasificación Inv ABC</button>
+                                </div>
+                                <!-- <div class="col-xs-2">
+                                    <button class="btn btn-info" id="btnImportNewInventory"><i class="bi bi-cloud-download mr-1"></i></button>
                                 </div> -->
-                                <div class="col-xs-2 py-2 mr-2">
-                                    <button class="btn btn-info" id="btnImportNewInventory">Importar Inventarios</button>
-                                </div>
-                                <div class="col-xs-4 cardBtnAddMonths">
-                                    <button class="btn btn-warning" id="btnInvetoryABC" name="btnInvetoryABC">Reclasificación Inventarios</button>
-                                </div>
                             </div>
                         </div>
                     </div>

@@ -37,9 +37,9 @@ if (sizeof($_SESSION) == 0)
             <!-- content -->
             <div class="page-content">
                 <!-- page header -->
-                <div class="page-title-box">
+                <div class="page-title-box" style="padding-bottom: 15px;">
                     <div class="container-fluid">
-                        <div class="row align-items-center cardHeader">
+                        <div class="row align-items-center">
                             <div class="col-sm-5 col-xl-6">
                                 <div class="page-title">
                                     <h3 class="mb-1 font-weight-bold text-dark"><i class="bi bi-archive mr-1"></i>Inventarios</h3>
@@ -48,7 +48,52 @@ if (sizeof($_SESSION) == 0)
                                     </ol>
                                 </div>
                             </div>
-                            <div class="col-sm-7 col-xl-6 form-inline justify-content-sm-end" id="card">
+                            <div class="col-sm-7 col-xl-6">
+                                <div class="row">
+                                    <div class="col-md-6 col-xl-4" style="padding-right: 0px;">
+                                        <div class="card bg-info">
+                                            <div class="card-body" style="padding: 10px;">
+                                                <div class="media text-white">
+                                                    <div class="media-body" style="text-align: center;">
+                                                        <span class="text-uppercase font-size-12 font-weight-bold" style="font-size: smaller;"><i class="fas fa-cube mr-1"></i> Inv Total: 30.000</span>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6 col-xl-4" style="padding-right: 0px;">
+                                        <div class="card bg-warning">
+                                            <div class="card-body" style="padding: 10px;">
+                                                <div class="media text-white">
+                                                    <div class="media-body" style="text-align: center;">
+                                                        <span class="text-uppercase font-size-12 font-weight-bold" style="font-size: smaller;"><i class="fas fa-plus mr-1"></i>Promedio: 27</span>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="col-md-6 col-xl-4" style="padding-right: 0px;">
+                                        <div class="card bg-primary">
+                                            <div class="card-body" style="padding: 10px;">
+                                                <div class="media text-white">
+                                                    <div class="media-body" style="text-align: center;">
+                                                        <span class="text-uppercase font-size-12 font-weight-bold" style="font-size: smaller;"><i class="bi bi-hourglass-bottom mr-1"></i> Concentracion: 22.22%</span>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="page-content-wrapper mt--45 mb-5">
+                    <div class="container-fluid">
+                        <div class="row cardHeader">
+                            <div class="col-sm-7 col-xl-12 mt-4 form-inline justify-content-sm-end" id="card">
                                 <div class="col-xs-2 mr-2">
                                     <button class="btn btn-warning" id="btnNewProduct"><i class="bi bi-plus-circle mr-1"></i>Adicionar</button>
                                 </div>

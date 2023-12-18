@@ -52,7 +52,7 @@ $(document).ready(function () {
         {
           title: "No.",
           data: null,
-          className: "uniqueClassName",
+          className: "uniqueClassName dt-head-center",
           render: function (data, type, full, meta) {
             return meta.row + 1;
           },
@@ -60,27 +60,27 @@ $(document).ready(function () {
         {
           title: "Pedido",
           data: "num_order",
-          className: "uniqueClassName",
+          className: "uniqueClassName dt-head-center",
         },
         {
           title: "Referencia",
           data: "reference",
-          className: "uniqueClassName",
+          className: "uniqueClassName dt-head-center",
         },
         {
           title: "Producto",
           data: "product",
-          className: "uniqueClassName",
+          className: "uniqueClassName dt-head-center",
         },
         {
           title: "Maquina",
           data: "machine",
-          className: "uniqueClassName",
+          className: "uniqueClassName dt-head-center",
         },
         {
           title: "Cantidades",
           data: null,
-          className: "uniqueClassName",
+          className: "uniqueClassName dt-head-center",
           render: function (data, type, full, meta) {
             const quantityOrder = full.quantity_order;
             const quantityProgramming = full.quantity_programming;
@@ -94,12 +94,12 @@ $(document).ready(function () {
         {
           title: "Cliente",
           data: "client",
-          className: "uniqueClassName",
+          className: "uniqueClassName dt-head-center",
         },
         {
           title: "Fecha y Hora",
           data: null,
-          className: "uniqueClassName",
+          className: "uniqueClassName dt-head-center",
           width: "200px",
           render: function (data, type, full, meta) {
             const minDate = full.min_date;
@@ -114,7 +114,7 @@ $(document).ready(function () {
         {
           title: "Orden Produccion",
           data: "id_programming",
-          className: "uniqueClassName",
+          className: "uniqueClassName dt-head-center",
           render: function (data) {
             return `
             <button class="btn btn-warning changeStatus " id="${data}" name="${data}">Crear OP</button>`;
@@ -123,7 +123,7 @@ $(document).ready(function () {
         {
           title: "Acciones",
           data: "id_programming",
-          className: "uniqueClassName",
+          className: "uniqueClassName dt-head-center",
           render: function (data) {
             return `
                 <a href="javascript:;" <i id="${data}" class="bx bx-edit-alt updateProgramming" data-toggle='tooltip' title='Actualizar Programa' style="font-size: 30px;"></i></a>
