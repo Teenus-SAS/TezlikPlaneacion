@@ -156,14 +156,14 @@ $(document).ready(function () {
       if (machines.length > 0) {
         dataProgramming.append('minDate', machines[machines.length - 1].max_date);
         let hour = new Date(machines[machines.length - 1].max_date).getHours();
-        let min_date = machines[machines.length - 1].max_date;
+        let min_date = getFirstText(machines[machines.length - 1].max_date);
         let date = new Date();
-        let dateFormat = convetFormatDate(date);
+        let dateFormat = `${date.getFullYear()}-${(date.getMonth() + 1).toString().padStart(2, '0')}-${date.getDate().toString().padStart(2, '0')}`;;
 
         if (machines[machines.length - 1].max_date < dateFormat) {
           date.setDate(date.getDate() + 1);
 
-          min_date = convetFormatDate(date);
+          min_date = `${date.getFullYear()}-${(date.getMonth() + 1).toString().padStart(2, '0')}-${date.getDate().toString().padStart(2, '0')}`;
         }
 
         calcMaxDate(min_date, hour, 1);
