@@ -20,11 +20,13 @@ class PlanCiclesMachineDao
     {
         $connection = Connection::getInstance()->getConnection();
 
-        $stmt = $connection->prepare("SELECT pcm.id_cicles_machine, pcm.id_product, p.reference, p.product, pcm.id_machine, m.machine, pcm.cicles_hour, pcm.units_turn, pcm.units_month
+        $stmt = $connection->prepare("SELECT pcm.id_cicles_machine, pcm.id_product, p.reference, p.product, pcm.id_process, IFNULL(pc.process, '') AS process, pcm.id_machine, 
+                                             m.machine, pcm.cicles_hour, pcm.units_turn, pcm.units_month, pcm.route
                                       FROM plan_cicles_machine pcm
                                        INNER JOIN machines m ON m.id_machine = pcm.id_machine
                                        INNER JOIN products p ON p.id_product = pcm.id_product
-                                      WHERE pcm.id_company = :id_company");
+                                       LEFT JOIN process pc ON pc.id_process = pcm.id_process
+                                      WHERE pcm.id_company = :id_company ORDER BY pcm.route ASC");
         $stmt->execute(['id_company' => $id_company]);
         $planCiclesMachines = $stmt->fetchAll($connection::FETCH_ASSOC);
         return $planCiclesMachines;

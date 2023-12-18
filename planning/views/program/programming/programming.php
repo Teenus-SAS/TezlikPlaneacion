@@ -94,6 +94,11 @@ if (sizeof($_SESSION) == 0)
                                                     <label for="">Inv MP</label>
                                                     <input type="text" class="form-control text-center" id="quantityMP" name="quantityMP" readonly>
                                                 </div>
+                                                <div class="col-sm-3 floating-label enable-floating-label show-label" id="process">
+                                                    <label for="">Proceso</label>
+                                                    <select class="form-control input" id="idProcess" name="idProcess">
+                                                    </select>
+                                                </div>
                                                 <div class="col-sm-3 floating-label enable-floating-label show-label" id="machines">
                                                     <label for="">Maquina</label>
                                                     <select class="form-control input" id="idMachine" name="idMachine">
@@ -103,13 +108,14 @@ if (sizeof($_SESSION) == 0)
                                                     <label for="">Cantidad a Fabricar</label>
                                                     <input type="number" class="form-control text-center input" id="quantity" name="quantity">
                                                 </div>
+                                                <div class="w-100"></div>
                                                 <div class="col-sm-3 floating-label enable-floating-label show-label date">
                                                     <label for="">Fecha Inicial</label>
-                                                    <input type="datetime-local" class="form-control text-center" inline="true" id="minDate" name="minDate" readonly>
+                                                    <input type="datetime-local" class="form-control text-center" inline="true" id="minDate" name="minDate" readonly min="<?php echo date('Y-m-d', strtotime('+1 day')); ?>">
                                                 </div>
                                                 <div class="col-sm-3 floating-label enable-floating-label show-label date">
                                                     <label for="">Fecha Final</label>
-                                                    <input type="datetime-local" class="form-control text-center number" id="maxDate" name="maxDate" readonly>
+                                                    <input type="datetime-local" class="form-control text-center number" id="maxDate" name="maxDate" readonly min="<?php echo date('Y-m-d', strtotime('+1 day')); ?>">
                                                 </div>
                                                 <div class="col-sm mt-2">
                                                     <button class="btn btn-info" type="submit" id="btnCreateProgramming" name="btnCreateProgramming">Crear</button>
@@ -163,9 +169,9 @@ if (sizeof($_SESSION) == 0)
     <script src="https://cdn.datatables.net/buttons/2.4.2/js/buttons.html5.min.js"></script>
     <script src="https://cdn.datatables.net/buttons/2.4.2/js/buttons.print.min.js"></script>
     <script src="/global/js/global/lastText.js"></script>
-    <script src="../planning/js/program/programming/tblProgramming.js"></script>
-    <!--  <script src="/planning/js/basic/products/configProducts.js"></script> -->
+    <script src="/planning/js/program/programming/tblProgramming.js"></script>
     <script src="/planning/js/orders/configOrders.js"></script>
+    <!-- <script src="/planning/js/basic/process/configProcess.js"></script> -->
     <script src="/planning/js/basic/machines/configMachines.js"></script>
     <script src="/planning/js/program/programming/programming.js"></script>
     <script src="/planning/js/program/programming/configProgramming.js"></script>

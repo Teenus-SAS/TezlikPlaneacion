@@ -1,5 +1,6 @@
 $(document).ready(function () {
   data = {};
+  let allProcess = [];
   let allMachines = [];
   let allCiclesMachines = [];
   let allPlanningMachines = [];
@@ -9,6 +10,7 @@ $(document).ready(function () {
   loadAllDataProgramming = async () => {
     try {
       const [
+        process,
         machines,
         ciclesMachines,
         planningMachines,
@@ -16,6 +18,7 @@ $(document).ready(function () {
         programming,
         productsMaterials
       ] = await Promise.all([
+        searchData('/api/process'),
         searchData('/api/machines'),
         searchData('/api/planCiclesMachine'),
         searchData('/api/planningMachines'),
@@ -24,6 +27,7 @@ $(document).ready(function () {
         searchData('/api/allProductsMaterials')
       ]);
 
+      allProcess = process;
       allMachines = machines;
       allCiclesMachines = ciclesMachines;
       allPlanningMachines = planningMachines;
@@ -291,12 +295,22 @@ $(document).ready(function () {
       for (let i = 0; i < r.length; i++) {
         if (this.value == r[i].id_product) {
           let ciclesMachine = allCiclesMachines.filter(item => item.id_product == this.value);
-          let $select = $(`#idMachine`);
+          let $select = $(`#idProcess`);
           $select.empty();
           $select.append(`<option value="0" disabled selected>Seleccionar</option>`);
      
           $.each(ciclesMachine, function (i, value) {
             $select.append(
+              `<option value = ${value.id_process}> ${value.process} </option>`
+            );
+          });
+
+          let $select1 = $(`#idMachine`);
+          $select1.empty();
+          $select1.append(`<option value="0" disabled selected>Seleccionar</option>`);
+     
+          $.each(ciclesMachine, function (i, value) {
+            $select1.append(
               `<option value = ${value.id_machine}> ${value.machine} </option>`
             );
           });
