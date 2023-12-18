@@ -20,11 +20,11 @@ $(document).ready(function () {
             return meta.row + 1;
           },
         },
-        // {
-        //     title: 'Id Maquina',
-        //     data: 'id_machine',
-        //     className: 'uniqueClassName dt-head-center',
-        // },
+        {
+            title: 'Proceso',
+            data: 'process',
+            className: 'uniqueClassName dt-head-center',
+        },
         {
           title: "Máquina",
           data: "machine",
