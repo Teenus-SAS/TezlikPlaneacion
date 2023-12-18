@@ -1,12 +1,40 @@
 $(document).ready(function () {
-  /* Ocultar panel para crear Machinees */
+  $('.selectNavigation').click(function (e) {
+    e.preventDefault();
+    
+    if (this.id == 'link-process') {
+      $('.cardMachines').hide();
+      $('.cardCreateMachines').hide(800);
+      $('.cardImportMachines').hide(800);
+      $('.cardProcess').show();
+    }
+    else if (this.id == 'link-machines') {
+      $('.cardProcess').hide();
+      $('.cardCreateProcess').hide(800);
+      $('.cardImportProcess').hide(800);
+      $('.cardMachines').show();
+    }
 
+    let tables = document.getElementsByClassName(
+      'dataTable'
+    );
+
+    for (let i = 0; i < tables.length; i++) {
+      let attr = tables[i];
+      attr.style.width = '100%';
+      attr = tables[i].firstElementChild;
+      attr.style.width = '100%';
+    }
+  });
+
+  /* Ocultar panel para crear Machinees */
   $(".cardCreateMachines").hide();
 
   /* Abrir panel para crear Machinees */
 
   $("#btnNewMachine").click(function (e) {
     e.preventDefault();
+    $('.cardImportMachines').hide(800);
     $(".cardCreateMachines").toggle(800);
     $("#btnCreateMachine").html("Crear");
 
@@ -30,6 +58,7 @@ $(document).ready(function () {
   /* Actualizar maquinas */
 
   $(document).on("click", ".updateMachines", function (e) {
+    $('.cardImportMachines').hide(800);
     $(".cardCreateMachines").show(800);
     $("#btnCreateMachine").html("Actualizar");
     idMachine = this.id;
@@ -69,7 +98,7 @@ $(document).ready(function () {
 
   /* Eliminar productos */
 
-  deleteFunction = () => {
+  deleteMachineFunction = () => {
     let row = $(this.activeElement).parent().parent()[0];
     let data = tblMachines.fnGetData(row);
 

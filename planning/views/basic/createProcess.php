@@ -38,7 +38,7 @@ if (sizeof($_SESSION) == 0)
                 <!-- Page header -->
                 <div class="page-title-box">
                     <div class="container-fluid">
-                        <div class="row align-items-center">
+                        <div class="row align-items-center cardProcess">
                             <div class="col-sm-5 col-xl-6">
                                 <div class="page-title">
                                     <h3 class="mb-1 font-weight-bold text-dark">Procesos</h3>
@@ -89,15 +89,15 @@ if (sizeof($_SESSION) == 0)
                             <form class="col-12" id="formImportProcess" enctype="multipart/form-data">
                                 <div class="card">
                                     <div class="card-body pt-3">
-                                        <div class="form-row">
+                                        <div class="form-row" id="formProcess">
                                             <div class="col-sm-6 floating-label enable-floating-label show-label drag-area" style="margin-bottom:10px!important">
                                                 <input class="form-control" type="file" id="fileProcess" accept=".xls,.xlsx">
                                                 <label for="formFile" class="form-label"> Importar Process</label>
                                             </div>
-                                            <div class="col-xs-2" style="margin-top:7px">
+                                            <div class="col-xs-2 cardBottons" style="margin-top:7px">
                                                 <button type="text" class="btn btn-success" id="btnImportProcess">Importar</button>
                                             </div>
-                                            <div class="col-xs-2" style="margin-top:7px">
+                                            <div class="col-xs-2 cardBottons" style="margin-top:7px">
                                                 <button type="text" class="btn btn-info" id="btnDownloadImportsProcess">Descarga Formato</button>
                                             </div>
                                         </div>

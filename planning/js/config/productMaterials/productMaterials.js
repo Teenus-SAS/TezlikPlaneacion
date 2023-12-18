@@ -5,23 +5,23 @@ $(document).ready(function () {
     e.preventDefault();
 
     if (this.id == 'materials') {
-      $('.cardProductsMaterials').show(800);
-      $('.cardPlanCicles').hide(800);
-      $('.cardRoutes').hide(800);
-      $('.cardCreatePlanCiclesMachine').hide(800);
-      $('.cardImportPlanCiclesMachine').hide(800);
+      $('.cardProductsMaterials').show();
+      $('.cardPlanCicles').hide();
+      $('.cardRoutes').hide();
+      $('.cardCreatePlanCiclesMachine').hide();
+      $('.cardImportPlanCiclesMachine').hide();
     } else if (this.id == 'planCicles') {
-      $('.cardPlanCicles').show(800);
-      $('.cardProductsMaterials').hide(800);
-      $('.cardRoutes').hide(800);
-      $('.cardAddMaterials').hide(800);
-      $('.cardImport').hide(800);
+      $('.cardPlanCicles').show();
+      $('.cardProductsMaterials').hide();
+      $('.cardRoutes').hide();
+      $('.cardAddMaterials').hide();
+      $('.cardImport').hide();
     } else {
-      $('.cardRoutes').show(800);
-      $('.cardPlanCicles').hide(800);
-      $('.cardProductsMaterials').hide(800);
-      $('.cardAddMaterials').hide(800);
-      $('.cardImport').hide(800);
+      $('.cardRoutes').show();
+      $('.cardPlanCicles').hide();
+      $('.cardProductsMaterials').hide();
+      $('.cardAddMaterials').hide();
+      $('.cardImport').hide();
       
     }
     let tables = document.getElementsByClassName(

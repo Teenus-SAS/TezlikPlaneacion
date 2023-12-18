@@ -38,7 +38,25 @@ if (sizeof($_SESSION) == 0)
                 <!-- Page header -->
                 <div class="page-title-box">
                     <div class="container-fluid">
-                        <div class="row align-items-center">
+                        <div class="row align-items-center cardProcess">
+                            <div class="col-sm-5 col-xl-6">
+                                <div class="page-title">
+                                    <h3 class="mb-1 font-weight-bold text-dark"><i class="fas fa-cogs mr-1"></i>Procesos y Máquinas</h3>
+                                    <ol class="breadcrumb mb-3 mb-md-0">
+                                        <li class="breadcrumb-item active">Creación de Procesos y Máquinas</li>
+                                    </ol>
+                                </div>
+                            </div>
+                            <div class="col-sm-7 col-xl-6 form-inline justify-content-sm-end">
+                                <div class="col-xs-2 mr-2">
+                                    <button class="btn btn-warning" id="btnNewProcess" name="btnNewProcess"><i class="bi bi-plus-circle mr-1"></i>Adicionar</button>
+                                </div>
+                                <div class="col-xs-2 py-2 mr-2">
+                                    <button class="btn btn-info" id="btnImportNewProcess"><i class="bi bi-cloud-arrow-up-fill mr-1"></i>Importar</button>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row align-items-center cardMachines" style="display: none;">
                             <div class="col-sm-5 col-xl-6">
                                 <div class="page-title">
                                     <h3 class="mb-1 font-weight-bold text-dark"><i class="fas fa-cogs mr-1"></i>Procesos y Máquinas</h3>
@@ -52,13 +70,64 @@ if (sizeof($_SESSION) == 0)
                                     <button class="btn btn-warning" id="btnNewMachine" name="btnNewMachine"><i class="bi bi-plus-circle mr-1"></i>Adicionar</button>
                                 </div>
                                 <div class="col-xs-2 py-2 mr-2">
-                                    <button class="btn btn-info" id="btnImportNewMachines" name="btnNewImportMachines"><i class="bi bi-cloud-arrow-up-fill"></i></button>
+                                    <button class="btn btn-info" id="btnImportNewMachines" name="btnNewImportMachines"><i class="bi bi-cloud-arrow-up-fill mr-1"></i>Importar</button>
                                 </div>
                             </div>
                         </div>
                     </div>
                 </div>
 
+                <!-- Procesos -->
+                <div class="page-content-wrapper mt--45 mb-5 cardCreateProcess">
+                    <div class="container-fluid">
+                        <div class="row">
+                            <div class="col-12">
+                                <div class="card">
+                                    <form id="formCreateProcess">
+                                        <div class="card-body">
+                                            <div class="form-row">
+                                                <div class="col-sm-10 floating-label enable-floating-label show-label" style="margin-bottom:0px">
+                                                    <label for="">Proceso</label>
+                                                    <input type="text" class="form-control" id="process" name="process">
+                                                </div>
+                                                <div class="col-sm mt-1">
+                                                    <button class="btn btn-success" id="btnCreateProcess">Crear Proceso</button>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="page-content-wrapper mt--45 mb-5 cardImportProcess">
+                    <div class="container-fluid">
+                        <div class="row">
+                            <form class="col-12" id="formImportProcess" enctype="multipart/form-data">
+                                <div class="card">
+                                    <div class="card-body pt-3">
+                                        <div class="form-row" id="formProcess">
+                                            <div class="col-sm-6 floating-label enable-floating-label show-label drag-area" style="margin-bottom:10px!important">
+                                                <input class="form-control" type="file" id="fileProcess" accept=".xls,.xlsx">
+                                                <label for="formFile" class="form-label"> Importar Process</label>
+                                            </div>
+                                            <div class="col-xs-2 cardBottons" style="margin-top:7px">
+                                                <button type="text" class="btn btn-success" id="btnImportProcess">Importar</button>
+                                            </div>
+                                            <div class="col-xs-2 cardBottons" style="margin-top:7px">
+                                                <button type="text" class="btn btn-info" id="btnDownloadImportsProcess">Descarga Formato</button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Maquinas -->
                 <div class="page-content-wrapper mt--45 mb-5 cardCreateMachines">
                     <div class="container-fluid">
                         <div class="row">
@@ -108,61 +177,37 @@ if (sizeof($_SESSION) == 0)
                     </div>
                 </div>
 
-                <!-- page content -->
-                <!-- <div class="page-content-wrapper mt--45">
-                    <div class="container-fluid">
-                        <div class="row">
-                            <div class="col-12">
-                                <div class="card">
-                                    <div class="card-body">
-                                        <div class="table-responsive">
-                                            <table class="fixed-table-loading table table-hover" id="tblMachines">
-
-                                            </table>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div> -->
-
                 <div class="page-content-wrapper mt--45">
                     <div class="container-fluid">
                         <!-- Row 5 -->
                         <div class="row">
                             <div class="col-12">
-
                                 <ul class="nav nav-tabs" id="pills-tab" role="tablist">
                                     <li class="nav-item">
-                                        <a class="nav-link active" id="pills-activity-tab" data-toggle="pill" href="#pills-activity" role="tab" aria-controls="pills-activity" aria-selected="true">
+                                        <a class="nav-link active selectNavigation" id="link-process" data-toggle="pill" href="javascript:;" role="tab" aria-controls="pills-activity" aria-selected="true">
                                             <i class="bi bi-diagram-3 mr-1"></i>Procesos
                                         </a>
                                     </li>
                                     <li class="nav-item">
-                                        <a class="nav-link" id="pills-projects-tab" data-toggle="pill" href="#pills-projects" role="tab" aria-controls="pills-projects" aria-selected="false">
+                                        <a class="nav-link selectNavigation" id="link-machines" data-toggle="pill" href="javascript:;" role="tab" aria-controls="pills-projects" aria-selected="false">
                                             <i class="bi bi-gear-wide mr-1"></i>Máquinas
                                         </a>
                                     </li>
                                 </ul>
-
-
                             </div>
                         </div>
                         <div class="row">
                             <div class="col-12">
                                 <div class="card">
                                     <div class="card-body">
-                                        <div class="tab-content mt-4 pt-3" id="pills-tabContent">
-                                            <div class="tab-pane fade show active" id="pills-activity" role="tabpanel" aria-labelledby="pills-activity-tab">
-                                                <div class="table-responsive">
-                                                    <table class="fixed-table-loading table table-hover" id="tblStore">
+                                        <div class="tab-pane cardProcess">
+                                            <div class="table-responsive">
+                                                <table class="fixed-table-loading table table-hover" id="tblProcess">
 
-                                                    </table>
-                                                </div>
+                                                </table>
                                             </div>
                                         </div>
-                                        <div class="tab-pane fade" id="pills-projects" role="tabpanel" aria-labelledby="pills-projects-tab">
+                                        <div class="tab-pane cardMachines" style="display: none;">
                                             <table class="fixed-table-loading table table-hover" id="tblMachines">
 
                                             </table>
@@ -183,13 +228,14 @@ if (sizeof($_SESSION) == 0)
     <!-- Page End -->
 
     <?php include_once dirname(dirname(dirname(__DIR__))) . '/global/partials/scriptsJS.php'; ?>
-    <!-- <script src="/planning/js/users/usersAccess.js"></script> -->
 
-    <script src="../global/js/global/number.js"></script>
+    <script src="/planning/js/basic/process/process.js"></script>
+    <script src="/planning/js/basic/process/tblProcess.js"></script>
     <script src="/planning/js/basic/machines/tblMachines.js"></script>
     <script src="/planning/js/basic/machines/machines.js"></script>
     <script src="../global/js/import/import.js"></script>
     <script src="/planning/js/basic/machines/importMachines.js"></script>
+    <script src="/planning/js/basic/process/importProcess.js"></script>
     <script src="../global/js/import/file.js"></script>
     <script src="../global/js/global/validateExt.js"></script>
 </body>

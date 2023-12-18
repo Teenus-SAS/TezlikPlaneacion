@@ -24,7 +24,7 @@ $(document).ready(function () {
 
     let idProcess = sessionStorage.getItem('id_process');
 
-    if (idProcess == '' || idProcess == null) { 
+    if (idProcess == '' || idProcess == null) {
       checkDataProcess('/api/addPlanProcess', idProcess);
     } else {
       checkDataProcess('/api/updatePlanProcess', idProcess);
@@ -68,12 +68,12 @@ $(document).ready(function () {
 
     let resp = await sendDataPOST(url, dataProcess);
 
-    message(resp);
-  }; 
+    messageProcess(resp);
+  };
 
   /* Eliminar proceso */
 
-  deleteFunction = () => {
+  deleteProcessFunction = () => {
     let row = $(this.activeElement).parent().parent()[0];
     let data = tblProcess.fnGetData(row);
 
@@ -98,7 +98,7 @@ $(document).ready(function () {
           $.get(
             `../../api/deletePlanProcess/${id_process}`,
             function (data, textStatus, jqXHR) {
-              message(data);
+              messageProcess(data);
             }
           );
         }
@@ -108,8 +108,10 @@ $(document).ready(function () {
 
   /* Mensaje de exito */
 
-  message = (data) => {
+  messageProcess = (data) => {
     if (data.success == true) {
+      $('.cardImportProcess').hide(800);
+      $('#formImportProcess').trigger('reset');
       $('.cardCreateProcess').hide(800);
       $('#formCreateProcess').trigger('reset');
       updateTable();
