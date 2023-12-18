@@ -74,7 +74,7 @@ class GeneralPlanCiclesMachinesDao
     {
         $connection = Connection::getInstance()->getConnection();
 
-        $stmt = $connection->prepare("SELECT pcm.id_cicles_machine, pcm.cicles_hour, pcm.units_turn, pcm.units_month, p.id_product, p.reference, p.product, IFNULL(pc.id_process, 0) AS id_process, IFNULL(pc.process, '') AS process, m.id_machine, m.machine
+        $stmt = $connection->prepare("SELECT pcm.id_cicles_machine, pcm.cicles_hour, pcm.units_turn, pcm.units_month, p.id_product, p.reference, p.product, IFNULL(pc.id_process, 0) AS id_process, IFNULL(pc.process, '') AS process, m.id_machine, m.machine, pcm.route
                                       FROM plan_cicles_machine pcm
                                         INNER JOIN products p ON p.id_product = pcm.id_product
                                         INNER JOIN machines m ON m.id_machine = pcm.id_machine
