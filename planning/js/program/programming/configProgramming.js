@@ -339,6 +339,7 @@ $(document).ready(function () {
 
       let id_process;
       let id_product;
+      let route;
 
       for (let i = 0; i < r.length; i++) {
         if (this.value == r[i].id_product) { 
@@ -351,6 +352,7 @@ $(document).ready(function () {
           
           $.each(process, function (i, value) {
             id_process = value.id_process;
+            route = value.route;
             $select.append(
               `<option value = ${value.id_process}> ${value.process} </option>`
             );
@@ -374,7 +376,7 @@ $(document).ready(function () {
 
       $('#idProcess').change(function (e) {
         e.preventDefault();
-        let ciclesMachine = allCiclesMachines.filter(item => item.id_product == id_product && item.id_process == id_process);
+        let ciclesMachine = allCiclesMachines.filter(item => item.id_product == id_product && item.id_process == id_process && item.route == route);
             
         let $select = $(`#idMachine`);
         $select.empty();
