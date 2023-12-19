@@ -66,9 +66,9 @@ if (sizeof($_SESSION) == 0)
 
                 <div class="page-content-wrapper mt--45 mb-5 cardCreateProgramming">
                     <div class="container-fluid">
-                        <div class="row">
-                            <div class="col-12">
-                                <form id="formCreateProgramming">
+                        <form id="formCreateProgramming">
+                            <div class="row">
+                                <div class="col-12">
                                     <div class="card">
                                         <div class="card-body" style="padding-bottom:0px">
                                             <div class="form-group mb-3">
@@ -106,13 +106,11 @@ if (sizeof($_SESSION) == 0)
                                             </div>
                                         </div>
                                     </div>
-                                </form>
+                                </div>
                             </div>
-                        </div>
 
-                        <div class="row">
-                            <div class="col-12">
-                                <form id="formCreateProgramming">
+                            <div class="row">
+                                <div class="col-12">
                                     <div class="card">
                                         <div class="card-body" style="padding-bottom:0px">
                                             <div class="form-group mb-3">
@@ -144,9 +142,9 @@ if (sizeof($_SESSION) == 0)
                                             </div>
                                         </div>
                                     </div>
-                                </form>
+                                </div>
                             </div>
-                        </div>
+                        </form>
                     </div>
                 </div>
 

@@ -5,7 +5,7 @@ $(document).ready(function () {
   let allCiclesMachines = [];
   let allPlanningMachines = [];
   let allOrders = [];
-  let allProgramming = []; 
+  let allProgramming = [];
 
   loadAllDataProgramming = async () => {
     try {
@@ -52,6 +52,7 @@ $(document).ready(function () {
   $(document).on('change', '#idMachine', function (e) {
     e.preventDefault();
 
+    sessionStorage.removeItem('minDate');
     checkData(1, this.id);
   });
 
@@ -60,7 +61,7 @@ $(document).ready(function () {
       $('#minDate').val('');
       $('#maxDate').val('');
       document.getElementById('minDate').readOnly = false;
-      document.getElementById('minDate').type = 'date'; 
+      document.getElementById('minDate').type = 'date';
       $('#btnCreateProgramming').hide(800);
     }
   });
@@ -161,10 +162,14 @@ $(document).ready(function () {
         let dateFormat = `${date.getFullYear()}-${(date.getMonth() + 1).toString().padStart(2, '0')}-${date.getDate().toString().padStart(2, '0')}`;;
 
         if (machines[machines.length - 1].max_date < dateFormat) {
+          let hour = getLastText(machines[machines.length - 1].max_date);
+
           date.setDate(date.getDate() + 1);
 
-          min_date = `${date.getFullYear()}-${(date.getMonth() + 1).toString().padStart(2, '0')}-${date.getDate().toString().padStart(2, '0')}`;
+          min_date = `${date.getFullYear()}-${(date.getMonth() + 1).toString().padStart(2, '0')}-${date.getDate().toString().padStart(2, '0')} ${hour}`;
         }
+
+        sessionStorage.setItem('minDate', min_date);
 
         calcMaxDate(min_date, hour, 1);
       } else {
@@ -175,26 +180,26 @@ $(document).ready(function () {
           document.getElementById('minDate').readOnly = false;
           document.getElementById('minDate').type = 'date';
           
-          $('#minDate').change(function (e) {
-            e.preventDefault();
+          // $('#minDate').change(function (e) {
+          //   e.preventDefault();
 
-            let date = this.value;
+          //   let date = this.value;
 
-            if (!date) {
-              toastr.error('Ingrese fecha inicial');
-              return false;
-            }
+          //   if (!date) {
+          //     toastr.error('Ingrese fecha inicial');
+          //     return false;
+          //   }
 
-            if (date.includes('T')) {
-              date = date.split('T')[0];
-            }
+          //   if (date.includes('T')) {
+          //     date = date.split('T')[0];
+          //   }
 
-            let min_date = convetFormatDate(date);
+          //   let min_date = convetFormatDate(date);
 
-            sessionStorage.setItem('minDate', min_date);
-            dataProgramming.append('minDate', min_date);
-            calcMaxDate(min_date, 0, 2);
-          });
+          //   sessionStorage.setItem('minDate', min_date);
+          //   dataProgramming.append('minDate', min_date);
+          //   calcMaxDate(min_date, 0, 2);
+          // });
         } else {
           document.getElementById('minDate').readOnly = true;
 
@@ -204,6 +209,27 @@ $(document).ready(function () {
       }
     }
   };
+
+  $('#minDate').change(function (e) {
+    e.preventDefault();
+
+    let date = this.value;
+
+    if (!date) {
+      toastr.error('Ingrese fecha inicial');
+      return false;
+    }
+
+    if (date.includes('T')) {
+      date = date.split('T')[0];
+    }
+
+    let min_date = convetFormatDate(date);
+
+    sessionStorage.setItem('minDate', min_date);
+    dataProgramming.append('minDate', min_date);
+    calcMaxDate(min_date, 0, 2);
+  });
 
   calcMaxDate = async (min_date, last_hour, op) => {
     try {
@@ -234,7 +260,15 @@ $(document).ready(function () {
       }
       
       if (op == 2) {
-        min_date = new Date(`${min_date} ${planningMachine.hour_start}:00:00`);
+        if (Number.isInteger(planningMachine.hour_start)) {
+          min_date = new Date(`${min_date} ${planningMachine.hour_start}:00:00`);
+        } else {
+          const hoursInteger = Math.floor(planningMachine.hour_start);
+          const minutes = Math.round((planningMachine.hour_start % 1) * 60);
+          const formattedMinutes = minutes < 10 ? `0${minutes}` : `${minutes}`;
+          min_date = new Date(min_date + 'T00:00:00');
+          min_date.setHours(hoursInteger, formattedMinutes, 0);
+        }
         min_date =
           min_date.getFullYear() + "-" +
           ("00" + (min_date.getMonth() + 1)).slice(-2) + "-" +
@@ -244,7 +278,7 @@ $(document).ready(function () {
     
       let days = (quantity / ciclesMachine.cicles_hour / planningMachine.hours_day);
 
-      if (days >= 1) { 
+      if (days >= 1) {
         final_date.setDate(final_date.getDate() + Math.floor(days));
       }
 
