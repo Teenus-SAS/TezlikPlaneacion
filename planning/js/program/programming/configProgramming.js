@@ -162,11 +162,12 @@ $(document).ready(function () {
         let dateFormat = `${date.getFullYear()}-${(date.getMonth() + 1).toString().padStart(2, '0')}-${date.getDate().toString().padStart(2, '0')}`;;
 
         if (machines[machines.length - 1].max_date < dateFormat) {
-          let hour = getLastText(machines[machines.length - 1].max_date);
-
-          date.setDate(date.getDate() + 1);
-
-          min_date = `${date.getFullYear()}-${(date.getMonth() + 1).toString().padStart(2, '0')}-${date.getDate().toString().padStart(2, '0')} ${hour}`;
+          $('#minDate').val('');
+          $('#maxDate').val('');
+          document.getElementById('minDate').readOnly = false;
+          document.getElementById('minDate').type = 'date';
+          $('.date').show();
+          return false;
         }
 
         sessionStorage.setItem('minDate', min_date);
