@@ -338,10 +338,12 @@ $(document).ready(function () {
       e.preventDefault();
 
       let id_process;
+      let id_product;
 
       for (let i = 0; i < r.length; i++) {
         if (this.value == r[i].id_product) { 
           let process = allProcess.filter(item => item.id_product == this.value && item.id_order && id_order);
+          id_product = this.value;
           
           let $select = $(`#idProcess`);
           $select.empty();
@@ -372,7 +374,7 @@ $(document).ready(function () {
 
       $('#idProcess').change(function (e) {
         e.preventDefault();
-        let ciclesMachine = allCiclesMachines.filter(item => item.id_product == this.value && item.id_process == id_process);
+        let ciclesMachine = allCiclesMachines.filter(item => item.id_product == id_product && item.id_process == id_process);
             
         let $select = $(`#idMachine`);
         $select.empty();
