@@ -70,55 +70,76 @@ if (sizeof($_SESSION) == 0)
                             <div class="col-12">
                                 <form id="formCreateProgramming">
                                     <div class="card">
-                                        <div class="card-body">
-                                            <div class="form-row">
-                                                <div class="col-sm-2 programmingSelect floating-label enable-floating-label show-label" id="orders">
-                                                    <label for="">No. Pedido</label>
-                                                    <select class="form-control" id="order" name="order">
-                                                    </select>
+                                        <div class="card-body" style="padding-bottom:0px">
+                                            <div class="form-group mb-3">
+                                                <h5 class="card-title text-secondary fw-bold">Datos del pedido</h5>
+                                                <hr class="mt-0 mb-2">
+                                                <div class="row mt-3">
+                                                    <div class="col-sm-2 programmingSelect floating-label enable-floating-label show-label" id="orders">
+                                                        <label for="">No. Pedido</label>
+                                                        <select class="form-control" id="order" name="order">
+                                                        </select>
+                                                    </div>
+                                                    <div class="col-sm-4 programmingSelect floating-label enable-floating-label show-label" id="products">
+                                                        <label for="">Producto</label>
+                                                        <select class="form-control input" id="selectNameProduct" name="idProduct"></select>
+                                                        <select class="form-control" id="refProduct" style="display:none"></select>
+                                                    </div>
+                                                    <div class="col-sm-1 floating-label enable-floating-label show-label">
+                                                        <label for="">Cant Pedido</label>
+                                                        <input type="text" class="form-control text-center" id="quantityOrder" name="quantityOrder" readonly>
+                                                    </div>
+                                                    <div class="col-sm-1 floating-label enable-floating-label show-label">
+                                                        <label for="">Pendiente</label>
+                                                        <input type="text" class="form-control text-center" id="quantityMissing" name="quantityMissing" readonly>
+                                                    </div>
+                                                    <div class="col-sm-2 floating-label enable-floating-label show-label">
+                                                        <label for="">Inv MP</label>
+                                                        <input type="text" class="form-control text-center" id="quantityMP" name="quantityMP" readonly>
+                                                    </div>
+
+                                                    <div class="col-sm-2 floating-label enable-floating-label show-label">
+                                                        <label for="">Cantidad a Fabricar</label>
+                                                        <input type="number" class="form-control text-center input" id="quantity" name="quantity">
+                                                    </div>
                                                 </div>
-                                                <div class="col-sm-6 programmingSelect floating-label enable-floating-label show-label" id="products">
-                                                    <label for="">Producto</label>
-                                                    <select class="form-control input" id="selectNameProduct" name="idProduct"></select>
-                                                    <select class="form-control" id="refProduct" style="display:none"></select>
-                                                </div>
-                                                <div class="col-sm-1 floating-label enable-floating-label show-label">
-                                                    <label for="">Cant Pedido</label>
-                                                    <input type="text" class="form-control text-center" id="quantityOrder" name="quantityOrder" readonly>
-                                                </div>
-                                                <div class="col-sm-1 floating-label enable-floating-label show-label">
-                                                    <label for="">Pendiente</label>
-                                                    <input type="text" class="form-control text-center" id="quantityMissing" name="quantityMissing" readonly>
-                                                </div>
-                                                <div class="col-sm-1 floating-label enable-floating-label show-label">
-                                                    <label for="">Inv MP</label>
-                                                    <input type="text" class="form-control text-center" id="quantityMP" name="quantityMP" readonly>
-                                                </div>
-                                                <div class="col-sm-3 floating-label enable-floating-label show-label" id="process">
-                                                    <label for="">Proceso</label>
-                                                    <select class="form-control input" id="idProcess" name="idProcess">
-                                                    </select>
-                                                </div>
-                                                <div class="col-sm-3 floating-label enable-floating-label show-label" id="machines">
-                                                    <label for="">Maquina</label>
-                                                    <select class="form-control input" id="idMachine" name="idMachine">
-                                                    </select>
-                                                </div>
-                                                <div class="col-sm-2 floating-label enable-floating-label show-label">
-                                                    <label for="">Cantidad a Fabricar</label>
-                                                    <input type="number" class="form-control text-center input" id="quantity" name="quantity">
-                                                </div>
-                                                <div class="w-100"></div>
-                                                <div class="col-sm-3 floating-label enable-floating-label show-label date">
-                                                    <label for="">Fecha Inicial</label>
-                                                    <input type="datetime-local" class="form-control text-center" inline="true" id="minDate" name="minDate" readonly min="<?php echo date('Y-m-d', strtotime('+1 day')); ?>">
-                                                </div>
-                                                <div class="col-sm-3 floating-label enable-floating-label show-label date">
-                                                    <label for="">Fecha Final</label>
-                                                    <input type="datetime-local" class="form-control text-center number" id="maxDate" name="maxDate" readonly min="<?php echo date('Y-m-d', strtotime('+1 day')); ?>">
-                                                </div>
-                                                <div class="col-sm mt-2">
-                                                    <button class="btn btn-info" type="submit" id="btnCreateProgramming" name="btnCreateProgramming">Crear</button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-12">
+                                <form id="formCreateProgramming">
+                                    <div class="card">
+                                        <div class="card-body" style="padding-bottom:0px">
+                                            <div class="form-group mb-3">
+                                                <h5 class="card-title text-secondary fw-bold">Programación de fabricación</h5>
+                                                <hr class="mt-0 mb-2">
+                                                <div class="row mt-3">
+                                                    <div class="col-sm-3 floating-label enable-floating-label show-label" id="process">
+                                                        <label for="">Proceso</label>
+                                                        <select class="form-control input" id="idProcess" name="idProcess">
+                                                        </select>
+                                                    </div>
+                                                    <div class="col-sm-2 floating-label enable-floating-label show-label" id="machines">
+                                                        <label for="">Maquina</label>
+                                                        <select class="form-control input" id="idMachine" name="idMachine">
+                                                        </select>
+                                                    </div>
+                                                    <div class="col-sm-3 floating-label enable-floating-label show-label date">
+                                                        <label for="">Fecha Inicial</label>
+                                                        <input type="datetime-local" class="form-control text-center" inline="true" id="minDate" name="minDate" readonly min="<?php echo date('Y-m-d', strtotime('+1 day')); ?>">
+                                                    </div>
+                                                    <div class="col-sm-3 floating-label enable-floating-label show-label date">
+                                                        <label for="">Fecha Final</label>
+                                                        <input type="datetime-local" class="form-control text-center number" id="maxDate" name="maxDate" readonly min="<?php echo date('Y-m-d', strtotime('+1 day')); ?>">
+                                                    </div>
+                                                    <div class="col-sm-1 mt-2">
+                                                        <button class="btn btn-info" type="submit" id="btnCreateProgramming" name="btnCreateProgramming">Crear</button>
+                                                    </div>
                                                 </div>
                                             </div>
                                         </div>
@@ -136,9 +157,9 @@ if (sizeof($_SESSION) == 0)
                         <div class="row">
                             <div class="col-12">
                                 <div class="card">
-                                    <div class="card-header">
+                                    <!-- <div class="card-header">
                                         <h5 class="card-title">Programación</h5>
-                                    </div>
+                                    </div> -->
                                     <div class="card-body">
                                         <div class="table-responsive">
                                             <table class="fixed-table-loading table table-hover" id="tblProgramming">
