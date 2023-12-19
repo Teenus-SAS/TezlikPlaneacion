@@ -351,10 +351,10 @@ $(document).ready(function () {
           $select.append(`<option value="0" disabled selected>Seleccionar</option>`);
           
           $.each(process, function (i, value) {
-            id_process = value.id_process;
-            route = value.route;
+            // id_process = value.id_process;
+            // route = value.route;
             $select.append(
-              `<option value = ${value.id_process}> ${value.process} </option>`
+              `<option class="${value.route1}" value ='${value.id_process}'> ${value.process} </option>`
             );
           });
           
@@ -369,14 +369,17 @@ $(document).ready(function () {
 
           dataProgramming.append('order', r[i].id_order);
           dataProgramming.append('num_order', num_order);
-          dataProgramming.append('route', process[0].route + 1);
           break;
         }
       }
-
+      
       $('#idProcess').change(function (e) {
         e.preventDefault();
-        let ciclesMachine = allCiclesMachines.filter(item => item.id_product == id_product && item.id_process == id_process && item.route == route);
+        // Obtener el classname de la opción seleccionada
+        var route = parseInt($(this).find('option:selected').attr('class'));
+        dataProgramming.append('route', route + 1);
+
+        let ciclesMachine = allCiclesMachines.filter(item => item.id_product == id_product && item.id_process == this.value && item.route == route);
             
         let $select = $(`#idMachine`);
         $select.empty();

@@ -138,7 +138,7 @@ $(document).ready(function () {
     let process = allProcess.filter(item => item.id_product == id_order && item.id_order && id_product);
 
     if (quantityMissing - quantityProgramming > 0)
-      dataProgramming.append('route', process[0].route);
+      dataProgramming.append('route', `${process[0].route1}, ${process[0].route1 + 1}`);
 
     $.ajax({
       type: "POST",
