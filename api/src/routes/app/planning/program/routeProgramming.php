@@ -14,10 +14,12 @@ use TezlikPlaneacion\dao\LotsProductsDao;
 use TezlikPlaneacion\dao\MachinesDao;
 use TezlikPlaneacion\dao\ProductsDao;
 use TezlikPlaneacion\dao\ProductsMaterialsDao;
+use TezlikPlaneacion\dao\ProgrammingRoutesDao;
 use TezlikPlaneacion\dao\StoreDao;
 
 $programmingDao = new ProgrammingDao();
 $generalProgrammingDao = new GeneralProgrammingDao();
+$programmingRoutesDao = new ProgrammingRoutesDao();
 $generalMaterialsDao = new GeneralMaterialsDao();
 $productsMaterialsDao = new ProductsMaterialsDao();
 $lastDataDao = new LastDataDao();

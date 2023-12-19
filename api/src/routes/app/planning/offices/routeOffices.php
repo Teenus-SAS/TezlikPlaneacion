@@ -101,6 +101,7 @@ $app->post('/changeOffices', function (Request $request, Response $response, $ar
         $data['maxDate'] = '';
         $data['idProduct'] = $dataOrder['idProduct'];
         $data['idClient'] = $client['id_client'];
+        $data['route'] = 1;
         // $data['originalQuantity'] = $dataOrder['quantity'] - $dataOrder['stock'];
         $data['originalQuantity'] =  $dataOrder['stock'] - ($dataOrder['quantity'] - $dataOrder['originalQuantity']);
 

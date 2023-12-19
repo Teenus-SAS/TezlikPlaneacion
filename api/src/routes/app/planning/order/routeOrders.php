@@ -6,10 +6,13 @@ use TezlikPlaneacion\dao\DeliveryDateDao;
 use TezlikPlaneacion\dao\GeneralClientsDao;
 use TezlikPlaneacion\dao\GeneralOrdersDao;
 use TezlikPlaneacion\dao\GeneralOrderTypesDao;
+use TezlikPlaneacion\dao\GeneralPlanCiclesMachinesDao;
 use TezlikPlaneacion\dao\GeneralProductsDao;
+use TezlikPlaneacion\dao\LastDataDao;
 use TezlikPlaneacion\dao\MallasDao;
 use TezlikPlaneacion\dao\OrdersDao;
 use TezlikPlaneacion\dao\ProductsMaterialsDao;
+use TezlikPlaneacion\dao\ProgrammingRoutesDao;
 
 $ordersDao = new OrdersDao();
 $generalOrdersDao = new GeneralOrdersDao();
@@ -21,7 +24,10 @@ $generalClientsDao = new GeneralClientsDao();
 $orderTypesDao = new GeneralOrderTypesDao();
 $mallasDao = new MallasDao();
 $deliveryDateDao = new DeliveryDateDao();
+$programmingRoutesDao = new ProgrammingRoutesDao();
 $productsMaterialsDao = new ProductsMaterialsDao();
+$lastDataDao = new LastDataDao();
+$generalPlanCiclesMachinesDao = new GeneralPlanCiclesMachinesDao();
 
 use Psr\Http\Message\ResponseInterface as Response;
 use Psr\Http\Message\ServerRequestInterface as Request;
@@ -107,9 +113,12 @@ $app->post('/addOrder', function (Request $request, Response $response, $args) u
     $generalOrdersDao,
     $convertDataDao,
     $productsDao,
+    $programmingRoutesDao,
     $generalProductsDao,
     $generalClientsDao,
-    $productsMaterialsDao
+    $lastDataDao,
+    $productsMaterialsDao,
+    $generalPlanCiclesMachinesDao
 ) {
     session_start();
     $id_company = $_SESSION['id_company'];
@@ -118,11 +127,20 @@ $app->post('/addOrder', function (Request $request, Response $response, $args) u
     $dataOrders = sizeof($dataOrder);
 
     if ($dataOrders > 1) {
-        $import = false;
+        // $import = false;
 
         $dataOrder = $convertDataDao->changeDateOrder($dataOrder);
 
         $order = $ordersDao->insertOrderByCompany($dataOrder, $id_company);
+
+        $arr = $lastDataDao->findLastInsertedOrder($id_company);
+        $dataOrder['idOrder'] = $arr['id_order'];
+        $dataOrder['route'] = 1;
+
+        $cicles = $generalPlanCiclesMachinesDao->findAllPlanCiclesMachineByProduct($dataOrder['idProduct'], $id_company);
+
+        if (sizeof($cicles) > 0)
+            $order = $programmingRoutesDao->insertProgrammingRoutes($dataOrder);
 
         $data[0] = $dataOrder['order'] . '-' . $dataOrder['idProduct'];
 
@@ -134,7 +152,7 @@ $app->post('/addOrder', function (Request $request, Response $response, $args) u
             $resp = array('error' => true, 'message' => 'Ocurrio un error mientras ingresaba la información. Intente nuevamente');
     } else {
         $order = $dataOrder['importOrder'];
-        $import = true;
+        // $import = true;
 
         for ($i = 0; $i < sizeof($order); $i++) {
             // Obtener id producto
@@ -149,8 +167,18 @@ $app->post('/addOrder', function (Request $request, Response $response, $args) u
 
             // Consultar pedido
             $findOrder = $generalOrdersDao->findOrder($order[$i], $id_company);
-            if (!$findOrder) $resolution = $ordersDao->insertOrderByCompany($order[$i], $id_company);
-            else {
+            if (!$findOrder) {
+                $resolution = $ordersDao->insertOrderByCompany($order[$i], $id_company);
+
+                $arr = $lastDataDao->findLastInsertedOrder($id_company);
+                $order[$i]['idOrder'] = $arr['id_order'];
+                $order[$i]['route'] = 1;
+
+                $cicles = $generalPlanCiclesMachinesDao->findAllPlanCiclesMachineByProduct($order[$i]['idProduct'], $id_company);
+
+                if (sizeof($cicles) > 0)
+                    $resolution = $programmingRoutesDao->insertProgrammingRoutes($order[$i]);
+            } else {
                 $order[$i]['idOrder'] = $findOrder['id_order'];
                 $resolution = $ordersDao->updateOrder($order[$i]);
             }

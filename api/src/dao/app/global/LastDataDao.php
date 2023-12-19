@@ -106,15 +106,15 @@ class LastDataDao
         return $programming;
     }
 
-    /* public function findLastInsertedOrder()
+    public function findLastInsertedOrder($id_company)
     {
         $connection = Connection::getInstance()->getConnection();
 
-        $stmt = $connection->prepare("SELECT MAX(id_order) AS id_order FROM plan_orders");
-        $stmt->execute();
+        $stmt = $connection->prepare("SELECT MAX(id_order) AS id_order FROM plan_orders WHERE id_company = :id_company");
+        $stmt->execute(['id_company' => $id_company]);
         $this->logger->info(__FUNCTION__, array('query' => $stmt->queryString, 'errors' => $stmt->errorInfo()));
 
         $order = $stmt->fetch($connection::FETCH_ASSOC);
         return $order;
-    } */
+    }
 }
