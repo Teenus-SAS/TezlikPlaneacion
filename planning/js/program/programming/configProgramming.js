@@ -18,7 +18,7 @@ $(document).ready(function () {
         programming,
         productsMaterials
       ] = await Promise.all([
-        searchData('/api/process'),
+        searchData('/api/processOrder'),
         searchData('/api/machines'),
         searchData('/api/planCiclesMachine'),
         searchData('/api/planningMachines'),
@@ -46,7 +46,7 @@ $(document).ready(function () {
     e.preventDefault();
 
     let num_order = $('#order :selected').text().trim();
-    loadProducts(num_order);
+    loadProducts(num_order, this.id);
   });
 
   $(document).on('change', '#idMachine', function (e) {
@@ -319,7 +319,7 @@ $(document).ready(function () {
   };
 
   /* Cargar Productos y Maquinas */
-  loadProducts = async (num_order) => {
+  loadProducts = async (num_order, id_order) => {
     let r = await searchData(`/api/programming/${num_order}`);
 
     $('#quantityOrder').val('');
@@ -337,26 +337,20 @@ $(document).ready(function () {
     $('#selectNameProduct').change(function (e) {
       e.preventDefault();
 
+      let id_process;
+
       for (let i = 0; i < r.length; i++) {
-        if (this.value == r[i].id_product) {
-          let ciclesMachine = allCiclesMachines.filter(item => item.id_product == this.value);
+        if (this.value == r[i].id_product) { 
+          let process = allProcess.filter(item => item.id_product == this.value && item.id_order && id_order);
+          
           let $select = $(`#idProcess`);
           $select.empty();
           $select.append(`<option value="0" disabled selected>Seleccionar</option>`);
-     
-          $.each(ciclesMachine, function (i, value) {
+          
+          $.each(process, function (i, value) {
+            id_process = value.id_process;
             $select.append(
               `<option value = ${value.id_process}> ${value.process} </option>`
-            );
-          });
-
-          let $select1 = $(`#idMachine`);
-          $select1.empty();
-          $select1.append(`<option value="0" disabled selected>Seleccionar</option>`);
-     
-          $.each(ciclesMachine, function (i, value) {
-            $select1.append(
-              `<option value = ${value.id_machine}> ${value.machine} </option>`
             );
           });
           
@@ -371,11 +365,31 @@ $(document).ready(function () {
 
           dataProgramming.append('order', r[i].id_order);
           dataProgramming.append('num_order', num_order);
+          dataProgramming.append('route', process[0].route + 1);
           break;
         }
       }
 
+      $('#idProcess').change(function (e) {
+        e.preventDefault();
+        let ciclesMachine = allCiclesMachines.filter(item => item.id_product == this.value && item.id_process == id_process);
+            
+        let $select = $(`#idMachine`);
+        $select.empty();
+        $select.append(`<option value="0" disabled selected>Seleccionar</option>`);
+       
+        $.each(ciclesMachine, function (i, value) {
+          $select.append(
+            `<option value = ${value.id_machine}> ${value.machine} </option>`
+          );
+        });
+      });
+
       checkData(2, this.id);
     });
+
+    
   };
+
+
 });

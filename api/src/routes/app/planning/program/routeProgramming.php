@@ -151,6 +151,14 @@ $app->get('/programming/{num_order}', function (Request $request, Response $resp
     return $response->withHeader('Content-Type', 'application/json');
 });
 
+$app->get('/processOrder', function (Request $request, Response $response, $args) use ($programmingRoutesDao) {
+    session_start();
+    $id_company = $_SESSION['id_company'];
+    $programming = $programmingRoutesDao->findAllProgrammingRoutes($id_company);
+    $response->getBody()->write(json_encode($programming, JSON_NUMERIC_CHECK));
+    return $response->withHeader('Content-Type', 'application/json');
+});
+
 $app->get('/programmingByMachine/{id_machine}/{id_product}', function (Request $request, Response $response, $args) use (
     $generalProgrammingDao,
     $generalPlanCiclesMachinesDao
@@ -181,6 +189,7 @@ $app->get('/ordersProgramming', function (Request $request, Response $response, 
 
 $app->post('/addProgramming', function (Request $request, Response $response, $args) use (
     $programmingDao,
+    $programmingRoutesDao,
     $generalProgrammingDao,
     $generalOrdersDao,
     $productsMaterialsDao,
@@ -193,6 +202,14 @@ $app->post('/addProgramming', function (Request $request, Response $response, $a
 
     $result = $programmingDao->insertProgrammingByCompany($dataProgramming, $id_company);
 
+    if ($result == null) {
+        $arr = $programmingRoutesDao->findProgrammingRoutes($dataProgramming);
+
+        if ($arr) {
+            $dataProgramming['idProgrammingRoutes'] = $arr['id_programming_routes'];
+            $result = $programmingRoutesDao->updateProgrammingRoutes($dataProgramming);
+        }
+    }
     if ($result == null) {
         $order = $generalProgrammingDao->checkAccumulatedQuantityOrder($dataProgramming['order']);
 
