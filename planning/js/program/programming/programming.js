@@ -129,7 +129,16 @@ $(document).ready(function () {
 
   /* Revision data programa de produccion */
   checkdataProgramming = async (url, idProgramming) => {
-    if (idProgramming) dataProgramming.append("idProgramming", idProgramming);
+    if (idProgramming) dataProgramming.append("idProgramming", idProgramming); 
+    let id_order = $('#order').val();
+    let id_product = $('#selectNameProduct').val();
+    let quantityMissing = parseInt($('#quantityMissing').val().replace('.', ''));
+    let quantityProgramming = parseInt($('#quantity').val());
+
+    let process = allProcess.filter(item => item.id_product == id_order && item.id_order && id_product);
+
+    if (quantityMissing - quantityProgramming > 0)
+      dataProgramming.append('route', process[0].route);
 
     $.ajax({
       type: "POST",

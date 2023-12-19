@@ -1,6 +1,6 @@
 $(document).ready(function () {
   data = {};
-  let allProcess = [];
+  allProcess = [];
   let allMachines = [];
   let allCiclesMachines = [];
   let allPlanningMachines = [];
