@@ -67,7 +67,10 @@ class GeneralProgrammingDao
     {
         $connection = Connection::getInstance()->getConnection();
 
-        $stmt = $connection->prepare("SELECT pg.id_programming, o.id_order, o.num_order, o.date_order, o.max_date, o.original_quantity AS quantity_order, o.accumulated_quantity, pg.quantity AS quantity_programming, p.id_product, 
+        $stmt = $connection->prepare("SET @rownum := 0");
+        $stmt->execute();
+
+        $stmt = $connection->prepare("SELECT pg.id_programming, CONCAT('OP', @rownum := @rownum + 1) AS op, o.id_order, o.num_order, o.date_order, o.max_date, o.original_quantity AS quantity_order, o.accumulated_quantity, pg.quantity AS quantity_programming, p.id_product, 
                                              p.reference, p.product, m.id_machine, m.machine, c.client, pg.min_date, HOUR(pg.min_date) AS min_hour, pm.hour_start, pg.max_date, HOUR(pg.max_date) AS max_hour, o.status
                                       FROM programming pg
                                         INNER JOIN plan_orders o ON o.id_order = pg.id_order
@@ -75,7 +78,8 @@ class GeneralProgrammingDao
                                         INNER JOIN machines m ON m.id_machine = pg.id_machine
                                         INNER JOIN plan_clients c ON c.id_client = o.id_client
                                         INNER JOIN plan_program_machines pm ON pm.id_machine = pg.id_machine
-                                      WHERE pg.status = 1 AND pg.id_company = :id_company");
+                                      WHERE pg.status = 1 AND pg.id_company = :id_company
+                                      ORDER BY pg.id_programming ASC");
         $stmt->execute([
             'id_company' => $id_company
         ]);

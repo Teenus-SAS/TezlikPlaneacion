@@ -49,7 +49,7 @@ $(document).ready(function () {
     loadProducts(num_order, this.id);
   });
 
-  $(document).on('change', '#idMachine', function (e) {
+  $(document).on('change', '.selects', function (e) {
     e.preventDefault();
 
     sessionStorage.removeItem('minDate');
@@ -157,11 +157,11 @@ $(document).ready(function () {
       if (machines.length > 0) {
         dataProgramming.append('minDate', machines[machines.length - 1].max_date);
         let hour = new Date(machines[machines.length - 1].max_date).getHours();
-        let min_date = getFirstText(machines[machines.length - 1].max_date);
+        let min_date = machines[machines.length - 1].max_date;
         let date = new Date();
         let dateFormat = `${date.getFullYear()}-${(date.getMonth() + 1).toString().padStart(2, '0')}-${date.getDate().toString().padStart(2, '0')}`;;
 
-        if (machines[machines.length - 1].max_date < dateFormat) {
+        if (min_date < dateFormat) {
           $('#minDate').val('');
           $('#maxDate').val('');
           document.getElementById('minDate').readOnly = false;

@@ -48,8 +48,8 @@ $(document).ready(function () {
           },
         },
         {
-          title: "Pedido",
-          data: "num_order",
+          title: "OP",
+          data: "op",
           className: "uniqueClassName dt-head-center",
         },
         {

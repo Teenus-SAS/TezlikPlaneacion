@@ -108,7 +108,6 @@ if (sizeof($_SESSION) == 0)
                                     </div>
                                 </div>
                             </div>
-
                             <div class="row">
                                 <div class="col-12">
                                     <div class="card">
@@ -119,12 +118,12 @@ if (sizeof($_SESSION) == 0)
                                                 <div class="row mt-3">
                                                     <div class="col-sm-3 floating-label enable-floating-label show-label" id="process">
                                                         <label for="">Proceso</label>
-                                                        <select class="form-control input" id="idProcess" name="idProcess">
+                                                        <select class="form-control input selects" id="idProcess" name="idProcess">
                                                         </select>
                                                     </div>
                                                     <div class="col-sm-2 floating-label enable-floating-label show-label" id="machines">
                                                         <label for="">Maquina</label>
-                                                        <select class="form-control input" id="idMachine" name="idMachine">
+                                                        <select class="form-control input selects" id="idMachine" name="idMachine">
                                                         </select>
                                                     </div>
                                                     <div class="col-sm-3 floating-label enable-floating-label show-label date">
