@@ -141,7 +141,7 @@ $(document).ready(function () {
       $('.cardRawMaterials').hide(800);
       $('#formCreateMaterial').trigger('reset');
       toastr.success(data.message);
-      updateTable();
+      loadAllData();
       return false;
     } else if (data.error == true) toastr.error(data.message);
     else if (data.info == true) toastr.info(data.message);
@@ -149,8 +149,8 @@ $(document).ready(function () {
 
   /* Actualizar tabla */
 
-  function updateTable() {
-    $('#tblRawMaterials').DataTable().clear();
-    $('#tblRawMaterials').DataTable().ajax.reload();
-  }
+  // function updateTable() {
+  //   $('#tblRawMaterials').DataTable().clear();
+  //   $('#tblRawMaterials').DataTable().ajax.reload();
+  // }
 });

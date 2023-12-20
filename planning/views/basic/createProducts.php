@@ -55,7 +55,7 @@ if (sizeof($_SESSION) == 0)
                                             <div class="card-body" style="padding: 10px;">
                                                 <div class="media text-white">
                                                     <div class="media-body" style="text-align: center;">
-                                                        <span class="text-uppercase font-size-12 font-weight-bold" style="font-size: smaller;"><i class="fas fa-cube mr-1"></i> Inv Total: 30.000</span>
+                                                        <span class="text-uppercase font-size-12 font-weight-bold" style="font-size: smaller;"><i class="fas fa-cube mr-1" id="lblTotal"></i> </span>
                                                     </div>
                                                 </div>
                                             </div>
@@ -66,7 +66,7 @@ if (sizeof($_SESSION) == 0)
                                             <div class="card-body" style="padding: 10px;">
                                                 <div class="media text-white">
                                                     <div class="media-body" style="text-align: center;">
-                                                        <span class="text-uppercase font-size-12 font-weight-bold" style="font-size: smaller;"><i class="fas fa-plus mr-1"></i>Promedio: 27</span>
+                                                        <span class="text-uppercase font-size-12 font-weight-bold" style="font-size: smaller;"><i class="fas fa-plus mr-1" id="lblAverage"></i> </span>
                                                     </div>
                                                 </div>
                                             </div>
@@ -78,7 +78,7 @@ if (sizeof($_SESSION) == 0)
                                             <div class="card-body" style="padding: 10px;">
                                                 <div class="media text-white">
                                                     <div class="media-body" style="text-align: center;">
-                                                        <span class="text-uppercase font-size-12 font-weight-bold" style="font-size: smaller;"><i class="bi bi-hourglass-bottom mr-1"></i> Concentracion: 22.22%</span>
+                                                        <span class="text-uppercase font-size-12 font-weight-bold" style="font-size: smaller;"><i class="bi bi-hourglass-bottom mr-1" id="lblConcentration"></i></span>
                                                     </div>
                                                 </div>
                                             </div>
@@ -326,8 +326,6 @@ if (sizeof($_SESSION) == 0)
     <script src="/planning/js/basic/rawMaterials/tblRawMaterials.js"></script>
     <script src="/planning/js/basic/rawMaterials/rawMaterials.js"></script>
     <script src="/planning/js/basic/products/tblProducts.js"></script>
-    <script src="/planning/js/basic/invMold/configInvMold.js"></script>
-    <script src="/planning/js/general/category/configCategories.js"></script>
     <script src="/planning/js/basic/products/products.js"></script>
     <script src="../global/js/import/import.js"></script>
     <script src="/planning/js/basic/products/importProducts.js"></script>

@@ -1,29 +1,4 @@
-$(document).ready(function () {
-  $(".selectNavigation").click(function (e) {
-    e.preventDefault();
-
-    if (this.id == "products") {
-      $(".cardProducts").show();
-      $(".cardMaterials").hide();
-      $(".cardRawMaterials").hide(800);
-      $(".cardImportMaterials").hide(800);
-    } else if (this.id == "materials") {
-      $(".cardMaterials").show();
-      $(".cardProducts").hide();
-      $(".cardCreateProduct").hide(800);
-      $(".cardImportProducts").hide(800);
-    }
-
-    let tables = document.getElementsByClassName("dataTable");
-
-    for (let i = 0; i < tables.length; i++) {
-      let attr = tables[i];
-      attr.style.width = "100%";
-      attr = tables[i].firstElementChild;
-      attr.style.width = "100%";
-    }
-  });
-
+$(document).ready(function () { 
   /* Ocultar panel crear producto */
 
   $(".cardCreateProduct").hide();
@@ -155,7 +130,7 @@ $(document).ready(function () {
       $(".cardCreateProduct").hide(800);
       $(".cardImportProducts").hide(800);
       $("#formCreateProduct").trigger("reset");
-      updateTable();
+      loadAllData();
       toastr.success(data.message);
       return false;
     } else if (data.error == true) toastr.error(data.message);
@@ -164,8 +139,8 @@ $(document).ready(function () {
 
   /* Actualizar tabla */
 
-  function updateTable() {
-    $("#tblProducts").DataTable().clear();
-    $("#tblProducts").DataTable().ajax.reload();
-  }
+  // function updateTable() {
+  //   $("#tblProducts").DataTable().clear();
+  //   $("#tblProducts").DataTable().ajax.reload();
+  // }
 });
