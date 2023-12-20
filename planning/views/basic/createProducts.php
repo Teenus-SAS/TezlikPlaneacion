@@ -92,13 +92,23 @@ if (sizeof($_SESSION) == 0)
 
                 <div class="page-content-wrapper mt--45 mb-5">
                     <div class="container-fluid">
-                        <div class="row cardHeader">
-                            <div class="col-sm-7 col-xl-12 mt-4 form-inline justify-content-sm-end" id="card">
+                        <div class="row cardProducts">
+                            <div class="col-sm-7 col-xl-12 mt-4 form-inline justify-content-sm-end">
                                 <div class="col-xs-2 mr-2">
                                     <button class="btn btn-warning" id="btnNewProduct"><i class="bi bi-plus-circle mr-1"></i>Adicionar</button>
                                 </div>
                                 <div class="col-xs-2 py-2 mr-2">
                                     <button class="btn btn-info" id="btnImportNewProducts"><i class="bi bi-cloud-arrow-up-fill"></i></button>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row cardMaterials" style="display: none;">
+                            <div class="col-sm-7 col-xl-12 mt-4 form-inline justify-content-sm-end">
+                                <div class="col-xs-2 mr-2">
+                                    <button class="btn btn-warning" id="btnNewMaterial"><i class="bi bi-plus-circle mr-1"></i>Adicionar</button>
+                                </div>
+                                <div class="col-xs-2 py-2 mr-2">
+                                    <button class="btn btn-info" id="btnImportNewMaterials"><i class="bi bi-cloud-arrow-up-fill"></i></button>
                                 </div>
                             </div>
                         </div>

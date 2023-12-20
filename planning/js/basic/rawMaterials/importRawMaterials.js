@@ -3,16 +3,19 @@ $(document).ready(function () {
 
   $('.cardImportMaterials').hide();
 
-  $(document).on('click', '#btnImportNewMaterials', function () {
+  $('#btnImportNewMaterials').click(function (e) {
+    e.preventDefault();
     $('.cardRawMaterials').hide(800);
     $('.cardImportMaterials').toggle(800);
   });
 
-  $(document).on('change', '#fileMaterials', function () {
+  $('#fileMaterials').click(function (e) {
+    e.preventDefault();
     selectedFile = e.target.files[0];
   });
 
-  $(document).on('click', '#btnImportMaterials', function () {
+  $('#btnImportMaterials').click(function (e) {
+    e.preventDefault();
     file = $('#fileMaterials').val();
 
     if (!file) {
@@ -26,7 +29,7 @@ $(document).ready(function () {
     form.insertAdjacentHTML(
       'beforeend',
       `<div class="col-sm-1 cardLoading" style="margin-top: 7px; margin-left: 15px">
-        <div class="spinner-border text-secondary" role="status">
+        <div class="spinner-grow text-dark" role="status">
             <span class="sr-only">Loading...</span>
         </div>
       </div>`
@@ -125,14 +128,15 @@ $(document).ready(function () {
   };
 
   /* Descargar formato */
-  $(document).on('click', '#btnDownloadImportsMaterials', async function () {
+  $('#btnDownloadImportsMaterials').click(async function (e) {
+    e.preventDefault();
     $('.cardBottons').hide();
     
     let form = document.getElementById('formMaterials');
     form.insertAdjacentHTML(
       'beforeend',
       `<div class="col-sm-1 cardLoading" style="margin-top: 7px; margin-left: 15px">
-        <div class="spinner-border text-secondary" role="status">
+        <div class="spinner-grow text-dark" role="status">
             <span class="sr-only">Loading...</span>
         </div>
       </div>`

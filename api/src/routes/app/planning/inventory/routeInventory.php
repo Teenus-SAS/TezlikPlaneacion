@@ -7,12 +7,16 @@ use TezlikPlaneacion\dao\GeneralCategoriesDao;
 use TezlikPlaneacion\dao\GeneralMaterialsDao;
 use TezlikPlaneacion\dao\GeneralProductsDao;
 use TezlikPlaneacion\dao\GeneralUnitSalesDao;
+use TezlikPlaneacion\Dao\MagnitudesDao;
 use TezlikPlaneacion\dao\MaterialsDao;
 use TezlikPlaneacion\dao\ProductsDao;
+use TezlikPlaneacion\dao\UnitsDao;
 
 $inventoryDao = new InventoryDao();
 $categoriesDao = new GeneralCategoriesDao();
 $moldsDao = new InvMoldsDao();
+$magnitudesDao = new MagnitudesDao();
+$unitsDao = new UnitsDao();
 $productsDao = new ProductsDao();
 $generalProductsDao = new GeneralProductsDao();
 $unitSalesDao = new GeneralUnitSalesDao();
@@ -42,104 +46,90 @@ $app->get('/inventory', function (Request $request, Response $response, $args) u
     return $response->withHeader('Content-Type', 'application/json');
 });
 
-$app->post('/inventoryDataValidation', function (Request $request, Response $response, $args) use (
-    $generalProductsDao,
-    $generalMaterialsDao,
-    $moldsDao,
-    $unitSalesDao
-) {
-    $dataInventory = $request->getParsedBody();
+// $app->post('/inventoryDataValidation', function (Request $request, Response $response, $args) use (
+//     $generalProductsDao,
+//     $generalMaterialsDao,
+//     $magnitudesDao,
+//     $unitsDao
+// ) {
+//     $dataInventory = $request->getParsedBody();
 
-    if (isset($dataInventory)) {
-        session_start();
-        $id_company = $_SESSION['id_company'];
+//     if (isset($dataInventory)) {
+//         session_start();
+//         $id_company = $_SESSION['id_company'];
 
-        $update = 0;
+//         $update = 0;
 
-        $inventory = $dataInventory['importInventory'];
+//         $inventory = $dataInventory['importInventory'];
 
-        for ($i = 0; $i < sizeof($inventory); $i++) {
-            if (
-                empty($inventory[$i]['reference']) || empty($inventory[$i]['nameInventory']) ||
-                empty($inventory[$i]['quantity']) || empty($inventory[$i]['category'])
-            ) {
-                $i = $i + 2;
-                $dataImportinventory = array('error' => true, 'message' => "Campos vacios en la fila: {$i}");
-                break;
-            }
+//         for ($i = 0; $i < sizeof($inventory); $i++) {
+//             if (
+//                 empty($inventory[$i]['reference']) || empty($inventory[$i]['nameInventory']) ||
+//                 empty($inventory[$i]['quantity']) || empty($inventory[$i]['category'])
+//             ) {
+//                 $i = $i + 2;
+//                 $dataImportinventory = array('error' => true, 'message' => "Campos vacios en la fila: {$i}");
+//                 break;
+//             }
+//             if (
+//                 trim(empty($inventory[$i]['reference'])) || trim(empty($inventory[$i]['nameInventory'])) ||
+//                 trim(empty($inventory[$i]['quantity'])) || trim(empty($inventory[$i]['category']))
+//             ) {
+//                 $i = $i + 2;
+//                 $dataImportinventory = array('error' => true, 'message' => "Campos vacios en la fila: {$i}");
+//                 break;
+//             }
 
-            $category = $inventory[$i]['category'];
+//             $category = $inventory[$i]['category'];
 
-            if ($category == 'Productos') {
-                if (empty($inventory[$i]['referenceMold']) || empty($inventory[$i]['mold'])) {
-                    $i = $i + 2;
-                    $dataImportinventory = array('error' => true, 'message' => "Moldes vacios en la fila: {$i}");
-                    break;
-                }
+//             if ($category == 'Materiales') {
+//                 if (
+//                     empty($inventory[$i]['magnitude']) || empty($inventory[$i]['unit'])
+//                 ) {
+//                     $i = $i + 2;
+//                     $dataImportinventory = array('error' => true, 'message' => "Campos vacios en la fila: {$i}");
+//                     break;
+//                 }
 
-                // Obtener id Molde
-                $findMold = $moldsDao->findInvMold($inventory[$i], $id_company);
-                if (!$findMold) {
-                    $i = $i + 2;
-                    $dataImportinventory = array('error' => true, 'message' => "Molde no existe en la base de datos.<br>Fila: {$i}");
-                    break;
-                }
-            }
+//                 if (
+//                     trim(empty($inventory[$i]['magnitude'])) || trim(empty($inventory[$i]['unit']))
+//                 ) {
+//                     $i = $i + 2;
+//                     $dataImportinventory = array('error' => true, 'message' => "Campos vacios en la fila: {$i}");
+//                     break;
+//                 }
 
-            if ($category == 'Materiales') {
-                if (empty($inventory[$i]['unityRawMaterial'])) {
-                    $i = $i + 2;
-                    $dataImportinventory = array('error' => true, 'message' => "Unidad vacia en la fila: {$i}");
-                    break;
-                }
-            }
+//                 // Consultar magnitud
+//                 $magnitude = $magnitudesDao->findMagnitude($inventory[$i]);
 
-            if ($category == 'Productos') {
-                $inventory[$i]['referenceProduct'] = $inventory[$i]['reference'];
-                $inventory[$i]['product'] = $inventory[$i]['nameInventory'];
+//                 if (!$magnitude) {
+//                     $i = $i + 2;
+//                     $dataImportinventory = array('error' => true, 'message' => "Magnitud no existe en la base de datos. Fila: $i");
+//                     break;
+//                 }
+//                 // Consultar unidad
+//                 $unit = $unitsDao->findUnit($inventory[$i]);
 
-                // Consultar si existe producto
-                $findProduct = $generalProductsDao->findProduct($inventory[$i], $id_company);
-                // Consultar si existe en tabla unit_sales
-                $inventory[$i]['idProduct'] = $findProduct['id_product'];
-                $unitSales = $unitSalesDao->findSales($inventory[$i], $id_company);
-                if (!$findProduct || $unitSales) {
-                    // Almacenar inventarios no existentes
-                    $dataImportinventory['reference'][$i] = $inventory[$i]['reference'];
-                    $dataImportinventory['nameInventory'][$i] = $inventory[$i]['nameInventory'];
-                    unset($inventory[$i]);
-                } else {
-                    $update = $update + 1;
-                }
-            }
-            if ($category == 'Materiales' || $category == 'Insumos') {
-                $inventory[$i]['refRawMaterial'] = $inventory[$i]['reference'];
-                $inventory[$i]['nameRawMaterial'] = $inventory[$i]['nameInventory'];
+//                 if (!$unit) {
+//                     $i = $i + 2;
+//                     $dataImportinventory = array('error' => true, 'message' => "Unidad no existe en la base de datos. Fila: $i");
+//                     break;
+//                 }
 
-                $findMaterial = $generalMaterialsDao->findMaterial($inventory[$i], $id_company);
-                if (!$findMaterial) {
-                    // Almacenar inventarios no existentes
-                    $dataImportinventory['reference'][$i] = $inventory[$i]['reference'];
-                    $dataImportinventory['nameInventory'][$i] = $inventory[$i]['nameInventory'];
-                    unset($inventory[$i]);
-                } else $update = $update + 1;
-            }
-            // Resetear llaves
-            $inventory = array_values($inventory);
-            if (isset($dataImportinventory)) {
-                $dataImportinventory['reference'] = array_values($dataImportinventory['reference']);
-                $dataImportinventory['nameInventory'] = array_values($dataImportinventory['nameInventory']);
-            }
-        }
-        $dataImportinventory['update'] = $update;
-        // Almacenar inventarios existentes
-        $_SESSION['dataImportInventory'] = $inventory;
-    } else
-        $dataImportinventory = array('error' => true, 'message' => 'El archivo se encuentra vacio. Intente nuevamente');
+//                 $findMaterial = $generalMaterialsDao->findMaterial($inventory[$i], $id_company);
+//                 if (!$findMaterial) $insert = $insert + 1;
+//                 else $update = $update + 1;
+//             }
+//         }
+//         $dataImportinventory['update'] = $update;
+//         // Almacenar inventarios existentes
+//         $_SESSION['dataImportInventory'] = $inventory;
+//     } else
+//         $dataImportinventory = array('error' => true, 'message' => 'El archivo se encuentra vacio. Intente nuevamente');
 
-    $response->getBody()->write(json_encode($dataImportinventory, JSON_NUMERIC_CHECK));
-    return $response->withHeader('Content-Type', 'application/json');
-});
+//     $response->getBody()->write(json_encode($dataImportinventory, JSON_NUMERIC_CHECK));
+//     return $response->withHeader('Content-Type', 'application/json');
+// });
 
 // $app->post('/addInventory', function (Request $request, Response $response, $args) use (
 //     $productsDao,

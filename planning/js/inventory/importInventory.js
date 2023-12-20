@@ -30,7 +30,7 @@ $(document).ready(function () {
     form.insertAdjacentHTML(
       'beforeend',
       `<div class="col-sm-1 cardLoading" style="margin-top: 7px; margin-left: 15px">
-        <div class="spinner-border text-secondary" role="status">
+        <div class="spinner-grow text-dark" role="status">
             <span class="sr-only">Loading...</span>
         </div>
       </div>`
@@ -38,7 +38,7 @@ $(document).ready(function () {
 
     importFile(selectedFile)
       .then((data) => {
-        const expectedHeaders = ['referencia','nombre','referencia_molde','molde','unidad','cantidad','categoria'];
+        const expectedHeaders = ['referencia',	'nombre',	'magnitud',	'unidad', 'cantidad', 'categoria'];
         const actualHeaders = Object.keys(data[0]);
 
         const missingHeaders = expectedHeaders.filter(header => !actualHeaders.includes(header));
@@ -55,9 +55,8 @@ $(document).ready(function () {
           return {
             reference: item.referencia,
             nameInventory: item.nombre,
-            referenceMold: item.referencia_molde,
-            mold: item.molde,
-            unityRawMaterial: item.unidad,
+            magnitude: item.magnitud,
+            unit: item.unidad,
             quantity: item.cantidad,
             category: item.categoria,
           };

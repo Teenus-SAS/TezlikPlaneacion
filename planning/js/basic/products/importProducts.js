@@ -3,16 +3,19 @@ $(document).ready(function () {
 
   $('.cardImportProducts').hide();
 
-  $(document).on('click', '#btnImportNewProducts', function () {
+  $('#btnImportNewProducts').click(function (e) {
+    e.preventDefault();
     $('.cardCreateProduct').hide(800);
     $('.cardImportProducts').toggle(800);
   });
 
-  $(document).on('change', '#fileProducts', function () {
+  $('#fileProducts').click(function (e) {
+    e.preventDefault();
     selectedFile = e.target.files[0];
   });
 
-  $(document).on('click', '#btnImportProducts', function () {
+  $('#btnImportProducts').click(function (e) {
+    e.preventDefault();
     file = $('#fileProducts').val();
 
     if (!file) {
@@ -26,7 +29,7 @@ $(document).ready(function () {
     form.insertAdjacentHTML(
       'beforeend',
       `<div class="col-sm-1 cardLoading" style="margin-top: 7px; margin-left: 15px">
-        <div class="spinner-border text-secondary" role="status">
+        <div class="spinner-grow text-dark" role="status">
             <span class="sr-only">Loading...</span>
         </div>
       </div>`
@@ -124,18 +127,47 @@ $(document).ready(function () {
   };
 
   /* Descargar formato */
-  $(document).on('click', '#btnDownloadImportsProducts', function () {
-    url = 'assets/formatsXlsx/Productos.xlsx';
+  $('#btnDownloadImportsProducts').click(async function (e) {
+    e.preventDefault();
 
-    link = document.createElement('a');
-    link.target = '_blank';
+    $('.cardBottons').hide();
+    
+    let form = document.getElementById('formProducts');
+    form.insertAdjacentHTML(
+      'beforeend',
+      `<div class="col-sm-1 cardLoading" style="margin-top: 7px; margin-left: 15px">
+        <div class="spinner-grow text-dark" role="status">
+            <span class="sr-only">Loading...</span>
+        </div>
+      </div>`
+    );
 
-    link.href = url;
-    document.body.appendChild(link);
-    link.click();
+    let wb = XLSX.utils.book_new();
 
-    document.body.removeChild(link);
-    delete link;
+    let data = [];
+
+    namexlsx = 'Productos.xlsx';
+    url = '/api/products';
+    
+    let products = await searchData(url);
+
+    if (products.length > 0) {
+      for (i = 0; i < products.length; i++) {
+        data.push({
+          referencia_producto: products[i].reference,
+          producto: products[i].product,
+          existencias: products[i].quantity
+        });
+      }
+
+      let ws = XLSX.utils.json_to_sheet(data);
+      XLSX.utils.book_append_sheet(wb, ws, 'Productos');
+      XLSX.writeFile(wb, namexlsx);
+    }
+
+    $('.cardLoading').remove();
+    $('.cardBottons').show(400);
+    $('#fileProducts').val('');
   });
  
 });

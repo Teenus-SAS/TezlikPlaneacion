@@ -4,7 +4,8 @@ $(document).ready(function () {
   $('.cardRawMaterials').hide();
 
   /* Abrir panel para crear materiales */
-  $(document).on('click', '#btnNewMaterial', function () {
+  $('#btnNewMaterial').click(function (e) {
+    e.preventDefault();
     $('.cardImportMaterials').hide(800);
     $('.cardRawMaterials').toggle(800);
     $('#btnCreateMaterial').html('Crear');
@@ -16,7 +17,8 @@ $(document).ready(function () {
   });
 
   /* Crear producto */
-  $(document).on('click', '#btnCreateMaterial', function () {
+  $('#btnCreateMaterial').click(function (e) {
+    e.preventDefault();
     let idMaterial = sessionStorage.getItem('id_material');
 
     if (idMaterial == '' || idMaterial == null) {

@@ -29,7 +29,7 @@ $(document).ready(function () {
     form.insertAdjacentHTML(
       'beforeend',
       `<div class="col-sm-1 cardLoading" style="margin-top: 7px; margin-left: 15px">
-        <div class="spinner-border text-secondary" role="status">
+        <div class="spinner-grow text-dark" role="status">
             <span class="sr-only">Loading...</span>
         </div>
       </div>`
