@@ -28,10 +28,30 @@ $(document).ready(function () {
 
       pending = dataRequisitions.filter(item => item.application_date == "0000-00-00" &&
         item.delivery_date == "0000-00-00" &&
-        item.purchase_order == "");
-      done = dataRequisitions.filter(item => item.application_date != "0000-00-00" &&
+        item.purchase_order == "").map(item => ({ ...item, status: 'Pendiente' }));
+      
+      let done1 = dataRequisitions.filter(item => item.application_date != "0000-00-00" &&
         item.delivery_date != "0000-00-00" &&
-        item.purchase_order != "");
+        item.purchase_order != "" && item.admission_date).map(item => ({ ...item, status: 'Recibido' }));
+      
+      let date = formatDate(new Date());
+
+      let process = dataRequisitions.filter(item => item.application_date != "0000-00-00" &&
+        item.delivery_date != "0000-00-00" &&
+        item.purchase_order != "" && !item.admission_date && item.delivery_date >= date).map(item => ({ ...item, status: 'Proceso' }));
+      
+      let process1 = dataRequisitions.filter(item => item.application_date != "0000-00-00" &&
+        item.delivery_date != "0000-00-00" &&
+        item.purchase_order != "" && !item.admission_date);
+      
+      let delayed = process1.filter(item => item.delivery_date < date).map(item => ({ ...item, status: 'Retrasada' }));
+
+      done = [...delayed, ...process, ...done1];
+
+      $('#lblPending').html(` Pendientes: ${pending.length}`);
+      $('#lblProcess').html(` Proceso: ${process.length}`);
+      $('#lblDelayed').html(` Retrasadas: ${delayed.length}`);
+      $('#lblReceived').html(` Recibido: ${done1.length}`);
       
       let visible = true;
       if (op === 1)
@@ -59,7 +79,7 @@ $(document).ready(function () {
   };
 
   /* Cargue tabla de Productos Materiales */
-  loadTblRequisitions = (data,visible) => { 
+  loadTblRequisitions = (data, visible) => {
     if ($.fn.dataTable.isDataTable("#tblRequisitions")) {
       $("#tblRequisitions").DataTable().clear();
       $("#tblRequisitions").DataTable().rows.add(data).draw();
@@ -69,8 +89,8 @@ $(document).ready(function () {
     tblRequisitions = $("#tblRequisitions").dataTable({
       // destroy: true,
       pageLength: 50,
-      order: [[9, 'asc']],
-      data:data,
+      order: [[0, 'asc']],
+      data: data,
       language: {
         url: "//cdn.datatables.net/plug-ins/1.10.20/i18n/Spanish.json",
       },
@@ -126,18 +146,28 @@ $(document).ready(function () {
         },
         {
           title: "",
-          data: null,
+          data: 'status',
           className: "uniqueClassName dt-head-center",
           render: function (data, type, full, meta) {
-            if (
-              (data.application_date == "0000-00-00" &&
-              data.delivery_date == "0000-00-00" &&
-              data.purchase_order == "" ) || !data.admission_date
-            )
-              date = "";
-            else date = `Recibido<br>${data.admission_date}`;
+            // if (
+            //   (data.application_date == "0000-00-00" &&
+            //   data.delivery_date == "0000-00-00" &&
+            //   data.purchase_order == "" ) || !data.admission_date
+            // )
+            //   date = "";
+            // else date = `Recibido<br>${data.admission_date}`;
 
-            return date;
+            // return date;
+            if (data == 'Pendiente')
+              badge = 'badge-info';
+            else if (data == 'Proceso')
+              badge = 'badge-warning';
+            else if (data == 'Retrasada')
+              badge = 'badge-danger';
+            else if (data == 'Recibido')
+              badge = 'badge-success';
+            
+            return `<span class="badge ${badge}">${data}</span>`
           },
         },
         {
@@ -145,10 +175,11 @@ $(document).ready(function () {
           data: null,
           className: "uniqueClassName dt-head-center",
           render: function (data) {
-            !data.admission_date
-              ? (action = `<a href="javascript:;" <i id="${data.id_requisition}" class="bx bx-edit-alt updateRequisition" data-toggle='tooltip' title='Actualizar Requisicion' style="font-size: 30px;"></i></a>
-                                                     <a href="javascript:;" <i id="${data.id_requisition}" class="mdi mdi-delete-forever" data-toggle='tooltip' title='Eliminar Requisicion' style="font-size: 30px;color:red" onclick="deleteFunction()"></i></a>`)
-              : (action = "");
+            if (data.status != 'Recibido')
+              action = `<a href="javascript:;" <i id="${data.id_requisition}" class="bx bx-edit-alt updateRequisition" data-toggle='tooltip' title='Actualizar Requisicion' style="font-size: 30px;"></i></a>
+                        <a href="javascript:;" <i id="${data.id_requisition}" class="mdi mdi-delete-forever" data-toggle='tooltip' title='Eliminar Requisicion' style="font-size: 30px;color:red" onclick="deleteFunction()"></i></a>`;
+            else
+              action = data.admission_date; 
             return action;
           },
         },

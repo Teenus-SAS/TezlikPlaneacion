@@ -49,24 +49,24 @@ if (sizeof($_SESSION) == 0)
                             </div>
                             <div class="col-sm-7 col-xl-5">
                                 <div class="row">
-                                    <div class="col-md-6 col-xl-4" style="padding-right: 0px;">
+                                    <div class="col-md-6 col-xl-3" style="padding-right: 0px;">
                                         <div class="card bg-info">
                                             <div class="card-body" style="padding: 10px;">
                                                 <div class="media text-white">
                                                     <div class="media-body" style="text-align: center;">
-                                                        <span class="text-uppercase font-size-12 font-weight-bold" style="font-size: smaller;"><i class="bi bi-exclamation-circle mr-1"></i> Pendientes: 3</span>
+                                                        <span class="text-uppercase font-size-12 font-weight-bold" style="font-size: x-small;"><i class="bi bi-exclamation-circle mr-1" id="lblPending"></i> </span>
                                                         <!-- <h2 class="mb-0 mt-1 text-white text-center" style="font-size: large;"><i class="bi bi-exclamation-circle mr-1"></i>3</h2> -->
                                                     </div>
                                                 </div>
                                             </div>
                                         </div>
                                     </div>
-                                    <div class="col-md-6 col-xl-4" style="padding-right: 0px;">
+                                    <div class="col-md-6 col-xl-3" style="padding-right: 0px;">
                                         <div class="card bg-warning">
                                             <div class="card-body" style="padding: 10px;">
                                                 <div class="media text-white">
                                                     <div class="media-body" style="text-align: center;">
-                                                        <span class="text-uppercase font-size-12 font-weight-bold" style="font-size: smaller;"><i class="bi bi-arrow-clockwise mr-1"></i>Proceso: 2</span>
+                                                        <span class="text-uppercase font-size-12 font-weight-bold" style="font-size: x-small;"><i class="bi bi-arrow-clockwise mr-1" id="lblProcess"></i></span>
                                                         <!-- <h2 class="mb-0 mt-1 text-white text-center" style="font-size: large;"><i class="bi bi-arrow-clockwise mr-1"></i>2</h2> -->
                                                     </div>
 
@@ -74,13 +74,26 @@ if (sizeof($_SESSION) == 0)
                                             </div>
                                         </div>
                                     </div>
-
-                                    <div class="col-md-6 col-xl-4" style="padding-right: 0px;">
+                                    <div class="col-md-6 col-xl-3" style="padding-right: 0px;">
                                         <div class="card bg-danger">
                                             <div class="card-body" style="padding: 10px;">
                                                 <div class="media text-white">
                                                     <div class="media-body" style="text-align: center;">
-                                                        <span class="text-uppercase font-size-12 font-weight-bold" style="font-size: smaller;"><i class="bi bi-hourglass-bottom mr-1"></i> Retrasadas: 10</span>
+                                                        <span class="text-uppercase font-size-12 font-weight-bold" style="font-size: x-small;"><i class="bi bi-hourglass-bottom mr-1" id="lblDelayed"></i> </span>
+                                                        <!-- <h2 class="mb-0 mt-1 text-white text-center" style="font-size: large;"><i class="bi bi-hourglass-bottom mr-1"></i>10</h2> -->
+                                                    </div>
+
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                    </div>
+                                    <div class="col-md-6 col-xl-3" style="padding-right: 0px;">
+                                        <div class="card bg-success">
+                                            <div class="card-body" style="padding: 10px;">
+                                                <div class="media text-white">
+                                                    <div class="media-body" style="text-align: center;">
+                                                        <span class="text-uppercase font-size-12 font-weight-bold" style="font-size: x-small;"><i class="bi bi-hourglass-bottom mr-1" id="lblReceived"></i> </span>
                                                         <!-- <h2 class="mb-0 mt-1 text-white text-center" style="font-size: large;"><i class="bi bi-hourglass-bottom mr-1"></i>10</h2> -->
                                                     </div>
 

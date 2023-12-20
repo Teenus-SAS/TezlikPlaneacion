@@ -193,8 +193,6 @@ if (sizeof($_SESSION) == 0)
     <script src="/planning/js/basic/machines/configMachines.js"></script>
     <script src="/planning/js/program/programming/programming.js"></script>
     <script src="/planning/js/program/programming/configProgramming.js"></script>
-    <script src="../global/js/global/validateExt.js"></script>
-    <script src="/global/js/global/convertDate.js"></script>
 </body>
 
 </html>
