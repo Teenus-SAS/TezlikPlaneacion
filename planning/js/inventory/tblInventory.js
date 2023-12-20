@@ -1,19 +1,26 @@
 $(document).ready(function () {
   sessionStorage.removeItem("products");
   // Obtener Inventarios
-  loadInventory = async () => {
-    await fetch(`/api/inventory`)
-      .then((response) => response.text())
-      .then((data) => {
-        data = JSON.parse(data);
-        // Guardar productos
-        dataProducts = JSON.stringify(data.products);  
+  loadInventory = async () => { 
+    try {
+      const [inventory, dataProductsMaterials, dataUnitSales] = await Promise.all([
+        searchData('/api/inventory'),
+        searchData(`/api/allProductsMaterials`),
+        searchData(`/api/unitSales`),
+      ]);
 
-        products = data.products;
-        materials = data.rawMaterials;
+      // dataProducts = JSON.stringify(inventory.products);  
+      data = inventory;
+      products = inventory.products;
+      materials = inventory.rawMaterials;
+      productsMaterials = dataProductsMaterials;
+      unitsSales = dataUnitSales;
 
-        $('#products').click();
-      });
+      inventoryIndicator(products);
+      $('#products').click();      
+    } catch (error) {
+      console.error('Error loading data:', error);
+    }
   };
 
   loadInventory();
@@ -30,6 +37,7 @@ $(document).ready(function () {
     if (this.id == 'products') {
       $(".cardBtnAddMonths").show(800);
       data = getInventory(products);
+      inventoryIndicator(products);
       data["visible"] = true;
     }
     // Materias Prima
@@ -69,6 +77,35 @@ $(document).ready(function () {
 
     return dataInventory;
   };
+
+  const inventoryIndicator = (data) => {
+    let totalQuantity = 0;
+    let rotation = 0;
+    let average = 0;
+    let totalSales = 0;
+    let coverage = 0;
+    let available = 0;
+    
+    totalQuantity = data.reduce((acc, obj) => acc + obj.quantity, 0);
+    average = totalQuantity / data.length;
+
+    unitsSales.forEach(item => {
+      for (const month in item) {
+        if (month !== 'id_unit_sales' && month !== 'id_product' && month !== 'product' && month !== 'year' && month !== 'average') {
+          totalSales += item[month];
+        }
+      }
+    });
+
+    rotation =  totalSales / average;
+    coverage =  totalQuantity / (average / 365);
+    available = data.reduce((acc, obj) => acc + (obj.quantity - obj.reserved), 0);
+
+    $('#lblTotal').html(` Inv Total: ${totalQuantity.toLocaleString('es-CO', { maximumFractionDigits: 0 })}`);
+    $('#lblRotation').html(` Rotacion: ${rotation.toLocaleString('es-CO', { maximumFractionDigits: 0 })}`);
+    $('#lblCoverage').html(` Cobertura: ${coverage.toLocaleString('es-CO', { maximumFractionDigits: 0 })}`);
+    $('#lblAvailable').html(` Disponibl: ${available.toLocaleString('es-CO', { maximumFractionDigits: 0 })}`);
+  }
 
   /* Cargar Tabla Inventarios */
   loadTable = (data) => {
