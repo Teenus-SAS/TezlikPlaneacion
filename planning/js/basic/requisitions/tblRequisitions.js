@@ -57,7 +57,7 @@ $(document).ready(function () {
       if (op === 1)
         dataToLoad = pending;
       else if (op === 2) {
-        dataToLoad = deliveredStore
+        dataToLoad = done;
         visible = false;
       } else {
         if (pending == 1)
@@ -148,44 +148,38 @@ $(document).ready(function () {
           title: "",
           data: 'status',
           className: "uniqueClassName dt-head-center",
-          render: function (data, type, full, meta) {
-            // if (
-            //   (data.application_date == "0000-00-00" &&
-            //   data.delivery_date == "0000-00-00" &&
-            //   data.purchase_order == "" ) || !data.admission_date
-            // )
-            //   date = "";
-            // else date = `Recibido<br>${data.admission_date}`;
-
-            // return date;
-            if (data == 'Pendiente')
-              badge = 'badge-info';
-            else if (data == 'Proceso')
-              badge = 'badge-warning';
-            else if (data == 'Retrasada')
-              badge = 'badge-danger';
-            else if (data == 'Recibido')
-              badge = 'badge-success';
-            
-            return `<span class="badge ${badge}">${data}</span>`
-          },
+          render: renderRequisitionStatus,
         },
         {
           title: "Acciones",
           data: null,
           className: "uniqueClassName dt-head-center",
-          render: function (data) {
-            if (data.status != 'Recibido')
-              action = `<a href="javascript:;" <i id="${data.id_requisition}" class="bx bx-edit-alt updateRequisition" data-toggle='tooltip' title='Actualizar Requisicion' style="font-size: 30px;"></i></a>
-                        <a href="javascript:;" <i id="${data.id_requisition}" class="mdi mdi-delete-forever" data-toggle='tooltip' title='Eliminar Requisicion' style="font-size: 30px;color:red" onclick="deleteFunction()"></i></a>`;
-            else
-              action = data.admission_date; 
-            return action;
-          },
+          render: renderRequisitionActions,
         },
       ],
     });
   };
 
   loadAllData(1, null, null);
+
+  function renderRequisitionStatus(data, type, full, meta) {
+    let badge = '';
+    if (data == 'Pendiente') badge = 'badge-info';
+    else if (data == 'Proceso') badge = 'badge-warning';
+    else if (data == 'Retrasada') badge = 'badge-danger';
+    else if (data == 'Recibido') badge = 'badge-success';
+
+    return `<span class="badge ${badge}">${data}</span>`;
+  }
+
+  function renderRequisitionActions(data) {
+    let action = '';
+    if (data.status != 'Recibido') {
+      action = `<a href="javascript:;" <i id="${data.id_requisition}" class="bx bx-edit-alt updateRequisition" data-toggle='tooltip' title='Actualizar Requisicion' style="font-size: 30px;"></i></a>
+              <a href="javascript:;" <i id="${data.id_requisition}" class="mdi mdi-delete-forever" data-toggle='tooltip' title='Eliminar Requisicion' style="font-size: 30px;color:red" onclick="deleteFunction()"></i></a>`;
+    } else {
+      action = data.admission_date;
+    }
+    return action;
+  }
 });
