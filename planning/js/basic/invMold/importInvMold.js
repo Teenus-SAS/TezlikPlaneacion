@@ -70,7 +70,7 @@ $(document).ready(function () {
             },
           },
           callback: function (result) {
-            if (result == true) {
+            if (result) {
               saveMoldTable(data);
             } else $('#fileInvMold').val('');
           },

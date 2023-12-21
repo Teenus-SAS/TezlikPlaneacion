@@ -119,7 +119,7 @@ $(document).ready(function () {
         },
       },
       callback: function (result) {
-        if (result == true) {
+        if (result) {
           $.get(
             `../../api/deletePlanMachine/${id_machine}`,
             function (data, textStatus, jqXHR) {

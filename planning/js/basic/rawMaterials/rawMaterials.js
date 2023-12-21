@@ -120,7 +120,7 @@ $(document).ready(function () {
         },
       },
       callback: function (result) {
-        if (result == true) {
+        if (result) {
           $.get(
             `../../api/deleteMaterial/${idMaterial}`,
             function (data, textStatus, jqXHR) {

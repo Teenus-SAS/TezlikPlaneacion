@@ -23,7 +23,7 @@ $(document).ready(function () {
                 },
             },
             callback: function (result) {
-                if (result == true) {
+                if (result) {
                     let date = $('#date').val();
 
                     if (!date) {
@@ -107,7 +107,7 @@ $(document).ready(function () {
                 },
             },
             callback: function (result) {
-                if (result == true) {
+                if (result) {
                     let form = new FormData();
                     form.append('idOrder', data.id_order);
                     form.append('idProduct', data.id_product);

@@ -149,7 +149,7 @@ $(document).ready(function () {
         },
       },
       callback: function (result) {
-        if (result == true) {
+        if (result) {
           $.get(
             `/api/deletePlanningMachines/${id_program_machine}/${id_machine}`,
             function (data, textStatus, jqXHR) {

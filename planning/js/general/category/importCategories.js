@@ -66,7 +66,7 @@ $(document).ready(function () {
             },
           },
           callback: function (result) {
-            if (result == true) {
+            if (result) {
               saveCategoryTable(data);
             } else $('#fileCategory').val('');
           },

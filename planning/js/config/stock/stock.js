@@ -100,7 +100,7 @@ $(document).ready(function () {
                 },
             },
             callback: function (result) {
-                if (result == true) {
+                if (result) {
                     $.get(
                         // `../../api/deletePlanProcess/${id_Stock}`,
                         function (data, textStatus, jqXHR) {

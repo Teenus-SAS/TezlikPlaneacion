@@ -112,7 +112,7 @@ $(document).ready(function () {
             },
           },
           callback: function (result) {
-            if (result == true) {
+            if (result) {
               saveSalesTable(data);
             } else {
               $('.cardLoading').remove();

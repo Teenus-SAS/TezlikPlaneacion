@@ -134,7 +134,7 @@ $(document).ready(function () {
         },
       },
       callback: function (result) {
-        if (result == true) {
+        if (result) {
           $.get(
             `/api/deleteProductInProcess/${idProductCategory}`,
             function (data, textStatus, jqXHR) {

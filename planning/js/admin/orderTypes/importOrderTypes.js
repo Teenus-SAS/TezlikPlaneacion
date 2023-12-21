@@ -65,7 +65,7 @@ $(document).ready(function () {
             },
           },
           callback: function (result) {
-            if (result == true) {
+            if (result) {
               saveClientTable(data);
             } else $('#fileOrderTypes').val('');
           },

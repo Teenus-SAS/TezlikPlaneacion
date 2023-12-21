@@ -69,7 +69,7 @@ $(document).ready(function () {
             },
           },
           callback: function (result) {
-            if (result == true) {
+            if (result) {
               saveProductProcessTable(data);
             } else $('#fileProductsProcess').val('');
           },
