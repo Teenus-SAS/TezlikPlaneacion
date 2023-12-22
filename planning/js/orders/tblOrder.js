@@ -20,15 +20,17 @@ $(document).ready(function () {
     let late = 0;
     let today = formatDate(new Date());
 
-    let arrCompleted = data.filter(item => item.date_order <= today && item.status);
-    let arrLate = data.filter(item => item.date_order > today && item.status);
+    if (data.length > 0) {
+      let arrCompleted = data.filter(item => item.status == 'Despacho');
+      let arrLate = data.filter(item => item.min_date < today);
 
-    totalQuantity = data.length;
-    completed =  arrCompleted.length/ totalQuantity;
-    late =  arrLate.length / totalQuantity;
+      totalQuantity = data.length;
+      completed = (arrCompleted.length / totalQuantity) * 100;
+      late = (arrLate.length / totalQuantity) * 100;
+    }
 
     $('#lblTotal').html(` Total: ${totalQuantity.toLocaleString('es-CO', { maximumFractionDigits: 0 })}`);
-    $('#lblCompleted').html(` Completados: ${completed.toLocaleString('es-CO', { maximumFractionDigits: 0 })}`);
+    $('#lblCompleted').html(` Completados: ${completed.toLocaleString('es-CO', { maximumFractionDigits: 2 })} %`);
     $('#lblLate').html(` Atrasados: ${late.toLocaleString('es-CO', { maximumFractionDigits: 2 })} %`);
   }
 

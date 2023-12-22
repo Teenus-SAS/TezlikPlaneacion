@@ -2,8 +2,14 @@ $(document).ready(function () {
   $(".selectNavigation").click(function (e) {
     e.preventDefault();
 
-    if (this.id == "deliver") loadTblOffices(pendingStore, true);
-    else if (this.id == "delivered") loadTblOffices(deliveredStore, false);
+    if (this.id == "deliver") {
+      loadTblOffices(pendingStore, true);
+      officesIndicators(pendingStore);
+    }
+    else if (this.id == "delivered") {
+      loadTblOffices(deliveredStore, false);
+      officesIndicators(deliveredStore);
+    }
   });
 
   loadAllData = async (op, min_date, max_date) => {
@@ -43,11 +49,32 @@ $(document).ready(function () {
 
       if (dataToLoad) {
         loadTblOffices(dataToLoad, visible);
+        officesIndicators(dataToLoad);
       }
     } catch (error) {
       console.error("Error loading data:", error);
     }
   };
+
+  const officesIndicators = (data) => {
+    let totalQuantity = 0;
+    let completed = 0;
+    let late = 0;
+    let today = formatDate(new Date());
+
+    if (data.length > 0) {
+      let arrCompleted = data.filter(item => item.delivery_date != null);
+      let arrLate = data.filter(item => item.max_date < today);
+
+      totalQuantity = data.length;
+      completed = (arrCompleted.length / totalQuantity) * 100;
+      late = (arrLate.length / totalQuantity) * 100;
+    }
+
+    $('#lblTotal').html(` Total: ${totalQuantity.toLocaleString('es-CO', { maximumFractionDigits: 0 })}`);
+    $('#lblCompleted').html(` Completados: ${completed.toLocaleString('es-CO', { maximumFractionDigits: 2 })} %`);
+    $('#lblLate').html(` Atrasados: ${late.toLocaleString('es-CO', { maximumFractionDigits: 2 })} %`);
+  }
 
   /* Cargar pedidos */
   loadTblOffices = (data, visible) => {
@@ -109,7 +136,7 @@ $(document).ready(function () {
 
             if (isOverdue)
               return `<span class="badge badge-info">Mínima: ${moment(minDate).format("DD/MM/YYYY")}</span><br><span class="badge badge-success">Máxima: ${moment(maxDate).format("DD/MM/YYYY")}</span>`;
-            else if(equal)
+            else if (equal)
               return `<span class="badge badge-info">Mínima: ${moment(minDate).format("DD/MM/YYYY")}</span><br><span class="badge badge-warning">Máxima: ${moment(maxDate).format("DD/MM/YYYY")}</span>`;
             else
               return `<span class="badge badge-info">Mínima: ${moment(minDate).format("DD/MM/YYYY")}</span><br><span class="badge badge-danger">Máxima: ${moment(maxDate).format("DD/MM/YYYY")}</span>`;
