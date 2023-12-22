@@ -21,7 +21,7 @@ $(document).ready(function () {
     let today = formatDate(new Date());
 
     if (data.length > 0) {
-      let arrCompleted = data.filter(item => item.status == 'Despacho');
+      let arrCompleted = data.filter(item => item.status == 'Despacho' && item.min_date < item.office_date);
       let arrLate = data.filter(item => item.min_date < today);
 
       totalQuantity = data.length;
