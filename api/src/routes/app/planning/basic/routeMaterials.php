@@ -202,6 +202,12 @@ $app->post('/updateMaterials', function (Request $request, Response $response, $
                         $generalOrdersDao->changeStatus($orders[$i]['id_order'], 'Programar');
                     }
 
+                    if ($order['status'] != 'Despacho') {
+                        $date = date('Y-m-d');
+
+                        $generalOrdersDao->updateOfficeDate($orders[$i]['id_order'], $date);
+                    }
+
                     $arr = $productsDao->findProductReserved($orders[$i]['id_product']);
                     !isset($arr['reserved']) ? $arr['reserved'] = 0 : $arr;
                     $productsDao->updateReservedByProduct($orders[$i]['id_product'], $arr['reserved']);

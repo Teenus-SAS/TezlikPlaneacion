@@ -170,4 +170,22 @@ class GeneralOrdersDao
             return $error;
         }
     }
+
+    public function updateOfficeDate($id_order, $date)
+    {
+        try {
+            $connection = Connection::getInstance()->getConnection();
+
+            $stmt = $connection->prepare("UPDATE plan_orders SET office_date = :office_date WHERE id_order = :id_order");
+            $stmt->execute([
+                'office_date' => $date,
+                'id_order' => $id_order
+            ]);
+        } catch (\Exception $e) {
+            $message = $e->getMessage();
+
+            $error = array('info' => true, 'message' => $message);
+            return $error;
+        }
+    }
 }

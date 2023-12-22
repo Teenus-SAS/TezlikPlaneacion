@@ -228,6 +228,12 @@ $app->post('/addOrder', function (Request $request, Response $response, $args) u
                     // $generalOrdersDao->changeStatus($orders[$i]['id_order'], 'Alistamiento');
                 }
 
+                if ($order['status'] != 'Despacho') {
+                    $date = date('Y-m-d');
+
+                    $generalOrdersDao->updateOfficeDate($orders[$i]['id_order'], $date);
+                }
+
                 $arr = $generalProductsDao->findProductReserved($orders[$i]['id_product']);
                 !isset($arr['reserved']) ? $arr['reserved'] = 0 : $arr;
                 $generalProductsDao->updateReservedByProduct($orders[$i]['id_product'], $arr['reserved']);
@@ -318,6 +324,12 @@ $app->post('/updateOrder', function (Request $request, Response $response, $args
                 } else {
                     $accumulated_quantity = $order['accumulated_quantity'];
                     // $generalOrdersDao->changeStatus($dataOrder['idOrder'], 'Alistamiento');
+                }
+
+                if ($order['status'] != 'Despacho') {
+                    $date = date('Y-m-d');
+
+                    $generalOrdersDao->updateOfficeDate($dataOrder['idOrder'], $date);
                 }
 
                 $arr = $generalProductsDao->findProductReserved($dataOrder['idProduct']);

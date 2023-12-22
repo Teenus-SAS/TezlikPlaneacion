@@ -63,7 +63,7 @@ $(document).ready(function () {
     let today = formatDate(new Date());
 
     if (data.length > 0) {
-      let arrCompleted = data.filter(item => item.delivery_date != null);
+      let arrCompleted = data.filter(item => item.max_date > today);
       let arrLate = data.filter(item => item.max_date < today);
 
       totalQuantity = data.length;
@@ -72,7 +72,7 @@ $(document).ready(function () {
     }
 
     $('#lblTotal').html(` Total: ${totalQuantity.toLocaleString('es-CO', { maximumFractionDigits: 0 })}`);
-    $('#lblCompleted').html(` Completados: ${completed.toLocaleString('es-CO', { maximumFractionDigits: 2 })} %`);
+    $('#lblCompleted').html(` A Tiempo: ${completed.toLocaleString('es-CO', { maximumFractionDigits: 2 })} %`);
     $('#lblLate').html(` Atrasados: ${late.toLocaleString('es-CO', { maximumFractionDigits: 2 })} %`);
   }
 
