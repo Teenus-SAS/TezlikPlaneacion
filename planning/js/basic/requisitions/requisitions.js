@@ -141,7 +141,7 @@ $(document).ready(function () {
         },
       },
       callback: function (result) {
-        if (result == true) {
+        if (result) {
           $.get(
             `/api/deleteRequisition/${idRequisition}`,
             function (data, textStatus, jqXHR) {
@@ -177,7 +177,7 @@ $(document).ready(function () {
         },
       },
       callback: function (result) {
-        if (result == true) {
+        if (result) {
           let date = $('#date').val();
 
           if (!date) {

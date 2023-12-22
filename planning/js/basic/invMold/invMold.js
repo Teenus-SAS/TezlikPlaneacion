@@ -137,7 +137,7 @@ $(document).ready(function () {
         },
       },
       callback: function (result) {
-        if (result == true) {
+        if (result) {
           $.get(
             `../../api/deleteMold/${id_mold}`,
             function (data, textStatus, jqXHR) {
@@ -169,7 +169,7 @@ $(document).ready(function () {
           },
         },
         callback: function (result) {
-          if (result == true) {
+          if (result) {
             saveMold(dataMold);
           } else {
             $(`#check-${id_mold}`).prop('checked', false);
@@ -182,7 +182,7 @@ $(document).ready(function () {
         message: '<p>Ingrese motivo de desactivación:</p>',
         inputType: 'textarea',
         callback: function (result) {
-          if (result == true) {
+          if (result) {
             if (!result || result == '') {
               toastr.error('Ingrese observación');
               return false;

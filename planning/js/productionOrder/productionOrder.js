@@ -23,7 +23,7 @@ $(document).ready(function () {
                 },
             },
             callback: function (result) {
-                if (result == true) {
+                if (result) {
                     $.post(
                         `/api/changeStatusOP`,
                         dataOP,

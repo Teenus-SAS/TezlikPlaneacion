@@ -69,7 +69,7 @@ $(document).ready(function () {
             },
           },
           callback: function (result) {
-            if (result == true) {
+            if (result) {
               saveProgrammingTable(data);
             } else $('#fileProgramming').val('');
           },

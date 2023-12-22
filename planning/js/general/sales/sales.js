@@ -158,7 +158,7 @@ $(document).ready(function () {
         },
       },
       callback: function (result) {
-        if (result == true) {
+        if (result) {
           $.post('/api/deleteUnitSale', dataSale,
             function (data, textStatus, jqXHR) {
               message(data);

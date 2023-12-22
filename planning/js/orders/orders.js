@@ -141,7 +141,7 @@ $(document).ready(function () {
         },
       },
       callback: function (result) {
-        if (result == true) {
+        if (result) {
           $.get(
             `../../api/deleteOrder/${id_order}`,
             function (data, textStatus, jqXHR) {

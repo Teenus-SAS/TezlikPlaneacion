@@ -176,7 +176,7 @@ $(document).ready(function () {
         },
       },
       callback: function (result) {
-        if (result == true) {
+        if (result) {
           dataProgramming["idProgramming"] = data.id_programming;
           dataProgramming["idProduct"] = data.id_product;
           dataProgramming["order"] = data.id_order;
@@ -219,7 +219,7 @@ $(document).ready(function () {
         },
       },
       callback: function (result) {
-        if (result == true) {
+        if (result) {
           $.post(
             `/api/changeStatusProgramming`,
             dataProgramming,

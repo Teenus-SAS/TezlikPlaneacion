@@ -147,7 +147,7 @@ $('#btnCloseClient').click(function (e) {
         },
       },
       callback: function (result) {
-        if (result == true) {
+        if (result) {
           $.get(
             `../../api/deleteClient/${id_client}`,
             function (data, textStatus, jqXHR) {
@@ -180,7 +180,7 @@ $('#btnCloseClient').click(function (e) {
           },
         },
         callback: function (result) {
-          if (result == true) {
+          if (result) {
             $.get(
               `../../api/changeStatus/${id_client}`,
               function (data, textStatus, jqXHR) {
@@ -221,7 +221,7 @@ $('#btnCloseClient').click(function (e) {
         },
       },
       callback: function (result) {
-        if (result == true) {
+        if (result) {
           type_client == 1 ? op = 2 : op = 1;
 
           $.get(

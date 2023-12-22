@@ -110,7 +110,7 @@ $(document).ready(function () {
         },
       },
       callback: function (result) {
-        if (result == true) {
+        if (result) {
           $.get(
             `/api/deletePlanProduct/${idProduct}`,
             function (data, textStatus, jqXHR) {

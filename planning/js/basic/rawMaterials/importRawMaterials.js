@@ -99,7 +99,7 @@ $(document).ready(function () {
             },
           },
           callback: function (result) {
-            if (result == true) {
+            if (result) {
               saveMaterialTable(data);
             } else {
               $('.cardLoading').remove();

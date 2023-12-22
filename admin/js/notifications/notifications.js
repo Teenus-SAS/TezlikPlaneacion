@@ -99,7 +99,7 @@ $(document).ready(function () {
         },
       },
       callback: function (result) {
-        if (result == true) {
+        if (result) {
           $.get(
             `/api/deleteNotification/${id_notification}`,
             function (data, textStatus, jqXHR) {

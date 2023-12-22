@@ -24,7 +24,7 @@ $(document).ready(function () {
                 },
             },
             callback: function (result) {
-                if (result == true) {
+                if (result) {
                     let date = $('#date').val();
 
                     if (!date) {
@@ -93,7 +93,7 @@ $(document).ready(function () {
                 },
             },
             callback: function (result) {
-                if (result == true) {
+                if (result) {
                     let store = parseFloat($('#quantity').val());
 
                     if (!store || store <= 0) {

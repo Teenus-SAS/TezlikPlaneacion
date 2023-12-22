@@ -99,7 +99,7 @@ $(document).ready(function () {
         },
       },
       callback: function (result) {
-        if (result == true) {
+        if (result) {
           $.get(
             `/api/deletePlanCiclesMachine/${id_cicles_machine}`,
             function (data, textStatus, jqXHR) {
