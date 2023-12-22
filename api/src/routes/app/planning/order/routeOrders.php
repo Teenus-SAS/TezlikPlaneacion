@@ -287,6 +287,7 @@ $app->post('/updateOrder', function (Request $request, Response $response, $args
         $dataOrder = $convertDataDao->changeDateOrder($dataOrder);
 
         $result = $ordersDao->updateOrder($dataOrder);
+        $result = $generalProductsDao->updateAccumulatedQuantityGeneral($id_company);
 
         $status = true;
         // Checkear cantidades
