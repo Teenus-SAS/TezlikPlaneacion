@@ -9,7 +9,7 @@ $(document).ready(function () {
     $('.cardImportMaterials').toggle(800);
   });
 
-  $('#fileMaterials').click(function (e) {
+  $('#fileMaterials').change(function (e) {
     e.preventDefault();
     selectedFile = e.target.files[0];
   });

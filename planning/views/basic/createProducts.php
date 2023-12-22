@@ -167,7 +167,7 @@ if (sizeof($_SESSION) == 0)
                                         <div class="form-row" id="formProducts">
                                             <div class="col-sm-6 floating-label enable-floating-label show-label drag-area" style="margin-bottom:10px!important">
                                                 <input class="form-control" type="file" id="fileProducts" accept=".xls,.xlsx">
-                                                <label for="formFile" class="form-label"> Importar</label>
+                                                <label for="fileProducts" class="form-label"> Importar</label>
                                             </div>
                                             <div class="col-xs-2 cardBottons" style="margin-top:7px">
                                                 <button type="text" class="btn btn-success" id="btnImportProducts">Importar</button>
@@ -236,7 +236,7 @@ if (sizeof($_SESSION) == 0)
                                         <div class="form-row" id="formMaterials">
                                             <div class="col-sm-6 floating-label enable-floating-label show-label drag-area" style="margin-bottom:10px!important">
                                                 <input class="form-control" type="file" id="fileMaterials" accept=".xls,.xlsx">
-                                                <label for="formFile" class="form-label">Importar Materia Prima</label>
+                                                <label for="fileMaterials" class="form-label">Importar Materia Prima</label>
                                             </div>
                                             <div class="col-xs-2 cardBottons" style="margin-top:7px">
                                                 <button type="text" class="btn btn-success" id="btnImportMaterials">Importar</button>
