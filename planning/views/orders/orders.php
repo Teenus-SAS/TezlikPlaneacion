@@ -56,7 +56,7 @@ if (sizeof($_SESSION) == 0)
                                             <div class="card-body" style="padding: 10px;">
                                                 <div class="media text-white">
                                                     <div class="media-body" style="text-align: center;">
-                                                        <span class="text-uppercase font-size-12 font-weight-bold" style="font-size: smaller;"><i class="bi bi-calendar-event mr-1"></i> Total: 310</span>
+                                                        <span class="text-uppercase font-size-12 font-weight-bold" style="font-size: smaller;"><i class="bi bi-calendar-event mr-1" id="lblTotal"></i></span>
                                                     </div>
                                                 </div>
                                             </div>
@@ -67,7 +67,7 @@ if (sizeof($_SESSION) == 0)
                                             <div class="card-body" style="padding: 10px;">
                                                 <div class="media text-white">
                                                     <div class="media-body" style="text-align: center;">
-                                                        <span class="text-uppercase font-size-12 font-weight-bold" style="font-size: smaller;"><i class="bi bi-file-earmark-x mr-1"></i>Completados: 95%</span>
+                                                        <span class="text-uppercase font-size-12 font-weight-bold" style="font-size: smaller;"><i class="bi bi-file-earmark-x mr-1" id="lblCompleted"></i></span>
                                                     </div>
                                                 </div>
                                             </div>
@@ -79,7 +79,7 @@ if (sizeof($_SESSION) == 0)
                                             <div class="card-body" style="padding: 10px;">
                                                 <div class="media text-white">
                                                     <div class="media-body" style="text-align: center;">
-                                                        <span class="text-uppercase font-size-12 font-weight-bold" style="font-size: smaller;"><i class="fas fa-arrow-down mr-1"></i>Atrasados: 5%</span>
+                                                        <span class="text-uppercase font-size-12 font-weight-bold" style="font-size: smaller;"><i class="fas fa-arrow-down mr-1" id="lblLate"></i></span>
                                                     </div>
                                                 </div>
                                             </div>

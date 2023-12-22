@@ -161,7 +161,7 @@ $(document).ready(function () {
 
       $('#createOrder').modal('hide');
       $('#formCreateOrder').trigger('reset');
-      updateTable();
+      loadAllData();
       toastr.success(data.message);
       return false;
     } else if (data.error == true) toastr.error(data.message);
@@ -169,8 +169,8 @@ $(document).ready(function () {
   };
 
   /* Actualizar tabla */
-  function updateTable() {
-    $('#tblOrder').DataTable().clear();
-    $('#tblOrder').DataTable().ajax.reload();
-  }
+  // function updateTable() {
+  //   $('#tblOrder').DataTable().clear();
+  //   $('#tblOrder').DataTable().ajax.reload();
+  // }
 });

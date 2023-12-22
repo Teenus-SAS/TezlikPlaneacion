@@ -53,6 +53,7 @@ $(document).ready(function () {
   loadTblOffices = (data, visible) => {
     if ($.fn.dataTable.isDataTable("#tblOffices")) {
       $("#tblOffices").DataTable().clear();
+      $('#tblOffices').DataTable().column(10).visible(visible);
       $("#tblOffices").DataTable().rows.add(data).draw();
       return;
     }
