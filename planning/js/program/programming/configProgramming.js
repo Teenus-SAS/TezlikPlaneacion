@@ -234,7 +234,7 @@ $(document).ready(function () {
       let id_order = parseFloat($('#order').val());
       let product = parseFloat($('#selectNameProduct').val());
       let machine = parseFloat($('#idMachine').val());
-      let quantity = $('#quantity').val();
+      let quantity = parseInt($('#quantity').val());
 
       for (let i = 0; i < allOrders.length; i++) {
         if (allOrders[i].id_order == id_order) {
@@ -279,10 +279,11 @@ $(document).ready(function () {
       if (days >= 1) {
         final_date.setDate(final_date.getDate() + Math.floor(days));
       }
-
-      let hours = (days % 1) * planningMachine.hours_day;
+      let sobDays = (days % 1);
+      let hours =  sobDays * planningMachine.hours_day;
       
-      let minutes = (hours % 1) * 60;
+      let sobHours = (hours % 1);
+      let minutes = sobHours * 60;
       final_date.setMinutes(final_date.getMinutes() + minutes);
 
       final_date.setHours(final_date.getHours() + hours);
