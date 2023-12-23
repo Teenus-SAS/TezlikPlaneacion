@@ -40,7 +40,7 @@ if (sizeof($_SESSION) == 0)
                 <div class="page-title-box">
                     <div class="container-fluid">
                         <div class="row align-items-center">
-                            <div class="col-sm-5 col-xl-6">
+                            <div class="col-sm-5 col-xl-7">
                                 <div class="page-title">
                                     <h3 class="mb-1 font-weight-bold text-dark">Programa de Producción</h3>
                                     <ol class="breadcrumb mb-3 mb-md-0">
@@ -49,16 +49,14 @@ if (sizeof($_SESSION) == 0)
                                 </div>
                             </div>
                             <div class="col-sm-7 col-xl-4 form-inline justify-content-sm-end">
-                                <div class="col-sm-3" id="machines">
+                                <div id="machines">
                                     <label class="font-weight-bold text-dark">Maquina</label>
                                     <select class="form-control idMachine" id="searchMachine">
                                     </select>
                                 </div>
                             </div>
-                            <div class="col-sm-7 col-xl-2 form-inline justify-content-sm-end">
-                                <div class="col-xs-2 mr-2 mt-3">
-                                    <button class="btn btn-warning" id="btnNewProgramming" name="btnNewProgramming">Programar</button>
-                                </div>
+                            <div class="col-sm-7 col-xl-1 form-inline justify-content-sm-end mt-3">
+                                <button class="btn btn-warning" id="btnNewProgramming" name="btnNewProgramming">Programar</button>
                             </div>
                         </div>
                     </div>
@@ -160,10 +158,24 @@ if (sizeof($_SESSION) == 0)
                                     <div class="card-body">
                                         <div class="table-responsive">
                                             <table class="fixed-table-loading table table-hover" id="tblProgramming">
-
+                                                <thead>
+                                                    <tr>
+                                                        <th>No.</th>
+                                                        <th>Pedido</th>
+                                                        <th>Referencia</th>
+                                                        <th>Producto</th>
+                                                        <th>Maquina</th>
+                                                        <th>Cantidades</th>
+                                                        <th>Cliente</th>
+                                                        <th>Fecha y Hora</th>
+                                                        <th>Orden Produccion</th>
+                                                        <th>Acciones</th>
+                                                        <!-- <th></th>  -->
+                                                    </tr>
+                                                </thead>
+                                                <tbody id="tblProgrammingBody"></tbody>
                                             </table>
                                         </div>
-
                                     </div>
                                 </div>
                             </div>

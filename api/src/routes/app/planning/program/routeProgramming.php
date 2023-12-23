@@ -390,7 +390,7 @@ $app->post('/deleteProgramming', function (Request $request, Response $response,
 
         foreach ($orders as $arr) {
             if ($arr['status'] != 'En Produccion' && $arr['status'] != 'Entregado' && $arr['status'] != 'Programado') {
-                $result = $generalOrdersDao->changeStatus($arr['id_order'], 'Programar');
+                // $result = $generalOrdersDao->changeStatus($arr['id_order'], 'Programar');
 
                 // Ficha tecnica
                 $productsMaterials = $productsMaterialsDao->findAllProductsmaterials($arr['id_product'], $id_company);

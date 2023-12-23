@@ -35,6 +35,20 @@ class GeneralOrdersDao
         return $orders;
     }
 
+    public function findAllOrdersByProduct($id_product)
+    {
+        $connection = Connection::getInstance()->getConnection();
+
+        $stmt = $connection->prepare("SELECT * FROM plan_orders WHERE id_product = :id_product");
+        $stmt->execute(['id_product' => $id_product]);
+
+        $this->logger->info(__FUNCTION__, array('query' => $stmt->queryString, 'errors' => $stmt->errorInfo()));
+
+        $orders = $stmt->fetchAll($connection::FETCH_ASSOC);
+        $this->logger->notice("pedidos", array('pedidos' => $orders));
+        return $orders;
+    }
+
     // Obtener informacion pedido
     public function findOrdersByCompany($dataOrder, $id_company)
     {

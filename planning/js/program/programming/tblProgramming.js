@@ -1,138 +1,140 @@
-/* Función mover filas
-
-let shadow;
-function dragit(event) {
-  shadow = event.target;
-}
-function dragover(e) {
-  let children = Array.from(e.target.parentNode.parentNode.children);
-  if (children.indexOf(e.target.parentNode) > children.indexOf(shadow))
-    e.target.parentNode.after(shadow);
-  else e.target.parentNode.before(shadow);
-}*/
 $(document).ready(function () {
   sessionStorage.removeItem("id_programming");
 
   $("#searchMachine").change(function (e) {
     e.preventDefault();
 
-    loadTblProgramming(this.value);
+    loadAllDataProgramming(2, this.value);
   });
 
-  loadTblProgramming = async (machine) => {
-    let data;
+  loadTblProgramming = async (data) => {
+    // Encabezados de la tabla
+    var headers = ['No.', 'Pedido', 'Referencia', 'Producto', 'Maquina', 'Cantidades', 'Cliente', 'Fecha y Hora', 'Orden Produccion', 'Acciones'];
 
-    if (machine == 0) {
-      data = await searchData("/api/programming");
-    } else data = await searchData(`/api/programmingByMachine/${machine}/0`);
+    // Obtén la tabla
+    var table = document.getElementById('tblProgrammingBody');
 
-    if ($.fn.dataTable.isDataTable("#tblProgramming")) {
-      $("#tblProgramming").DataTable().clear();
-      $("#tblProgramming").DataTable().rows.add(data).draw();
-      return;
-    }
+    $('#tblProgrammingBody').empty();
 
-    tblProgramming = $("#tblProgramming").dataTable({
-      // destroy: true,
-      pageLength: 50,
-      data: data,
-      language: {
-        url: "//cdn.datatables.net/plug-ins/1.10.20/i18n/Spanish.json",
-      },
-      dom: "Bfrtip",
-      buttons: [
-        {
-          extend: "excel",
-          exportOptions: {
-            columns: [0, 1, 2, 3, 4, 5, 6, 7, 8],
-          },
-        },
-      ],
-      columns: [
-        {
-          title: "No.",
-          data: null,
-          className: "uniqueClassName dt-head-center",
-          render: function (data, type, full, meta) {
-            return meta.row + 1;
-          },
-        },
-        {
-          title: "Pedido",
-          data: "num_order",
-          className: "uniqueClassName dt-head-center",
-        },
-        {
-          title: "Referencia",
-          data: "reference",
-          className: "uniqueClassName dt-head-center",
-        },
-        {
-          title: "Producto",
-          data: "product",
-          className: "uniqueClassName dt-head-center",
-        },
-        {
-          title: "Maquina",
-          data: "machine",
-          className: "uniqueClassName dt-head-center",
-        },
-        {
-          title: "Cantidades",
-          data: null,
-          className: "uniqueClassName dt-head-center",
-          render: function (data, type, full, meta) {
-            const quantityOrder = full.quantity_order;
-            const quantityProgramming = full.quantity_programming;
-            const accumulatedQuantity = full.accumulated_quantity;
+    // Crea la fila de encabezados
+    // var headerRow = table.createTHead().insertRow();
+    // headers.forEach(function (header) {
+    //   var th = document.createElement('th');
+    //   th.textContent = header;
+    //   headerRow.appendChild(th);
+    // });
+
+    // Itera sobre los datos y crea filas para cada conjunto de datos
+    data.forEach(function (data, index) {
+      // Crea una fila con datos
+      var dataRow = table.insertRow();
+      // Itera sobre los datos y agrega celdas a la fila
+      headers.forEach(function (header, columnIndex) {
+        var cell = dataRow.insertCell();
+        switch (header) {
+          // case '':
+          //   // Agrega un enlace con un ícono para reordenar y configura la clase 'drag-handle'
+          //   var moveIconLink = document.createElement('a');
+          //   moveIconLink.href = 'javascript:;';
+          //   moveIconLink.innerHTML = `<i id="${data.id_programming}" class="bi bi-justify drag-handle" data-toggle='tooltip' title='Mover' style="font-size: 20px; color:black;"></i>`;
+          //   cell.appendChild(moveIconLink);
+          //   cell.classList.add('drag-handle-cell');
+          //   break;
+          case 'No.':
+            cell.textContent = index + 1;
+            break;
+          case 'Pedido':
+            cell.textContent = data.num_order;
+            break;
+          case 'Referencia':
+            cell.textContent = data.reference;
+            break;
+          case 'Producto':
+            cell.textContent = data.product;
+            break;
+          case 'Maquina':
+            cell.textContent = data.machine;
+            break;
+          case 'Cantidades':
+            const quantityOrder = data.quantity_order;
+            const quantityProgramming = data.quantity_programming;
+            const accumulatedQuantity = data.accumulated_quantity;
+
             if (accumulatedQuantity > 0)
-              return `Pedido: ${quantityOrder}<br>Fabricar: ${quantityProgramming}<br><span class="badge badge-danger">Pendiente: ${accumulatedQuantity}</span>`;
+              cell.innerHTML = `Pedido: ${quantityOrder}<br>Fabricar: ${quantityProgramming}<br><span class="badge badge-danger">Pendiente: ${accumulatedQuantity}</span>`;
             else
-              return `Pedido: ${quantityOrder}<br>Fabricar: ${quantityProgramming}<br>Pendiente: ${accumulatedQuantity}`;
-          },
-        },
-        {
-          title: "Cliente",
-          data: "client",
-          className: "uniqueClassName dt-head-center",
-        },
-        {
-          title: "Fecha y Hora",
-          data: null,
-          className: "uniqueClassName dt-head-center",
-          width: "200px",
-          render: function (data, type, full, meta) {
-            const minDate = full.min_date;
-            const maxDate = full.max_date;
-
-            return `Inicio: ${moment(minDate).format(
-              "DD/MM/YYYY HH:mm A"
-            )}<br>Fin: ${moment(maxDate).format("DD/MM/YYYY HH:mm A")}`;
-          },
-        },
-
-        {
-          title: "Orden Produccion",
-          data: "id_programming",
-          className: "uniqueClassName dt-head-center",
-          render: function (data) {
-            return `
-            <button class="btn btn-warning changeStatus " id="${data}" name="${data}">Crear OP</button>`;
-          },
-        },
-        {
-          title: "Acciones",
-          data: "id_programming",
-          className: "uniqueClassName dt-head-center",
-          render: function (data) {
-            return `
-                <a href="javascript:;" <i id="${data}" class="bx bx-edit-alt updateProgramming" data-toggle='tooltip' title='Actualizar Programa' style="font-size: 30px;"></i></a>
-                <a href="javascript:;" <i id="${data}" class="mdi mdi-delete-forever" data-toggle='tooltip' title='Eliminar Programa' style="font-size: 30px;color:red" onclick="deleteFunction()"></i></a>`;
-          },
-        },
-      ],
+              cell.innerHTML = `Pedido: ${quantityOrder}<br>Fabricar: ${quantityProgramming}<br>Pendiente: ${accumulatedQuantity}`;
+            
+            break;
+          case 'Cliente':
+            cell.textContent = data.client;
+            break;
+          case 'Fecha y Hora':
+            const minDate = data.min_date;
+            const maxDate = data.max_date;
+            cell.innerHTML = `Inicio: ${moment(minDate).format("DD/MM/YYYY HH:mm A")}<br>Fin: ${moment(maxDate).format("DD/MM/YYYY HH:mm A")}`;
+            break;
+          case 'Orden Produccion':
+            cell.innerHTML = `<button class="btn btn-warning changeStatus" id="${data.id_programming}" name="${data.id_programming}">Crear OP</button>`;
+            break;
+          case 'Acciones':
+            cell.innerHTML = `
+            <a href="javascript:;" <i id="${data.id_programming}" class="bx bx-edit-alt updateProgramming" data-toggle='tooltip' title='Actualizar Programa' style="font-size: 30px;"></i></a>
+            <a href="javascript:;" <i id="${data.id_programming}" class="mdi mdi-delete-forever" data-toggle='tooltip' title='Eliminar Programa' style="font-size: 30px;color:red" onclick="deleteFunction()"></i></a>`;
+            break;
+          default:
+            cell.textContent = ''; // Manejar cualquier otro encabezado no especificado
+            break;
+        }
+      });
     });
-  };
 
-  loadTblProgramming(0);
+    $('#tblProgramming').DataTable();
+
+    dragula([
+      document.getElementById('tblProgrammingBody')
+    ]).on('drop', function (el, container, source, sibling) {
+      // Get the row index of the dropped element
+      var rowIndex = $(el).closest('tr').index();
+
+      // If the row was dropped within the same container,
+      // move it to the specified position
+      if (container === source) {
+        var targetIndex = $(el).closest('tbody').find('tr').index(sibling);
+        $(el).closest('tr').insertAfter($(container).find('tr')[targetIndex]);
+      } else {
+        // If the row was dropped into a different container,
+        // move it to the first position
+        $(el).closest('tr').appendTo($(container));
+      }
+    });
+
+    // var drake = dragula({
+    //   moves: function (el, source, handle, sibling) {
+    //     // Permite arrastrar solo las filas utilizando la clase 'drag-handle'
+    //     return handle.classList.contains('drag-handle');
+    //   },
+    //   accepts: function (el, target, source, sibling) {
+    //     // Permite soltar solo en el área de la fila de la tabla
+    //     return target.tagName === 'tr';
+    //   },
+    // });
+
+    // // Itera sobre las filas y añade cada una al conjunto arrastrable
+    // var rows = table.getElementsByTagName('tr');
+    // for (var i = 0; i < rows.length; i++) {
+    //   drake.containers.push(rows[i]);
+    // }
+
+    // // Configura Dragula para permitir el arrastre de columnas
+    // dragula([headerRow], {
+    //   moves: function (el, source, handle, sibling) {
+    //     return el.tagName === 'th';
+    //   },
+    //   accepts: function (el, target, source, sibling) {
+    //     return target.tagName === 'tr';
+    //   },
+    //   direction: 'horizontal',
+    // });
+  };
 });

@@ -48,10 +48,8 @@ $(document).ready(function () {
   $(document).on("click", ".updateProgramming", async function (e) {
     $(".cardCreateProgramming").show(800);
     $("#btnCreateProgramming").html("Actualizar");
-
-    let row = $(this).parent().parent()[0];
-    // i = row.rowIndex;
-    let data = tblProgramming.fnGetData(row);
+    
+    let data = allProgramming.find(item => item.id_programming == this.id); 
 
     sessionStorage.setItem("id_programming", data.id_programming);
     $("#order").empty();
@@ -75,6 +73,13 @@ $(document).ready(function () {
 
     $select.append(
       `<option value ='${data.id_machine}' selected> ${data.machine} </option>`
+    );
+    let $select1 = $(`#idProcess`);
+    $select1.empty();
+    $select1.append(`<option value="0" disabled>Seleccionar</option>`);
+
+    $select1.append(
+      `<option value ='${data.id_process}' selected> ${data.process} </option>`
     );
     // $(`#idMachine option[value=${data.id_machine}]`).prop('selected', true);
 
@@ -135,7 +140,7 @@ $(document).ready(function () {
     let quantityMissing = parseInt($('#quantityMissing').val().replace('.', ''));
     let quantityProgramming = parseInt($('#quantity').val());
 
-    let process = allProcess.filter(item => item.id_product == id_order && item.id_order && id_product);
+    let process = allProcess.filter(item => item.id_product == id_product && item.id_order == id_order);
 
     if (quantityMissing - quantityProgramming > 0)
       dataProgramming.append('route', `${process[0].route1}, ${process[0].route1 + 1}`);
@@ -156,8 +161,7 @@ $(document).ready(function () {
   /* Eliminar programa de produccion */
 
   deleteFunction = () => {
-    let row = $(this.activeElement).parent().parent()[0];
-    let data = tblProgramming.fnGetData(row);
+    let data = allProgramming.find(item => item.id_programming == this.id); 
 
     let dataProgramming = {};
 

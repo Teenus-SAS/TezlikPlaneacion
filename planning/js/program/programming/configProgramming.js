@@ -5,9 +5,9 @@ $(document).ready(function () {
   let allCiclesMachines = [];
   let allPlanningMachines = [];
   let allOrders = [];
-  let allProgramming = [];
+  allProgramming = [];
 
-  loadAllDataProgramming = async () => {
+  loadAllDataProgramming = async (op, machine) => {
     try {
       const [
         process,
@@ -16,37 +16,55 @@ $(document).ready(function () {
         planningMachines,
         orders,
         programming,
+        programmingMachines,
         productsMaterials
       ] = await Promise.all([
-        searchData('/api/processOrder'),
-        searchData('/api/machines'),
-        searchData('/api/planCiclesMachine'),
-        searchData('/api/planningMachines'),
-        searchData('/api/orders'),
-        searchData('/api/programming'),
-        searchData('/api/allProductsMaterials')
+        op == 1 ? searchData('/api/processOrder') : null,
+        op == 1 ? searchData('/api/machines') : null,
+        op == 1 ? searchData('/api/planCiclesMachine') : null,
+        op == 1 ? searchData('/api/planningMachines') : null,
+        op == 1 ? searchData('/api/orders') : null,
+        op == 1 ? searchData('/api/programming') : null,
+        op == 2 ? searchData(`/api/programmingByMachine/${machine}/0`) : null,
+        op == 1 ? searchData('/api/allProductsMaterials') : null
       ]);
+      let data = [];
 
-      allProcess = process;
-      allMachines = machines;
-      allCiclesMachines = ciclesMachines;
-      allPlanningMachines = planningMachines;
-      allOrders = orders;
-      allProgramming = programming;
-      copyAllProgramming = allProgramming;
-      allProductsMaterials = productsMaterials;
+      if (op == 1) {
+        allProcess = process;
+        allMachines = machines;
+        allCiclesMachines = ciclesMachines;
+        allPlanningMachines = planningMachines;
+        allOrders = orders;
+        allProgramming = programming;
+        copyAllProgramming = allProgramming;
+        allProductsMaterials = productsMaterials;
+        data = programming;
+      } else {
+        data = programmingMachines;
+      }
+
+      loadTblProgramming(data);
     } catch (error) {
       console.error('Error loading data:', error);
     }
   };
 
-  loadAllDataProgramming();
+  loadAllDataProgramming(1);
 
   $(document).on('change', '#order', function (e) {
     e.preventDefault();
 
+    let value = this.value;
+
     let num_order = $('#order :selected').text().trim();
-    loadProducts(num_order, this.id);
+    $("#formCreateProgramming").trigger("reset");
+    $(`#order option[value=${value}]`).prop('selected', true);
+    $('#selectNameProduct').empty();
+    $('#idProcess').empty();
+    $('#idMachine').empty();
+    
+    loadProducts(num_order, value);
   });
 
   $(document).on('change', '.selects', function (e) {
@@ -92,7 +110,7 @@ $(document).ready(function () {
     //   toastr.error('');
     // }
 
-    if (op == 1 || !isNaN(machine)) {
+    if (op == 1 && !isNaN(machine)) {
       machines = [];
 
       for (let i = 0; i < allProgramming.length; i++) {
@@ -179,28 +197,7 @@ $(document).ready(function () {
         if (!date) {
           $('.date').show(800);
           document.getElementById('minDate').readOnly = false;
-          document.getElementById('minDate').type = 'date';
-          
-          // $('#minDate').change(function (e) {
-          //   e.preventDefault();
-
-          //   let date = this.value;
-
-          //   if (!date) {
-          //     toastr.error('Ingrese fecha inicial');
-          //     return false;
-          //   }
-
-          //   if (date.includes('T')) {
-          //     date = date.split('T')[0];
-          //   }
-
-          //   let min_date = convetFormatDate(date);
-
-          //   sessionStorage.setItem('minDate', min_date);
-          //   dataProgramming.append('minDate', min_date);
-          //   calcMaxDate(min_date, 0, 2);
-          // });
+          document.getElementById('minDate').type = 'date'; 
         } else {
           document.getElementById('minDate').readOnly = true;
 
@@ -343,7 +340,7 @@ $(document).ready(function () {
 
       for (let i = 0; i < r.length; i++) {
         if (this.value == r[i].id_product) { 
-          let process = allProcess.filter(item => item.id_product == this.value && item.id_order && id_order);
+          let process = allProcess.filter(item => item.id_product == this.value && item.id_order == id_order);
           id_product = this.value;
           
           let $select = $(`#idProcess`);

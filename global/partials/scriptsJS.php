@@ -15,6 +15,12 @@
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels@2.0.0"></script>
 
+<!-- ================== BEGIN PAGE LEVEL JS ================== -->
+<script src="/assets/libs/dragula/dragula.min.js"></script>
+<!-- ================== END PAGE LEVEL JS ================== -->
+<!-- ================== BEGIN PAGE JS ================== -->
+<script src="/assets/js/pages/dragula.init.js"></script>
+<!-- <script src="/assets/js/pages/dragula.init.js"></script> -->
 <!-- page JS -->
 <script src="/assets/js/app.js"></script>
 <!-- <script src="/global/js/global/sessionUser.js"></script> -->
@@ -28,6 +34,7 @@
 <!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/0.19.2/axios.min.js"></script> -->
 <script src="https://unpkg.com/xlsx@latest/dist/xlsx.full.min.js"></script>
 <!-- <script src="https://cdn.datatables.net/select/1.4.0/js/dataTables.select.min.js"></script> -->
+<!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/dragula/3.7.2/dragula.min.js"></script> -->
 
 <!-- Notifications -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>

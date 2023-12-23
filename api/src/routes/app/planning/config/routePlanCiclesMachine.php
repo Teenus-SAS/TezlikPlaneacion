@@ -2,12 +2,14 @@
 
 use TezlikPlaneacion\dao\CiclesMachineDao;
 use TezlikPlaneacion\dao\GeneralMachinesDao;
+use TezlikPlaneacion\dao\GeneralOrdersDao;
 use TezlikPlaneacion\dao\GeneralPlanCiclesMachinesDao;
 use TezlikPlaneacion\dao\GeneralProcessDao;
 use TezlikPlaneacion\dao\GeneralProductsDao;
 use TezlikPlaneacion\dao\LastDataDao;
 use TezlikPlaneacion\dao\LotsProductsDao;
 use TezlikPlaneacion\dao\PlanCiclesMachineDao;
+use TezlikPlaneacion\dao\ProgrammingRoutesDao;
 
 $planCiclesMachineDao = new PlanCiclesMachineDao();
 $generalPlanCiclesMachinesDao = new GeneralPlanCiclesMachinesDao();
@@ -17,6 +19,8 @@ $processDao = new GeneralProcessDao();
 $machinesDao = new GeneralMachinesDao();
 $productsDao = new GeneralProductsDao();
 $economicLotDao = new LotsProductsDao();
+$programmingRoutesDao = new ProgrammingRoutesDao();
+$generalOrdersDao = new GeneralOrdersDao();
 
 use Psr\Http\Message\ResponseInterface as Response;
 use Psr\Http\Message\ServerRequestInterface as Request;
@@ -148,7 +152,9 @@ $app->post('/addPlanCiclesMachine', function (Request $request, Response $respon
     $lastDataDao,
     $productsDao,
     $processDao,
-    $machinesDao
+    $machinesDao,
+    $generalOrdersDao,
+    $programmingRoutesDao
 ) {
     session_start();
     $id_company = $_SESSION['id_company'];
@@ -181,6 +187,25 @@ $app->post('/addPlanCiclesMachine', function (Request $request, Response $respon
                     $data['units_month'] = $arr['units_month'];
 
                     $planCiclesMachine = $generalPlanCiclesMachinesDao->updateUnits($data);
+                }
+            }
+
+            if ($planCiclesMachine == null) {
+                $ciclesMachine = $generalPlanCiclesMachinesDao->findAllPlanCiclesMachineByProduct($dataPlanCiclesMachine['idProduct'], $id_company);
+
+                if (sizeof($ciclesMachine) == 1) {
+                    $orders = $generalOrdersDao->findAllOrdersByProduct($dataPlanCiclesMachine['idProduct']);
+
+                    foreach ($orders as $arr) {
+                        $data = [];
+                        $data['idProduct'] = $dataPlanCiclesMachine['idProduct'];
+                        $data['idOrder'] = $arr['id_order'];
+                        $data['route'] = 1;
+
+                        $planCiclesMachine = $programmingRoutesDao->insertProgrammingRoutes($data, $id_company);
+
+                        if (isset($planCiclesMachine['info'])) break;
+                    }
                 }
             }
 
