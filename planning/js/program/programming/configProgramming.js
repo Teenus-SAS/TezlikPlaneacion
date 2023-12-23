@@ -274,7 +274,7 @@ $(document).ready(function () {
       }
       let final_date = new Date(min_date);
     
-      let days = (quantity / ciclesMachine.cicles_hour / planningMachine.hours_day);
+      let days = (quantity / ciclesMachine.cicles_hour / planningMachine.hours_day).toFixed(3);
 
       if (days >= 1) {
         final_date.setDate(final_date.getDate() + Math.floor(days));
