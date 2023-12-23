@@ -337,7 +337,7 @@ $(document).ready(function () {
       let id_process;
       let id_product;
       let route;
-      let id_order = this.className;
+      let id_order = parseInt($(this).find('option:selected').attr('class'));
 
       for (let i = 0; i < r.length; i++) {
         if (this.value == r[i].id_product) { 
