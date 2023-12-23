@@ -64,7 +64,7 @@ $(document).ready(function () {
     $('#idProcess').empty();
     $('#idMachine').empty();
     
-    loadProducts(num_order, value);
+    loadProducts(num_order);
   });
 
   $(document).on('change', '.selects', function (e) {
@@ -316,7 +316,7 @@ $(document).ready(function () {
   };
 
   /* Cargar Productos y Maquinas */
-  loadProducts = async (num_order, id_order) => {
+  loadProducts = async (num_order) => {
     let r = await searchData(`/api/programming/${num_order}`);
 
     $('#quantityOrder').val('');
@@ -337,6 +337,7 @@ $(document).ready(function () {
       let id_process;
       let id_product;
       let route;
+      let id_order = this.className;
 
       for (let i = 0; i < r.length; i++) {
         if (this.value == r[i].id_product) { 
