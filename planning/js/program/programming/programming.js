@@ -160,8 +160,8 @@ $(document).ready(function () {
 
   /* Eliminar programa de produccion */
 
-  deleteFunction = () => {
-    let data = allProgramming.find(item => item.id_programming == this.id); 
+  deleteFunction = (id) => {
+    let data = allProgramming.find(item => item.id_programming == id); 
 
     let dataProgramming = {};
 
@@ -186,6 +186,7 @@ $(document).ready(function () {
           dataProgramming["order"] = data.id_order;
           dataProgramming["num_order"] = data.num_order;
           dataProgramming["quantity"] = data.quantity_programming;
+          dataProgramming["accumulatedQuantity"] = '';
 
           $.post(
             `/api/deleteProgramming`,
@@ -201,8 +202,7 @@ $(document).ready(function () {
 
   /* Cambiar estado */
   $(document).on("click", ".changeStatus", function () {
-    let row = $(this).parent().parent()[0];
-    let data = tblProgramming.fnGetData(row);
+    let data = allProgramming.find(item => item.id_programming == this.id); 
 
     let dataProgramming = {};
     dataProgramming["idProgramming"] = data.id_programming;
@@ -260,80 +260,6 @@ $(document).ready(function () {
     setTblStatusProgramming();
   });
 
-  // setTblStatusProgramming = () => {
-  //   let data = copyAllProgramming;
-
-  //   let tblStatusProgrammingBody = document.getElementById(
-  //     'tblStatusProgrammingBody'
-  //   );
-
-  //   for (i = 0; i < data.length; i++) {
-  //     programming.push({ idProgramming: data[i].id_programming });
-
-  //     tblStatusProgrammingBody.insertAdjacentHTML(
-  //       'beforeend',
-  //       `
-  //       <tr>
-  //           <td>${i + 1}</td>
-  //           <td>${data[i].num_order}</td>
-  //           <td>${data[i].reference}</td>
-  //           <td>${data[i].product}</td>
-  //           <td>${data[i].machine}</td>
-  //           <td>${data[i].quantity_order}</td>
-  //           <td>${data[i].quantity_programming}</td>
-  //           <td>
-  //               <input type="checkbox" class="form-control-updated checkStatusProgramming" id="checkIn-${data[i].id_programming
-  //       }" checked>
-  //           </td>
-  //       </tr>
-  //     `
-  //     );
-  //   }
-
-  //   $('#changeStatusProgramming').modal('show');
-
-  //   $('#tblStatusProgramming').DataTable({
-  //     destroy: true,
-  //     scrollY: '150px',
-  //     scrollCollapse: true,
-  //     // language: {
-  //     //   url: '//cdn.datatables.net/plug-ins/1.10.20/i18n/Spanish.json',
-  //     // },
-  //     dom: '<"datatable-error-console">frtip',
-  //     fnInfoCallback: function (oSettings, iStart, iEnd, iMax, iTotal, sPre) {
-  //       if (oSettings.json && oSettings.json.hasOwnProperty('error')) {
-  //         console.error(oSettings.json.error);
-  //       }
-  //     },
-  //   });
-
-  //   let tables = document.getElementsByClassName(
-  //     'dataTables_scrollHeadInner'
-  //   );
-
-  //   let attr = tables[0];
-  //   attr.style.width = '100%';
-  //   attr = tables[0].firstElementChild;
-  //   attr.style.width = '100%';
-  // };
-
-  // $(document).on('click', '.checkStatusProgramming', function () {
-  //   let id = this.id;
-  //   let idProgramming = id.slice(8, id.length);
-
-  //   if ($(`#${id}`).is(':checked')) {
-  //     let data = {
-  //       idProgramming: idProgramming,
-  //     };
-
-  //     programming.push(data);
-  //   } else {
-  //     for (i = 0; i < programming.length; i++)
-  //       if (programming[i].idProgramming == idProgramming)
-  //         programming.splice(i, 1);
-  //   }
-  // });
-
   $("#btnSaveProgramming").click(function (e) {
     e.preventDefault();
 
@@ -368,8 +294,7 @@ $(document).ready(function () {
       if (data.success) {
         hideCardAndResetForm();
         toastr.success(data.message);
-        await loadAllDataProgramming();
-        loadTblProgramming(0);
+        await loadAllDataProgramming(1);
       } else if (data.error) {
         toastr.error(data.message);
       } else if (data.info) {

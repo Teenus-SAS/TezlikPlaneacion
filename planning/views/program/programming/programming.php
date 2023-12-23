@@ -158,7 +158,7 @@ if (sizeof($_SESSION) == 0)
                                     <div class="card-body">
                                         <div class="table-responsive">
                                             <table class="fixed-table-loading table table-hover" id="tblProgramming">
-                                                <thead>
+                                                <!-- <thead>
                                                     <tr>
                                                         <th>No.</th>
                                                         <th>Pedido</th>
@@ -169,10 +169,9 @@ if (sizeof($_SESSION) == 0)
                                                         <th>Cliente</th>
                                                         <th>Fecha y Hora</th>
                                                         <th>Orden Produccion</th>
-                                                        <th>Acciones</th>
-                                                        <!-- <th></th>  -->
+                                                        <th>Acciones</th> 
                                                     </tr>
-                                                </thead>
+                                                </thead> -->
                                                 <tbody id="tblProgrammingBody"></tbody>
                                             </table>
                                         </div>

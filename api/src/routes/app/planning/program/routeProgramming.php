@@ -194,7 +194,8 @@ $app->post('/addProgramming', function (Request $request, Response $response, $a
     $generalOrdersDao,
     $productsMaterialsDao,
     $generalMaterialsDao,
-    $ordersDao
+    $ordersDao,
+    $lastDataDao
 ) {
     session_start();
     $dataProgramming = $request->getParsedBody();
@@ -210,6 +211,12 @@ $app->post('/addProgramming', function (Request $request, Response $response, $a
             $result = $programmingRoutesDao->updateProgrammingRoutes($dataProgramming);
         }
     }
+
+    if ($result == null) {
+        $arr = $lastDataDao->findLastInsertedProgramming($id_company);
+        $result = $generalProgrammingDao->addMinutesProgramming($arr['id_programming'], $dataProgramming['minutes']);
+    }
+
     if ($result == null) {
         $order = $generalProgrammingDao->checkAccumulatedQuantityOrder($dataProgramming['order']);
 
@@ -299,6 +306,8 @@ $app->post('/updateProgramming', function (Request $request, Response $response,
 
         $result = $generalOrdersDao->updateAccumulatedOrder($dataProgramming);
     }
+    if ($result == null)
+        $result = $generalProgrammingDao->addMinutesProgramming($dataProgramming['idProgramming'], $dataProgramming['minutes']);
 
     if ($result == null) {
         $productsMaterials = $productsMaterialsDao->findAllProductsmaterials($dataProgramming['idProduct'], $id_company);
@@ -364,6 +373,8 @@ $app->post('/deleteProgramming', function (Request $request, Response $response,
 
     $dataProgramming = $request->getParsedBody();
     $result = $programmingDao->deleteProgramming($dataProgramming['idProgramming']);
+    if ($result == null)
+        $result = $generalOrdersDao->updateAccumulatedOrder($dataProgramming);
 
     if ($result == null) {
         $programming = $programmingDao->findAllProgrammingByCompany($id_company);

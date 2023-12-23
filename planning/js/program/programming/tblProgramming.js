@@ -8,38 +8,37 @@ $(document).ready(function () {
   });
 
   loadTblProgramming = async (data) => {
+
+    if ($.fn.dataTable.isDataTable("#tblProgramming")) {
+      $("#tblProgramming").DataTable().destroy();
+      $("#tblProgramming").empty();
+    }
     // Encabezados de la tabla
     var headers = ['No.', 'Pedido', 'Referencia', 'Producto', 'Maquina', 'Cantidades', 'Cliente', 'Fecha y Hora', 'Orden Produccion', 'Acciones'];
-
+    
     // Obtén la tabla
-    var table = document.getElementById('tblProgrammingBody');
-
-    $('#tblProgrammingBody').empty();
+    var table = document.getElementById('tblProgramming');
 
     // Crea la fila de encabezados
-    // var headerRow = table.createTHead().insertRow();
-    // headers.forEach(function (header) {
-    //   var th = document.createElement('th');
-    //   th.textContent = header;
-    //   headerRow.appendChild(th);
-    // });
+    var headerRow = table.createTHead().insertRow();
+    headers.forEach(function (header) {
+      var th = document.createElement('th');
+      th.textContent = header;
+      headerRow.appendChild(th);
+    });
+    
+    $('#tblProgrammingBody').empty();
+
+    var body = document.getElementById('tblProgrammingBody');
 
     // Itera sobre los datos y crea filas para cada conjunto de datos
     data.forEach(function (data, index) {
       // Crea una fila con datos
-      var dataRow = table.insertRow();
+      var dataRow = body.insertRow();
       // Itera sobre los datos y agrega celdas a la fila
       headers.forEach(function (header, columnIndex) {
         var cell = dataRow.insertCell();
-        switch (header) {
-          // case '':
-          //   // Agrega un enlace con un ícono para reordenar y configura la clase 'drag-handle'
-          //   var moveIconLink = document.createElement('a');
-          //   moveIconLink.href = 'javascript:;';
-          //   moveIconLink.innerHTML = `<i id="${data.id_programming}" class="bi bi-justify drag-handle" data-toggle='tooltip' title='Mover' style="font-size: 20px; color:black;"></i>`;
-          //   cell.appendChild(moveIconLink);
-          //   cell.classList.add('drag-handle-cell');
-          //   break;
+        switch (header) { 
           case 'No.':
             cell.textContent = index + 1;
             break;
@@ -80,7 +79,7 @@ $(document).ready(function () {
           case 'Acciones':
             cell.innerHTML = `
             <a href="javascript:;" <i id="${data.id_programming}" class="bx bx-edit-alt updateProgramming" data-toggle='tooltip' title='Actualizar Programa' style="font-size: 30px;"></i></a>
-            <a href="javascript:;" <i id="${data.id_programming}" class="mdi mdi-delete-forever" data-toggle='tooltip' title='Eliminar Programa' style="font-size: 30px;color:red" onclick="deleteFunction()"></i></a>`;
+            <a href="javascript:;" <i id="${index + 1}" class="mdi mdi-delete-forever" data-toggle='tooltip' title='Eliminar Programa' style="font-size: 30px;color:red" onclick="deleteFunction(${data.id_programming})"></i></a>`;
             break;
           default:
             cell.textContent = ''; // Manejar cualquier otro encabezado no especificado

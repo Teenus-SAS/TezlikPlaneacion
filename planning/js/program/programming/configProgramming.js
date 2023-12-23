@@ -284,11 +284,12 @@ $(document).ready(function () {
       
       let sobHours = (hours % 1);
       let minutes = sobHours * 60;
+      let minutes1 = (quantity * 60) / planningMachine.hours_day;
 
       final_date.setMinutes(final_date.getMinutes() + Math.floor(minutes));
       final_date.setHours(final_date.getHours() + Math.floor(hours));
         
-      final_date =
+      final_date = 
         final_date.getFullYear() + "-" +
         ("00" + (final_date.getMonth() + 1)).slice(-2) + "-" +
         ("00" + final_date.getDate()).slice(-2) + " " + ("00" + final_date.getHours()).slice(-2) + ':' + ("00" + final_date.getMinutes()).slice(-2) + ':' + '00';
@@ -298,6 +299,7 @@ $(document).ready(function () {
       dataProgramming.append('quantity', quantity);
       dataProgramming.append('minDate', min_date);
       dataProgramming.append('maxDate', final_date);
+      dataProgramming.append('minutes', minutes1);
 
       final_date = convetFormatDateTime(final_date);
       min_date = convetFormatDateTime(min_date);
