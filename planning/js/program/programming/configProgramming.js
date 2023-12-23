@@ -284,9 +284,9 @@ $(document).ready(function () {
       
       let sobHours = (hours % 1);
       let minutes = sobHours * 60;
-      final_date.setMinutes(final_date.getMinutes() + minutes);
 
-      final_date.setHours(final_date.getHours() + hours);
+      final_date.setMinutes(final_date.getMinutes() + Math.floor(minutes));
+      final_date.setHours(final_date.getHours() + Math.floor(hours));
         
       final_date =
         final_date.getFullYear() + "-" +
