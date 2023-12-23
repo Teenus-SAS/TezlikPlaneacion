@@ -274,15 +274,15 @@ $(document).ready(function () {
       }
       let final_date = new Date(min_date);
     
-      let days = (quantity / ciclesMachine.cicles_hour / planningMachine.hours_day).toFixed(3);
+      let days = (quantity / ciclesMachine.cicles_hour / planningMachine.hours_day);
 
       if (days >= 1) {
         final_date.setDate(final_date.getDate() + Math.floor(days));
       }
-      let sobDays = (days % 1).toFixed(3);
+      let sobDays = (days % 1);
       let hours =  sobDays * planningMachine.hours_day;
       
-      let sobHours = (hours % 1).toFixed(2);
+      let sobHours = (hours % 1);
       let minutes = sobHours * 60;
       final_date.setMinutes(final_date.getMinutes() + minutes);
 
