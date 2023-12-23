@@ -279,10 +279,10 @@ $(document).ready(function () {
       if (days >= 1) {
         final_date.setDate(final_date.getDate() + Math.floor(days));
       }
-      let sobDays = (days % 1);
+      let sobDays = (days % 1).toFixed(3);
       let hours =  sobDays * planningMachine.hours_day;
       
-      let sobHours = (hours % 1);
+      let sobHours = (hours % 1).toFixed(2);
       let minutes = sobHours * 60;
       final_date.setMinutes(final_date.getMinutes() + minutes);
 
