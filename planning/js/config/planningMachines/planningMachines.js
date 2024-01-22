@@ -54,7 +54,7 @@ $(document).ready(function () {
     $('#createPlanMachine').modal('show');
     $('#btnCreatePlanMachine').html('Actualizar');
 
-    id_planning_machine = this.id;
+    let id_planning_machine = this.id;
     id_planning_machine = sessionStorage.setItem(
       'id_planning_machine',
       id_planning_machine

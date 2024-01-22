@@ -106,10 +106,6 @@ $(document).ready(function () {
     let machine = parseFloat($('#idMachine').val());
     let quantity = parseFloat($('#quantity').val());
 
-    // if (quantity > quantityMissing) {
-    //   toastr.error('');
-    // }
-
     if (op == 1 && !isNaN(machine)) {
       machines = [];
 
@@ -337,9 +333,9 @@ $(document).ready(function () {
     $('#selectNameProduct').change(function (e) {
       e.preventDefault();
 
-      let id_process;
+      // let id_process;
       let id_product;
-      let route;
+      // let route;
       let id_order = parseInt($(this).find('option:selected').attr('class'));
 
       for (let i = 0; i < r.length; i++) {
@@ -351,9 +347,7 @@ $(document).ready(function () {
           $select.empty();
           $select.append(`<option value="0" disabled selected>Seleccionar</option>`);
           
-          $.each(process, function (i, value) {
-            // id_process = value.id_process;
-            // route = value.route;
+          $.each(process, function (i, value) { 
             $select.append(
               `<option class="${value.route1}" value ='${value.id_process}'> ${value.process} </option>`
             );
@@ -394,10 +388,6 @@ $(document).ready(function () {
       });
 
       checkData(2, this.id);
-    });
-
-    
-  };
-
-
+    }); 
+  }; 
 });

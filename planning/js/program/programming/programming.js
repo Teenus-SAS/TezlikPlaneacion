@@ -65,8 +65,7 @@ $(document).ready(function () {
     $("#quantityOrder").val(data.quantity_order.toLocaleString());
     $("#quantityMissing").val(data.accumulated_quantity.toLocaleString());
     $("#quantityMP").val(data.quantity_mp.toLocaleString());
-
-    // await loadProducts(data.num_order);
+ 
     let $select = $(`#idMachine`);
     $select.empty();
     $select.append(`<option value="0" disabled>Seleccionar</option>`);
@@ -80,8 +79,7 @@ $(document).ready(function () {
 
     $select1.append(
       `<option value ='${data.id_process}' selected> ${data.process} </option>`
-    );
-    // $(`#idMachine option[value=${data.id_machine}]`).prop('selected', true);
+    ); 
 
     $("#quantity").val(data.quantity_programming);
 
