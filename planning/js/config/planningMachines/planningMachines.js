@@ -107,14 +107,6 @@ $(document).ready(function () {
       return false;
     }
 
-    // if (hourStart.includes('PM') && hourEnd.includes('AM')) {
-    //   if (hourEnd > hourStart) {
-    //     toastr.error('La hora final no puede ser mayor a la hora inicio');
-    //     $('#hourEnd').css('border-color', 'red');
-    //     return false;
-    //   }
-    // }
-
     let dataPlanningMachines = new FormData(formCreatePlanMachine);
 
     if (idProgramMachine != '' || idProgramMachine != null)
