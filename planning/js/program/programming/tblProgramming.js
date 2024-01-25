@@ -70,8 +70,15 @@ $(document).ready(function () {
             break;
           case 'Fecha y Hora':
             const minDate = data.min_date;
-            const maxDate = data.max_date;
-            cell.innerHTML = `Inicio: ${moment(minDate).format("DD/MM/YYYY HH:mm A")}<br>Fin: ${moment(maxDate).format("DD/MM/YYYY HH:mm A")}`;
+            // const maxDate = data.max_date;
+            const min_programming = data.min_programming;
+
+            let final_date = new Date(minDate);
+            let min_date = new Date(minDate);
+            final_date.setMinutes(min_date.getMinutes() + Math.floor(min_programming));
+            cell.innerHTML = `Inicio: ${moment(minDate).format("DD/MM/YYYY HH:mm A")}<br>Fin: ${moment(final_date).format("DD/MM/YYYY HH:mm A")}`;
+
+            // cell.innerHTML = `Inicio: ${moment(minDate).format("DD/MM/YYYY HH:mm A")}<br>Fin: ${moment(maxDate).format("DD/MM/YYYY HH:mm A")}`;
             break;
           case 'Orden Produccion':
             cell.innerHTML = `<button class="btn btn-warning changeStatus" id="${data.id_programming}" name="${data.id_programming}">Crear OP</button>`;
@@ -90,9 +97,7 @@ $(document).ready(function () {
 
     $('#tblProgramming').DataTable();
 
-    dragula([
-      document.getElementById('tblProgrammingBody')
-    ]).on('drop', function (el, container, source, sibling) {
+    dragula([document.getElementById('tblProgrammingBody')]).on('drop', function (el, container, source, sibling) {
       // Get the row index of the dropped element
       var rowIndex = $(el).closest('tr').index();
 

@@ -22,7 +22,7 @@ class DashboardGeneralDao
 
         $stmt = $connection->prepare("SELECT SUM(CASE WHEN classification = 'A' THEN 1 ELSE 0 END) AS A, SUM(CASE WHEN classification = 'B' THEN 1 ELSE 0 END) AS B,
                                              SUM(CASE WHEN classification = 'C' THEN 1 ELSE 0 END) AS C
-                                      FROM products
+                                      FROM products_inventory
                                       WHERE id_company = :id_company");
         $stmt->execute([
             'id_company' => $id_company

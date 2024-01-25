@@ -280,7 +280,7 @@ $(document).ready(function () {
       
       let sobHours = (hours % 1);
       let minutes = sobHours * 60;
-      let minutes1 = (quantity * 60) / planningMachine.hours_day;
+      let minutes1 = Math.floor(hours) + parseInt(minutes);
 
       final_date.setMinutes(final_date.getMinutes() + Math.floor(minutes));
       final_date.setHours(final_date.getHours() + Math.floor(hours));

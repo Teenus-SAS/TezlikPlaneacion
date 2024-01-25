@@ -19,8 +19,9 @@ class ProductsDao
   public function findAllProductsByCompany($id_company)
   {
     $connection = Connection::getInstance()->getConnection();
-    $stmt = $connection->prepare("SELECT p.id_product, p.reference, p.product, p.product AS descript, p.img, p.quantity, p.reserved, p.minimum_stock, p.days, p.classification, 'UND' AS abbreviation
+    $stmt = $connection->prepare("SELECT p.id_product, p.reference, p.product, p.product AS descript, p.img, p.quantity, pi.reserved, pi.minimum_stock, pi.days, pi.classification, 'UND' AS abbreviation
                                   FROM products p
+                                    INNER JOIN products_inventory pi ON pi.id_product = p.id_product
                                   WHERE p.id_company = :id_company");
     $stmt->execute(['id_company' => $id_company]);
 

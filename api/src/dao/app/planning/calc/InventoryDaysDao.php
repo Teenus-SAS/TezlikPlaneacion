@@ -41,7 +41,7 @@ class InventoryDaysDao
         $connection = Connection::getInstance()->getConnection();
 
         try {
-            $stmt = $connection->prepare("UPDATE products SET days = :days WHERE id_product = :id_product");
+            $stmt = $connection->prepare("UPDATE products_inventory SET days = :days WHERE id_product = :id_product");
             $stmt->execute([
                 'id_product' => $id_product,
                 'days' => $inventoryDay

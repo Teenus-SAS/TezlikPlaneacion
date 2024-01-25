@@ -68,12 +68,12 @@ $app->post('/productsInProcessDataValidation', function (Request $request, Respo
             }
 
             // Saber si existe con categoria en proceso
-            $findProductInProcess = $generalProductsDao->findProductByCategoryInProcess($productsInProcess[$i], $id_company);
-            if (!$findProductInProcess) {
-                $i = $i + 2;
-                $dataImportProductsInProcess = array('error' => true, 'message' => "Producto no esta en la categoria en proceso. Fila: {$i}");
-                break;
-            }
+            // $findProductInProcess = $generalProductsDao->findProductByCategoryInProcess($productsInProcess[$i], $id_company);
+            // if (!$findProductInProcess) {
+            //     $i = $i + 2;
+            //     $dataImportProductsInProcess = array('error' => true, 'message' => "Producto no esta en la categoria en proceso. Fila: {$i}");
+            //     break;
+            // }
 
             // Obtener Id Producto Final
             $productsInProcess[$i]['referenceProduct'] = $productsInProcess[$i]['referenceFinalProduct'];

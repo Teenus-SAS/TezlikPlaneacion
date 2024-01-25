@@ -19,10 +19,11 @@ class GeneralProductsDao
     public function findAllProductsUnitSalesByCompany($id_company)
     {
         $connection = Connection::getInstance()->getConnection();
-        $stmt = $connection->prepare("SELECT p.id_product, p.reference, p.product, p.product AS descript, p.img, p.quantity, p.reserved, p.classification, 'UNIDAD' AS unit, IFNULL(u.jan , 0) AS jan, p.minimum_stock, 
+        $stmt = $connection->prepare("SELECT p.id_product, p.reference, p.product, p.product AS descript, p.img, p.quantity, pi.reserved, pi.classification, 'UNIDAD' AS unit, IFNULL(u.jan , 0) AS jan, pi.minimum_stock, 
                                          IFNULL(u.feb, 0) AS feb, IFNULL(u.mar, 0) AS mar, IFNULL(u.apr, 0) AS apr, IFNULL(u.may, 0) AS may, IFNULL(u.jun, 0) AS jun, IFNULL(u.jul, 0) AS jul, IFNULL(u.aug, 0) AS aug, IFNULL(u.sept, 0) AS sept, IFNULL(u.oct, 0) AS oct, IFNULL(u.nov, 0) AS nov, IFNULL(u.dece, 0) AS dece
                                   FROM products p
                                   LEFT JOIN plan_unit_sales u ON u.id_product = p.id_product 
+                                  INNER JOIN products_inventory pi ON pi.id_product = p.id_product 
                                   WHERE p.id_company = :id_company");
         $stmt->execute(['id_company' => $id_company]);
 
@@ -78,20 +79,20 @@ class GeneralProductsDao
         return $findProduct;
     }
 
-    public function findProductByCategoryInProcess($dataProduct, $id_company)
-    {
-        $connection = Connection::getInstance()->getConnection();
+    // public function findProductByCategoryInProcess($dataProduct, $id_company)
+    // {
+    //     $connection = Connection::getInstance()->getConnection();
 
-        $stmt = $connection->prepare("SELECT * FROM products WHERE reference = :reference
-                                  AND product = :product AND category LIKE '%en proceso' AND id_company = :id_company");
-        $stmt->execute([
-            'reference' => trim($dataProduct['referenceProduct']),
-            'product' => ucfirst(strtolower(trim($dataProduct['product']))),
-            'id_company' => $id_company
-        ]);
-        $findProduct = $stmt->fetch($connection::FETCH_ASSOC);
-        return $findProduct;
-    }
+    //     $stmt = $connection->prepare("SELECT * FROM products WHERE reference = :reference
+    //                               AND product = :product AND category LIKE '%en proceso' AND id_company = :id_company");
+    //     $stmt->execute([
+    //         'reference' => trim($dataProduct['referenceProduct']),
+    //         'product' => ucfirst(strtolower(trim($dataProduct['product']))),
+    //         'id_company' => $id_company
+    //     ]);
+    //     $findProduct = $stmt->fetch($connection::FETCH_ASSOC);
+    //     return $findProduct;
+    // }
 
     public function findProductReserved($id_product)
     {
@@ -113,9 +114,13 @@ class GeneralProductsDao
 
         try {
             if ($op == 1)
-                $stmt = $connection->prepare("UPDATE products SET accumulated_quantity = :accumulated_quantity WHERE id_product = :id_product");
+                $stmt = $connection->prepare("UPDATE products_inventory SET accumulated_quantity = :accumulated_quantity WHERE id_product = :id_product");
             else
-                $stmt = $connection->prepare("UPDATE products SET accumulated_quantity = :accumulated_quantity, quantity = :accumulated_quantity WHERE id_product = :id_product");
+                $stmt = $connection->prepare("UPDATE products
+                                              JOIN products_inventory ON products.id_product = products_inventory.id_product
+                                              SET products_inventory.accumulated_quantity = :accumulated_quantity,
+                                                  products.quantity = :accumulated_quantity
+                                              WHERE products.id_product = :id_product");
 
             $stmt->execute([
                 'accumulated_quantity' => $accumulated_quantity,
@@ -134,7 +139,10 @@ class GeneralProductsDao
         $connection = Connection::getInstance()->getConnection();
 
         try {
-            $stmt = $connection->prepare("UPDATE products SET accumulated_quantity = quantity WHERE id_company = :id_company");
+            $stmt = $connection->prepare("UPDATE products
+                                          JOIN products_inventory ON products.id_product = products_inventory.id_product
+                                          SET products_inventory.accumulated_quantity = products.quantity
+                                          WHERE products.id_company = :id_company");
 
             $stmt->execute([
                 'id_company' => $id_company
@@ -152,7 +160,7 @@ class GeneralProductsDao
         $connection = Connection::getInstance()->getConnection();
 
         try {
-            $stmt = $connection->prepare("UPDATE products SET reserved = :reserved WHERE id_product = :id_product");
+            $stmt = $connection->prepare("UPDATE products_inventory SET reserved = :reserved WHERE id_product = :id_product");
 
             $stmt->execute([
                 'reserved' => $reserved,
@@ -171,7 +179,7 @@ class GeneralProductsDao
         $connection = Connection::getInstance()->getConnection();
 
         try {
-            $stmt = $connection->prepare("UPDATE products SET minimum_stock = :minimum_stock WHERE id_product = :id_product");
+            $stmt = $connection->prepare("UPDATE products_inventory SET minimum_stock = :minimum_stock WHERE id_product = :id_product");
 
             $stmt->execute([
                 'minimum_stock' => $stock,
@@ -189,7 +197,7 @@ class GeneralProductsDao
         $connection = Connection::getInstance()->getConnection();
 
         try {
-            $stmt = $connection->prepare("UPDATE products SET classification = 'C' WHERE id_company = :id_company");
+            $stmt = $connection->prepare("UPDATE products_inventory SET classification = 'C' WHERE id_company = :id_company");
 
             $stmt->execute([
                 'id_company' => $id_company

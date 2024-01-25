@@ -10,9 +10,11 @@ use TezlikPlaneacion\dao\InventoryDaysDao;
 use TezlikPlaneacion\dao\InvMoldsDao;
 use TezlikPlaneacion\dao\LastDataDao;
 use TezlikPlaneacion\dao\ProductsDao;
+use TezlikPlaneacion\dao\ProductsInventoryDao;
 use TezlikPlaneacion\dao\ProductsMaterialsDao;
 
 $productsDao = new ProductsDao();
+$productsInventoryDao = new ProductsInventoryDao();
 $generalProductsDao = new GeneralProductsDao();
 $generalOrdersDao = new GeneralOrdersDao();
 $generalMaterialsDao = new GeneralMaterialsDao();
@@ -74,6 +76,7 @@ $app->post('/productsDataValidation', function (Request $request, Response $resp
 
 $app->post('/addProduct', function (Request $request, Response $response, $args) use (
     $productsDao,
+    $productsInventoryDao,
     $generalProductsDao,
     $generalMaterialsDao,
     $lastDataDao,
@@ -101,6 +104,9 @@ $app->post('/addProduct', function (Request $request, Response $response, $args)
             if (sizeof($_FILES) > 0) $FilesDao->imageProduct($lastProductId['id_product'], $id_company);
 
             if ($products == null)
+                $products = $productsInventoryDao->insertProductsInventory($lastProductId['id_product'], $id_company);
+
+            if ($products == null)
                 $products = $generalProductsDao->updateAccumulatedQuantity($lastProductId['id_product'], $dataProduct['quantity'], 1);
 
             if ($products == null)
@@ -120,6 +126,12 @@ $app->post('/addProduct', function (Request $request, Response $response, $args)
 
             if (!$product) {
                 $resolution = $productsDao->insertProductByCompany($products[$i], $id_company);
+
+                $lastProductId = $lastDataDao->lastInsertedProductId($id_company);
+
+                if (isset($resolution['info'])) break;
+
+                $resolution = $productsInventoryDao->insertProductsInventory($lastProductId['id_product'], $id_company);
             } else {
                 $products[$i]['idProduct'] = $product['id_product'];
                 $resolution = $productsDao->updateProductByCompany($products[$i], $id_company);
