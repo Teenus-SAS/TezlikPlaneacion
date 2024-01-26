@@ -16,13 +16,14 @@ $(document).ready(function () {
     e.preventDefault();
     $("#btnCreateProgramming").hide();
 
-    let resp = await loadOrdersProgramming();
+    // let resp = await loadOrdersProgramming();
 
     sessionStorage.removeItem("minDate");
-    if (resp) {
-      toastr.error("Sin pedidos para programar");
-      return false;
-    }
+    sessionStorage.removeItem("id_programming");
+    // if (resp) {
+    //   toastr.error("Sin pedidos para programar");
+    //   return false;
+    // }
 
     $(".date").hide();
     $("#selectNameProduct").empty();
@@ -37,10 +38,12 @@ $(document).ready(function () {
     let idProgramming = sessionStorage.getItem("id_programming");
 
     if (idProgramming == "" || idProgramming == null) {
-      checkdataProgramming("/api/addProgramming", idProgramming);
+      dataProgramming['id_programming'] = allTblData.length;
+      checkdataProgramming(idProgramming);
     } else {
-      checkdataProgramming("/api/updateProgramming", idProgramming);
-    }
+      dataProgramming['id_programming'] = idProgramming;
+      checkdataProgramming(idProgramming);
+    } 
   });
 
   /* Actualizar programa de produccion */
@@ -49,7 +52,7 @@ $(document).ready(function () {
     $(".cardCreateProgramming").show(800);
     $("#btnCreateProgramming").html("Actualizar");
     
-    let data = allProgramming.find(item => item.id_programming == this.id); 
+    let data = allTblData.find(item => item.id_programming == this.id); 
 
     sessionStorage.setItem("id_programming", data.id_programming);
     $("#order").empty();
@@ -64,7 +67,7 @@ $(document).ready(function () {
     );
     $("#quantityOrder").val(data.quantity_order.toLocaleString());
     $("#quantityMissing").val(data.accumulated_quantity.toLocaleString());
-    $("#quantityMP").val(data.quantity_mp.toLocaleString());
+    $("#quantityMP").val(data.accumulated_quantity.toLocaleString());
  
     let $select = $(`#idMachine`);
     $select.empty();
@@ -93,9 +96,17 @@ $(document).ready(function () {
     $("#minDate").val(min_date);
     $("#maxDate").val(max_date);
 
-    dataProgramming = new FormData(formCreateProgramming);
-    dataProgramming.append('num_order', data.num_order);
-
+    // dataProgramming = new FormData(formCreateProgramming);
+    dataProgramming = [];
+    dataProgramming['id_order'] = data.id_order;
+    dataProgramming['num_order'] = data.num_order;
+    dataProgramming['client'] = data.client;
+    dataProgramming['reference'] = data.reference;
+    dataProgramming['product'] = data.product;
+    dataProgramming['min_date'] = data.min_date;
+    dataProgramming['max_date'] = data.max_date;
+    dataProgramming['min_programming'] = data.min_programming;
+    
     $(document).one("click", "#minDate", function (e) {
       e.preventDefault();
 
@@ -113,7 +124,8 @@ $(document).ready(function () {
       let min_date = convetFormatDate(this.value);
 
       sessionStorage.setItem("minDate", min_date);
-      dataProgramming.append("minDate", min_date);
+      dataProgramming['min_date'] = min_date;
+      // dataProgramming.append("minDate", min_date);
       calcMaxDate(min_date, 0, 2);
     });
 
@@ -131,38 +143,47 @@ $(document).ready(function () {
   });
 
   /* Revision data programa de produccion */
-  checkdataProgramming = async (url, idProgramming) => {
-    if (idProgramming) dataProgramming.append("idProgramming", idProgramming); 
+  checkdataProgramming = async (idProgramming) => {
     let id_order = $('#order').val();
     let id_product = $('#selectNameProduct').val();
     let quantityMissing = parseInt($('#quantityMissing').val().replace('.', ''));
     let quantityProgramming = parseInt($('#quantity').val());
+    let quantityOrder = parseInt($('#quantityOrder').val()); 
+    let machine = $('#idMachine :selected').text().trim();
+    let id_process = $('#idProcess').val();
+    let process = $('#idProcess :selected').text().trim();
 
-    let process = allProcess.filter(item => item.id_product == id_product && item.id_order == id_order);
+    dataProgramming['machine'] = machine;
+    dataProgramming['id_process'] = id_process;
+    dataProgramming['process'] = process;
+    dataProgramming['quantity_order'] = quantityOrder;
+    dataProgramming['quantity_programming'] = quantityProgramming;
+    dataProgramming['accumulated_quantity'] = quantityMissing;
+    dataProgramming['status'] = 'Programado';
+
+    process = allProcess.find(item => item.id_product == id_product && item.id_order == id_order);
 
     if (quantityMissing - quantityProgramming > 0)
-      dataProgramming.append('route', `${process[0].route1}, ${process[0].route1 + 1}`);
+      dataProgramming['route'] = `${process.route1}, ${process.route1 + 1}`;
+ 
+    hideCardAndResetForm();
 
-    $.ajax({
-      type: "POST",
-      url: url,
-      data: dataProgramming,
-      contentType: false,
-      cache: false,
-      processData: false,
-      success: function (resp) {
-        message(resp);
-      },
-    });
+    if(idProgramming == null){
+      toastr.success('Programa de producción creado correctamente');
+    } else {
+      allTblData.splice(idProgramming, 1);
+      toastr.success('Programa de producción modificado correctamente');
+    }
+    
+    allTblData.push(dataProgramming);
+
+    loadTblProgramming(allTblData);
+    dataProgramming = [];
   };
 
   /* Eliminar programa de produccion */
 
-  deleteFunction = (id) => {
-    let data = allProgramming.find(item => item.id_programming == id); 
-
-    let dataProgramming = {};
-
+  deleteFunction = (id) => { 
     bootbox.confirm({
       title: "Eliminar",
       message:
@@ -178,21 +199,10 @@ $(document).ready(function () {
         },
       },
       callback: function (result) {
-        if (result) {
-          dataProgramming["idProgramming"] = data.id_programming;
-          dataProgramming["idProduct"] = data.id_product;
-          dataProgramming["order"] = data.id_order;
-          dataProgramming["num_order"] = data.num_order;
-          dataProgramming["quantity"] = data.quantity_programming;
-          dataProgramming["accumulatedQuantity"] = '';
-
-          $.post(
-            `/api/deleteProgramming`,
-            dataProgramming,
-            function (data, textStatus, jqXHR) {
-              message(data);
-            }
-          );
+        if (result) { 
+          allTblData.splice(id, 1);
+          loadTblProgramming(allTblData);
+          toastr.success('Programa de producción eliminado correctamente'); 
         }
       },
     });
