@@ -20,11 +20,11 @@ $(document).ready(function () {
 
     sessionStorage.removeItem("minDate");
     sessionStorage.removeItem("id_programming");
-    
-    if (allOrders.length == 0) {
-      toastr.error("Sin pedidos para programar");
-      return false;
-    }
+
+    // if (allOrders.length == 0) {
+    //   toastr.error("Sin pedidos para programar");
+    //   return false;
+    // }
 
     $(".date").hide();
     $("#selectNameProduct").empty();
