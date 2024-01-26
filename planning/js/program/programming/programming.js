@@ -161,6 +161,21 @@ $(document).ready(function () {
     dataProgramming['accumulated_quantity'] = quantityMissing;
     dataProgramming['status'] = 'Programado';
 
+    // allOrders['accumulated_quantity']
+    for (let i = 0; i < array.length; i++) { 
+      if (allOrders[i].id_order == id_order) {
+        allOrders[i].status = 'Programado';
+
+        let quantity = 0;
+        
+        if (quantityProgramming < allOrders[i].original_quantity) {
+          quantity = allOrders[i].original_quantity - quantityProgramming;
+        }
+
+        allOrders[i].accumulated_quantity = quantity;
+      }
+    }
+
     process = allProcess.find(item => item.id_product == id_product && item.id_order == id_order);
 
     if (quantityMissing - quantityProgramming > 0)
