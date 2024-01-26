@@ -20,10 +20,11 @@ $(document).ready(function () {
 
     sessionStorage.removeItem("minDate");
     sessionStorage.removeItem("id_programming");
-    // if (resp) {
-    //   toastr.error("Sin pedidos para programar");
-    //   return false;
-    // }
+    
+    if (allOrders.length == 0) {
+      toastr.error("Sin pedidos para programar");
+      return false;
+    }
 
     $(".date").hide();
     $("#selectNameProduct").empty();
@@ -162,7 +163,7 @@ $(document).ready(function () {
     dataProgramming['status'] = 'Programado';
 
     // allOrders['accumulated_quantity']
-    for (let i = 0; i < array.length; i++) { 
+    for (let i = 0; i < allOrders.length; i++) { 
       if (allOrders[i].id_order == id_order) {
         allOrders[i].status = 'Programado';
 
@@ -170,9 +171,11 @@ $(document).ready(function () {
         
         if (quantityProgramming < allOrders[i].original_quantity) {
           quantity = allOrders[i].original_quantity - quantityProgramming;
+          allOrders[i].accumulated_quantity = quantity;
+        } else {
+          allOrders.splice(i, 1);
         }
 
-        allOrders[i].accumulated_quantity = quantity;
       }
     }
 

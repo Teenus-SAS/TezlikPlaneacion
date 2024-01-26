@@ -4,7 +4,7 @@ $(document).ready(function () {
   let allMachines = [];
   let allCiclesMachines = [];
   let allPlanningMachines = [];
-  let allOrders = [];
+  allOrders = [];
   allProgramming = [];
   allTblData = [];
 
