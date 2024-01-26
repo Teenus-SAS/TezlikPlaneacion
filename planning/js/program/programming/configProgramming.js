@@ -349,6 +349,11 @@ $(document).ready(function () {
     $('#selectNameProduct').change(function (e) {
       e.preventDefault();
 
+      let orders = allOrders.filter(item => item.num_order == num_order &&
+        (item.status == 'Programar' || item.status == 'Programado') &&
+        (item.accumulated_quantity == null || item.accumulated_quantity == 0)
+      ); 
+      
       let product = orders.find(item => item.id_product == this.value);
 
       dataProgramming = [];
