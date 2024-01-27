@@ -7,6 +7,7 @@ $(document).ready(function () {
   let allPlanningMachines = [];
   allOrders = [];
   allProgramming = [];
+  allProductsMaterials = [];
   allTblData = [];
   let selectProduct = false;
   let selectProcess = false;
@@ -363,7 +364,7 @@ $(document).ready(function () {
   const loadProducts = (num_order) => {
     let orders = allOrders.filter(item => item.num_order == num_order &&
       (item.status == 'Programar' || item.status == 'Programado') &&
-      (item.accumulated_quantity == null || item.accumulated_quantity == 0)
+      (item.accumulated_quantity_order == null || item.accumulated_quantity_order != 0)
     );
 
     $('#quantityOrder').val('');
@@ -388,7 +389,7 @@ $(document).ready(function () {
       let num_order = $('#order :selected').text().trim();
       let productOrders = allOrders.filter(item => item.num_order == num_order &&
         (item.status == 'Programar' || item.status == 'Programado') &&
-        (item.accumulated_quantity == null || item.accumulated_quantity == 0)
+        (item.accumulated_quantity_order == null || item.accumulated_quantity_order != 0)
       );
 
       let product = productOrders.find(item => item.id_product == this.value);
@@ -416,7 +417,7 @@ $(document).ready(function () {
           });
           
           $('#quantityOrder').val(parseFloat(productOrders[i].original_quantity).toLocaleString());
-          $('#quantityMissing').val(parseFloat(productOrders[i].accumulated_quantity) == 0 ? parseFloat(productOrders[i].original_quantity).toLocaleString() : parseFloat(orders[i].accumulated_quantity).toLocaleString());
+          $('#quantityMissing').val(parseFloat(productOrders[i].accumulated_quantity) == 0 ? parseFloat(productOrders[i].original_quantity).toLocaleString() : parseFloat(productOrders[i].accumulated_quantity).toLocaleString());
 
           let productsMaterials = allProductsMaterials.filter(item => item.id_product == this.value);
           productsMaterials = productsMaterials.sort((a, b) => a.quantity - b.quantity);

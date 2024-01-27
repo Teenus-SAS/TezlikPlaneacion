@@ -68,7 +68,10 @@ $(document).ready(function () {
     );
     $("#quantityOrder").val(data.quantity_order.toLocaleString());
     $("#quantityMissing").val(data.accumulated_quantity.toLocaleString());
-    $("#quantityMP").val(data.accumulated_quantity.toLocaleString());
+    // $("#quantityMP").val(data.accumulated_quantity.toLocaleString());
+    let productsMaterials = allProductsMaterials.filter(item => item.id_product == data.id_product);
+    productsMaterials = productsMaterials.sort((a, b) => a.quantity - b.quantity);
+    $('#quantityMP').val(productsMaterials[0].quantity.toLocaleString('es-CO', { maximumfractiondigits: 2 }));
  
     let $select = $(`#idMachine`);
     $select.empty();
@@ -146,7 +149,7 @@ $(document).ready(function () {
   /* Revision data programa de produccion */
   checkdataProgramming = async (idProgramming) => {
     let id_order = $('#order').val();
-    let id_product = $('#selectNameProduct').val();
+    let id_product = parseInt($('#selectNameProduct').val());
     let quantityMissing = parseInt($('#quantityMissing').val().replace('.', ''));
     let quantityProgramming = parseInt($('#quantity').val());
     let quantityOrder = parseInt($('#quantityOrder').val()); 
@@ -162,14 +165,14 @@ $(document).ready(function () {
     dataProgramming['status'] = 'Programado';
     
     for (let i = 0; i < allOrders.length; i++) { 
-      if (allOrders[i].id_order == id_order) {
+      if (allOrders[i].id_product == id_product) {
         allOrders[i].status = 'Programado';
 
         let quantity = 0;
         
         if (quantityProgramming < allOrders[i].original_quantity) {
           quantity = allOrders[i].original_quantity - quantityProgramming;
-          allOrders[i].accumulated_quantity = quantity;
+          allOrders[i].accumulated_quantity_order = quantity;
         } else {
           allOrders.splice(i, 1);
         }
@@ -177,14 +180,14 @@ $(document).ready(function () {
     }
 
     for (let i = 0; i < allOrdersProgramming.length; i++) { 
-      if (allOrdersProgramming[i].id_order == id_order) {
+      if (allOrdersProgramming[i].id_product == id_product) {
         allOrdersProgramming[i].status = 'Programado';
 
         quantityMissing = 0;
         
         if (quantityProgramming < allOrdersProgramming[i].original_quantity) {
           quantityMissing = allOrdersProgramming[i].original_quantity - quantityProgramming;
-          allOrdersProgramming[i].accumulated_quantity = quantityMissing;
+          allOrdersProgramming[i].accumulated_quantity_order = quantityMissing;
         } else {
           allOrdersProgramming.splice(i, 1);
         }
