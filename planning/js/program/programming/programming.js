@@ -28,6 +28,8 @@ $(document).ready(function () {
 
     $(".date").hide();
     $("#selectNameProduct").empty();
+    $("#idMachine").empty();
+    $("#idProcess").empty();
     $(".cardCreateProgramming").toggle(800);
     $("#btnCreateProgramming").html("Crear");
     $("#formCreateProgramming").trigger("reset");
@@ -44,7 +46,7 @@ $(document).ready(function () {
     } else {
       dataProgramming['id_programming'] = idProgramming;
       checkdataProgramming(idProgramming);
-    } 
+    }
   });
 
   /* Actualizar programa de produccion */
@@ -53,7 +55,7 @@ $(document).ready(function () {
     $(".cardCreateProgramming").show(800);
     $("#btnCreateProgramming").html("Actualizar");
     
-    let data = allTblData.find(item => item.id_programming == this.id); 
+    let data = allTblData.find(item => item.id_programming == this.id);
 
     sessionStorage.setItem("id_programming", data.id_programming);
     $("#order").empty();
@@ -86,7 +88,7 @@ $(document).ready(function () {
 
     $select1.append(
       `<option value ='${data.id_process}' selected> ${data.process} </option>`
-    ); 
+    );
 
     $("#quantity").val(data.quantity_programming);
 
@@ -152,7 +154,7 @@ $(document).ready(function () {
     let id_product = parseInt($('#selectNameProduct').val());
     let quantityMissing = parseInt($('#quantityMissing').val().replace('.', ''));
     let quantityProgramming = parseInt($('#quantity').val());
-    let quantityOrder = parseInt($('#quantityOrder').val()); 
+    let quantityOrder = parseInt($('#quantityOrder').val());
     let machine = $('#idMachine :selected').text().trim();
     let id_process = $('#idProcess').val();
     let process = $('#idProcess :selected').text().trim();
@@ -164,31 +166,60 @@ $(document).ready(function () {
     dataProgramming['quantity_programming'] = quantityProgramming;
     dataProgramming['status'] = 'Programado';
     
-    for (let i = 0; i < allOrders.length; i++) { 
-      if (allOrders[i].id_product == id_product) {
+    for (let i = 0; i < allOrders.length; i++) {
+      if (allOrders[i].id_order == id_order) {
         allOrders[i].status = 'Programado';
 
         let quantity = 0;
         
         if (quantityProgramming < allOrders[i].original_quantity) {
           quantity = allOrders[i].original_quantity - quantityProgramming;
-          allOrders[i].accumulated_quantity_order = quantity;
-        } else {
-          allOrders.splice(i, 1);
+          if (!allOrders[i]['quantity_programming']) {
+            allOrders[i].quantity_programming = quantity;
+            allOrders[i].accumulated_quantity_order = quantity;
+            allOrders[i].accumulated_quantity = quantity;
+          }
+          else {
+            allOrders[i].accumulated_quantity_order = allOrders[i].quantity_programming - quantityProgramming;
+            allOrders[i].accumulated_quantity = allOrders[i].quantity_programming - quantityProgramming;
+          }
         }
       }
     }
 
-    for (let i = 0; i < allOrdersProgramming.length; i++) { 
-      if (allOrdersProgramming[i].id_product == id_product) {
+    for (let i = 0; i < allOrdersProgramming.length; i++) {
+      if (allOrdersProgramming[i].id_order == id_order) {
         allOrdersProgramming[i].status = 'Programado';
 
         quantityMissing = 0;
         
         if (quantityProgramming < allOrdersProgramming[i].original_quantity) {
           quantityMissing = allOrdersProgramming[i].original_quantity - quantityProgramming;
-          allOrdersProgramming[i].accumulated_quantity_order = quantityMissing;
-        } else {
+          if (!allOrdersProgramming[i]['quantity_programming'])
+            allOrdersProgramming[i].quantity_programming = quantityMissing;
+          else {
+            allOrdersProgramming[i].accumulated_quantity_order = allOrdersProgramming[i].quantity_programming - quantityProgramming;
+            quantityMissing = allOrdersProgramming[i].accumulated_quantity_order;
+          }
+        }
+      }
+    }
+
+    for (let i = 0; i < allOrders.length; i++) {
+      if (allOrders[i].id_product == id_product) {
+        allOrders[i].status = 'Programado';
+        
+        if (quantityProgramming > allOrders[i].original_quantity) {
+          allOrders.splice(i, 1);
+        }
+      }
+    }
+
+    for (let i = 0; i < allOrdersProgramming.length; i++) {
+      if (allOrdersProgramming[i].id_product == id_product) {
+        allOrdersProgramming[i].status = 'Programado';
+        
+        if (quantityProgramming > allOrdersProgramming[i].original_quantity) {
           allOrdersProgramming.splice(i, 1);
         }
       }
@@ -203,7 +234,7 @@ $(document).ready(function () {
  
     hideCardAndResetForm();
 
-    if(idProgramming == null){
+    if (idProgramming == null) {
       toastr.success('Programa de producción creado correctamente');
     } else {
       allTblData.splice(idProgramming, 1);
@@ -218,7 +249,7 @@ $(document).ready(function () {
 
   /* Eliminar programa de produccion */
 
-  deleteFunction = (id) => { 
+  deleteFunction = (id) => {
     bootbox.confirm({
       title: "Eliminar",
       message:
@@ -234,10 +265,10 @@ $(document).ready(function () {
         },
       },
       callback: function (result) {
-        if (result) { 
+        if (result) {
           allTblData.splice(id, 1);
           loadTblProgramming(allTblData);
-          toastr.success('Programa de producción eliminado correctamente'); 
+          toastr.success('Programa de producción eliminado correctamente');
         }
       },
     });
@@ -245,7 +276,7 @@ $(document).ready(function () {
 
   /* Cambiar estado */
   $(document).on("click", ".changeStatus", function () {
-    let data = allProgramming.find(item => item.id_programming == this.id); 
+    let data = allProgramming.find(item => item.id_programming == this.id);
 
     let dataProgramming = {};
     dataProgramming["idProgramming"] = data.id_programming;

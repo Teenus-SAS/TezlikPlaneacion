@@ -144,9 +144,9 @@ $(document).ready(function () {
     if (op == 1 && !isNaN(machine)) {
       machines = [];
 
-      for (let i = 0; i < allProgramming.length; i++) {
-        if (allProgramming[i].id_machine == machine)
-          machines.push(allProgramming[i]);
+      for (let i = 0; i < allTblData.length; i++) {
+        if (allTblData[i].id_machine == machine)
+          machines.push(allTblData[i]);
       }
 
       let planningMachine = false;
@@ -329,12 +329,6 @@ $(document).ready(function () {
         ("00" + (final_date.getMonth() + 1)).slice(-2) + "-" +
         ("00" + final_date.getDate()).slice(-2) + " " + ("00" + final_date.getHours()).slice(-2) + ':' + ("00" + final_date.getMinutes()).slice(-2) + ':' + '00';
 
-      // dataProgramming.append('idProduct', product);
-      // dataProgramming.append('idMachine', machine);
-      // dataProgramming.append('quantity', quantity);
-      // dataProgramming.append('minDate', min_date);
-      // dataProgramming.append('maxDate', final_date);
-      // dataProgramming.append('minutes', minutes1);
       dataProgramming['id_product'] = product;
       dataProgramming['id_machine'] = machine;
       dataProgramming['quantity_programming'] = quantity;
