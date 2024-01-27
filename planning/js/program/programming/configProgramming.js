@@ -1,5 +1,6 @@
 $(document).ready(function () {
   data = {};
+  allOrdersProgramming = [];
   allProcess = [];
   let allMachines = [];
   let allCiclesMachines = [];
@@ -7,24 +8,28 @@ $(document).ready(function () {
   allOrders = [];
   allProgramming = [];
   allTblData = [];
+  let selectProduct = false;
+  let selectProcess = false;
 
   loadAllDataProgramming = async (op, machine) => {
     try {
       const [
+        ordersProgramming,
         process,
         machines,
         ciclesMachines,
         planningMachines,
-        orders, 
+        orders,
         programming,
         programmingMachines,
         productsMaterials
       ] = await Promise.all([
+        op == 1 ? searchData('/api/ordersProgramming') : null,
         op == 1 ? searchData('/api/processOrder') : null,
         op == 1 ? searchData('/api/machines') : null,
         op == 1 ? searchData('/api/planCiclesMachine') : null,
         op == 1 ? searchData('/api/planningMachines') : null,
-        op == 1 ? searchData('/api/orders') : null, 
+        op == 1 ? searchData('/api/orders') : null,
         op == 1 ? searchData('/api/programming') : null,
         op == 2 ? searchData(`/api/programmingByMachine/${machine}/0`) : null,
         op == 1 ? searchData('/api/allProductsMaterials') : null
@@ -32,6 +37,7 @@ $(document).ready(function () {
       let data = [];
 
       if (op == 1) {
+        allOrdersProgramming = ordersProgramming;
         allProcess = process;
         allMachines = machines;
         allCiclesMachines = ciclesMachines;
@@ -46,10 +52,35 @@ $(document).ready(function () {
         data = programmingMachines;
       }
 
+      loadOrdersProgramming(allOrdersProgramming);
       loadTblProgramming(data);
     } catch (error) {
       console.error('Error loading data:', error);
     }
+  };
+
+  loadOrdersProgramming = async (data) => {
+    if (data.length === 0) {
+      return 1;
+    }
+
+    data = data.reduce((acc, current) => {
+      if (!acc.some(item => item.num_order === current.num_order)) {
+        acc.push(current);
+      }
+      return acc;
+    }, []);
+
+    let $select = $(`#order`);
+    $select.empty();
+
+    $select.append(`<option disabled selected>Seleccionar</option>`);
+
+    $.each(data, function (i, value) {
+      $select.append(
+        `<option value ='${value.id_order}'> ${value.num_order} </option>`
+      );
+    });
   };
 
   loadAllDataProgramming(1);
@@ -65,6 +96,7 @@ $(document).ready(function () {
     $('#selectNameProduct').empty();
     $('#idProcess').empty();
     $('#idMachine').empty();
+    selectProduct = false;
     
     loadProducts(num_order);
   });
@@ -328,11 +360,11 @@ $(document).ready(function () {
   };
 
   /* Cargar Productos y Maquinas */
-  loadProducts = async (num_order) => { 
+  const loadProducts = (num_order) => {
     let orders = allOrders.filter(item => item.num_order == num_order &&
       (item.status == 'Programar' || item.status == 'Programado') &&
-      (item.accumulated_quantity == null || item.accumulated_quantity == 0)
-    ); 
+      (item.accumulated_quantity == null || item.accumulated_quantity != 0)
+    );
 
     $('#quantityOrder').val('');
     
@@ -346,26 +378,30 @@ $(document).ready(function () {
       );
     });
 
-    $('#selectNameProduct').change(function (e) {
-      e.preventDefault();
+    selectProduct = true;
+  };
 
-      let orders = allOrders.filter(item => item.num_order == num_order &&
+  $('#selectNameProduct').change(function (e) {
+    e.preventDefault();
+
+    if (selectProduct == true) {
+      let num_order = $('#order :selected').text().trim();
+      let productOrders = allOrders.filter(item => item.num_order == num_order &&
         (item.status == 'Programar' || item.status == 'Programado') &&
-        (item.accumulated_quantity == null || item.accumulated_quantity == 0)
-      ); 
-      
-      let product = orders.find(item => item.id_product == this.value);
+        (item.accumulated_quantity == null || item.accumulated_quantity != 0)
+      );
+
+      let product = productOrders.find(item => item.id_product == this.value);
 
       dataProgramming = [];
       dataProgramming['reference'] = product.reference;
       dataProgramming['product'] = product.product;
 
       let id_product;
-      // let route;
       let id_order = parseInt($(this).find('option:selected').attr('class'));
 
-      for (let i = 0; i < orders.length; i++) {
-        if (this.value == orders[i].id_product) {
+      for (let i = 0; i < productOrders.length; i++) {
+        if (this.value == productOrders[i].id_product) {
           let process = allProcess.filter(item => item.id_product == this.value && item.id_order == id_order);
           id_product = this.value;
           
@@ -379,44 +415,45 @@ $(document).ready(function () {
             );
           });
           
-          $('#quantityOrder').val(parseFloat(orders[i].original_quantity).toLocaleString());
-          $('#quantityMissing').val(parseFloat(orders[i].accumulated_quantity) == 0 ? parseFloat(orders[i].original_quantity).toLocaleString() : parseFloat(orders[i].accumulated_quantity).toLocaleString());
+          $('#quantityOrder').val(parseFloat(productOrders[i].original_quantity).toLocaleString());
+          $('#quantityMissing').val(parseFloat(productOrders[i].accumulated_quantity) == 0 ? parseFloat(productOrders[i].original_quantity).toLocaleString() : parseFloat(orders[i].accumulated_quantity).toLocaleString());
 
           let productsMaterials = allProductsMaterials.filter(item => item.id_product == this.value);
           productsMaterials = productsMaterials.sort((a, b) => a.quantity - b.quantity);
           $('#quantityMP').val(productsMaterials[0].quantity.toLocaleString('es-CO', { maximumfractiondigits: 2 }));
 
-          // dataProgramming = new FormData(formCreateProgramming);
-
-          dataProgramming['id_order'] = orders[i].id_order;
-          dataProgramming['num_order'] = num_order; 
-          // dataProgramming.append('order', r[i].id_order);
-          // dataProgramming.append('num_order', num_order);
+          dataProgramming['id_order'] = productOrders[i].id_order;
+          dataProgramming['num_order'] = num_order;
           break;
         }
       }
-      
-      $('#idProcess').change(function (e) {
-        e.preventDefault();
-        // Obtener el classname de la opción seleccionada
-        var route = parseInt($(this).find('option:selected').attr('class'));
-        // dataProgramming.append('route', route + 1);
-        dataProgramming['route'] = route + 1;
 
-        let ciclesMachine = allCiclesMachines.filter(item => item.id_product == id_product && item.id_process == this.value && item.route == route);
+      selectProcess = true;
+      checkData(2, this.id); 
+    }
+  });
+
+  $('#idProcess').change(function (e) {
+    e.preventDefault();
+
+    if (selectProcess == true) {
+      // Obtener el classname de la opción seleccionada
+      var route = parseInt($(this).find('option:selected').attr('class'));
+      // dataProgramming.append('route', route + 1);
+      dataProgramming['route'] = route + 1;
+      let id_product = parseInt($('#selectNameProduct').val());
+
+      let ciclesMachine = allCiclesMachines.filter(item => item.id_product == id_product && item.id_process == this.value && item.route == route);
             
-        let $select = $(`#idMachine`);
-        $select.empty();
-        $select.append(`<option value="0" disabled selected>Seleccionar</option>`);
+      let $select = $(`#idMachine`);
+      $select.empty();
+      $select.append(`<option value="0" disabled selected>Seleccionar</option>`);
        
-        $.each(ciclesMachine, function (i, value) {
-          $select.append(
-            `<option value = ${value.id_machine}> ${value.machine} </option>`
-          );
-        });
+      $.each(ciclesMachine, function (i, value) {
+        $select.append(
+          `<option value = ${value.id_machine}> ${value.machine} </option>`
+        );
       });
-
-      checkData(2, this.id);
-    });
-  };
+    }
+  });
 });

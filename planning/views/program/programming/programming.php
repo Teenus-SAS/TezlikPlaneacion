@@ -185,7 +185,7 @@ if (sizeof($_SESSION) == 0)
     <script src="https://cdn.datatables.net/buttons/2.4.2/js/buttons.print.min.js"></script>
     <script src="/global/js/global/lastText.js"></script>
     <script src="/planning/js/program/programming/tblProgramming.js"></script>
-    <script src="/planning/js/orders/configOrders.js"></script>
+    <!-- <script src="/planning/js/orders/configOrders.js"></script> -->
     <!-- <script src="/planning/js/basic/process/configProcess.js"></script> -->
     <script src="/planning/js/basic/machines/configMachines.js"></script>
     <script src="/planning/js/program/programming/programming.js"></script>

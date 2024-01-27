@@ -16,15 +16,15 @@ $(document).ready(function () {
     e.preventDefault();
     $("#btnCreateProgramming").hide();
 
-    // let resp = await loadOrdersProgramming();
+    let resp = await loadOrdersProgramming(allOrdersProgramming);
 
     sessionStorage.removeItem("minDate");
     sessionStorage.removeItem("id_programming");
 
-    // if (allOrders.length == 0) {
-    //   toastr.error("Sin pedidos para programar");
-    //   return false;
-    // }
+    if (resp == 1) {
+      toastr.error("Sin pedidos para programar");
+      return false;
+    }
 
     $(".date").hide();
     $("#selectNameProduct").empty();
@@ -159,10 +159,8 @@ $(document).ready(function () {
     dataProgramming['process'] = process;
     dataProgramming['quantity_order'] = quantityOrder;
     dataProgramming['quantity_programming'] = quantityProgramming;
-    dataProgramming['accumulated_quantity'] = quantityMissing;
     dataProgramming['status'] = 'Programado';
-
-    // allOrders['accumulated_quantity']
+    
     for (let i = 0; i < allOrders.length; i++) { 
       if (allOrders[i].id_order == id_order) {
         allOrders[i].status = 'Programado';
@@ -175,10 +173,26 @@ $(document).ready(function () {
         } else {
           allOrders.splice(i, 1);
         }
-
       }
     }
 
+    for (let i = 0; i < allOrdersProgramming.length; i++) { 
+      if (allOrdersProgramming[i].id_order == id_order) {
+        allOrdersProgramming[i].status = 'Programado';
+
+        quantityMissing = 0;
+        
+        if (quantityProgramming < allOrdersProgramming[i].original_quantity) {
+          quantityMissing = allOrdersProgramming[i].original_quantity - quantityProgramming;
+          allOrdersProgramming[i].accumulated_quantity = quantityMissing;
+        } else {
+          allOrdersProgramming.splice(i, 1);
+        }
+      }
+    }
+
+    dataProgramming['accumulated_quantity'] = quantityMissing;
+    
     process = allProcess.find(item => item.id_product == id_product && item.id_order == id_order);
 
     if (quantityMissing - quantityProgramming > 0)
