@@ -363,7 +363,7 @@ $(document).ready(function () {
   const loadProducts = (num_order) => {
     let orders = allOrders.filter(item => item.num_order == num_order &&
       (item.status == 'Programar' || item.status == 'Programado') &&
-      (item.accumulated_quantity == null || item.accumulated_quantity != 0)
+      (item.accumulated_quantity == null || item.accumulated_quantity == 0)
     );
 
     $('#quantityOrder').val('');
@@ -388,7 +388,7 @@ $(document).ready(function () {
       let num_order = $('#order :selected').text().trim();
       let productOrders = allOrders.filter(item => item.num_order == num_order &&
         (item.status == 'Programar' || item.status == 'Programado') &&
-        (item.accumulated_quantity == null || item.accumulated_quantity != 0)
+        (item.accumulated_quantity == null || item.accumulated_quantity == 0)
       );
 
       let product = productOrders.find(item => item.id_product == this.value);
