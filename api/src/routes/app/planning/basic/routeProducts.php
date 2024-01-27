@@ -121,6 +121,7 @@ $app->post('/addProduct', function (Request $request, Response $response, $args)
         $products = $dataProduct['importProducts'];
 
         for ($i = 0; $i < sizeof($products); $i++) {
+            if (isset($resolution['info'])) break;
 
             $product = $generalProductsDao->findProduct($products[$i], $id_company);
 
@@ -135,8 +136,15 @@ $app->post('/addProduct', function (Request $request, Response $response, $args)
             } else {
                 $products[$i]['idProduct'] = $product['id_product'];
                 $resolution = $productsDao->updateProductByCompany($products[$i], $id_company);
+                // if ($products == null) {
+                //     $products = $generalProductsDao->updateAccumulatedQuantity($dataProduct['idProduct'], $$products[$i]['quantity'], 1);
+                // }
             }
+            $resolution = $generalProductsDao->updateAccumulatedQuantity($lastProductId['id_product'], $products[$i]['quantity'], 1);
         }
+
+        $products = $generalProductsDao->updateAccumulatedQuantityGeneral($id_company);
+
         if ($resolution == null)
             $resp = array('success' => true, 'message' => 'Productos importados correctamente');
         else
