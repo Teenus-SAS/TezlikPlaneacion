@@ -1,11 +1,11 @@
 $(document).ready(function () {
-  data = {};
+  data = {}; 
   allOrdersProgramming = [];
   allProcess = [];
   let allMachines = [];
   let allCiclesMachines = [];
   let allPlanningMachines = [];
-  allOrders = [];
+  allOrders = []; 
   allProgramming = [];
   allProductsMaterials = [];
   allTblData = [];
@@ -37,13 +37,15 @@ $(document).ready(function () {
       ]);
       let data = [];
 
-      if (op == 1) {
-        allOrdersProgramming = ordersProgramming;
+      if (op == 1) { 
+        // allOrdersProgramming = ordersProgramming;
+        allOrdersProgramming = ordersProgramming.map(item => ({ ...item, flag_tbl: 1 })); 
         allProcess = process;
         allMachines = machines;
         allCiclesMachines = ciclesMachines;
         allPlanningMachines = planningMachines;
-        allOrders = orders;
+        // allOrders = orders;  
+        allOrders = orders.map(item => ({ ...item, flag_tbl: 1 }));
         allProducts = products;
         allProgramming = programming;
         copyAllProgramming = allProgramming;
@@ -63,6 +65,8 @@ $(document).ready(function () {
   };
 
   loadOrdersProgramming = async (data) => {
+    data = data.filter(item => item.flag_tbl == 1);
+
     if (data.length === 0) {
       return 1;
     }
@@ -357,7 +361,8 @@ $(document).ready(function () {
   const loadProducts = (num_order) => {
     let orders = allOrders.filter(item => item.num_order == num_order &&
       (item.status == 'Programar' || item.status == 'Programado') &&
-      (item.accumulated_quantity_order == null || item.accumulated_quantity_order != 0)
+      (item.accumulated_quantity_order == null || item.accumulated_quantity_order != 0) &&
+      item.flag_tbl == 1
     );
 
     $('#quantityOrder').val('');

@@ -205,20 +205,19 @@ $(document).ready(function () {
         }
       }
     }
-
-    for (let i = 0; i < allOrders.length; i++) {
-      if (allOrders[i].id_product == id_product) {        
-        if (quantityMissing == 0) {
-          allOrders.splice(i, 1);
-        }
+    
+    // Recorre allOrders en sentido inverso para evitar problemas con la actualización de índices
+    for (let i = allOrders.length - 1; i >= 0; i--) {
+      if (allOrders[i].id_product == id_product && quantityMissing === 0) {
+        allOrders[i].flag_tbl = 0;
       }
     }
 
-    for (let i = 0; i < allOrdersProgramming.length; i++) {
-      if (allOrdersProgramming[i].id_product == id_product) {         
-        if (quantityMissing == 0) {
-          allOrdersProgramming.splice(i, 1);
-        }
+    // Recorre allOrdersProgramming en sentido inverso
+    for (let i = allOrdersProgramming.length - 1; i >= 0; i--) { 
+      if (allOrdersProgramming[i].id_product == id_product && quantityMissing === 0) {
+        allOrdersProgramming[i].flag_tbl = 0;
+        // allOrdersProgramming.splice(i, 1);
       }
     }
 
@@ -263,6 +262,42 @@ $(document).ready(function () {
       },
       callback: function (result) {
         if (result) {
+          // let arr = allOrders.filter(item => item.id_product == allTblData[id].id_product);
+          // arr.sort((a, b) => b.flag_tbl - a.flag_tbl);
+
+          // let flag = arr[0].flag_tbl;
+
+          for (let i = 0; i < allOrders.length; i++) {
+            // if (flag == 0) {
+            if (allOrders[i].id_product == allTblData[id].id_product) {
+              allOrders[i].flag_tbl = 1;
+            }
+            // }
+            // else {
+            //   if (allOrders[i].id_order == allTblData[id].id_order) {
+            //     allOrders[i].flag_tbl = 1;
+            //     break;
+            //   }
+            // }
+          }
+        
+          // arr = allOrdersProgramming.filter(item => item.id_product == allTblData[id].id_product);
+          // arr.sort((a, b) => b.flag_tbl - a.flag_tbl);
+          // flag = arr[0].flag_tbl;
+
+          for (let i = 0; i < allOrdersProgramming.length; i++) {
+            // if (flag == 0) {
+            if (allOrdersProgramming[i].id_product == allTblData[id].id_product) {
+              allOrdersProgramming[i].flag_tbl = 1;
+            }
+            // } else {
+            //   if (allOrdersProgramming[i].id_order == allOrders[i].id_order) {
+            //     allOrdersProgramming[i].flag_tbl = 1;
+            //     break;
+            //   }
+            // }
+          }
+          
           allTblData.splice(id, 1);
           loadTblProgramming(allTblData);
           toastr.success('Programa de producción eliminado correctamente');

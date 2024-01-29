@@ -89,7 +89,7 @@ $(document).ready(function () {
           case 'Acciones':
             cell.innerHTML = `
             <a href="javascript:;" <i id="${arr.id_programming}" class="bx bx-edit-alt updateProgramming" data-toggle='tooltip' title='Actualizar Programa' style="font-size: 30px;"></i></a>
-            <a href="javascript:;" <i id="${index}" class="mdi mdi-delete-forever" data-toggle='tooltip' title='Eliminar Programa' style="font-size: 30px;color:red" onclick="deleteFunction(${arr.id_programming})"></i></a>`;
+            <a href="javascript:;" <i id="${index}" class="mdi mdi-delete-forever" data-toggle='tooltip' title='Eliminar Programa' style="font-size: 30px;color:red" onclick="deleteFunction(${index})"></i></a>`;
             break;
           default:
             cell.textContent = ''; // Manejar cualquier otro encabezado no especificado
