@@ -9,6 +9,7 @@ $(document).ready(function () {
 
   /* Ocultar panel crear programa de producción */
   $(".cardCreateProgramming").hide();
+  $('.cardBottons').hide();
 
   /* Abrir panel crear programa de producción */
 

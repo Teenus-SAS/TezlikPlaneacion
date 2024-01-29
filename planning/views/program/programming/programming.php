@@ -48,14 +48,14 @@ if (sizeof($_SESSION) == 0)
                                     </ol>
                                 </div>
                             </div>
-                            <div class="col-sm-7 col-xl-4 form-inline justify-content-sm-end">
+                            <div class="col-sm-7 col-xl-4 form-inline justify-content-sm-end cardBottons">
                                 <div id="machines">
                                     <label class="font-weight-bold text-dark">Maquina</label>
                                     <select class="form-control idMachine" id="searchMachine">
                                     </select>
                                 </div>
                             </div>
-                            <div class="col-sm-7 col-xl-1 form-inline justify-content-sm-end mt-3">
+                            <div class="col-sm-7 col-xl-1 form-inline justify-content-sm-end mt-3 cardBottons">
                                 <button class="btn btn-warning" id="btnNewProgramming" name="btnNewProgramming">Programar</button>
                             </div>
                         </div>

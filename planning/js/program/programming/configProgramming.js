@@ -53,6 +53,8 @@ $(document).ready(function () {
         data = programmingMachines;
       }
 
+      $('.cardBottons').show(800)
+
       loadOrdersProgramming(allOrdersProgramming);
       loadTblProgramming(data);
     } catch (error) {
@@ -203,8 +205,7 @@ $(document).ready(function () {
         return false;
       };
 
-      if (machines.length > 0) {
-        // dataProgramming.append('minDate', machines[machines.length - 1].max_date);
+      if (machines.length > 0) { 
         dataProgramming['min_date'] = machines[machines.length - 1].max_date;
 
         let hour = new Date(machines[machines.length - 1].max_date).getHours();
@@ -233,8 +234,7 @@ $(document).ready(function () {
           document.getElementById('minDate').type = 'date';
         } else {
           document.getElementById('minDate').readOnly = true;
-
-          // dataProgramming.append('minDate', date);
+ 
           dataProgramming['min_date'] = date;
           calcMaxDate(date, 0, 2);
         }
@@ -258,8 +258,7 @@ $(document).ready(function () {
 
     let min_date = convetFormatDate(date);
 
-    sessionStorage.setItem('minDate', min_date);
-    // dataProgramming.append('minDate', min_date);
+    sessionStorage.setItem('minDate', min_date); 
     dataProgramming['min_date'] = min_date;
     calcMaxDate(min_date, 0, 2);
   });
@@ -439,8 +438,7 @@ $(document).ready(function () {
 
     if (selectProcess == true) {
       // Obtener el classname de la opción seleccionada
-      var route = parseInt($(this).find('option:selected').attr('class'));
-      // dataProgramming.append('route', route + 1);
+      var route = parseInt($(this).find('option:selected').attr('class')); 
       dataProgramming['route'] = route + 1;
       let id_product = parseInt($('#selectNameProduct').val());
 
