@@ -206,20 +206,16 @@ $(document).ready(function () {
     }
 
     for (let i = 0; i < allOrders.length; i++) {
-      if (allOrders[i].id_product == id_product) {
-        allOrders[i].status = 'Programado';
-        
-        if (quantityProgramming > allOrders[i].original_quantity) {
+      if (allOrders[i].id_product == id_product) {        
+        if (quantityMissing == 0) {
           allOrders.splice(i, 1);
         }
       }
     }
 
     for (let i = 0; i < allOrdersProgramming.length; i++) {
-      if (allOrdersProgramming[i].id_product == id_product) {
-        allOrdersProgramming[i].status = 'Programado';
-        
-        if (quantityProgramming > allOrdersProgramming[i].original_quantity) {
+      if (allOrdersProgramming[i].id_product == id_product) {         
+        if (quantityMissing == 0) {
           allOrdersProgramming.splice(i, 1);
         }
       }

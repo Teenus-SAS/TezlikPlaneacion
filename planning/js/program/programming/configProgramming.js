@@ -411,7 +411,13 @@ $(document).ready(function () {
           });
           
           $('#quantityOrder').val(parseFloat(productOrders[i].original_quantity).toLocaleString());
-          $('#quantityMissing').val(parseFloat(productOrders[i].accumulated_quantity) == 0 ? parseFloat(productOrders[i].original_quantity).toLocaleString() : parseFloat(productOrders[i].accumulated_quantity).toLocaleString());
+
+          if (productOrders[i].accumulated_quantity_order == 0 || productOrders[i].accumulated_quantity_order == null)
+            accumulated_quantity = parseFloat(productOrders[i].original_quantity).toLocaleString(); 
+          else
+            accumulated_quantity = parseFloat(productOrders[i].accumulated_quantity_order).toLocaleString(); 
+
+          $('#quantityMissing').val(accumulated_quantity);
 
           let productsMaterials = allProductsMaterials.filter(item => item.id_product == this.value);
           productsMaterials = productsMaterials.sort((a, b) => a.quantity - b.quantity);
