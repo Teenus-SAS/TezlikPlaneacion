@@ -184,7 +184,11 @@ $(document).ready(function () {
             allOrders[i].accumulated_quantity_order = allOrders[i].quantity_programming - quantityProgramming;
             allOrders[i].accumulated_quantity = allOrders[i].quantity_programming - quantityProgramming;
           }
-        }
+        } else
+        {
+          allOrders[i].accumulated_quantity_order = quantity;
+          allOrders[i].accumulated_quantity = quantity;
+          }
       }
     }
 
@@ -202,6 +206,8 @@ $(document).ready(function () {
             allOrdersProgramming[i].accumulated_quantity_order = allOrdersProgramming[i].quantity_programming - quantityProgramming;
             quantityMissing = allOrdersProgramming[i].accumulated_quantity_order;
           }
+        } else {
+          allOrdersProgramming[i].accumulated_quantity_order = quantityMissing;
         }
       }
     }
@@ -262,40 +268,35 @@ $(document).ready(function () {
       },
       callback: function (result) {
         if (result) {
-          // let arr = allOrders.filter(item => item.id_product == allTblData[id].id_product);
-          // arr.sort((a, b) => b.flag_tbl - a.flag_tbl);
-
-          // let flag = arr[0].flag_tbl;
-
           for (let i = 0; i < allOrders.length; i++) {
-            // if (flag == 0) {
             if (allOrders[i].id_product == allTblData[id].id_product) {
               allOrders[i].flag_tbl = 1;
+
+              let quantity = allTblData[id].accumulated_quantity;
+
+              if (allTblData[id].quantity_programming > allTblData[id].quantity_order) {
+                quantity = allTblData[id].quantity_order;
+              } else {
+                quantity = allTblData[id].quantity_programming;                
+              }
+
+              allOrders[i].accumulated_quantity_order += quantity;              
             }
-            // }
-            // else {
-            //   if (allOrders[i].id_order == allTblData[id].id_order) {
-            //     allOrders[i].flag_tbl = 1;
-            //     break;
-            //   }
-            // }
           }
-        
-          // arr = allOrdersProgramming.filter(item => item.id_product == allTblData[id].id_product);
-          // arr.sort((a, b) => b.flag_tbl - a.flag_tbl);
-          // flag = arr[0].flag_tbl;
 
           for (let i = 0; i < allOrdersProgramming.length; i++) {
-            // if (flag == 0) {
             if (allOrdersProgramming[i].id_product == allTblData[id].id_product) {
               allOrdersProgramming[i].flag_tbl = 1;
+
+              let quantity = allTblData[id].accumulated_quantity;
+
+              if (allTblData[id].quantity_programming > allTblData[id].accumulated_quantity) {
+                quantity = allTblData[id].quantity_order;
+              } else
+                quantity = allTblData[id].quantity_programming;
+
+              allOrdersProgramming[i].accumulated_quantity_order += quantity; 
             }
-            // } else {
-            //   if (allOrdersProgramming[i].id_order == allOrders[i].id_order) {
-            //     allOrdersProgramming[i].flag_tbl = 1;
-            //     break;
-            //   }
-            // }
           }
           
           allTblData.splice(id, 1);
