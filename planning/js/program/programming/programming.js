@@ -272,30 +272,34 @@ $(document).ready(function () {
             if (allOrders[i].id_product == allTblData[id].id_product) {
               allOrders[i].flag_tbl = 1;
 
-              let quantity = allTblData[id].accumulated_quantity;
+              if (allOrders[i].id_order == allTblData[id].id_order) {
 
-              if (allTblData[id].quantity_programming > allTblData[id].quantity_order) {
-                quantity = allTblData[id].quantity_order;
-              } else {
-                quantity = allTblData[id].quantity_programming;                
-              }
+                let quantity = allTblData[id].accumulated_quantity;
 
-              allOrders[i].accumulated_quantity_order += quantity;              
+                if (allTblData[id].quantity_programming > allTblData[id].quantity_order) {
+                  quantity = allTblData[id].quantity_order;
+                } else {
+                  quantity = allTblData[id].quantity_programming;
+                } 
+                allOrders[i].accumulated_quantity_order += quantity;
+              }           
             }
           }
 
           for (let i = 0; i < allOrdersProgramming.length; i++) {
             if (allOrdersProgramming[i].id_product == allTblData[id].id_product) {
               allOrdersProgramming[i].flag_tbl = 1;
+              if (allOrdersProgramming[i].id_order == allTblData[id].id_order) {
 
-              let quantity = allTblData[id].accumulated_quantity;
+                let quantity = allTblData[id].accumulated_quantity;
 
-              if (allTblData[id].quantity_programming > allTblData[id].accumulated_quantity) {
-                quantity = allTblData[id].quantity_order;
-              } else
-                quantity = allTblData[id].quantity_programming;
+                if (allTblData[id].quantity_programming > allTblData[id].accumulated_quantity) {
+                  quantity = allTblData[id].quantity_order;
+                } else
+                  quantity = allTblData[id].quantity_programming;
 
-              allOrdersProgramming[i].accumulated_quantity_order += quantity; 
+                allOrdersProgramming[i].accumulated_quantity_order += quantity;
+              }
             }
           }
           
