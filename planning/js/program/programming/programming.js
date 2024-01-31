@@ -183,12 +183,12 @@ $(document).ready(function () {
           else {
             allOrders[i].accumulated_quantity_order = allOrders[i].quantity_programming - quantityProgramming;
             allOrders[i].accumulated_quantity = allOrders[i].quantity_programming - quantityProgramming;
+            allOrders[i].quantity_programming = allOrders[i].quantity_programming - quantityProgramming;
           }
-        } else
-        {
+        } else {
           allOrders[i].accumulated_quantity_order = quantity;
           allOrders[i].accumulated_quantity = quantity;
-          }
+        }
       }
     }
 
@@ -202,8 +202,9 @@ $(document).ready(function () {
           quantityMissing = allOrdersProgramming[i].original_quantity - quantityProgramming;
           if (!allOrdersProgramming[i]['quantity_programming'])
             allOrdersProgramming[i].quantity_programming = quantityMissing;
-          else {
+          else { 
             allOrdersProgramming[i].accumulated_quantity_order = allOrdersProgramming[i].quantity_programming - quantityProgramming;
+            allOrdersProgramming[i].quantity_programming = allOrdersProgramming[i].quantity_programming - quantityProgramming;
             quantityMissing = allOrdersProgramming[i].accumulated_quantity_order;
           }
         } else {
@@ -220,7 +221,7 @@ $(document).ready(function () {
     }
 
     // Recorre allOrdersProgramming en sentido inverso
-    for (let i = allOrdersProgramming.length - 1; i >= 0; i--) { 
+    for (let i = allOrdersProgramming.length - 1; i >= 0; i--) {
       if (allOrdersProgramming[i].id_product == id_product && quantityMissing === 0) {
         allOrdersProgramming[i].flag_tbl = 0;
         // allOrdersProgramming.splice(i, 1);
@@ -268,6 +269,9 @@ $(document).ready(function () {
       },
       callback: function (result) {
         if (result) {
+
+          // let id_order = allTblData[id].id_order;
+
           for (let i = 0; i < allOrders.length; i++) {
             if (allOrders[i].id_product == allTblData[id].id_product) {
               allOrders[i].flag_tbl = 1;
@@ -278,11 +282,20 @@ $(document).ready(function () {
 
                 if (allTblData[id].quantity_programming > allTblData[id].quantity_order) {
                   quantity = allTblData[id].quantity_order;
+                  // } else if (quantity == 0) { 
                 } else {
                   quantity = allTblData[id].quantity_programming;
-                } 
+                }
+
                 allOrders[i].accumulated_quantity_order += quantity;
-              }           
+                allOrders[i].accumulated_quantity += quantity;
+
+                if (allOrders[i].hasOwnProperty('quantity_programming') && (quantity == 0 || quantity == allTblData[id].quantity_order ||
+                  allOrders[i].accumulated_quantity == allTblData[id].quantity_order)) {
+                  delete allOrders[i]['quantity_programming'];
+                } else
+                  allOrders[i].quantity_programming += quantity;
+              }
             }
           }
 
@@ -293,17 +306,37 @@ $(document).ready(function () {
 
                 let quantity = allTblData[id].accumulated_quantity;
 
-                if (allTblData[id].quantity_programming > allTblData[id].accumulated_quantity) {
+                if (allTblData[id].quantity_programming > allTblData[id].quantity_order) {
                   quantity = allTblData[id].quantity_order;
+                  // } else if(quantity == 0)
                 } else
                   quantity = allTblData[id].quantity_programming;
 
                 allOrdersProgramming[i].accumulated_quantity_order += quantity;
+
+                if (allOrdersProgramming[i].hasOwnProperty('quantity_programming') && (quantity == 0 || quantity == allTblData[id].quantity_order ||
+                  allOrdersProgramming[i].accumulated_quantity == allTblData[id].quantity_order)) {
+                  delete allOrdersProgramming[i]['quantity_programming'];
+                } else
+                  allOrdersProgramming[i].quantity_programming += quantity;
               }
             }
           }
-          
           allTblData.splice(id, 1);
+
+          for (let i = 0; i < allTblData.length; i++) {
+            let quantity = 0;
+        
+            if (allTblData[i].quantity_programming < allTblData[i].quantity_order) {
+              // if(id_order == allTblData[i].id_order)
+              quantity = allTblData[i].quantity_order - allTblData[i].quantity_programming; 
+                
+              allTblData[i].accumulated_quantity = quantity;
+            } else
+              allTblData[i].accumulated_quantity = quantity;
+            
+          }
+          
           loadTblProgramming(allTblData);
           toastr.success('Programa de producción eliminado correctamente');
         }
