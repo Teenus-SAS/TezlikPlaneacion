@@ -1,4 +1,6 @@
 $(document).ready(function () {
+  $('#btnExportStore').hide();
+  
   $(".selectNavigation").click(function (e) {
     e.preventDefault();
 
@@ -7,8 +9,14 @@ $(document).ready(function () {
       $("#tblStore").empty();
     }
 
-    if (this.id == "receive") loadTblStoreMaterial(requisitions);
-    else if (this.id == "deliver") loadTblStoreOrder(store);
+    if (this.id == "receive") {
+      loadTblStoreMaterial(requisitions);
+      $('#btnExportStore').hide();
+    }
+    else if (this.id == "deliver") {
+      $('#btnExportStore').show();
+      loadTblStoreOrder(store);
+    }
   });
 
   loadAllData = async (op) => {

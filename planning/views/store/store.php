@@ -50,6 +50,9 @@ if (sizeof($_SESSION) == 0)
                                 </div>
                             </div>
                             <div class="col-sm-7 col-xl-6 form-inline justify-content-sm-end">
+                                <div class="col-xs-2 mr-2">
+                                    <button class="btn btn-success" id="btnExportStore" data-toggle="tooltip" title="Exportar" style="height: 39px"><i class="fas fa-file-excel fa-lg"></i></button>
+                                </div>
                                 <!-- <div class="col-xs-2 py-2 mr-2">
                                     <select id="typeStore" class="form-control">
                                         <option disabled selected>Seleccionar</option>
@@ -172,6 +175,7 @@ if (sizeof($_SESSION) == 0)
 
     <script src="/planning/js/store/tblStore.js"></script>
     <script src="/planning/js/store/store.js"></script>
+    <script src="/planning/js/store/exportStore.js"></script>
 </body>
 
 </html>

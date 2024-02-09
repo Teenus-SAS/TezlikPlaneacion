@@ -397,6 +397,9 @@ $(document).ready(function () {
       dataProgramming['product'] = product.product;
 
       let id_product;
+
+
+      
       let id_order = parseInt($(this).find('option:selected').attr('class'));
 
       for (let i = 0; i < productOrders.length; i++) {
