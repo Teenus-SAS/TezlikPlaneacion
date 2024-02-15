@@ -211,14 +211,17 @@ $app->post('/addOrder', function (Request $request, Response $response, $args) u
                 break;
             }
         }
+
+        for ($i = 0; $i < sizeof($allOrders); $i++) {
+            if ($allOrders[$i]['id_order'] == $arr['id_order'])
+                $allOrders[$i]['status_mp'] = $status;
+        }
     }
 
     $orders = $filterDataDao->filterDuplicateArray($allOrders, 'id_order');
 
     for ($i = 0; $i < sizeof($orders); $i++) {
-        $status = true;
-
-        if ($status == true) {
+        if ($orders[$i]['status_mp'] == true) {
             if ($orders[$i]['original_quantity'] <= $orders[$i]['accumulated_quantity']) {
                 $generalOrdersDao->changeStatus($orders[$i]['id_order'], 'Despacho');
                 $accumulated_quantity = $orders[$i]['accumulated_quantity'] - $orders[$i]['original_quantity'];
@@ -374,28 +377,30 @@ $app->post('/updateOrder', function (Request $request, Response $response, $args
         $status = true;
 
         $allOrders = $generalOrdersDao->findAllOrdersWithMaterialsByCompany($id_company);
-        $status = true;
 
         foreach ($allOrders as $arr) {
             if ($arr['original_quantity'] > $arr['accumulated_quantity']) {
                 if ($arr['quantity_material'] == NULL || !$arr['quantity_material']) {
                     $generalOrdersDao->changeStatus($arr['id_order'], 'Sin Ficha Tecnica');
                     $status = false;
-                    break;
+                    // break;
                 } else if ($arr['quantity_material'] <= 0) {
                     $generalOrdersDao->changeStatus($arr['id_order'], 'Sin Materia Prima');
                     $status = false;
-                    break;
+                    // break;
                 }
+            }
+
+            for ($i = 0; $i < sizeof($allOrders); $i++) {
+                if ($allOrders[$i]['id_order'] == $arr['id_order'])
+                    $allOrders[$i]['status_mp'] = $status;
             }
         }
 
         $orders = $filterDataDao->filterDuplicateArray($allOrders, 'id_order');
 
         for ($i = 0; $i < sizeof($orders); $i++) {
-            $status = true;
-
-            if ($status == true) {
+            if ($orders[$i]['status_mp'] == true) {
                 if ($orders[$i]['original_quantity'] <= $orders[$i]['accumulated_quantity']) {
                     $generalOrdersDao->changeStatus($orders[$i]['id_order'], 'Despacho');
                     $accumulated_quantity = $orders[$i]['accumulated_quantity'] - $orders[$i]['original_quantity'];
