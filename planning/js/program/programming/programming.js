@@ -324,18 +324,18 @@ $(document).ready(function () {
           }
           allTblData.splice(id, 1);
 
-          for (let i = 0; i < allTblData.length; i++) {
-            let quantity = 0;
+          // for (let i = 0; i < allTblData.length; i++) {
+          //   let quantity = 0;
         
-            if (allTblData[i].quantity_programming < allTblData[i].quantity_order) {
-              // if(id_order == allTblData[i].id_order)
-              quantity = allTblData[i].quantity_order - allTblData[i].quantity_programming; 
+          //   if (allTblData[i].quantity_programming < allTblData[i].quantity_order) {
+          //     // if(id_order == allTblData[i].id_order)
+          //     quantity = allTblData[i].quantity_order - allTblData[i].quantity_programming; 
                 
-              allTblData[i].accumulated_quantity = quantity;
-            } else
-              allTblData[i].accumulated_quantity = quantity;
+          //     allTblData[i].accumulated_quantity = quantity;
+          //   } else
+          //     allTblData[i].accumulated_quantity = quantity;
             
-          }
+          // }
           
           loadTblProgramming(allTblData);
           toastr.success('Programa de producción eliminado correctamente');
