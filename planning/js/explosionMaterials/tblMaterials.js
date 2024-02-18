@@ -35,27 +35,55 @@ $(document).ready(function () {
       },
       {
         title: "Inventario",
-        data: "quantity_material",
+        data: null,
         className: "uniqueClassName dt-head-center",
-        render: $.fn.dataTable.render.number(".", ",", 2, ""),
+        render: function (data) {
+          let quantity = data.quantity_material
+          
+          if (data.abbreviation === 'UND') quantity = quantity.toLocaleString('es-CO', { maximumFractionDigits: 0 });
+          else quantity = quantity.toLocaleString('es-CO', { minimumFractionDigits: 2 });
+                    
+          return quantity;
+        },
       },
       {
         title: "Stock Min",
-        data: "minimum_stock",
+        data: null,
         className: "uniqueClassName dt-head-center",
-        render: $.fn.dataTable.render.number(".", ",", 2, ""),
+        render: function (data) {
+          let minimum_stock = data.minimum_stock
+          
+          if (data.abbreviation === 'UND') minimum_stock = minimum_stock.toLocaleString('es-CO', { maximumFractionDigits: 0 });
+          else minimum_stock = minimum_stock.toLocaleString('es-CO', { minimumFractionDigits: 2 });
+                    
+          return minimum_stock;
+        },
       },
       {
         title: "En Transito",
-        data: "transit",
+        data: null,
         className: "uniqueClassName dt-head-center",
-        render: $.fn.dataTable.render.number(".", ",", 2, ""),
+        render: function (data) {
+          let transit = data.transit
+          
+          if (data.abbreviation === 'UND') transit = transit.toLocaleString('es-CO', { maximumFractionDigits: 0 });
+          else transit = transit.toLocaleString('es-CO', { minimumFractionDigits: 2 });
+          
+          return transit;
+        },
       },
       {
         title: "Necesidad",
-        data: "need",
+        data: null,
         className: "uniqueClassName dt-head-center",
-        render: $.fn.dataTable.render.number(".", ",", 2, ""),
+        render: function (data) {
+          let need = data.need
+          
+          if (data.abbreviation === 'UND') need = need.toLocaleString('es-CO', { maximumFractionDigits: 0 });
+          else need = need.toLocaleString('es-CO', { minimumFractionDigits: 2 });
+          
+          return need;
+        },
       },
       {
         title: "Disponible",

@@ -48,7 +48,11 @@ class GeneralOrdersDao
                                         LEFT JOIN materials m ON m.id_material = pm.id_material
                                         INNER JOIN products_inventory pi ON pi.id_product = o.id_product
                                         INNER JOIN plan_clients c ON c.id_client = o.id_client  
-                                      WHERE o.status_order = 0 AND o.id_company = :id_company AND o.status != 'Entregado' AND o.status != 'En Produccion' AND o.status != 'Fabricado'");
+                                      WHERE 
+                                        o.status_order = 0 
+                                        AND o.id_company = :id_company 
+                                        AND o.status NOT IN ('Entregado', 'En Produccion', 'Fabricado') 
+                                        AND o.max_date != '0000-00-00'");
         $stmt->execute(['id_company' => $id_company]);
 
         $this->logger->info(__FUNCTION__, array('query' => $stmt->queryString, 'errors' => $stmt->errorInfo()));

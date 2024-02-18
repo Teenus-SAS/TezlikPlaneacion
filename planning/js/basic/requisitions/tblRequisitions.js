@@ -135,9 +135,16 @@ $(document).ready(function () {
         },
         {
           title: "Cantidad",
-          data: "quantity",
+          data: null,
           className: "uniqueClassName dt-head-center",
-          render: $.fn.dataTable.render.number(".", ",", 2, ""),
+          render: function (data) {
+            let quantity = data.quantity
+            
+            if (data.abbreviation === 'UND') quantity = quantity.toLocaleString('es-CO', { maximumFractionDigits: 0 });
+            else quantity = quantity.toLocaleString('es-CO', { minimumFractionDigits: 2 });
+                    
+            return quantity;
+          },
         },
         {
           title: "Orden de Compra",
