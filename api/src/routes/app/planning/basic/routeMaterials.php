@@ -185,10 +185,13 @@ $app->post('/updateMaterials', function (Request $request, Response $response, $
                 }
             }
 
-            for ($i = 0; $i < sizeof($allOrders); $i++) {
-                if ($allOrders[$i]['id_order'] == $arr['id_order'])
-                    $allOrders[$i]['status_mp'] = $status;
+            foreach ($allOrders as &$order) {
+                if ((!isset($arr['status_mp']) || $arr['status_mp'] === false) && $order['id_order'] == $arr['id_order']) {
+                    // if ($order['id_order'] == $arr['id_order']) {
+                    $order['status_mp'] = $status;
+                }
             }
+            unset($order);
 
             if ($status == true && $arr['programming'] != 0) {
                 $generalOrdersDao->changeStatus($arr['id_order'], 'Programado');

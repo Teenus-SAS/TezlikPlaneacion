@@ -38,8 +38,8 @@ class ProgrammingRoutesDao
         $stmt = $connection->prepare("SELECT * FROM programming_routes
                                       WHERE id_order = :id_order AND id_product = :id_product");
         $stmt->execute([
-            'id_order' => $dataProgramming['order'],
-            'id_product' => $dataProgramming['idProduct']
+            'id_order' => $dataProgramming['id_order'],
+            'id_product' => $dataProgramming['id_product']
         ]);
         $programming = $stmt->fetch($connection::FETCH_ASSOC);
         return $programming;

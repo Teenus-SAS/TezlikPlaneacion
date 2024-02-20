@@ -16,6 +16,18 @@ class GeneralProgrammingDao
         $this->logger->pushHandler(new RotatingFileHandler(Constants::LOGS_PATH . 'querys.log', 20, Logger::DEBUG));
     }
 
+    public function findProgramming($id_programming)
+    {
+        $connection = Connection::getInstance()->getConnection();
+
+        $stmt = $connection->prepare("SELECT * FROM programming WHERE id_programming = :id_programming");
+        $stmt->execute(['id_programming' => $id_programming]);
+
+        $this->logger->info(__FUNCTION__, array('query' => $stmt->queryString, 'errors' => $stmt->errorInfo()));
+
+        $programming = $stmt->fetch($connection::FETCH_ASSOC);
+        return $programming;
+    }
     public function findAllProgrammingByCompany($id_company)
     {
         $connection = Connection::getInstance()->getConnection();

@@ -40,7 +40,7 @@ if (sizeof($_SESSION) == 0)
                 <div class="page-title-box">
                     <div class="container-fluid">
                         <div class="row align-items-center">
-                            <div class="col-sm-5 col-xl-7">
+                            <div class="col-sm-5 col-xl-6">
                                 <div class="page-title">
                                     <h3 class="mb-1 font-weight-bold text-dark">Programa de Producción</h3>
                                     <ol class="breadcrumb mb-3 mb-md-0">
@@ -57,6 +57,9 @@ if (sizeof($_SESSION) == 0)
                             </div>
                             <div class="col-sm-7 col-xl-1 form-inline justify-content-sm-end mt-3 cardBottons">
                                 <button class="btn btn-warning" id="btnNewProgramming" name="btnNewProgramming">Programar</button>
+                            </div>
+                            <div class="col-sm-7 col-xl-1 form-inline justify-content-sm-end mt-3 cardSaveBottons">
+                                <button class="btn btn-primary" id="btnSavePrograming" name="btnSavePrograming">Guardar</button>
                             </div>
                         </div>
                     </div>
@@ -158,7 +161,7 @@ if (sizeof($_SESSION) == 0)
                                     <div class="card-body">
                                         <div class="table-responsive">
                                             <table class="fixed-table-loading table table-hover" id="tblProgramming">
-
+                                                <tbody id="tblProgrammingBody"></tbody>
                                             </table>
                                         </div>
                                     </div>

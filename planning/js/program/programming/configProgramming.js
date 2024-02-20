@@ -392,7 +392,7 @@ $(document).ready(function () {
 
       let product = productOrders.find(item => item.id_product == this.value);
 
-      dataProgramming = [];
+      dataProgramming = {};
       dataProgramming['reference'] = product.reference;
       dataProgramming['product'] = product.product;
 

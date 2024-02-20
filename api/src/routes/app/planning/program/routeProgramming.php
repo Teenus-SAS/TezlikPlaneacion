@@ -187,7 +187,7 @@ $app->get('/ordersProgramming', function (Request $request, Response $response, 
     return $response->withHeader('Content-Type', 'application/json');
 });
 
-$app->post('/addProgramming', function (Request $request, Response $response, $args) use (
+$app->post('/saveProgramming', function (Request $request, Response $response, $args) use (
     $programmingDao,
     $programmingRoutesDao,
     $generalProgrammingDao,
@@ -201,41 +201,49 @@ $app->post('/addProgramming', function (Request $request, Response $response, $a
     $dataProgramming = $request->getParsedBody();
     $id_company = $_SESSION['id_company'];
 
-    $result = $programmingDao->insertProgrammingByCompany($dataProgramming, $id_company);
+    $programmings = $dataProgramming['data'];
 
-    if ($result == null) {
-        $arr = $programmingRoutesDao->findProgrammingRoutes($dataProgramming);
+    for ($i = 0; $i < sizeof($programmings); $i++) {
+        $find = $generalProgrammingDao->findProgramming($programmings[$i]['id_programming']);
 
-        if ($arr) {
-            $dataProgramming['idProgrammingRoutes'] = $arr['id_programming_routes'];
-            $result = $programmingRoutesDao->updateProgrammingRoutes($dataProgramming);
-        }
-    }
-
-    if ($result == null) {
-        $arr = $lastDataDao->findLastInsertedProgramming($id_company);
-        $result = $generalProgrammingDao->addMinutesProgramming($arr['id_programming'], $dataProgramming['minutes']);
-    }
-
-    if ($result == null) {
-        $order = $generalProgrammingDao->checkAccumulatedQuantityOrder($dataProgramming['order']);
-
-        if ($order['quantity_programming'] < $order['original_quantity'])
-            $dataProgramming['accumulatedQuantity'] = $order['original_quantity'] - $order['quantity_programming'];
+        if (!$find)
+            $result = $programmingDao->insertProgrammingByCompany($programmings[$i], $id_company);
         else
-            $dataProgramming['accumulatedQuantity'] = 0;
+            $result = $programmingDao->updateProgramming($programmings[$i]);
 
-        $result = $generalOrdersDao->updateAccumulatedOrder($dataProgramming);
-    }
+        if ($result == null) {
+            $arr = $programmingRoutesDao->findProgrammingRoutes($programmings[$i]);
 
-    if ($result == null)
-        $result = $generalOrdersDao->changeStatus($dataProgramming['order'], 'Programado');
+            if ($arr) {
+                $programmings[$i]['idProgrammingRoutes'] = $arr['id_programming_routes'];
+                $result = $programmingRoutesDao->updateProgrammingRoutes($programmings[$i]);
+            }
+        }
 
-    if ($result == null) {
-        $productsMaterials = $productsMaterialsDao->findAllProductsmaterials($dataProgramming['idProduct'], $id_company);
+        // if ($result == null) {
+        //     $arr = $lastDataDao->findLastInsertedProgramming($id_company);
+        //     $result = $generalProgrammingDao->addMinutesProgramming($arr['id_programming'], $dataProgramming['minutes']);
+        // }
+
+        // if ($result == null) {
+        //     $order = $generalProgrammingDao->checkAccumulatedQuantityOrder($dataProgramming['order']);
+
+        //     if ($order['quantity_programming'] < $order['original_quantity'])
+        //         $dataProgramming['accumulatedQuantity'] = $order['original_quantity'] - $order['quantity_programming'];
+        //     else
+        //         $dataProgramming['accumulatedQuantity'] = 0;
+
+        //     $result = $generalOrdersDao->updateAccumulatedOrder($dataProgramming);
+        // }
+
+        if ($result != null) break;
+        $result = $generalOrdersDao->changeStatus($programmings[$i]['id_order'], 'Programado');
+
+        if ($result != null) break;
+        $productsMaterials = $productsMaterialsDao->findAllProductsmaterials($programmings[$i]['id_product'], $id_company);
 
         if (sizeof($productsMaterials) == 0) {
-            $generalOrdersDao->changeStatus($dataProgramming['order'], 'Sin Ficha Tecnica');
+            $generalOrdersDao->changeStatus($programmings[$i]['id_order'], 'Sin Ficha Tecnica');
         } else {
             foreach ($productsMaterials as $k) {
                 if (isset($result['info'])) break;
@@ -247,13 +255,12 @@ $app->post('/addProgramming', function (Request $request, Response $response, $a
                 $result = $generalMaterialsDao->updateReservedMaterial($k['id_material'], $j['reserved']);
             }
         }
-    }
 
-    if ($result == null) {
+        if ($result != null) break;
         $orders = $ordersDao->findAllOrdersByCompany($id_company);
 
         foreach ($orders as $arr) {
-            if ($arr['status'] != 'En Produccion' && $arr['status'] != 'Entregado' && $arr['status'] != 'Programado' && $arr['id_product'] == $dataProgramming['idProduct']) {
+            if ($arr['status'] != 'En Produccion' && $arr['status'] != 'Entregado' && $arr['status'] != 'Programado' && $arr['id_product'] == $programmings[$i]['id_product']) {
                 // Ficha tecnica
                 $productsMaterials = $productsMaterialsDao->findAllProductsmaterials($arr['id_product'], $id_company);
 
@@ -282,83 +289,83 @@ $app->post('/addProgramming', function (Request $request, Response $response, $a
     return $response->withStatus(200)->withHeader('Content-Type', 'application/json');
 });
 
-$app->post('/updateProgramming', function (Request $request, Response $response, $args) use (
-    $programmingDao,
-    $generalProgrammingDao,
-    $generalOrdersDao,
-    $productsMaterialsDao,
-    $generalMaterialsDao,
-    $ordersDao
-) {
-    session_start();
-    $id_company = $_SESSION['id_company'];
-    $dataProgramming = $request->getParsedBody();
+// $app->post('/updateProgramming', function (Request $request, Response $response, $args) use (
+//     $programmingDao,
+//     $generalProgrammingDao,
+//     $generalOrdersDao,
+//     $productsMaterialsDao,
+//     $generalMaterialsDao,
+//     $ordersDao
+// ) {
+//     session_start();
+//     $id_company = $_SESSION['id_company'];
+//     $dataProgramming = $request->getParsedBody();
 
-    $result = $programmingDao->updateProgramming($dataProgramming);
+//     $result = $programmingDao->updateProgramming($dataProgramming);
 
-    if ($result == null) {
-        $order = $generalProgrammingDao->checkAccumulatedQuantityOrder($dataProgramming['order']);
+//     if ($result == null) {
+//         $order = $generalProgrammingDao->checkAccumulatedQuantityOrder($dataProgramming['order']);
 
-        if ($order['quantity_programming'] < $order['original_quantity'])
-            $dataProgramming['accumulatedQuantity'] = $order['original_quantity'] - $order['quantity_programming'];
-        else
-            $dataProgramming['accumulatedQuantity'] = 0;
+//         if ($order['quantity_programming'] < $order['original_quantity'])
+//             $dataProgramming['accumulatedQuantity'] = $order['original_quantity'] - $order['quantity_programming'];
+//         else
+//             $dataProgramming['accumulatedQuantity'] = 0;
 
-        $result = $generalOrdersDao->updateAccumulatedOrder($dataProgramming);
-    }
-    if ($result == null)
-        $result = $generalProgrammingDao->addMinutesProgramming($dataProgramming['idProgramming'], $dataProgramming['minutes']);
+//         $result = $generalOrdersDao->updateAccumulatedOrder($dataProgramming);
+//     }
+//     if ($result == null)
+//         $result = $generalProgrammingDao->addMinutesProgramming($dataProgramming['idProgramming'], $dataProgramming['minutes']);
 
-    if ($result == null) {
-        $productsMaterials = $productsMaterialsDao->findAllProductsmaterials($dataProgramming['idProduct'], $id_company);
+//     if ($result == null) {
+//         $productsMaterials = $productsMaterialsDao->findAllProductsmaterials($dataProgramming['idProduct'], $id_company);
 
-        if (sizeof($productsMaterials) == 0) {
-            $generalOrdersDao->changeStatus($dataProgramming['order'], 'Sin Ficha Tecnica');
-        } else {
-            foreach ($productsMaterials as $k) {
-                if (isset($result['info'])) break;
+//         if (sizeof($productsMaterials) == 0) {
+//             $generalOrdersDao->changeStatus($dataProgramming['order'], 'Sin Ficha Tecnica');
+//         } else {
+//             foreach ($productsMaterials as $k) {
+//                 if (isset($result['info'])) break;
 
-                $j = $generalMaterialsDao->findReservedMaterial($k['id_material']);
+//                 $j = $generalMaterialsDao->findReservedMaterial($k['id_material']);
 
-                !isset($j['reserved']) ? $j['reserved'] = 0 : $j;
+//                 !isset($j['reserved']) ? $j['reserved'] = 0 : $j;
 
-                $result = $generalMaterialsDao->updateReservedMaterial($k['id_material'], $j['reserved']);
-            }
-        }
-    }
+//                 $result = $generalMaterialsDao->updateReservedMaterial($k['id_material'], $j['reserved']);
+//             }
+//         }
+//     }
 
-    if ($result == null) {
-        $orders = $ordersDao->findAllOrdersByCompany($id_company);
+//     if ($result == null) {
+//         $orders = $ordersDao->findAllOrdersByCompany($id_company);
 
-        foreach ($orders as $arr) {
-            if ($arr['status'] != 'En Produccion' && $arr['status'] != 'Entregado' && $arr['status'] != 'Programado' && $arr['id_product'] == $dataProgramming['idProduct']) {
-                // Ficha tecnica
-                $productsMaterials = $productsMaterialsDao->findAllProductsmaterials($arr['id_product'], $id_company);
+//         foreach ($orders as $arr) {
+//             if ($arr['status'] != 'En Produccion' && $arr['status'] != 'Entregado' && $arr['status'] != 'Programado' && $arr['id_product'] == $dataProgramming['idProduct']) {
+//                 // Ficha tecnica
+//                 $productsMaterials = $productsMaterialsDao->findAllProductsmaterials($arr['id_product'], $id_company);
 
-                if (sizeof($productsMaterials) == 0) {
-                    $generalOrdersDao->changeStatus($arr['id_order'], 'Sin Ficha Tecnica');
-                } else {
-                    foreach ($productsMaterials as $k) {
-                        if (($k['quantity_material'] - $k['reserved']) <= 0) {
-                            $result = $generalOrdersDao->changeStatus($arr['id_order'], 'Sin Materia Prima');
-                            break;
-                        }
-                    }
-                }
-            }
-        }
-    }
+//                 if (sizeof($productsMaterials) == 0) {
+//                     $generalOrdersDao->changeStatus($arr['id_order'], 'Sin Ficha Tecnica');
+//                 } else {
+//                     foreach ($productsMaterials as $k) {
+//                         if (($k['quantity_material'] - $k['reserved']) <= 0) {
+//                             $result = $generalOrdersDao->changeStatus($arr['id_order'], 'Sin Materia Prima');
+//                             break;
+//                         }
+//                     }
+//                 }
+//             }
+//         }
+//     }
 
-    if ($result == null)
-        $resp = array('success' => true, 'message' => 'Programa de producción actualizado correctamente');
-    else if (isset($result['info']))
-        $resp = array('info' => true, 'message' => $result['message']);
-    else
-        $resp = array('error' => true, 'message' => 'Ocurrio un error mientras actualizaba la información. Intente nuevamente');
+//     if ($result == null)
+//         $resp = array('success' => true, 'message' => 'Programa de producción actualizado correctamente');
+//     else if (isset($result['info']))
+//         $resp = array('info' => true, 'message' => $result['message']);
+//     else
+//         $resp = array('error' => true, 'message' => 'Ocurrio un error mientras actualizaba la información. Intente nuevamente');
 
-    $response->getBody()->write(json_encode($resp));
-    return $response->withStatus(200)->withHeader('Content-Type', 'application/json');
-});
+//     $response->getBody()->write(json_encode($resp));
+//     return $response->withStatus(200)->withHeader('Content-Type', 'application/json');
+// });
 
 $app->post('/deleteProgramming', function (Request $request, Response $response, $args) use (
     $programmingDao,

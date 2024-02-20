@@ -10,6 +10,7 @@ $(document).ready(function () {
   /* Ocultar panel crear programa de producción */
   $(".cardCreateProgramming").hide();
   $('.cardBottons').hide();
+  $('.cardSaveBottons').hide();
 
   /* Abrir panel crear programa de producción */
 
@@ -430,6 +431,24 @@ $(document).ready(function () {
     programming = [];
     $("#changeStatusProgramming").modal("hide");
     $("#tblStatusProgrammingBody").empty();
+  });
+
+  $('#btnSavePrograming').click(function (e) { 
+    e.preventDefault();
+    
+    if (allTblData.length == 0) {
+      toastr.error('Ingrese una programacion');
+      return false;
+    }
+
+    $.ajax({
+      type: "POST",
+      url: '/api/saveProgramming',
+      data: {data:allTblData},
+      success: function (resp) {
+        message(resp);
+      }
+    });
   });
 
   /* Mensaje de exito */

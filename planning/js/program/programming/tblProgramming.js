@@ -9,6 +9,10 @@ $(document).ready(function () {
 
   loadTblProgramming = async (data) => {
 
+    if (allTblData.length > 0) {
+      $('.cardSaveBottons').show(800);
+    }
+
     if ($.fn.dataTable.isDataTable("#tblProgramming")) {
       $("#tblProgramming").DataTable().destroy();
       $("#tblProgramming").empty();
