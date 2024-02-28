@@ -37,17 +37,14 @@ $(document).ready(function () {
     var body = document.getElementById('tblProgrammingBody');
 
     // Itera sobre los datos y crea filas para cada conjunto de datos
-    data.forEach(function (arr, index) {
-      data;
-      let i = index;
-      // Crea una fila con datos
-      var dataRow = body.insertRow();
-      // Itera sobre los datos y agrega celdas a la fila
-      headers.forEach(function (header, columnIndex) {
-        var cell = dataRow.insertCell();
-        switch (header) { 
+    data.forEach((arr, index) => {
+      const i = index;
+      const dataRow = body.insertRow();
+      headers.forEach((header, columnIndex) => {
+        const cell = dataRow.insertCell();
+        switch (header) {
           case 'No.':
-            cell.textContent = index + 1;
+            cell.textContent = i + 1;
             break;
           case 'Pedido':
             cell.textContent = arr.num_order;
@@ -62,65 +59,70 @@ $(document).ready(function () {
             cell.textContent = arr.machine;
             break;
           case 'Cantidades':
-            const quantityOrder = arr.quantity_order;
-            const quantityProgramming = arr.quantity_programming;
-            const accumulatedQuantity = arr.accumulated_quantity;
-
-            if (accumulatedQuantity > 0)
-              cell.innerHTML = `Pedido: ${quantityOrder}<br>Fabricar: ${quantityProgramming}<br><span class="badge badge-danger">Pendiente: ${accumulatedQuantity}</span>`;
+            const { quantity_order, quantity_programming, accumulated_quantity } = arr;
+            if (accumulated_quantity > 0)
+              cell.innerHTML = `Pedido: ${quantity_order}<br>Fabricar: ${quantity_programming}<br><span class="badge badge-danger">Pendiente: ${accumulated_quantity}</span>`;
             else
-              cell.innerHTML = `Pedido: ${quantityOrder}<br>Fabricar: ${quantityProgramming}<br>Pendiente: ${accumulatedQuantity}`;
-            
+              cell.innerHTML = `Pedido: ${quantity_order}<br>Fabricar: ${quantity_programming}<br>Pendiente: ${accumulated_quantity}`;
             break;
           case 'Cliente':
             cell.textContent = arr.client;
             break;
           case 'Fecha y Hora':
-            const minDate = arr.min_date;
-            // const maxDate = data.max_date;
-            const min_programming = arr.min_programming;
-
-            let final_date = new Date(minDate);
-            let min_date = new Date(minDate);
-            final_date.setMinutes(min_date.getMinutes() + Math.floor(min_programming));
-            cell.innerHTML = `Inicio: ${moment(minDate).format("DD/MM/YYYY HH:mm A")}<br>Fin: ${moment(final_date).format("DD/MM/YYYY HH:mm A")}`;
-
-            // cell.innerHTML = `Inicio: ${moment(minDate).format("DD/MM/YYYY HH:mm A")}<br>Fin: ${moment(maxDate).format("DD/MM/YYYY HH:mm A")}`;
+            const { min_date, min_programming } = arr;
+            const final_date = new Date(min_date);
+            const minDate = new Date(min_date);
+            final_date.setMinutes(minDate.getMinutes() + Math.floor(min_programming));
+            cell.innerHTML = `Inicio: ${moment(min_date).format("DD/MM/YYYY HH:mm A")}<br>Fin: ${moment(final_date).format("DD/MM/YYYY HH:mm A")}`;
             break;
           case 'Orden Produccion':
             cell.innerHTML = `<button class="btn btn-warning changeStatus" id="${arr.id_programming}" name="${arr.id_programming}">Crear OP</button>`;
             break;
           case 'Acciones':
             cell.innerHTML = `
-            <a href="javascript:;" <i id="${arr.id_programming}" class="bx bx-edit-alt updateProgramming" data-toggle='tooltip' title='Actualizar Programa' style="font-size: 30px;"></i></a>
-            <a href="javascript:;" <i id="${index}" class="mdi mdi-delete-forever" data-toggle='tooltip' title='Eliminar Programa' style="font-size: 30px;color:red" onclick="deleteFunction(${index})"></i></a>`;
+                <a href="javascript:;" <i id="${arr.id_programming}" class="bx bx-edit-alt updateProgramming" data-toggle='tooltip' title='Actualizar Programa' style="font-size: 30px;"></i></a>
+                <a href="javascript:;" <i id="${index}" class="mdi mdi-delete-forever" data-toggle='tooltip' title='Eliminar Programa' style="font-size: 30px;color:red" onclick="deleteFunction(${index})"></i></a>`;
             break;
           default:
-            cell.textContent = ''; // Manejar cualquier otro encabezado no especificado
+            cell.textContent = '';
             break;
         }
       });
-
-      i++;
     });
 
     $('#tblProgramming').DataTable();
 
     dragula([document.getElementById('tblProgrammingBody')]).on('drop', function (el, container, source, sibling) {
       // Get the row index of the dropped element
-      var rowIndex = $(el).closest('tr').index();
+      var rowIndex = el.closest('tr').rowIndex;
 
       // If the row was dropped within the same container,
       // move it to the specified position
       if (container === source) {
-        var targetIndex = $(el).closest('tbody').find('tr').index(sibling);
-        $(el).closest('tr').insertAfter($(container).find('tr')[targetIndex]);
+        var targetIndex = sibling ? sibling.rowIndex : container.children.length - 1;
+        container.insertBefore(el, container.children[targetIndex]);
       } else {
         // If the row was dropped into a different container,
         // move it to the first position
-        $(el).closest('tr').appendTo($(container));
+        container.insertBefore(el, container.firstChild);
       }
     });
+
+    // dragula([document.getElementById('tblProgrammingBody')]).on('drop', function (el, container, source, sibling) {
+    //   // Get the row index of the dropped element
+    //   var rowIndex = $(el).closest('tr').index();
+
+    //   // If the row was dropped within the same container,
+    //   // move it to the specified position
+    //   if (container === source) {
+    //     var targetIndex = $(el).closest('tbody').find('tr').index(sibling);
+    //     $(el).closest('tr').insertAfter($(container).find('tr')[targetIndex]);
+    //   } else {
+    //     // If the row was dropped into a different container,
+    //     // move it to the first position
+    //     $(el).closest('tr').appendTo($(container));
+    //   }
+    // });
 
     // var drake = dragula({
     //   moves: function (el, source, handle, sibling) {

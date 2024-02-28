@@ -271,75 +271,33 @@ $(document).ready(function () {
       callback: function (result) {
         if (result) {
 
-          // let id_order = allTblData[id].id_order;
+          const idProduct = allTblData[id].id_product;
+          const quantityProgramming = allTblData[id].quantity_programming;
+          const quantityOrder = allTblData[id].quantity_order;
+          const accumulatedQuantity = allTblData[id].accumulated_quantity;
 
-          for (let i = 0; i < allOrders.length; i++) {
-            if (allOrders[i].id_product == allTblData[id].id_product) {
-              allOrders[i].flag_tbl = 1;
+          for (const orderList of [allOrders, allOrdersProgramming]) {
+            for (let i = 0; i < orderList.length; i++) {
+              const order = orderList[i];
+              if (order.id_product === idProduct && order.id_order === allTblData[id].id_order) {
+                order.flag_tbl = 1;
+                let quantity = quantityProgramming > quantityOrder ? quantityOrder : quantityProgramming;
 
-              if (allOrders[i].id_order == allTblData[id].id_order) {
+                order.accumulated_quantity_order += quantity;
 
-                let quantity = allTblData[id].accumulated_quantity;
-
-                if (allTblData[id].quantity_programming > allTblData[id].quantity_order) {
-                  quantity = allTblData[id].quantity_order;
-                  // } else if (quantity == 0) { 
+                if (order.hasOwnProperty('quantity_programming') && (quantity === 0 || quantity === quantityOrder || order.accumulated_quantity === quantityOrder)) {
+                  delete order['quantity_programming'];
                 } else {
-                  quantity = allTblData[id].quantity_programming;
+                  order.quantity_programming += quantity;
                 }
-
-                allOrders[i].accumulated_quantity_order += quantity;
-                allOrders[i].accumulated_quantity += quantity;
-
-                if (allOrders[i].hasOwnProperty('quantity_programming') && (quantity == 0 || quantity == allTblData[id].quantity_order ||
-                  allOrders[i].accumulated_quantity == allTblData[id].quantity_order)) {
-                  delete allOrders[i]['quantity_programming'];
-                } else
-                  allOrders[i].quantity_programming += quantity;
               }
             }
           }
 
-          for (let i = 0; i < allOrdersProgramming.length; i++) {
-            if (allOrdersProgramming[i].id_product == allTblData[id].id_product) {
-              allOrdersProgramming[i].flag_tbl = 1;
-              if (allOrdersProgramming[i].id_order == allTblData[id].id_order) {
-
-                let quantity = allTblData[id].accumulated_quantity;
-
-                if (allTblData[id].quantity_programming > allTblData[id].quantity_order) {
-                  quantity = allTblData[id].quantity_order;
-                  // } else if(quantity == 0)
-                } else
-                  quantity = allTblData[id].quantity_programming;
-
-                allOrdersProgramming[i].accumulated_quantity_order += quantity;
-
-                if (allOrdersProgramming[i].hasOwnProperty('quantity_programming') && (quantity == 0 || quantity == allTblData[id].quantity_order ||
-                  allOrdersProgramming[i].accumulated_quantity == allTblData[id].quantity_order)) {
-                  delete allOrdersProgramming[i]['quantity_programming'];
-                } else
-                  allOrdersProgramming[i].quantity_programming += quantity;
-              }
-            }
-          }
           allTblData.splice(id, 1);
-
-          // for (let i = 0; i < allTblData.length; i++) {
-          //   let quantity = 0;
-        
-          //   if (allTblData[i].quantity_programming < allTblData[i].quantity_order) {
-          //     // if(id_order == allTblData[i].id_order)
-          //     quantity = allTblData[i].quantity_order - allTblData[i].quantity_programming; 
-                
-          //     allTblData[i].accumulated_quantity = quantity;
-          //   } else
-          //     allTblData[i].accumulated_quantity = quantity;
-            
-          // }
-          
           loadTblProgramming(allTblData);
           toastr.success('Programa de producción eliminado correctamente');
+
         }
       },
     });

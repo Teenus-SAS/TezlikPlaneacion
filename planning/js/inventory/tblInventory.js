@@ -104,7 +104,7 @@ $(document).ready(function () {
     $('#lblTotal').html(` Inv Total: ${totalQuantity.toLocaleString('es-CO', { maximumFractionDigits: 0 })}`);
     $('#lblRotation').html(` Rotacion: ${rotation.toLocaleString('es-CO', { maximumFractionDigits: 0 })}`);
     $('#lblCoverage').html(` Cobertura: ${coverage.toLocaleString('es-CO', { maximumFractionDigits: 0 })}`);
-    $('#lblAvailable').html(` Disponibl: ${available.toLocaleString('es-CO', { maximumFractionDigits: 0 })}`);
+    $('#lblAvailable').html(` Disponible: ${available.toLocaleString('es-CO', { maximumFractionDigits: 0 })}`);
   }
 
   /* Cargar Tabla Inventarios */
