@@ -380,6 +380,7 @@ $app->post('/deleteProgramming', function (Request $request, Response $response,
 
     $dataProgramming = $request->getParsedBody();
     $result = $programmingDao->deleteProgramming($dataProgramming['idProgramming']);
+
     if ($result == null)
         $result = $generalOrdersDao->updateAccumulatedOrder($dataProgramming);
 

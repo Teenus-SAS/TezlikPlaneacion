@@ -227,7 +227,7 @@ $app->post('/addOrder', function (Request $request, Response $response, $args) u
         $orders = $filterDataDao->filterDuplicateArray($allOrders, 'id_order');
 
         for ($i = 0; $i < sizeof($orders); $i++) {
-            if ($orders[$i]['status_mp'] == true) {
+            if (isset($orders[$i]['status_mp']) && $orders[$i]['status_mp'] == true) {
                 if ($orders[$i]['original_quantity'] <= $orders[$i]['accumulated_quantity']) {
                     $generalOrdersDao->changeStatus($orders[$i]['id_order'], 'Despacho');
                     $accumulated_quantity = $orders[$i]['accumulated_quantity'] - $orders[$i]['original_quantity'];

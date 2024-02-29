@@ -57,6 +57,7 @@ $(document).ready(function () {
 
       $('.cardBottons').show(800)
 
+      allTblData = data;
       loadOrdersProgramming(allOrdersProgramming);
       loadTblProgramming(data);
     } catch (error) {

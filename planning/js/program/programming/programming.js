@@ -235,13 +235,19 @@ $(document).ready(function () {
 
     if (quantityMissing - quantityProgramming > 0)
       dataProgramming['route'] = `${process.route1}, ${process.route1 + 1}`;
+
+    dataProgramming['bd_status'] = 0;
  
     hideCardAndResetForm();
 
     if (idProgramming == null) {
       toastr.success('Programa de producción creado correctamente');
-    } else {
-      allTblData.splice(idProgramming, 1);
+    } else { 
+      for (let i = 0; i < allTblData.length; i++) {
+        if (allTblData[i].id_programming == idProgramming)
+        allTblData.splice(i, 1);         
+      } 
+
       toastr.success('Programa de producción modificado correctamente');
     }
     
@@ -253,7 +259,7 @@ $(document).ready(function () {
 
   /* Eliminar programa de produccion */
 
-  deleteFunction = (id) => {
+  deleteFunction = (id, bd_status) => {
     bootbox.confirm({
       title: "Eliminar",
       message:
@@ -271,33 +277,51 @@ $(document).ready(function () {
       callback: function (result) {
         if (result) {
 
-          const idProduct = allTblData[id].id_product;
-          const quantityProgramming = allTblData[id].quantity_programming;
-          const quantityOrder = allTblData[id].quantity_order;
-          const accumulatedQuantity = allTblData[id].accumulated_quantity;
+          if (bd_status == 0) {
+            const idProduct = allTblData[id].id_product;
+            const quantityProgramming = allTblData[id].quantity_programming;
+            const quantityOrder = allTblData[id].quantity_order;
+            const accumulatedQuantity = allTblData[id].accumulated_quantity;
 
-          for (const orderList of [allOrders, allOrdersProgramming]) {
-            for (let i = 0; i < orderList.length; i++) {
-              const order = orderList[i];
-              if (order.id_product === idProduct && order.id_order === allTblData[id].id_order) {
-                order.flag_tbl = 1;
-                let quantity = quantityProgramming > quantityOrder ? quantityOrder : quantityProgramming;
+            for (const orderList of [allOrders, allOrdersProgramming]) {
+              for (let i = 0; i < orderList.length; i++) {
+                const order = orderList[i];
+                if (order.id_product === idProduct && order.id_order === allTblData[id].id_order) {
+                  order.flag_tbl = 1;
+                  let quantity = quantityProgramming > quantityOrder ? quantityOrder : quantityProgramming;
 
-                order.accumulated_quantity_order += quantity;
+                  order.accumulated_quantity_order += quantity;
 
-                if (order.hasOwnProperty('quantity_programming') && (quantity === 0 || quantity === quantityOrder || order.accumulated_quantity === quantityOrder)) {
-                  delete order['quantity_programming'];
-                } else {
-                  order.quantity_programming += quantity;
+                  if (order.hasOwnProperty('quantity_programming') && (quantity === 0 || quantity === quantityOrder || order.accumulated_quantity === quantityOrder)) {
+                    delete order['quantity_programming'];
+                  } else {
+                    order.quantity_programming += quantity;
+                  }
                 }
               }
             }
+
+            allTblData.splice(id, 1);
+            loadTblProgramming(allTblData);
+            toastr.success('Programa de producción eliminado correctamente');
+          } else {
+            let data = allTblData.find(item => item.id_programming == id);
+            let dataProgramming = new FormData();;
+            dataProgramming.append('idProgramming', data.id_programming);
+            dataProgramming.append('order', data.id_order);
+
+            $.ajax({
+              type: "POST",
+              url: '/api/deleteProgramming',
+              data: dataProgramming,               
+              contentType: false,
+              cache: false,
+              processData: false,
+              success: function (resp) {
+                message(resp);
+              }
+            });
           }
-
-          allTblData.splice(id, 1);
-          loadTblProgramming(allTblData);
-          toastr.success('Programa de producción eliminado correctamente');
-
         }
       },
     });
