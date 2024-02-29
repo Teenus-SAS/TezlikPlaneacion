@@ -159,23 +159,23 @@ $app->get('/processOrder', function (Request $request, Response $response, $args
     return $response->withHeader('Content-Type', 'application/json');
 });
 
-$app->get('/programmingByMachine/{id_machine}/{id_product}', function (Request $request, Response $response, $args) use (
-    $generalProgrammingDao,
-    $generalPlanCiclesMachinesDao
-) {
-    session_start();
-    $id_company = $_SESSION['id_company'];
-    $programming = $generalProgrammingDao->findAllProgrammingByMachine($args['id_machine'], $id_company);
+// $app->get('/programmingByMachine', function (Request $request, Response $response, $args) use (
+//     $generalProgrammingDao,
+//     $generalPlanCiclesMachinesDao
+// ) {
+//     session_start();
+//     $id_company = $_SESSION['id_company'];
+//     $programming = $generalProgrammingDao->findAllProgrammingByMachine($args['id_machine'], $id_company);
 
-    if ($args['id_product'] != 0) {
-        $planCiclesMachines = $generalPlanCiclesMachinesDao->findPlanCiclesMachineByProductAndMachine($args['id_product'], $args['id_machine'], $id_company);
+//     if ($args['id_product'] != 0) {
+//         $planCiclesMachines = $generalPlanCiclesMachinesDao->findPlanCiclesMachineByProductAndMachine($args['id_product'], $args['id_machine'], $id_company);
 
-        if (!$planCiclesMachines) $programming = 1;
-    }
+//         if (!$planCiclesMachines) $programming = 1;
+//     }
 
-    $response->getBody()->write(json_encode($programming, JSON_NUMERIC_CHECK));
-    return $response->withHeader('Content-Type', 'application/json');
-});
+//     $response->getBody()->write(json_encode($programming, JSON_NUMERIC_CHECK));
+//     return $response->withHeader('Content-Type', 'application/json');
+// });
 
 $app->get('/ordersProgramming', function (Request $request, Response $response, $args) use (
     $generalProgrammingDao

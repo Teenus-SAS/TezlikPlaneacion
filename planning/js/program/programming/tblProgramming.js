@@ -4,10 +4,21 @@ $(document).ready(function () {
   $("#searchMachine").change(function (e) {
     e.preventDefault();
 
-    loadAllDataProgramming(2, this.value);
+    let data = [];
+
+    if (this.value == '0') {
+      data = allTblData;
+      op = 1;
+    }
+    else {
+      data = allTblData.filter(item => item.id_machine == this.value);
+      op = 2;
+    }
+
+    loadTblProgramming(data, 2);
   });
 
-  loadTblProgramming = async (data) => {
+  loadTblProgramming = async (data, op) => {
 
     if (allTblData.length > 0) {
       $('.cardSaveBottons').show(800);
@@ -90,23 +101,25 @@ $(document).ready(function () {
       });
     });
 
-    $('#tblProgramming').DataTable();
+    $('#tblProgramming').DataTable(); 
+    
+    if (op == 2) {
+      dragula([document.getElementById('tblProgrammingBody')]).on('drop', function (el, container, source, sibling) {
+        // Get the row index of the dropped element
+        var rowIndex = el.closest('tr').rowIndex;
 
-    dragula([document.getElementById('tblProgrammingBody')]).on('drop', function (el, container, source, sibling) {
-      // Get the row index of the dropped element
-      var rowIndex = el.closest('tr').rowIndex;
-
-      // If the row was dropped within the same container,
-      // move it to the specified position
-      if (container === source) {
-        var targetIndex = sibling ? sibling.rowIndex : container.children.length - 1;
-        container.insertBefore(el, container.children[targetIndex]);
-      } else {
-        // If the row was dropped into a different container,
-        // move it to the first position
-        container.insertBefore(el, container.firstChild);
-      }
-    });
+        // If the row was dropped within the same container,
+        // move it to the specified position
+        if (container === source) {
+          var targetIndex = sibling ? sibling.rowIndex : container.children.length - 1;
+          container.insertBefore(el, container.children[targetIndex]);
+        } else {
+          // If the row was dropped into a different container,
+          // move it to the first position
+          container.insertBefore(el, container.firstChild);
+        }
+      });
+    }
 
     // dragula([document.getElementById('tblProgrammingBody')]).on('drop', function (el, container, source, sibling) {
     //   // Get the row index of the dropped element

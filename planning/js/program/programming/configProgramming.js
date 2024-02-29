@@ -12,7 +12,7 @@ $(document).ready(function () {
   let selectProduct = false;
   let selectProcess = false;
 
-  loadAllDataProgramming = async (op, machine) => {
+  loadAllDataProgramming = async () => {
     try {
       const [
         ordersProgramming,
@@ -22,44 +22,40 @@ $(document).ready(function () {
         planningMachines,
         orders,
         programming,
-        programmingMachines,
         productsMaterials
       ] = await Promise.all([
-        op == 1 ? searchData('/api/ordersProgramming') : null,
-        op == 1 ? searchData('/api/processOrder') : null,
-        op == 1 ? searchData('/api/machines') : null,
-        op == 1 ? searchData('/api/planCiclesMachine') : null,
-        op == 1 ? searchData('/api/planningMachines') : null,
-        op == 1 ? searchData('/api/orders') : null,
-        op == 1 ? searchData('/api/programming') : null,
-        op == 2 ? searchData(`/api/programmingByMachine/${machine}/0`) : null,
-        op == 1 ? searchData('/api/allProductsMaterials') : null
+        searchData('/api/ordersProgramming'),
+        searchData('/api/processOrder'),
+        searchData('/api/machines'),
+        searchData('/api/planCiclesMachine'),
+        searchData('/api/planningMachines'),
+        searchData('/api/orders'),
+        searchData('/api/programming'),
+        // searchData(`/api/programmingByMachine/`),
+        searchData('/api/allProductsMaterials')
       ]);
       let data = [];
-
-      if (op == 1) { 
-        // allOrdersProgramming = ordersProgramming;
-        allOrdersProgramming = ordersProgramming.map(item => ({ ...item, flag_tbl: 1 })); 
-        allProcess = process;
-        allMachines = machines;
-        allCiclesMachines = ciclesMachines;
-        allPlanningMachines = planningMachines;
-        // allOrders = orders;  
-        allOrders = orders.map(item => ({ ...item, flag_tbl: 1 }));
-        allProducts = products;
-        allProgramming = programming;
-        copyAllProgramming = allProgramming;
-        allProductsMaterials = productsMaterials;
-        data = programming;
-      } else {
-        data = programmingMachines;
-      }
+ 
+      // allOrdersProgramming = ordersProgramming;
+      allOrdersProgramming = ordersProgramming.map(item => ({ ...item, flag_tbl: 1 }));
+      allProcess = process;
+      allMachines = machines;
+      allCiclesMachines = ciclesMachines;
+      allPlanningMachines = planningMachines;
+      // allOrders = orders;  
+      allOrders = orders.map(item => ({ ...item, flag_tbl: 1 }));
+      allProducts = products;
+      allProgramming = programming;
+      copyAllProgramming = allProgramming;
+      allProductsMaterials = productsMaterials;
+      data = programming;
+      
 
       $('.cardBottons').show(800)
 
       allTblData = data;
       loadOrdersProgramming(allOrdersProgramming);
-      loadTblProgramming(data);
+      loadTblProgramming(data, 1);
     } catch (error) {
       console.error('Error loading data:', error);
     }
@@ -91,7 +87,7 @@ $(document).ready(function () {
     });
   };
 
-  loadAllDataProgramming(1);
+  loadAllDataProgramming();
 
   $(document).on('change', '#order', function (e) {
     e.preventDefault();

@@ -41,6 +41,7 @@ $(document).ready(function () {
   $("#btnCreateProgramming").click(function (e) {
     e.preventDefault();
     let idProgramming = sessionStorage.getItem("id_programming");
+    dataProgramming['bd_status'] = 0;
 
     if (idProgramming == "" || idProgramming == null) {
       dataProgramming['id_programming'] = allTblData.length;
@@ -71,7 +72,9 @@ $(document).ready(function () {
       `<option value ='${data.id_product}' selected> ${data.product} </option>`
     );
     $("#quantityOrder").val(data.quantity_order.toLocaleString());
-    $("#quantityMissing").val(data.accumulated_quantity.toLocaleString());
+    !data.accumulated_quantity ? accumulated_quantity = 0 : accumulated_quantity = data.accumulated_quantity;
+
+    $("#quantityMissing").val(accumulated_quantity.toLocaleString());
     // $("#quantityMP").val(data.accumulated_quantity.toLocaleString());
     let productsMaterials = allProductsMaterials.filter(item => item.id_product == data.id_product);
     productsMaterials = productsMaterials.sort((a, b) => a.quantity - b.quantity);
@@ -105,7 +108,7 @@ $(document).ready(function () {
     $("#maxDate").val(max_date);
 
     // dataProgramming = new FormData(formCreateProgramming);
-    dataProgramming = [];
+    dataProgramming = {};
     dataProgramming['id_order'] = data.id_order;
     dataProgramming['num_order'] = data.num_order;
     dataProgramming['client'] = data.client;
@@ -114,28 +117,29 @@ $(document).ready(function () {
     dataProgramming['min_date'] = data.min_date;
     dataProgramming['max_date'] = data.max_date;
     dataProgramming['min_programming'] = data.min_programming;
+    dataProgramming['route'] = 1;
     
-    $(document).one("click", "#minDate", function (e) {
-      e.preventDefault();
+    // $(document).one("click", "#minDate", function (e) {
+    //   e.preventDefault();
 
-      document.getElementById("minDate").type = "date";
-    });
+    //   document.getElementById("minDate").type = "date";
+    // });
 
-    $("#minDate").change(function (e) {
-      e.preventDefault();
+    // $("#minDate").change(function (e) {
+    //   e.preventDefault();
 
-      if (!this.value) {
-        toastr.error("Ingrese fecha inicial");
-        return false;
-      }
+    //   if (!this.value) {
+    //     toastr.error("Ingrese fecha inicial");
+    //     return false;
+    //   }
 
-      let min_date = convetFormatDate(this.value);
+    //   let min_date = convetFormatDate(this.value);
 
-      sessionStorage.setItem("minDate", min_date);
-      dataProgramming['min_date'] = min_date;
-      // dataProgramming.append("minDate", min_date);
-      calcMaxDate(min_date, 0, 2);
-    });
+    //   sessionStorage.setItem("minDate", min_date);
+    //   dataProgramming['min_date'] = min_date;
+    //   // dataProgramming.append("minDate", min_date);
+    //   calcMaxDate(min_date, 0, 2);
+    // });
 
     $("html, body").animate(
       {
@@ -235,8 +239,6 @@ $(document).ready(function () {
 
     if (quantityMissing - quantityProgramming > 0)
       dataProgramming['route'] = `${process.route1}, ${process.route1 + 1}`;
-
-    dataProgramming['bd_status'] = 0;
  
     hideCardAndResetForm();
 
@@ -253,7 +255,7 @@ $(document).ready(function () {
     
     allTblData.push(dataProgramming);
 
-    loadTblProgramming(allTblData);
+    loadTblProgramming(allTblData, 1);
     dataProgramming = [];
   };
 
@@ -302,7 +304,7 @@ $(document).ready(function () {
             }
 
             allTblData.splice(id, 1);
-            loadTblProgramming(allTblData);
+            loadTblProgramming(allTblData, 1);
             toastr.success('Programa de producción eliminado correctamente');
           } else {
             let data = allTblData.find(item => item.id_programming == id);
@@ -439,7 +441,7 @@ $(document).ready(function () {
       if (data.success) {
         hideCardAndResetForm();
         toastr.success(data.message);
-        await loadAllDataProgramming(1);
+        await loadAllDataProgramming();
       } else if (data.error) {
         toastr.error(data.message);
       } else if (data.info) {
