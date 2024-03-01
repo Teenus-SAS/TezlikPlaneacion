@@ -48,12 +48,10 @@ $(document).ready(function () {
       allProgramming = programming;
       copyAllProgramming = allProgramming;
       allProductsMaterials = productsMaterials;
-      data = programming;
+      data = programming;      
       
+      $('.cardBottons').show(800);
 
-      $('.cardBottons').show(800)
-
-      allTblData = data;
       loadOrdersProgramming(allOrdersProgramming);
       loadTblProgramming(data, 1);
     } catch (error) {
@@ -319,7 +317,7 @@ $(document).ready(function () {
       
       let sobHours = (hours % 1);
       let minutes = sobHours * 60;
-      let minutes1 = (Math.floor(hours) * 60) + parseInt(minutes);
+      let minutes1 = (Math.floor(days) * 1440) + (Math.floor(hours) * 60) + parseInt(minutes);
 
       final_date.setMinutes(final_date.getMinutes() + Math.floor(minutes));
       final_date.setHours(final_date.getHours() + Math.floor(hours));

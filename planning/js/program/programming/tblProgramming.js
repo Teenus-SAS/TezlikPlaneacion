@@ -5,6 +5,7 @@ $(document).ready(function () {
     e.preventDefault();
 
     let data = [];
+    let op;
 
     if (this.value == '0') {
       data = allTblData;
@@ -15,7 +16,7 @@ $(document).ready(function () {
       op = 2;
     }
 
-    loadTblProgramming(data, 2);
+    loadTblProgramming(data, op);
   });
 
   loadTblProgramming = async (data, op) => {
@@ -45,12 +46,15 @@ $(document).ready(function () {
     
     $('#tblProgrammingBody').empty();
 
+    if (op == 2) MMindate = data[0].min_date;
+
     var body = document.getElementById('tblProgrammingBody');
 
     // Itera sobre los datos y crea filas para cada conjunto de datos
     data.forEach((arr, index) => {
       const i = index;
       const dataRow = body.insertRow();
+      dataRow.setAttribute('data-index', index);
       headers.forEach((header, columnIndex) => {
         const cell = dataRow.insertCell();
         switch (header) {
@@ -80,11 +84,28 @@ $(document).ready(function () {
             cell.textContent = arr.client;
             break;
           case 'Fecha y Hora':
-            const { min_date, min_programming } = arr;
-            const final_date = new Date(min_date);
-            const minDate = new Date(min_date);
-            final_date.setMinutes(minDate.getMinutes() + Math.floor(min_programming));
-            cell.innerHTML = `Inicio: ${moment(min_date).format("DD/MM/YYYY HH:mm A")}<br>Fin: ${moment(final_date).format("DD/MM/YYYY HH:mm A")}`;
+            // const min_date = arr.min_date;
+            if (op == 2) {
+              if (i == 0) {
+                minProgramming = 0;
+              } else {
+                min_date1 = minProgramming; 
+              }
+              minProgramming += arr.min_programming;
+              min_date = MMindate;
+            } else {
+              min_date = arr.min_date;
+              minProgramming = arr.min_programming;
+            }
+            
+            let minDate = new Date(min_date);
+            let final_date = new Date(min_date);
+            final_date.setMinutes(minDate.getMinutes() + Math.floor(minProgramming));
+            
+            if (op == 2 && i > 0) {
+              minDate.setMinutes(minDate.getMinutes() + Math.floor(min_date1));
+            }
+            cell.innerHTML = `Inicio: ${moment(minDate).format("DD/MM/YYYY hh:mm A")}<br>Fin: ${moment(final_date).format("DD/MM/YYYY hh:mm A")}`; 
             break;
           case 'Orden Produccion':
             cell.innerHTML = `<button class="btn btn-warning changeStatus" id="${arr.id_programming}" name="${arr.id_programming}">Crear OP</button>`;
@@ -105,64 +126,30 @@ $(document).ready(function () {
     
     if (op == 2) {
       dragula([document.getElementById('tblProgrammingBody')]).on('drop', function (el, container, source, sibling) {
-        // Get the row index of the dropped element
-        var rowIndex = el.closest('tr').rowIndex;
+        // Obtener el indice de la fila anterior
+        var previousIndex = el.dataset.index;
+        // Obtener el índice de fila actual
+        var currentIndex = el.closest('tr').rowIndex;
 
         // If the row was dropped within the same container,
         // move it to the specified position
         if (container === source) {
-          var targetIndex = sibling ? sibling.rowIndex : container.children.length - 1;
+          var targetIndex = sibling ? sibling.rowIndex - 1 : container.children.length - 1;
+          
           container.insertBefore(el, container.children[targetIndex]);
+
+          // Crear copia para organizar el array de acuerdo a la key
+          let copy = allTblData;
+
+          copy[previousIndex] = allTblData[currentIndex - 1];
+          copy[currentIndex - 1] = allTblData[previousIndex];
+          loadTblProgramming(copy, 2);
         } else {
           // If the row was dropped into a different container,
           // move it to the first position
           container.insertBefore(el, container.firstChild);
         }
       });
-    }
-
-    // dragula([document.getElementById('tblProgrammingBody')]).on('drop', function (el, container, source, sibling) {
-    //   // Get the row index of the dropped element
-    //   var rowIndex = $(el).closest('tr').index();
-
-    //   // If the row was dropped within the same container,
-    //   // move it to the specified position
-    //   if (container === source) {
-    //     var targetIndex = $(el).closest('tbody').find('tr').index(sibling);
-    //     $(el).closest('tr').insertAfter($(container).find('tr')[targetIndex]);
-    //   } else {
-    //     // If the row was dropped into a different container,
-    //     // move it to the first position
-    //     $(el).closest('tr').appendTo($(container));
-    //   }
-    // });
-
-    // var drake = dragula({
-    //   moves: function (el, source, handle, sibling) {
-    //     // Permite arrastrar solo las filas utilizando la clase 'drag-handle'
-    //     return handle.classList.contains('drag-handle');
-    //   },
-    //   accepts: function (el, target, source, sibling) {
-    //     // Permite soltar solo en el área de la fila de la tabla
-    //     return target.tagName === 'tr';
-    //   },
-    // });
-
-    // // Itera sobre las filas y añade cada una al conjunto arrastrable
-    // var rows = table.getElementsByTagName('tr');
-    // for (var i = 0; i < rows.length; i++) {
-    //   drake.containers.push(rows[i]);
-    // }
-
-    // // Configura Dragula para permitir el arrastre de columnas
-    // dragula([headerRow], {
-    //   moves: function (el, source, handle, sibling) {
-    //     return el.tagName === 'th';
-    //   },
-    //   accepts: function (el, target, source, sibling) {
-    //     return target.tagName === 'tr';
-    //   },
-    //   direction: 'horizontal',
-    // });
+    } 
   };
 });

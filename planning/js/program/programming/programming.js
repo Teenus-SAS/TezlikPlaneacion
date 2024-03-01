@@ -233,6 +233,8 @@ $(document).ready(function () {
       }
     }
 
+    quantityMissing < 0 ? quantityMissing = 0 : quantityMissing;
+
     dataProgramming['accumulated_quantity'] = quantityMissing;
     
     process = allProcess.find(item => item.id_product == id_product && item.id_order == id_order);
