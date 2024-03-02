@@ -160,11 +160,11 @@ $app->post('/addProduct', function (Request $request, Response $response, $args)
             $status = true;
             if ($arr['original_quantity'] > $arr['accumulated_quantity']) {
                 if ($arr['quantity_material'] == NULL || !$arr['quantity_material']) {
-                    $generalOrdersDao->changeStatus($arr['id_order'], 'Sin Ficha Tecnica');
+                    $generalOrdersDao->changeStatus($arr['id_order'], 5);
                     $status = false;
                     // break;
                 } else if ($arr['quantity_material'] <= 0) {
-                    $generalOrdersDao->changeStatus($arr['id_order'], 'Sin Materia Prima');
+                    $generalOrdersDao->changeStatus($arr['id_order'], 6);
                     $status = false;
                     // break;
                 }
@@ -179,7 +179,7 @@ $app->post('/addProduct', function (Request $request, Response $response, $args)
             unset($order);
 
             if ($status == true && $arr['programming'] != 0) {
-                $generalOrdersDao->changeStatus($arr['id_order'], 'Programado');
+                $generalOrdersDao->changeStatus($arr['id_order'], 4);
 
                 $k = $generalMaterialsDao->findReservedMaterial($arr['id_material']);
                 !isset($k['reserved']) ? $k['reserved'] = 0 : $k;
@@ -198,13 +198,13 @@ $app->post('/addProduct', function (Request $request, Response $response, $args)
         for ($i = 0; $i < sizeof($orders); $i++) {
             if ($orders[$i]['status_mp'] == true) {
                 if ($orders[$i]['original_quantity'] <= $orders[$i]['accumulated_quantity']) {
-                    $generalOrdersDao->changeStatus($orders[$i]['id_order'], 'Despacho');
+                    $generalOrdersDao->changeStatus($orders[$i]['id_order'], 2);
                     $accumulated_quantity = $orders[$i]['accumulated_quantity'] - $orders[$i]['original_quantity'];
                 } else {
                     $accumulated_quantity = $orders[$i]['accumulated_quantity'];
                 }
 
-                if ($orders[$i]['status'] != 'Despacho') {
+                if ($orders[$i]['status'] != 2) {
                     $date = date('Y-m-d');
 
                     $generalOrdersDao->updateOfficeDate($orders[$i]['id_order'], $date);
@@ -322,11 +322,11 @@ $app->post('/updatePlanProduct', function (Request $request, Response $response,
             $status = true;
             if ($arr['original_quantity'] > $arr['accumulated_quantity']) {
                 if ($arr['quantity_material'] == NULL || !$arr['quantity_material']) {
-                    $generalOrdersDao->changeStatus($arr['id_order'], 'Sin Ficha Tecnica');
+                    $generalOrdersDao->changeStatus($arr['id_order'], 5);
                     $status = false;
                     // break;
                 } else if ($arr['quantity_material'] <= 0) {
-                    $generalOrdersDao->changeStatus($arr['id_order'], 'Sin Materia Prima');
+                    $generalOrdersDao->changeStatus($arr['id_order'], 6);
                     $status = false;
                     // break;
                 }
@@ -341,7 +341,7 @@ $app->post('/updatePlanProduct', function (Request $request, Response $response,
             unset($order);
 
             if ($status == true && $arr['programming'] != 0) {
-                $generalOrdersDao->changeStatus($arr['id_order'], 'Programado');
+                $generalOrdersDao->changeStatus($arr['id_order'], 4);
 
                 $k = $generalMaterialsDao->findReservedMaterial($arr['id_material']);
                 !isset($k['reserved']) ? $k['reserved'] = 0 : $k;
@@ -356,14 +356,14 @@ $app->post('/updatePlanProduct', function (Request $request, Response $response,
                 if ($orders[$i]['original_quantity'] <= $orders[$i]['accumulated_quantity']) {
                     $generalOrdersDao->changeStatus(
                         $orders[$i]['id_order'],
-                        'Despacho'
+                        2
                     );
                     $accumulated_quantity = $orders[$i]['accumulated_quantity'] - $orders[$i]['original_quantity'];
                 } else {
                     $accumulated_quantity = $orders[$i]['accumulated_quantity'];
                 }
 
-                if ($orders[$i]['status'] != 'Despacho') {
+                if ($orders[$i]['status'] != 2) {
                     $date = date('Y-m-d');
 
                     $generalOrdersDao->updateOfficeDate($orders[$i]['id_order'], $date);

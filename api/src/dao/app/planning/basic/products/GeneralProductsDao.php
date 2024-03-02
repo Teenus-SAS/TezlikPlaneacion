@@ -100,7 +100,7 @@ class GeneralProductsDao
 
         $stmt = $connection->prepare("SELECT SUM(original_quantity) AS reserved
                                       FROM plan_orders 
-                                      WHERE id_product = :id_product AND status = 'Despacho'");
+                                      WHERE id_product = :id_product AND status = 2");
         $stmt->execute([
             'id_product' => $id_product
         ]);

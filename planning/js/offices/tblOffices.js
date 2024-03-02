@@ -25,10 +25,10 @@ $(document).ready(function () {
       else pending = 0;
 
       pendingStore = dataActualOffices.filter(
-        (item) => item.status !== "Entregado"
+        (item) => item.status !== "ENTREGADO"
       );
       deliveredStore = dataActualOffices.filter(
-        (item) => item.status === "Entregado"
+        (item) => item.status === "ENTREGADO"
       );
 
       let visible = true;
@@ -39,11 +39,11 @@ $(document).ready(function () {
       } else {
         if (pending == 1)
           dataToLoad = dataOffices.filter(
-            (item) => item.status !== "Entregado"
+            (item) => item.status !== "ENTREGADO"
           );
         else
           dataToLoad = dataOffices.filter(
-            (item) => item.status === "Entregado"
+            (item) => item.status === "ENTREGADO"
           );
       }
 
@@ -169,10 +169,10 @@ $(document).ready(function () {
           data: "status",
           className: "uniqueClassName dt-head-center",
           render: function (data) {
-            if (data == "Entregado") badge = "badge-success";
+            if (data == "ENTREGADO") badge = "badge-success";
             else if (data == "Sin Ficha Tecnica" || data == "Sin Materia Prima")
               badge = "badge-danger";
-            else if (data == "Despacho") badge = "badge-info";
+            else if (data == "DESPACHO") badge = "badge-info";
             else badge = "badge-light";
 
             return `<span class="badge ${badge}">${data}</span>`;
@@ -183,7 +183,7 @@ $(document).ready(function () {
           data: null,
           className: "uniqueClassName dt-head-center",
           render: function (data) {
-            data.status == "Despacho"
+            data.status == "DESPACHO"
               ? (action = `<button class="btn btn-info changeDate" id="${data.id_order}" name="${data.id_order}">Entregar</button>`)
               : (action = data.delivery_date);
 
@@ -196,8 +196,8 @@ $(document).ready(function () {
           className: "uniqueClassName dt-head-center",
           visible: visible,
           render: function (data) {
-            return data.status == "Despacho"
-              ? `<a href="javascript:;" <i class="fas fa-times cancelOrder" id="${data.id_order}" data-toggle='tooltip' title='Cancelar Despacho' style="font-size: 30px;color:red;"></i></a>`
+            return data.status == "DESPACHO"
+              ? `<a href="javascript:;" <i class="fas fa-times cancelOrder" id="${data.id_order}" data-toggle='tooltip' title='Cancelar DESPACHO' style="font-size: 30px;color:red;"></i></a>`
               : "";
           },
         },

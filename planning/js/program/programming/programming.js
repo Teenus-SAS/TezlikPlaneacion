@@ -97,6 +97,7 @@ $(document).ready(function () {
 
     $("#quantity").val(data.quantity_programming);
 
+    document.getElementById('minDate').type = 'datetime-local';
     document.getElementById("minDate").readOnly = false;
     $(".date").show(800);
     $("#btnCreateProgramming").show(800);
@@ -170,11 +171,11 @@ $(document).ready(function () {
     dataProgramming['process'] = process;
     dataProgramming['quantity_order'] = quantityOrder;
     dataProgramming['quantity_programming'] = quantityProgramming;
-    dataProgramming['status'] = 'Programado';
+    dataProgramming['status'] = 'PROGRAMADO';
     
     for (let i = 0; i < allOrders.length; i++) {
       if (allOrders[i].id_order == id_order) {
-        allOrders[i].status = 'Programado';
+        allOrders[i].status = 'PROGRAMADO';
 
         let quantity = 0;
         
@@ -199,7 +200,7 @@ $(document).ready(function () {
 
     for (let i = 0; i < allOrdersProgramming.length; i++) {
       if (allOrdersProgramming[i].id_order == id_order) {
-        allOrdersProgramming[i].status = 'Programado';
+        allOrdersProgramming[i].status = 'PROGRAMADO';
 
         quantityMissing = 0;
         

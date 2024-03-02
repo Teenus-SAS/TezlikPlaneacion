@@ -21,7 +21,7 @@ $(document).ready(function () {
     let today = formatDate(new Date());
 
     if (data.length > 0) {
-      let arrCompleted = data.filter(item => item.status == 'Despacho' && item.min_date < item.office_date);
+      let arrCompleted = data.filter(item => item.status == 'DESPACHO' && item.min_date < item.office_date);
       let arrLate = data.filter(item => item.min_date < today);
 
       totalQuantity = data.length;
@@ -87,11 +87,11 @@ $(document).ready(function () {
           data: 'status',
           className: 'uniqueClassName dt-head-center',
           render: function (data) {
-            if (data == 'Entregado')
+            if (data == 'ENTREGADO')
               badge = 'badge-success';
-            else if (data == 'Sin Ficha Tecnica' || data == 'Sin Materia Prima')
+            else if (data == 'SIN FICHA TECNICA' || data == 'SIN MATERIA PRIMA')
               badge = 'badge-danger';
-            else if (data == 'Despacho')
+            else if (data == 'DESPACHO')
               badge = 'badge-info';
             else
               badge = 'badge-light';
@@ -104,7 +104,7 @@ $(document).ready(function () {
           data: null,
           className: 'uniqueClassName dt-head-center',
           render: function (data) {
-            !data.delivery_date && data.status == 'Programar' ? action = `<a href="javascript:;" <i class="bx bx-edit-alt updateOrder" id="${data.id_order}" data-toggle='tooltip' title='Actualizar Pedido' style="font-size: 30px;"></i></a><a href="javascript:;" <i class="mdi mdi-delete-forever" id="${data.id_order}" data-toggle='tooltip' title='Eliminar Pedido' style="font-size: 30px;color:red" onclick="deleteFunction()"></i></a>`
+            !data.delivery_date && data.status == 'PROGRAMAR' ? action = `<a href="javascript:;" <i class="bx bx-edit-alt updateOrder" id="${data.id_order}" data-toggle='tooltip' title='Actualizar Pedido' style="font-size: 30px;"></i></a><a href="javascript:;" <i class="mdi mdi-delete-forever" id="${data.id_order}" data-toggle='tooltip' title='Eliminar Pedido' style="font-size: 30px;color:red" onclick="deleteFunction()"></i></a>`
               : action = '';
 
             return action;
@@ -112,7 +112,7 @@ $(document).ready(function () {
         },
       ],
       // rowCallback: function (row, data, index) {
-      //   if (data.status == 'Sin Ficha Tecnica' || data.status == 'Sin Materia Prima') $(row).css('color', 'red');
+      //   if (data.status == 'SIN FICHA TECNICA' || data.status == 'Sin Materia Prima') $(row).css('color', 'red');
       // },
     });
   }

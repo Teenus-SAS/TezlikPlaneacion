@@ -53,6 +53,7 @@ $(document).ready(function () {
       $('.cardBottons').show(800);
 
       loadOrdersProgramming(allOrdersProgramming);
+      allTblData = data;
       loadTblProgramming(data, 1);
     } catch (error) {
       console.error('Error loading data:', error);
@@ -312,6 +313,7 @@ $(document).ready(function () {
       if (days >= 1) {
         final_date.setDate(final_date.getDate() + Math.floor(days));
       }
+      
       let sobDays = (days % 1);
       let hours = sobDays * planningMachine.hours_day;
       
@@ -355,7 +357,7 @@ $(document).ready(function () {
   /* Cargar Productos y Maquinas */
   const loadProducts = (num_order) => {
     let orders = allOrders.filter(item => item.num_order == num_order &&
-      (item.status == 'Programar' || item.status == 'Programado') &&
+      (item.status == 'PROGRAMAR' || item.status == 'DESPACHO') &&
       (item.accumulated_quantity_order == null || item.accumulated_quantity_order != 0) &&
       item.flag_tbl == 1
     );
@@ -381,7 +383,7 @@ $(document).ready(function () {
     if (selectProduct == true) {
       let num_order = $('#order :selected').text().trim();
       let productOrders = allOrders.filter(item => item.num_order == num_order &&
-        (item.status == 'Programar' || item.status == 'Programado') &&
+        (item.status == 'PROGRAMAR' || item.status == 'DESPACHO') &&
         (item.accumulated_quantity_order == null || item.accumulated_quantity_order != 0)
       );
 
@@ -397,7 +399,8 @@ $(document).ready(function () {
 
       for (let i = 0; i < productOrders.length; i++) {
         if (this.value == productOrders[i].id_product) {
-          let process = allProcess.filter(item => item.id_product == this.value && item.id_order == id_order);
+          // let process = allProcess.filter(item => item.id_product == this.value && item.id_order == id_order);
+          let process = allProcess.filter(item => item.id_product == this.value);
           id_product = this.value;
           
           let $select = $(`#idProcess`);

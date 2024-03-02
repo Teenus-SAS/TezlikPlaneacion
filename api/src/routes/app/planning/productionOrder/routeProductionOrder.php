@@ -30,7 +30,7 @@ $app->post('/changeStatusOP', function (Request $request, Response $response, $a
     $id_company = $_SESSION['id_company'];
     $dataOP = $request->getParsedBody();
 
-    $result = $generalOrdersDao->changeStatus($dataOP['idOrder'], 'Fabricado');
+    $result = $generalOrdersDao->changeStatus($dataOP['idOrder'], 8);
     $generalProductsDao->updateAccumulatedQuantity($dataOP['idProduct'], $dataOP['quantity'], 2);
 
     // Cambiar estado pedidos
@@ -40,17 +40,17 @@ $app->post('/changeStatusOP', function (Request $request, Response $response, $a
         // Checkear cantidades
         $order = $generalOrdersDao->checkAccumulatedQuantityOrder($orders[$i]['id_order']);
         if (
-            $order['status'] != 'En Produccion' && $order['status'] != 'Entregado' && $order['status'] != 'Fabricado' &&
-            $order['status'] != 'Sin Ficha Tecnica' && $order['status'] != 'Sin Materia Prima'
+            $order['status'] != 8 && $order['status'] != 7 && $order['status'] != 6
+            && $order['status'] != 5 && $order['status'] != 3
         ) {
             if ($order['original_quantity'] <= $order['accumulated_quantity']) {
-                $generalOrdersDao->changeStatus($orders[$i]['id_order'], 'Despacho');
+                $generalOrdersDao->changeStatus($orders[$i]['id_order'], 2);
                 $accumulated_quantity = $order['accumulated_quantity'] - $order['original_quantity'];
             } else {
                 $accumulated_quantity = $order['accumulated_quantity'];
             }
 
-            if ($order['status'] != 'Despacho') {
+            if ($order['status'] != 2) {
                 $date = Date('Y-m-d');
 
                 $generalOrdersDao->updateOfficeDate($orders[$i]['id_order'], $date);

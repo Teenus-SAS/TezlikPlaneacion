@@ -237,13 +237,13 @@ $app->post('/saveProgramming', function (Request $request, Response $response, $
         // }
 
         if ($result != null) break;
-        $result = $generalOrdersDao->changeStatus($programmings[$i]['id_order'], 'Programado');
+        $result = $generalOrdersDao->changeStatus($programmings[$i]['id_order'], 4);
 
         if ($result != null) break;
         $productsMaterials = $productsMaterialsDao->findAllProductsmaterials($programmings[$i]['id_product'], $id_company);
 
         if (sizeof($productsMaterials) == 0) {
-            $generalOrdersDao->changeStatus($programmings[$i]['id_order'], 'Sin Ficha Tecnica');
+            $generalOrdersDao->changeStatus($programmings[$i]['id_order'], 5);
         } else {
             foreach ($productsMaterials as $k) {
                 if (isset($result['info'])) break;
@@ -260,16 +260,16 @@ $app->post('/saveProgramming', function (Request $request, Response $response, $
         $orders = $ordersDao->findAllOrdersByCompany($id_company);
 
         foreach ($orders as $arr) {
-            if ($arr['status'] != 'En Produccion' && $arr['status'] != 'Entregado' && $arr['status'] != 'Programado' && $arr['id_product'] == $programmings[$i]['id_product']) {
+            if ($arr['status'] != 7 && $arr['status'] != 3 && $arr['status'] != 4 && $arr['id_product'] == $programmings[$i]['id_product']) {
                 // Ficha tecnica
                 $productsMaterials = $productsMaterialsDao->findAllProductsmaterials($arr['id_product'], $id_company);
 
                 if (sizeof($productsMaterials) == 0) {
-                    $generalOrdersDao->changeStatus($arr['id_order'], 'Sin Ficha Tecnica');
+                    $generalOrdersDao->changeStatus($arr['id_order'], 5);
                 } else {
                     foreach ($productsMaterials as $k) {
                         if (($k['quantity_material'] - $k['reserved']) <= 0) {
-                            $result = $generalOrdersDao->changeStatus($arr['id_order'], 'Sin Materia Prima');
+                            $result = $generalOrdersDao->changeStatus($arr['id_order'], 6);
                             break;
                         }
                     }
@@ -402,20 +402,20 @@ $app->post('/deleteProgramming', function (Request $request, Response $response,
     }
 
     if ($result == null)
-        $result = $generalOrdersDao->changeStatus($dataProgramming['order'], 'Programar');
+        $result = $generalOrdersDao->changeStatus($dataProgramming['order'], 1);
 
     if ($result == null) {
         $orders = $ordersDao->findAllOrdersByCompany($id_company);
 
         foreach ($orders as $arr) {
-            if ($arr['status'] != 'En Produccion' && $arr['status'] != 'Entregado' && $arr['status'] != 'Programado') {
+            if ($arr['status'] != 7 && $arr['status'] != 3 && $arr['status'] != 4) {
                 // $result = $generalOrdersDao->changeStatus($arr['id_order'], 'Programar');
 
                 // Ficha tecnica
                 $productsMaterials = $productsMaterialsDao->findAllProductsmaterials($arr['id_product'], $id_company);
 
                 if (sizeof($productsMaterials) == 0) {
-                    $generalOrdersDao->changeStatus($arr['id_order'], 'Sin Ficha Tecnica');
+                    $generalOrdersDao->changeStatus($arr['id_order'], 5);
                 } else {
                     foreach ($productsMaterials as $k) {
                         if (isset($result['info'])) break;
@@ -450,7 +450,7 @@ $app->post('/changeStatusProgramming', function (Request $request, Response $res
         $orders = $generalProgrammingDao->findProgrammingByOrder($dataProgramming['idOrder']);
 
         if (sizeof($orders) == 1) {
-            $generalOrdersDao->changeStatus($dataProgramming['idOrder'], 'En Produccion');
+            $generalOrdersDao->changeStatus($dataProgramming['idOrder'], 7);
         }
     } else {
         $programming = $dataProgramming['data'];

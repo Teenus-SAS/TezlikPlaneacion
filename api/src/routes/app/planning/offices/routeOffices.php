@@ -54,7 +54,7 @@ $app->post('/cancelOffice', function (Request $request, Response $response, $arg
     $dataOrder = $request->getParsedBody();
 
     // $order = $generalProductsDao->updateAccumulatedQuantity($dataOrder['idProduct'], $dataOrder['quantity'] + $dataOrder['originalQuantity'], 1);
-    $order = $generalOrdersDao->changeStatus($dataOrder['idOrder'], 'Programar');
+    $order = $generalOrdersDao->changeStatus($dataOrder['idOrder'], 1);
 
     $arr = $generalProductsDao->findProductReserved($dataOrder['idProduct']);
     !isset($arr['reserved']) ? $arr['reserved'] = 0 : $arr;
@@ -85,7 +85,7 @@ $app->post('/changeOffices', function (Request $request, Response $response, $ar
 
     $resolution = $officesDao->updateDeliveryDate($dataOrder);
 
-    $generalOrdersDao->changeStatus($dataOrder['idOrder'], 'Entregado');
+    $generalOrdersDao->changeStatus($dataOrder['idOrder'], 3);
     $arr = $generalProductsDao->findProductReserved($dataOrder['idProduct']);
     !isset($arr['reserved']) ? $arr['reserved'] = 0 : $arr;
     $generalProductsDao->updateReservedByProduct($dataOrder['idProduct'], $arr['reserved']);

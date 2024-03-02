@@ -14,8 +14,8 @@ $(document).ready(function () {
     try {
       const data = await searchData('/api/productionOrder');
 
-      dataOP = data.filter(item => item.status == 'En Produccion');
-      dataNOP = data.filter(item => item.status != 'En Produccion');
+      dataOP = data.filter(item => item.status == 'EN PRODUCCION');
+      dataNOP = data.filter(item => item.status != 'EN PRODUCCION');
       
       loadTblProductionOrders(dataOP);
       // $('.selectNavigation').show();
@@ -103,7 +103,7 @@ $(document).ready(function () {
           data: "status",
           className: "uniqueClassName dt-head-center",
           render: function (data) {
-            if (data == "En Produccion") {
+            if (data == "EN PRODUCCION") {
               return `<button type="button" id="${data}" class="btn btn-sm btn-warning changeStatus" style="font-size: 12px;">Fabricado</button>`;
             } else {
               return "";

@@ -20,12 +20,13 @@ class GeneralOrdersDao
     {
         $connection = Connection::getInstance()->getConnection();
 
-        $stmt = $connection->prepare("SELECT o.id_order, o.id_client, o.id_product, o.num_order, o.status, o.date_order, o.original_quantity, p.product, c.client, o.min_date, o.max_date, o.delivery_date, pi.accumulated_quantity
+        $stmt = $connection->prepare("SELECT o.id_order, o.id_client, o.id_product, o.num_order, ps.status, o.date_order, o.original_quantity, p.product, c.client, o.min_date, o.max_date, o.delivery_date, pi.accumulated_quantity
                                       FROM plan_orders o
                                         INNER JOIN products p ON p.id_product = o.id_product
                                         INNER JOIN products_inventory pi ON pi.id_product = o.id_product
                                         INNER JOIN plan_clients c ON c.id_client = o.id_client  
-                                      WHERE o.status_order = 0 AND o.id_company = :id_company AND o.status != 'Entregado'
+                                        INNER JOIN plan_status ps ON ps.id_status = o.status
+                                      WHERE o.status_order = 0 AND o.id_company = :id_company AND o.status NOT IN (3)
                                       ORDER BY o.status ASC");
         $stmt->execute(['id_company' => $id_company]);
 
@@ -40,7 +41,7 @@ class GeneralOrdersDao
     {
         $connection = Connection::getInstance()->getConnection();
 
-        $stmt = $connection->prepare("SELECT o.id_order, o.id_client, o.id_product, o.num_order, o.status, o.date_order, o.original_quantity, p.product, c.client, o.min_date, o.max_date, o.delivery_date, pi.accumulated_quantity, IFNULL(m.quantity, 0) AS quantity_material,
+        $stmt = $connection->prepare("SELECT o.id_order, o.id_client, o.id_product, o.num_order, ps.status, o.date_order, o.original_quantity, p.product, c.client, o.min_date, o.max_date, o.delivery_date, pi.accumulated_quantity, IFNULL(m.quantity, 0) AS quantity_material,
                                              IFNULL((SELECT id_programming FROM programming WHERE id_order = o.id_order LIMIT 1), 0) AS programming
                                       FROM plan_orders o
                                         INNER JOIN products p ON p.id_product = o.id_product
@@ -48,10 +49,12 @@ class GeneralOrdersDao
                                         LEFT JOIN materials m ON m.id_material = pm.id_material
                                         INNER JOIN products_inventory pi ON pi.id_product = o.id_product
                                         INNER JOIN plan_clients c ON c.id_client = o.id_client  
+                                        INNER JOIN plan_status ps ON ps.id_status = o.status
                                       WHERE 
                                         o.status_order = 0 
                                         AND o.id_company = :id_company 
-                                        AND o.status NOT IN ('Entregado', 'En Produccion', 'Fabricado') 
+                                        AND o.status NOT IN (3, 7, 8)
+                                        -- NOT IN ('Entregado', 'En Produccion', 'Fabricado') 
                                         AND o.max_date != '0000-00-00' ORDER BY p.product ASC");
         $stmt->execute(['id_company' => $id_company]);
 
@@ -143,10 +146,11 @@ class GeneralOrdersDao
     {
         $connection = Connection::getInstance()->getConnection();
 
-        $stmt = $connection->prepare("SELECT o.original_quantity, p.quantity, pi.accumulated_quantity, o.status
+        $stmt = $connection->prepare("SELECT o.original_quantity, p.quantity, pi.accumulated_quantity, ps.status
                                       FROM plan_orders o
                                         INNER JOIN products p ON p.id_product = o.id_product
                                         INNER JOIN products_inventory pi ON pi.id_product = o.id_product
+                                        INNER JOIN plan_status ps ON ps.id_status = o.status
                                       WHERE o.id_order = :id_order");
         $stmt->execute([
             'id_order' => $id_order
