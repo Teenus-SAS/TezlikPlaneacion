@@ -1,18 +1,21 @@
 $(document).ready(function () {
   sessionStorage.removeItem("id_programming");
+  let copy;
 
   $("#searchMachine").change(function (e) {
     e.preventDefault();
 
     let data = [];
     let op;
+    copy = undefined;
 
     if (this.value == '0') {
       data = allTblData;
       op = 1;
     }
-    else {
+    else { 
       data = allTblData.filter(item => item.id_machine == this.value);
+      MMindate = data[0].min_date; 
       op = 2;
     }
 
@@ -44,9 +47,7 @@ $(document).ready(function () {
       headerRow.appendChild(th);
     });
     
-    $('#tblProgrammingBody').empty();
-
-    if (op == 2) MMindate = data[0].min_date;
+    $('#tblProgrammingBody').empty(); 
 
     var body = document.getElementById('tblProgrammingBody');
 
@@ -85,7 +86,7 @@ $(document).ready(function () {
             break;
           case 'Fecha y Hora':
             // const min_date = arr.min_date;
-            if (op == 2) {
+            if ($('#searchMachine').val() != '0' && $('#searchMachine').val()) {
               if (i == 0) {
                 minProgramming = 0;
               } else {
@@ -102,7 +103,7 @@ $(document).ready(function () {
             let final_date = new Date(min_date);
             final_date.setMinutes(minDate.getMinutes() + Math.floor(minProgramming));
             
-            if (op == 2 && i > 0) {
+            if ($('#searchMachine').val() != '0' && $('#searchMachine').val() && i > 0) {
               minDate.setMinutes(minDate.getMinutes() + Math.floor(min_date1));
             }
             cell.innerHTML = `Inicio: ${moment(minDate).format("DD/MM/YYYY hh:mm A")}<br>Fin: ${moment(final_date).format("DD/MM/YYYY hh:mm A")}`; 
@@ -139,10 +140,14 @@ $(document).ready(function () {
           container.insertBefore(el, container.children[targetIndex]);
 
           // Crear copia para organizar el array de acuerdo a la key
-          let copy = allTblData;
 
-          copy[previousIndex] = allTblData[currentIndex - 1];
-          copy[currentIndex - 1] = allTblData[previousIndex];
+          !copy ? copy = [...allTblData] : copy; 
+          
+          copy[previousIndex]['key'] = currentIndex - 1;
+          copy[currentIndex - 1]['key'] = previousIndex;
+
+          copy.sort((a, b) => a.key - b.key);
+
           loadTblProgramming(copy, 2);
         } else {
           // If the row was dropped into a different container,
