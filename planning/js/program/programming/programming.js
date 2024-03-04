@@ -239,10 +239,10 @@ $(document).ready(function () {
     dataProgramming['accumulated_quantity'] = quantityMissing;
     dataProgramming['key'] = allTblData.length;
     
-    process = allProcess.find(item => item.id_product == id_product && item.id_order == id_order);
+    // process = allProcess.find(item => item.id_product == id_product && item.id_order == id_order);
 
-    if (quantityMissing - quantityProgramming > 0)
-      dataProgramming['route'] = `${process.route1}, ${process.route1 + 1}`;
+    // if (quantityMissing - quantityProgramming > 0)
+    //   dataProgramming['route'] = `${process.route1}, ${process.route1 + 1}`;
  
     hideCardAndResetForm();
 
@@ -282,48 +282,54 @@ $(document).ready(function () {
       },
       callback: function (result) {
         if (result) {
-
           if (bd_status == 0) {
-            const idProduct = allTblData[id].id_product;
-            const quantityProgramming = allTblData[id].quantity_programming;
-            const quantityOrder = allTblData[id].quantity_order;
-            const accumulatedQuantity = allTblData[id].accumulated_quantity;
 
-            for (const orderList of [allOrders, allOrdersProgramming]) {
-              for (let i = 0; i < orderList.length; i++) {
-                const order = orderList[i];
-                if (order.id_product === idProduct && order.id_order === allTblData[id].id_order) {
-                  order.flag_tbl = 1;
-                  let quantity = quantityProgramming > quantityOrder ? quantityOrder : quantityProgramming;
+          const idProduct = allTblData[id].id_product;
+          const quantityProgramming = allTblData[id].quantity_programming;
+          const quantityOrder = allTblData[id].quantity_order;
+          const accumulatedQuantity = allTblData[id].accumulated_quantity;
 
-                  order.accumulated_quantity_order += quantity;
+          for (const orderList of [allOrders, allOrdersProgramming]) {
+            for (let i = 0; i < orderList.length; i++) {
+              const order = orderList[i];
+              if (order.id_product === idProduct && order.id_order === allTblData[id].id_order) {
+                order.flag_tbl = 1;
+                let quantity = quantityProgramming > quantityOrder ? quantityOrder : quantityProgramming;
 
-                  if (order.hasOwnProperty('quantity_programming') && (quantity === 0 || quantity === quantityOrder || order.accumulated_quantity === quantityOrder)) {
-                    delete order['quantity_programming'];
-                  } else {
-                    order.quantity_programming += quantity;
-                  }
+                order.accumulated_quantity_order += quantity;
+
+                if (order.hasOwnProperty('quantity_programming') && (quantity === 0 || quantity === quantityOrder || order.accumulated_quantity === quantityOrder)) {
+                  delete order['quantity_programming'];
+                } else {
+                  order.quantity_programming += quantity;
                 }
               }
             }
+          }
 
             allTblData.splice(id, 1);
             loadTblProgramming(allTblData, 1);
             toastr.success('Programa de producción eliminado correctamente');
           } else {
             let data = allTblData.find(item => item.id_programming == id);
-            let dataProgramming = new FormData();;
+            let dataProgramming = new FormData();
             dataProgramming.append('idProgramming', data.id_programming);
             dataProgramming.append('order', data.id_order);
+
+            for (let i = 0; i < allTblData.length; i++) {
+              if (allTblData[i].id_programming === id) {
+                allTblData.splice(i, 1);
+              } 
+            }
 
             $.ajax({
               type: "POST",
               url: '/api/deleteProgramming',
-              data: dataProgramming,               
+              data: dataProgramming,
               contentType: false,
               cache: false,
               processData: false,
-              success: function (resp) {
+              success: function (resp) {                 
                 message(resp);
               }
             });
@@ -434,6 +440,8 @@ $(document).ready(function () {
       url: '/api/saveProgramming',
       data: {data:allTblData},
       success: function (resp) {
+        allTblData = [];
+        
         message(resp);
       }
     });
@@ -441,8 +449,10 @@ $(document).ready(function () {
 
   /* Mensaje de exito */
   message = async (data) => {
-    try {
+    try { 
       if (data.success) {
+        localStorage.setItem('dataProgramming', allTblData);
+
         hideCardAndResetForm();
         toastr.success(data.message);
         await loadAllDataProgramming();

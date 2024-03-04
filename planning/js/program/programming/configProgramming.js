@@ -11,6 +11,7 @@ $(document).ready(function () {
   allTblData = [];
   let selectProduct = false;
   let selectProcess = false;
+  // localStorage.removeItem('dataProgramming');
 
   loadAllDataProgramming = async () => {
     try {
@@ -52,8 +53,23 @@ $(document).ready(function () {
       
       $('.cardBottons').show(800);
 
+      !localStorage.getItem('dataProgramming') ? allTblData = [] : allTblData = JSON.parse(localStorage.getItem('dataProgramming'));
+ 
+      allTblData = allTblData.concat(data); 
+      data = data.concat(allTblData);
+
+      for (let i = 0; i < data.length; i++) {
+        for (let j = 0; j < allTblData.length; j++) {
+          if (data[i].id_programming === allTblData[j].id_programming) {
+            let arr = data.filter(item => item.id_programming === data[i].id_programming);
+
+            if (arr.length > 1)
+              data.splice(i, 1);
+          } 
+        }
+      }
+
       loadOrdersProgramming(allOrdersProgramming);
-      allTblData = data;
       loadTblProgramming(data, 1);
     } catch (error) {
       console.error('Error loading data:', error);

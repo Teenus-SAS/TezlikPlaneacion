@@ -377,6 +377,7 @@ $app->post('/deleteProgramming', function (Request $request, Response $response,
 ) {
     session_start();
     $id_company = $_SESSION['id_company'];
+    // $id_company = 1;
 
     $dataProgramming = $request->getParsedBody();
     $result = $programmingDao->deleteProgramming($dataProgramming['idProgramming']);
