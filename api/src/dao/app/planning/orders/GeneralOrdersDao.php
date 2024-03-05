@@ -202,12 +202,12 @@ class GeneralOrdersDao
         try {
             $connection = Connection::getInstance()->getConnection();
 
-            isset($dataOrder['accumulatedQuantity']) == '' ? $quantity = null : $quantity = $dataOrder['accumulatedQuantity'];
+            $dataOrder['accumulated_quantity_order'] == '' ? $quantity = null : $quantity = $dataOrder['accumulated_quantity_order'];
 
             $stmt = $connection->prepare("UPDATE plan_orders SET accumulated_quantity = :accumulated_quantity WHERE id_order = :id_order");
             $stmt->execute([
                 'accumulated_quantity' => $quantity,
-                'id_order' => $dataOrder['order']
+                'id_order' => $dataOrder['id_order']
             ]);
         } catch (\Exception $e) {
             $message = $e->getMessage();

@@ -113,9 +113,10 @@ $(document).ready(function () {
             cell.innerHTML = `<button class="btn btn-warning changeStatus" id="${arr.id_programming}" name="${arr.id_programming}">Crear OP</button>`;
             break;
           case 'Acciones':
-            cell.innerHTML = `
-                <a href="javascript:;" <i id="${arr.id_programming}" class="bx bx-edit-alt updateProgramming" data-toggle='tooltip' title='Actualizar Programa' style="font-size: 30px;"></i></a>
-                <a href="javascript:;" <i id="${arr.id_programming}" class="mdi mdi-delete-forever" data-toggle='tooltip' title='Eliminar Programa' style="font-size: 30px;color:red" onclick="deleteFunction(${arr.id_programming}, ${arr.bd_status})"></i></a>`;
+            cell.innerHTML = $('#searchMachine').val() != '0' && $('#searchMachine').val() ?
+              `<a href="javascript:;" <i id="${arr.id_programming}" class="bx bx-edit-alt updateProgramming" data-toggle='tooltip' title='Actualizar Programa' style="font-size: 30px;"></i></a>
+                <a href="javascript:;" <i id="${arr.id_programming}" class="mdi mdi-delete-forever" data-toggle='tooltip' title='Eliminar Programa' style="font-size: 30px;color:red" onclick="deleteFunction(${arr.bd_status == 1 ? arr.id_programming : i}, ${arr.bd_status})"></i></a>`
+              : '';
             break;
           default:
             cell.textContent = '';

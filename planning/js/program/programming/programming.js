@@ -41,10 +41,10 @@ $(document).ready(function () {
   $("#btnCreateProgramming").click(function (e) {
     e.preventDefault();
     let idProgramming = sessionStorage.getItem("id_programming");
-    dataProgramming['bd_status'] = 0;
-
+    
     if (idProgramming == "" || idProgramming == null) {
       dataProgramming['id_programming'] = allTblData.length;
+      dataProgramming['bd_status'] = 0;
       checkdataProgramming(idProgramming);
     } else {
       dataProgramming['id_programming'] = idProgramming;
@@ -59,6 +59,7 @@ $(document).ready(function () {
     $("#btnCreateProgramming").html("Actualizar");
     
     let data = allTblData.find(item => item.id_programming == this.id);
+    sessionStorage.removeItem("minDate");
 
     sessionStorage.setItem("id_programming", data.id_programming);
     $("#order").empty();
@@ -118,29 +119,8 @@ $(document).ready(function () {
     dataProgramming['min_date'] = data.min_date;
     dataProgramming['max_date'] = data.max_date;
     dataProgramming['min_programming'] = data.min_programming;
+    dataProgramming['update'] = 1;
     dataProgramming['route'] = 1;
-    
-    // $(document).one("click", "#minDate", function (e) {
-    //   e.preventDefault();
-
-    //   document.getElementById("minDate").type = "date";
-    // });
-
-    // $("#minDate").change(function (e) {
-    //   e.preventDefault();
-
-    //   if (!this.value) {
-    //     toastr.error("Ingrese fecha inicial");
-    //     return false;
-    //   }
-
-    //   let min_date = convetFormatDate(this.value);
-
-    //   sessionStorage.setItem("minDate", min_date);
-    //   dataProgramming['min_date'] = min_date;
-    //   // dataProgramming.append("minDate", min_date);
-    //   calcMaxDate(min_date, 0, 2);
-    // });
 
     $("html, body").animate(
       {
@@ -181,15 +161,15 @@ $(document).ready(function () {
         
         if (quantityProgramming < allOrders[i].original_quantity) {
           quantity = allOrders[i].original_quantity - quantityProgramming;
-          if (!allOrders[i]['quantity_programming']) {
+          if (allOrders[i].accumulated_quantity_order == 0 || allOrders[i].accumulated_quantity_order == null) {
             allOrders[i].quantity_programming = quantity;
             allOrders[i].accumulated_quantity_order = quantity;
             allOrders[i].accumulated_quantity = quantity;
           }
           else {
-            allOrders[i].accumulated_quantity_order = allOrders[i].quantity_programming - quantityProgramming;
-            allOrders[i].accumulated_quantity = allOrders[i].quantity_programming - quantityProgramming;
-            allOrders[i].quantity_programming = allOrders[i].quantity_programming - quantityProgramming;
+            allOrders[i].accumulated_quantity_order = (allOrders[i].accumulated_quantity_order - quantityProgramming) < 0 ? 0 : allOrders[i].accumulated_quantity_order - quantityProgramming;
+            allOrders[i].accumulated_quantity = (allOrders[i].accumulated_quantity_order - quantityProgramming) < 0 ? 0 : allOrders[i].accumulated_quantity_order - quantityProgramming;
+            allOrders[i].quantity_programming = (allOrders[i].accumulated_quantity_order - quantityProgramming) < 0 ? 0 : allOrders[i].accumulated_quantity_order - quantityProgramming;
           }
         } else {
           allOrders[i].accumulated_quantity_order = quantity;
@@ -206,11 +186,12 @@ $(document).ready(function () {
         
         if (quantityProgramming < allOrdersProgramming[i].original_quantity) {
           quantityMissing = allOrdersProgramming[i].original_quantity - quantityProgramming;
-          if (!allOrdersProgramming[i]['quantity_programming'])
+          if (allOrdersProgramming[i].accumulated_quantity == 0 || allOrdersProgramming[i].accumulated_quantity == null)
             allOrdersProgramming[i].quantity_programming = quantityMissing;
-          else { 
-            allOrdersProgramming[i].accumulated_quantity_order = allOrdersProgramming[i].quantity_programming - quantityProgramming;
-            allOrdersProgramming[i].quantity_programming = allOrdersProgramming[i].quantity_programming - quantityProgramming;
+          else {
+            allOrdersProgramming[i].accumulated_quantity_order = (allOrdersProgramming[i].accumulated_quantity - quantityProgramming) < 0 ? 0 : allOrdersProgramming[i].accumulated_quantity - quantityProgramming;
+            allOrdersProgramming[i].accumulated_quantity = (allOrdersProgramming[i].accumulated_quantity - quantityProgramming) < 0 ? 0 : allOrdersProgramming[i].accumulated_quantity - quantityProgramming;
+            allOrdersProgramming[i].quantity_programming = (allOrdersProgramming[i].accumulated_quantity - quantityProgramming) < 0 ? 0 : allOrdersProgramming[i].accumulated_quantity - quantityProgramming;
             quantityMissing = allOrdersProgramming[i].accumulated_quantity_order;
           }
         } else {
@@ -237,6 +218,7 @@ $(document).ready(function () {
     quantityMissing < 0 ? quantityMissing = 0 : quantityMissing;
 
     dataProgramming['accumulated_quantity'] = quantityMissing;
+    dataProgramming['accumulated_quantity_order'] = quantityMissing;
     dataProgramming['key'] = allTblData.length;
     
     // process = allProcess.find(item => item.id_product == id_product && item.id_order == id_order);
@@ -247,17 +229,35 @@ $(document).ready(function () {
     hideCardAndResetForm();
 
     if (idProgramming == null) {
-      toastr.success('Programa de producción creado correctamente');
-    } else { 
       for (let i = 0; i < allTblData.length; i++) {
-        if (allTblData[i].id_programming == idProgramming)
-        allTblData.splice(i, 1);         
-      } 
+        for (let j = 0; j < allTblData.length; j++) {
+          if (allTblData[i].id_programming === allTblData[j].id_programming) {
+            let arr = allTblData.filter(item => item.id_programming === allTblData[i].id_programming);
+
+            if (arr.length > 1)
+              allTblData.splice(i, 1);
+          }
+        }
+      }
+    
+      allTblData.push(dataProgramming);
+      
+      toastr.success('Programa de producción creado correctamente');
+    } else {
+      for (let i = 0; i < allTblData.length; i++) {
+        if (allTblData[i].id_programming == idProgramming) {
+          allTblData[i].accumulated_quantity = quantityMissing;
+          allTblData[i].accumulated_quantity_order = quantityMissing;
+          allTblData[i].quantity_programming = quantityProgramming;
+          allTblData[i].min_date = dataProgramming['min_date'];
+          allTblData[i].max_date = dataProgramming['max_date'];
+          allTblData[i].min_programming = dataProgramming['min_programming'];
+          // allTblData[i]. =
+        }
+      }
 
       toastr.success('Programa de producción modificado correctamente');
     }
-    
-    allTblData.push(dataProgramming);
 
     loadTblProgramming(allTblData, 1);
     dataProgramming = [];
@@ -283,29 +283,28 @@ $(document).ready(function () {
       callback: function (result) {
         if (result) {
           if (bd_status == 0) {
+            const idProduct = allTblData[id].id_product;
+            const quantityProgramming = allTblData[id].quantity_programming;
+            const quantityOrder = allTblData[id].quantity_order;
+            const accumulatedQuantity = allTblData[id].accumulated_quantity;
 
-          const idProduct = allTblData[id].id_product;
-          const quantityProgramming = allTblData[id].quantity_programming;
-          const quantityOrder = allTblData[id].quantity_order;
-          const accumulatedQuantity = allTblData[id].accumulated_quantity;
+            for (const orderList of [allOrders, allOrdersProgramming]) {
+              for (let i = 0; i < orderList.length; i++) {
+                const order = orderList[i];
+                if (order.id_product === idProduct && order.id_order === allTblData[id].id_order) {
+                  order.flag_tbl = 1;
+                  let quantity = quantityProgramming > quantityOrder ? quantityOrder : quantityProgramming;
 
-          for (const orderList of [allOrders, allOrdersProgramming]) {
-            for (let i = 0; i < orderList.length; i++) {
-              const order = orderList[i];
-              if (order.id_product === idProduct && order.id_order === allTblData[id].id_order) {
-                order.flag_tbl = 1;
-                let quantity = quantityProgramming > quantityOrder ? quantityOrder : quantityProgramming;
+                  order.accumulated_quantity_order += quantity;
 
-                order.accumulated_quantity_order += quantity;
-
-                if (order.hasOwnProperty('quantity_programming') && (quantity === 0 || quantity === quantityOrder || order.accumulated_quantity === quantityOrder)) {
-                  delete order['quantity_programming'];
-                } else {
-                  order.quantity_programming += quantity;
+                  if (order.hasOwnProperty('quantity_programming') && (quantity === 0 || quantity === quantityOrder || order.accumulated_quantity === quantityOrder)) {
+                    delete order['quantity_programming'];
+                  } else {
+                    order.quantity_programming += quantity;
+                  }
                 }
               }
             }
-          }
 
             allTblData.splice(id, 1);
             loadTblProgramming(allTblData, 1);
@@ -315,11 +314,13 @@ $(document).ready(function () {
             let dataProgramming = new FormData();
             dataProgramming.append('idProgramming', data.id_programming);
             dataProgramming.append('order', data.id_order);
+            dataProgramming.append('id_order', data.id_order);
+            dataProgramming.append('accumulated_quantity_order', '');
 
             for (let i = 0; i < allTblData.length; i++) {
               if (allTblData[i].id_programming === id) {
                 allTblData.splice(i, 1);
-              } 
+              }
             }
 
             $.ajax({
@@ -329,7 +330,7 @@ $(document).ready(function () {
               contentType: false,
               cache: false,
               processData: false,
-              success: function (resp) {                 
+              success: function (resp) {
                 message(resp);
               }
             });
@@ -451,7 +452,7 @@ $(document).ready(function () {
   message = async (data) => {
     try { 
       if (data.success) {
-        localStorage.setItem('dataProgramming', allTblData);
+        localStorage.setItem('dataProgramming', JSON.stringify(allTblData));
 
         hideCardAndResetForm();
         toastr.success(data.message);
@@ -470,7 +471,7 @@ $(document).ready(function () {
   const hideCardAndResetForm = () => {
     $(".cardCreateProgramming").hide(800);
     $("#formCreateProgramming").trigger("reset");
-    $("#searchMachine").val("0");
+    // $("#searchMachine").val("0");
   };
 
   loadDataMachines(3);

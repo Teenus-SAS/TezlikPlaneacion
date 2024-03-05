@@ -53,7 +53,7 @@ $(document).ready(function () {
       
       $('.cardBottons').show(800);
 
-      !localStorage.getItem('dataProgramming') ? allTblData = [] : allTblData = JSON.parse(localStorage.getItem('dataProgramming'));
+      !localStorage.getItem('dataProgramming') || localStorage.getItem('dataProgramming').includes('[object Object]') ? allTblData = [] : allTblData = JSON.parse(localStorage.getItem('dataProgramming'));
  
       allTblData = allTblData.concat(data); 
       data = data.concat(allTblData);
@@ -128,7 +128,7 @@ $(document).ready(function () {
   });
 
   $(document).on('click', '#minDate', function () {
-    if (sessionStorage.getItem('minDate')) {
+    if (sessionStorage.getItem('minDate') && $('#btnCreateProgramming').html() == 'Crear') {
       $('#minDate').val('');
       $('#maxDate').val('');
       document.getElementById('minDate').readOnly = false;
@@ -269,12 +269,12 @@ $(document).ready(function () {
     }
 
     if (date.includes('T')) {
-      date = date.split('T')[0];
-    }
+      // date = date.split('T')[0];
+      min_date = convetFormatDateTime1(date);
+    } else
+      min_date = convetFormatDate(date);
 
-    let min_date = convetFormatDate(date);
-
-    sessionStorage.setItem('minDate', min_date); 
+    sessionStorage.setItem('minDate', min_date);
     dataProgramming['min_date'] = min_date;
     calcMaxDate(min_date, 0, 2);
   });
@@ -308,20 +308,26 @@ $(document).ready(function () {
       }
       
       if (op == 2) {
-        if (Number.isInteger(planningMachine.hour_start)) {
-          min_date = new Date(`${min_date} ${planningMachine.hour_start}:00:00`);
+        if (dataProgramming['update'] == 0) {
+          if (Number.isInteger(planningMachine.hour_start)) {
+            min_date = new Date(`${min_date} ${planningMachine.hour_start}:00:00`);
+          } else {
+            const hoursInteger = Math.floor(planningMachine.hour_start);
+            const minutes = Math.round((planningMachine.hour_start % 1) * 60);
+            const formattedMinutes = minutes < 10 ? `0${minutes}` : `${minutes}`;
+            min_date = new Date(min_date + 'T00:00:00');
+            min_date.setHours(hoursInteger, formattedMinutes, 0);
+          }
         } else {
-          const hoursInteger = Math.floor(planningMachine.hour_start);
-          const minutes = Math.round((planningMachine.hour_start % 1) * 60);
-          const formattedMinutes = minutes < 10 ? `0${minutes}` : `${minutes}`;
-          min_date = new Date(min_date + 'T00:00:00');
-          min_date.setHours(hoursInteger, formattedMinutes, 0);
+          min_date = new Date(min_date);
         }
+
         min_date =
           min_date.getFullYear() + "-" +
           ("00" + (min_date.getMonth() + 1)).slice(-2) + "-" +
           ("00" + min_date.getDate()).slice(-2) + " " + ("00" + min_date.getHours()).slice(-2) + ':' + ("00" + min_date.getMinutes()).slice(-2) + ':' + '00';
       }
+
       let final_date = new Date(min_date);
     
       let days = (quantity / ciclesMachine.cicles_hour / planningMachine.hours_day);
@@ -373,7 +379,7 @@ $(document).ready(function () {
   /* Cargar Productos y Maquinas */
   const loadProducts = (num_order) => {
     let orders = allOrders.filter(item => item.num_order == num_order &&
-      (item.status == 'PROGRAMAR' || item.status == 'DESPACHO') &&
+      (item.status == 'PROGRAMAR' || item.status == 'PROGRAMADO') &&
       (item.accumulated_quantity_order == null || item.accumulated_quantity_order != 0) &&
       item.flag_tbl == 1
     );
@@ -399,7 +405,7 @@ $(document).ready(function () {
     if (selectProduct == true) {
       let num_order = $('#order :selected').text().trim();
       let productOrders = allOrders.filter(item => item.num_order == num_order &&
-        (item.status == 'PROGRAMAR' || item.status == 'DESPACHO') &&
+        (item.status == 'PROGRAMAR' || item.status == 'PROGRAMADO') &&
         (item.accumulated_quantity_order == null || item.accumulated_quantity_order != 0)
       );
 
@@ -408,6 +414,7 @@ $(document).ready(function () {
       dataProgramming = {};
       dataProgramming['reference'] = product.reference;
       dataProgramming['product'] = product.product;
+      dataProgramming['update'] = 0;
 
       let id_product;
 

@@ -108,16 +108,18 @@ $app->get('/programming', function (Request $request, Response $response, $args)
     $programming = $programmingDao->findAllProgrammingByCompany($id_company);
 
     for ($i = 0; $i < sizeof($programming); $i++) {
-        $dataProgramming['order'] = $programming[$i]['id_order'];
-        $order = $generalProgrammingDao->checkAccumulatedQuantityOrder($dataProgramming['order']);
+        $dataProgramming['id_order'] = $programming[$i]['id_order'];
+        $order = $generalProgrammingDao->checkAccumulatedQuantityOrder($dataProgramming['id_order']);
 
         if ($order['quantity_programming'] < $order['original_quantity'])
-            $dataProgramming['accumulatedQuantity'] = $order['original_quantity'] - $order['quantity_programming'];
+            $dataProgramming['accumulated_quantity_order'] = $order['original_quantity'] - $order['quantity_programming'];
         else
-            $dataProgramming['accumulatedQuantity'] = 0;
+            $dataProgramming['accumulated_quantity_order'] = 0;
 
         $generalOrdersDao->updateAccumulatedOrder($dataProgramming);
     }
+
+    $programming = $programmingDao->findAllProgrammingByCompany($id_company);
 
     // $programming1 = $generalProgrammingDao->findAllOrdersByCompany($id_company);
 
@@ -225,16 +227,16 @@ $app->post('/saveProgramming', function (Request $request, Response $response, $
         //     $result = $generalProgrammingDao->addMinutesProgramming($arr['id_programming'], $dataProgramming['minutes']);
         // }
 
-        // if ($result == null) {
-        //     $order = $generalProgrammingDao->checkAccumulatedQuantityOrder($dataProgramming['order']);
+        if ($result == null) {
+            // $order = $generalProgrammingDao->checkAccumulatedQuantityOrder($programming[$i]['order']);
 
-        //     if ($order['quantity_programming'] < $order['original_quantity'])
-        //         $dataProgramming['accumulatedQuantity'] = $order['original_quantity'] - $order['quantity_programming'];
-        //     else
-        //         $dataProgramming['accumulatedQuantity'] = 0;
+            // if ($programmings[$i]['quantity_programming'] < $programmings[$i]['original_quantity'])
+            //     $dataProgramming['accumulatedQuantity'] = $programmings[$i]['original_quantity'] - $programmings[$i]['quantity_programming'];
+            // else
+            //     $dataProgramming['accumulatedQuantity'] = 0;
 
-        //     $result = $generalOrdersDao->updateAccumulatedOrder($dataProgramming);
-        // }
+            $result = $generalOrdersDao->updateAccumulatedOrder($programmings[$i]);
+        }
 
         if ($result != null) break;
         $result = $generalOrdersDao->changeStatus($programmings[$i]['id_order'], 4);
@@ -257,6 +259,7 @@ $app->post('/saveProgramming', function (Request $request, Response $response, $
         }
 
         if ($result != null) break;
+
         $orders = $ordersDao->findAllOrdersByCompany($id_company);
 
         foreach ($orders as $arr) {
@@ -394,9 +397,9 @@ $app->post('/deleteProgramming', function (Request $request, Response $response,
             $order = $generalProgrammingDao->checkAccumulatedQuantityOrder($dataProgramming['order']);
 
             if ($order['quantity_programming'] < $order['original_quantity'])
-                $dataProgramming['accumulatedQuantity'] = $order['original_quantity'] - $order['quantity_programming'];
+                $dataProgramming['accumulated_quantity_order'] = $order['original_quantity'] - $order['quantity_programming'];
             else
-                $dataProgramming['accumulatedQuantity'] = 0;
+                $dataProgramming['accumulated_quantity_order'] = '';
 
             $result = $generalOrdersDao->updateAccumulatedOrder($dataProgramming);
         }
@@ -433,7 +436,7 @@ $app->post('/deleteProgramming', function (Request $request, Response $response,
     }
 
     if ($result == null)
-        $resp = array('success' => true, 'message' => 'Orden de Producción eliminada correctamente');
+        $resp = array('success' => true, 'message' => 'Programa de produccion eliminado correctamente');
     else if (isset($programming['info']))
         $resp = array('info' => true, 'message' => $programming['message']);
     else
