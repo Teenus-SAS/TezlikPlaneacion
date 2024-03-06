@@ -11,7 +11,7 @@ $(document).ready(function () {
   allTblData = [];
   let selectProduct = false;
   let selectProcess = false;
-  // localStorage.removeItem('dataProgramming');
+  // sessionStorage.removeItem('dataProgramming');
 
   loadAllDataProgramming = async () => {
     try {
@@ -26,7 +26,7 @@ $(document).ready(function () {
         productsMaterials
       ] = await Promise.all([
         searchData('/api/ordersProgramming'),
-        searchData('/api/processOrder'),
+        searchData('/api/processProgramming'),
         searchData('/api/machines'),
         searchData('/api/planCiclesMachine'),
         searchData('/api/planningMachines'),
@@ -53,7 +53,7 @@ $(document).ready(function () {
       
       $('.cardBottons').show(800);
 
-      !localStorage.getItem('dataProgramming') || localStorage.getItem('dataProgramming').includes('[object Object]') ? allTblData = [] : allTblData = JSON.parse(localStorage.getItem('dataProgramming'));
+      !sessionStorage.getItem('dataProgramming') || sessionStorage.getItem('dataProgramming').includes('[object Object]') ? allTblData = [] : allTblData = JSON.parse(sessionStorage.getItem('dataProgramming'));
  
       allTblData = allTblData.concat(data); 
       data = data.concat(allTblData);
@@ -417,8 +417,6 @@ $(document).ready(function () {
       dataProgramming['update'] = 0;
 
       let id_product;
-
-      let id_order = parseInt($(this).find('option:selected').attr('class'));
 
       for (let i = 0; i < productOrders.length; i++) {
         if (this.value == productOrders[i].id_product) {

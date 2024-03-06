@@ -120,7 +120,7 @@ $(document).ready(function () {
     dataProgramming['max_date'] = data.max_date;
     dataProgramming['min_programming'] = data.min_programming;
     dataProgramming['update'] = 1;
-    dataProgramming['route'] = 1;
+    // dataProgramming['route'] = data.route;
 
     $("html, body").animate(
       {
@@ -186,9 +186,11 @@ $(document).ready(function () {
         
         if (quantityProgramming < allOrdersProgramming[i].original_quantity) {
           quantityMissing = allOrdersProgramming[i].original_quantity - quantityProgramming;
-          if (allOrdersProgramming[i].accumulated_quantity == 0 || allOrdersProgramming[i].accumulated_quantity == null)
+          if (allOrdersProgramming[i].accumulated_quantity == 0 || allOrdersProgramming[i].accumulated_quantity == null){
             allOrdersProgramming[i].quantity_programming = quantityMissing;
-          else {
+            allOrdersProgramming[i].accumulated_quantity = quantityMissing;
+            allOrdersProgramming[i].accumulated_quantity_order = quantityMissing;          
+          } else {
             allOrdersProgramming[i].accumulated_quantity_order = (allOrdersProgramming[i].accumulated_quantity - quantityProgramming) < 0 ? 0 : allOrdersProgramming[i].accumulated_quantity - quantityProgramming;
             allOrdersProgramming[i].accumulated_quantity = (allOrdersProgramming[i].accumulated_quantity - quantityProgramming) < 0 ? 0 : allOrdersProgramming[i].accumulated_quantity - quantityProgramming;
             allOrdersProgramming[i].quantity_programming = (allOrdersProgramming[i].accumulated_quantity - quantityProgramming) < 0 ? 0 : allOrdersProgramming[i].accumulated_quantity - quantityProgramming;
@@ -221,10 +223,11 @@ $(document).ready(function () {
     dataProgramming['accumulated_quantity_order'] = quantityMissing;
     dataProgramming['key'] = allTblData.length;
     
-    // process = allProcess.find(item => item.id_product == id_product && item.id_order == id_order);
+    process = allProcess.find(item => item.id_product == id_product //&& item.id_order == id_order
+    );
 
-    // if (quantityMissing - quantityProgramming > 0)
-    //   dataProgramming['route'] = `${process.route1}, ${process.route1 + 1}`;
+    if (quantityMissing - quantityProgramming > 0)
+      dataProgramming['route'] = `${process.route1}, ${process.route1 + 1}`;
  
     hideCardAndResetForm();
 
@@ -452,7 +455,7 @@ $(document).ready(function () {
   message = async (data) => {
     try { 
       if (data.success) {
-        localStorage.setItem('dataProgramming', JSON.stringify(allTblData));
+        sessionStorage.setItem('dataProgramming', JSON.stringify(allTblData));
 
         hideCardAndResetForm();
         toastr.success(data.message);

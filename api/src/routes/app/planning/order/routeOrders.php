@@ -140,10 +140,10 @@ $app->post('/addOrder', function (Request $request, Response $response, $args) u
         $dataOrder['idOrder'] = $arr['id_order'];
         $dataOrder['route'] = 1;
 
-        $cicles = $generalPlanCiclesMachinesDao->findAllPlanCiclesMachineByProduct($dataOrder['idProduct'], $id_company);
+        // $cicles = $generalPlanCiclesMachinesDao->findAllPlanCiclesMachineByProduct($dataOrder['idProduct'], $id_company);
 
-        if (sizeof($cicles) > 0)
-            $order = $programmingRoutesDao->insertProgrammingRoutes($dataOrder, $id_company);
+        // if (sizeof($cicles) > 0)
+        //     $order = $programmingRoutesDao->insertProgrammingRoutes($dataOrder, $id_company);
 
         $data[0] = $dataOrder['order'] . '-' . $dataOrder['idProduct'];
 
@@ -174,13 +174,13 @@ $app->post('/addOrder', function (Request $request, Response $response, $args) u
                 $resolution = $ordersDao->insertOrderByCompany($order[$i], $id_company);
 
                 $arr = $lastDataDao->findLastInsertedOrder($id_company);
-                $order[$i]['idOrder'] = $arr['id_order'];
-                $order[$i]['route'] = 1;
+                // $order[$i]['idOrder'] = $arr['id_order'];
+                // $order[$i]['route'] = 1;
 
-                $cicles = $generalPlanCiclesMachinesDao->findAllPlanCiclesMachineByProduct($order[$i]['idProduct'], $id_company);
+                // $cicles = $generalPlanCiclesMachinesDao->findAllPlanCiclesMachineByProduct($order[$i]['idProduct'], $id_company);
 
-                if (sizeof($cicles) > 0)
-                    $resolution = $programmingRoutesDao->insertProgrammingRoutes($order[$i], $id_company);
+                // if (sizeof($cicles) > 0)
+                //     $resolution = $programmingRoutesDao->insertProgrammingRoutes($order[$i], $id_company);
             } else {
                 $order[$i]['idOrder'] = $findOrder['id_order'];
                 $resolution = $ordersDao->updateOrder($order[$i]);

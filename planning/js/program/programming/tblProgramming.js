@@ -23,7 +23,7 @@ $(document).ready(function () {
   });
 
   loadTblProgramming = async (data, op) => { 
-    localStorage.setItem('dataProgramming', JSON.stringify(allTblData));
+    sessionStorage.setItem('dataProgramming', JSON.stringify(allTblData));
      
     if (allTblData.length > 0) {
       $('.cardSaveBottons').show(800);

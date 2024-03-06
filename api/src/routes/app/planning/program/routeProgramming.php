@@ -153,7 +153,7 @@ $app->get('/programming/{num_order}', function (Request $request, Response $resp
     return $response->withHeader('Content-Type', 'application/json');
 });
 
-$app->get('/processOrder', function (Request $request, Response $response, $args) use ($programmingRoutesDao) {
+$app->get('/processProgramming', function (Request $request, Response $response, $args) use ($programmingRoutesDao) {
     session_start();
     $id_company = $_SESSION['id_company'];
     $programming = $programmingRoutesDao->findAllProgrammingRoutes($id_company);
@@ -214,7 +214,7 @@ $app->post('/saveProgramming', function (Request $request, Response $response, $
             $result = $programmingDao->updateProgramming($programmings[$i]);
 
         if ($result == null) {
-            $arr = $programmingRoutesDao->findProgrammingRoutes($programmings[$i]);
+            $arr = $programmingRoutesDao->findProgrammingRoutes($programmings[$i]['id_product']);
 
             if ($arr) {
                 $programmings[$i]['idProgrammingRoutes'] = $arr['id_programming_routes'];

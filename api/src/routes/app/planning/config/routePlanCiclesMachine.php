@@ -194,17 +194,15 @@ $app->post('/addPlanCiclesMachine', function (Request $request, Response $respon
                 $ciclesMachine = $generalPlanCiclesMachinesDao->findAllPlanCiclesMachineByProduct($dataPlanCiclesMachine['idProduct'], $id_company);
 
                 if (sizeof($ciclesMachine) == 1) {
-                    $orders = $generalOrdersDao->findAllOrdersByProduct($dataPlanCiclesMachine['idProduct']);
+                    $arr = $programmingRoutesDao->findProgrammingRoutes($dataPlanCiclesMachine['idProduct']);
 
-                    foreach ($orders as $arr) {
+                    if (!$arr) {
                         $data = [];
                         $data['idProduct'] = $dataPlanCiclesMachine['idProduct'];
-                        $data['idOrder'] = $arr['id_order'];
+                        // $data['idOrder'] = $arr['id_order'];
                         $data['route'] = 1;
 
                         $planCiclesMachine = $programmingRoutesDao->insertProgrammingRoutes($data, $id_company);
-
-                        if (isset($planCiclesMachine['info'])) break;
                     }
                 }
             }

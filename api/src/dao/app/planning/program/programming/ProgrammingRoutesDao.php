@@ -20,9 +20,9 @@ class ProgrammingRoutesDao
     {
         $connection = Connection::getInstance()->getConnection();
 
-        $stmt = $connection->prepare("SELECT pr.id_programming_routes, pr.id_order, pr.id_product, pr.route, pcm.route AS route1, p.id_process, p.process
+        $stmt = $connection->prepare("SELECT pr.id_programming_routes, pr.id_product, pr.route, pcm.route AS route1, p.id_process, p.process
                                         FROM programming_routes pr
-                                        INNER JOIN plan_orders o ON o.id_order = pr.id_order
+                                        -- INNER JOIN plan_orders o ON o.id_order = pr.id_order
                                         INNER JOIN plan_cicles_machine pcm ON pcm.id_product = pr.id_product AND FIND_IN_SET(pcm.route, pr.route) > 0
                                         INNER JOIN process p ON p.id_process = pcm.id_process
                                         WHERE pr.id_company = :id_company");
@@ -31,15 +31,14 @@ class ProgrammingRoutesDao
         return $programming;
     }
 
-    public function findProgrammingRoutes($dataProgramming)
+    public function findProgrammingRoutes($id_product)
     {
         $connection = Connection::getInstance()->getConnection();
 
         $stmt = $connection->prepare("SELECT * FROM programming_routes
-                                      WHERE id_order = :id_order AND id_product = :id_product");
+                                      WHERE id_product = :id_product");
         $stmt->execute([
-            'id_order' => $dataProgramming['id_order'],
-            'id_product' => $dataProgramming['id_product']
+            'id_product' => $id_product
         ]);
         $programming = $stmt->fetch($connection::FETCH_ASSOC);
         return $programming;
@@ -50,11 +49,11 @@ class ProgrammingRoutesDao
         try {
             $connection = Connection::getInstance()->getConnection();
 
-            $stmt = $connection->prepare("INSERT INTO programming_routes (id_company, id_order, id_product, route) 
-                                          VALUES (:id_company, :id_order, :id_product, :route)");
+            $stmt = $connection->prepare("INSERT INTO programming_routes (id_company, id_product, route) 
+                                          VALUES (:id_company, :id_product, :route)");
             $stmt->execute([
                 'id_company' => $id_company,
-                'id_order' => $dataProgramming['idOrder'],
+                // 'id_order' => $dataProgramming['idOrder'],
                 'id_product' => $dataProgramming['idProduct'],
                 'route' => $dataProgramming['route']
             ]);
