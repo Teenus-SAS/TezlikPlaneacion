@@ -44,7 +44,7 @@ $(document).ready(function () {
       allCiclesMachines = ciclesMachines;
       allPlanningMachines = planningMachines;
       // allOrders = orders;  
-      allOrders = orders.map(item => ({ ...item, flag_tbl: 1 }));
+      allOrders = orders.map(item => ({ ...item, flag_tbl: 1, flag_process: 0 }));
       allProducts = products;
       allProgramming = programming;
       copyAllProgramming = allProgramming;
@@ -377,10 +377,10 @@ $(document).ready(function () {
   };
 
   /* Cargar Productos y Maquinas */
-  const loadProducts = (num_order) => {
+  const loadProducts = (num_order) => { 
     let orders = allOrders.filter(item => item.num_order == num_order &&
       (item.status == 'PROGRAMAR' || item.status == 'PROGRAMADO') &&
-      (item.accumulated_quantity_order == null || item.accumulated_quantity_order != 0) &&
+      ((item.accumulated_quantity_order == null || item.accumulated_quantity_order != 0) || item.flag_process == 0) &&
       item.flag_tbl == 1
     );
 
@@ -392,7 +392,7 @@ $(document).ready(function () {
     $select.append(`<option disabled selected>Seleccionar</option>`);
     $.each(orders, function (i, value) {
       $select.append(
-        `<option value ='${value.id_product}' class='${value.id_order}'> ${value.product} </option>`
+        `<option value ='${value.id_product}'> ${value.product} </option>`
       );
     });
 
@@ -403,8 +403,8 @@ $(document).ready(function () {
     e.preventDefault();
 
     if (selectProduct == true) {
-      let num_order = $('#order :selected').text().trim();
-      let productOrders = allOrders.filter(item => item.num_order == num_order &&
+      let num_order = $('#order :selected').text().trim(); 
+      productOrders = allOrders.filter(item => item.num_order == num_order &&
         (item.status == 'PROGRAMAR' || item.status == 'PROGRAMADO') &&
         (item.accumulated_quantity_order == null || item.accumulated_quantity_order != 0)
       );
@@ -422,6 +422,7 @@ $(document).ready(function () {
         if (this.value == productOrders[i].id_product) {
           // let process = allProcess.filter(item => item.id_product == this.value && item.id_order == id_order);
           let process = allProcess.filter(item => item.id_product == this.value);
+          process = process.filter(item => item.route1 == process[0].route);
           id_product = this.value;
           
           let $select = $(`#idProcess`);

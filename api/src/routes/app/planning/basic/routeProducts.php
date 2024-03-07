@@ -107,7 +107,7 @@ $app->post('/addProduct', function (Request $request, Response $response, $args)
             if (sizeof($_FILES) > 0) $FilesDao->imageProduct($lastProductId['id_product'], $id_company);
 
             if ($products == null)
-                $products = $productsInventoryDao->insertProductsInventory($lastProductId['id_product'], $id_company);
+                $products = $productsInventoryDao->insertProductsInventory($lastProductId['id_product'], $dataProduct['quantity'], $id_company);
 
             if ($products == null)
                 $products = $generalProductsDao->updateAccumulatedQuantity($lastProductId['id_product'], $dataProduct['quantity'], 1);
@@ -135,10 +135,12 @@ $app->post('/addProduct', function (Request $request, Response $response, $args)
 
                 if (isset($resolution['info'])) break;
 
-                $resolution = $productsInventoryDao->insertProductsInventory($lastProductId['id_product'], $id_company);
+                $resolution = $productsInventoryDao->insertProductsInventory($lastProductId['id_product'], $products[$i]['quantity'], $id_company);
             } else {
                 $products[$i]['idProduct'] = $product['id_product'];
                 $resolution = $productsDao->updateProductByCompany($products[$i], $id_company);
+
+                $resolution = $productsInventoryDao->updateProductsInventory($products[$i]['idProduct'], $products[$i]['quantity']);
                 // if ($products == null) {
                 //     $products = $generalProductsDao->updateAccumulatedQuantity($dataProduct['idProduct'], $$products[$i]['quantity'], 1);
                 // }
@@ -312,6 +314,7 @@ $app->post('/updatePlanProduct', function (Request $request, Response $response,
             $products = $FilesDao->imageProduct($dataProduct['idProduct'], $id_company);
 
         if ($products == null) {
+            $products = $inventoryDaysDao->updateInventoryDays($dataProduct['idProduct'], $dataProduct['quantity']);
             $products = $generalProductsDao->updateAccumulatedQuantityGeneral($id_company);
             $products = $generalProductsDao->updateAccumulatedQuantity($dataProduct['idProduct'], $dataProduct['quantity'], 1);
         }

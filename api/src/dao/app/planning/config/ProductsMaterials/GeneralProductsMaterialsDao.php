@@ -52,9 +52,9 @@ class GeneralProductsMaterialsDao
     {
         $connection = Connection::getInstance()->getConnection();
 
-        $stmt = $connection->prepare("SELECT pm.id_product_material, pm.id_material, pm.id_product, p.quantity
+        $stmt = $connection->prepare("SELECT pm.id_product_material, pm.id_material, pm.id_product, pi.quantity
                                       FROM products_materials pm
-                                      INNER JOIN products p ON p.id_product = pm.id_product
+                                      INNER JOIN products_inventory pi ON pi.id_product = pm.id_product
                                       INNER JOIN plan_unit_sales u ON u.id_product = pm.id_product
                                       WHERE id_material = :id_material");
         $stmt->execute(['id_material' => $id_material]);

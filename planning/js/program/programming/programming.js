@@ -201,33 +201,45 @@ $(document).ready(function () {
         }
       }
     }
-    
+
+    process = allProcess.find(item => item.id_product == id_product);
+
+    // Recorre allProcess para actualizar la ruta
+    for (let i = 0; i < allProcess.length; i++) {
+      if (quantityMissing == 0) {
+        allProcess[i].route += 1; 
+        allProcess[i].status = 1;
+      } 
+    }
+
     // Recorre allOrders en sentido inverso para evitar problemas con la actualización de índices
     for (let i = allOrders.length - 1; i >= 0; i--) {
-      if (allOrders[i].id_product == id_product && quantityMissing === 0) {
+      if (allOrders[i].id_product == id_product && quantityMissing === 0 && process.length === 1) {
         allOrders[i].flag_tbl = 0;
+
+        if (allProcess[0].status == 1)
+        allOrders[i].flag_process = 0;
       }
     }
 
     // Recorre allOrdersProgramming en sentido inverso
     for (let i = allOrdersProgramming.length - 1; i >= 0; i--) {
-      if (allOrdersProgramming[i].id_product == id_product && quantityMissing === 0) {
+      if (allOrdersProgramming[i].id_product == id_product && quantityMissing === 0 && process.length === 1) {
         allOrdersProgramming[i].flag_tbl = 0;
         // allOrdersProgramming.splice(i, 1);
       }
     }
 
+    
+
     quantityMissing < 0 ? quantityMissing = 0 : quantityMissing;
 
     dataProgramming['accumulated_quantity'] = quantityMissing;
     dataProgramming['accumulated_quantity_order'] = quantityMissing;
-    dataProgramming['key'] = allTblData.length;
-    
-    process = allProcess.find(item => item.id_product == id_product //&& item.id_order == id_order
-    );
+    dataProgramming['key'] = allTblData.length; 
 
     if (quantityMissing - quantityProgramming > 0)
-      dataProgramming['route'] = `${process.route1}, ${process.route1 + 1}`;
+      dataProgramming['route'] = allProcess[0].route;
  
     hideCardAndResetForm();
 

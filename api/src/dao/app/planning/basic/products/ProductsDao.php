@@ -19,7 +19,7 @@ class ProductsDao
   public function findAllProductsByCompany($id_company)
   {
     $connection = Connection::getInstance()->getConnection();
-    $stmt = $connection->prepare("SELECT p.id_product, p.reference, p.product, p.product AS descript, p.img, p.quantity, pi.reserved, pi.minimum_stock, pi.days, pi.classification, 'UND' AS abbreviation
+    $stmt = $connection->prepare("SELECT p.id_product, p.reference, p.product, p.product AS descript, p.img, pi.quantity, pi.reserved, pi.minimum_stock, pi.days, pi.classification, 'UND' AS abbreviation
                                   FROM products p
                                     INNER JOIN products_inventory pi ON pi.id_product = p.id_product
                                   WHERE p.id_company = :id_company");
@@ -37,16 +37,12 @@ class ProductsDao
     $connection = Connection::getInstance()->getConnection();
 
     try {
-      $quantity = str_replace('.', '', $dataProduct['quantity']);
-      $quantity = str_replace(',', '.', $quantity);
-
-      $stmt = $connection->prepare("INSERT INTO products (id_company, reference, product, quantity) 
-                                      VALUES(:id_company, :reference, :product, :quantity)");
+      $stmt = $connection->prepare("INSERT INTO products (id_company, reference, product) 
+                                      VALUES(:id_company, :reference, :product)");
       $stmt->execute([
         'reference' => trim($dataProduct['referenceProduct']),
         'product' => strtoupper(trim($dataProduct['product'])),
         'id_company' => $id_company,
-        'quantity' => $quantity,
       ]);
       $this->logger->info(__FUNCTION__, array('query' => $stmt->queryString, 'errors' => $stmt->errorInfo()));
     } catch (\Exception $e) {
@@ -65,16 +61,12 @@ class ProductsDao
     $connection = Connection::getInstance()->getConnection();
 
     try {
-      $quantity = str_replace('.', '', $dataProduct['quantity']);
-      $quantity = str_replace(',', '.', $quantity);
-
-      $stmt = $connection->prepare("UPDATE products SET reference = :reference, product = :product, quantity = :quantity 
+      $stmt = $connection->prepare("UPDATE products SET reference = :reference, product = :product
                                     WHERE id_product = :id_product AND id_company = :id_company");
       $stmt->execute([
         'reference' => trim($dataProduct['referenceProduct']),
         'product' => strtoupper(trim($dataProduct['product'])),
         'id_company' => $id_company,
-        'quantity' => $quantity,
         'id_product' => $dataProduct['idProduct'],
       ]);
       $this->logger->info(__FUNCTION__, array('query' => $stmt->queryString, 'errors' => $stmt->errorInfo()));

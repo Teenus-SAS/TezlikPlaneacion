@@ -146,7 +146,7 @@ class GeneralOrdersDao
     {
         $connection = Connection::getInstance()->getConnection();
 
-        $stmt = $connection->prepare("SELECT o.original_quantity, p.quantity, pi.accumulated_quantity, ps.status
+        $stmt = $connection->prepare("SELECT o.original_quantity, pi.quantity, pi.accumulated_quantity, ps.status
                                       FROM plan_orders o
                                         INNER JOIN products p ON p.id_product = o.id_product
                                         INNER JOIN products_inventory pi ON pi.id_product = o.id_product

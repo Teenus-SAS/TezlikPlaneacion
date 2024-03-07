@@ -50,8 +50,9 @@ class ProgrammingDao
     {
         $connection = Connection::getInstance()->getConnection();
 
-        $stmt = $connection->prepare("SELECT o.id_order, p.id_product, p.reference, p.product, p.quantity, o.original_quantity, IFNULL(o.accumulated_quantity, 0) AS accumulated_quantity
+        $stmt = $connection->prepare("SELECT o.id_order, p.id_product, p.reference, p.product, pi.quantity, o.original_quantity, IFNULL(o.accumulated_quantity, 0) AS accumulated_quantity
                                       FROM products p
+                                      INNER JOIN products_inventory pi ON pi.id_product = p.id_product
                                       INNER JOIN plan_orders o ON o.id_product = p.id_product
                                       WHERE o.num_order = :num_order AND o.status IN (1, 4)
                                       AND (o.accumulated_quantity IS NULL OR o.accumulated_quantity != 0)
