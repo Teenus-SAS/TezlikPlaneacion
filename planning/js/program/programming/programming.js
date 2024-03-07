@@ -141,10 +141,18 @@ $(document).ready(function () {
     let id_product = parseInt($('#selectNameProduct').val());
     let quantityMissing = parseInt($('#quantityMissing').val().replace('.', ''));
     let quantityProgramming = parseInt($('#quantity').val());
-    let quantityOrder = parseInt($('#quantityOrder').val());
+    let quantityOrder = parseInt($('#quantityOrder').val().replace('.', ''));
     let machine = $('#idMachine :selected').text().trim();
     let id_process = $('#idProcess').val();
     let process = $('#idProcess :selected').text().trim();
+
+    let productsMaterials = allProductsMaterials.filter(item => item.id_product == id_product);
+    productsMaterials = productsMaterials.sort((a, b) => a.quantity - b.quantity);
+        
+    if (productsMaterials[0].quantity < quantityProgramming) {
+      toastr.error('Cantidad a programar mayor a el inventario de MP');
+      return false;
+    }
 
     dataProgramming['machine'] = machine;
     dataProgramming['id_process'] = id_process;

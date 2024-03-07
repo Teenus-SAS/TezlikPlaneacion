@@ -2,7 +2,7 @@ $(document).ready(function () {
   data = {}; 
   allOrdersProgramming = [];
   allProcess = [];
-  let allMachines = [];
+  let machines = [];
   let allCiclesMachines = [];
   let allPlanningMachines = [];
   allOrders = []; 
@@ -148,11 +148,13 @@ $(document).ready(function () {
 
     $('#btnCreateProgramming').hide();
     
-    $('#minDate').val('');
-    $('#maxDate').val('');
-    document.getElementById('minDate').readOnly = false;
-    document.getElementById('minDate').type = 'date';
-    $('.date').hide();
+    if (dataProgramming['update'] == 0) {
+      $('#minDate').val('');
+      $('#maxDate').val('');
+      document.getElementById('minDate').readOnly = false;
+      document.getElementById('minDate').type = 'date';
+      $('.date').hide();
+    }
 
     let order = parseFloat($('#order').val());
     let product = parseFloat($('#selectNameProduct').val());
@@ -211,7 +213,7 @@ $(document).ready(function () {
         if (productMaterial == false) {
           toastr.error('Materia prima sin cantidad disponible');
           return false;
-        }
+        } 
       }
 
       let data = order * product * machine * quantity;
@@ -244,7 +246,12 @@ $(document).ready(function () {
       } else {
         let date = sessionStorage.getItem('minDate');
 
-        if (!date) {
+        if (dataProgramming['update'] == 1) {
+          date = convetFormatDateTime1($('#minDate').val());
+
+          dataProgramming['min_date'] = date;
+          calcMaxDate(date, 0, 2);
+        } else if (!date) {
           $('.date').show(800);
           document.getElementById('minDate').readOnly = false;
           document.getElementById('minDate').type = 'date';

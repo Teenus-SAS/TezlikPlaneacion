@@ -49,7 +49,7 @@ if (sizeof($_SESSION) == 0)
                                 </div>
                             </div>
                             <div class="col-sm-7 col-xl-4 form-inline justify-content-sm-end cardBottons">
-                                <div id="machines">
+                                <div id="machines1">
                                     <label class="font-weight-bold text-dark">Maquina</label>
                                     <select class="form-control idMachine" id="searchMachine">
                                     </select>
@@ -122,7 +122,7 @@ if (sizeof($_SESSION) == 0)
                                                         <select class="form-control input selects" id="idProcess" name="idProcess">
                                                         </select>
                                                     </div>
-                                                    <div class="col-sm-2 floating-label enable-floating-label show-label" id="machines">
+                                                    <div class="col-sm-2 floating-label enable-floating-label show-label" id="machines1">
                                                         <label for="">Maquina</label>
                                                         <select class="form-control input selects" id="idMachine" name="idMachine">
                                                         </select>

@@ -293,6 +293,7 @@ $app->post('/updatePlanProduct', function (Request $request, Response $response,
     $generalProductsDao,
     $generalMaterialsDao,
     $generalOrdersDao,
+    $productsInventoryDao,
     $FilesDao,
     $productsMaterialsDao,
     $generalProgrammingDao,
@@ -314,7 +315,7 @@ $app->post('/updatePlanProduct', function (Request $request, Response $response,
             $products = $FilesDao->imageProduct($dataProduct['idProduct'], $id_company);
 
         if ($products == null) {
-            $products = $inventoryDaysDao->updateInventoryDays($dataProduct['idProduct'], $dataProduct['quantity']);
+            $products = $productsInventoryDao->updateProductsInventory($dataProduct['idProduct'], $dataProduct['quantity']);
             $products = $generalProductsDao->updateAccumulatedQuantityGeneral($id_company);
             $products = $generalProductsDao->updateAccumulatedQuantity($dataProduct['idProduct'], $dataProduct['quantity'], 1);
         }
