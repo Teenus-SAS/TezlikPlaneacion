@@ -83,7 +83,13 @@ $(document).ready(function () {
     $('#applicationDate').val(data.application_date);
     $('#deliveryDate').val(data.delivery_date);
     $('#purchaseOrder').val(data.purchase_order); 
-    $('#quantity').val(data.quantity);
+
+    let quantity = data.quantity
+            
+    if (data.abbreviation === 'UND') quantity = quantity.toLocaleString('es-CO', { maximumFractionDigits: 0 });
+    else quantity = quantity.toLocaleString('es-CO', { minimumFractionDigits: 2 });
+    
+    $('#quantity').val(quantity);
     
     $('html, body').animate(
       {

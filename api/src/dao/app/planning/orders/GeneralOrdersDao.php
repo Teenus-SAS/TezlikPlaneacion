@@ -197,6 +197,24 @@ class GeneralOrdersDao
         }
     }
 
+    public function changeStatusByProduct($id_product, $status)
+    {
+        $connection = Connection::getInstance()->getConnection();
+
+        try {
+            $stmt = $connection->prepare("UPDATE plan_orders SET status = :status WHERE id_product = :id_product");
+            $stmt->execute([
+                'status' => $status,
+                'id_product' => $id_product
+            ]);
+        } catch (\Exception $e) {
+            $message = $e->getMessage();
+
+            $error = array('info' => true, 'message' => $message);
+            return $error;
+        }
+    }
+
     public function updateAccumulatedOrder($dataOrder)
     {
         try {

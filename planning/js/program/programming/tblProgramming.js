@@ -15,8 +15,14 @@ $(document).ready(function () {
     }
     else { 
       data = allTblData.filter(item => item.id_machine == this.value);
-      MMindate = data[0].min_date; 
-      op = 2;
+
+      if (data.length > 0) {
+        MMindate = data[0].min_date;
+        op = 2;
+      } else {
+        // data = allTblData;
+        op = 1;
+      }
     }
 
     loadTblProgramming(data, op);
@@ -87,11 +93,12 @@ $(document).ready(function () {
             break;
           case 'Fecha y Hora':
             // const min_date = arr.min_date;
-            if ($('#searchMachine').val() != '0' && $('#searchMachine').val()) {
+            // if ($('#searchMachine').val() != '0' && $('#searchMachine').val()) {
+            if (op == 2) {
               if (i == 0) {
                 minProgramming = 0;
               } else {
-                min_date1 = minProgramming; 
+                min_date1 = minProgramming;
               }
               minProgramming += arr.min_programming;
               min_date = MMindate;
@@ -104,10 +111,11 @@ $(document).ready(function () {
             let final_date = new Date(min_date);
             final_date.setMinutes(minDate.getMinutes() + Math.floor(minProgramming));
             
-            if ($('#searchMachine').val() != '0' && $('#searchMachine').val() && i > 0) {
+            // if ($('#searchMachine').val() != '0' && $('#searchMachine').val() && i > 0) {
+            if (op == 2 && i > 0) {
               minDate.setMinutes(minDate.getMinutes() + Math.floor(min_date1));
             }
-            cell.innerHTML = `Inicio: ${moment(minDate).format("DD/MM/YYYY hh:mm A")}<br>Fin: ${moment(final_date).format("DD/MM/YYYY hh:mm A")}`; 
+            cell.innerHTML = `Inicio: ${moment(minDate).format("DD/MM/YYYY hh:mm A")}<br>Fin: ${moment(final_date).format("DD/MM/YYYY hh:mm A")}`;
             break;
           case 'Orden Produccion':
             cell.innerHTML = `<button class="btn btn-warning changeStatus" id="${arr.id_programming}" name="${arr.id_programming}">Crear OP</button>`;

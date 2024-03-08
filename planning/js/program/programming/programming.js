@@ -194,10 +194,10 @@ $(document).ready(function () {
         
         if (quantityProgramming < allOrdersProgramming[i].original_quantity) {
           quantityMissing = allOrdersProgramming[i].original_quantity - quantityProgramming;
-          if (allOrdersProgramming[i].accumulated_quantity == 0 || allOrdersProgramming[i].accumulated_quantity == null){
+          if (allOrdersProgramming[i].accumulated_quantity == 0 || allOrdersProgramming[i].accumulated_quantity == null) {
             allOrdersProgramming[i].quantity_programming = quantityMissing;
             allOrdersProgramming[i].accumulated_quantity = quantityMissing;
-            allOrdersProgramming[i].accumulated_quantity_order = quantityMissing;          
+            allOrdersProgramming[i].accumulated_quantity_order = quantityMissing;
           } else {
             allOrdersProgramming[i].accumulated_quantity_order = (allOrdersProgramming[i].accumulated_quantity - quantityProgramming) < 0 ? 0 : allOrdersProgramming[i].accumulated_quantity - quantityProgramming;
             allOrdersProgramming[i].accumulated_quantity = (allOrdersProgramming[i].accumulated_quantity - quantityProgramming) < 0 ? 0 : allOrdersProgramming[i].accumulated_quantity - quantityProgramming;
@@ -214,10 +214,10 @@ $(document).ready(function () {
 
     // Recorre allProcess para actualizar la ruta
     for (let i = 0; i < allProcess.length; i++) {
-      if (quantityMissing == 0) {
-        allProcess[i].route += 1; 
+      if (quantityMissing == 0 && allProcess[i].id_product == id_product) {
+        allProcess[i].route += 1;
         allProcess[i].status = 1;
-      } 
+      }
     }
 
     // Recorre allOrders en sentido inverso para evitar problemas con la actualización de índices
@@ -226,7 +226,7 @@ $(document).ready(function () {
         allOrders[i].flag_tbl = 0;
 
         if (allProcess[0].status == 1)
-        allOrders[i].flag_process = 0;
+          allOrders[i].flag_process = 0;
       }
     }
 
@@ -238,13 +238,11 @@ $(document).ready(function () {
       }
     }
 
-    
-
     quantityMissing < 0 ? quantityMissing = 0 : quantityMissing;
 
     dataProgramming['accumulated_quantity'] = quantityMissing;
     dataProgramming['accumulated_quantity_order'] = quantityMissing;
-    dataProgramming['key'] = allTblData.length; 
+    dataProgramming['key'] = allTblData.length;
 
     if (quantityMissing - quantityProgramming > 0)
       dataProgramming['route'] = allProcess[0].route;
@@ -264,8 +262,8 @@ $(document).ready(function () {
       }
     
       allTblData.push(dataProgramming);
-      
-      toastr.success('Programa de producción creado correctamente');
+
+      changeStatus(id_order, 4, 'Programa de producción creado correctamente');
     } else {
       for (let i = 0; i < allTblData.length; i++) {
         if (allTblData[i].id_programming == idProgramming) {
@@ -329,9 +327,10 @@ $(document).ready(function () {
               }
             }
 
+            changeStatus(allTblData[id].id_order, 1, 'Programa de producción eliminado correctamente');
+
             allTblData.splice(id, 1);
             loadTblProgramming(allTblData, 1);
-            toastr.success('Programa de producción eliminado correctamente');
           } else {
             let data = allTblData.find(item => item.id_programming == id);
             let dataProgramming = new FormData();
@@ -362,6 +361,22 @@ $(document).ready(function () {
       },
     });
   };
+
+  const changeStatus = async (id_order, status, message) => {
+    let resp = await searchData(`/api/statusOrder/${id_order}/${status}`);
+
+    try {
+      if (resp.success) {
+        toastr.success(message);
+      } else if (resp.error) {
+        toastr.error(resp.message);
+      } else if (resp.info) {
+        toastr.info(resp.message);
+      }
+    } catch (error) {
+      console.error("Error in message function:", error);
+    }
+  }
 
   /* Cambiar estado */
   $(document).on("click", ".changeStatus", function () {

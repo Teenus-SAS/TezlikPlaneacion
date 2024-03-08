@@ -276,8 +276,13 @@ $(document).ready(function () {
     }
 
     if (date.includes('T')) {
-      // date = date.split('T')[0];
-      min_date = convetFormatDateTime1(date);
+      if (dataProgramming['update'] == 0) {
+        date = date.split('T')[0];
+        
+        min_date = convetFormatDate(date);
+      } else
+        min_date = convetFormatDateTime1(date);
+      
     } else
       min_date = convetFormatDate(date);
 
@@ -413,7 +418,8 @@ $(document).ready(function () {
       let num_order = $('#order :selected').text().trim(); 
       productOrders = allOrders.filter(item => item.num_order == num_order &&
         (item.status == 'PROGRAMAR' || item.status == 'PROGRAMADO') &&
-        (item.accumulated_quantity_order == null || item.accumulated_quantity_order != 0)
+        ((item.accumulated_quantity_order == null || item.accumulated_quantity_order != 0) || item.flag_process == 0) &&
+        item.flag_tbl == 1
       );
 
       let product = productOrders.find(item => item.id_product == this.value);

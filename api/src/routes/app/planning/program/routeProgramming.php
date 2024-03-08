@@ -171,6 +171,22 @@ $app->get('/ordersProgramming', function (Request $request, Response $response, 
     return $response->withHeader('Content-Type', 'application/json');
 });
 
+$app->get('/statusOrder/{id_order}/{status}', function (Request $request, Response $response, $args) use (
+    $generalOrdersDao
+) {
+    $orders = $generalOrdersDao->changeStatus($args['id_order'], $args['status']);
+
+    if ($orders == null)
+        $resp = array('success' => true);
+    else if (isset($orders['info']))
+        $resp = array('info' => true, 'message' => $orders['message']);
+    else
+        $resp = array('error' => true, 'message' => 'Ocurrio un error cambiando la informacion. Intente nuevamente');
+
+    $response->getBody()->write(json_encode($resp, JSON_NUMERIC_CHECK));
+    return $response->withHeader('Content-Type', 'application/json');
+});
+
 $app->post('/saveProgramming', function (Request $request, Response $response, $args) use (
     $programmingDao,
     $programmingRoutesDao,
