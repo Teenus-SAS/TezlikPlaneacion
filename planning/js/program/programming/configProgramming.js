@@ -1,17 +1,17 @@
 $(document).ready(function () {
-  data = {}; 
+  data = {};
   allOrdersProgramming = [];
   allProcess = [];
   let machines = [];
   let allCiclesMachines = [];
   let allPlanningMachines = [];
-  allOrders = []; 
+  allOrders = [];
   allProgramming = [];
   allProductsMaterials = [];
   allTblData = [];
   let selectProduct = false;
   let selectProcess = false;
-  // sessionStorage.removeItem('dataProgramming');
+  sessionStorage.removeItem('dataProgramming');
 
   loadAllDataProgramming = async () => {
     try {
@@ -49,13 +49,24 @@ $(document).ready(function () {
       allProgramming = programming;
       copyAllProgramming = allProgramming;
       allProductsMaterials = productsMaterials;
-      data = programming;      
+      data = programming;
       
       $('.cardBottons').show(800);
 
-      !sessionStorage.getItem('dataProgramming') || sessionStorage.getItem('dataProgramming').includes('[object Object]') ? allTblData = [] : allTblData = JSON.parse(sessionStorage.getItem('dataProgramming'));
+      if (!sessionStorage.getItem('dataProgramming') || sessionStorage.getItem('dataProgramming').includes('[object Object]'))
+        allTblData = []
+      else {
+        allTblData = JSON.parse(sessionStorage.getItem('dataProgramming'));
+
+        for (let i = 0; i < allProcess.length; i++) {
+          if (allProcess[i].route > allProcess[i].route1) {
+            allOrdersProgramming = allOrdersProgramming.filter(item => item.id_product != allProcess[i].id_product);
+            allOrders = allOrders.filter(item => item.id_product != allProcess[i].id_product);
+          }          
+        }
+      }
  
-      allTblData = allTblData.concat(data); 
+      allTblData = allTblData.concat(data);
       data = data.concat(allTblData);
 
       for (let i = 0; i < data.length; i++) {
@@ -65,7 +76,7 @@ $(document).ready(function () {
 
             if (arr.length > 1)
               data.splice(i, 1);
-          } 
+          }
         }
       }
 
@@ -213,7 +224,7 @@ $(document).ready(function () {
         if (productMaterial == false) {
           toastr.error('Materia prima sin cantidad disponible');
           return false;
-        } 
+        }
       }
 
       let data = order * product * machine * quantity;
@@ -223,7 +234,7 @@ $(document).ready(function () {
         return false;
       };
 
-      if (machines.length > 0) { 
+      if (machines.length > 0) {
         dataProgramming['min_date'] = machines[machines.length - 1].max_date;
 
         let hour = new Date(machines[machines.length - 1].max_date).getHours();
@@ -389,7 +400,7 @@ $(document).ready(function () {
   };
 
   /* Cargar Productos y Maquinas */
-  const loadProducts = (num_order) => { 
+  const loadProducts = (num_order) => {
     let orders = allOrders.filter(item => item.num_order == num_order &&
       (item.status == 'PROGRAMAR' || item.status == 'PROGRAMADO') &&
       ((item.accumulated_quantity_order == null || item.accumulated_quantity_order != 0) || item.flag_process == 0) &&
@@ -415,7 +426,7 @@ $(document).ready(function () {
     e.preventDefault();
 
     if (selectProduct == true) {
-      let num_order = $('#order :selected').text().trim(); 
+      let num_order = $('#order :selected').text().trim();
       productOrders = allOrders.filter(item => item.num_order == num_order &&
         (item.status == 'PROGRAMAR' || item.status == 'PROGRAMADO') &&
         ((item.accumulated_quantity_order == null || item.accumulated_quantity_order != 0) || item.flag_process == 0) &&
@@ -451,9 +462,9 @@ $(document).ready(function () {
           $('#quantityOrder').val(parseFloat(productOrders[i].original_quantity).toLocaleString());
 
           if (productOrders[i].accumulated_quantity_order == 0 || productOrders[i].accumulated_quantity_order == null)
-            accumulated_quantity = parseFloat(productOrders[i].original_quantity).toLocaleString(); 
+            accumulated_quantity = parseFloat(productOrders[i].original_quantity).toLocaleString();
           else
-            accumulated_quantity = parseFloat(productOrders[i].accumulated_quantity_order).toLocaleString(); 
+            accumulated_quantity = parseFloat(productOrders[i].accumulated_quantity_order).toLocaleString();
 
           $('#quantityMissing').val(accumulated_quantity);
 
@@ -468,7 +479,7 @@ $(document).ready(function () {
       }
 
       selectProcess = true;
-      checkData(2, this.id); 
+      checkData(2, this.id);
     }
   });
 
@@ -477,7 +488,7 @@ $(document).ready(function () {
 
     if (selectProcess == true) {
       // Obtener el classname de la opción seleccionada
-      var route = parseInt($(this).find('option:selected').attr('class')); 
+      var route = parseInt($(this).find('option:selected').attr('class'));
       dataProgramming['route'] = route + 1;
       let id_product = parseInt($('#selectNameProduct').val());
 
@@ -492,6 +503,39 @@ $(document).ready(function () {
           `<option value = ${value.id_machine}> ${value.machine} </option>`
         );
       });
+    }
+  });
+
+  $('#idMachine').change(function (e) {
+    e.preventDefault();
+
+    if (allTblData.length > 0) {
+      let id_product = $('#selectNameProduct').val();
+
+      let data = allTblData.filter(item => item.id_product == id_product);
+      data.sort((a, b) => a.id_machine - b.id_machine);
+
+      if (data[data.length - 1].id_machine != this.value) {
+        let minProgramming = allTblData.reduce((total, arr) => total + arr.min_programming, 0);
+
+        let min_date = new Date(allTblData[0].min_date);
+
+        let max_date = new Date(allTblData[0].min_date);
+        max_date.setMinutes(min_date.getMinutes() + Math.floor(minProgramming));
+
+        max_date.setDate(max_date.getDate() + 1);
+
+        max_date =
+          max_date.getFullYear() + "-" +
+          ("00" + (max_date.getMonth() + 1)).slice(-2) + "-" +
+          ("00" + max_date.getDate()).slice(-2) + " " + ("00" + max_date.getHours()).slice(-2) + ':' + ("00" + max_date.getMinutes()).slice(-2) + ':' + '00';
+
+        document.getElementById('minDate').type = 'datetime-local';
+        let minDate = document.getElementById('minDate');
+
+        minDate.value = max_date;
+        dataProgramming['update'] = 1;
+      }
     }
   });
 });

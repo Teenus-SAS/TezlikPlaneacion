@@ -155,7 +155,7 @@ $(document).ready(function () {
     }
 
     for (let i = 0; i < productsMaterials.length; i++) {
-      productsMaterials[i].quantity -= quantityProgramming;    
+      productsMaterials[i].quantity -= quantityProgramming;
     }
 
     dataProgramming['machine'] = machine;
@@ -219,8 +219,10 @@ $(document).ready(function () {
     // Recorre allProcess para actualizar la ruta
     for (let i = 0; i < allProcess.length; i++) {
       if (quantityMissing == 0 && allProcess[i].id_product == id_product) {
+
         allProcess[i].route += 1;
-        allProcess[i].status = 1;
+        if (process[process.length - 1].route >= allProcess[i].route)
+          allProcess[i].status = 1;
       }
     }
 
@@ -231,6 +233,8 @@ $(document).ready(function () {
 
         if (allProcess[0].status == 1)
           allOrders[i].flag_process = 0;
+        else
+          allOrders[i].flag_process = 1;
       }
     }
 

@@ -116,8 +116,9 @@ $(document).ready(function () {
     let ref = $('#material').val();
     let quan = $('#quantity').val();
     let idProduct = $('#selectNameProduct').val();
+    let unit = $('#units').val();
  
-    let data = ref * idProduct;
+    let data = ref * idProduct * unit;
 
     if (!data || quan == '') {
       toastr.error('Ingrese todos los campos');

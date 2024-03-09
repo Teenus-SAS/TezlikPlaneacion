@@ -139,10 +139,9 @@ class GeneralProductsDao
         $connection = Connection::getInstance()->getConnection();
 
         try {
-            $stmt = $connection->prepare("UPDATE products
-                                          JOIN products_inventory ON products.id_product = products_inventory.id_product
-                                          SET products_inventory.accumulated_quantity = products.quantity
-                                          WHERE products.id_company = :id_company");
+            $stmt = $connection->prepare("UPDATE products_inventory
+                                          SET accumulated_quantity = quantity
+                                          WHERE id_company = :id_company");
 
             $stmt->execute([
                 'id_company' => $id_company
