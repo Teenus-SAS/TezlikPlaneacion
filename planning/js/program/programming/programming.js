@@ -214,7 +214,7 @@ $(document).ready(function () {
       }
     }
 
-    process = allProcess.find(item => item.id_product == id_product);
+    process = allProcess.filter(item => item.id_product == id_product);
 
     // Recorre allProcess para actualizar la ruta
     for (let i = 0; i < allProcess.length; i++) {
@@ -225,6 +225,8 @@ $(document).ready(function () {
           allProcess[i].status = 1;
       }
     }
+
+    checkProcessMachines(allTblData);
 
     // Recorre allOrders en sentido inverso para evitar problemas con la actualización de índices
     for (let i = allOrders.length - 1; i >= 0; i--) {

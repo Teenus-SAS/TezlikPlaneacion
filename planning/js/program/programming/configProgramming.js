@@ -58,12 +58,7 @@ $(document).ready(function () {
       else {
         allTblData = JSON.parse(sessionStorage.getItem('dataProgramming'));
 
-        for (let i = 0; i < allProcess.length; i++) {
-          if (allProcess[i].route > allProcess[i].route1) {
-            allOrdersProgramming = allOrdersProgramming.filter(item => item.id_product != allProcess[i].id_product);
-            allOrders = allOrders.filter(item => item.id_product != allProcess[i].id_product);
-          }          
-        }
+        checkProcessMachines(allTblData);
       }
  
       allTblData = allTblData.concat(data);
@@ -276,6 +271,32 @@ $(document).ready(function () {
     }
   };
 
+  checkProcessMachines = (data) => {
+    let conteoClaves = data.reduce((conteo, obj) => {
+      conteo[obj.id_product] = (conteo[obj.id_product] || 0) + 1;
+      return conteo;
+    }, {});
+
+    // Inicializar un array para almacenar los subarrays
+    let subarrays = [];
+
+    // Iterar sobre el objeto de conteo y dividir el array original
+    for (let id_product in conteoClaves) {
+      let subarray = array.filter(obj => obj.id_product === id_product);
+      subarrays.push(subarray);
+    }
+
+    for (let i = 0; i < subarrays.length; i++) {
+      let process = allProcess.filter(item => item.id_product == subarrays[i][0].id_product);
+      process.sort((a, b) => b.route1 - a.route1);
+
+      if (subarrays[i][subarrays[i].length - 1].route < process[0].route1) {
+        allOrdersProgramming = allOrdersProgramming.filter(item => item.id_product != subarrays[i][0].id_product);
+        allOrders = allOrders.filter(item => item.id_product != subarrays[i][0].id_product);
+      }
+    }
+  }
+
   $('#minDate').change(function (e) {
     e.preventDefault();
 
@@ -300,7 +321,7 @@ $(document).ready(function () {
     sessionStorage.setItem('minDate', min_date);
     dataProgramming['min_date'] = min_date;
     calcMaxDate(min_date, 0, 2);
-  });
+  })
 
   calcMaxDate = async (min_date, last_hour, op) => {
     try {
@@ -523,7 +544,7 @@ $(document).ready(function () {
         let max_date = new Date(allTblData[0].min_date);
         max_date.setMinutes(min_date.getMinutes() + Math.floor(minProgramming));
 
-        max_date.setDate(max_date.getDate() + 1);
+        // max_date.setDate(max_date.getDate() + 1);
 
         max_date =
           max_date.getFullYear() + "-" +
