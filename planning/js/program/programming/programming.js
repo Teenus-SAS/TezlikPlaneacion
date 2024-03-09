@@ -154,6 +154,10 @@ $(document).ready(function () {
       return false;
     }
 
+    for (let i = 0; i < productsMaterials.length; i++) {
+      productsMaterials[i].quantity -= quantityProgramming;    
+    }
+
     dataProgramming['machine'] = machine;
     dataProgramming['id_process'] = id_process;
     dataProgramming['process'] = process;
@@ -308,6 +312,12 @@ $(document).ready(function () {
             const quantityProgramming = allTblData[id].quantity_programming;
             const quantityOrder = allTblData[id].quantity_order;
             const accumulatedQuantity = allTblData[id].accumulated_quantity;
+
+            let productsMaterials = allProductsMaterials.filter(item => item.id_product == idProduct);
+            productsMaterials = productsMaterials.sort((a, b) => a.quantity - b.quantity);
+            for (let i = 0; i < productsMaterials.length; i++) {
+              productsMaterials[i].quantity -= quantityProgramming;
+            }
 
             for (const orderList of [allOrders, allOrdersProgramming]) {
               for (let i = 0; i < orderList.length; i++) {

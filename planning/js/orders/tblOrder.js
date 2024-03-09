@@ -104,16 +104,13 @@ $(document).ready(function () {
           data: null,
           className: 'uniqueClassName dt-head-center',
           render: function (data) {
-            !data.delivery_date && data.status == 'PROGRAMAR' ? action = `<a href="javascript:;" <i class="bx bx-edit-alt updateOrder" id="${data.id_order}" data-toggle='tooltip' title='Actualizar Pedido' style="font-size: 30px;"></i></a><a href="javascript:;" <i class="mdi mdi-delete-forever" id="${data.id_order}" data-toggle='tooltip' title='Eliminar Pedido' style="font-size: 30px;color:red" onclick="deleteFunction()"></i></a>`
+            !data.delivery_date && (data.status == 'PROGRAMAR' || data.status == 'POR PROCESAR') ? action = `<a href="javascript:;" <i class="bx bx-edit-alt updateOrder" id="${data.id_order}" data-toggle='tooltip' title='Actualizar Pedido' style="font-size: 30px;"></i></a><a href="javascript:;" <i class="mdi mdi-delete-forever" id="${data.id_order}" data-toggle='tooltip' title='Eliminar Pedido' style="font-size: 30px;color:red" onclick="deleteFunction()"></i></a>`
               : action = '';
 
             return action;
           },
         },
       ],
-      // rowCallback: function (row, data, index) {
-      //   if (data.status == 'SIN FICHA TECNICA' || data.status == 'Sin Materia Prima') $(row).css('color', 'red');
-      // },
     });
   }
 

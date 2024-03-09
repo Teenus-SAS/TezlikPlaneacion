@@ -54,7 +54,7 @@ $app->post('/cancelOffice', function (Request $request, Response $response, $arg
     $dataOrder = $request->getParsedBody();
 
     // $order = $generalProductsDao->updateAccumulatedQuantity($dataOrder['idProduct'], $dataOrder['quantity'] + $dataOrder['originalQuantity'], 1);
-    $order = $generalOrdersDao->changeStatus($dataOrder['idOrder'], 1);
+    $order = $generalOrdersDao->changeStatus($dataOrder['idOrder'], 9);
 
     $arr = $generalProductsDao->findProductReserved($dataOrder['idProduct']);
     !isset($arr['reserved']) ? $arr['reserved'] = 0 : $arr;
