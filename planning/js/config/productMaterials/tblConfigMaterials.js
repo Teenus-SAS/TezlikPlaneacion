@@ -6,6 +6,7 @@ $(document).ready(function () {
     id = this.value;
     $("#selectNameProduct option").removeAttr("selected");
     $(`#selectNameProduct option[value=${id}]`).prop("selected", true);
+    $('.cardAddMaterials').hide(800);
     loadtableMaterials(id);
     loadTblPlanCiclesMachine(id);
     loadTblRoutes(id);
@@ -16,6 +17,7 @@ $(document).ready(function () {
     id = this.value;
     $("#refProduct option").removeAttr("selected");
     $(`#refProduct option[value=${id}]`).prop("selected", true);
+    $('.cardAddMaterials').hide(800);
     loadtableMaterials(id);
     loadTblPlanCiclesMachine(id);
     loadTblRoutes(id);

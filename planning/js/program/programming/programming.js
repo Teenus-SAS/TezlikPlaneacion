@@ -226,8 +226,6 @@ $(document).ready(function () {
       }
     }
 
-    checkProcessMachines(allTblData);
-
     // Recorre allOrders en sentido inverso para evitar problemas con la actualización de índices
     for (let i = allOrders.length - 1; i >= 0; i--) {
       if (allOrders[i].id_product == id_product && quantityMissing === 0 && process.length === 1) {
@@ -290,6 +288,7 @@ $(document).ready(function () {
       toastr.success('Programa de producción modificado correctamente');
     }
 
+    checkProcessMachines(allTblData);
     loadTblProgramming(allTblData, 1);
     dataProgramming = [];
   };

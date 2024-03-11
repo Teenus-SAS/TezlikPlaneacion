@@ -282,7 +282,7 @@ $(document).ready(function () {
 
     // Iterar sobre el objeto de conteo y dividir el array original
     for (let id_product in conteoClaves) {
-      let subarray = array.filter(obj => obj.id_product === id_product);
+      let subarray = data.filter(obj => obj.id_product == id_product);
       subarrays.push(subarray);
     }
 
@@ -290,7 +290,7 @@ $(document).ready(function () {
       let process = allProcess.filter(item => item.id_product == subarrays[i][0].id_product);
       process.sort((a, b) => b.route1 - a.route1);
 
-      if (subarrays[i][subarrays[i].length - 1].route < process[0].route1) {
+      if (subarrays[i][subarrays[i].length - 1].route > process[0].route1) {
         allOrdersProgramming = allOrdersProgramming.filter(item => item.id_product != subarrays[i][0].id_product);
         allOrders = allOrders.filter(item => item.id_product != subarrays[i][0].id_product);
       }

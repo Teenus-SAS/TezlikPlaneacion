@@ -6,6 +6,7 @@ $(document).ready(function () {
     id = this.value;
     $('#selectNameProduct option').removeAttr('selected');
     $(`#selectNameProduct option[value=${id}]`).attr('selected', true);
+    $(".cardAddProcess").hide(800);
     loadtableProcess(id);
   });
 
@@ -14,6 +15,7 @@ $(document).ready(function () {
     id = this.value;
     $('#refProduct option').removeAttr('selected');
     $(`#refProduct option[value=${id}]`).attr('selected', true);
+    $(".cardAddProcess").hide(800);
     loadtableProcess(id);
   });
 
