@@ -75,6 +75,8 @@ $(document).ready(function () {
         let quantity = data.quantity;
         let reserved = data.reserved1;
 
+        data.delivery_pending == 0 && data.delivery_date == null ? delivery_pending = reserved : delivery_pending = data.delivery_pending;
+
         bootbox.confirm({
             title: 'Entrega Material',
             message:
@@ -99,6 +101,11 @@ $(document).ready(function () {
                     if (!store || store <= 0) {
                         toastr.error('Ingrese todos los campos');
                         return false;
+                    }
+                    
+                    if (store > delivery_pending) {
+                        toastr.error('Cantidad a entregar mayor');
+                        return false;                        
                     }
 
                     store <= reserved ? pending = (reserved - store) : pending = 0;
