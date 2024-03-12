@@ -86,8 +86,8 @@ $(document).ready(function () {
 
     let quantity = data.quantity
             
-    if (data.abbreviation === 'UND') quantity = quantity.toLocaleString('es-CO', { maximumFractionDigits: 0 });
-    else quantity = quantity.toLocaleString('es-CO', { minimumFractionDigits: 2 });
+    if (data.abbreviation === 'UND') quantity = Math.floor(quantity);
+    // else quantity = quantity.toLocaleString('es-CO', { minimumFractionDigits: 2 });
     
     $('#quantity').val(quantity);
     

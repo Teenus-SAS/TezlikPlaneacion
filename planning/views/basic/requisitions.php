@@ -174,7 +174,7 @@ if (sizeof($_SESSION) == 0)
                                                 </div>
                                                 <div class="col-sm-2 floating-label enable-floating-label show-label" style="margin-bottom:5px">
                                                     <label for="">Fecha Solicitud</label>
-                                                    <input class="form-control" type="date" name="applicationDate" id="applicationDate">
+                                                    <input class="form-control" type="date" name="applicationDate" id="applicationDate" min="<?php echo date('Y-m-d'); ?>">
                                                 </div>
                                                 <div class="col-sm-2 floating-label enable-floating-label show-label" style="margin-bottom:5px">
                                                     <label for="">Fecha Entrega</label>

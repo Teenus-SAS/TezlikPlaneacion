@@ -132,6 +132,7 @@ $app->post('/addProduct', function (Request $request, Response $response, $args)
                 $resolution = $productsDao->insertProductByCompany($products[$i], $id_company);
 
                 $lastProductId = $lastDataDao->lastInsertedProductId($id_company);
+                $products[$i]['idProduct'] = $lastProductId['id_product'];
 
                 if (isset($resolution['info'])) break;
 
@@ -145,7 +146,7 @@ $app->post('/addProduct', function (Request $request, Response $response, $args)
                 //     $products = $generalProductsDao->updateAccumulatedQuantity($dataProduct['idProduct'], $$products[$i]['quantity'], 1);
                 // }
             }
-            $resolution = $generalProductsDao->updateAccumulatedQuantity($lastProductId['id_product'], $products[$i]['quantity'], 1);
+            $resolution = $generalProductsDao->updateAccumulatedQuantity($products[$i]['idProduct'], $products[$i]['quantity'], 1);
         }
 
         $products = $generalProductsDao->updateAccumulatedQuantityGeneral($id_company);
