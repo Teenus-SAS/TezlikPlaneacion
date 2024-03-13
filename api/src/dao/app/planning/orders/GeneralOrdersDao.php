@@ -55,7 +55,7 @@ class GeneralOrdersDao
                                         AND o.id_company = :id_company 
                                         AND o.status NOT IN (3, 7, 8)
                                         -- NOT IN ('Entregado', 'En Produccion', 'Fabricado') 
-                                        AND o.max_date != '0000-00-00' ORDER BY p.product ASC");
+                                        AND o.max_date != '0000-00-00' ORDER BY p.id_product ASC");
         $stmt->execute(['id_company' => $id_company]);
 
         $this->logger->info(__FUNCTION__, array('query' => $stmt->queryString, 'errors' => $stmt->errorInfo()));

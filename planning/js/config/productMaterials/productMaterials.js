@@ -55,7 +55,7 @@ $(document).ready(function () {
 
   /* Adicionar unidad de materia prima */
 
-  $('#material').change(async function (e) {
+  $('#material').change(function (e) {
     e.preventDefault();
     let id = this.value;
 
@@ -67,7 +67,7 @@ $(document).ready(function () {
 
     for (i = 0; i < dataMaterials.length; i++) {
       if (id == dataMaterials[i].id_material) {
-        await loadUnitsByMagnitude(dataMaterials[i], 2);
+        loadUnitsByMagnitude(dataMaterials[i], 2);
       }
     }
   });
@@ -88,7 +88,7 @@ $(document).ready(function () {
 
   /* Actualizar productos materials */
 
-  $(document).on('click', '.updateMaterials',async function (e) {
+  $(document).on('click', '.updateMaterials', function (e) {
     $('.cardImportProductsMaterials').hide(800);
     $('.cardAddMaterials').show(800);
     $('#btnAddMaterials').html('Actualizar');
@@ -102,7 +102,7 @@ $(document).ready(function () {
     $(`#material option[value=${data.id_material}]`).prop('selected', true);
  
     $('#quantity').val(data.quantity);
-    await loadUnitsByMagnitude(data, 2);
+    loadUnitsByMagnitude(data, 2);
 
     $('html, body').animate(
       {

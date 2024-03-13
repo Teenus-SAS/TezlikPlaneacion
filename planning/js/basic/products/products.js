@@ -89,7 +89,7 @@ $(document).ready(function () {
 
   /* Eliminar productos */
 
-  deleteFunction = () => {
+  deleteProductsFunction = () => {
     let row = $(this.activeElement).parent().parent()[0];
     let data = tblProducts.fnGetData(row);
 

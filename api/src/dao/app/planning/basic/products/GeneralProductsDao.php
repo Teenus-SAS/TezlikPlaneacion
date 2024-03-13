@@ -116,11 +116,8 @@ class GeneralProductsDao
             if ($op == 1)
                 $stmt = $connection->prepare("UPDATE products_inventory SET accumulated_quantity = :accumulated_quantity WHERE id_product = :id_product");
             else
-                $stmt = $connection->prepare("UPDATE products
-                                              JOIN products_inventory ON products.id_product = products_inventory.id_product
-                                              SET products_inventory.accumulated_quantity = :accumulated_quantity,
-                                                  products.quantity = :accumulated_quantity
-                                              WHERE products.id_product = :id_product");
+                $stmt = $connection->prepare("UPDATE products_inventory accumulated_quantity = :accumulated_quantity, quantity = :accumulated_quantity
+                                              WHERE id_product = :id_product");
 
             $stmt->execute([
                 'accumulated_quantity' => $accumulated_quantity,
@@ -141,6 +138,25 @@ class GeneralProductsDao
         try {
             $stmt = $connection->prepare("UPDATE products_inventory
                                           SET accumulated_quantity = quantity
+                                          WHERE id_company = :id_company");
+
+            $stmt->execute([
+                'id_company' => $id_company
+            ]);
+        } catch (\Exception $e) {
+            $message = $e->getMessage();
+
+            $error = array('info' => true, 'message' => $message);
+            return $error;
+        }
+    }
+    public function clearAccumulatedQuantityGeneral($id_company)
+    {
+        $connection = Connection::getInstance()->getConnection();
+
+        try {
+            $stmt = $connection->prepare("UPDATE products_inventory
+                                          SET accumulated_quantity = 0
                                           WHERE id_company = :id_company");
 
             $stmt->execute([

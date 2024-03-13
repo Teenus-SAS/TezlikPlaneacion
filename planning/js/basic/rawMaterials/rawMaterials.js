@@ -30,7 +30,7 @@ $(document).ready(function () {
 
   /* Actualizar productos */
 
-  $(document).on('click', '.updateRawMaterials', async function (e) {
+  $(document).on('click', '.updateRawMaterials', function (e) {
     $('.cardImportMaterials').hide(800);
     $('#units').empty();
     $('.cardRawMaterials').show(800);
@@ -45,7 +45,7 @@ $(document).ready(function () {
     $('#refRawMaterial').val(data.reference);
     $('#nameRawMaterial').val(data.material);
     $(`#magnitudes option[value=${data.id_magnitude}]`).prop('selected', true);
-    await loadUnitsByMagnitude(data.id_magnitude, 1);
+    loadUnitsByMagnitude(data.id_magnitude, 1);
     $(`#units option[value=${data.id_unit}]`).prop('selected', true);
 
     quantity = data.quantity;
@@ -99,7 +99,7 @@ $(document).ready(function () {
 
   /* Eliminar productos */
 
-  deleteFunction = () => {
+  deleteMaterialsFunction = () => {
     let row = $(this.activeElement).parent().parent()[0];
     let data = tblRawMaterials.fnGetData(row);
 
