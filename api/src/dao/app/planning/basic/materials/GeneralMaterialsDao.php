@@ -84,10 +84,10 @@ class GeneralMaterialsDao
     {
         $connection = Connection::getInstance()->getConnection();
 
-        $stmt = $connection->prepare("SELECT (m.quantity + r.quantity) AS quantity
+        $stmt = $connection->prepare("SELECT IFNULL((m.quantity + IFNULL(r.quantity, 0)), 0) AS quantity
                                       FROM materials m
-                                        INNER JOIN requisitions r ON r.id_material = m.id_material AND application_date != '0000-00-00' AND delivery_date != '0000-00-00'
-                                        AND purchase_order != ''
+                                        LEFT JOIN requisitions r ON r.id_material = m.id_material AND r.application_date != '0000-00-00' AND r.delivery_date != '0000-00-00'
+                                        AND r.purchase_order != ''
                                       WHERE m.id_material = :id_material");
         $stmt->execute([
             'id_material' => $id_material,
