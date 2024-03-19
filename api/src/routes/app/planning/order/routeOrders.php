@@ -198,21 +198,17 @@ $app->post('/addOrder', function (Request $request, Response $response, $args) u
 
     $result = $generalProductsDao->updateAccumulatedQuantityGeneral($id_company);
 
-    if ($result == null) {
+    if (!$result) {
         $allOrders = $generalOrdersDao->findAllOrdersWithMaterialsByCompany($id_company);
         $status = true;
 
         foreach ($allOrders as $arr) {
             if ($arr['original_quantity'] > $arr['accumulated_quantity']) {
-                if ($arr['quantity_material'] == NULL || !$arr['quantity_material']) {
-                    $generalOrdersDao->changeStatus($arr['id_order'], 5);
-                    $status = false;
-                    // break;
-                } else if ($arr['quantity_material'] <= 0) {
-                    $generalOrdersDao->changeStatus($arr['id_order'], 6);
-                    $status = false;
-                    // break;
-                }
+                if (!$arr['quantity_material'] || !$arr['quantity_material'])
+                    $generalOrdersDao->changeStatus($arr['id_order'], 5); //5 sin ficha tecnica MP
+                else if ($arr['quantity_material'] <= 0)
+                    $generalOrdersDao->changeStatus($arr['id_order'], 6); // 6 sin cantidad materia prima
+                $status = false;
             }
 
             foreach ($allOrders as &$order) {
