@@ -97,6 +97,7 @@ $app->post('/addProduct', function (Request $request, Response $response, $args)
 
     if ($dataProducts > 1) {
         $product = $generalProductsDao->findProductByReferenceOrName($dataProduct, $id_company);
+
         if (!$product) {
             //INGRESA id_company, referencia, producto. BD
             $products = $productsDao->insertProductByCompany($dataProduct, $id_company);
@@ -162,7 +163,7 @@ $app->post('/addProduct', function (Request $request, Response $response, $args)
         foreach ($allOrders as $arr) {
             $status = true;
             if ($arr['original_quantity'] > $arr['accumulated_quantity']) {
-                if ($arr['quantity_material'] == NULL || !$arr['quantity_material']) {
+                if ($arr['status_ds'] == 0) {
                     $generalOrdersDao->changeStatus($arr['id_order'], 5);
                     $status = false;
                     // break;
@@ -306,9 +307,18 @@ $app->post('/updatePlanProduct', function (Request $request, Response $response,
 
     $dataProduct = $request->getParsedBody();
 
-    $product = $generalProductsDao->findProductByReferenceOrName($dataProduct, $id_company);
-    !is_array($product) ? $data['id_product'] = 0 : $data = $product;
-    if ($data['id_product'] == $dataProduct['idProduct'] || $data['id_product'] == 0) {
+    $status = true;
+
+    $products = $generalProductsDao->findProductByReferenceOrName($dataProduct, $id_company);
+
+    foreach ($products as $arr) {
+        if ($arr['id_product'] != $dataProduct['idProduct']) {
+            $status = false;
+            break;
+        }
+    }
+
+    if ($status == true) {
         // Actualizar Datos, Imagen y Calcular Precio del producto
         $products = $productsDao->updateProductByCompany($dataProduct, $id_company);
 
@@ -326,7 +336,7 @@ $app->post('/updatePlanProduct', function (Request $request, Response $response,
         foreach ($allOrders as $arr) {
             $status = true;
             if ($arr['original_quantity'] > $arr['accumulated_quantity']) {
-                if ($arr['quantity_material'] == NULL || !$arr['quantity_material']) {
+                if ($arr['status_ds'] == 0) {
                     $generalOrdersDao->changeStatus($arr['id_order'], 5);
                     $status = false;
                     // break;

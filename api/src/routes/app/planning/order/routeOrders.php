@@ -204,7 +204,7 @@ $app->post('/addOrder', function (Request $request, Response $response, $args) u
 
         foreach ($allOrders as $arr) {
             if ($arr['original_quantity'] > $arr['accumulated_quantity']) {
-                if (!$arr['quantity_material'] || !$arr['quantity_material'])
+                if ($arr['status_ds'] == 0)
                     $generalOrdersDao->changeStatus($arr['id_order'], 5); //5 sin ficha tecnica MP
                 else if ($arr['quantity_material'] <= 0)
                     $generalOrdersDao->changeStatus($arr['id_order'], 6); // 6 sin cantidad materia prima

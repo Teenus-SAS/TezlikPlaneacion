@@ -108,7 +108,8 @@ $app->post('/addMaterials', function (Request $request, Response $response, $arg
     $dataMaterials = sizeof($dataMaterial);
 
     if ($dataMaterials > 1) {
-        $material = $generalMaterialsDao->findMaterial($dataMaterial, $id_company);
+        $material = $generalMaterialsDao->findMaterialByReferenceOrName($dataMaterial, $id_company);
+
         if (!$material) {
             $materials = $materialsDao->insertMaterialsByCompany($dataMaterial, $id_company);
             if ($materials == null)
@@ -163,9 +164,17 @@ $app->post('/updateMaterials', function (Request $request, Response $response, $
     $dataMaterial = $request->getParsedBody();
     $id_company = $_SESSION['id_company'];
 
-    $material = $generalMaterialsDao->findMaterial($dataMaterial, $id_company);
-    !is_array($material) ? $data['id_material'] = 0 : $data = $material;
-    if ($data['id_material'] == $dataMaterial['idMaterial'] || $data['id_material'] == 0) {
+    $status = true;
+    $materials = $generalMaterialsDao->findMaterialByReferenceOrName($dataMaterial, $id_company);
+
+    foreach ($materials as $arr) {
+        if ($arr['id_material'] != $dataMaterial['idMaterial']) {
+            $status = false;
+            break;
+        }
+    }
+
+    if ($status == true) {
         $materials = $materialsDao->updateMaterialsByCompany($dataMaterial);
 
         // Cambiar estado pedidos
@@ -174,7 +183,7 @@ $app->post('/updateMaterials', function (Request $request, Response $response, $
         foreach ($allOrders as $arr) {
             $status = true;
             if ($arr['original_quantity'] > $arr['accumulated_quantity']) {
-                if ($arr['quantity_material'] == NULL || !$arr['quantity_material']) {
+                if ($arr['status_ds'] == 0) {
                     $generalOrdersDao->changeStatus($arr['id_order'], 5);
                     $status = false;
                     // break;

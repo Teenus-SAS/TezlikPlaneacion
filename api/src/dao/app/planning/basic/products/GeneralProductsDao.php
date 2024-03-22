@@ -75,24 +75,37 @@ class GeneralProductsDao
             'product' => strtoupper(trim($dataProduct['product'])),
             'id_company' => $id_company
         ]);
-        $findProduct = $stmt->fetch($connection::FETCH_ASSOC);
-        return $findProduct;
+        $products = $stmt->fetchAll($connection::FETCH_ASSOC);
+        return $products;
     }
 
-    // public function findProductByCategoryInProcess($dataProduct, $id_company)
-    // {
-    //     $connection = Connection::getInstance()->getConnection();
+    public function findAllProductsStatus($id_company)
+    {
+        $connection = Connection::getInstance()->getConnection();
 
-    //     $stmt = $connection->prepare("SELECT * FROM products WHERE reference = :reference
-    //                               AND product = :product AND category LIKE '%en proceso' AND id_company = :id_company");
-    //     $stmt->execute([
-    //         'reference' => trim($dataProduct['referenceProduct']),
-    //         'product' => ucfirst(strtolower(trim($dataProduct['product']))),
-    //         'id_company' => $id_company
-    //     ]);
-    //     $findProduct = $stmt->fetch($connection::FETCH_ASSOC);
-    //     return $findProduct;
-    // }
+        $stmt = $connection->prepare("SELECT p.id_product, IFNULL((SELECT id_product_material FROM products_materials WHERE id_product = p.id_product LIMIT 1), 0) AS status
+                                      FROM products p 
+                                      WHERE p.id_company = :id_company");
+        $stmt->execute([
+            'id_company' => $id_company
+        ]);
+        $products = $stmt->fetchAll($connection::FETCH_ASSOC);
+        return $products;
+    }
+
+    public function findProductStatus($id_product)
+    {
+        $connection = Connection::getInstance()->getConnection();
+
+        $stmt = $connection->prepare("SELECT IFNULL((SELECT id_product_material FROM products_materials WHERE id_product = p.id_product LIMIT 1), 0) AS status
+                                      FROM products p 
+                                      WHERE p.id_product = :id_product");
+        $stmt->execute([
+            'id_product' => $id_product
+        ]);
+        $product = $stmt->fetch($connection::FETCH_ASSOC);
+        return $product;
+    }
 
     public function findProductReserved($id_product)
     {
@@ -161,6 +174,25 @@ class GeneralProductsDao
 
             $stmt->execute([
                 'id_company' => $id_company
+            ]);
+        } catch (\Exception $e) {
+            $message = $e->getMessage();
+
+            $error = array('info' => true, 'message' => $message);
+            return $error;
+        }
+    }
+
+    public function updateStatusByProduct($id_product, $status_ds)
+    {
+        $connection = Connection::getInstance()->getConnection();
+
+        try {
+            $stmt = $connection->prepare("UPDATE products_inventory SET status_ds = :status_ds WHERE id_product = :id_product");
+
+            $stmt->execute([
+                'status_ds' => $status_ds,
+                'id_product' => $id_product
             ]);
         } catch (\Exception $e) {
             $message = $e->getMessage();

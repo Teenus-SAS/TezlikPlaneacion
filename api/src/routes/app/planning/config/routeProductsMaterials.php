@@ -14,6 +14,7 @@ use TezlikPlaneacion\dao\UnitsDao;
 
 $productsMaterialsDao = new ProductsMaterialsDao();
 $generalProductsMaterialsDao = new GeneralProductsMaterialsDao();
+$generalProductsDao = new GeneralProductsDao();
 $convertDataDao = new ConvertDataDao();
 $productsDao = new GeneralProductsDao();
 $materialsDao = new GeneralMaterialsDao();
@@ -150,6 +151,7 @@ $app->post('/productsMaterialsDataValidation', function (Request $request, Respo
 $app->post('/addProductsMaterials', function (Request $request, Response $response, $args) use (
     $productsMaterialsDao,
     $generalProductsMaterialsDao,
+    $generalProductsDao,
     $convertDataDao,
     $productsDao,
     $materialsDao,
@@ -170,6 +172,10 @@ $app->post('/addProductsMaterials', function (Request $request, Response $respon
         $productMaterials = $generalProductsMaterialsDao->findProductMaterial($dataProductMaterial, $id_company);
         if (!$productMaterials) {
             $resolution = $productsMaterialsDao->insertProductsMaterialsByCompany($dataProductMaterial, $id_company);
+
+            // Estado producto
+            if ($resolution == null)
+                $resolution = $generalProductsDao->updateStatusByProduct($dataProductMaterial['idProduct'], 1);
 
             if ($resolution == null) {
                 $arr = $minimumStockDao->calcStockByMaterial($dataProductMaterial['material']);
@@ -256,7 +262,7 @@ $app->post('/addProductsMaterials', function (Request $request, Response $respon
     foreach ($allOrders as $arr) {
         $status = true;
         if ($arr['original_quantity'] > $arr['accumulated_quantity']) {
-            if ($arr['quantity_material'] == NULL || !$arr['quantity_material']) {
+            if ($arr['status_ds'] == 0) {
                 $generalOrdersDao->changeStatus($arr['id_order'], 5);
                 $status = false;
                 // break;
@@ -433,11 +439,18 @@ $app->post('/deletePlanProductMaterial', function (Request $request, Response $r
     $productsMaterialsDao,
     $generalProductsMaterialsDao,
     $productsDao,
+    $generalProductsDao,
     $generalMaterialsDao,
     $minimumStockDao
 ) {
     $dataProductMaterial = $request->getParsedBody();
     $resolution = $productsMaterialsDao->deleteProductMaterial($dataProductMaterial['idProductMaterial']);
+
+    if ($resolution == null) {
+        $product = $generalProductsDao->findProductStatus($dataProductMaterial['idProduct']);
+
+        $resolution = $generalProductsDao->updateStatusByProduct($dataProductMaterial['idProduct'], $product['status']);
+    }
 
     if ($resolution == null) {
         $arr = $minimumStockDao->calcStockByMaterial($dataProductMaterial['idMaterial']);
