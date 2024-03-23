@@ -75,8 +75,7 @@ $(document).ready(function () {
     $("#quantityOrder").val(data.quantity_order.toLocaleString());
     !data.accumulated_quantity ? accumulated_quantity = 0 : accumulated_quantity = data.accumulated_quantity;
 
-    $("#quantityMissing").val(accumulated_quantity.toLocaleString());
-    // $("#quantityMP").val(data.accumulated_quantity.toLocaleString());
+    $("#quantityMissing").val(accumulated_quantity.toLocaleString()); 
     let productsMaterials = allProductsMaterials.filter(item => item.id_product == data.id_product);
     productsMaterials = productsMaterials.sort((a, b) => a.quantity - b.quantity);
     $('#quantityMP').val(productsMaterials[0].quantity.toLocaleString('es-CO', { maximumfractiondigits: 2 }));
@@ -108,8 +107,7 @@ $(document).ready(function () {
 
     $("#minDate").val(min_date);
     $("#maxDate").val(max_date);
-
-    // dataProgramming = new FormData(formCreateProgramming);
+ 
     dataProgramming = {};
     dataProgramming['id_order'] = data.id_order;
     dataProgramming['num_order'] = data.num_order;
@@ -119,8 +117,7 @@ $(document).ready(function () {
     dataProgramming['min_date'] = data.min_date;
     dataProgramming['max_date'] = data.max_date;
     dataProgramming['min_programming'] = data.min_programming;
-    dataProgramming['update'] = 1;
-    // dataProgramming['route'] = data.route;
+    dataProgramming['update'] = 1; 
 
     $("html, body").animate(
       {
@@ -241,8 +238,7 @@ $(document).ready(function () {
     // Recorre allOrdersProgramming en sentido inverso
     for (let i = allOrdersProgramming.length - 1; i >= 0; i--) {
       if (allOrdersProgramming[i].id_product == id_product && quantityMissing === 0 && process.length === 1) {
-        allOrdersProgramming[i].flag_tbl = 0;
-        // allOrdersProgramming.splice(i, 1);
+        allOrdersProgramming[i].flag_tbl = 0; 
       }
     }
 
@@ -280,8 +276,7 @@ $(document).ready(function () {
           allTblData[i].quantity_programming = quantityProgramming;
           allTblData[i].min_date = dataProgramming['min_date'];
           allTblData[i].max_date = dataProgramming['max_date'];
-          allTblData[i].min_programming = dataProgramming['min_programming'];
-          // allTblData[i]. =
+          allTblData[i].min_programming = dataProgramming['min_programming']; 
         }
       }
 
@@ -523,8 +518,7 @@ $(document).ready(function () {
   // Función auxiliar para ocultar la tarjeta y reiniciar el formulario
   const hideCardAndResetForm = () => {
     $(".cardCreateProgramming").hide(800);
-    $("#formCreateProgramming").trigger("reset");
-    // $("#searchMachine").val("0");
+    $("#formCreateProgramming").trigger("reset"); 
   };
 
   loadDataMachines(3);

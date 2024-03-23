@@ -9,12 +9,14 @@ use TezlikPlaneacion\dao\GeneralMaterialsDao;
 use TezlikPlaneacion\dao\GeneralOrdersDao;
 use TezlikPlaneacion\dao\GeneralPlanCiclesMachinesDao;
 use TezlikPlaneacion\dao\GeneralProgrammingDao;
+use TezlikPlaneacion\dao\GeneralRequisitionsDao;
 use TezlikPlaneacion\dao\LastDataDao;
 use TezlikPlaneacion\dao\LotsProductsDao;
 use TezlikPlaneacion\dao\MachinesDao;
 use TezlikPlaneacion\dao\ProductsDao;
 use TezlikPlaneacion\dao\ProductsMaterialsDao;
 use TezlikPlaneacion\dao\ProgrammingRoutesDao;
+use TezlikPlaneacion\dao\RequisitionsDao;
 use TezlikPlaneacion\dao\StoreDao;
 
 $programmingDao = new ProgrammingDao();
@@ -34,6 +36,9 @@ $generalPlanCiclesMachinesDao = new GeneralPlanCiclesMachinesDao();
 $explosionMaterialsDao = new ExplosionMaterialsDao();
 $productsMaterialsDao = new ProductsMaterialsDao();
 $storeDao = new StoreDao();
+$explosionMaterialsDao = new ExplosionMaterialsDao();
+$generalRequisitionsDao = new GeneralRequisitionsDao();
+$requisitionsDao = new RequisitionsDao();
 
 use Psr\Http\Message\ResponseInterface as Response;
 use Psr\Http\Message\ServerRequestInterface as Request;
@@ -195,7 +200,10 @@ $app->post('/saveProgramming', function (Request $request, Response $response, $
     $productsMaterialsDao,
     $generalMaterialsDao,
     $ordersDao,
-    $lastDataDao
+    $lastDataDao,
+    $explosionMaterialsDao,
+    $requisitionsDao,
+    $generalRequisitionsDao
 ) {
     session_start();
     $dataProgramming = $request->getParsedBody();
@@ -278,6 +286,32 @@ $app->post('/saveProgramming', function (Request $request, Response $response, $
             }
         }
     }
+
+    if ($result == null) {
+        $materials = $explosionMaterialsDao->findAllMaterialsConsolidated($id_company);
+
+        for ($i = 0; $i < sizeof($materials); $i++) {
+            if ($materials[$i]['available'] < 0) {
+                $data = [];
+                $data['idMaterial'] = $materials[$i]['id_material'];
+                $data['idProvider'] = '';
+                $data['applicationDate'] = '';
+                $data['deliveryDate'] = '';
+                $data['quantity'] = abs($materials[$i]['available']);
+                $data['purchaseOrder'] = '';
+
+                $requisition = $generalRequisitionsDao->findRequisitionByApplicationDate($materials[$i]['id_material']);
+
+                if (!$requisition)
+                    $requisitionsDao->insertRequisitionByCompany($data, $id_company);
+                else {
+                    $data['idRequisition'] = $requisition['id_requisition'];
+                    $requisitionsDao->updateRequisition($data);
+                }
+            }
+        }
+    }
+
 
     if ($result == null)
         $resp = array('success' => true, 'message' => 'Programa de producción creado correctamente');

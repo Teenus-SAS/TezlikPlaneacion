@@ -31,19 +31,16 @@ $(document).ready(function () {
         searchData('/api/planCiclesMachine'),
         searchData('/api/planningMachines'),
         searchData('/api/orders'),
-        searchData('/api/programming'),
-        // searchData(`/api/programmingByMachine/`),
+        searchData('/api/programming'), 
         searchData('/api/allProductsMaterials')
       ]);
       let data = [];
- 
-      // allOrdersProgramming = ordersProgramming;
+  
       allOrdersProgramming = ordersProgramming.map(item => ({ ...item, flag_tbl: 1 }));
       allProcess = process;
       allMachines = machines;
       allCiclesMachines = ciclesMachines;
-      allPlanningMachines = planningMachines;
-      // allOrders = orders;  
+      allPlanningMachines = planningMachines; 
       allOrders = orders.map(item => ({ ...item, flag_tbl: 1, flag_process: 0 }));
       allProducts = products;
       allProgramming = programming;
@@ -464,8 +461,7 @@ $(document).ready(function () {
       let id_product;
 
       for (let i = 0; i < productOrders.length; i++) {
-        if (this.value == productOrders[i].id_product) {
-          // let process = allProcess.filter(item => item.id_product == this.value && item.id_order == id_order);
+        if (this.value == productOrders[i].id_product) { 
           let process = allProcess.filter(item => item.id_product == this.value);
           process = process.filter(item => item.route1 == process[0].route);
           id_product = this.value;
@@ -543,8 +539,6 @@ $(document).ready(function () {
 
         let max_date = new Date(allTblData[0].min_date);
         max_date.setMinutes(min_date.getMinutes() + Math.floor(minProgramming));
-
-        // max_date.setDate(max_date.getDate() + 1);
 
         max_date =
           max_date.getFullYear() + "-" +
