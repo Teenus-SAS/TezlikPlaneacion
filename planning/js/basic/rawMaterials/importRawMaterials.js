@@ -165,6 +165,18 @@ $(document).ready(function () {
       let ws = XLSX.utils.json_to_sheet(data);
       XLSX.utils.book_append_sheet(wb, ws, 'Materiales');
       XLSX.writeFile(wb, namexlsx);
+    } else {
+      url = 'assets/formatsXlsx/Materia_prima.xlsx';
+
+      link = document.createElement('a');
+      link.target = '_blank';
+
+      link.href = url;
+      document.body.appendChild(link);
+      link.click();
+
+      document.body.removeChild(link);
+      delete link;
     }
 
     $('.cardLoading').remove();

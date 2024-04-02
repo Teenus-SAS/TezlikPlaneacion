@@ -137,7 +137,11 @@ if (sizeof($_SESSION) == 0)
                                     <div class="card-body pb-0">
                                         <form id="formAddMaterials">
                                             <div class="form-row">
-                                                <div class="col-sm-7 floating-label enable-floating-label show-label" style="margin-bottom:20px">
+                                                <div class="col-sm-3 floating-label enable-floating-label show-label" style="margin-bottom:20px">
+                                                    <label for="">Referencia</label>
+                                                    <select class="form-control" name="refMaterial" id="refMaterial"></select>
+                                                </div>
+                                                <div class="col-sm-6 floating-label enable-floating-label show-label" style="margin-bottom:20px">
                                                     <label for="">Materia Prima</label>
                                                     <select class="form-control" name="material" id="material"></select>
                                                 </div>

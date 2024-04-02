@@ -49,6 +49,11 @@ $(document).ready(function () {
         },
       },
       {
+        title: 'Referencia',
+        data: 'reference',
+        className: 'uniqueClassName dt-head-center',
+      },
+      {
         title: 'Producto',
         data: 'product',
         className: 'uniqueClassName dt-head-center',

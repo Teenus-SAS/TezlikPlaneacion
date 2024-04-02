@@ -52,26 +52,7 @@ $(document).ready(function () {
 
     $('#formAddMaterials').trigger('reset');
   });
-
-  /* Adicionar unidad de materia prima */
-
-  $('#material').change(function (e) {
-    e.preventDefault();
-    let id = this.value;
-
-    let data = sessionStorage.getItem('dataMaterials');
-    if (data) {
-      dataMaterials = JSON.parse(data);
-      sessionStorage.removeItem('dataMaterials');
-    }
-
-    for (i = 0; i < dataMaterials.length; i++) {
-      if (id == dataMaterials[i].id_material) {
-        loadUnitsByMagnitude(dataMaterials[i], 2);
-      }
-    }
-  });
-
+ 
   /* Adicionar nueva materia prima */
 
   $('#btnAddMaterials').click(function (e) {

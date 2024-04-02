@@ -19,7 +19,7 @@ class UnitSalesDao
     public function findAllSalesByCompany($id_company)
     {
         $connection = Connection::getInstance()->getConnection();
-        $stmt = $connection->prepare("SELECT u.id_unit_sales, u.id_product, p.product, u.year, u.jan, u.feb, u.mar, u.apr, u.may, u.jun, u.jul, u.aug, u.sept, u.oct, u.nov, u.dece,
+        $stmt = $connection->prepare("SELECT u.id_unit_sales, u.id_product, p.reference, p.product, u.year, u.jan, u.feb, u.mar, u.apr, u.may, u.jun, u.jul, u.aug, u.sept, u.oct, u.nov, u.dece,
                                              (u.jan + u.feb + u.mar + u.apr + u.may + u.jun + u.jul + u.aug + u.sept + u.oct + u.nov + u.dece) / NULLIF((u.jan > 0) + (u.feb > 0) + 
                                              (u.mar > 0) + (u.apr > 0) + (u.may > 0) + (u.jun > 0) + (u.jul > 0) + (u.aug > 0) + (u.sept > 0) + (u.oct > 0) + (u.nov > 0) + (u.dece > 0), 0) AS average 
                                       FROM plan_unit_sales u 
