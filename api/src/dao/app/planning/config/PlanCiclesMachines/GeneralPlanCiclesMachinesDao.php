@@ -89,16 +89,16 @@ class GeneralPlanCiclesMachinesDao
         return $machines;
     }
 
-    public function findPlanCiclesMachineByProductAndMachine($id_product, $id_machine, $id_company)
+    public function findPlanCiclesMachineByProductAndMachine($id_product, $id_machine, $id_process)
     {
         $connection = Connection::getInstance()->getConnection();
 
         $stmt = $connection->prepare("SELECT * FROM plan_cicles_machine
-                                      WHERE id_product = :id_product AND id_machine = :id_machine AND id_company = :id_company");
+                                      WHERE id_product = :id_product AND id_machine = :id_machine AND id_process = :id_process");
         $stmt->execute([
             'id_product' => $id_product,
             'id_machine' => $id_machine,
-            'id_company' => $id_company
+            'id_process' => $id_process
         ]);
         $planCiclesMachine = $stmt->fetch($connection::FETCH_ASSOC);
         return $planCiclesMachine;

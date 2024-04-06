@@ -60,17 +60,17 @@ $app->get('/routesCiclesMachine/{id_product}', function (Request $request, Respo
     return $response->withHeader('Content-Type', 'application/json');
 });
 
-$app->get('/planCiclesMachine/{id_product}/{id_machine}', function (Request $request, Response $response, $args) use (
-    $generalPlanCiclesMachinesDao
-) {
-    session_start();
-    $id_company = $_SESSION['id_company'];
+// $app->get('/planCiclesMachine/{id_product}/{id_machine}', function (Request $request, Response $response, $args) use (
+//     $generalPlanCiclesMachinesDao
+// ) {
+//     session_start();
+//     $id_company = $_SESSION['id_company'];
 
-    $planCiclesMachine = $generalPlanCiclesMachinesDao->findPlanCiclesMachineByProductAndMachine($args['id_product'], $args['id_machine'], $id_company);
+//     $planCiclesMachine = $generalPlanCiclesMachinesDao->findPlanCiclesMachineByProductAndMachine($args['id_product'], $args['id_machine'], $id_company);
 
-    $response->getBody()->write(json_encode($planCiclesMachine, JSON_NUMERIC_CHECK));
-    return $response->withHeader('Content-Type', 'application/json');
-});
+//     $response->getBody()->write(json_encode($planCiclesMachine, JSON_NUMERIC_CHECK));
+//     return $response->withHeader('Content-Type', 'application/json');
+// });
 
 $app->post('/planCiclesMachineDataValidation', function (Request $request, Response $response, $args) use (
     $generalPlanCiclesMachinesDao,
@@ -163,7 +163,7 @@ $app->post('/addPlanCiclesMachine', function (Request $request, Response $respon
     $dataPlanCiclesMachines = sizeof($dataPlanCiclesMachine);
 
     if ($dataPlanCiclesMachines > 1) {
-        $findPlanCiclesMachine = $generalPlanCiclesMachinesDao->findPlanCiclesMachineByProductAndMachine($dataPlanCiclesMachine['idProduct'], $dataPlanCiclesMachine['idMachine'], $id_company);
+        $findPlanCiclesMachine = $generalPlanCiclesMachinesDao->findPlanCiclesMachineByProductAndMachine($dataPlanCiclesMachine['idProduct'], $dataPlanCiclesMachine['idMachine'], $dataPlanCiclesMachine['idProcess']);
 
         if (!$findPlanCiclesMachine) {
             $planCiclesMachine = $planCiclesMachineDao->addPlanCiclesMachines($dataPlanCiclesMachine, $id_company);
@@ -283,7 +283,7 @@ $app->post('/updatePlanCiclesMachine', function (Request $request, Response $res
     $id_company = $_SESSION['id_company'];
     $dataPlanCiclesMachine = $request->getParsedBody();
 
-    $machine = $generalPlanCiclesMachinesDao->findPlanCiclesMachineByProductAndMachine($dataPlanCiclesMachine['idProduct'], $dataPlanCiclesMachine['idMachine'], $id_company);
+    $machine = $generalPlanCiclesMachinesDao->findPlanCiclesMachineByProductAndMachine($dataPlanCiclesMachine['idProduct'], $dataPlanCiclesMachine['idMachine'], $dataPlanCiclesMachine['idProcess']);
     !is_array($machine) ? $data['id_cicles_machine'] = 0 : $data = $machine;
 
     if ($data['id_cicles_machine'] == $dataPlanCiclesMachine['idCiclesMachine'] || $data['id_cicles_machine'] == 0) {
