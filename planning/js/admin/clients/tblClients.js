@@ -57,7 +57,7 @@ $(document).ready(function () {
         data: null,
         className: 'uniqueClassName dt-head-center',
         render: function (data) {
-          if (data.type_client == '1') {
+          if (data.type_client == '1' || data.type_client == '0') {
             name = 'Cliente';
             badge = 'badge-success';
           }

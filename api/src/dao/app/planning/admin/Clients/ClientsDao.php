@@ -34,8 +34,8 @@ class ClientsDao
         $connection = Connection::getInstance()->getConnection();
 
         try {
-            $stmt = $connection->prepare("INSERT INTO plan_clients (nit, client, address, phone, city, id_company) 
-                                          VALUES (:nit, :client, :addr, :phone, :city, :id_company)");
+            $stmt = $connection->prepare("INSERT INTO plan_clients (nit, client, address, phone, city, id_company, type_client) 
+                                          VALUES (:nit, :client, :addr, :phone, :city, :id_company, :type_client)");
             $stmt->execute([
                 'id_company' => $id_company,
                 'nit' => $dataClient['nit'],
@@ -43,6 +43,7 @@ class ClientsDao
                 'addr' => $dataClient['address'],
                 'phone' => $dataClient['phone'],
                 'city' => $dataClient['city'],
+                'type_client' => 1
             ]);
             $this->logger->info(__FUNCTION__, array('query' => $stmt->queryString, 'errors' => $stmt->errorInfo()));
         } catch (\Exception $e) {
