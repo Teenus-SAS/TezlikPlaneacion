@@ -3,7 +3,7 @@ $(document).ready(function () {
     let data = await searchData('/api/clients');
 
     if (op == 1)
-      data = data.filter(item => item.type_client == 1);
+      data = data.filter(item => item.type_client == 1 || item.type_client == 0);
     else
       data = data.filter(item => item.type_client == 2);
     let $select = $(`#client`);
