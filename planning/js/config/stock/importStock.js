@@ -63,7 +63,7 @@ $(document).ready(function () {
         checkStock(StockToImport);
       })
       .catch(() => {
-                  $('.cardLoading').remove();
+          $('.cardLoading').remove();
           $('.cardBottons').show(400);
           $('#fileStock').val('');
 

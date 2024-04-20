@@ -151,6 +151,9 @@ if (sizeof($_SESSION) == 0)
     </div>
     <!-- Page End -->
 
+    <script>
+        viewRawMaterial = 1;
+    </script>
     <?php include_once dirname(dirname(dirname(__DIR__))) . '/global/partials/scriptsJS.php'; ?>
     <script src="/planning/js/basic/rawMaterials/configRawMaterials.js"></script>
     <script src="/planning/js/admin/clients/configClients.js"></script>

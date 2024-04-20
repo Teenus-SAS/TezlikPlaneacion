@@ -69,6 +69,16 @@ $(document).ready(function () {
         toastr.error('Ingrese todos los campos');
         return false;
       }
+      
+      if (dateOrder > minDate) {
+        toastr.error('Fecha de pedido mayor a la fecha minima');
+        return false;        
+      }
+      
+      if (minDate > maxDate) {
+        toastr.error('Fecha minima mayor a la fecha maxima');
+        return false;        
+      }
 
       dataOrder = $('#formCreateOrder').serialize();
 

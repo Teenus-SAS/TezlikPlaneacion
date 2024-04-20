@@ -33,45 +33,48 @@ $(document).ready(function () {
 
 
   /* Funciones cuando se selecciona una materia prima */
-  $('#refMaterial').change(function (e) {
-    e.preventDefault();
-    let id = this.value;
 
-    $('#material option').prop('selected', function () {
-      return $(this).val() == id;
+  if (viewRawMaterial == 1) {
+    $('#refMaterial').change(function (e) {
+      e.preventDefault();
+      let id = this.value;
+
+      $('#material option').prop('selected', function () {
+        return $(this).val() == id;
+      });
+
+      let data = sessionStorage.getItem('dataMaterials');
+      if (data) {
+        dataMaterials = JSON.parse(data);
+        sessionStorage.removeItem('dataMaterials');
+      }
+
+      for (i = 0; i < dataMaterials.length; i++) {
+        if (id == dataMaterials[i].id_material) {
+          loadUnitsByMagnitude(dataMaterials[i], 2);
+        }
+      }
     });
 
-    let data = sessionStorage.getItem('dataMaterials');
-    if (data) {
-      dataMaterials = JSON.parse(data);
-      sessionStorage.removeItem('dataMaterials');
-    }
+    $('#material').change(function (e) {
+      e.preventDefault();
+      let id = this.value;
 
-    for (i = 0; i < dataMaterials.length; i++) {
-      if (id == dataMaterials[i].id_material) {
-        loadUnitsByMagnitude(dataMaterials[i], 2);
+      $('#refMaterial option').prop('selected', function () {
+        return $(this).val() == id;
+      });
+
+      let data = sessionStorage.getItem('dataMaterials');
+      if (data) {
+        dataMaterials = JSON.parse(data);
+        sessionStorage.removeItem('dataMaterials');
       }
-    }
-  });
 
-  $('#material').change(function (e) {
-    e.preventDefault();
-    let id = this.value;
-
-    $('#refMaterial option').prop('selected', function () {
-      return $(this).val() == id;
+      for (i = 0; i < dataMaterials.length; i++) {
+        if (id == dataMaterials[i].id_material) {
+          loadUnitsByMagnitude(dataMaterials[i], 2);
+        }
+      }
     });
-
-    let data = sessionStorage.getItem('dataMaterials');
-    if (data) {
-      dataMaterials = JSON.parse(data);
-      sessionStorage.removeItem('dataMaterials');
-    }
-
-    for (i = 0; i < dataMaterials.length; i++) {
-      if (id == dataMaterials[i].id_material) {
-        loadUnitsByMagnitude(dataMaterials[i], 2);
-      }
-    }
-  });
+  }
 });

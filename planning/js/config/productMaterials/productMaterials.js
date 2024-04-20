@@ -80,6 +80,7 @@ $(document).ready(function () {
 
     sessionStorage.setItem('id_product_material', data.id_product_material);
 
+    $(`#refMaterial option[value=${data.id_material}]`).prop('selected', true);
     $(`#material option[value=${data.id_material}]`).prop('selected', true);
  
     $('#quantity').val(data.quantity);

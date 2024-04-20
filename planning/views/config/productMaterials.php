@@ -326,6 +326,9 @@ if (sizeof($_SESSION) == 0)
     <?php include_once dirname(dirname(dirname(__DIR__))) . '/global/partials/scriptsJS.php'; ?>
     <!-- <script src="/planning/js/users/usersAccess.js"></script> -->
 
+    <script>
+        viewRawMaterial = 1;
+    </script>
     <script src="/global/js/global/configUnits.js"></script>
     <script src="/planning/js/config/productMaterials/tblConfigMaterials.js"></script>
     <script src="/planning/js/basic/products/configProducts.js"></script>
