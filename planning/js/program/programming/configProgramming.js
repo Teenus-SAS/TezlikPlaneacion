@@ -31,7 +31,7 @@ $(document).ready(function () {
         searchData('/api/planCiclesMachine'),
         searchData('/api/planningMachines'),
         searchData('/api/orders'),
-        searchData('/api/programming'), 
+        searchData('/api/programming'),
         searchData('/api/allProductsMaterials')
       ]);
       let data = [];
@@ -40,7 +40,7 @@ $(document).ready(function () {
       allProcess = process;
       allMachines = machines;
       allCiclesMachines = ciclesMachines;
-      allPlanningMachines = planningMachines; 
+      allPlanningMachines = planningMachines;
       allOrders = orders.map(item => ({ ...item, flag_tbl: 1, flag_process: 0 }));
       allProducts = products;
       allProgramming = programming;
@@ -72,11 +72,40 @@ $(document).ready(function () {
         }
       }
 
+      let uniqueIdsSet = new Set(); // Conjunto para almacenar IDs únicas
+      let uniqueArray = []; // Array para almacenar elementos únicos
+
+      data.forEach(item => {
+        // Verificamos si el ID ya existe en el conjunto
+        if (!uniqueIdsSet.has(item.id_machine)) {
+          uniqueIdsSet.add(item.id_machine); // Si no existe, lo agregamos al conjunto
+          uniqueArray.push(item); // También agregamos el elemento al array de elementos únicos
+        }
+      });
+
+      // Cargar selects de maquinas por pedidos programados
+      loadDataMachinesProgramming(uniqueArray);
+      // Cargar selects de pedidos que esten por programar
       loadOrdersProgramming(allOrdersProgramming);
+      // Cargar DataTable con los pedidos programados
       loadTblProgramming(data, 1);
     } catch (error) {
       console.error('Error loading data:', error);
     }
+  };
+
+  loadDataMachinesProgramming = (data) => {
+    let $select = $(`.idMachine`);
+    $select.empty();
+    $select.append(`<option value="0" disabled selected>Seleccionar</option>`);
+    
+    $select.append(`<option value="0">Todos</option>`);
+    
+    $.each(data, function (i, value) {
+      $select.append(
+        `<option value = ${value.id_machine}> ${value.machine} </option>`
+      );
+    });
   };
 
   loadOrdersProgramming = async (data) => {

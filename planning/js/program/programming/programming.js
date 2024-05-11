@@ -521,5 +521,5 @@ $(document).ready(function () {
     $("#formCreateProgramming").trigger("reset"); 
   };
 
-  loadDataMachines(3);
+  // loadDataMachines(3);
 });

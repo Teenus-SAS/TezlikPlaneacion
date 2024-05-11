@@ -82,9 +82,10 @@ $(document).ready(function () {
 
     $(`#refMaterial option[value=${data.id_material}]`).prop('selected', true);
     $(`#material option[value=${data.id_material}]`).prop('selected', true);
- 
+    
     $('#quantity').val(data.quantity);
     loadUnitsByMagnitude(data, 2);
+    $(`#units option[value=${data.id_unit}]`).prop('selected', true);
 
     $('html, body').animate(
       {

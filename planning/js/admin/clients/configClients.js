@@ -6,6 +6,7 @@ $(document).ready(function () {
       data = data.filter(item => item.type_client == 1 || item.type_client == 0);
     else
       data = data.filter(item => item.type_client == 2);
+    
     let $select = $(`#client`);
     $select.empty();
 
