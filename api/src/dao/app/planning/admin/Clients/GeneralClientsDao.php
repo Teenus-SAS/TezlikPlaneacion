@@ -32,6 +32,22 @@ class GeneralClientsDao
         return $client;
     }
 
+    public function findClientsByNitAndName($dataClient)
+    {
+        $connection = Connection::getInstance()->getConnection();
+
+        $stmt = $connection->prepare("SELECT * FROM plan_clients 
+                                      WHERE nit = :nit OR client = :client");
+        $stmt->execute([
+            'nit' => trim($dataClient['nit']),
+            'client' => strtoupper(trim($dataClient['client'])),
+        ]);
+        $this->logger->info(__FUNCTION__, array('query' => $stmt->queryString, 'errors' => $stmt->errorInfo()));
+
+        $client = $stmt->fetchAll($connection::FETCH_ASSOC);
+        return $client;
+    }
+
     public function findClientByName($dataClient, $id_company, $type)
     {
         $connection = Connection::getInstance()->getConnection();

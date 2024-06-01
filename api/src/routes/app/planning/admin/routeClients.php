@@ -41,7 +41,11 @@ $app->post('/clientsDataValidation', function (Request $request, Response $respo
 
         $clients = $dataClient['importClients'];
 
-        for ($i = 0; $i < sizeof($clients); $i++) {
+        // Verificar duplicados
+        $duplicateTracker = [];
+        $dataImportClients = [];
+
+        for ($i = 0; $i < count($clients); $i++) {
             if (
                 empty($clients[$i]['nit']) || empty($clients[$i]['client']) || empty($clients[$i]['address']) ||
                 empty($clients[$i]['phone']) || empty($clients[$i]['city']) || empty($clients[$i]['type'])
@@ -58,7 +62,38 @@ $app->post('/clientsDataValidation', function (Request $request, Response $respo
                 $i = $i + 2;
                 $dataImportClients = array('error' => true, 'message' => "Campos vacios en la fila: {$i}");
                 break;
+            }
+
+            $item = $clients[$i];
+            $nitClient = trim($item['nit']);
+            $nameClient = trim($item['client']);
+
+            if (isset($duplicateTracker[$nitClient]) || isset($duplicateTracker[$nameClient])) {
+                $i = $i + 2;
+                $dataImportClients =  array('error' => true, 'message' => "Duplicación encontrada en la fila: $i.<br>- NIT: $nitClient<br>- Cliente: $nameClient");
+                break;
             } else {
+                $duplicateTracker[$nitClient] = true;
+                $duplicateTracker[$nameClient] = true;
+            }
+
+            $findClient = $generalClientsDao->findClientsByNitAndName($clients[$i]);
+
+            if (sizeof($findClient) > 1) {
+                $i = $i + 2;
+                $dataImportClients =  array('error' => true, 'message' => "NIT y nombre de cliente ya existente, fila: $i.<br>- NIT: $nitClient<br>- Cliente: $nameClient");
+                break;
+            }
+
+            if ($findClient[0]['nit'] != $nitClient || $findClient[0]['client'] != $nameClient) {
+                $i = $i + 2;
+                $dataImportClients =  array('error' => true, 'message' => "NIT o nombre de cliente ya existente, fila: $i.<br>- NIT: $nitClient<br>- Cliente: $nameClient");
+                break;
+            }
+        }
+
+        if (sizeof($dataImportClients) == 0) {
+            for ($i = 0; $i < sizeof($clients); $i++) {
                 $findClient = $generalClientsDao->findClient($clients[$i], $id_company);
                 if (!$findClient) $insert = $insert + 1;
                 else $update = $update + 1;
@@ -85,7 +120,7 @@ $app->post('/addClient', function (Request $request, Response $response, $args) 
     $countClients = sizeof($dataClient);
 
     if ($countClients > 1) {
-        $findClient = $generalClientsDao->findClient($dataClient, $id_company);
+        $findClient = $generalClientsDao->findClientsByNitAndName($dataClient, $id_company);
 
         if (!$findClient) {
             $client = $clientsDao->insertClient($dataClient, $id_company);
@@ -150,9 +185,16 @@ $app->post('/updateClient', function (Request $request, Response $response, $arg
         $resp = array('error' => true, 'message' => 'No hubo cambio alguno');
     else {
         $client = $generalClientsDao->findClient($dataClient, $id_company);
+        $status = true;
 
-        !is_array($client) ? $data['id_client'] = 0 : $data = $client;
-        if ($data['id_client'] == $dataClient['idClient'] || $data['idClient'] == 0) {
+        foreach ($client as $arr) {
+            if ($arr['id_client'] != $dataClient['idClient']) {
+                $status = false;
+                break;
+            }
+        }
+
+        if ($status == true) {
             $client = $clientsDao->updateClient($dataClient);
 
             if (sizeof($_FILES) > 0) {
