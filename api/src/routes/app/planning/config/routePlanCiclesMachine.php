@@ -124,13 +124,18 @@ $app->post('/planCiclesMachineDataValidation', function (Request $request, Respo
                 break;
             } else $planCiclesMachine[$i]['idProcess'] = $findProcess['id_process'];
 
-            // Obtener id maquina
-            $findMachine = $machinesDao->findMachine($planCiclesMachine[$i], $id_company);
-            if (!$findMachine) {
-                $i = $i + 2;
-                $dataImportPlanCiclesMachine = array('error' => true, 'message' => "No existe la maquina en la base de datos<br>Fila: {$i}");
-                break;
-            } else $planCiclesMachine[$i]['idMachine'] = $findMachine['id_machine'];
+            // Obtener id maquina 
+            // Si no está definida agrega 0 a 'idMachine'
+            if (!isset($planCiclesMachine[$i]['machine']) || strtoupper(trim($planCiclesMachine[$i]['machine'])) == 'PROCESO MANUAL') {
+                $planCiclesMachine[$i]['idMachine'] = 0;
+            } else {
+                $findMachine = $machinesDao->findMachine($planCiclesMachine[$i], $id_company);
+                if (!$findMachine) {
+                    $i = $i + 2;
+                    $dataImportPlanCiclesMachine = array('error' => true, 'message' => "Maquina no existe en la base de datos <br>Fila: {$i}");
+                    break;
+                } else $planCiclesMachine[$i]['idMachine'] = $findMachine['id_machine'];
+            }
 
             $findPlanCiclesMachine = $generalPlanCiclesMachinesDao->findPlansCiclesMachine($planCiclesMachine[$i], $id_company);
 
@@ -230,8 +235,12 @@ $app->post('/addPlanCiclesMachine', function (Request $request, Response $respon
             $planCiclesMachine[$i]['idProcess'] = $findProcess['id_process'];
 
             // Obtener id maquina
-            $findMachine = $machinesDao->findMachine($planCiclesMachine[$i], $id_company);
-            $planCiclesMachine[$i]['idMachine'] = $findMachine['id_machine'];
+            if (!isset($planCiclesMachine[$i]['machine']) || strtoupper(trim($planCiclesMachine[$i]['machine'])) == 'PROCESO MANUAL') {
+                $planCiclesMachine[$i]['idMachine'] = 0;
+            } else {
+                $findMachine = $machinesDao->findMachine($planCiclesMachine[$i], $id_company);
+                $planCiclesMachine[$i]['idMachine'] = $findMachine['id_machine'];
+            }
 
             $findPlanCiclesMachine = $generalPlanCiclesMachinesDao->findPlansCiclesMachine($planCiclesMachine[$i], $id_company);
             if (!$findPlanCiclesMachine) $resolution = $planCiclesMachineDao->addPlanCiclesMachines($planCiclesMachine[$i], $id_company);

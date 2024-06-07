@@ -31,7 +31,7 @@ $app->get('/materials', function (Request $request, Response $response, $args) u
     session_start();
     $id_company = $_SESSION['id_company'];
     $materials = $materialsDao->findAllMaterialsByCompany($id_company);
-    $response->getBody()->write(json_encode($materials, JSON_NUMERIC_CHECK));
+    $response->getBody()->write(json_encode($materials));
     return $response->withHeader('Content-Type', 'application/json');
 });
 
@@ -52,14 +52,55 @@ $app->post('/materialsDataValidation', function (Request $request, Response $res
 
         $materials = $dataMaterial['importMaterials'];
 
-        for ($i = 0; $i < sizeof($materials); $i++) {
+        // Verificar duplicados
+        $duplicateTracker = [];
+        $dataImportMaterial = [];
+
+        for ($i = 0; $i < count($materials); $i++) {
             if (
                 empty($materials[$i]['refRawMaterial']) || empty($materials[$i]['nameRawMaterial']) ||
                 empty($materials[$i]['magnitude']) || empty($materials[$i]['unit'])
             ) {
                 $i = $i + 2;
-                $dataImportMaterial = array('error' => true, 'message' => "Campos vacios. Fila: {$i}");
+                $dataImportMaterial = array('error' => true, 'message' => "Campos vacios, fila: $i");
                 break;
+            }
+            if (
+                empty(trim($materials[$i]['refRawMaterial'])) || empty(trim($materials[$i]['nameRawMaterial'])) ||
+                empty(trim($materials[$i]['magnitude'])) || empty(trim($materials[$i]['unit']))
+            ) {
+                $i = $i + 2;
+                $dataImportMaterial = array('error' => true, 'message' => "Campos vacios, fila: $i");
+                break;
+            }
+
+            $item = $materials[$i];
+            $refRawMaterial = trim($item['refRawMaterial']);
+            $nameRawMaterial = trim($item['nameRawMaterial']);
+
+            if (isset($duplicateTracker[$refRawMaterial]) || isset($duplicateTracker[$nameRawMaterial])) {
+                $i = $i + 2;
+                $dataImportMaterial =  array('error' => true, 'message' => "Duplicación encontrada en la fila: $i.<br>- Referencia: $refRawMaterial<br>- Material: $nameRawMaterial");
+                break;
+            } else {
+                $duplicateTracker[$refRawMaterial] = true;
+                $duplicateTracker[$nameRawMaterial] = true;
+            }
+
+            $findMaterial = $generalMaterialsDao->findMaterialByReferenceOrName($materials[$i], $id_company);
+
+            if (sizeof($findMaterial) > 1) {
+                $i = $i + 2;
+                $dataImportMaterial =  array('error' => true, 'message' => "Referencia o nombre de material ya existente, fila: $i.<br>- Referencia: $refRawMaterial<br>- Material: $nameRawMaterial");
+                break;
+            }
+
+            if ($findMaterial) {
+                if ($findMaterial[0]['material'] != $nameRawMaterial || $findMaterial[0]['reference'] != $refRawMaterial) {
+                    $i = $i + 2;
+                    $dataImportMaterial =  array('error' => true, 'message' => "Referencia o nombre de material ya existente, fila: $i.<br>- Referencia: $refRawMaterial<br>- Material: $nameRawMaterial");
+                    break;
+                }
             }
 
             // Consultar magnitud
@@ -81,12 +122,44 @@ $app->post('/materialsDataValidation', function (Request $request, Response $res
                 $dataImportMaterial = array('error' => true, 'message' => "Unidad no existe en la base de datos. Fila: $i");
                 break;
             }
+        }
 
-            $findMaterial = $generalMaterialsDao->findMaterial($materials[$i], $id_company);
-            if (!$findMaterial) $insert = $insert + 1;
-            else $update = $update + 1;
-            $dataImportMaterial['insert'] = $insert;
-            $dataImportMaterial['update'] = $update;
+        if (sizeof($dataImportMaterial) == 0) {
+            // if (
+            //     empty($materials[$i]['refRawMaterial']) || empty($materials[$i]['nameRawMaterial']) ||
+            //     empty($materials[$i]['magnitude']) || empty($materials[$i]['unit'])
+            // ) {
+            //     $i = $i + 2;
+            //     $dataImportMaterial = array('error' => true, 'message' => "Campos vacios. Fila: {$i}");
+            //     break;
+            // }
+
+            // // Consultar magnitud
+            // $magnitude = $magnitudesDao->findMagnitude($materials[$i]);
+
+            // if (!$magnitude) {
+            //     $i = $i + 2;
+            //     $dataImportMaterial = array('error' => true, 'message' => "Magnitud no existe en la base de datos. Fila: $i");
+            //     break;
+            // }
+
+            // $materials[$i]['idMagnitude'] = $magnitude['id_magnitude'];
+
+            // // Consultar unidad
+            // $unit = $unitsDao->findUnit($materials[$i]);
+
+            // if (!$unit) {
+            //     $i = $i + 2;
+            //     $dataImportMaterial = array('error' => true, 'message' => "Unidad no existe en la base de datos. Fila: $i");
+            //     break;
+            // }
+            for ($i = 0; $i < count($materials); $i++) {
+                $findMaterial = $generalMaterialsDao->findMaterial($materials[$i], $id_company);
+                if (!$findMaterial) $insert = $insert + 1;
+                else $update = $update + 1;
+                $dataImportMaterial['insert'] = $insert;
+                $dataImportMaterial['update'] = $update;
+            }
         }
     } else
         $dataImportMaterial = array('error' => true, 'message' => 'El archivo se encuentra vacio. Intente nuevamente');

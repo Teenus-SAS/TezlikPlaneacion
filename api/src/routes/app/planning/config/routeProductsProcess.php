@@ -69,7 +69,7 @@ $app->post('/productsProcessDataValidation', function (Request $request, Respons
 
             // Obtener id maquina
             // Si no está definida agrega 0 a 'idMachine'
-            if (!isset($productProcess[$i]['machine'])) {
+            if (!isset($productProcess[$i]['machine']) || strtoupper(trim($productProcess[$i]['machine'])) == 'PROCESO MANUAL') {
                 $productProcess[$i]['idMachine'] = 0;
             } else {
                 $findMachine = $machinesDao->findMachine($productProcess[$i], $id_company);

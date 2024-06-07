@@ -61,8 +61,8 @@ $(document).ready(function () {
     let concentration = 0;
     let maxQuantity = 0;
     
-    totalQuantity = data.reduce((acc, obj) => acc + obj.quantity, 0);
-    maxQuantity = Math.max(...data.map(obj => obj.quantity));
+    totalQuantity = data.reduce((acc, obj) => acc + parseFloat(obj.quantity), 0);
+    maxQuantity = Math.max(...data.map(obj => parseFloat(obj.quantity)));
     average = totalQuantity / data.length;
     concentration = maxQuantity / totalQuantity;
 
@@ -81,10 +81,17 @@ $(document).ready(function () {
     }
 
     tblProducts = $('#tblProducts').dataTable({
+      destroy: true,
       pageLength: 50,
       data: data,
+      dom: '<"datatable-error-console">frtip',
       language: {
         url: '//cdn.datatables.net/plug-ins/1.10.20/i18n/Spanish.json',
+      },
+      fnInfoCallback: function (oSettings, iStart, iEnd, iMax, iTotal, sPre) {
+        if (oSettings.json && oSettings.json.hasOwnProperty('error')) {
+          console.error(oSettings.json.error);
+        }
       },
       columns: [
         {
@@ -109,7 +116,17 @@ $(document).ready(function () {
           title: 'Existencia',
           data: 'quantity',
           className: 'uniqueClassName dt-head-center',
-          render: $.fn.dataTable.render.number('.', ',', 0),
+          render: function (data) {
+            let quantity = parseFloat(data);
+            if (Math.abs(quantity) < 0.01) {
+              // let decimals = contarDecimales(data);
+              // data = formatNumber(data, decimals);
+              quantity = quantity.toLocaleString('es-CO', { minimumFractionDigits: 2, maximumFractionDigits: 9 });
+            } else
+              quantity = quantity.toLocaleString('es-CO', { maximumFractionDigits: 2 });
+            
+            return quantity;
+          },
         },
         {
           title: 'Medida',
@@ -125,13 +142,33 @@ $(document).ready(function () {
           title: 'Stock Min',
           data: 'minimum_stock',
           className: 'uniqueClassName dt-head-center',
-          render: $.fn.dataTable.render.number('.', ',', 0),
+          render: function (data) {
+            let minimum_stock = parseFloat(data);
+            if (Math.abs(minimum_stock) < 0.01) {
+              // let decimals = contarDecimales(data);
+              // data = formatNumber(data, decimals);
+              minimum_stock = minimum_stock.toLocaleString('es-CO', { minimumFractionDigits: 2, maximumFractionDigits: 9 });
+            } else
+              minimum_stock = minimum_stock.toLocaleString('es-CO', { maximumFractionDigits: 2 });
+            
+            return minimum_stock;
+          },
         },
         {
           title: "Dias Inv",
           data: "days",
           className: "uniqueClassName dt-head-center",
-          render: $.fn.dataTable.render.number('.', ',', 0),
+          render: function (data) {
+            let days = parseFloat(data);
+            if (Math.abs(days) < 0.01) {
+              // let decimals = contarDecimales(data);
+              // data = formatNumber(data, decimals);
+              days = days.toLocaleString('es-CO', { minimumFractionDigits: 2, maximumFractionDigits: 9 });
+            } else
+              days = days.toLocaleString('es-CO', { maximumFractionDigits: 2 });
+            
+            return days;
+          },
         },
       
         {

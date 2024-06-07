@@ -168,7 +168,7 @@ $(document).ready(function () {
 
         let quantity = 0;
         
-        if (quantityProgramming < allOrders[i].original_quantity && productsMaterials[0].quantity > allOrders[i].original_quantity) {
+        if (quantityProgramming < allOrders[i].original_quantity /*&& productsMaterials[0].quantity > allOrders[i].original_quantity*/) {
           quantity = allOrders[i].original_quantity - quantityProgramming;
           if (allOrders[i].accumulated_quantity_order == 0 || allOrders[i].accumulated_quantity_order == null) {
             allOrders[i].quantity_programming = quantity;
@@ -193,7 +193,7 @@ $(document).ready(function () {
 
         quantityMissing = 0;
         
-        if (quantityProgramming < allOrdersProgramming[i].original_quantity && productsMaterials[0].quantity > allOrders[i].original_quantity) {
+        if (quantityProgramming < allOrdersProgramming[i].original_quantity /*&& productsMaterials[0].quantity > allOrders[i].original_quantity*/) {
           quantityMissing = allOrdersProgramming[i].original_quantity - quantityProgramming;
           if (allOrdersProgramming[i].accumulated_quantity == 0 || allOrdersProgramming[i].accumulated_quantity == null) {
             allOrdersProgramming[i].quantity_programming = quantityMissing;

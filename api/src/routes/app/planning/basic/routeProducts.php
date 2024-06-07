@@ -37,7 +37,7 @@ $app->get('/products', function (Request $request, Response $response, $args) us
     session_start();
     $id_company = $_SESSION['id_company'];
     $products = $productsDao->findAllProductsByCompany($id_company);
-    $response->getBody()->write(json_encode($products, JSON_NUMERIC_CHECK));
+    $response->getBody()->write(json_encode($products));
     return $response->withHeader('Content-Type', 'application/json');
 });
 
@@ -51,23 +51,69 @@ $app->post('/productsDataValidation', function (Request $request, Response $resp
         session_start();
         $id_company = $_SESSION['id_company'];
 
-        $insert = 0;
-        $update = 0;
-
         $products = $dataProduct['importProducts'];
 
-        for ($i = 0; $i < sizeof($products); $i++) {
-            if (empty($products[$i]['referenceProduct']) || empty($products[$i]['product'])) {
+        // Verificar duplicados
+        $duplicateTracker = [];
+        $dataImportProduct = [];
+
+        for ($i = 0; $i < count($products); $i++) {
+            if (
+                empty($products[$i]['referenceProduct']) || empty($products[$i]['product'])
+            ) {
                 $i = $i + 2;
-                $dataImportProduct = array('error' => true, 'message' => "Campos vacios. Fila: {$i}");
+                $dataImportProduct = array('error' => true, 'message' => "Campos vacios, fila: $i");
+                break;
+            }
+            if (
+                empty(trim($products[$i]['referenceProduct'])) || empty(trim($products[$i]['product']))
+            ) {
+                $i = $i + 2;
+                $dataImportProduct = array('error' => true, 'message' => "Campos vacios, fila: $i");
                 break;
             }
 
-            $findProduct = $generalProductsDao->findProduct($products[$i], $id_company);
-            if (!$findProduct) $insert = $insert + 1;
-            else $update = $update + 1;
-            $dataImportProduct['insert'] = $insert;
-            $dataImportProduct['update'] = $update;
+            $item = $products[$i];
+            $refProduct = trim($item['referenceProduct']);
+            $nameProduct = trim($item['product']);
+
+            if (isset($duplicateTracker[$refProduct]) || isset($duplicateTracker[$nameProduct])) {
+                $i = $i + 2;
+                $dataImportProduct =  array('error' => true, 'message' => "Duplicación encontrada en la fila: $i.<br>- Referencia: $refProduct<br>- Producto: $nameProduct");
+                break;
+            } else {
+                $duplicateTracker[$refProduct] = true;
+                $duplicateTracker[$nameProduct] = true;
+            }
+
+            $findProduct = $generalProductsDao->findProductByReferenceOrName($products[$i], $id_company);
+
+            if (sizeof($findProduct) > 1) {
+                $i = $i + 2;
+                $dataImportProduct =  array('error' => true, 'message' => "Referencia y nombre de producto ya existente, fila: $i.<br>- Referencia: $refProduct<br>- Producto: $nameProduct");
+                break;
+            }
+
+            if ($findProduct) {
+                if ($findProduct[0]['product'] != $nameProduct || $findProduct[0]['reference'] != $refProduct) {
+                    $i = $i + 2;
+                    $dataImportProduct =  array('error' => true, 'message' => "Referencia o nombre de producto ya existente, fila: $i.<br>- Referencia: $refProduct<br>- Producto: $nameProduct");
+                    break;
+                }
+            }
+        }
+
+        $insert = 0;
+        $update = 0;
+
+        if (sizeof($dataImportProduct) == 0) {
+            for ($i = 0; $i < count($products); $i++) {
+                $findProduct = $generalProductsDao->findProduct($products[$i], $id_company);
+                if (!$findProduct) $insert = $insert + 1;
+                else $update = $update + 1;
+                $dataImportProduct['insert'] = $insert;
+                $dataImportProduct['update'] = $update;
+            }
         }
     } else
         $dataImportProduct = array('error' => true, 'message' => 'El archivo se encuentra vacio. Intente nuevamente');
