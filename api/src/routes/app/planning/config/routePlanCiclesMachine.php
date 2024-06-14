@@ -251,7 +251,6 @@ $app->post('/addPlanCiclesMachine', function (Request $request, Response $respon
 
             if (isset($resolution)) break;
 
-
             $data = [];
             if (!$findPlanCiclesMachine) {
                 $machine = $lastDataDao->findLastInsertedCiclesMachine($id_company);

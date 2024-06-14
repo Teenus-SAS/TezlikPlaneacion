@@ -155,6 +155,8 @@ $app->post('/addProductsMaterials', function (Request $request, Response $respon
     $convertDataDao,
     $productsDao,
     $materialsDao,
+    $magnitudesDao,
+    $unitsDao,
     $generalOrdersDao,
     $generalProgrammingDao,
     $minimumStockDao,
@@ -217,6 +219,14 @@ $app->post('/addProductsMaterials', function (Request $request, Response $respon
             // Obtener id materia prima
             $findMaterial = $materialsDao->findMaterial($productMaterials[$i], $id_company);
             $productMaterials[$i]['material'] = $findMaterial['id_material'];
+
+            // Consultar magnitud
+            $magnitude = $magnitudesDao->findMagnitude($productMaterials[$i]);
+            $productMaterials[$i]['idMagnitude'] = $magnitude['id_magnitude'];
+
+            // Consultar unidad
+            $unit = $unitsDao->findUnit($productMaterials[$i]);
+            $productMaterials[$i]['unit'] = $unit['id_unit'];
 
             $findProductsMaterials = $generalProductsMaterialsDao->findProductMaterial($productMaterials[$i]);
 
