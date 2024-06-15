@@ -269,7 +269,7 @@ $app->post('/saveProgramming', function (Request $request, Response $response, $
         $orders = $ordersDao->findAllOrdersByCompany($id_company);
 
         foreach ($orders as $arr) {
-            if ($arr['status'] != 7 && $arr['status'] != 3 && $arr['status'] != 4 && $arr['id_product'] == $programmings[$i]['id_product']) {
+            if ($arr['status'] != 'EN PRODUCCION' && $arr['status'] != 'ENTREGADO' && $arr['status'] != 'PROGRAMADO' && $arr['id_product'] == $programmings[$i]['id_product']) {
                 // Ficha tecnica
                 $productsMaterials = $productsMaterialsDao->findAllProductsmaterials($arr['id_product'], $id_company);
 
@@ -444,7 +444,7 @@ $app->post('/deleteProgramming', function (Request $request, Response $response,
         $orders = $ordersDao->findAllOrdersByCompany($id_company);
 
         foreach ($orders as $arr) {
-            if ($arr['status'] != 7 && $arr['status'] != 3 && $arr['status'] != 4) {
+            if ($arr['status'] != 'EN PRODUCCION' && $arr['status'] != 'ENTREGADO' && $arr['status'] != 'PROGRAMADO') {
                 // $result = $generalOrdersDao->changeStatus($arr['id_order'], 'Programar');
 
                 // Ficha tecnica

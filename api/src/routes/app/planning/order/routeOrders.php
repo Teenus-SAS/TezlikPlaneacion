@@ -499,7 +499,7 @@ $app->post('/updateOrder', function (Request $request, Response $response, $args
 
         // Checkear cantidades
         $order = $generalOrdersDao->checkAccumulatedQuantityOrder($dataOrder['idOrder']);
-        if ($order['status'] != 7 && $order['status'] != 3 && $order['status'] != 8) {
+        if ($order['status'] != 'EN PRODUCCION' && $order['status'] != 'FABRICADO') {
             if ($order['original_quantity'] > $order['accumulated_quantity']) {
                 // Ficha tecnica
                 $productsMaterials = $productsMaterialsDao->findAllProductsmaterials($dataOrder['idProduct'], $id_company);
@@ -527,7 +527,7 @@ $app->post('/updateOrder', function (Request $request, Response $response, $args
                     // $generalOrdersDao->changeStatus($dataOrder['idOrder'], 'Alistamiento');
                 }
 
-                if ($order['status'] != 2) {
+                if ($order['status'] != 'DESPACHO') {
                     $date = date('Y-m-d');
 
                     $generalOrdersDao->updateOfficeDate($dataOrder['idOrder'], $date);
