@@ -230,7 +230,7 @@ $app->post('/addProductsMaterials', function (Request $request, Response $respon
 
             $findProductsMaterials = $generalProductsMaterialsDao->findProductMaterial($productMaterials[$i]);
 
-            $productMaterials[$i] = $convertDataDao->strReplaceProductsMaterials($productMaterials[$i]);
+            // $productMaterials[$i] = $convertDataDao->strReplaceProductsMaterials($productMaterials[$i]);
 
             if (!$findProductsMaterials) $resolution = $productsMaterialsDao->insertProductsMaterialsByCompany($productMaterials[$i], $id_company);
             else {

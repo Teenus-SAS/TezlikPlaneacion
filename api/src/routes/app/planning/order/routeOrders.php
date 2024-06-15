@@ -348,9 +348,9 @@ $app->post('/addOrder', function (Request $request, Response $response, $args) u
     for ($i = 0; $i < sizeof($orders); $i++) {
         $status = true;
         // Checkear cantidades
-        $order = $generalOrdersDao->checkAccumulatedQuantityOrder($orders[$i]['id_order']);
-        if ($order['status'] != 7 && $order['status'] != 3 && $order['status'] != 8) {
-            if ($order['original_quantity'] > $order['accumulated_quantity']) {
+        // $order = $generalOrdersDao->checkAccumulatedQuantityOrder($orders[$i]['id_order']);
+        if ($orders[$i]['status'] != 'EN PRODUCCION' /*&& $order['status'] != 3*/ && $orders[$i]['status'] != 'FABRICADO') {
+            if ($orders[$i]['original_quantity'] > $orders[$i]['accumulated_quantity']) {
                 // Ficha tecnica
                 $productsMaterials = $productsMaterialsDao->findAllProductsmaterials($orders[$i]['id_product'], $id_company);
 
@@ -369,15 +369,15 @@ $app->post('/addOrder', function (Request $request, Response $response, $args) u
             }
 
             if ($status == true) {
-                if ($order['original_quantity'] <= $order['accumulated_quantity']) {
+                if ($orders[$i]['original_quantity'] <= $orders[$i]['accumulated_quantity']) {
                     $generalOrdersDao->changeStatus($orders[$i]['id_order'], 2);
-                    $accumulated_quantity = $order['accumulated_quantity'] - $order['original_quantity'];
+                    $accumulated_quantity = $orders[$i]['accumulated_quantity'] - $orders[$i]['original_quantity'];
                 } else {
-                    $accumulated_quantity = $order['accumulated_quantity'];
+                    $accumulated_quantity = $orders[$i]['accumulated_quantity'];
                     // $generalOrdersDao->changeStatus($orders[$i]['id_order'], 'Alistamiento');
                 }
 
-                if ($order['status'] != 2) {
+                if ($orders[$i]['status'] != 'DESPACHO') {
                     $date = date('Y-m-d');
 
                     $generalOrdersDao->updateOfficeDate($orders[$i]['id_order'], $date);
