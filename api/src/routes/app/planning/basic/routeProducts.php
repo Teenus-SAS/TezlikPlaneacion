@@ -449,12 +449,12 @@ $app->post('/updatePlanProduct', function (Request $request, Response $response,
                     $productsMaterials = $productsMaterialsDao->findAllProductsmaterials($orders[$i]['id_product'], $id_company);
 
                     if (sizeof($productsMaterials) == 0) {
-                        $resolution = $generalOrdersDao->changeStatus($orders[$i]['id_order'], 5);
+                        $generalOrdersDao->changeStatus($orders[$i]['id_order'], 5);
                         $status = false;
                     } else {
                         foreach ($productsMaterials as $arr) {
                             if ($arr['quantity_material'] <= 0) {
-                                $resolution = $generalOrdersDao->changeStatus($orders[$i]['id_order'], 6);
+                                $generalOrdersDao->changeStatus($orders[$i]['id_order'], 6);
                                 $status = false;
                                 break;
                             }

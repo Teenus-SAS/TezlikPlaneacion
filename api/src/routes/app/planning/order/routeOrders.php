@@ -3,17 +3,20 @@
 use TezlikPlaneacion\dao\ClientsDao;
 use TezlikPlaneacion\dao\ConvertDataDao;
 use TezlikPlaneacion\dao\DeliveryDateDao;
+use TezlikPlaneacion\dao\ExplosionMaterialsDao;
 use TezlikPlaneacion\dao\FilterDataDao;
 use TezlikPlaneacion\dao\GeneralClientsDao;
 use TezlikPlaneacion\dao\GeneralOrdersDao;
 use TezlikPlaneacion\dao\GeneralOrderTypesDao;
 use TezlikPlaneacion\dao\GeneralPlanCiclesMachinesDao;
 use TezlikPlaneacion\dao\GeneralProductsDao;
+use TezlikPlaneacion\dao\GeneralRequisitionsDao;
 use TezlikPlaneacion\dao\LastDataDao;
 use TezlikPlaneacion\dao\MallasDao;
 use TezlikPlaneacion\dao\OrdersDao;
 use TezlikPlaneacion\dao\ProductsMaterialsDao;
 use TezlikPlaneacion\dao\ProgrammingRoutesDao;
+use TezlikPlaneacion\dao\RequisitionsDao;
 
 $ordersDao = new OrdersDao();
 $generalOrdersDao = new GeneralOrdersDao();
@@ -29,6 +32,9 @@ $programmingRoutesDao = new ProgrammingRoutesDao();
 $productsMaterialsDao = new ProductsMaterialsDao();
 $lastDataDao = new LastDataDao();
 $generalPlanCiclesMachinesDao = new GeneralPlanCiclesMachinesDao();
+$explosionMaterialsDao = new ExplosionMaterialsDao();
+$generalRequisitionsDao = new GeneralRequisitionsDao();
+$requisitionsDao = new RequisitionsDao();
 $filterDataDao = new FilterDataDao();
 
 use Psr\Http\Message\ResponseInterface as Response;
@@ -164,7 +170,10 @@ $app->post('/addOrder', function (Request $request, Response $response, $args) u
     $lastDataDao,
     $productsMaterialsDao,
     $generalPlanCiclesMachinesDao,
-    $filterDataDao
+    $filterDataDao,
+    $explosionMaterialsDao,
+    $generalRequisitionsDao,
+    $requisitionsDao
 ) {
     session_start();
     $id_company = $_SESSION['id_company'];
@@ -360,7 +369,7 @@ $app->post('/addOrder', function (Request $request, Response $response, $args) u
                 } else {
                     foreach ($productsMaterials as $arr) {
                         if ($arr['quantity_material'] <= 0) {
-                            $order = $generalOrdersDao->changeStatus($orders[$i]['id_order'], 6);
+                            $generalOrdersDao->changeStatus($orders[$i]['id_order'], 6);
                             $status = false;
                             break;
                         }
@@ -420,6 +429,28 @@ $app->post('/addOrder', function (Request $request, Response $response, $args) u
     else if (sizeof($array_diff) == 0)
         $result = null;
 
+    $materials = $explosionMaterialsDao->findAllMaterialsConsolidated($id_company);
+
+    for ($i = 0; $i < sizeof($materials); $i++) {
+        if ($materials[$i]['available'] < 0) {
+            $data = [];
+            $data['idMaterial'] = $materials[$i]['id_material'];
+            $data['idProvider'] = '';
+            $data['applicationDate'] = '';
+            $data['deliveryDate'] = '';
+            $data['quantity'] = abs($materials[$i]['available']);
+            $data['purchaseOrder'] = '';
+
+            $requisition = $generalRequisitionsDao->findRequisitionByApplicationDate($materials[$i]['id_material']);
+
+            if (!$requisition)
+                $requisitionsDao->insertRequisitionByCompany($data, $id_company);
+            else {
+                $data['idRequisition'] = $requisition['id_requisition'];
+                $requisitionsDao->updateRequisition($data);
+            }
+        }
+    }
 
     $response->getBody()->write(json_encode($resp));
     return $response->withStatus(200)->withHeader('Content-Type', 'application/json');
@@ -431,6 +462,9 @@ $app->post('/updateOrder', function (Request $request, Response $response, $args
     $generalProductsDao,
     $convertDataDao,
     $filterDataDao,
+    $explosionMaterialsDao,
+    $requisitionsDao,
+    $generalRequisitionsDao,
     $productsMaterialsDao
 ) {
     session_start();
@@ -505,12 +539,12 @@ $app->post('/updateOrder', function (Request $request, Response $response, $args
                 $productsMaterials = $productsMaterialsDao->findAllProductsmaterials($dataOrder['idProduct'], $id_company);
 
                 if (sizeof($productsMaterials) == 0) {
-                    $order = $generalOrdersDao->changeStatus($dataOrder['idOrder'], 5);
+                    $generalOrdersDao->changeStatus($dataOrder['idOrder'], 5);
                     $status = false;
                 } else {
                     foreach ($productsMaterials as $arr) {
                         if ($arr['quantity_material'] <= 0) {
-                            $order = $generalOrdersDao->changeStatus($dataOrder['idOrder'], 6);
+                            $generalOrdersDao->changeStatus($dataOrder['idOrder'], 6);
                             $status = false;
                             break;
                         }
@@ -538,6 +572,29 @@ $app->post('/updateOrder', function (Request $request, Response $response, $args
                 $generalProductsDao->updateReservedByProduct($dataOrder['idProduct'], $arr['reserved']);
 
                 $generalProductsDao->updateAccumulatedQuantity($dataOrder['idProduct'], $accumulated_quantity, 1);
+            }
+        }
+
+        $materials = $explosionMaterialsDao->findAllMaterialsConsolidated($id_company);
+
+        for ($i = 0; $i < sizeof($materials); $i++) {
+            if ($materials[$i]['available'] < 0) {
+                $data = [];
+                $data['idMaterial'] = $materials[$i]['id_material'];
+                $data['idProvider'] = '';
+                $data['applicationDate'] = '';
+                $data['deliveryDate'] = '';
+                $data['quantity'] = abs($materials[$i]['available']);
+                $data['purchaseOrder'] = '';
+
+                $requisition = $generalRequisitionsDao->findRequisitionByApplicationDate($materials[$i]['id_material']);
+
+                if (!$requisition)
+                    $requisitionsDao->insertRequisitionByCompany($data, $id_company);
+                else {
+                    $data['idRequisition'] = $requisition['id_requisition'];
+                    $requisitionsDao->updateRequisition($data);
+                }
             }
         }
 
