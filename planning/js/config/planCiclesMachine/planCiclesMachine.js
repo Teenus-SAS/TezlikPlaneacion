@@ -112,14 +112,15 @@ $(document).ready(function () {
   };
 
   /* Mensaje de exito */
-
   messageMachine = (data) => {
     if (data.success == true) {
       $('.cardCreatePlanCiclesMachine').hide(800);
       $('#formCreatePlanCiclesMachine').trigger('reset');
       $('.cardImportPlanCiclesMachine').hide(800);
       $('#formImportPlanCiclesMachine').trigger('reset');
-      updateTable();
+
+      if($('#selectNameProduct').val())
+        updateTable();
       toastr.success(data.message);
       return false;
     } else if (data.error == true) toastr.error(data.message);
@@ -127,7 +128,6 @@ $(document).ready(function () {
   };
 
   /* Actualizar tabla */
-
   function updateTable() {
     $('#tblPlanCiclesMachine').DataTable().clear();
     $('#tblPlanCiclesMachine').DataTable().ajax.reload();
@@ -135,5 +135,5 @@ $(document).ready(function () {
     $('#tblRoutes').DataTable().ajax.reload();
   }
 
-  loadDataMachines(2);
+  loadDataMachines(1);
 });

@@ -243,29 +243,53 @@ $app->post('/addPlanCiclesMachine', function (Request $request, Response $respon
             }
 
             $findPlanCiclesMachine = $generalPlanCiclesMachinesDao->findPlansCiclesMachine($planCiclesMachine[$i], $id_company);
-            if (!$findPlanCiclesMachine) $resolution = $planCiclesMachineDao->addPlanCiclesMachines($planCiclesMachine[$i], $id_company);
-            else {
+            if (!$findPlanCiclesMachine) {
+                $resolution = $planCiclesMachineDao->addPlanCiclesMachines($planCiclesMachine[$i], $id_company);
+
+                if (isset($resolution['info'])) break;
+
+                $ciclesMachine = $generalPlanCiclesMachinesDao->findAllPlanCiclesMachineByProduct($planCiclesMachine[$i]['idProduct'], $id_company);
+
+                if (sizeof($ciclesMachine) == 1) {
+                    $arr = $programmingRoutesDao->findProgrammingRoutes($planCiclesMachine[$i]['idProduct']);
+
+                    if (!$arr) {
+                        $data = [];
+                        $data['idProduct'] = $planCiclesMachine[$i]['idProduct'];
+                        // $data['idOrder'] = $arr['id_order'];
+                        $data['route'] = 1;
+
+                        $resolution = $programmingRoutesDao->insertProgrammingRoutes($data, $id_company);
+                    }
+                }
+
+                $data = [];
+
+                if (!$findPlanCiclesMachine) {
+                    $machine = $lastDataDao->findLastInsertedCiclesMachine($id_company);
+                    $data['idCiclesMachine'] = $machine['id_cicles_machine'];
+                } else
+                    $data['idCiclesMachine'] = $findPlanCiclesMachine['id_cicles_machine'];
+
+                $planCiclesMachine[$i]['idCiclesMachine'] = $data['idCiclesMachine'];
+
+                // Añadir siguiente ruta
+                $arr = $generalPlanCiclesMachinesDao->findNextRouteByProduct($planCiclesMachine[$i]['idProduct']);
+                $data['route'] = $arr['route'];
+                $resolution = $generalPlanCiclesMachinesDao->changeRouteById($data);
+            } else {
                 $planCiclesMachine[$i]['idCiclesMachine'] = $findPlanCiclesMachine['id_cicles_machine'];
                 $resolution = $planCiclesMachineDao->updatePlanCiclesMachine($planCiclesMachine[$i]);
             }
 
-            if (isset($resolution)) break;
+            if (isset($resolution['info'])) break;
 
             $data = [];
-            if (!$findPlanCiclesMachine) {
-                $machine = $lastDataDao->findLastInsertedCiclesMachine($id_company);
-                $data['idCiclesMachine'] = $machine['id_cicles_machine'];
-            } else
-                $data['idCiclesMachine'] = $findPlanCiclesMachine['idCiclesMachine'];
-
-            // Añadir siguiente ruta
-            $arr = $generalPlanCiclesMachinesDao->findNextRouteByProduct($planCiclesMachine[$i]['idProduct']);
-            $data['route'] = $arr['route'];
-            $resolution = $generalPlanCiclesMachinesDao->changeRouteById($data);
+            $data['idCiclesMachine'] = $planCiclesMachine[$i]['idCiclesMachine'];
 
             if (isset($resolution)) break;
             // Calcular unidades
-            $arr = $ciclesMachinesDao->calcUnitsTurn($machine['id_cicles_machine']);
+            $arr = $ciclesMachinesDao->calcUnitsTurn($planCiclesMachine[$i]['idCiclesMachine']);
             $data['units_turn'] = $arr['units_turn'];
 
             $arr = $ciclesMachinesDao->calcUnitsMonth($data, 2);

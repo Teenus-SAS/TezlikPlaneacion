@@ -111,6 +111,22 @@ $app->post('/addPlanningMachines', function (Request $request, Response $respons
             $dataPMachine = $timeConvertDao->timeConverter($dataPMachines);
             $planningMachines = $planningMachinesDao->insertPlanMachinesByCompany($dataPMachine, $id_company);
 
+            $machines = $generalPlanCiclesMachinesDao->findAllPlanCiclesMachine($dataPMachine['idMachine']);
+
+            foreach ($machines as $k) {
+                if (isset($planningMachines['info'])) break;
+                $data = [];
+                $data['idCiclesMachine'] = $k['id_cicles_machine'];
+
+                $arr = $ciclesMachinesDao->calcUnitsTurn($k['id_cicles_machine']);
+                $data['units_turn'] = $arr['units_turn'];
+
+                $arr = $ciclesMachinesDao->calcUnitsMonth($data, 1);
+                $data['units_month'] = $arr['units_month'];
+
+                $planningMachines = $generalPlanCiclesMachinesDao->updateUnits($data);
+            }
+
             if ($planningMachines == null)
                 $resp = array('success' => true, 'message' => 'Planeación de maquina creada correctamente');
             else if (isset($planningMachines['info']))
@@ -135,22 +151,22 @@ $app->post('/addPlanningMachines', function (Request $request, Response $respons
             else {
                 $planningMachines[$i]['idProgramMachine'] = $findPlanMachines['id_program_machine'];
                 $resolution = $planningMachinesDao->updatePlanMachines($planningMachines[$i]);
+            }
 
-                $machines = $generalPlanCiclesMachinesDao->findAllPlanCiclesMachine($planningMachines[$i]['idMachine']);
+            $machines = $generalPlanCiclesMachinesDao->findAllPlanCiclesMachine($planningMachines[$i]['idMachine']);
 
-                foreach ($machines as $k) {
-                    if (isset($resolution['info'])) break;
-                    $data = [];
-                    $data['idCiclesMachine'] = $k['id_cicles_machine'];
+            foreach ($machines as $k) {
+                if (isset($resolution['info'])) break;
+                $data = [];
+                $data['idCiclesMachine'] = $k['id_cicles_machine'];
 
-                    $arr = $ciclesMachinesDao->calcUnitsTurn($k['id_cicles_machine']);
-                    $data['units_turn'] = $arr['units_turn'];
+                $arr = $ciclesMachinesDao->calcUnitsTurn($k['id_cicles_machine']);
+                $data['units_turn'] = $arr['units_turn'];
 
-                    $arr = $ciclesMachinesDao->calcUnitsMonth($data, 1);
-                    $data['units_month'] = $arr['units_month'];
+                $arr = $ciclesMachinesDao->calcUnitsMonth($data, 1);
+                $data['units_month'] = $arr['units_month'];
 
-                    $resolution = $generalPlanCiclesMachinesDao->updateUnits($data);
-                }
+                $resolution = $generalPlanCiclesMachinesDao->updateUnits($data);
             }
         }
         if ($resolution == null) $resp = array('success' => true, 'message' => 'Planeacion de maquina importada correctamente');
