@@ -36,7 +36,7 @@ $(document).ready(function () {
 
     importFile(selectedFile)
       .then((data) => {
-        const expectedHeaders = ['maquina', 'no_trabajadores', 'hora_dia', 'hora_inicio', 'hora_fin', 'enero', 'febrero', 'marzo', 'abril', 'mayo', 'junio', 'julio', 'agosto', 'septiembre', 'octubre', 'noviembre', 'diciembre'];
+        const expectedHeaders = ['maquina', 'no_trabajadores', 'hora_dia', 'hora_inicio', 'enero', 'febrero', 'marzo', 'abril', 'mayo', 'junio', 'julio', 'agosto', 'septiembre', 'octubre', 'noviembre', 'diciembre'];
         const actualHeaders = Object.keys(data[0]);
 
         const missingHeaders = expectedHeaders.filter(header => !actualHeaders.includes(header));
@@ -152,7 +152,7 @@ $(document).ready(function () {
         no_trabajadores: data[i].number_workers,
         hora_dia: data[i].hours_day,
         hora_inicio: data[i].hour_start,
-        hora_fin: data[i].hour_end,
+        // hora_fin: data[i].hour_end,
         enero: data[i].january,
         febrero: data[i].february,
         marzo: data[i].march,

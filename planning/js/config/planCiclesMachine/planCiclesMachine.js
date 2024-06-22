@@ -58,9 +58,9 @@ $(document).ready(function () {
     let idProduct = parseInt($('#selectNameProduct').val());
     let ciclesHour = $('#ciclesHour').val();
 
-    let data = idProcess * idMachine * idProduct * ciclesHour;
+    let data = idProcess * idProduct * ciclesHour;
 
-    if (!data || data == '' || data == null || data == 0) {
+    if (!data || data == '' || data == null || data == 0 || isNaN(idMachine)) {
       toastr.error('Ingrese todos los campos');
       return false;
     }

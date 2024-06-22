@@ -70,7 +70,7 @@ $app->post('/planningMachinesDataValidation', function (Request $request, Respon
             } else $planningMachines[$i]['idMachine'] = $findMachine['id_machine'];
 
             if (
-                empty($planningMachines[$i]['numberWorkers']) || empty($planningMachines[$i]['hoursDay']) || empty($planningMachines[$i]['hourStart']) || empty($planningMachines[$i]['hourEnd']) || empty($planningMachines[$i]['january']) || empty($planningMachines[$i]['february']) ||
+                empty($planningMachines[$i]['numberWorkers']) || empty($planningMachines[$i]['hoursDay']) || empty($planningMachines[$i]['hourStart']) || empty($planningMachines[$i]['january']) || empty($planningMachines[$i]['february']) ||
                 empty($planningMachines[$i]['march']) || empty($planningMachines[$i]['april']) || empty($planningMachines[$i]['may']) || empty($planningMachines[$i]['june']) || empty($planningMachines[$i]['july']) ||
                 empty($planningMachines[$i]['august']) || empty($planningMachines[$i]['september']) ||  empty($planningMachines[$i]['october']) ||  empty($planningMachines[$i]['november']) ||  empty($planningMachines[$i]['december'])
             ) {
@@ -145,7 +145,11 @@ $app->post('/addPlanningMachines', function (Request $request, Response $respons
 
             $findPlanMachines = $generalPlanningMachinesDao->findPlanMachines($planningMachines[$i], $id_company);
 
-            $planningMachines[$i] = $timeConvertDao->timeConverter($planningMachines[$i]);
+            $hourEnd = $timeConvertDao->calculateHourEnd($planningMachines[$i]['hourStart'], $planningMachines[$i]['hoursDay']);
+
+            $planningMachines[$i]['year'] = date('Y');
+            $planningMachines[$i]['hourStart'] = date("G.i", strtotime($planningMachines[$i]['hourStart']));
+            $planningMachines[$i]['hourEnd'] = $hourEnd;
 
             if (!$findPlanMachines) $resolution = $planningMachinesDao->insertPlanMachinesByCompany($planningMachines[$i], $id_company);
             else {
@@ -163,7 +167,7 @@ $app->post('/addPlanningMachines', function (Request $request, Response $respons
                 $arr = $ciclesMachinesDao->calcUnitsTurn($k['id_cicles_machine']);
                 $data['units_turn'] = $arr['units_turn'];
 
-                $arr = $ciclesMachinesDao->calcUnitsMonth($data, 1);
+                $arr = $ciclesMachinesDao->calcUnitsMonth($data, 2);
                 $data['units_month'] = $arr['units_month'];
 
                 $resolution = $generalPlanCiclesMachinesDao->updateUnits($data);

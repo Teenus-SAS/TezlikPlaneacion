@@ -57,7 +57,7 @@ class GeneralMaterialsDao
     {
         $connection = Connection::getInstance()->getConnection();
 
-        $stmt = $connection->prepare("SELECT id_material FROM materials 
+        $stmt = $connection->prepare("SELECT * FROM materials 
                                         WHERE (reference = :reference OR material = :material) 
                                         AND id_company = :id_company");
         $stmt->execute([

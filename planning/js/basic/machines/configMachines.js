@@ -12,7 +12,7 @@
     $select.append(`<option value="0" disabled selected>Seleccionar</option>`);
     
     if(op == 1)
-      $select.append(`<option value="0">Proceso Manual</option>`);
+      $select.append(`<option value="0">PROCESO MANUAL</option>`);
     else if(op == 3)
       $select.append(`<option value="0">Todos</option>`);
     

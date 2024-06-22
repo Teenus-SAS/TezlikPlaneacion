@@ -25,4 +25,40 @@ class TimeConvertDao
 
         return $dataPMachines;
     }
+
+    public function calculateHourEnd($hourStart, $hoursDay)
+    {
+        // Separar la parte de la hora y el indicador AM/PM
+        list($time, $ampm) = explode(' ', $hourStart);
+        list($hours, $minutes) = explode(':', $time);
+
+        // Convertir horas y minutos a enteros
+        $hours = (int)$hours;
+        $minutes = (int)$minutes;
+
+        // Convertir la hora a formato de 24 horas
+        if ($ampm == 'PM' && $hours != 12) {
+            $hours += 12;
+        } elseif ($ampm == 'AM' && $hours == 12) {
+            $hours = 0;
+        }
+
+        // Calcular la parte decimal de la hora inicial
+        $initialHourDecimal = $hours + ($minutes / 60);
+
+        // Sumar hoursDay
+        $finalHourDecimal = $initialHourDecimal + $hoursDay;
+
+        // Obtener horas y minutos finales
+        $finalHours = (int)$finalHourDecimal;
+        $finalMinutes = ($finalHourDecimal - $finalHours) * 60;
+
+        // Formatear minutos para asegurarse de que tienen dos dígitos
+        $formattedFinalMinutes = str_pad((int)$finalMinutes, 2, '0', STR_PAD_LEFT);
+
+        // Formatear la hora final en el formato HH.MM
+        $hourEnd = $finalHours . '.' . $formattedFinalMinutes;
+
+        return $hourEnd;
+    }
 }
