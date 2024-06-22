@@ -1,21 +1,28 @@
 $(document).ready(function () {
+  products = [];
+  materials = [];
+
   $(".selectNavigation").click(function (e) {
     e.preventDefault();
+    let option = this.id;
 
-    if (this.id == "products") {
-      $(".cardProducts").show();
-      $(".cardMaterials").hide();
-      $(".cardRawMaterials").hide(800);
-      $(".cardImportMaterials").hide(800);
-      loadTblProduct(products);
-      inventoryIndicator(products);
-    } else if (this.id == "materials") {
-      $(".cardMaterials").show();
-      $(".cardProducts").hide();
-      $(".cardCreateProduct").hide(800);
-      $(".cardImportProducts").hide(800);
-      loadTblMaterials(materials);
-      inventoryIndicator(materials);
+    switch (option) {
+      case 'sProducts':
+        $(".cardProducts").show();
+        $(".cardMaterials").hide();
+        $(".cardRawMaterials").hide(800);
+        $(".cardImportMaterials").hide(800);
+        loadTblProduct(products);
+        inventoryIndicator(products);
+        break;
+      case 'sMaterials':
+        $(".cardMaterials").show();
+        $(".cardProducts").hide();
+        $(".cardCreateProduct").hide(800);
+        $(".cardImportProducts").hide(800);
+        loadTblMaterials(materials);
+        inventoryIndicator(materials);
+        break;
     }
 
     let tables = document.getElementsByClassName("dataTable");
@@ -32,24 +39,21 @@ $(document).ready(function () {
     try {
       const [dataProducts, dataMaterials] = await Promise.all([
         searchData('/api/products'),
-        searchData(`/api/materials`)
+        searchData('/api/materials')
       ]);
 
       products = dataProducts;
       materials = dataMaterials;
 
-      let card = document.getElementsByClassName('selectNavigation');
+      const card = document.querySelector('.selectNavigation');
 
-      if (card[0].className.includes('active')) {
+      if (card.classList.contains('active')) {
         loadTblProduct(products);
         inventoryIndicator(products);
-      }
-      else {
+      } else {
         loadTblMaterials(materials);
         inventoryIndicator(materials);
       }
-
-      
     } catch (error) {
       console.error('Error loading data:', error);
     }
@@ -73,14 +77,17 @@ $(document).ready(function () {
   }
 
   /* Cargue tabla de Proyectos */
-  loadTblProduct = (data) => {
+  const loadTblProduct = (data) => {
+    const tblProductsElement = $("#tblProducts");
+
     if ($.fn.dataTable.isDataTable("#tblProducts")) {
-      $("#tblProducts").DataTable().clear();
-      $("#tblProducts").DataTable().rows.add(data).draw();
+      const dataTable = tblProductsElement.DataTable();
+      dataTable.clear();
+      dataTable.rows.add(data).draw();
       return;
     }
 
-    tblProducts = $('#tblProducts').dataTable({
+    tblProducts = tblProductsElement.dataTable({
       destroy: true,
       pageLength: 50,
       data: data,
@@ -88,8 +95,8 @@ $(document).ready(function () {
       language: {
         url: '//cdn.datatables.net/plug-ins/1.10.20/i18n/Spanish.json',
       },
-      fnInfoCallback: function (oSettings, iStart, iEnd, iMax, iTotal, sPre) {
-        if (oSettings.json && oSettings.json.hasOwnProperty('error')) {
+      fnInfoCallback: (oSettings, iStart, iEnd, iMax, iTotal, sPre) => {
+        if (oSettings.json && oSettings.json.error) {
           console.error(oSettings.json.error);
         }
       },
@@ -97,10 +104,8 @@ $(document).ready(function () {
         {
           title: 'No.',
           data: null,
-          className: 'uniqueClassName  dt-head-center',
-          render: function (data, type, full, meta) {
-            return meta.row + 1;
-          },
+          className: 'uniqueClassName dt-head-center',
+          render: (data, type, full, meta) => meta.row + 1,
         },
         {
           title: 'Referencia',
@@ -116,83 +121,55 @@ $(document).ready(function () {
           title: 'Existencia',
           data: 'quantity',
           className: 'uniqueClassName dt-head-center',
-          render: function (data) {
-            let quantity = parseFloat(data);
-            if (Math.abs(quantity) < 0.01) {
-              // let decimals = contarDecimales(data);
-              // data = formatNumber(data, decimals);
-              quantity = quantity.toLocaleString('es-CO', { minimumFractionDigits: 2, maximumFractionDigits: 9 });
-            } else
-              quantity = quantity.toLocaleString('es-CO', { maximumFractionDigits: 2 });
-            
-            return quantity;
-          },
+          render: (data) => formatNumber(data, 'es-CO'),
         },
         {
           title: 'Medida',
           data: 'abbreviation',
           className: 'uniqueClassName dt-head-center',
         },
-        /* {
-          title: 'Reservado',
-          data: 'reserved',
-          className: 'uniqueClassName', 
-        },  */
         {
           title: 'Stock Min',
           data: 'minimum_stock',
           className: 'uniqueClassName dt-head-center',
-          render: function (data) {
-            let minimum_stock = parseFloat(data);
-            if (Math.abs(minimum_stock) < 0.01) {
-              // let decimals = contarDecimales(data);
-              // data = formatNumber(data, decimals);
-              minimum_stock = minimum_stock.toLocaleString('es-CO', { minimumFractionDigits: 2, maximumFractionDigits: 9 });
-            } else
-              minimum_stock = minimum_stock.toLocaleString('es-CO', { maximumFractionDigits: 2 });
-            
-            return minimum_stock;
-          },
+          render: (data) => formatNumber(data, 'es-CO'),
         },
         {
           title: "Dias Inv",
           data: "days",
           className: "uniqueClassName dt-head-center",
-          render: function (data) {
-            let days = parseFloat(data);
-            if (Math.abs(days) < 0.01) {
-              // let decimals = contarDecimales(data);
-              // data = formatNumber(data, decimals);
-              days = days.toLocaleString('es-CO', { minimumFractionDigits: 2, maximumFractionDigits: 9 });
-            } else
-              days = days.toLocaleString('es-CO', { maximumFractionDigits: 2 });
-            
-            return days;
-          },
+          render: (data) => formatNumber(data, 'es-CO'),
         },
-      
         {
           title: 'Img',
           data: 'img',
           className: 'uniqueClassName dt-head-center',
-          render: (data, type, row) => {
-            data ? img = `<img src="${data}" alt="" style="width:80px;border-radius:100px">` : (img = '');
-            return img;
-          },
+          render: (data) => data ? `<img src="${data}" alt="" style="width:80px;border-radius:100px">` : '',
         },
         {
           title: 'Acciones',
           data: 'id_product',
           className: 'uniqueClassName dt-head-center',
-          render: function (data) {
-            return `
-                <a href="javascript:;" <i id="${data}" class="bx bx-edit-alt updateProducts" data-toggle='tooltip' title='Actualizar Producto' style="font-size: 30px;"></i></a>
-                <a href="javascript:;" <i id="${data}" class="mdi mdi-delete-forever" data-toggle='tooltip' title='Eliminar Producto' style="font-size: 30px;color:red" onclick="deleteProductsFunction()"></i></a>`;
-          },
+          render: (data) => `
+          <a href="javascript:;">
+            <i id="${data}" class="bx bx-edit-alt updateProducts" data-toggle='tooltip' title='Actualizar Producto' style="font-size: 30px;"></i>
+          </a>
+          <a href="javascript:;">
+            <i id="${data}" class="mdi mdi-delete-forever" data-toggle='tooltip' title='Eliminar Producto' style="font-size: 30px;color:red" onclick="deleteProductsFunction()"></i>
+          </a>
+        `,
         },
       ],
     });
-  }
+  };
+
+  const formatNumber = (num, locale) => {
+    const value = parseFloat(num);
+    if (Math.abs(value) < 0.01) {
+      return value.toLocaleString(locale, { minimumFractionDigits: 2, maximumFractionDigits: 9 });
+    }
+    return value.toLocaleString(locale, { maximumFractionDigits: 2 });
+  };
 
   loadAllData();
 });

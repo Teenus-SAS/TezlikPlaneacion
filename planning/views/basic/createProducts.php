@@ -276,12 +276,12 @@ if (sizeof($_SESSION) == 0)
                             <div class="col-12">
                                 <ul class="nav nav-tabs" id="pills-tab" role="tablist">
                                     <li class="nav-item">
-                                        <a class="nav-link active selectNavigation" id="products" data-toggle="pill" href="#pills-activity" role="tab" aria-controls="pills-activity" aria-selected="true">
+                                        <a class="nav-link active selectNavigation" id="sProducts" data-toggle="pill" href="#pills-activity" role="tab" aria-controls="pills-activity" aria-selected="true">
                                             <i class="fas fa-cube mr-1"></i>Productos
                                         </a>
                                     </li>
                                     <li class="nav-item">
-                                        <a class="nav-link selectNavigation" id="materials" data-toggle="pill" href="#pills-projects" role="tab" aria-controls="pills-projects" aria-selected="false">
+                                        <a class="nav-link selectNavigation" id="sMaterials" data-toggle="pill" href="#pills-projects" role="tab" aria-controls="pills-projects" aria-selected="false">
                                             <i class="fas fa-flask mr-1"></i>Materia Prima
                                         </a>
                                     </li>
