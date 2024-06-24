@@ -516,7 +516,8 @@ $(document).ready(function () {
 
           let productsMaterials = allProductsMaterials.filter(item => item.id_product == this.value);
           productsMaterials = productsMaterials.sort((a, b) => a.quantity - b.quantity);
-          $('#quantityMP').val(productsMaterials[0].quantity.toLocaleString('es-CO', { maximumfractiondigits: 2 }));
+          let quantity = parseFloat(productsMaterials[0].quantity) / parseFloat(productOrders[i].original_quantity);
+          $('#quantityMP').val(quantity.toLocaleString('es-CO', { maximumfractiondigits: 2 }));
 
           dataProgramming['id_order'] = productOrders[i].id_order;
           dataProgramming['num_order'] = num_order;

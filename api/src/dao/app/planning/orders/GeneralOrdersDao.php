@@ -116,6 +116,23 @@ class GeneralOrdersDao
         return $orders;
     }
 
+    public function findSameOrder($dataOrder)
+    {
+        $connection = Connection::getInstance()->getConnection();
+
+        $stmt = $connection->prepare("SELECT * FROM plan_orders 
+                                      WHERE num_order = :num_order AND id_product = :id_product AND id_client = :id_client AND status = 1");
+        $stmt->execute([
+            'num_order' => trim($dataOrder['order']),
+            'id_product' => $dataOrder['idProduct'],
+            'id_client' => $dataOrder['idClient']
+        ]);
+        $this->logger->info(__FUNCTION__, array('query' => $stmt->queryString, 'errors' => $stmt->errorInfo()));
+        $orders = $stmt->fetch($connection::FETCH_ASSOC);
+        $this->logger->notice("pedidos", array('pedidos' => $orders));
+        return $orders;
+    }
+
     public function findLastNumOrder($id_company)
     {
         $connection = Connection::getInstance()->getConnection();

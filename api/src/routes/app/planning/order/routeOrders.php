@@ -101,6 +101,22 @@ $app->post('/orderDataValidation', function (Request $request, Response $respons
                 $dataImportOrder = array('error' => true, 'message' => "Fecha de minima mayor a la fecha maxima fila: {$i}");
                 break;
             }
+
+            // Obtener id producto
+            $findProduct = $productsDao->findProduct($order[$i], $id_company);
+            if (!$findProduct) {
+                $i = $i + 2;
+                $dataImportOrder = array('error' => true, 'message' => "Producto no existe en la base de datos.<br>Fila: {$i}");
+                break;
+            } else $order[$i]['idProduct'] = $findProduct['id_product'];
+
+            // Obtener id cliente
+            $findClient = $generalClientsDao->findClientByName($order[$i], $id_company, 1);
+            if (!$findClient) {
+                $i = $i + 2;
+                $dataImportOrder = array('error' => true, 'message' => "Cliente no existe en la base de datos o es tipo proveedor.<br>Fila: {$i}");
+                break;
+            } else $order[$i]['idClient'] = $findClient['id_client'];
         }
 
         if (!isset($dataImportOrder['error'])) {
@@ -108,6 +124,7 @@ $app->post('/orderDataValidation', function (Request $request, Response $respons
 
             foreach ($order as $arr) {
                 $repeat = false;
+
                 for ($i = 0; $i < sizeof($importOrder); $i++) {
                     if ($importOrder[$i]['referenceProduct'] == trim($arr['referenceProduct']) && $importOrder[$i]['client'] == strtoupper(trim($arr['client']))) {
                         $importOrder[$i]['originalQuantity'] += $arr['originalQuantity'];
@@ -118,8 +135,10 @@ $app->post('/orderDataValidation', function (Request $request, Response $respons
 
                 if ($repeat == false) {
                     $importOrder[] = array(
+                        'idProduct' => $arr['idProduct'],
                         'referenceProduct' => trim($arr['referenceProduct']),
                         'product' => $arr['product'],
+                        'idClient' => $arr['idClient'],
                         'client' => strtoupper(trim($arr['client'])),
                         'order' => $arr['order'],
                         'dateOrder' => $arr['dateOrder'],
@@ -131,22 +150,6 @@ $app->post('/orderDataValidation', function (Request $request, Response $respons
             }
 
             for ($i = 0; $i < sizeof($importOrder); $i++) {
-                // Obtener id producto
-                $findProduct = $productsDao->findProduct($importOrder[$i], $id_company);
-                if (!$findProduct) {
-                    $i = $i + 2;
-                    $dataImportOrder = array('error' => true, 'message' => "Producto no existe en la base de datos.<br>Fila: {$i}");
-                    break;
-                } else $importOrder[$i]['idProduct'] = $findProduct['id_product'];
-
-                // Obtener id cliente
-                $findClient = $generalClientsDao->findClientByName($importOrder[$i], $id_company, 1);
-                if (!$findClient) {
-                    $i = $i + 2;
-                    $dataImportOrder = array('error' => true, 'message' => "Cliente no existe en la base de datos o es tipo proveedor.<br>Fila: {$i}");
-                    break;
-                } else $importOrder[$i]['idClient'] = $findClient['id_client'];
-
                 $findOrder = $generalOrdersDao->findOrder($importOrder[$i], $id_company);
                 !$findOrder ? $insert = $insert + 1 : $update = $update + 1;
                 $dataImportOrder['insert'] = $insert;
@@ -210,7 +213,19 @@ $app->post('/addOrder', function (Request $request, Response $response, $args) u
         $importOrder = [];
 
         foreach ($order as $arr) {
+            // Obtener id producto
+            $findProduct = $productsDao->findProduct($arr, $id_company);
+            $arr['idProduct'] = $findProduct['id_product'];
+
+            // Obtener id cliente
+            $findClient = $generalClientsDao->findClientByName($arr, $id_company, 1);
+            $arr['idClient'] = $findClient['id_client'];
+
             $repeat = false;
+
+            $k = $generalOrdersDao->findSameOrder($arr);
+            if ($k) $arr['originalQuantity'] += $k['original_quantity'];
+
             for ($i = 0; $i < sizeof($importOrder); $i++) {
                 if ($importOrder[$i]['referenceProduct'] == trim($arr['referenceProduct']) && $importOrder[$i]['client'] == strtoupper(trim($arr['client']))) {
                     $importOrder[$i]['originalQuantity'] += $arr['originalQuantity'];
@@ -221,8 +236,10 @@ $app->post('/addOrder', function (Request $request, Response $response, $args) u
 
             if ($repeat == false) {
                 $importOrder[] = array(
+                    'idProduct' => $arr['idProduct'],
                     'referenceProduct' => trim($arr['referenceProduct']),
                     'product' => $arr['product'],
+                    'idClient' => $arr['idClient'],
                     'client' => strtoupper(trim($arr['client'])),
                     'order' => $arr['order'],
                     'dateOrder' => $arr['dateOrder'],
@@ -235,14 +252,6 @@ $app->post('/addOrder', function (Request $request, Response $response, $args) u
         // $import = true;
 
         for ($i = 0; $i < sizeof($importOrder); $i++) {
-            // Obtener id producto
-            $findProduct = $productsDao->findProduct($importOrder[$i], $id_company);
-            $importOrder[$i]['idProduct'] = $findProduct['id_product'];
-
-            // Obtener id cliente
-            $findClient = $generalClientsDao->findClientByName($importOrder[$i], $id_company, 1);
-            $importOrder[$i]['idClient'] = $findClient['id_client'];
-
             $importOrder[$i] = $convertDataDao->changeDateOrder($importOrder[$i]);
 
             // Consultar pedido
