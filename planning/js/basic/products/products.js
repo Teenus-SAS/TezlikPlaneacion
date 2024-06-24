@@ -53,7 +53,7 @@ $(document).ready(function () {
 
     sessionStorage.setItem("id_product", idProduct);
 
-    let row = $(this).parent().parent()[0];
+    let row = $(this).parent().parent().parent()[0];
     let data = tblProducts.fnGetData(row);
     $("#referenceProduct").val(data.reference);
     $("#product").val(data.product);

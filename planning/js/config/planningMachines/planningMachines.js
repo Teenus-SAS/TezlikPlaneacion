@@ -63,8 +63,7 @@ $(document).ready(function () {
 
     let row = $(this).parent().parent()[0];
     let data = tblPlanMachines.fnGetData(row);
-
-    $(`#idMachine option:contains(${data.machine})`).prop('selected', true);
+    $(`#idMachine option[value=${data.id_machine}]`).prop('selected', true); 
     $('#numberWorkers').val(data.number_workers);
 
     $('#hoursDay').val(data.hours_day);

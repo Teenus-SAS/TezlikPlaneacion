@@ -147,12 +147,13 @@ $(document).ready(function () {
     let data = tblPlanMachines.fnGetData();
 
     for (let i = 0; i < data.length; i++) {
+      let hourStart = moment(data[i].hour_start, ['HH:mm']).format('h:mm A');
+
       planningMachines.push({
         maquina: data[i].machine,
         no_trabajadores: data[i].number_workers,
         hora_dia: data[i].hours_day,
-        hora_inicio: data[i].hour_start,
-        // hora_fin: data[i].hour_end,
+        hora_inicio: hourStart, 
         enero: data[i].january,
         febrero: data[i].february,
         marzo: data[i].march,

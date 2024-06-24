@@ -1,26 +1,20 @@
 $(document).ready(function () {
-  searchData = async (urlApi) => {
+  const fetchData = async (url, options = {}) => {
     try {
-      result = await $.ajax({ url: urlApi });
+      const result = await $.ajax({ url, ...options });
       return result;
     } catch (error) {
-      console.error(error);
+      console.error(`Error fetching data from ${url}:`, error);
     }
   };
 
-  sendDataPOST = async (urlApi, params) => {
-    try {
-      result = await $.ajax({
-        url: urlApi,
-        type: 'POST',
-        data: params,
-        contentType: false,
-        cache: false,
-        processData: false,
-      });
-      return result;
-    } catch (error) {
-      console.error(error);
-    }
-  };
+  searchData = async (urlApi) => fetchData(urlApi);
+
+  sendDataPOST = async (urlApi, params) => fetchData(urlApi, {
+    type: 'POST',
+    data: params,
+    contentType: false,
+    cache: false,
+    processData: false,
+  });
 });

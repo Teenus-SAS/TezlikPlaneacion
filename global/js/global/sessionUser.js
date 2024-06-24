@@ -1,70 +1,3 @@
-/* 
-$(document).ready(function () {
-  Cierre de página 
-  $(window).on('mouseover', function () {
-    window.onbeforeunload = null;
-  });
-  $(window).on('mouseout', function () {
-    window.onbeforeunload = ConfirmLeave;
-  });
-  $('body').on('click', 'a', function () {
-    window.onbeforeunload = null;
-  });
-
-  // Tiempo de inactividad
-  (function () {
-    var minutes = true;
-    var interval = minutes ? 60000 : 1000;
-    var IDLE_TIMEOUT = 10;
-    var idleCounter = 0;
-
-    document.onmousemove = document.onkeypress = function () {
-      idleCounter = 0;
-    };
-
-    window.setInterval(function () {
-      if (++idleCounter >= IDLE_TIMEOUT) {
-        fetchindata();
-      }
-    }, interval);
-  });
-
-  getApi = async (url) => {
-    try {
-      result = await $.ajax({
-        url: url,
-      });
-      return result;
-    } catch (error) {
-      return 0;
-    }
-  };
-
-  // var timeout;
-  // var prevKey = '';
-
-  checkSession = async () => {
-    data = await getApi('/api/checkSessionUser');
-
-    if (data == 0) {
-      location.href = '/';
-    }
-  };
-  checkSession();
-
-  function ConfirmLeave() {
-    fetchindata();
-  }
-
-  fetchindata = async () => {
-    resp = await getApi('/api/logoutInactiveUser');
-    if (resp.inactive) {
-      location.href = '/';
-      toastr.error(resp.message);
-    }
-  };
-});
-*/
 $(document).ready(function () {
   // Variable para almacenar la última ruta visitada
   let lastVisitedRoute = window.location.pathname;
@@ -93,22 +26,23 @@ $(document).ready(function () {
 
   // Función para realizar solicitudes AJAX
   async function getApi(url) {
-    try {
+    try { 
       const response = await fetch(url);
       if (response.ok) {
         return await response.json();
       } else {
-        throw new Error('Network response was not ok.');
+        return 0;
       }
     } catch (error) {
-      console.error('Error fetching data:', error);
+      // console.error('Error fetching data:', error);
       return 0;
     }
   }
 
   // Función para verificar la sesión del usuario
   async function checkSession() {
-    const data = await getApi('/api/checkSessionUser');
+    const data = await getApi('/api/checkSessionUser'); 
+    // debugger
     if (data === 0) {
       location.href = '/';
     }
@@ -121,6 +55,7 @@ $(document).ready(function () {
     if (window.location.pathname === lastVisitedRoute) {
       // Solo ejecuta el logout si sigue en la misma ruta
       const resp = await getApi('/api/logoutInactiveUser');
+ 
       if (resp && resp.inactive) {
         location.href = '/';
         toastr.error(resp.message);

@@ -20,7 +20,7 @@ class GeneralProductsMaterialsDao
     {
         $connection = Connection::getInstance()->getConnection();
         $stmt = $connection->prepare("SELECT p.id_product, p.reference AS reference_product, p.product, m.id_material, m.reference AS reference_material, 
-                                             m.material, ((m.quantity * pm.quantity) - IFNULL((SELECT SUM(quantity) FROM programming WHERE id_product = p.id_product), 0)) AS quantity
+                                             m.material, ((m.quantity / pm.quantity) - IFNULL((SELECT SUM(quantity) FROM programming WHERE id_product = p.id_product), 0)) AS quantity
                                       FROM products p
                                         INNER JOIN products_materials pm ON pm.id_product = p.id_product
                                         INNER JOIN materials m ON m.id_material = pm.id_material

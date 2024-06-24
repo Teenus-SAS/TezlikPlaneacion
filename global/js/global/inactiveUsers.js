@@ -3,8 +3,7 @@ $(document).ready(function () {
     try {
       result = await $.ajax({
         url: '/api/checkLastLoginUsers',
-      });
-      // console.log(result);
+      }); 
     } catch (error) {
       console.log(error);
     }
