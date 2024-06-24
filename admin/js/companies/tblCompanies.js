@@ -68,7 +68,7 @@ $(document).ready(function () {
           data: 'id_company',
           className: 'uniqueClassName dt-head-center',
           render: function (data) {
-            return `<a href="javascript:;" <i id="${data}" class="bx bx-edit-alt updateCompany" data-toggle='tooltip' title='Actualizar Empresa' style="font-size: 30px;"></i></a>`;
+            return `<a href="javascript:;" <i id="upd-${data}" class="bx bx-edit-alt updateCompany" data-toggle='tooltip' title='Actualizar Empresa' style="font-size: 30px;"></i></a>`;
           },
         },
       ],

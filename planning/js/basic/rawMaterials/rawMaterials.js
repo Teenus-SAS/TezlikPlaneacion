@@ -36,8 +36,12 @@ $(document).ready(function () {
     $('.cardRawMaterials').show(800);
     $('#btnCreateMaterial').html('Actualizar');
 
-    idMaterial = this.id;
-    idMaterial = sessionStorage.setItem('id_material', idMaterial);
+    // Obtener el ID del elemento
+    let id = $(this).attr('id');
+    // Obtener la parte después del guion '-'
+    let idMaterial = id.split('-')[1]; 
+
+    sessionStorage.setItem('id_material', idMaterial);
 
     let row = $(this).parent().parent()[0];
     let data = tblRawMaterials.fnGetData(row);

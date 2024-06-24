@@ -54,7 +54,7 @@ $(document).ready(function () {
         className: 'uniqueClassName dt-head-center',
         render: function (data) {
           return `
-                    <a href="javascript:;" <i id="${data}" class="bx bx-x-circle userStatus" data-toggle='tooltip' title='Estado Usuario' style="font-size: 30px;"></i></a>
+                    <a href="javascript:;" <i id="us-${data}" class="bx bx-x-circle userStatus" data-toggle='tooltip' title='Estado Usuario' style="font-size: 30px;"></i></a>
                     `;
         },
       },

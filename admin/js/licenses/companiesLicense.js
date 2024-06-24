@@ -81,7 +81,10 @@ $(document).ready(function () {
 
   $(document).on('click', '.licenseStatus', function (e) {
     e.preventDefault();
-    id_company = this.id;
+    // Obtener el ID del elemento
+    let id = $(this).attr('id');
+    // Obtener la parte después del guion '-'
+    let id_company = id.split('-')[1]; 
 
     $.ajax({
       type: 'POST',

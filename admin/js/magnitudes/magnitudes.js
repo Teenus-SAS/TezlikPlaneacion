@@ -38,7 +38,11 @@ $(document).ready(function () {
   $(document).on('click', '.updateMagnitude', function () {
     $('#btnCreateMagnitude').html('Actualizar');
 
-    let idMagnitude = this.id;
+    // Obtener el ID del elemento
+    let id = $(this).attr('id');
+    // Obtener la parte después del guion '-'
+    let idMagnitude = id.split('-')[1]; 
+
     sessionStorage.setItem('idMagnitude', idMagnitude);
 
     let row = $(this).parent().parent()[0];

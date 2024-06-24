@@ -46,7 +46,11 @@ $(document).ready(function () {
     let row = $(this).parent().parent()[0];
     let data = tblNotifications.fnGetData(row);
 
-    let id_notification = this.id;
+    // Obtener el ID del elemento
+    let id = $(this).attr('id');
+    // Obtener la parte después del guion '-'
+    let id_notification = id.split('-')[1]; 
+
     sessionStorage.setItem('id_notification', id_notification);
 
     $('#description').val(data.description);

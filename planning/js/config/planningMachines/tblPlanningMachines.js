@@ -119,7 +119,7 @@ $(document).ready(function () {
         className: "uniqueClassName dt-head-center",
         render: function (data) {
           return `
-                    <a href="javascript:;" <i id="${data}" class="bx bx-edit-alt updatePMachines" data-toggle='tooltip' title='Actualizar Plan Maquina' style="font-size: 30px;"></i></a>
+                    <a href="javascript:;" <i id="upd-${data}" class="bx bx-edit-alt updatePMachines" data-toggle='tooltip' title='Actualizar Plan Maquina' style="font-size: 30px;"></i></a>
                     <a href="javascript:;" <i id="${data}" class="mdi mdi-delete-forever" data-toggle='tooltip' title='Eliminar Plan Maquina' style="font-size: 30px;color:red" onclick="deleteFunction()"></i></a>`;
         },
       },

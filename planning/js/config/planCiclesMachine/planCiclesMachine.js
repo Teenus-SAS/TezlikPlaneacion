@@ -31,11 +31,12 @@ $(document).ready(function () {
     $('.cardCreatePlanCiclesMachine').show(800);
     $('#btnCreatePlanCiclesMachine').html('Actualizar');
 
-    id_cicles_machine = this.id;
-    id_cicles_machine = sessionStorage.setItem(
-      'id_cicles_machine',
-      id_cicles_machine
-    );
+    // Obtener el ID del elemento
+    let id = $(this).attr('id');
+    // Obtener la parte después del guion '-'
+    let id_cicles_machine = id.split('-')[1]; 
+
+    sessionStorage.setItem('id_cicles_machine', id_cicles_machine);
 
     let row = $(this).parent().parent()[0];
     let data = tblPlanCiclesMachine.fnGetData(row);

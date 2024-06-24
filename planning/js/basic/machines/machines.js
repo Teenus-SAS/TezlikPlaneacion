@@ -61,8 +61,13 @@ $(document).ready(function () {
     $('.cardImportMachines').hide(800);
     $(".cardCreateMachines").show(800);
     $("#btnCreateMachine").html("Actualizar");
-    idMachine = this.id;
-    idMachine = sessionStorage.setItem("id_machine", idMachine);
+
+    // Obtener el ID del elemento
+    let id = $(this).attr('id');
+    // Obtener la parte después del guion '-'
+    let idMachine = id.split('-')[1]; 
+
+    sessionStorage.setItem("id_machine", idMachine);
 
     let row = $(this).parent().parent()[0];
     let data = tblMachines.fnGetData(row);

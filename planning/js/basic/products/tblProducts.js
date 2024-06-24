@@ -152,7 +152,7 @@ $(document).ready(function () {
           className: 'uniqueClassName dt-head-center',
           render: (data) => `
           <a href="javascript:;">
-            <i id="${data}" class="bx bx-edit-alt updateProducts" data-toggle='tooltip' title='Actualizar Producto' style="font-size: 30px;"></i>
+            <i id="upd-${data}" class="bx bx-edit-alt updateProducts" data-toggle='tooltip' title='Actualizar Producto' style="font-size: 30px;"></i>
           </a>
           <a href="javascript:;">
             <i id="${data}" class="mdi mdi-delete-forever" data-toggle='tooltip' title='Eliminar Producto' style="font-size: 30px;color:red" onclick="deleteProductsFunction()"></i>

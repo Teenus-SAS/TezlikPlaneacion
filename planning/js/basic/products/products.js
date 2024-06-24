@@ -46,8 +46,12 @@ $(document).ready(function () {
     $(".cardCreateProduct").show(800);
     $("#btnCreateProduct").html("Actualizar Producto");
 
-    idProduct = this.id;
-    idProduct = sessionStorage.setItem("id_product", idProduct);
+    // Obtener el ID del elemento
+    let id = $(this).attr('id');
+    // Obtener la parte después del guion '-'
+    let idProduct = id.split('-')[1]; 
+
+    sessionStorage.setItem("id_product", idProduct);
 
     let row = $(this).parent().parent()[0];
     let data = tblProducts.fnGetData(row);

@@ -30,7 +30,7 @@ $(document).ready(function () {
         className: "uniqueClassName dt-head-center ",
         render: function (data) {
           return `
-                <a href="javascript:;" <i id="${data}" class="bx bx-edit-alt updateMachines" data-toggle='tooltip' title='Actualizar Maquina' style="font-size: 30px;"></i></a>
+                <a href="javascript:;" <i id="upd-${data}" class="bx bx-edit-alt updateMachines" data-toggle='tooltip' title='Actualizar Maquina' style="font-size: 30px;"></i></a>
                 <a href="javascript:;" <i id="${data}" class="mdi mdi-delete-forever" data-toggle='tooltip' title='Eliminar Maquina' style="font-size: 30px;color:red" onclick="deleteMachineFunction()"></i></a>`;
         },
       },

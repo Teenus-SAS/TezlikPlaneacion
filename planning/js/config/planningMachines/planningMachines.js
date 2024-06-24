@@ -54,11 +54,12 @@ $(document).ready(function () {
     $('#createPlanMachine').modal('show');
     $('#btnCreatePlanMachine').html('Actualizar');
 
-    let id_planning_machine = this.id;
-    id_planning_machine = sessionStorage.setItem(
-      'id_planning_machine',
-      id_planning_machine
-    );
+    // Obtener el ID del elemento
+    let id = $(this).attr('id');
+    // Obtener la parte después del guion '-'
+    let id_planning_machine = id.split('-')[1]; 
+    
+    sessionStorage.setItem('id_planning_machine', id_planning_machine);
 
     let row = $(this).parent().parent()[0];
     let data = tblPlanMachines.fnGetData(row);

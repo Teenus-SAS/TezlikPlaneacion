@@ -77,7 +77,11 @@ $(document).ready(function () {
     $('#license').hide();
     $('#btnCreateCompany').html('Actualizar');
 
-    idCompany = this.id;
+    // Obtener el ID del elemento
+    let id = $(this).attr('id');
+    // Obtener la parte después del guion '-'
+    let idCompany = id.split('-')[1]; 
+
     sessionStorage.setItem('id_company', idCompany);
 
     let row = $(this).parent().parent()[0];
