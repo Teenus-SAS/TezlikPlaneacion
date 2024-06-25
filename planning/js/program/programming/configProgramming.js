@@ -543,7 +543,8 @@ $(document).ready(function () {
             
       let $select = $(`#idMachine`);
       $select.empty();
-      $select.append(`<option value="0" disabled selected>Seleccionar</option>`);
+      $select.append(`<option disabled selected>Seleccionar</option>`);
+      $select.append(`<option value="0"> PROCESO MANUAL </option>`);
        
       $.each(ciclesMachine, function (i, value) {
         $select.append(
@@ -556,7 +557,7 @@ $(document).ready(function () {
   $('#idMachine').change(function (e) {
     e.preventDefault();
 
-    if (allTblData.length > 0) {
+    if (allTblData.length > 0 && this.value != 0) {
       let id_product = $('#selectNameProduct').val();
 
       let data = allTblData.filter(item => item.id_product == id_product);
