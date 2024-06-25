@@ -410,11 +410,11 @@ $app->post('/addOrder', function (Request $request, Response $response, $args) u
         }
     }
 
-    $result = $generalOrdersDao->findAllOrdersConcat($id_company);
+    // $result = $generalOrdersDao->findAllOrdersConcat($id_company);
 
     $arrayBD = [];
-    for ($i = 0; $i < sizeof($result); $i++) {
-        array_push($arrayBD, $result[$i]['concate']);
+    for ($i = 0; $i < sizeof($orders); $i++) {
+        array_push($arrayBD, $orders[$i]['concate']);
     }
 
     $tam_arrayBD = sizeof($arrayBD);
@@ -433,10 +433,9 @@ $app->post('/addOrder', function (Request $request, Response $response, $args) u
             $posicion =  strrpos($array_diff[$i], '-');
             $id_product = substr($array_diff[$i], $posicion + 1);
             $order = substr($array_diff[$i], 0, $posicion);
-            $result = $generalOrdersDao->changeStatusOrder($order, $id_product);
+            $generalOrdersDao->changeStatusOrder($order, $id_product);
         }
-    else if (sizeof($array_diff) == 0)
-        $result = null;
+    // else if (sizeof($array_diff) == 0)
 
     $materials = $explosionMaterialsDao->findAllMaterialsConsolidated($id_company);
 
@@ -618,10 +617,38 @@ $app->post('/updateOrder', function (Request $request, Response $response, $args
     return $response->withStatus(200)->withHeader('Content-Type', 'application/json');
 });
 
-$app->get('/deleteOrder/{id_order}', function (Request $request, Response $response, $args) use ($ordersDao) {
+$app->get('/deleteOrder/{id_order}', function (Request $request, Response $response, $args) use (
+    $ordersDao,
+    $explosionMaterialsDao,
+    $generalRequisitionsDao,
+    $requisitionsDao
+) {
+    session_start();
+    $id_company = $_SESSION['id_company'];
     $order = $ordersDao->deleteOrder($args['id_order']);
     // $generalProductsDao->updateAccumulatedQuantity($dataOrder['idProduct'], 0, 1);
+    $materials = $explosionMaterialsDao->findAllMaterialsConsolidated($id_company);
 
+    for ($i = 0; $i < sizeof($materials); $i++) {
+        if ($materials[$i]['available'] < 0) {
+            $data = [];
+            $data['idMaterial'] = $materials[$i]['id_material'];
+            $data['idProvider'] = '';
+            $data['applicationDate'] = '';
+            $data['deliveryDate'] = '';
+            $data['quantity'] = abs($materials[$i]['available']);
+            $data['purchaseOrder'] = '';
+
+            $requisition = $generalRequisitionsDao->findRequisitionByApplicationDate($materials[$i]['id_material']);
+
+            if (!$requisition)
+                $requisitionsDao->insertRequisitionByCompany($data, $id_company);
+            else {
+                $data['idRequisition'] = $requisition['id_requisition'];
+                $requisitionsDao->updateRequisition($data);
+            }
+        }
+    }
     if ($order == null)
         $resp = array('success' => true, 'message' => 'Pedido eliminado correctamente');
     else if ($order['info'])

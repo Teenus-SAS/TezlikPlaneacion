@@ -47,8 +47,8 @@ $(document).ready(function () {
         data: null,
         className: "text-center",
         render: function (data, type, full, meta) {
-          const hourStart = moment(full.hour_start, ["HH:mm"]).format("h:mm A");
-          const hourEnd = moment(full.hour_end, ["HH:mm"]).format("h:mm A");
+          const hourStart = moment((full.hour_start).toFixed(2), ["HH:mm"]).format("h:mm A");
+          const hourEnd = moment((full.hour_end).toFixed(2), ["HH:mm"]).format("h:mm A");
 
           return `Inicio: ${hourStart}<br>Fin: ${hourEnd}`;
         },

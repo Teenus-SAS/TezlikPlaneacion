@@ -51,10 +51,11 @@ class TimeConvertDao
 
         // Obtener horas y minutos finales
         $finalHours = (int)$finalHourDecimal;
-        $finalMinutes = ($finalHourDecimal - $finalHours) * 60;
+        $finalMinutes = round(($finalHourDecimal - $finalHours) * 60);
 
         // Formatear minutos para asegurarse de que tienen dos dígitos
-        $formattedFinalMinutes = str_pad((int)$finalMinutes, 2, '0', STR_PAD_LEFT);
+        $minutes = (int)$finalMinutes;
+        $formattedFinalMinutes = str_pad($minutes, 2, '0', STR_PAD_LEFT);
 
         // Formatear la hora final en el formato HH.MM
         $hourEnd = $finalHours . '.' . $formattedFinalMinutes;

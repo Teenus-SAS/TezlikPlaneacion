@@ -380,7 +380,7 @@ $app->post('/addProductsMaterials', function (Request $request, Response $respon
                 if (sizeof($programming) > 0) {
                     $generalOrdersDao->changeStatus($orders[$i]['id_order'], 4);
 
-                    $productsMaterials = $productsMaterialsDao->findAllProductsmaterials($orders[$i]['id_product'], $id_company);
+                    // $productsMaterials = $productsMaterialsDao->findAllProductsmaterials($orders[$i]['id_product'], $id_company);
 
                     foreach ($productsMaterials as $arr) {
                         $k = $generalMaterialsDao->findReservedMaterial($arr['id_material']);

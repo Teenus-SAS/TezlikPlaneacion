@@ -68,8 +68,8 @@ $(document).ready(function () {
 
     $('#hoursDay').val(data.hours_day);
 
-    hourStart = moment(data.hour_start, ['HH:mm']).format('h:mm A');
-    hourEnd = moment(data.hour_end, ['HH:mm']).format('h:mm A');
+    hourStart = moment((data.hour_start).toFixed(2), ['HH:mm']).format('h:mm A');
+    hourEnd = moment((data.hour_end).toFixed(2), ['HH:mm']).format('h:mm A');
     $('#hourStart').val(hourStart);
     $('#hourEnd').val(hourEnd);
 

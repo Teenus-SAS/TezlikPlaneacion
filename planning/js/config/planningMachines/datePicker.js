@@ -87,7 +87,7 @@ $(document).ready(function () {
  
     var hourEnd = parseFloat(horas + '.' + (minutos < 10 ? '0' : '') + minutos) + hoursDay;
 
-    hourEnd = moment(hourEnd, ['HH:mm']).format('h:mm A');
+    hourEnd = moment(hourEnd.toFixed(2), ['HH:mm']).format('h:mm A');
 
     $('#hourEnd').val(hourEnd);
   });

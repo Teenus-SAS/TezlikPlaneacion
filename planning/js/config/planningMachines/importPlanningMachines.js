@@ -147,7 +147,7 @@ $(document).ready(function () {
     let data = tblPlanMachines.fnGetData();
 
     for (let i = 0; i < data.length; i++) {
-      let hourStart = moment(data[i].hour_start, ['HH:mm']).format('h:mm A');
+      let hourStart = moment((data[i].hour_start).toFixed(2), ['HH:mm']).format('h:mm A');
 
       planningMachines.push({
         maquina: data[i].machine,
