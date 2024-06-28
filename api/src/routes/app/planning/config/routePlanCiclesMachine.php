@@ -325,10 +325,10 @@ $app->post('/updatePlanCiclesMachine', function (Request $request, Response $res
 
         $data['idCiclesMachine'] = $dataPlanCiclesMachine['idCiclesMachine'];
 
-        $arr = $ciclesMachinesDao->calcUnitsTurn($machine['id_cicles_machine']);
+        $arr = $ciclesMachinesDao->calcUnitsTurn($data['idCiclesMachine']);
         $data['units_turn'] = $arr['units_turn'];
 
-        $arr = $ciclesMachinesDao->calcUnitsMonth($data, 1);
+        $arr = $ciclesMachinesDao->calcUnitsMonth($data, 2);
         $data['units_month'] = $arr['units_month'];
 
         $planCiclesMachine = $generalPlanCiclesMachinesDao->updateUnits($data);

@@ -126,16 +126,21 @@ class GeneralProductsDao
         $connection = Connection::getInstance()->getConnection();
 
         try {
-            if ($op == 1)
+            if ($op == 1) {
                 $stmt = $connection->prepare("UPDATE products_inventory SET accumulated_quantity = :accumulated_quantity WHERE id_product = :id_product");
-            else
-                $stmt = $connection->prepare("UPDATE products_inventory accumulated_quantity = :accumulated_quantity, quantity = :accumulated_quantity
+                $stmt->execute([
+                    'accumulated_quantity' => $accumulated_quantity,
+                    'id_product' => $id_product
+                ]);
+            } else {
+                $stmt = $connection->prepare("UPDATE products_inventory SET accumulated_quantity = :accumulated_quantity, quantity = :quantity
                                               WHERE id_product = :id_product");
-
-            $stmt->execute([
-                'accumulated_quantity' => $accumulated_quantity,
-                'id_product' => $id_product
-            ]);
+                $stmt->execute([
+                    'quantity' => $accumulated_quantity,
+                    'accumulated_quantity' => $accumulated_quantity,
+                    'id_product' => $id_product
+                ]);
+            }
         } catch (\Exception $e) {
             $message = $e->getMessage();
 

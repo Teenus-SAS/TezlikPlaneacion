@@ -102,6 +102,13 @@ $app->post('/orderDataValidation', function (Request $request, Response $respons
                 break;
             }
 
+            $date = date("Y-m-d");
+            if ($order[$i]['minDate'] < $date || $order[$i]['maxDate'] < $date || $order[$i]['dateOrder'] < $date) {
+                $i = $i + 2;
+                $dataImportOrder = array('error' => true, 'message' => "Fecha menor a la fecha actual fila: {$i}");
+                break;
+            }
+
             // Obtener id producto
             $findProduct = $productsDao->findProduct($order[$i], $id_company);
             if (!$findProduct) {

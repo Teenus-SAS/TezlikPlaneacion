@@ -79,6 +79,13 @@ $(document).ready(function () {
         toastr.error('Fecha minima mayor a la fecha maxima');
         return false;        
       }
+      
+      let date = new Date().toISOString().split('T')[0];
+      
+      if (minDate < date || maxDate < date || dateOrder < date) {
+        toastr.error('Fecha por debajo de la fecha actual');
+        return false;      
+      }
 
       dataOrder = $('#formCreateOrder').serialize();
 
@@ -124,6 +131,13 @@ $(document).ready(function () {
     let data = $('#formCreateOrder').serialize();
     idOrder = sessionStorage.getItem('id_order');
     data = data + '&idOrder=' + idOrder;
+
+    let date = new Date().toISOString().split('T')[0];
+      
+    if (minDate < date || maxDate < date || dateOrder < date) {
+      toastr.error('Fecha por debajo de la fecha actual');
+      return false;
+    }
 
     $.post('/api/updateOrder', data, function (data, textStatus, jqXHR) {
       message(data);

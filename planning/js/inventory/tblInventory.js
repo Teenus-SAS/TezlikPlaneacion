@@ -118,7 +118,7 @@ $(document).ready(function () {
       pageLength: 50,
       data: data,
       language: {
-        url: "//cdn.datatables.net/plug-ins/1.10.20/i18n/Spanish.json",
+        url: "/assets/plugins/i18n/Spanish.json",
       },
       order: [[2, 'asc']],
       columns: [

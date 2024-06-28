@@ -80,6 +80,7 @@ $(document).ready(function () {
   loadTblOffices = (data, visible) => {
     if ($.fn.dataTable.isDataTable("#tblOffices")) {
       $("#tblOffices").DataTable().clear();
+      $('#tblOffices').DataTable().column(8).visible(visible);
       $('#tblOffices').DataTable().column(10).visible(visible);
       $("#tblOffices").DataTable().rows.add(data).draw();
       return;
@@ -90,7 +91,7 @@ $(document).ready(function () {
       pageLength: 50,
       data: data,
       language: {
-        url: "//cdn.datatables.net/plug-ins/1.10.20/i18n/Spanish.json",
+        url: "/assets/plugins/i18n/Spanish.json",
       },
       columns: [
         {
@@ -160,6 +161,7 @@ $(document).ready(function () {
         },
         {
           title: "Existencias",
+          visible: visible,
           data: "quantity",
           className: "uniqueClassName dt-head-center",
           render: $.fn.dataTable.render.number(".", ",", 0),
