@@ -374,7 +374,7 @@ $app->post('/addOrder', function (Request $request, Response $response, $args) u
         $status = true;
         // Checkear cantidades
         // $order = $generalOrdersDao->checkAccumulatedQuantityOrder($orders[$i]['id_order']);
-        if ($orders[$i]['status'] != 'EN PRODUCCION' /*&& $order['status'] != 3*/ && $orders[$i]['status'] != 'FABRICADO') {
+        if ($orders[$i]['status'] != 'EN PRODUCCION' && $orders[$i]['status'] != 'PROGRAMADO' && $orders[$i]['status'] != 'FABRICADO') {
             if ($orders[$i]['original_quantity'] > $orders[$i]['accumulated_quantity']) {
                 // Ficha tecnica
                 $productsMaterials = $productsMaterialsDao->findAllProductsmaterials($orders[$i]['id_product'], $id_company);
@@ -548,7 +548,7 @@ $app->post('/updateOrder', function (Request $request, Response $response, $args
 
         // Checkear cantidades
         $order = $generalOrdersDao->checkAccumulatedQuantityOrder($dataOrder['idOrder']);
-        if ($order['status'] != 'EN PRODUCCION' && $order['status'] != 'FABRICADO') {
+        if ($order['status'] != 'EN PRODUCCION' && $order['status'] != 'FABRICADO' && $order['status'] != 'PROGRAMADO') {
             if ($order['original_quantity'] > $order['accumulated_quantity']) {
                 // Ficha tecnica
                 $productsMaterials = $productsMaterialsDao->findAllProductsmaterials($dataOrder['idProduct'], $id_company);
