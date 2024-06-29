@@ -29,26 +29,28 @@ class InventoryABCDao
         return $InventoryABC;
     }
 
-    // public function insertInventoryABC($dataInventory)
-    // {
-    //     $connection = Connection::getInstance()->getConnection();
+    public function insertInventoryABC($dataInventory, $id_company)
+    {
+        $connection = Connection::getInstance()->getConnection();
 
-    //     try {
-    //         $stmt = $connection->prepare("INSERT INTO inventory_abc (InventoryABC, type_InventoryABC) VALUES (:InventoryABC, :type_InventoryABC)");
-    //         $stmt->execute([
-    //             'InventoryABC' => strtoupper(trim($dataInventory['InventoryABC'])),
-    //             'type_InventoryABC' => $dataInventory['typeInventoryABC']
-    //         ]);
-    //         $this->logger->info(__FUNCTION__, array('query' => $stmt->queryString, 'errors' => $stmt->errorInfo()));
-    //     } catch (\Exception $e) {
-    //         $message = $e->getMessage();
+        try {
+            $stmt = $connection->prepare("INSERT INTO inventory_abc (id_company, a, b, c) VALUES (:id_company, :a, :b, :c)");
+            $stmt->execute([
+                'id_company' => $id_company,
+                'a' => $dataInventory['a'],
+                'b' => $dataInventory['b'],
+                'c' => $dataInventory['c'],
+            ]);
+            $this->logger->info(__FUNCTION__, array('query' => $stmt->queryString, 'errors' => $stmt->errorInfo()));
+        } catch (\Exception $e) {
+            $message = $e->getMessage();
 
-    //         if ($e->getCode() == 23000)
-    //             $message = 'Categoría duplicada. Ingrese una nueva categoría';
-    //         $error = array('info' => true, 'message' => $message);
-    //         return $error;
-    //     }
-    // }
+            if ($e->getCode() == 23000)
+                $message = 'Categoría duplicada. Ingrese una nueva categoría';
+            $error = array('info' => true, 'message' => $message);
+            return $error;
+        }
+    }
 
     public function updateInventoryABC($dataInventory)
     {

@@ -51,10 +51,10 @@ if (sizeof($_SESSION) == 0)
                                 </div>
                             </div>
                             <div class="col-sm-7 col-xl-6 form-inline justify-content-sm-end">
-                                <!-- <div class="col-xs-2 mr-2">
-                                    <button class="btn btn-secondary" id="btnNewinventoryABC" name="btnNewinventoryABC">Dias de Ventas</button>
-                                </div> 
-                                <div class="col-xs-2 py-2 mr-2">
+                                <div class="col-xs-2 mr-2">
+                                    <button class="btn btn-secondary" id="btnNewInventoryABC" name="btnNewInventoryABC" style="display: none;">Dias de Ventas</button>
+                                </div>
+                                <!--<div class="col-xs-2 py-2 mr-2">
                                     <button class="btn btn-info" id="btnImportNewinventory_abc">Importar Venta</button>
                                 </div> -->
                             </div>
@@ -71,15 +71,15 @@ if (sizeof($_SESSION) == 0)
                                         <div class="card-body pt-3">
                                             <div class="form-row">
                                                 <div class="col-sm-2 floating-label enable-floating-label show-label" style="margin-bottom:10px!important">
-                                                    <input type="number" class="text-center form-control" name="a" id="a">
+                                                    <input type="number" class="text-center form-control" name="a" id="a" max="100">
                                                     <label for="">a</label>
                                                 </div>
                                                 <div class="col-sm-2 floating-label enable-floating-label show-label" style="margin-bottom:10px!important">
-                                                    <input type="number" class="text-center form-control" name="b" id="b">
+                                                    <input type="number" class="text-center form-control" name="b" id="b" max="100">
                                                     <label for="">b</label>
                                                 </div>
                                                 <div class="col-sm-2 floating-label enable-floating-label show-label" style="margin-bottom:10px!important">
-                                                    <input type="number" class="text-center form-control" name="c" id="c">
+                                                    <input type="number" class="text-center form-control" name="c" id="c" max="100">
                                                     <label for="">c</label>
                                                 </div>
                                                 <div class="col-xs-2" style="margin-top:7px">

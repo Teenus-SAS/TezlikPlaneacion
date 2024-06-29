@@ -58,42 +58,43 @@ $app->get('/inventoryABC', function (Request $request, Response $response, $args
 //     return $response->withHeader('Content-Type', 'application/json');
 // });
 
-// $app->post('/addCategory', function (Request $request, Response $response, $args) use (
-//     $invCategoriesDao,
-//     $generalCategoriesDao
-// ) {
-//     $dataInventory = $request->getParsedBody();
+$app->post('/addInventoryABC', function (Request $request, Response $response, $args) use (
+    $inventoryABCDao,
+) {
+    session_start();
+    $id_company = $_SESSION['id_company'];
+    $dataInventory = $request->getParsedBody();
 
-//     if (empty($dataInventory['importCategories'])) {
-//         $category = $invCategoriesDao->insertCategory($dataInventory);
+    // if (empty($dataInventory['importCategories'])) {
+    $category = $inventoryABCDao->insertInventoryABC($dataInventory, $id_company);
 
-//         if ($category == null)
-//             $resp = array('success' => true, 'message' => 'Inventario creada correctamente');
-//         else if (isset($category['info']))
-//             $resp = array('info' => true, 'message' => $category['message']);
-//         else
-//             $resp = array('error' => true, 'message' => 'Ocurrio un error mientras ingresaba la información. Intente nuevamente');
-//     } else {
-//         $categories = $dataInventory['importCategories'];
+    if ($category == null)
+        $resp = array('success' => true, 'message' => 'Inventario creada correctamente');
+    else if (isset($category['info']))
+        $resp = array('info' => true, 'message' => $category['message']);
+    else
+        $resp = array('error' => true, 'message' => 'Ocurrio un error mientras ingresaba la información. Intente nuevamente');
+    // } else {
+    //     $categories = $dataInventory['importCategories'];
 
-//         for ($i = 0; $i < sizeof($categories); $i++) {
-//             $findCategory = $generalCategoriesDao->findCategory($categories[$i]);
-//             if (!$findCategory)
-//                 $resolution = $invCategoriesDao->insertCategory($categories[$i]);
-//             else {
-//                 $categories[$i]['idCategory'] = $findCategory['id_category'];
-//                 $resolution = $invCategoriesDao->updateCategory($categories[$i]);
-//             }
-//         }
-//         if ($resolution == null)
-//             $resp = array('success' => true, 'message' => 'Inventario importada correctamente');
-//         else
-//             $resp = array('error' => true, 'message' => 'Ocurrio un error mientras importaba la información. Intente nuevamente');
-//     }
+    //     for ($i = 0; $i < sizeof($categories); $i++) {
+    //         $findCategory = $generalCategoriesDao->findCategory($categories[$i]);
+    //         if (!$findCategory)
+    //             $resolution = $invCategoriesDao->insertCategory($categories[$i]);
+    //         else {
+    //             $categories[$i]['idCategory'] = $findCategory['id_category'];
+    //             $resolution = $invCategoriesDao->updateCategory($categories[$i]);
+    //         }
+    //     }
+    //     if ($resolution == null)
+    //         $resp = array('success' => true, 'message' => 'Inventario importada correctamente');
+    //     else
+    //         $resp = array('error' => true, 'message' => 'Ocurrio un error mientras importaba la información. Intente nuevamente');
+    // }
 
-//     $response->getBody()->write(json_encode($resp));
-//     return $response->withStatus(200)->withHeader('Content-Type', 'application/json');
-// });
+    $response->getBody()->write(json_encode($resp));
+    return $response->withStatus(200)->withHeader('Content-Type', 'application/json');
+});
 
 $app->post('/updateInventoryABC', function (Request $request, Response $response, $args) use (
     $inventoryABCDao,
