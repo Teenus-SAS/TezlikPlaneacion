@@ -17,9 +17,9 @@ $(document).ready(function () {
     let idInventory = sessionStorage.getItem('id_inventory');
     
     if (!idInventory) {
-      checkDataInventory('/api/addInventoryABC');
+      checkDataInventory('/api/addInventoryABC', idInventory);
     } else {
-      checkDataInventory('/api/updateInventoryABC');
+      checkDataInventory('/api/updateInventoryABC', idInventory);
     }
   });
 

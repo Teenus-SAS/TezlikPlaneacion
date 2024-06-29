@@ -32,4 +32,23 @@ $(document).ready(function () {
       });
     },
   });
+
+  /* Seleccion producto */
+  $('#refProduct').change(async function (e) {
+    e.preventDefault();
+    let id = this.value;
+
+    $('#selectNameProduct option').prop('selected', function () {
+      return $(this).val() == id;
+    });
+  });
+
+  $('#selectNameProduct').change(async function (e) {
+    e.preventDefault();
+    let id = this.value;
+
+    $('#refProduct option').prop('selected', function () {
+      return $(this).val() == id;
+    });
+  });  
 });

@@ -13,21 +13,6 @@ $(document).ready(function () {
     11: 'Noviembre',
     12: 'Diciembre'
   };
-  
-  /* Seleccion producto */
-  $('#refProduct').change(function (e) {
-    e.preventDefault();
-    id = this.value;
-    $('#selectNameProduct option').removeAttr('selected');
-    $(`#selectNameProduct option[value=${id}]`).attr('selected', true);
-  });
-
-  $('#selectNameProduct').change(function (e) {
-    e.preventDefault();
-    id = this.value;
-    $('#refProduct option').removeAttr('selected');
-    $(`#refProduct option[value=${id}]`).attr('selected', true);
-  });
 
   // Cargar tabla de Ventas
   tblSales = $('#tblSales').dataTable({
