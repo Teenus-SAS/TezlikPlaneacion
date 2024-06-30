@@ -41,9 +41,9 @@ if (sizeof($_SESSION) == 0)
                         <div class="row align-items-center">
                             <div class="col-sm-5 col-xl-6">
                                 <div class="page-title">
-                                    <h3 class="mb-1 font-weight-bold text-dark">Tiempos Proveedores Stock Minimo</h3>
+                                    <h3 class="mb-1 font-weight-bold text-dark">Tiempos Stock Mínimo Materia Prima</h3>
                                     <ol class="breadcrumb mb-3 mb-md-0">
-                                        <li class="breadcrumb-item active">Creación de Tiempos Stock Minimo Materia Prima</li>
+                                        <li class="breadcrumb-item active">Adicione los tiempos minimos y maximos de su proveedor para la entrega de la Materia Prima</li>
                                     </ol>
                                 </div>
                             </div>
