@@ -83,7 +83,7 @@ $(document).ready(function () {
           $('.cardBottons').show(400);
           $('#fileStock').val('');
 
-          $('#formImportStock').trigger('reset');
+          $('#formImportRMStock').trigger('reset');
           toastr.error(resp.message);
           return false;
         }

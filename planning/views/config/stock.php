@@ -38,33 +38,56 @@ if (sizeof($_SESSION) == 0)
                 <!-- Page header -->
                 <div class="page-title-box">
                     <div class="container-fluid">
-                        <div class="row align-items-center">
-                            <div class="col-sm-5 col-xl-6">
-                                <div class="page-title">
-                                    <h3 class="mb-1 font-weight-bold text-dark">Tiempos Proveedores Stock Minimo</h3>
-                                    <ol class="breadcrumb mb-3 mb-md-0">
-                                        <li class="breadcrumb-item active">Creación de Tiempos Stock Minimo Materia Prima</li>
-                                    </ol>
+                        <div class="tab-pane cardGeneralSN cardProducts">
+                            <div class="row align-items-center">
+                                <div class="col-sm-5 col-xl-6">
+                                    <div class="page-title">
+                                        <h3 class="mb-1 font-weight-bold text-dark">Tiempos Productos Stock Minimo</h3>
+                                        <ol class="breadcrumb mb-3 mb-md-0">
+                                            <li class="breadcrumb-item active">Creación de Tiempos Stock Minimo Productos</li>
+                                        </ol>
+                                    </div>
+                                </div>
+                                <div class="col-sm-7 col-xl-6 form-inline justify-content-sm-end">
+                                    <div class="col-xs-2 mr-2">
+                                        <button class="btn btn-warning" id="btnNewPStock" name="btnNewPStock"><i class="bi bi-plus-circle"></i> Nuevo Stock</button>
+                                    </div>
+                                    <div class="col-xs-2 py-2 mr-2">
+                                        <button class="btn btn-info" id="btnImportNewPStock"><i class="bi bi-cloud-arrow-up-fill"></i> Importar</button>
+                                    </div>
                                 </div>
                             </div>
-                            <div class="col-sm-7 col-xl-6 form-inline justify-content-sm-end">
-                                <div class="col-xs-2 mr-2">
-                                    <button class="btn btn-warning" id="btnNewStock" name="btnNewStock"><i class="bi bi-plus-circle"></i> Nuevo Stock</button>
+                        </div>
+                        <div class="tab-pane cardGeneralSN cardMaterials" style="display: none;">
+                            <div class="row align-items-center">
+                                <div class="col-sm-5 col-xl-6">
+                                    <div class="page-title">
+                                        <h3 class="mb-1 font-weight-bold text-dark">Tiempos Proveedores Stock Minimo</h3>
+                                        <ol class="breadcrumb mb-3 mb-md-0">
+                                            <li class="breadcrumb-item active">Creación de Tiempos Stock Minimo Materia Prima</li>
+                                        </ol>
+                                    </div>
                                 </div>
-                                <div class="col-xs-2 py-2 mr-2">
-                                    <button class="btn btn-info" id="btnImportNewStock"><i class="bi bi-cloud-arrow-up-fill"></i> Importar</button>
+                                <div class="col-sm-7 col-xl-6 form-inline justify-content-sm-end">
+                                    <div class="col-xs-2 mr-2">
+                                        <button class="btn btn-warning" id="btnNewRMStock" name="btnNewRMStock"><i class="bi bi-plus-circle"></i> Nuevo Stock</button>
+                                    </div>
+                                    <div class="col-xs-2 py-2 mr-2">
+                                        <button class="btn btn-info" id="btnImportNewRMStock"><i class="bi bi-cloud-arrow-up-fill"></i> Importar</button>
+                                    </div>
                                 </div>
                             </div>
                         </div>
                     </div>
                 </div>
 
-                <div class="page-content-wrapper mt--45 mb-5 cardCreateStock">
+                <!-- Stock Products -->
+                <div class="page-content-wrapper mt--45 mb-5 cardGeneralSN cardCreatePStock" style="display: none;">
                     <div class="container-fluid">
                         <div class="row">
                             <div class="col-12">
                                 <div class="card">
-                                    <form id="formCreateStock">
+                                    <form id="formCreateRPStock">
                                         <div class="card-body">
                                             <div class="form-row">
                                                 <div class="col-sm-4 floating-label enable-floating-label show-label" style="margin-bottom:20px">
@@ -84,7 +107,7 @@ if (sizeof($_SESSION) == 0)
                                                     <input type="number" class="form-control text-center" id="usual" name="usual">
                                                 </div>
                                                 <div class="col-sm mt-1">
-                                                    <button class="btn btn-success" id="btnCreateStock">Crear Stock</button>
+                                                    <button class="btn btn-success" id="btnCreatePStock">Crear Stock</button>
                                                 </div>
                                             </div>
                                         </div>
@@ -95,22 +118,83 @@ if (sizeof($_SESSION) == 0)
                     </div>
                 </div>
 
-                <div class="page-content-wrapper mt--45 mb-5 cardImportStock">
+                <div class="page-content-wrapper mt--45 mb-5 cardGeneralSN cardImportPStock" style="display: none;">
                     <div class="container-fluid">
                         <div class="row">
-                            <form class="col-12" id="formImportStock" enctype="multipart/form-data">
+                            <form class="col-12" id="formImportPStock" enctype="multipart/form-data">
                                 <div class="card">
                                     <div class="card-body pt-3">
                                         <div class="form-row" id="formStock">
                                             <div class="col-sm-6 floating-label enable-floating-label show-label drag-area" style="margin-bottom:10px!important">
-                                                <input class="form-control" type="file" id="fileStock" accept=".xls,.xlsx">
+                                                <input class="form-control" type="file" id="filePStock" accept=".xls,.xlsx">
                                                 <label for="formFile" class="form-label"> Importar Stock</label>
                                             </div>
                                             <div class="col-xs-2 cardBottons" style="margin-top:7px">
-                                                <button type="text" class="btn btn-success" id="btnImportStock">Importar</button>
+                                                <button type="text" class="btn btn-success" id="btnImportPStock">Importar</button>
                                             </div>
                                             <div class="col-xs-2 cardBottons" style="margin-top:7px">
-                                                <button type="text" class="btn btn-info" id="btnDownloadImportsStock">Descarga Formato</button>
+                                                <button type="text" class="btn btn-info" id="btnDownloadImportsPStock">Descarga Formato</button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+                <!-- Stock Material -->
+                <div class="page-content-wrapper mt--45 mb-5 cardGeneralSN cardCreateRMStock" style="display: none;">
+                    <div class="container-fluid">
+                        <div class="row">
+                            <div class="col-12">
+                                <div class="card">
+                                    <form id="formCreateRMStock">
+                                        <div class="card-body">
+                                            <div class="form-row">
+                                                <div class="col-sm-4 floating-label enable-floating-label show-label" style="margin-bottom:20px">
+                                                    <label for="">Materia Prima</label>
+                                                    <select class="form-control" name="material" id="material"></select>
+                                                </div>
+                                                <div class="col-sm-3 floating-label enable-floating-label show-label" style="margin-bottom:20px">
+                                                    <label for="">Provedoores</label>
+                                                    <select class="form-control" name="idProvider" id="client"></select>
+                                                </div>
+                                                <div class="col-xs-1 floating-label enable-floating-label show-label" style="margin-bottom:0px">
+                                                    <label for="">Plazo Max</label>
+                                                    <input type="number" class="form-control text-center" id="max" name="max">
+                                                </div>
+                                                <div class="col-xs-1 floating-label enable-floating-label show-label" style="margin-bottom:0px">
+                                                    <label for="">Plazo Habitual</label>
+                                                    <input type="number" class="form-control text-center" id="usual" name="usual">
+                                                </div>
+                                                <div class="col-sm mt-1">
+                                                    <button class="btn btn-success" id="btnCreateRMStock">Crear Stock</button>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="page-content-wrapper mt--45 mb-5 cardGeneralSN cardImportRMStock" style="display: none;">
+                    <div class="container-fluid">
+                        <div class="row">
+                            <form class="col-12" id="formImportRMStock" enctype="multipart/form-data">
+                                <div class="card">
+                                    <div class="card-body pt-3">
+                                        <div class="form-row" id="formStock">
+                                            <div class="col-sm-6 floating-label enable-floating-label show-label drag-area" style="margin-bottom:10px!important">
+                                                <input class="form-control" type="file" id="fileRMStock" accept=".xls,.xlsx">
+                                                <label for="formFile" class="form-label"> Importar Stock</label>
+                                            </div>
+                                            <div class="col-xs-2 cardBottons" style="margin-top:7px">
+                                                <button type="text" class="btn btn-success" id="btnImportRMStock">Importar</button>
+                                            </div>
+                                            <div class="col-xs-2 cardBottons" style="margin-top:7px">
+                                                <button type="text" class="btn btn-info" id="btnDownloadImportsRMStock">Descarga Formato</button>
                                             </div>
                                         </div>
                                     </div>
@@ -126,15 +210,39 @@ if (sizeof($_SESSION) == 0)
                         <!-- Row 5 -->
                         <div class="row">
                             <div class="col-12">
+                                <ul class="nav nav-tabs" id="pills-tab" role="tablist">
+                                    <li class="nav-item">
+                                        <a class="nav-link active selectNavigation" id="nProducts" data-toggle="pill" href="javascript:;" role="tab" aria-controls="pills-activity" aria-selected="true">
+                                            <i class="fas fa-flask mr-1"></i>Productos
+                                        </a>
+                                    </li>
+                                    <li class="nav-item">
+                                        <a class="nav-link selectNavigation" id="nMaterials" data-toggle="pill" href="#pills-projects" role="tab" aria-controls="pills-projects" aria-selected="false">
+                                            <i class="bi bi-arrow-repeat mr-1"></i>Materiales
+                                        </a>
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-12">
                                 <div class="card">
-                                    <!-- <div class="card-header">
-                                        <h5 class="card-title">Stock Minimo</h5>
-                                    </div> -->
-                                    <div class="card-body">
-                                        <div class="table-responsive">
-                                            <table class="fixed-table-loading table table-hover" id="tblStock">
+                                    <div class="tab-pane cardGeneralSN cardProducts">
+                                        <div class="card-body">
+                                            <div class="table-responsive">
+                                                <table class="fixed-table-loading table table-hover text-center" id="tblPStock" name="tblPStock">
 
-                                            </table>
+                                                </table>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="tab-pane cardGeneralSN cardMaterials" style="display: none;">
+                                        <div class="card-body">
+                                            <div class="table-responsive">
+                                                <table class="fixed-table-loading table table-hover text-center" id="tblRMtock" name="tblRMStock">
+
+                                                </table>
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
@@ -157,11 +265,14 @@ if (sizeof($_SESSION) == 0)
     <?php include_once dirname(dirname(dirname(__DIR__))) . '/global/partials/scriptsJS.php'; ?>
     <script src="/planning/js/basic/rawMaterials/configRawMaterials.js"></script>
     <script src="/planning/js/admin/clients/configClients.js"></script>
-    <script src="/planning/js/config/stock/stock.js"></script>
-    <script src="/planning/js/config/stock/tblStock.js"></script>
-    <script src="../global/js/import/import.js"></script>
-    <script src="/planning/js/config/stock/importStock.js"></script>
-    <script src="../global/js/import/file.js"></script>
+    <script src="/planning/js/config/PStock/PStock.js"></script>
+    <script src="/planning/js/config/RMStock/"></script>
+    <script src="/planning/js/config/PStock/tblPStock.js"></script>
+    <script src="/planning/js/config/RMStock/tblRMStock.js"></script>
+    <script src="/global/js/import/import.js"></script>
+    <script src="/planning/js/config/PStock/importPStock.js"></script>
+    <script src="/planning/js/config/RMStock/importRMStock.js"></script>
+    <script src="/global/js/import/file.js"></script>
 
 </body>
 
