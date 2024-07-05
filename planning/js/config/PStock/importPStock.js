@@ -1,23 +1,23 @@
 $(document).ready(function () {
   let selectedFile;
 
-  $('.cardImportStock').hide();
+  $('.cardImportPStock').hide();
 
-  $('#btnImportNewStock').click(function (e) {
+  $('#btnImportNewPStock').click(function (e) {
     e.preventDefault();
-    $('.cardCreateStock').hide(800);
-    $('.cardImportStock').toggle(800);
+    $('.cardCreatePStock').hide(800);
+    $('.cardImportPStock').toggle(800);
   });
 
-  $('#fileStock').change(function (e) {
+  $('#filePStock').change(function (e) {
     e.preventDefault();
     selectedFile = e.target.files[0];
   });
 
-  $('#btnImportStock').click(function (e) {
+  $('#btnImportPStock').click(function (e) {
     e.preventDefault();
 
-    file = $('#fileStock').val();
+    file = $('#filePStock').val();
 
     if (!file) {
       toastr.error('Seleccione un archivo');
@@ -26,7 +26,7 @@ $(document).ready(function () {
 
     $('.cardBottons').hide();
 
-    let form = document.getElementById('formStock');
+    let form = document.getElementById('formPStock');
     form.insertAdjacentHTML(
       'beforeend',
       `<div class="col-sm-1 cardLoading" style="margin-top: 7px; margin-left: 15px">
@@ -38,7 +38,7 @@ $(document).ready(function () {
 
     importFile(selectedFile)
       .then((data) => {
-        const expectedHeaders = ['referencia_material','material','proveedor','plazo_maximo','plazo_habitual'];
+        const expectedHeaders = ['referencia_producto', 'producto', 'plazo_maximo', 'plazo_habitual'];
         const actualHeaders = Object.keys(data[0]);
 
         const missingHeaders = expectedHeaders.filter(header => !actualHeaders.includes(header));
@@ -46,42 +46,41 @@ $(document).ready(function () {
         if (missingHeaders.length > 0) {
           $('.cardLoading').remove();
           $('.cardBottons').show(400);
-          $('#fileStock').val('');
+          $('#filePStock').val('');
           toastr.error('Archivo no corresponde a el formato. Verifique nuevamente');
           return false;
         }
 
         let StockToImport = data.map((item) => {
           return {
-            refRawMaterial: item.referencia_material,
-            nameRawMaterial: item.material,
-            client: item.proveedor,
+            referenceProduct: item.referencia_producto,
+            product: item.producto,
             max: item.plazo_maximo,
             usual: item.plazo_habitual,
           };
         });
-        checkStock(StockToImport);
+        checkPStock(StockToImport);
       })
       .catch(() => {
-          $('.cardLoading').remove();
-          $('.cardBottons').show(400);
-          $('#fileStock').val('');
+        $('.cardLoading').remove();
+        $('.cardBottons').show(400);
+        $('#filePStock').val('');
 
         toastr.error('Ocurrio un error. Intente Nuevamente');
       });
   });
 
   /* Mensaje de advertencia */
-  checkStock = (data) => {
+  const checkPStock = (data) => {
     $.ajax({
       type: 'POST',
-      url: '/api/stockDataValidation',
+      url: '/api/pStockDataValidation',
       data: { importStock: data },
       success: function (resp) {
         if (resp.error == true) {
           $('.cardLoading').remove();
           $('.cardBottons').show(400);
-          $('#fileStock').val('');
+          $('#filePStock').val('');
 
           $('#formImportRMStock').trigger('reset');
           toastr.error(resp.message);
@@ -103,11 +102,11 @@ $(document).ready(function () {
           },
           callback: function (result) {
             if (result) {
-              saveStockTable(data);
+              savePStockTable(data);
             } else {
-                        $('.cardLoading').remove();
-          $('.cardBottons').show(400);
-$('#fileStock').val('');
+              $('.cardLoading').remove();
+              $('.cardBottons').show(400);
+              $('#filePStock').val('');
             }
           },
         });
@@ -115,28 +114,28 @@ $('#fileStock').val('');
     });
   };
 
-  saveStockTable = (data) => {
+  const savePStockTable = (data) => {
     $.ajax({
       type: 'POST',
-      url: '../../api/addStock',
+      url: '/api/addPStock',
       data: { importStock: data },
       success: function (r) {
         $('.cardLoading').remove();
-          $('.cardBottons').show(400);
-        $('#fileStock').val('');
+        $('.cardBottons').show(400);
+        $('#filePStock').val('');
         
-        message(r);
+        messagePS(r);
       },
     });
   };
 
   /* Descargar formato */
-  $('#btnDownloadImportsStock').click(async function (e) {
+  $('#btnDownloadImportsPStock').click(async function (e) {
     e.preventDefault();
 
     $('.cardBottons').hide();
 
-    let form = document.getElementById('formStock');
+    let form = document.getElementById('formPStock');
     form.insertAdjacentHTML(
       'beforeend',
       `<div class="col-sm-1 cardLoading" style="margin-top: 7px; margin-left: 15px">
@@ -150,17 +149,16 @@ $('#fileStock').val('');
 
     let data = [];
 
-    namexlsx = 'Stock.xlsx';
-    url = '/api/stockMaterials';
+    namexlsx = 'Stock_Products.xlsx';
+    url = '/api/stockProducts';
     
     let stock = await searchData(url);
 
     if (stock.length > 0) {
       for (i = 0; i < stock.length; i++) {
         data.push({
-          referencia_material: stock[i].reference,
-          material: stock[i].material,
-          proveedor: stock[i].client,
+          referencia_producto: stock[i].reference,
+          producto: stock[i].product,
           plazo_maximo: parseFloat(stock[i].max_term),
           plazo_habitual: parseFloat(stock[i].usual_term),
         });
@@ -173,6 +171,6 @@ $('#fileStock').val('');
 
     $('.cardLoading').remove();
     $('.cardBottons').show(400);
-    $('#fileStock').val('');
+    $('#filePStock').val('');
   });
 });

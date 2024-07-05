@@ -8,11 +8,11 @@ $(document).ready(function () {
 
         if (this.id == 'nProducts') {
             $('.cardProducts').show();
-            $('.cardMaterials').hide(); 
+            $('.cardMaterials').hide();
         } else if (this.id == 'nMaterials') {
             $('.cardMaterials').show();
-            $('.cardProducts').hide(); 
-        }  
+            $('.cardProducts').hide();
+        }
 
         let tables = document.getElementsByClassName(
             'dataTable'
@@ -28,48 +28,48 @@ $(document).ready(function () {
     
     /* Ocultar panel crear stock */
 
-    $('.cardCreateStock').hide();
+    $('.cardCreateRMStock').hide();
 
     /* Abrir panel crear stock */
 
-    $('#btnNewStock').click(function (e) {
+    $('#btnNewRMStock').click(function (e) {
         e.preventDefault();
 
-        $('.cardImportStock').hide(800);
-        $('.cardCreateStock').toggle(800);
-        $('#formCreateStock').trigger('reset');
-        $('#btnCreateStock').html('Crear');
+        $('.cardImportRMStock').hide(800);
+        $('.cardCreateRMStock').toggle(800);
+        $('#formCreateRMStock').trigger('reset');
+        $('#btnCreateRMStock').html('Crear');
 
         sessionStorage.removeItem('idStock');
     });
 
     /* Crear nuevo proceso */
 
-    $('#btnCreateStock').click(function (e) {
+    $('#btnCreateRMStock').click(function (e) {
         e.preventDefault();
 
         let idStock = sessionStorage.getItem('idStock');
         if (!idStock)
-            checkDataStock('/api/addStock', idStock);
+            checkDataRMStock('/api/addRMStock', idStock);
         else
-            checkDataStock('/api/updateStock', idStock);
+            checkDataRMStock('/api/updateRMStock', idStock);
     });
 
     /* Actualizar procesos */
 
-    $(document).on('click', '.updateStock', function (e) {
-        $('.cardImportStock').hide(800);
-        $('.cardCreateStock').show(800);
-        $('#btnCreateStock').html('Actualizar');
+    $(document).on('click', '.updateRMStock', function (e) {
+        $('.cardImportRMStock').hide(800);
+        $('.cardCreateRMStock').show(800);
+        $('#btnCreateRMStock').html('Actualizar');
 
         let row = $(this).parent().parent()[0];
-        let data = tblStock.fnGetData(row);
+        let data = tblRMStock.fnGetData(row);
 
-        sessionStorage.setItem('idStock', data.id_stock);
+        sessionStorage.setItem('idStock', data.id_stock_material);
         $(`#material option[value=${data.id_material}]`).prop('selected', true);
         $(`#client option[value=${data.id_provider}]`).prop('selected', true);
-        $('#max').val(data.max_term);
-        $('#usual').val(data.usual_term);
+        $('#rMMax').val(data.max_term);
+        $('#rMUsual').val(data.usual_term);
 
         $('html, body').animate(
             {
@@ -79,11 +79,11 @@ $(document).ready(function () {
         );
     });
 
-    checkDataStock = async (url, idStock) => {
+    const checkDataRMStock = async (url, idStock) => {
         let material = parseFloat($('#material').val());
         let provider = parseFloat($('#client').val());
-        let max = parseFloat($('#max').val());
-        let usual = parseFloat($('#usual').val());
+        let max = parseFloat($('#rMMax').val());
+        let usual = parseFloat($('#rMUsual').val());
 
         let data = material * provider * max * usual;
 
@@ -92,7 +92,7 @@ $(document).ready(function () {
             return false;
         }
 
-        let dataStock = new FormData(formCreateStock);
+        let dataStock = new FormData(formCreateRMStock);
         dataStock.append('idMaterial', material);
 
         if (idStock != '' || idStock != null)
@@ -100,14 +100,14 @@ $(document).ready(function () {
 
         let resp = await sendDataPOST(url, dataStock);
 
-        message(resp);
+        messageRMS(resp);
     }
 
     /* Eliminar proceso 
 
     deleteFunction = () => {
         let row = $(this.activeElement).parent().parent()[0];
-        let data = tblStock.fnGetData(row);
+        let data = tblRMStock.fnGetData(row);
 
         // // let id_Stock = data.id_Stock;
 
@@ -140,11 +140,11 @@ $(document).ready(function () {
 
     /* Mensaje de exito */
 
-    message = (data) => {
+    messageRMS = (data) => {
         if (data.success == true) {
-            $('.cardImportStock').hide(800);
-            $('.cardCreateStock').hide(800);
-            $('#formCreateStock').trigger('reset');
+            $('.cardImportRMStock').hide(800);
+            $('.cardCreateRMStock').hide(800);
+            $('#formCreateRMStock').trigger('reset');
             updateTable();
             toastr.success(data.message);
             return false;
@@ -155,7 +155,7 @@ $(document).ready(function () {
     /* Actualizar tabla */
 
     function updateTable() {
-        $('#tblStock').DataTable().clear();
-        $('#tblStock').DataTable().ajax.reload();
+        $('#tblRMStock').DataTable().clear();
+        $('#tblRMStock').DataTable().ajax.reload();
     }
 });

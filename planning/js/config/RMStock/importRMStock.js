@@ -1,23 +1,23 @@
 $(document).ready(function () {
   let selectedFile;
 
-  $('.cardImportStock').hide();
+  $('.cardImportRMStock').hide();
 
-  $('#btnImportNewStock').click(function (e) {
+  $('#btnImportNewRMStock').click(function (e) {
     e.preventDefault();
-    $('.cardCreateStock').hide(800);
-    $('.cardImportStock').toggle(800);
+    $('.cardCreateRMStock').hide(800);
+    $('.cardImportRMStock').toggle(800);
   });
 
-  $('#fileStock').change(function (e) {
+  $('#fileRMStock').change(function (e) {
     e.preventDefault();
     selectedFile = e.target.files[0];
   });
 
-  $('#btnImportStock').click(function (e) {
+  $('#btnImportRMStock').click(function (e) {
     e.preventDefault();
 
-    file = $('#fileStock').val();
+    file = $('#fileRMStock').val();
 
     if (!file) {
       toastr.error('Seleccione un archivo');
@@ -26,7 +26,7 @@ $(document).ready(function () {
 
     $('.cardBottons').hide();
 
-    let form = document.getElementById('formStock');
+    let form = document.getElementById('formRMStock');
     form.insertAdjacentHTML(
       'beforeend',
       `<div class="col-sm-1 cardLoading" style="margin-top: 7px; margin-left: 15px">
@@ -38,7 +38,7 @@ $(document).ready(function () {
 
     importFile(selectedFile)
       .then((data) => {
-        const expectedHeaders = ['referencia_material','material','proveedor','plazo_maximo','plazo_habitual'];
+        const expectedHeaders = ['referencia_material', 'material', 'proveedor', 'plazo_maximo', 'plazo_habitual'];
         const actualHeaders = Object.keys(data[0]);
 
         const missingHeaders = expectedHeaders.filter(header => !actualHeaders.includes(header));
@@ -46,7 +46,7 @@ $(document).ready(function () {
         if (missingHeaders.length > 0) {
           $('.cardLoading').remove();
           $('.cardBottons').show(400);
-          $('#fileStock').val('');
+          $('#fileRMStock').val('');
           toastr.error('Archivo no corresponde a el formato. Verifique nuevamente');
           return false;
         }
@@ -63,9 +63,9 @@ $(document).ready(function () {
         checkStock(StockToImport);
       })
       .catch(() => {
-          $('.cardLoading').remove();
-          $('.cardBottons').show(400);
-          $('#fileStock').val('');
+        $('.cardLoading').remove();
+        $('.cardBottons').show(400);
+        $('#fileRMStock').val('');
 
         toastr.error('Ocurrio un error. Intente Nuevamente');
       });
@@ -75,13 +75,13 @@ $(document).ready(function () {
   checkStock = (data) => {
     $.ajax({
       type: 'POST',
-      url: '/api/stockDataValidation',
+      url: '/api/rMStockDataValidation',
       data: { importStock: data },
       success: function (resp) {
         if (resp.error == true) {
           $('.cardLoading').remove();
           $('.cardBottons').show(400);
-          $('#fileStock').val('');
+          $('#fileRMStock').val('');
 
           $('#formImportRMStock').trigger('reset');
           toastr.error(resp.message);
@@ -105,9 +105,9 @@ $(document).ready(function () {
             if (result) {
               saveStockTable(data);
             } else {
-                        $('.cardLoading').remove();
-          $('.cardBottons').show(400);
-$('#fileStock').val('');
+              $('.cardLoading').remove();
+              $('.cardBottons').show(400);
+              $('#fileRMStock').val('');
             }
           },
         });
@@ -118,25 +118,25 @@ $('#fileStock').val('');
   saveStockTable = (data) => {
     $.ajax({
       type: 'POST',
-      url: '../../api/addStock',
+      url: '/api/addRMStock',
       data: { importStock: data },
       success: function (r) {
         $('.cardLoading').remove();
-          $('.cardBottons').show(400);
-        $('#fileStock').val('');
+        $('.cardBottons').show(400);
+        $('#fileRMStock').val('');
         
-        message(r);
+        messageRMS(r);
       },
     });
   };
 
   /* Descargar formato */
-  $('#btnDownloadImportsStock').click(async function (e) {
+  $('#btnDownloadImportsRMStock').click(async function (e) {
     e.preventDefault();
 
     $('.cardBottons').hide();
 
-    let form = document.getElementById('formStock');
+    let form = document.getElementById('formRMStock');
     form.insertAdjacentHTML(
       'beforeend',
       `<div class="col-sm-1 cardLoading" style="margin-top: 7px; margin-left: 15px">
@@ -150,7 +150,7 @@ $('#fileStock').val('');
 
     let data = [];
 
-    namexlsx = 'Stock.xlsx';
+    namexlsx = 'Stock_Materiales.xlsx';
     url = '/api/stockMaterials';
     
     let stock = await searchData(url);
@@ -173,6 +173,6 @@ $('#fileStock').val('');
 
     $('.cardLoading').remove();
     $('.cardBottons').show(400);
-    $('#fileStock').val('');
+    $('#fileRMStock').val('');
   });
 });

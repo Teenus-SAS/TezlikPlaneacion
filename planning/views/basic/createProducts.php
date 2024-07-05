@@ -299,6 +299,7 @@ if (sizeof($_SESSION) == 0)
                                                         <tr>
                                                             <td></td>
                                                             <td></td>
+                                                            <td></td>
                                                             <td>Total: </td>
                                                             <td id="totalQuantity"></td>
                                                             <td></td>
@@ -315,6 +316,18 @@ if (sizeof($_SESSION) == 0)
                                         <div class="card-body">
                                             <div class="table-responsive">
                                                 <table class="fixed-table-loading table table-hover" id="tblRawMaterials">
+                                                    <tfoot>
+                                                        <tr>
+                                                            <td></td>
+                                                            <td></td>
+                                                            <td></td>
+                                                            <td>Total: </td>
+                                                            <td></td>
+                                                            <td></td>
+                                                            <td></td>
+                                                            <td></td>
+                                                        </tr>
+                                                    </tfoot>
 
                                                 </table>
                                             </div>

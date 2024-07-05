@@ -70,7 +70,7 @@ $(document).ready(function () {
     average = totalQuantity / data.length;
     concentration = maxQuantity / totalQuantity;
 
-    $('#totalQuantity').html(totalQuantity.toLocaleString('es-CO', { maximumFractionDigits: 0 }));
+    // $('#totalQuantity').html(totalQuantity.toLocaleString('es-CO', { maximumFractionDigits: 0 }));
     $('#lblTotal').html(` Inv Total: ${totalQuantity.toLocaleString('es-CO', { maximumFractionDigits: 0 })}`);
     $('#lblAverage').html(` Promedio: ${average.toLocaleString('es-CO', { maximumFractionDigits: 0 })}`);
     $('#lblConcentration').html(` Concentracion: ${concentration.toLocaleString('es-CO', { maximumFractionDigits: 2 })} %`);
@@ -160,6 +160,36 @@ $(document).ready(function () {
         `,
         },
       ],
+      footerCallback: function (row, data, start, end, display) {
+        let quantity = 0; 
+        let minimum_stock = 0; 
+        let days = 0; 
+
+        for (i = 0; i < display.length; i++) {
+          quantity += parseFloat(data[display[i]].quantity); 
+          minimum_stock += parseFloat(data[display[i]].minimum_stock); 
+          days += parseFloat(data[display[i]].days); 
+        }
+
+        $(this.api().column(4).footer()).html(
+          quantity.toLocaleString('es-CO', {
+            minimumFractionDigits: 0,
+            maximumFractionDigits: 0,
+          })
+        ); 
+        $(this.api().column(5).footer()).html(
+          minimum_stock.toLocaleString('es-CO', {
+            minimumFractionDigits: 0,
+            maximumFractionDigits: 0,
+          })
+        ); 
+        $(this.api().column(6).footer()).html(
+          days.toLocaleString('es-CO', {
+            minimumFractionDigits: 0,
+            maximumFractionDigits: 0,
+          })
+        ); 
+      },
     });
   };
 

@@ -61,7 +61,7 @@ class MinimumStockDao
             $stmt = $connection->prepare("SELECT SUM((IFNULL(s.max_term, 0) - IFNULL(s.usual_term, 0)) * (((IFNULL(u.jan, 0) + IFNULL(u.feb, 0) + IFNULL(u.mar, 0) + IFNULL(u.apr, 0) + IFNULL(u.may, 0) + IFNULL(u.jun, 0) + IFNULL(u.jul, 0) + IFNULL(u.aug, 0) + IFNULL(u.sept, 0) + IFNULL(u.oct, 0) + IFNULL(u.nov, 0) + IFNULL(u.dece, 0)) / 
                                                  NULLIF((u.jan > 0) + (u.feb > 0) + (u.mar > 0) + (u.apr > 0) + (u.may > 0) + (u.jun > 0) + (u.jul > 0) + (u.aug > 0) + (u.sept > 0) + (u.oct > 0) + (u.nov > 0) + (u.dece > 0), 0))/ 12) * pm.quantity) AS stock  
                                           FROM products_materials pm
-                                          LEFT JOIN stock s ON s.id_material = pm.id_material
+                                          LEFT JOIN stock_materials s ON s.id_material = pm.id_material
                                           LEFT JOIN plan_unit_sales u ON u.id_product = pm.id_product
                                           WHERE pm.id_material = :id_material");
             $stmt->execute(['id_material' => $id_material]);

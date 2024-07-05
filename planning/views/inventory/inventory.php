@@ -127,7 +127,7 @@ if (sizeof($_SESSION) == 0)
                                             <div class="form-row">
                                                 <div class="col-sm-3 floating-label enable-floating-label show-label" style="margin-bottom:0px">
                                                     <label for="cantMonths">Meses a Analizar:</label>
-                                                    <input type="number" class="form-control text-center" id="cantMonths" name="cantMonths" style="width:200px">
+                                                    <input type="number" class="form-control text-center" id="cantMonths" name="cantMonths" style="width:200px" value="<?php echo $_SESSION['months'] ?>">
                                                 </div>
                                                 <div class="col-sm mt-1">
                                                     <button class="btn btn-success" id="btnAddMonths">Calcular</button>

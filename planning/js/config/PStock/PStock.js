@@ -1,49 +1,49 @@
 $(document).ready(function () {
-    loadClients(2);
+    // loadClients(2);
     /* Ocultar panel crear stock */
 
-    $('.cardCreateStock').hide();
+    $('.cardCreatePStock').hide();
 
     /* Abrir panel crear stock */
 
-    $('#btnNewStock').click(function (e) {
+    $('#btnNewPStock').click(function (e) {
         e.preventDefault();
 
-        $('.cardImportStock').hide(800);
-        $('.cardCreateStock').toggle(800);
-        $('#formCreateStock').trigger('reset');
-        $('#btnCreateStock').html('Crear');
+        $('.cardImportPStock').hide(800);
+        $('.cardCreatePStock').toggle(800);
+        $('#formCreatePStock').trigger('reset');
+        $('#btnCreatePStock').html('Crear');
 
         sessionStorage.removeItem('idStock');
     });
 
     /* Crear nuevo proceso */
 
-    $('#btnCreateStock').click(function (e) {
+    $('#btnCreatePStock').click(function (e) {
         e.preventDefault();
 
         let idStock = sessionStorage.getItem('idStock');
         if (!idStock)
-            checkDataStock('/api/addStock', idStock);
+            checkDataPStock('/api/addPStock', idStock);
         else
-            checkDataStock('/api/updateStock', idStock);
+            checkDataPStock('/api/updatePStock', idStock);
     });
 
     /* Actualizar procesos */
 
-    $(document).on('click', '.updateStock', function (e) {
-        $('.cardImportStock').hide(800);
-        $('.cardCreateStock').show(800);
-        $('#btnCreateStock').html('Actualizar');
+    $(document).on('click', '.updatePStock', function (e) {
+        $('.cardImportPStock').hide(800);
+        $('.cardCreatePStock').show(800);
+        $('#btnCreatePStock').html('Actualizar');
 
         let row = $(this).parent().parent()[0];
-        let data = tblStock.fnGetData(row);
+        let data = tblPStock.fnGetData(row);
 
-        sessionStorage.setItem('idStock', data.id_stock);
-        $(`#material option[value=${data.id_material}]`).prop('selected', true);
-        $(`#client option[value=${data.id_provider}]`).prop('selected', true);
-        $('#max').val(data.max_term);
-        $('#usual').val(data.usual_term);
+        sessionStorage.setItem('idStock', data.id_stock_product);
+        $(`#refProduct option[value=${data.id_product}]`).prop('selected', true);
+        $(`#selectNameProduct option[value=${data.id_product}]`).prop('selected', true);
+        $('#pMax').val(data.max_term);
+        $('#pUsual').val(data.usual_term);
 
         $('html, body').animate(
             {
@@ -53,35 +53,34 @@ $(document).ready(function () {
         );
     });
 
-    checkDataStock = async (url, idStock) => {
-        let material = parseFloat($('#material').val());
-        let provider = parseFloat($('#client').val());
-        let max = parseFloat($('#max').val());
-        let usual = parseFloat($('#usual').val());
+    const checkDataPStock = async (url, idStock) => {
+        let id_product = parseFloat($('#refProduct').val()); 
+        let max = parseFloat($('#pMax').val());
+        let usual = parseFloat($('#pUsual').val());
 
-        let data = material * provider * max * usual;
+        let data = id_product * max * usual;
 
         if (isNaN(data) || data <= 0) {
             toastr.error('Ingrese todos los campos');
             return false;
         }
 
-        let dataStock = new FormData(formCreateStock);
-        dataStock.append('idMaterial', material);
+        let dataStock = new FormData(formCreatePStock);
+        dataStock.append('idProduct', id_product);
 
         if (idStock != '' || idStock != null)
             dataStock.append('idStock', idStock);
 
         let resp = await sendDataPOST(url, dataStock);
 
-        message(resp);
+        messagePS(resp);
     }
 
     /* Eliminar proceso 
 
     deleteFunction = () => {
         let row = $(this.activeElement).parent().parent()[0];
-        let data = tblStock.fnGetData(row);
+        let data = tblPStock.fnGetData(row);
 
         // // let id_Stock = data.id_Stock;
 
@@ -114,11 +113,11 @@ $(document).ready(function () {
 
     /* Mensaje de exito */
 
-    message = (data) => {
+    messagePS = (data) => {
         if (data.success == true) {
-            $('.cardImportStock').hide(800);
-            $('.cardCreateStock').hide(800);
-            $('#formCreateStock').trigger('reset');
+            $('.cardImportPStock').hide(800);
+            $('.cardCreatePStock').hide(800);
+            $('#formCreatePStock').trigger('reset');
             updateTable();
             toastr.success(data.message);
             return false;
@@ -129,7 +128,7 @@ $(document).ready(function () {
     /* Actualizar tabla */
 
     function updateTable() {
-        $('#tblStock').DataTable().clear();
-        $('#tblStock').DataTable().ajax.reload();
+        $('#tblPStock').DataTable().clear();
+        $('#tblPStock').DataTable().ajax.reload();
     }
 });

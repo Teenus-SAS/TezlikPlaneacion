@@ -6,7 +6,7 @@ use TezlikPlaneacion\Constants\Constants;
 use Monolog\Handler\RotatingFileHandler;
 use Monolog\Logger;
 
-class GeneralStockDao
+class GeneralPStockDao
 {
     private $logger;
 
@@ -19,10 +19,9 @@ class GeneralStockDao
     public function findStock($dataStock)
     {
         $connection = Connection::getInstance()->getConnection();
-        $stmt = $connection->prepare("SELECT * FROM stock WHERE id_material = :id_material AND id_provider = :id_provider");
+        $stmt = $connection->prepare("SELECT * FROM stock_products WHERE id_product = :id_product");
         $stmt->execute([
-            'id_material' => $dataStock['idMaterial'],
-            'id_provider' => $dataStock['idProvider']
+            'id_product' => $dataStock['idProduct'],
         ]);
 
         $this->logger->info(__FUNCTION__, array('query' => $stmt->queryString, 'errors' => $stmt->errorInfo()));

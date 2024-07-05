@@ -87,24 +87,24 @@ if (sizeof($_SESSION) == 0)
                         <div class="row">
                             <div class="col-12">
                                 <div class="card">
-                                    <form id="formCreateRPStock">
+                                    <form id="formCreatePStock">
                                         <div class="card-body">
                                             <div class="form-row">
                                                 <div class="col-sm-4 floating-label enable-floating-label show-label" style="margin-bottom:20px">
-                                                    <label for="">Materia Prima</label>
-                                                    <select class="form-control" name="material" id="material"></select>
+                                                    <label for="">Referencia</label>
+                                                    <select class="form-control refProduct" name="refProduct" id="refProduct"></select>
                                                 </div>
-                                                <div class="col-sm-3 floating-label enable-floating-label show-label" style="margin-bottom:20px">
-                                                    <label for="">Provedoores</label>
-                                                    <select class="form-control" name="idProvider" id="client"></select>
+                                                <div class="col-sm-8 floating-label enable-floating-label show-label" style="margin-bottom:5px">
+                                                    <label for="">Producto</label>
+                                                    <select class="form-control selectNameProduct" name="selectNameProduct" id="selectNameProduct"></select>
                                                 </div>
                                                 <div class="col-xs-1 floating-label enable-floating-label show-label" style="margin-bottom:0px">
                                                     <label for="">Plazo Max</label>
-                                                    <input type="number" class="form-control text-center" id="max" name="max">
+                                                    <input type="number" class="form-control text-center" id="pMax" name="max">
                                                 </div>
                                                 <div class="col-xs-1 floating-label enable-floating-label show-label" style="margin-bottom:0px">
                                                     <label for="">Plazo Habitual</label>
-                                                    <input type="number" class="form-control text-center" id="usual" name="usual">
+                                                    <input type="number" class="form-control text-center" id="pUsual" name="usual">
                                                 </div>
                                                 <div class="col-sm mt-1">
                                                     <button class="btn btn-success" id="btnCreatePStock">Crear Stock</button>
@@ -124,10 +124,10 @@ if (sizeof($_SESSION) == 0)
                             <form class="col-12" id="formImportPStock" enctype="multipart/form-data">
                                 <div class="card">
                                     <div class="card-body pt-3">
-                                        <div class="form-row" id="formStock">
+                                        <div class="form-row" id="formPStock">
                                             <div class="col-sm-6 floating-label enable-floating-label show-label drag-area" style="margin-bottom:10px!important">
                                                 <input class="form-control" type="file" id="filePStock" accept=".xls,.xlsx">
-                                                <label for="formFile" class="form-label"> Importar Stock</label>
+                                                <label for="formFile" class="form-label"> Importar Stock Productos</label>
                                             </div>
                                             <div class="col-xs-2 cardBottons" style="margin-top:7px">
                                                 <button type="text" class="btn btn-success" id="btnImportPStock">Importar</button>
@@ -161,11 +161,11 @@ if (sizeof($_SESSION) == 0)
                                                 </div>
                                                 <div class="col-xs-1 floating-label enable-floating-label show-label" style="margin-bottom:0px">
                                                     <label for="">Plazo Max</label>
-                                                    <input type="number" class="form-control text-center" id="max" name="max">
+                                                    <input type="number" class="form-control text-center" id="rMMax" name="max">
                                                 </div>
                                                 <div class="col-xs-1 floating-label enable-floating-label show-label" style="margin-bottom:0px">
                                                     <label for="">Plazo Habitual</label>
-                                                    <input type="number" class="form-control text-center" id="usual" name="usual">
+                                                    <input type="number" class="form-control text-center" id="rMUsual" name="usual">
                                                 </div>
                                                 <div class="col-sm mt-1">
                                                     <button class="btn btn-success" id="btnCreateRMStock">Crear Stock</button>
@@ -185,10 +185,10 @@ if (sizeof($_SESSION) == 0)
                             <form class="col-12" id="formImportRMStock" enctype="multipart/form-data">
                                 <div class="card">
                                     <div class="card-body pt-3">
-                                        <div class="form-row" id="formStock">
+                                        <div class="form-row" id="formRMStock">
                                             <div class="col-sm-6 floating-label enable-floating-label show-label drag-area" style="margin-bottom:10px!important">
                                                 <input class="form-control" type="file" id="fileRMStock" accept=".xls,.xlsx">
-                                                <label for="formFile" class="form-label"> Importar Stock</label>
+                                                <label for="formFile" class="form-label"> Importar Stock Materiales</label>
                                             </div>
                                             <div class="col-xs-2 cardBottons" style="margin-top:7px">
                                                 <button type="text" class="btn btn-success" id="btnImportRMStock">Importar</button>
@@ -239,7 +239,7 @@ if (sizeof($_SESSION) == 0)
                                     <div class="tab-pane cardGeneralSN cardMaterials" style="display: none;">
                                         <div class="card-body">
                                             <div class="table-responsive">
-                                                <table class="fixed-table-loading table table-hover text-center" id="tblRMtock" name="tblRMStock">
+                                                <table class="fixed-table-loading table table-hover text-center" id="tblRMStock" name="tblRMStock">
 
                                                 </table>
                                             </div>
@@ -263,10 +263,11 @@ if (sizeof($_SESSION) == 0)
         viewRawMaterial = 2;
     </script>
     <?php include_once dirname(dirname(dirname(__DIR__))) . '/global/partials/scriptsJS.php'; ?>
+    <script src="/planning/js/basic/products/configProducts.js"></script>
     <script src="/planning/js/basic/rawMaterials/configRawMaterials.js"></script>
     <script src="/planning/js/admin/clients/configClients.js"></script>
     <script src="/planning/js/config/PStock/PStock.js"></script>
-    <script src="/planning/js/config/RMStock/"></script>
+    <script src="/planning/js/config/RMStock/RMStock.js"></script>
     <script src="/planning/js/config/PStock/tblPStock.js"></script>
     <script src="/planning/js/config/RMStock/tblRMStock.js"></script>
     <script src="/global/js/import/import.js"></script>

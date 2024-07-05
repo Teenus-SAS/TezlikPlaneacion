@@ -285,7 +285,16 @@ if (sizeof($_SESSION) == 0)
                                         <div class="card-body">
                                             <div class="table-responsive">
                                                 <table class="fixed-table-loading table table-hover text-center" id="tblConfigMaterials" name="tblConfigMaterials">
-
+                                                    <tfoot>
+                                                        <tr>
+                                                            <td></td>
+                                                            <td></td>
+                                                            <td></td>
+                                                            <td>Total: </td>
+                                                            <td></td>
+                                                            <td></td>
+                                                        </tr>
+                                                    </tfoot>
                                                 </table>
                                             </div>
                                         </div>
@@ -294,7 +303,17 @@ if (sizeof($_SESSION) == 0)
                                         <div class="card-body">
                                             <div class="table-responsive">
                                                 <table class="fixed-table-loading table table-hover text-center" id="tblPlanCiclesMachine" name="tblPlanCiclesMachine">
-
+                                                    <tfoot>
+                                                        <tr>
+                                                            <td></td>
+                                                            <td></td>
+                                                            <td>Total: </td>
+                                                            <td></td>
+                                                            <td></td>
+                                                            <td></td>
+                                                            <td></td>
+                                                        </tr>
+                                                    </tfoot>
                                                 </table>
                                             </div>
                                         </div>

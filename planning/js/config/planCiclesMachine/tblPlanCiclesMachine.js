@@ -59,6 +59,38 @@ $(document).ready(function () {
           },
         },
       ],
+      footerCallback: function (row, data, start, end, display) {
+        let cicles_hour = 0; 
+        let units_turn = 0; 
+        let units_month = 0; 
+
+        for (i = 0; i < display.length; i++) {
+          cicles_hour += parseFloat(data[display[i]].cicles_hour); 
+          units_turn += parseFloat(data[display[i]].units_turn); 
+          units_month += parseFloat(data[display[i]].units_month); 
+        }
+
+        $(this.api().column(3).footer()).html(
+          cicles_hour.toLocaleString('es-CO', {
+            minimumFractionDigits: 0,
+            maximumFractionDigits: 0,
+          })
+        ); 
+        
+        $(this.api().column(4).footer()).html(
+          units_turn.toLocaleString('es-CO', {
+            minimumFractionDigits: 0,
+            maximumFractionDigits: 0,
+          })
+        ); 
+
+        $(this.api().column(5).footer()).html(
+          units_month.toLocaleString('es-CO', {
+            minimumFractionDigits: 0,
+            maximumFractionDigits: 0,
+          })
+        ); 
+      },
     });
   }
 });

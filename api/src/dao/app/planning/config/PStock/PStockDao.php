@@ -6,7 +6,7 @@ use TezlikPlaneacion\Constants\Constants;
 use Monolog\Handler\RotatingFileHandler;
 use Monolog\Logger;
 
-class StockDao
+class PStockDao
 {
     private $logger;
 
@@ -19,11 +19,10 @@ class StockDao
     public function findAllStockByCompany($id_company)
     {
         $connection = Connection::getInstance()->getConnection();
-        $stmt = $connection->prepare("SELECT s.id_stock, s.id_material, m.reference, m.material, IFNULL(s.id_provider, 0) AS id_provider, 
-                                             IFNULL(c.client, '') AS client, m.unit, m.quantity, s.max_term, s.usual_term
-                                      FROM stock s
-                                        INNER JOIN materials m ON m.id_material = s.id_material
-                                        LEFT JOIN plan_clients c ON c.id_client = s.id_provider
+        $stmt = $connection->prepare("SELECT s.id_stock_product, p.id_product, p.reference, p.product, pi.quantity, s.max_term, s.usual_term
+                                      FROM stock_products s
+                                        INNER JOIN products p ON p.id_product = s.id_product
+                                        INNER JOIN products_inventory pi ON pi.id_product = s.id_product
                                       WHERE s.id_company = :id_company");
         $stmt->execute(['id_company' => $id_company]);
 
@@ -39,12 +38,11 @@ class StockDao
         $connection = Connection::getInstance()->getConnection();
 
         try {
-            $stmt = $connection->prepare("INSERT INTO stock (id_company, id_material, id_provider, max_term, usual_term) 
-                                          VALUES (:id_company, :id_material, :id_provider, :max_term, :usual_term)");
+            $stmt = $connection->prepare("INSERT INTO stock_products (id_company, id_product, max_term, usual_term) 
+                                          VALUES (:id_company, :id_product, :max_term, :usual_term)");
             $stmt->execute([
                 'id_company' => $id_company,
-                'id_material' => $dataStock['idMaterial'],
-                'id_provider' => $dataStock['idProvider'],
+                'id_product' => $dataStock['idProduct'],
                 'max_term' => $dataStock['max'],
                 'usual_term' => $dataStock['usual']
             ]);
@@ -61,12 +59,11 @@ class StockDao
         $connection = Connection::getInstance()->getConnection();
 
         try {
-            $stmt = $connection->prepare("UPDATE stock SET id_material = :id_material, id_provider = :id_provider, max_term = :max_term, usual_term = :usual_term 
-                                          WHERE id_stock = :id_stock");
+            $stmt = $connection->prepare("UPDATE stock_products SET id_product = :id_product, max_term = :max_term, usual_term = :usual_term 
+                                          WHERE id_stock_product = :id_stock_product");
             $stmt->execute([
-                'id_stock' => $dataStock['idStock'],
-                'id_material' => $dataStock['idMaterial'],
-                'id_provider' => $dataStock['idProvider'],
+                'id_stock_product' => $dataStock['idStock'],
+                'id_product' => $dataStock['idProduct'],
                 'max_term' => $dataStock['max'],
                 'usual_term' => $dataStock['usual']
             ]);

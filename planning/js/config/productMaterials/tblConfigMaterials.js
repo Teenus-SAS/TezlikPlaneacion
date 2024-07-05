@@ -90,6 +90,20 @@ $(document).ready(function () {
           },
         },
       ],
+      footerCallback: function (row, data, start, end, display) {
+        let quantity = 0;  
+
+        for (i = 0; i < display.length; i++) {
+          quantity += parseFloat(data[display[i]].quantity);  
+        }
+
+        $(this.api().column(4).footer()).html(
+          quantity.toLocaleString('es-CO', {
+            minimumFractionDigits: 0,
+            maximumFractionDigits: 0,
+          })
+        );  
+      },
     });
   };
   /* Cargue tabla de Productos en proceso 

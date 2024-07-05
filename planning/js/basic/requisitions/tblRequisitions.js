@@ -164,6 +164,20 @@ $(document).ready(function () {
           render: renderRequisitionActions,
         },
       ],
+      footerCallback: function (row, data, start, end, display) {
+        let quantity = 0; 
+
+        for (i = 0; i < display.length; i++) {
+          quantity += parseFloat(data[display[i]].quantity); 
+        }
+
+        $(this.api().column(7).footer()).html(
+          quantity.toLocaleString('es-CO', {
+            minimumFractionDigits: 0,
+            maximumFractionDigits: 0,
+          })
+        ); 
+      },
     });
   };
 

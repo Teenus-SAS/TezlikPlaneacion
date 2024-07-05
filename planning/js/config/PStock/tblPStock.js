@@ -1,10 +1,10 @@
 $(document).ready(function () {
   /* Cargue tabla de stock */
 
-  tblStock = $("#tblStock").dataTable({
+  tblPStock = $("#tblPStock").dataTable({
     pageLength: 50,
     ajax: {
-      url: "../../api/stock",
+      url: "/api/pStock",
       dataSrc: "",
     },
     language: {
@@ -25,13 +25,8 @@ $(document).ready(function () {
         className: "uniqueClassName dt-head-center",
       },
       {
-        title: "Materia Prima",
-        data: "material",
-        className: "uniqueClassName dt-head-center",
-      },
-      {
-        title: "Proveedor",
-        data: "client",
+        title: "Producto",
+        data: "product",
         className: "uniqueClassName dt-head-center",
       },
       {
@@ -46,10 +41,10 @@ $(document).ready(function () {
       },
       {
         title: "Acciones",
-        data: "id_stock",
+        data: "id_stock_product",
         className: "uniqueClassName dt-head-center",
         render: function (data) {
-          return `<a href="javascript:;" <i id="${data}" class="bx bx-edit-alt updateStock" data-toggle='tooltip' title='Actualizar Stock' style="font-size: 30px;"></i></a>`;
+          return `<a href="javascript:;" <i id="${data}" class="bx bx-edit-alt updatePStock" data-toggle='tooltip' title='Actualizar Stock' style="font-size: 30px;"></i></a>`;
         },
       },
     ],

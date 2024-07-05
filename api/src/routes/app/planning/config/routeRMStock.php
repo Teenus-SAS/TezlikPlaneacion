@@ -4,13 +4,13 @@ use TezlikPlaneacion\dao\GeneralClientsDao;
 use TezlikPlaneacion\dao\GeneralMaterialsDao;
 use TezlikPlaneacion\dao\GeneralProductsDao;
 use TezlikPlaneacion\dao\GeneralProductsMaterialsDao;
-use TezlikPlaneacion\dao\GeneralStockDao;
+use TezlikPlaneacion\dao\GeneralRMStockDao;
 use TezlikPlaneacion\dao\MinimumStockDao;
 use TezlikPlaneacion\dao\ProductsMaterialsDao;
-use TezlikPlaneacion\dao\StockDao;
+use TezlikPlaneacion\dao\RMStockDao;
 
-$stockDao = new StockDao();
-$generalStockDao = new GeneralStockDao();
+$stockDao = new RMStockDao();
+$generalStockDao = new GeneralRMStockDao();
 $generalMaterialsDao = new GeneralMaterialsDao();
 $generalProductsDao = new GeneralProductsDao();
 $minimumStockDao = new MinimumStockDao();
@@ -23,7 +23,7 @@ use Psr\Http\Message\ServerRequestInterface as Request;
 
 /* Consulta todos */
 
-$app->get('/stock', function (Request $request, Response $response, $args) use ($stockDao) {
+$app->get('/rMStock', function (Request $request, Response $response, $args) use ($stockDao) {
     session_start();
     $id_company = $_SESSION['id_company'];
     $stock = $stockDao->findAllStockByCompany($id_company);
@@ -39,7 +39,7 @@ $app->get('/stockMaterials', function (Request $request, Response $response, $ar
     return $response->withHeader('Content-Type', 'application/json');
 });
 
-$app->post('/stockDataValidation', function (Request $request, Response $response, $args) use (
+$app->post('/rMStockDataValidation', function (Request $request, Response $response, $args) use (
     $generalStockDao,
     $generalMaterialsDao,
     $generalClientsDao
@@ -114,7 +114,7 @@ $app->post('/stockDataValidation', function (Request $request, Response $respons
     return $response->withHeader('Content-Type', 'application/json');
 });
 
-$app->post('/addStock', function (Request $request, Response $response, $args) use (
+$app->post('/addRMStock', function (Request $request, Response $response, $args) use (
     $stockDao,
     $generalStockDao,
     $generalMaterialsDao,
@@ -140,17 +140,17 @@ $app->post('/addStock', function (Request $request, Response $response, $args) u
                     $resolution = $generalMaterialsDao->updateStockMaterial($dataStock['idMaterial'], $arr['stock']);
             }
 
-            if ($resolution == null) {
-                $products = $generalProductsMaterialsDao->findAllProductByMaterial($dataStock['idMaterial']);
+            // if ($resolution == null) {
+            //     $products = $generalProductsMaterialsDao->findAllProductByMaterial($dataStock['idMaterial']);
 
-                foreach ($products as $arr) {
-                    $product = $minimumStockDao->calcStockByProduct($arr['id_product']);
-                    if (isset($product['stock']))
-                        $resolution = $generalProductsDao->updateStockByProduct($arr['id_product'], $product['stock']);
+            //     foreach ($products as $arr) {
+            //         $product = $minimumStockDao->calcStockByProduct($arr['id_product']);
+            //         if (isset($product['stock']))
+            //             $resolution = $generalProductsDao->updateStockByProduct($arr['id_product'], $product['stock']);
 
-                    if (isset($resolution['info'])) break;
-                }
-            }
+            //         if (isset($resolution['info'])) break;
+            //     }
+            // }
 
 
             if ($resolution == null)
@@ -180,7 +180,7 @@ $app->post('/addStock', function (Request $request, Response $response, $args) u
             if (!$findstock)
                 $resolution = $stockDao->insertStockByCompany($stock[$i], $id_company);
             else {
-                $stock[$i]['idStock'] = $findstock['id_stock'];
+                $stock[$i]['idStock'] = $findstock['id_stock_material'];
                 $resolution = $stockDao->updateStock($stock[$i]);
             }
 
@@ -191,15 +191,15 @@ $app->post('/addStock', function (Request $request, Response $response, $args) u
 
             if (isset($resolution['info'])) break;
 
-            $products = $generalProductsMaterialsDao->findAllProductByMaterial($stock[$i]['idMaterial']);
+            // $products = $generalProductsMaterialsDao->findAllProductByMaterial($stock[$i]['idMaterial']);
 
-            foreach ($products as $arr) {
-                $product = $minimumStockDao->calcStockByProduct($arr['id_product']);
-                if (isset($product['stock']))
-                    $resolution = $generalProductsDao->updateStockByProduct($arr['id_product'], $product['stock']);
+            // foreach ($products as $arr) {
+            //     $product = $minimumStockDao->calcStockByProduct($arr['id_product']);
+            //     if (isset($product['stock']))
+            //         $resolution = $generalProductsDao->updateStockByProduct($arr['id_product'], $product['stock']);
 
-                if (isset($resolution['info'])) break;
-            }
+            //     if (isset($resolution['info'])) break;
+            // }
         }
 
         if ($resolution == null)
@@ -214,7 +214,7 @@ $app->post('/addStock', function (Request $request, Response $response, $args) u
     return $response->withStatus(200)->withHeader('Content-Type', 'application/json');
 });
 
-$app->post('/updateStock', function (Request $request, Response $response, $args) use (
+$app->post('/updateRMStock', function (Request $request, Response $response, $args) use (
     $stockDao,
     $generalStockDao,
     $generalProductsMaterialsDao,
@@ -225,9 +225,9 @@ $app->post('/updateStock', function (Request $request, Response $response, $args
     $dataStock = $request->getParsedBody();
 
     $stock = $generalStockDao->findStock($dataStock);
-    !is_array($stock) ? $data['id_stock'] = 0 : $data = $stock;
+    !is_array($stock) ? $data['id_stock_material'] = 0 : $data = $stock;
 
-    if ($data['id_stock'] == $dataStock['idStock'] || $data['id_stock'] == 0) {
+    if ($data['id_stock_material'] == $dataStock['idStock'] || $data['id_stock_material'] == 0) {
         $resolution = $stockDao->updateStock($dataStock);
 
         if ($resolution == null) {
@@ -236,17 +236,17 @@ $app->post('/updateStock', function (Request $request, Response $response, $args
                 $resolution = $generalMaterialsDao->updateStockMaterial($dataStock['idMaterial'], $arr['stock']);
         }
 
-        if ($resolution == null) {
-            $products = $generalProductsMaterialsDao->findAllProductByMaterial($dataStock['idMaterial']);
+        // if ($resolution == null) {
+        //     $products = $generalProductsMaterialsDao->findAllProductByMaterial($dataStock['idMaterial']);
 
-            foreach ($products as $arr) {
-                $product = $minimumStockDao->calcStockByProduct($arr['id_product']);
-                if (isset($product['stock']))
-                    $resolution = $generalProductsDao->updateStockByProduct($arr['id_product'], $product['stock']);
+        //     foreach ($products as $arr) {
+        //         $product = $minimumStockDao->calcStockByProduct($arr['id_product']);
+        //         if (isset($product['stock']))
+        //             $resolution = $generalProductsDao->updateStockByProduct($arr['id_product'], $product['stock']);
 
-                if (isset($resolution['info'])) break;
-            }
-        }
+        //         if (isset($resolution['info'])) break;
+        //     }
+        // }
 
         if ($resolution == null)
             $resp = array('success' => true, 'message' => 'Stock actualizado correctamente');

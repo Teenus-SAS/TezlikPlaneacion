@@ -44,15 +44,7 @@ $(document).ready(function () {
     else if (this.id == 'materials') {
       data = getInventory(materials);
       data["visible"] = false;
-    }
-    // Todos
-    // else if (value == 3) {
-    //   dataProducts = getInventory(products);
-    //   dataMaterials = getInventory(materials);
-
-    //   data = dataProducts.concat(dataMaterials);
-    //   data["visible"] = false;
-    // }
+    } 
     loadTable(data);
   });
 
