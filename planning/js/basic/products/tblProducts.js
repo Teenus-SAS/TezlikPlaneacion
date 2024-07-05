@@ -118,15 +118,15 @@ $(document).ready(function () {
           className: 'uniqueClassName dt-head-center',
         },
         {
+          title: 'Medida',
+          data: 'abbreviation',
+          className: 'uniqueClassName dt-head-center',
+        },
+        {
           title: 'Existencia',
           data: 'quantity',
           className: 'uniqueClassName dt-head-center',
           render: (data) => formatNumber(data, 'es-CO'),
-        },
-        {
-          title: 'Medida',
-          data: 'abbreviation',
-          className: 'uniqueClassName dt-head-center',
         },
         {
           title: 'Stock Min',

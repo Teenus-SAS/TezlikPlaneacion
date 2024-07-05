@@ -141,15 +141,15 @@ $(document).ready(function () {
           className: "uniqueClassName dt-head-center",
         },
         {
+          title: "Medida",
+          data: "abbreviation",
+          className: "uniqueClassName dt-head-center",
+        },
+        {
           title: "Existencia",
           data: "quantity",
           className: "uniqueClassName dt-head-center",
           render: $.fn.dataTable.render.number(".", ",", 0),
-        },
-        {
-          title: "Medida",
-          data: "abbreviation",
-          className: "uniqueClassName dt-head-center",
         },
         {
           title: "Reservado",
@@ -198,7 +198,7 @@ $(document).ready(function () {
             else if (data.classification == "B") badge = "badge-info";
             else badge = "badge-danger";
             //else badge = "badge-light";
-            return `<span class="badge ${badge}">${data.classification}</span>`;
+            return `<span class="badge ${badge}" style="font-size: large;">${data.classification}</span>`;
             //return `<p>${data.classification}</p>`;
           },
         },

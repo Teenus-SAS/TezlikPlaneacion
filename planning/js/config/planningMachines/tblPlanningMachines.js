@@ -1,13 +1,13 @@
 $(document).ready(function () {
   let = opcionesDeFormato = {
-  day: "2-digit",
-  month: "2-digit",
-  year: "numeric",
-  hour: "2-digit",
-  minute: "2-digit",
-  hour12: true,
+    day: "2-digit",
+    month: "2-digit",
+    year: "numeric",
+    hour: "2-digit",
+    minute: "2-digit",
+    hour12: true,
   };
-  
+
   // Mostrar Tabla planeacion maquinas
   tblPlanMachines = $("#tblPlanMachines").dataTable({
     pageLength: 50,
@@ -28,6 +28,16 @@ $(document).ready(function () {
         },
       },
       {
+        title: "Acciones",
+        data: "id_program_machine",
+        className: "uniqueClassName dt-head-center",
+        render: function (data) {
+          return `
+                    <a href="javascript:;" <i id="upd-${data}" class="bx bx-edit-alt updatePMachines" data-toggle='tooltip' title='Actualizar Plan Maquina' style="font-size: 30px;"></i></a>
+                    <a href="javascript:;" <i id="${data}" class="mdi mdi-delete-forever" data-toggle='tooltip' title='Eliminar Plan Maquina' style="font-size: 30px;color:red" onclick="deleteFunction()"></i></a>`;
+        },
+      },
+      {
         title: "Máquina",
         data: "machine",
         className: "uniqueClassName dt-head-center",
@@ -38,17 +48,21 @@ $(document).ready(function () {
         className: "text-center",
       },
       {
-        title: "H.Dia",
+        title: "Horas Dia",
         data: "hours_day",
         className: "text-center",
       },
       {
-        title: "Horas",
+        title: "Horario",
         data: null,
         className: "text-center",
         render: function (data, type, full, meta) {
-          const hourStart = moment((full.hour_start).toFixed(2), ["HH:mm"]).format("h:mm A");
-          const hourEnd = moment((full.hour_end).toFixed(2), ["HH:mm"]).format("h:mm A");
+          const hourStart = moment(full.hour_start.toFixed(2), [
+            "HH:mm",
+          ]).format("h:mm A");
+          const hourEnd = moment(full.hour_end.toFixed(2), ["HH:mm"]).format(
+            "h:mm A"
+          );
 
           return `Inicio: ${hourStart}<br>Fin: ${hourEnd}`;
         },
@@ -112,16 +126,6 @@ $(document).ready(function () {
         title: "Diciembre",
         data: "december",
         className: "text-center",
-      },
-      {
-        title: "Acciones",
-        data: "id_program_machine",
-        className: "uniqueClassName dt-head-center",
-        render: function (data) {
-          return `
-                    <a href="javascript:;" <i id="upd-${data}" class="bx bx-edit-alt updatePMachines" data-toggle='tooltip' title='Actualizar Plan Maquina' style="font-size: 30px;"></i></a>
-                    <a href="javascript:;" <i id="${data}" class="mdi mdi-delete-forever" data-toggle='tooltip' title='Eliminar Plan Maquina' style="font-size: 30px;color:red" onclick="deleteFunction()"></i></a>`;
-        },
       },
     ],
   });

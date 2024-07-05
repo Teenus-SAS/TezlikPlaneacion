@@ -34,6 +34,16 @@ $(document).ready(function () {
         },
       },
       {
+        title: 'Acciones',
+        data: 'id_unit_sales',
+        className: 'uniqueClassName dt-head-center',
+        render: function (data) {
+          return `
+                <a href="javascript:;" <i id="${data}" class="bx bx-edit-alt updateSale" data-toggle='tooltip' title='Actualizar Venta' style="font-size: 30px;"></i></a>
+                <a href="javascript:;" <i id="${data}" class="mdi mdi-delete-forever" data-toggle='tooltip' title='Eliminar Venta' style="font-size: 30px;color:red" onclick="deleteFunction()"></i></a>`;
+        },
+      },
+      {
         title: 'Referencia',
         data: 'reference',
         className: 'uniqueClassName dt-head-center',
@@ -47,6 +57,18 @@ $(document).ready(function () {
         title: 'Año',
         data: 'year',
         className: 'uniqueClassName dt-head-center',
+      },
+      {
+        title: 'Promedio Diario',
+        data: 'average',
+        className: 'uniqueClassName dt-head-center',
+        render: $.fn.dataTable.render.number('.', ',', 0, ''),
+      },
+      {
+        title: 'Promedio Mensual',
+        data: 'average',
+        className: 'uniqueClassName dt-head-center',
+        render: $.fn.dataTable.render.number('.', ',', 0, ''),
       },
       {
         title: 'Enero',
@@ -119,22 +141,6 @@ $(document).ready(function () {
         data: 'dece',
         className: 'uniqueClassName dt-head-center',
         render: $.fn.dataTable.render.number('.', ',', 0, ''),
-      },
-      {
-        title: 'Promedio',
-        data: 'average',
-        className: 'uniqueClassName dt-head-center',
-        render: $.fn.dataTable.render.number('.', ',', 0, ''),
-      },
-      {
-        title: 'Acciones',
-        data: 'id_unit_sales',
-        className: 'uniqueClassName dt-head-center',
-        render: function (data) {
-          return `
-                <a href="javascript:;" <i id="${data}" class="bx bx-edit-alt updateSale" data-toggle='tooltip' title='Actualizar Venta' style="font-size: 30px;"></i></a>
-                <a href="javascript:;" <i id="${data}" class="mdi mdi-delete-forever" data-toggle='tooltip' title='Eliminar Venta' style="font-size: 30px;color:red" onclick="deleteFunction()"></i></a>`;
-        },
       },
     ],
   });

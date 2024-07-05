@@ -37,6 +37,11 @@ $(document).ready(function () {
           className: "uniqueClassName dt-head-center",
         },
         {
+          title: "Medida",
+          data: "abbreviation",
+          className: "uniqueClassName dt-head-center",
+        },
+        {
           title: "Existencia",
           data: null,
           className: "uniqueClassName dt-head-center",
@@ -50,11 +55,6 @@ $(document).ready(function () {
               }));
             return number;
           },
-        },
-        {
-          title: "Medida",
-          data: "abbreviation",
-          className: "uniqueClassName dt-head-center",
         },
         {
           title: "Reservado",
