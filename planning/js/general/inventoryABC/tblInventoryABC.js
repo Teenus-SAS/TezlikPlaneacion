@@ -6,11 +6,13 @@ $(document).ready(function () {
       $('#btnNewInventoryABC').show();
     }
 
-    loadTblInventory(data);
+    loadTblInventoryABC(data);
   };
 
+  visible = inventory_abc == '1' ? true : false;
+
   /* Cargue tabla de Categorias */
-  const loadTblInventory = (data) => {
+  const loadTblInventoryABC = (data) => {
     tblInventoryABC = $('#tblInventoryABC').dataTable({
       destroy: true,
       pageLength: 50,
@@ -54,6 +56,7 @@ $(document).ready(function () {
         {
           title: 'Acciones',
           data: 'id_inventory',
+          // visible: visible,
           className: 'uniqueClassName dt-head-center',
           render: function (data) {
             return `<a href="javascript:;" <i id="${data}" class="bx bx-edit-alt updateInventory" data-toggle='tooltip' title='Actualizar Inventario' style="font-size: 30px;"></i></a>`;

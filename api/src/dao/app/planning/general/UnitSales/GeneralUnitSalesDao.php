@@ -48,10 +48,24 @@ class GeneralUnitSalesDao
     {
         $connection = Connection::getInstance()->getConnection();
 
-        $stmt = $connection->prepare("SELECT * FROM sale_days WHERE id_company = :id_company");
+        $stmt = $connection->prepare("SELECT *, 'false' AS new FROM sale_days WHERE id_company = :id_company");
         $stmt->execute([
             'id_company' => $id_company
         ]);
+        $findSales = $stmt->fetchAll($connection::FETCH_ASSOC);
+        return $findSales;
+    }
+
+    public function findAllSaleDays()
+    {
+        $connection = Connection::getInstance()->getConnection();
+
+        $stmt = $connection->prepare("SELECT n AS id_sale_day, 0 days, n AS month, YEAR(CURDATE()) AS year, 'true' AS new
+                                      FROM (SELECT 1 AS n UNION ALL SELECT 2 UNION ALL SELECT 3 UNION ALL 
+                                            SELECT 4 UNION ALL SELECT 5 UNION ALL SELECT 6 UNION ALL 
+                                            SELECT 7 UNION ALL SELECT 8 UNION ALL SELECT 9 UNION ALL 
+                                            SELECT 10 UNION ALL SELECT 11 UNION ALL SELECT 12) AS numbers");
+        $stmt->execute();
         $findSales = $stmt->fetchAll($connection::FETCH_ASSOC);
         return $findSales;
     }

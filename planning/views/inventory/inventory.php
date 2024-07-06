@@ -168,6 +168,38 @@ if (sizeof($_SESSION) == 0)
                     </div>
                 </div>
 
+                <div class="page-content-wrapper mt--45 mb-5 cardInventoryABC">
+                    <div class="container-fluid">
+                        <div class="row">
+                            <div class="col-12">
+                                <form id="formInventoryABC">
+                                    <div class="card">
+                                        <div class="card-body pt-3">
+                                            <div class="form-row">
+                                                <div class="col-sm-2 floating-label enable-floating-label show-label" style="margin-bottom:10px!important">
+                                                    <input type="number" class="text-center form-control" name="a" id="a" max="100">
+                                                    <label for="">a</label>
+                                                </div>
+                                                <div class="col-sm-2 floating-label enable-floating-label show-label" style="margin-bottom:10px!important">
+                                                    <input type="number" class="text-center form-control" name="b" id="b" max="100">
+                                                    <label for="">b</label>
+                                                </div>
+                                                <div class="col-sm-2 floating-label enable-floating-label show-label" style="margin-bottom:10px!important">
+                                                    <input type="number" class="text-center form-control" name="c" id="c" max="100">
+                                                    <label for="">c</label>
+                                                </div>
+                                                <div class="col-xs-2" style="margin-top:7px">
+                                                    <button class="btn btn-success" id="btnSaveInventoryABC">Guardar</button>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
                 <!-- page content -->
                 <!-- <div class="page-content-wrapper mt--45">
                     <div class="container-fluid">
@@ -213,11 +245,27 @@ if (sizeof($_SESSION) == 0)
 
                             </div>
                         </div>
+                        <div class="row cardTblInventoryABC" style="display: none;">
+                            <div class="col-12">
+                                <div class="card">
+                                    <!-- <div class="card-header">
+                                        <h5 class="card-title">Dias Ventas por mes</h5>
+                                    </div> -->
+                                    <div class="card-body">
+                                        <div class="table-responsive">
+                                            <table class="fixed-table-loading table table-hover" id="tblInventoryABC">
+
+                                            </table>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
                         <div class="row">
                             <div class="col-12">
                                 <div class="card">
                                     <div class="card-body">
-                                        <!-- <div class="tab-content mt-4 pt-3" id="pills-tabContent"> -->
                                         <div class="tab-pane fade show active" role="tabpanel" aria-labelledby="pills-activity-tab">
                                             <div class="table-responsive">
                                                 <div class="table-responsive">
@@ -227,22 +275,12 @@ if (sizeof($_SESSION) == 0)
                                                 </div>
                                             </div>
                                         </div>
-                                        <!-- </div> -->
-                                        <!-- <div class="tab-pane fade" id="" role="tabpanel" aria-labelledby="pills-projects-tab">
-                                            <div class="table-responsive">
-                                                <table class="fixed-table-loading table table-hover" id="tblInventories">
-
-                                                </table>
-                                            </div>
-                                        </div> -->
                                     </div>
                                 </div>
                             </div>
                         </div>
                     </div>
                 </div>
-
-
             </div>
         </div>
         <!-- main content End -->
@@ -252,8 +290,11 @@ if (sizeof($_SESSION) == 0)
 
     <?php include_once dirname(dirname(dirname(__DIR__))) . '/global/partials/scriptsJS.php'; ?>
     <!-- <script src="/planning/js/users/usersAccess.js"></script> -->
-
-    <!-- <script src="/planning/js/general/category/configCategories.js"></script> -->
+    <script>
+        inventory_abc = "<? $_SESSION['inventory_abc'] ?>";
+    </script>
+    <script src="/planning/js/general/inventoryABC/tblinventoryABC.js"></script>
+    <script src="/planning/js/general/inventoryABC/inventoryABC.js"></script>
     <script src="../planning/js/inventory/tblInventory.js"></script>
     <script src="../planning/js/inventory/inventory.js"></script>
     <script src="../global/js/import/import.js"></script>

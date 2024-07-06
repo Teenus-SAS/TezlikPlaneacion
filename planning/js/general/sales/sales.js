@@ -204,7 +204,8 @@ $(document).ready(function () {
     let row = $(this).parent().parent()[0];
     let data = tblSalesDays.fnGetData(row);
 
-    sessionStorage.setItem('id_sale_day', data.id_sale_day);
+    if (data.new == 'false')
+      sessionStorage.setItem('id_sale_day', data.id_sale_day);
 
     $('#year').val(data.year);
     $(`#month option[value=${data.month}]`).prop('selected', true);
@@ -227,6 +228,15 @@ $(document).ready(function () {
 
     if (!data || data <= 0 || isNaN(data)) {
       toastr.error('Ingrese todos los campos');
+      return false;
+    }
+
+    let date = new Date();
+
+    let lastDay = getLastDayOfMonth(date.getFullYear(), month);
+
+    if (lastDay < days) {
+      toastr.error('Dia mayor a los dias totales del mes');
       return false;
     }
 

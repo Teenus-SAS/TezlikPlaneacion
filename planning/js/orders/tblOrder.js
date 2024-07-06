@@ -100,6 +100,18 @@ $(document).ready(function () {
           }
         },
         {
+          title: "Clasificación",
+          data: null,
+          className: "uniqueClassName dt-head-center",
+          visible: data["visible"],
+          render: function (data) {
+            if (data.classification == "A") badge = "badge-success";
+            else if (data.classification == "B") badge = "badge-info";
+            else badge = "badge-danger"; 
+            return `<span class="badge ${badge}" style="font-size: large;">${data.classification}</span>`; 
+          },
+        },
+        {
           title: 'Acciones',
           data: null,
           className: 'uniqueClassName dt-head-center',

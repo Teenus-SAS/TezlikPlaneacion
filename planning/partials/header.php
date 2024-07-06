@@ -138,17 +138,10 @@
                                                                     <i class="fas fa-balance-scale"></i>
                                                                     <a href="/planning/sales">Ventas Unidades</a>
                                                                     </li>
-                                                                    <?php //if ($_SESSION['sale'] == 1) { 
-                                                                    ?>
-                                                                    <!-- <li class="planSales"> -->
-                                                                    <?php //} else { 
-                                                                    ?>
-                                                                    <li class="inventoryABC">
-                                                                        <?php //} 
-                                                                        ?>
+                                                                    <!-- <li class="inventoryABC">
                                                                         <i class="fas fa-clipboard-list"></i>
                                                                         <a href="/planning/inventoryABC">Inventario ABC</a>
-                                                                    </li>
+                                                                    </li> -->
                                                         </ul>
                                                         </div>
 

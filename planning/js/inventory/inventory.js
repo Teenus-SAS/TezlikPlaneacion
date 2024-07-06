@@ -8,7 +8,17 @@ $(document).ready(function () {
   $('#btnInvetoryABC').click(function (e) {
     e.preventDefault();
     $('.cardImportInventory').hide(800);
+    $('.cardInventoryABC').hide(800);
     $('.cardAddMonths').toggle(800);
+
+    let display = $('.cardAddMonths').css('display');
+
+    if(display == 'block') 
+      $('.cardTblInventoryABC').show(800);
+    else{
+      $('.cardTblInventoryABC').hide(800);
+      $('.cardInventoryABC').hide(800);
+    }
 
     $('#formAddMonths').trigger('reset');
   });

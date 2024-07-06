@@ -135,13 +135,40 @@ $(document).ready(function () {
 
           permissions.push({
             name: "Ventas",
-            icon: data.sales
+            icon: data.sale
               ? "bi bi-check-circle-fill text-success"
               : "bi bi-x-circle-fill text-danger",
             //color: {
             //text: data.sales ? "text-danger" : "text-danger", // Aplica color según el valor de data.inventory
             //},
           });
+          
+          permissions.push({
+            name: "Inventario ABC",
+            icon: data.inventory_abc
+              ? "bi bi-check-circle-fill text-success"
+              : "bi bi-x-circle-fill text-danger",
+            color: { text: "black" },
+          }); 
+
+          let output = '<div class="stacked-column">';
+          for (const permission of permissions) {
+            output += `<span class="text-${permission.color} mx-1">
+            <i class="${permission.icon}"></i> ${permission.name}
+          </span>`;
+          }
+          output += "</div>";
+
+          return output;
+        },
+      },
+      {
+        title: "Administrador",
+        data: null,
+        width: "100px",
+        render: function (data, type, row) {
+          const permissions = []; 
+
           permissions.push({
             name: "Usuarios",
             icon: data.user

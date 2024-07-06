@@ -86,6 +86,8 @@ if (sizeof($_SESSION) == 0)
                                                         <select class="form-control input" id="selectNameProduct" name="idProduct"></select>
                                                         <select class="form-control" id="refProduct" style="display:none"></select>
                                                     </div>
+                                                    <div class="col-sm-1" id="classification" style="display: flex; flex-direction: column; align-items: center;">
+                                                    </div>
                                                     <div class="col-sm-1 floating-label enable-floating-label show-label">
                                                         <label for="">Cant Pedido</label>
                                                         <input type="text" class="form-control text-center" id="quantityOrder" name="quantityOrder" readonly>

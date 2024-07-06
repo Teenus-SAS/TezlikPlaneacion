@@ -603,8 +603,19 @@ $app->get('/saleDays', function (Request $request, Response $response, $args) us
     $id_company = $_SESSION['id_company'];
 
     $saleDays = $generalUnitSalesDao->findSaleDaysByCompany($id_company);
+    $allSD = $generalUnitSalesDao->findAllSaleDays();
 
-    $response->getBody()->write(json_encode($saleDays, JSON_NUMERIC_CHECK));
+    for ($i = 0; $i < sizeof($saleDays); $i++) {
+        for ($j = 0; $j < sizeof($allSD); $j++) {
+            if ($saleDays[$i]['month'] == $allSD[$j]['month']) {
+                $allSD[$j]['id_sale_day'] = $saleDays[$i]['id_sale_day'];
+                $allSD[$j]['days'] = $saleDays[$i]['days'];
+                $allSD[$j]['new'] = 'false';
+            }
+        }
+    }
+
+    $response->getBody()->write(json_encode($allSD, JSON_NUMERIC_CHECK));
     return $response->withHeader('Content-Type', 'application/json');
 });
 

@@ -97,14 +97,13 @@ $(document).ready(function () {
       programsMachine: data.programs_machine,
       ciclesMachine: data.cicles_machine, 
       stock: data.stock,
-      sale: data.sale,
       client: data.client,
-      plannigUser: data.user,
-      ordersType: data.orders_type,
+      sale: data.sale,
+      inventoryABC: data.inventory_abc,
+      plannigUser: data.user, 
       inventory: data.inventory,
       order: data.plan_order,
-      program: data.program,
-      load: data.plan_load,
+      program: data.program, 
       explosionOfMaterial: data.explosion_of_material,
       productionOrder: data.production_order,
       office: data.office,
@@ -112,7 +111,7 @@ $(document).ready(function () {
     };
 
     $.each(access, (index, value) => {
-      if (value === 1) {
+      if (value == 1) {
         $(`#checkbox-${i}`).prop('checked', true);
       } else $(`#checkbox-${i}`).prop('checked', false);
       i++;
@@ -160,14 +159,13 @@ $(document).ready(function () {
       programsMachine: 0,
       ciclesMachine: 0,
       stock: 0,
+      inventoryABC: 0,
       sale: 0,
       client: 0,
-      plannigUser: 0,
-      ordersType: 0,
+      plannigUser: 0, 
       inventory: 0,
       order: 0,
-      program: 0,
-      load: 0,
+      program: 0, 
       explosionOfMaterial: 0,
       productionOrder: 0,
       office: 0,

@@ -26,6 +26,8 @@ $(document).ready(function () {
   /* Actualizar categoria */
   $(document).on('click', '.updateInventory', function (e) {
     $('.cardInventoryABC').show(800);
+    $('.cardImportInventory').hide(800);
+    $('.cardAddMonths').hide(800);
     $('#btnSaveInventoryABC').html('Actualizar');
 
     let row = $(this).parent().parent()[0];
@@ -45,11 +47,11 @@ $(document).ready(function () {
   });
 
   const checkDataInventory = async (url, idInventory) => {
-    let a = $('#a').val();
-    let b = $('#b').val();
-    let c = $('#c').val();
+    let a = parseInt($('#a').val());
+    let b = parseInt($('#b').val());
+    let c = parseInt($('#c').val());
 
-    let arr = a * b * c;
+    let arr = a * b;
 
     if (!arr || isNaN(arr) || arr <= 0) {
       toastr.error('Ingrese todos los campos');
@@ -58,6 +60,11 @@ $(document).ready(function () {
 
     if (a > 100 || b > 100 || c > 100) {
       toastr.error('El procentaje debe ser menor a 100');
+      return false;
+    } 
+
+    if (a < b || a < c || b < c) {
+      toastr.error('Verificar que los valores B y C no sean mayores a A');
       return false;
     }
 

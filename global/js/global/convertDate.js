@@ -46,4 +46,8 @@ $(document).ready(function () {
 
         return `${year}-${month}-${day}`;
     }
+
+    getLastDayOfMonth = (year, month) => {
+        return new Date(year, month, 0).getDate();
+    };
 });

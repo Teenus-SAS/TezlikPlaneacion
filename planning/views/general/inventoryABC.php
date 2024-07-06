@@ -101,9 +101,6 @@ if (sizeof($_SESSION) == 0)
                         <div class="row">
                             <div class="col-12">
                                 <div class="card">
-                                    <!-- <div class="card-header">
-                                        <h5 class="card-title">Unidades Vendidas</h5>
-                                    </div> -->
                                     <div class="card-body">
                                         <div class="table-responsive">
                                             <table class="fixed-table-loading table-hover" id="tblInventoryABC">
@@ -124,8 +121,9 @@ if (sizeof($_SESSION) == 0)
     </div>
 
     <?php include_once dirname(dirname(dirname(__DIR__))) . '/global/partials/scriptsJS.php'; ?>
-    <!-- <script src="/planning/js/users/usersAccess.js"></script> -->
-
+    <script>
+        inventory_abc = "<? $_SESSION['inventory_abc'] ?>";
+    </script>
     <script src="/planning/js/general/inventoryABC/tblinventoryABC.js"></script>
     <script src="/planning/js/general/inventoryABC/inventoryABC.js"></script>
 </body>
