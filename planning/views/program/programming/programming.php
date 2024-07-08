@@ -78,26 +78,26 @@ if (sizeof($_SESSION) == 0)
                                                 <div class="row mt-3">
                                                     <div class="col-sm-2 programmingSelect floating-label enable-floating-label show-label" id="orders">
                                                         <label for="">No. Pedido</label>
-                                                        <select class="form-control" id="order" name="order">
+                                                        <select class="form-control text-center" id="order" name="order">
                                                         </select>
                                                     </div>
-                                                    <div class="col-sm-4 programmingSelect floating-label enable-floating-label show-label" id="products">
+                                                    <div class="col-sm-9 programmingSelect floating-label enable-floating-label show-label" id="products">
                                                         <label for="">Producto</label>
                                                         <select class="form-control input" id="selectNameProduct" name="idProduct"></select>
                                                         <select class="form-control" id="refProduct" style="display:none"></select>
                                                     </div>
                                                     <div class="col-sm-1" id="classification" style="display: flex; flex-direction: column; align-items: center;">
                                                     </div>
-                                                    <div class="col-sm-1 floating-label enable-floating-label show-label">
+                                                    <div class="col-sm-2 floating-label enable-floating-label show-label">
                                                         <label for="">Cant Pedido</label>
                                                         <input type="text" class="form-control text-center" id="quantityOrder" name="quantityOrder" readonly>
                                                     </div>
-                                                    <div class="col-sm-1 floating-label enable-floating-label show-label">
-                                                        <label for="">Pendiente</label>
+                                                    <div class="col-sm-2 floating-label enable-floating-label show-label">
+                                                        <label for="">Pendiente Fabricar</label>
                                                         <input type="text" class="form-control text-center" id="quantityMissing" name="quantityMissing" readonly>
                                                     </div>
                                                     <div class="col-sm-2 floating-label enable-floating-label show-label">
-                                                        <label for="">Inv MP</label>
+                                                        <label for="">Cantidad MP</label>
                                                         <input type="text" class="form-control text-center" id="quantityMP" name="quantityMP" readonly>
                                                     </div>
 
