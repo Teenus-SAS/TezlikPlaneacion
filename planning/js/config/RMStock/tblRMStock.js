@@ -35,6 +35,11 @@ $(document).ready(function () {
         className: "uniqueClassName dt-head-center",
       },
       {
+        title: "Plazo Min",
+        data: "min_term",
+        className: "uniqueClassName dt-head-center",
+      },
+      {
         title: "Plazo Max",
         data: "max_term",
         className: "uniqueClassName dt-head-center",
@@ -42,6 +47,13 @@ $(document).ready(function () {
       {
         title: "Plazo Habitual",
         data: "usual_term",
+        className: "uniqueClassName dt-head-center",
+      },
+      {
+        title: "Tiempo Promedio",
+        data: function (data) {
+          return parseFloat(data.max_term) - parseFloat(data.min_term);
+        },
         className: "uniqueClassName dt-head-center",
       },
       {

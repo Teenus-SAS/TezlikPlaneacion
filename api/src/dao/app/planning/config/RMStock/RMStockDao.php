@@ -20,7 +20,7 @@ class RMStockDao
     {
         $connection = Connection::getInstance()->getConnection();
         $stmt = $connection->prepare("SELECT s.id_stock_material, s.id_material, m.reference, m.material, IFNULL(s.id_provider, 0) AS id_provider, 
-                                             IFNULL(c.client, '') AS client, m.unit, m.quantity, s.max_term, s.usual_term
+                                             IFNULL(c.client, '') AS client, m.unit, m.quantity, s.min_term, s.max_term, s.usual_term
                                       FROM stock_materials s
                                         INNER JOIN materials m ON m.id_material = s.id_material
                                         LEFT JOIN plan_clients c ON c.id_client = s.id_provider
@@ -39,12 +39,13 @@ class RMStockDao
         $connection = Connection::getInstance()->getConnection();
 
         try {
-            $stmt = $connection->prepare("INSERT INTO stock_materials (id_company, id_material, id_provider, max_term, usual_term) 
-                                          VALUES (:id_company, :id_material, :id_provider, :max_term, :usual_term)");
+            $stmt = $connection->prepare("INSERT INTO stock_materials (id_company, id_material, id_provider, min_term, max_term, usual_term) 
+                                          VALUES (:id_company, :id_material, :id_provider, :min_term, :max_term, :usual_term)");
             $stmt->execute([
                 'id_company' => $id_company,
                 'id_material' => $dataStock['idMaterial'],
                 'id_provider' => $dataStock['idProvider'],
+                'min_term' => $dataStock['min'],
                 'max_term' => $dataStock['max'],
                 'usual_term' => $dataStock['usual']
             ]);
@@ -61,12 +62,13 @@ class RMStockDao
         $connection = Connection::getInstance()->getConnection();
 
         try {
-            $stmt = $connection->prepare("UPDATE stock_materials SET id_material = :id_material, id_provider = :id_provider, max_term = :max_term, usual_term = :usual_term 
+            $stmt = $connection->prepare("UPDATE stock_materials SET id_material = :id_material, id_provider = :id_provider, min_term = :min_term, max_term = :max_term, usual_term = :usual_term 
                                           WHERE id_stock_material = :id_stock_material");
             $stmt->execute([
                 'id_stock_material' => $dataStock['idStock'],
                 'id_material' => $dataStock['idMaterial'],
                 'id_provider' => $dataStock['idProvider'],
+                'min_term' => $dataStock['min'],
                 'max_term' => $dataStock['max'],
                 'usual_term' => $dataStock['usual']
             ]);

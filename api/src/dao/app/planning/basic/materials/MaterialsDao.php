@@ -24,7 +24,7 @@ class MaterialsDao
                                   FROM materials m
                                     INNER JOIN convert_units u ON u.id_unit = m.unit
                                     INNER JOIN convert_magnitudes mg ON mg.id_magnitude = u.id_magnitude 
-                                  WHERE m.id_company = :id_company ORDER BY m.material ASC");
+                                  WHERE m.id_company = :id_company ORDER BY m.reference ASC");
     $stmt->execute(['id_company' => $id_company]);
 
     $this->logger->info(__FUNCTION__, array('query' => $stmt->queryString, 'errors' => $stmt->errorInfo()));

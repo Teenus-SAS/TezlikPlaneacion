@@ -159,6 +159,11 @@ if (sizeof($_SESSION) == 0)
                                                     <label for="">Provedoores</label>
                                                     <select class="form-control" name="idProvider" id="client"></select>
                                                 </div>
+                                                <div class="w-100"></div>
+                                                <div class="col-xs-1 floating-label enable-floating-label show-label" style="margin-bottom:0px">
+                                                    <label for="">Plazo Min</label>
+                                                    <input type="number" class="form-control text-center" id="rMMin" name="min">
+                                                </div>
                                                 <div class="col-xs-1 floating-label enable-floating-label show-label" style="margin-bottom:0px">
                                                     <label for="">Plazo Max</label>
                                                     <input type="number" class="form-control text-center" id="rMMax" name="max">

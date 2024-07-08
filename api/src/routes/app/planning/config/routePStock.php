@@ -130,18 +130,11 @@ $app->post('/addPStock', function (Request $request, Response $response, $args) 
             //         $resolution = $generalMaterialsDao->updateStockMaterial($dataStock['idMaterial'], $arr['stock']);
             // }
 
-            // if ($resolution == null) {
-            //     $products = $generalProductsMaterialsDao->findAllProductByMaterial($dataStock['idMaterial']);
-
-            //     foreach ($products as $arr) {
-            //         $product = $minimumStockDao->calcStockByProduct($arr['id_product']);
-            //         if (isset($product['stock']))
-            //             $resolution = $generalProductsDao->updateStockByProduct($arr['id_product'], $product['stock']);
-
-            //         if (isset($resolution['info'])) break;
-            //     }
-            // }
-
+            if ($resolution == null) {
+                $arr = $minimumStockDao->calcStockByProduct($dataStock['idProduct']);
+                if (isset($arr['stock']))
+                    $resolution = $generalProductsDao->updateStockByProduct($dataStock['idProduct'], $arr['stock']);
+            }
 
             if ($resolution == null)
                 $resp = array('success' => true, 'message' => 'Stock creado correctamente');
@@ -170,22 +163,11 @@ $app->post('/addPStock', function (Request $request, Response $response, $args) 
                 $resolution = $stockDao->updateStock($stock[$i]);
             }
 
-            // if (isset($resolution['info'])) break;
-            // $arr = $minimumStockDao->calcStockByMaterial($stock[$i]['idMaterial']);
-            // if (isset($arr['stock']))
-            //     $resolution = $generalMaterialsDao->updateStockMaterial($stock[$i]['idMaterial'], $arr['stock']);
+            if (isset($resolution['info'])) break;
 
-            // if (isset($resolution['info'])) break;
-
-            // $products = $generalProductsMaterialsDao->findAllProductByMaterial($stock[$i]['idMaterial']);
-
-            // foreach ($products as $arr) {
-            //     $product = $minimumStockDao->calcStockByProduct($arr['id_product']);
-            //     if (isset($product['stock']))
-            //         $resolution = $generalProductsDao->updateStockByProduct($arr['id_product'], $product['stock']);
-
-            //     if (isset($resolution['info'])) break;
-            // }
+            $arr = $minimumStockDao->calcStockByProduct($stock[$i]['idProduct']);
+            if (isset($arr['stock']))
+                $resolution = $generalProductsDao->updateStockByProduct($stock[$i]['idProduct'], $arr['stock']);
         }
 
         if ($resolution == null)
@@ -216,23 +198,11 @@ $app->post('/updatePStock', function (Request $request, Response $response, $arg
     if ($data['id_stock_product'] == $dataStock['idStock'] || $data['id_stock_product'] == 0) {
         $resolution = $stockDao->updateStock($dataStock);
 
-        // if ($resolution == null) {
-        //     $arr = $minimumStockDao->calcStockByMaterial($dataStock['idMaterial']);
-        //     if (isset($arr['stock']))
-        //         $resolution = $generalMaterialsDao->updateStockMaterial($dataStock['idMaterial'], $arr['stock']);
-        // }
-
-        // if ($resolution == null) {
-        //     $products = $generalProductsMaterialsDao->findAllProductByMaterial($dataStock['idMaterial']);
-
-        //     foreach ($products as $arr) {
-        //         $product = $minimumStockDao->calcStockByProduct($arr['id_product']);
-        //         if (isset($product['stock']))
-        //             $resolution = $generalProductsDao->updateStockByProduct($arr['id_product'], $product['stock']);
-
-        //         if (isset($resolution['info'])) break;
-        //     }
-        // }
+        if ($resolution == null) {
+            $arr = $minimumStockDao->calcStockByProduct($dataStock['idProduct']);
+            if (isset($arr['stock']))
+                $resolution = $generalProductsDao->updateStockByProduct($dataStock['idProduct'], $arr['stock']);
+        }
 
         if ($resolution == null)
             $resp = array('success' => true, 'message' => 'Stock actualizado correctamente');

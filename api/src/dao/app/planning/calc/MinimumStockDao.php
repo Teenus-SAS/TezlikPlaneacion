@@ -41,10 +41,48 @@ class MinimumStockDao
     {
         try {
             $connection = Connection::getInstance()->getConnection();
-            $stmt = $connection->prepare("SELECT SUM(IFNULL(m.minimum_stock, 0) * IFNULL(pm.quantity, 0)) AS stock
-                                          FROM products_materials pm
-                                          LEFT JOIN materials m ON m.id_material = pm.id_material
-                                          WHERE pm.id_product = :id_product");
+            $stmt = $connection->prepare("SELECT 
+                                            (
+                                                IFNULL(s.max_term, 0) - IFNULL(s.usual_term, 0)
+                                            ) * 
+                                            (
+                                                (
+                                                    (
+                                                        IFNULL(us.jan, 0) + 
+                                                        IFNULL(us.feb, 0) + 
+                                                        IFNULL(us.mar, 0) + 
+                                                        IFNULL(us.apr, 0) + 
+                                                        IFNULL(us.may, 0) + 
+                                                        IFNULL(us.jun, 0) + 
+                                                        IFNULL(us.jul, 0) + 
+                                                        IFNULL(us.aug, 0) + 
+                                                        IFNULL(us.sept, 0) + 
+                                                        IFNULL(us.oct, 0) + 
+                                                        IFNULL(us.nov, 0) + 
+                                                        IFNULL(us.dece, 0)
+                                                    ) / 
+                                                    NULLIF
+                                                    (
+                                                        (us.jan > 0) + 
+                                                        (us.feb > 0) + 
+                                                        (us.mar > 0) + 
+                                                        (us.apr > 0) + 
+                                                        (us.may > 0) + 
+                                                        (us.jun > 0) + 
+                                                        (us.jul > 0) + 
+                                                        (us.aug > 0) + 
+                                                        (us.sept > 0) + 
+                                                        (us.oct > 0) +
+                                                        (us.nov > 0) + 
+                                                        (us.dece > 0)
+                                                    , 0)
+                                                )
+                                            ) AS stock, 
+                                            pi.quantity
+                                          FROM plan_unit_sales us
+                                          LEFT JOIN stock_products s ON s.id_product = us.id_product 
+                                          INNER JOIN products_inventory pi ON pi.id_product = us.id_product
+                                          WHERE us.id_product = :id_product;");
             $stmt->execute(['id_product' => $id_product]);
             $product = $stmt->fetch($connection::FETCH_ASSOC);
             return $product;
@@ -58,8 +96,50 @@ class MinimumStockDao
     {
         try {
             $connection = Connection::getInstance()->getConnection();
-            $stmt = $connection->prepare("SELECT SUM((IFNULL(s.max_term, 0) - IFNULL(s.usual_term, 0)) * (((IFNULL(u.jan, 0) + IFNULL(u.feb, 0) + IFNULL(u.mar, 0) + IFNULL(u.apr, 0) + IFNULL(u.may, 0) + IFNULL(u.jun, 0) + IFNULL(u.jul, 0) + IFNULL(u.aug, 0) + IFNULL(u.sept, 0) + IFNULL(u.oct, 0) + IFNULL(u.nov, 0) + IFNULL(u.dece, 0)) / 
-                                                 NULLIF((u.jan > 0) + (u.feb > 0) + (u.mar > 0) + (u.apr > 0) + (u.may > 0) + (u.jun > 0) + (u.jul > 0) + (u.aug > 0) + (u.sept > 0) + (u.oct > 0) + (u.nov > 0) + (u.dece > 0), 0))/ 12) * pm.quantity) AS stock  
+            // $stmt = $connection->prepare("SELECT SUM((IFNULL(s.max_term, 0) - IFNULL(s.usual_term, 0)) * (((IFNULL(u.jan, 0) + IFNULL(u.feb, 0) + IFNULL(u.mar, 0) + IFNULL(u.apr, 0) + IFNULL(u.may, 0) + IFNULL(u.jun, 0) + IFNULL(u.jul, 0) + IFNULL(u.aug, 0) + IFNULL(u.sept, 0) + IFNULL(u.oct, 0) + IFNULL(u.nov, 0) + IFNULL(u.dece, 0)) / 
+            //                                      NULLIF((u.jan > 0) + (u.feb > 0) + (u.mar > 0) + (u.apr > 0) + (u.may > 0) + (u.jun > 0) + (u.jul > 0) + (u.aug > 0) + (u.sept > 0) + (u.oct > 0) + (u.nov > 0) + (u.dece > 0), 0))/ 12) * pm.quantity) AS stock  
+            //                               FROM products_materials pm
+            //                               LEFT JOIN stock_materials s ON s.id_material = pm.id_material
+            //                               LEFT JOIN plan_unit_sales u ON u.id_product = pm.id_product
+            //                               WHERE pm.id_material = :id_material");
+            $stmt = $connection->prepare("SELECT 
+                                            SUM(
+                                                (  
+                                                    IFNULL(s.max_term, 0) - IFNULL(s.usual_term, 0)
+                                                ) * 
+                                                (
+                                                    (
+                                                        (
+                                                            IFNULL(u.jan, 0) + 
+                                                            IFNULL(u.feb, 0) + 
+                                                            IFNULL(u.mar, 0) + 
+                                                            IFNULL(u.apr, 0) + 
+                                                            IFNULL(u.may, 0) + 
+                                                            IFNULL(u.jun, 0) + 
+                                                            IFNULL(u.jul, 0) + 
+                                                            IFNULL(u.aug, 0) + 
+                                                            IFNULL(u.sept, 0) + 
+                                                            IFNULL(u.oct, 0) + 
+                                                            IFNULL(u.nov, 0) + 
+                                                            IFNULL(u.dece, 0)
+                                                        ) / 
+                                                        NULLIF (
+                                                            (u.jan > 0) + 
+                                                            (u.feb > 0) + 
+                                                            (u.mar > 0) + 
+                                                            (u.apr > 0) + 
+                                                            (u.may > 0) + 
+                                                            (u.jun > 0) + 
+                                                            (u.jul > 0) + 
+                                                            (u.aug > 0) + 
+                                                            (u.sept > 0) + 
+                                                            (u.oct > 0) +
+                                                            (u.nov > 0) + 
+                                                            (u.dece > 0)
+                                                        , 0)
+                                                    )
+                                                ) * pm.quantity
+                                            ) AS stock  
                                           FROM products_materials pm
                                           LEFT JOIN stock_materials s ON s.id_material = pm.id_material
                                           LEFT JOIN plan_unit_sales u ON u.id_product = pm.id_product

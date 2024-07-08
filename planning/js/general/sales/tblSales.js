@@ -60,13 +60,13 @@ $(document).ready(function () {
       },
       {
         title: 'Promedio Diario',
-        data: 'average',
+        data: 'average_day',
         className: 'uniqueClassName dt-head-center',
         render: $.fn.dataTable.render.number('.', ',', 0, ''),
       },
       {
         title: 'Promedio Mensual',
-        data: 'average',
+        data: 'average_month',
         className: 'uniqueClassName dt-head-center',
         render: $.fn.dataTable.render.number('.', ',', 0, ''),
       },

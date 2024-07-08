@@ -38,7 +38,7 @@ $(document).ready(function () {
 
     importFile(selectedFile)
       .then((data) => {
-        const expectedHeaders = ['referencia_material', 'material', 'proveedor', 'plazo_maximo', 'plazo_habitual'];
+        const expectedHeaders = ['referencia_material', 'material', 'proveedor', 'plazo_minimo', 'plazo_maximo', 'plazo_habitual'];
         const actualHeaders = Object.keys(data[0]);
 
         const missingHeaders = expectedHeaders.filter(header => !actualHeaders.includes(header));
@@ -56,6 +56,7 @@ $(document).ready(function () {
             refRawMaterial: item.referencia_material,
             nameRawMaterial: item.material,
             client: item.proveedor,
+            min: item.plazo_minimo,
             max: item.plazo_maximo,
             usual: item.plazo_habitual,
           };
@@ -161,6 +162,7 @@ $(document).ready(function () {
           referencia_material: stock[i].reference,
           material: stock[i].material,
           proveedor: stock[i].client,
+          plazo_minimo: parseFloat(stock[i].min_term),
           plazo_maximo: parseFloat(stock[i].max_term),
           plazo_habitual: parseFloat(stock[i].usual_term),
         });

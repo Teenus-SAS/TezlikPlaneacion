@@ -68,6 +68,7 @@ $(document).ready(function () {
         sessionStorage.setItem('idStock', data.id_stock_material);
         $(`#material option[value=${data.id_material}]`).prop('selected', true);
         $(`#client option[value=${data.id_provider}]`).prop('selected', true);
+        $('#rMMin').val(data.min_term);
         $('#rMMax').val(data.max_term);
         $('#rMUsual').val(data.usual_term);
 
@@ -82,10 +83,11 @@ $(document).ready(function () {
     const checkDataRMStock = async (url, idStock) => {
         let material = parseFloat($('#material').val());
         let provider = parseFloat($('#client').val());
+        let min = parseFloat($('#rMMin').val());
         let max = parseFloat($('#rMMax').val());
         let usual = parseFloat($('#rMUsual').val());
 
-        let data = material * provider * max * usual;
+        let data = material * provider * min * max * usual;
 
         if (isNaN(data) || data <= 0) {
             toastr.error('Ingrese todos los campos');
