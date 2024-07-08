@@ -59,13 +59,13 @@ $(document).ready(function () {
         className: 'uniqueClassName dt-head-center',
       },
       {
-        title: 'Promedio Diario',
+        title: 'Promedio Mensual',
         data: 'average',
         className: 'uniqueClassName dt-head-center',
         render: $.fn.dataTable.render.number('.', ',', 0, ''),
       },
       {
-        title: 'Promedio Mensual',
+        title: 'Promedio Diario',
         data: 'average',
         className: 'uniqueClassName dt-head-center',
         render: $.fn.dataTable.render.number('.', ',', 0, ''),
