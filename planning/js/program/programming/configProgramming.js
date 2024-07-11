@@ -483,8 +483,8 @@ $(document).ready(function () {
       
       let product = productOrders.find(item => item.id_product == this.value);
 
-      if (data.classification == "A") badge = "badge-success";
-      else if (data.classification == "B") badge = "badge-info";
+      if (product.classification === "A") badge = "badge-success";
+      else if (product.classification === "B") badge = "badge-info";
       else badge = "badge-danger";
 
       $('#classification').html(`Clasificación<span class="badge ${badge}" style="font-size: large;">${product.classification}</span>`);

@@ -1,15 +1,19 @@
 $(document).ready(function () {
   loadAllData = async () => {
     let data = await searchData('/api/inventoryABC');
+    sessionStorage.setItem('dataInventoryABC', JSON.stringify(data));
 
     if (data.length == 0) {
       $('#btnNewInventoryABC').show();
+    } else {
+      $('#a').val(data[0].a);
+      $('#b').val(data[0].b);
+      $('#c').val(data[0].c);
     }
-
-    loadTblInventoryABC(data);
+    // loadTblInventoryABC(data);
   };
 
-  visible = inventory_abc == '1' ? true : false;
+  // visible = inventory_abc == '1' ? true : false;
 
   /* Cargue tabla de Categorias */
   const loadTblInventoryABC = (data) => {

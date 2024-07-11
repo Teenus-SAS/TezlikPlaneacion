@@ -236,6 +236,82 @@ $('#btnCloseClient').click(function (e) {
     
   });
 
+  // Clonar cliente
+  $(document).on('click','.copyClient', function () {
+    let data = JSON.parse(sessionStorage.getItem('dataClients'));
+    let options = '';
+
+    for (let i = 0; i < data.length; i++) {
+      options += `<option value="${data[i].id_client}">${data[i].client}</option>`;     
+    }
+
+    bootbox.confirm({
+      size: 'large',
+      title: 'Clonar Cliente',
+      message: `<div class="row">
+                  <div class="col-6">
+                    <label for="">Cliente</label>
+                    <select class="form-control" id="SCClient">
+                      <option disabled selected value="0">Seleccionar</option>
+                      ${options}
+                    </select>
+                  </div>
+                  <div class="col-6">
+                    <label for="">Tipo</label>
+                    <select class="form-control" id="SType">
+                      <option disabled selected value="0">Seleccionar</option>
+                      <option value="1">CLIENTE</option>
+                      <option value="2">PROVEEDOR</option>
+                    </select>
+                  </div>
+                </div>`,
+      buttons: {
+        confirm: {
+          label: 'Ok',
+          className: 'btn-success',
+        },
+        cancel: {
+          label: 'Cancel',
+          className: 'btn-danger',
+        },
+      },
+      callback: function (result) {
+        if (result == true) {
+          let SCClient = $('#SCClient').val();
+          let SType = $('#SType').val();
+
+          if (!SType || SType == '0' || !SCClient || SCClient == '0') {
+            toastr.error('Seleccione datos');
+            return false;
+          }
+
+          let client = data.find(item => item.id_client == SCClient);
+
+          // if (client.type_client == SType) {
+          //   toastr.error('Tipo cliente ya existente en ese cliente');
+          //   return false;
+          // }
+
+          let dataClient = {};
+          dataClient['nit'] = client.nit;
+          dataClient['client'] = client.client;
+          dataClient['address'] = client.address;
+          dataClient['phone'] = client.phone;
+          dataClient['city'] = client.city;
+          dataClient['type'] = SType;
+
+          $.post(
+            '/api/copyClient',
+            dataClient,
+            function (data, textStatus, jqXHR) {
+              message(data);
+            }
+          );
+        }
+      },
+    });
+  });
+
   /* Mensaje de exito */
 
   message = (data) => {
@@ -243,17 +319,10 @@ $('#btnCloseClient').click(function (e) {
       $('.cardImportClients').hide(800);
       $('#formImportClients').trigger('reset');
       $('#formCreateClient').trigger('reset');
-      updateTable();
+      loadAllDataClients();
       toastr.success(data.message);
       return false;
     } else if (data.error == true) toastr.error(data.message);
     else if (data.info == true) toastr.info(data.message);
   };
-
-  /* Actualizar tabla */
-
-  function updateTable() {
-    $('#tblClients').DataTable().clear();
-    $('#tblClients').DataTable().ajax.reload();
-  }
 });

@@ -141,14 +141,6 @@ $(document).ready(function () {
             //color: {
             //text: data.sales ? "text-danger" : "text-danger", // Aplica color según el valor de data.inventory
             //},
-          });
-          
-          permissions.push({
-            name: "Inventario ABC",
-            icon: data.inventory_abc
-              ? "bi bi-check-circle-fill text-success"
-              : "bi bi-x-circle-fill text-danger",
-            color: { text: "black" },
           }); 
 
           let output = '<div class="stacked-column">';
@@ -204,6 +196,15 @@ $(document).ready(function () {
               text: data.inventory ? "green" : "red",
             },
           });
+
+          permissions.push({
+            name: "Inventario ABC",
+            icon: data.inventory_abc
+              ? "bi bi-check-circle-fill text-success"
+              : "bi bi-x-circle-fill text-danger",
+            color: { text: "black" },
+          }); 
+
           permissions.push({
             name: "Pedidos",
             icon: data.plan_order

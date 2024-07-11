@@ -93,7 +93,6 @@ $(document).ready(function () {
         bootbox.confirm({
           title: '¿Desea continuar con la importación?',
           message: `Se han encontrado los siguientes registros:<br><br>Datos a insertar: ${resp.insert}`,
-          // message: `Se han encontrado los siguientes registros:<br><br>Datos a insertar: ${resp.insert} <br>Datos a actualizar: ${resp.update}`,
           buttons: {
             confirm: {
               label: 'Si',
@@ -109,8 +108,8 @@ $(document).ready(function () {
               saveMachineTable(data);
             } else {
               $('.cardLoading').remove();
-        $('.cardBottons').show(400);
-        $('#fileRequisitions').val('');
+              $('.cardBottons').show(400);
+              $('#fileRequisitions').val('');
             }
           },
         });

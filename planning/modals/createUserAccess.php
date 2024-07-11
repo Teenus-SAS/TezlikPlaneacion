@@ -72,7 +72,7 @@
                                                     <label for="checkbox-6">Programación Maquina</label>
                                                 </div>
                                                 <div class="checkbox checkbox-success checkbox-circle">
-                                                    <input id="checkbox-7" name="programsMachine" type="checkbox">
+                                                    <input id="checkbox-7" name="ciclesMachine" type="checkbox">
                                                     <label for="checkbox-7">Plan Ciclos Maquina</label>
                                                 </div>
                                                 <div class="checkbox checkbox-success checkbox-circle">
@@ -89,15 +89,11 @@
                                                     <input id="checkbox-10" name="sale" type="checkbox">
                                                     <label for="checkbox-10">Ventas</label>
                                                 </div>
-                                                <div class="checkbox checkbox-success checkbox-circle">
-                                                    <input id="checkbox-11" name="inventoryABC" type="checkbox">
-                                                    <label for="checkbox-11">Inventario ABC</label>
-                                                </div>
                                             </div>
                                             <div class="col-sm-2 pb-2">Administrador
                                                 <div class="mt-1 checkbox checkbox-success checkbox-circle">
-                                                    <input id="checkbox-12" name="plannigUser" type="checkbox">
-                                                    <label for="checkbox-12">Usuarios</label>
+                                                    <input id="checkbox-11" name="plannigUser" type="checkbox">
+                                                    <label for="checkbox-11">Usuarios</label>
                                                 </div>
                                             </div>
                                             <div class="col-12 col-lg-12 mt-2">
@@ -105,8 +101,14 @@
                                             </div>
                                             <div class="col-sm-4">
                                                 <div class="checkbox checkbox-success checkbox-circle">
-                                                    <input id="checkbox-13" name="inventory" type="checkbox">
-                                                    <label for="checkbox-13">Inventarios</label>
+                                                    <input id="checkbox-12" name="inventory" type="checkbox">
+                                                    <label for="checkbox-12">Inventarios</label>
+                                                </div>
+                                            </div>
+                                            <div class="col-sm-4">
+                                                <div class="checkbox checkbox-success checkbox-circle">
+                                                    <input id="checkbox-13" name="inventoryABC" type="checkbox">
+                                                    <label for="checkbox-13">Inventario ABC</label>
                                                 </div>
                                             </div>
                                             <div class="col-sm-4">

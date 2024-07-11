@@ -150,7 +150,7 @@ $(document).ready(function () {
         $('.cardBottons').show(400);
         $('#fileInventory').val('');
 
-        message(r);
+        messageInventory(r);
       },
     });
   };

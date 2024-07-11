@@ -61,8 +61,7 @@ $(document).ready(function () {
       $('#navPlanGeneral').show();
 
     if (
-      access.planUsers == 0 &&
-      access.planTypeOrder == 0
+      access.planUsers == 0 
     ) {
       $('#navPlanAdmin').hide();
     } else

@@ -13,14 +13,14 @@ $(document).ready(function () {
 
     let display = $('.cardAddMonths').css('display');
 
-    if(display == 'block') 
-      $('.cardTblInventoryABC').show(800);
-    else{
-      $('.cardTblInventoryABC').hide(800);
+    if (display == 'none')
+    // $('.cardTblInventoryABC').show(800); 
+    // $('.cardTblInventoryABC').hide(800);
+    {
       $('.cardInventoryABC').hide(800);
     }
 
-    $('#formAddMonths').trigger('reset');
+    // $('#formAddMonths').trigger('reset');
   });
 
   $('#btnAddMonths').click(function (e) {
@@ -32,42 +32,20 @@ $(document).ready(function () {
       toastr.error('Ingrese cantidad a calcular');
       return false;
     }
-
-    // category = $('#category').val();
-
-    // products = sessionStorage.getItem('dataProducts');
-
-    // products = JSON.parse(products);
-    // dataInventory = [];
-    // // Almacenar data para calcular clasificacion
-    // for (let i in products) {
-    //   dataInventory.push({
-    //     cantMonths: cantMonths,
-    //     idProduct: products[i]['id_product'],
-    //   });
-    // }
-
-    // $.ajax({
-    //   type: 'POST',
-    //   url: '/api/calcClassification',
-    //   data: { products: dataInventory },
-    //   success: function (response) {
-    //     message(response);
-    //   },
-    // });
+ 
     $.get(`/api/classification/${cantMonths}`, 
       function (data, textStatus, jqXHR) {
-        message(data);
+        messageInventory(data);
       },
     );
   });
 
   /* Mensaje de exito */
-  message = async (data) => {
+  messageInventory = async (data) => {
     if (data.success == true) {
       $('.cardImportInventory').hide(800);
       $('.cardAddMonths').hide(800);
-      $('#formAddMonths').trigger('reset');
+      // $('#formAddMonths').trigger('reset');
 
       await loadInventory();
       // $('#category').val(1).trigger('change');

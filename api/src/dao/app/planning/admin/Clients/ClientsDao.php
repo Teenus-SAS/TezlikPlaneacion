@@ -43,7 +43,7 @@ class ClientsDao
                 'addr' => $dataClient['address'],
                 'phone' => $dataClient['phone'],
                 'city' => $dataClient['city'],
-                'type_client' => 1
+                'type_client' => $dataClient['type']
             ]);
             $this->logger->info(__FUNCTION__, array('query' => $stmt->queryString, 'errors' => $stmt->errorInfo()));
         } catch (\Exception $e) {

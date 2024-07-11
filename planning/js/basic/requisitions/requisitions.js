@@ -224,8 +224,7 @@ $(document).ready(function () {
       $('.cardImportRequisitions').hide(800);
       $('#formImportRequisitions').trigger('reset');
       $('.cardAddRequisitions').hide(800);
-      $('#formAddRequisition').trigger('reset');
-      // loadTblRequisitions(null, null);
+      $('#formAddRequisition').trigger('reset'); 
       loadAllData(null, null, null);
       toastr.success(data.message);
       return false;

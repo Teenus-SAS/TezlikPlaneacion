@@ -26,27 +26,54 @@ $(document).ready(function () {
         op = 2;
       }
 
-      pending = dataRequisitions.filter(item => item.application_date == "0000-00-00" &&
-        item.delivery_date == "0000-00-00" &&
-        item.purchase_order == "").map(item => ({ ...item, status: 'Pendiente' }));
+      // pending = dataRequisitions.filter(item => item.application_date == "0000-00-00" &&
+      //   item.delivery_date == "0000-00-00" &&
+      //   item.purchase_order == "").map(item => ({ ...item, status: 'Pendiente' }));
       
-      let done1 = dataRequisitions.filter(item => item.application_date != "0000-00-00" &&
-        item.delivery_date != "0000-00-00" &&
-        item.purchase_order != "" && item.admission_date).map(item => ({ ...item, status: 'Recibido' }));
+      // let done1 = dataRequisitions.filter(item => item.application_date != "0000-00-00" &&
+      //   item.delivery_date != "0000-00-00" &&
+      //   item.purchase_order != "" && item.admission_date).map(item => ({ ...item, status: 'Recibido' }));
       
+      // let date = formatDate(new Date());
+
+      // let process = dataRequisitions.filter(item => item.application_date != "0000-00-00" &&
+      //   item.delivery_date != "0000-00-00" &&
+      //   item.purchase_order != "" && !item.admission_date && item.delivery_date >= date).map(item => ({ ...item, status: 'Proceso' }));
+      
+      // let process1 = dataRequisitions.filter(item => item.application_date != "0000-00-00" &&
+      //   item.delivery_date != "0000-00-00" &&
+      //   item.purchase_order != "" && !item.admission_date);
+      
+      // let delayed = process1.filter(item => item.delivery_date < date).map(item => ({ ...item, status: 'Retrasada' }));
+
+      // done = [...delayed, ...process, ...done1];
       let date = formatDate(new Date());
 
-      let process = dataRequisitions.filter(item => item.application_date != "0000-00-00" &&
-        item.delivery_date != "0000-00-00" &&
-        item.purchase_order != "" && !item.admission_date && item.delivery_date >= date).map(item => ({ ...item, status: 'Proceso' }));
-      
-      let process1 = dataRequisitions.filter(item => item.application_date != "0000-00-00" &&
-        item.delivery_date != "0000-00-00" &&
-        item.purchase_order != "" && !item.admission_date);
-      
-      let delayed = process1.filter(item => item.delivery_date < date).map(item => ({ ...item, status: 'Retrasada' }));
+      pending = [];
+      let done1 = [];
+      let process = [];
+      let delayed = [];
 
-      done = [...delayed, ...process, ...done1];
+      dataRequisitions.forEach(item => {
+        if (item.application_date === "0000-00-00" &&
+          item.delivery_date === "0000-00-00" &&
+          item.purchase_order === "") {
+          pending.push({ ...item, status: 'Pendiente' });
+        } else if (item.application_date !== "0000-00-00" &&
+          item.delivery_date !== "0000-00-00" &&
+          item.purchase_order !== "") {
+        
+          if (item.admission_date) {
+            done1.push({ ...item, status: 'Recibido' });
+          } else if (item.delivery_date >= date) {
+            process.push({ ...item, status: 'Proceso' });
+          } else {
+            delayed.push({ ...item, status: 'Retrasada' });
+          }
+        }
+      });
+
+      let done = [...delayed, ...process, ...done1];
 
       $('#lblPending').html(` Pendientes: ${pending.length}`);
       $('#lblProcess').html(` Proceso: ${process.length}`);

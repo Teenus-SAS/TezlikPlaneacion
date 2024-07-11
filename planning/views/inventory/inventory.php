@@ -106,9 +106,11 @@ if (sizeof($_SESSION) == 0)
                     <div class="container-fluid">
                         <div class="row">
                             <div class="col-sm-7 col-xl-12 mt-4 form-inline justify-content-sm-end">
-                                <div class="col-xs-4 cardBtnAddMonths  mr-2">
-                                    <button class="btn btn-warning" id="btnInvetoryABC" name="btnInvetoryABC"><i class="bi bi-folder mr-1"></i>Reclasificación Inv ABC</button>
-                                </div>
+                                <?php if ($_SESSION['inventory_abc'] == '1') { ?>
+                                    <div class="col-xs-4 cardBtnAddMonths  mr-2">
+                                        <button class="btn btn-warning" id="btnInvetoryABC" name="btnInvetoryABC"><i class="bi bi-folder mr-1"></i>Reclasificación Inv ABC</button>
+                                    </div>
+                                <?php } ?>
                                 <!-- <div class="col-xs-2">
                                     <button class="btn btn-info" id="btnImportNewInventory"><i class="bi bi-cloud-download mr-1"></i></button>
                                 </div> -->
@@ -122,7 +124,7 @@ if (sizeof($_SESSION) == 0)
                         <div class="row">
                             <div class="col-12">
                                 <div class="card">
-                                    <form id="formAddMonths">
+                                    <form id="formInventoryABC">
                                         <div class="card-body">
                                             <div class="form-row">
                                                 <div class="col-sm-3 floating-label enable-floating-label show-label" style="margin-bottom:0px">
@@ -131,6 +133,21 @@ if (sizeof($_SESSION) == 0)
                                                 </div>
                                                 <div class="col-sm mt-1">
                                                     <button class="btn btn-success" id="btnAddMonths">Calcular</button>
+                                                </div>
+                                                <div class="col-sm-2 floating-label enable-floating-label show-label" style="margin-bottom:10px!important">
+                                                    <input type="number" class="text-center form-control" name="a" id="a" max="100">
+                                                    <label for="">a</label>
+                                                </div>
+                                                <div class="col-sm-2 floating-label enable-floating-label show-label" style="margin-bottom:10px!important">
+                                                    <input type="number" class="text-center form-control" name="b" id="b" max="100">
+                                                    <label for="">b</label>
+                                                </div>
+                                                <div class="col-sm-2 floating-label enable-floating-label show-label" style="margin-bottom:10px!important">
+                                                    <input type="number" class="text-center form-control" name="c" id="c" max="100">
+                                                    <label for="">c</label>
+                                                </div>
+                                                <div class="col-xs-2" style="margin-top:7px">
+                                                    <button class="btn btn-success" id="btnSaveInventoryABC">Guardar</button>
                                                 </div>
                                             </div>
                                         </div>
@@ -168,7 +185,7 @@ if (sizeof($_SESSION) == 0)
                     </div>
                 </div>
 
-                <div class="page-content-wrapper mt--45 mb-5 cardInventoryABC">
+                <!-- <div class="page-content-wrapper mt--45 mb-5 cardInventoryABC">
                     <div class="container-fluid">
                         <div class="row">
                             <div class="col-12">
@@ -176,21 +193,7 @@ if (sizeof($_SESSION) == 0)
                                     <div class="card">
                                         <div class="card-body pt-3">
                                             <div class="form-row">
-                                                <div class="col-sm-2 floating-label enable-floating-label show-label" style="margin-bottom:10px!important">
-                                                    <input type="number" class="text-center form-control" name="a" id="a" max="100">
-                                                    <label for="">a</label>
-                                                </div>
-                                                <div class="col-sm-2 floating-label enable-floating-label show-label" style="margin-bottom:10px!important">
-                                                    <input type="number" class="text-center form-control" name="b" id="b" max="100">
-                                                    <label for="">b</label>
-                                                </div>
-                                                <div class="col-sm-2 floating-label enable-floating-label show-label" style="margin-bottom:10px!important">
-                                                    <input type="number" class="text-center form-control" name="c" id="c" max="100">
-                                                    <label for="">c</label>
-                                                </div>
-                                                <div class="col-xs-2" style="margin-top:7px">
-                                                    <button class="btn btn-success" id="btnSaveInventoryABC">Guardar</button>
-                                                </div>
+                                                
                                             </div>
                                         </div>
                                     </div>
@@ -198,7 +201,7 @@ if (sizeof($_SESSION) == 0)
                             </div>
                         </div>
                     </div>
-                </div>
+                </div> -->
 
                 <!-- page content -->
                 <!-- <div class="page-content-wrapper mt--45">
@@ -245,12 +248,9 @@ if (sizeof($_SESSION) == 0)
 
                             </div>
                         </div>
-                        <div class="row cardTblInventoryABC" style="display: none;">
+                        <!-- <div class="row cardTblInventoryABC" style="display: none;">
                             <div class="col-12">
-                                <div class="card">
-                                    <!-- <div class="card-header">
-                                        <h5 class="card-title">Dias Ventas por mes</h5>
-                                    </div> -->
+                                <div class="card"> 
                                     <div class="card-body">
                                         <div class="table-responsive">
                                             <table class="fixed-table-loading table table-hover" id="tblInventoryABC">
@@ -260,7 +260,7 @@ if (sizeof($_SESSION) == 0)
                                     </div>
                                 </div>
                             </div>
-                        </div>
+                        </div> -->
 
                         <div class="row">
                             <div class="col-12">
@@ -289,10 +289,6 @@ if (sizeof($_SESSION) == 0)
     </div>
 
     <?php include_once dirname(dirname(dirname(__DIR__))) . '/global/partials/scriptsJS.php'; ?>
-    <!-- <script src="/planning/js/users/usersAccess.js"></script> -->
-    <script>
-        inventory_abc = "<? $_SESSION['inventory_abc'] ?>";
-    </script>
     <script src="/planning/js/general/inventoryABC/tblinventoryABC.js"></script>
     <script src="/planning/js/general/inventoryABC/inventoryABC.js"></script>
     <script src="../planning/js/inventory/tblInventory.js"></script>

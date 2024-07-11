@@ -123,6 +123,7 @@ $app->post('/addClient', function (Request $request, Response $response, $args) 
         $findClient = $generalClientsDao->findClientsByNitAndName($dataClient, $id_company);
 
         if (!$findClient) {
+            $dataClient['type'] = 1;
             $client = $clientsDao->insertClient($dataClient, $id_company);
 
             if (sizeof($_FILES) > 0) {
@@ -147,6 +148,7 @@ $app->post('/addClient', function (Request $request, Response $response, $args) 
             $findClient = $generalClientsDao->findClient($clients[$i], $id_company);
 
             if (!$findClient) {
+                $clients[$i]['type'] = 1;
                 $resolution = $clientsDao->insertClient($clients[$i], $id_company);
 
                 $lastClient = $lastDataDao->findLastInsertedClient();
@@ -211,6 +213,25 @@ $app->post('/updateClient', function (Request $request, Response $response, $arg
         } else
             $resp = array('info' => true, 'message' => 'Ya existe un cliente con el mismo nit. Ingrese nuevo nit');
     }
+    $response->getBody()->write(json_encode($resp));
+    return $response->withStatus(200)->withHeader('Content-Type', 'application/json');
+});
+
+$app->post('/copyClient', function (Request $request, Response $response, $args) use (
+    $clientsDao,
+) {
+    session_start();
+    $id_company = $_SESSION['id_company'];
+    $dataClient = $request->getParsedBody();
+
+    $client = $clientsDao->insertClient($dataClient, $id_company);
+
+    if ($client == null)
+        $resp = array('success' => true, 'message' => 'Cliente clonado correctamente');
+    else if (isset($client['info']))
+        $resp = array('info' => true, 'message' => $client['message']);
+    else
+        $resp = array('error' => true, 'message' => 'Ocurrio un error mientras ingresaba la información. Intente nuevamente');
     $response->getBody()->write(json_encode($resp));
     return $response->withStatus(200)->withHeader('Content-Type', 'application/json');
 });

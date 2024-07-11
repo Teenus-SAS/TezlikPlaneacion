@@ -1,29 +1,50 @@
 $(document).ready(function () {
+  // $('.selectNavigation').click(function (e) {
+  //   e.preventDefault();
+    
+  //   if (this.id == 'link-process') {
+  //     $('.cardMachines').hide();
+  //     $('.cardCreateMachines').hide(800);
+  //     $('.cardImportMachines').hide(800);
+  //     $('.cardProcess').show();
+  //   }
+  //   else if (this.id == 'link-machines') {
+  //     $('.cardProcess').hide();
+  //     $('.cardCreateProcess').hide(800);
+  //     $('.cardImportProcess').hide(800);
+  //     $('.cardMachines').show();
+  //   }
+
+  //   let tables = document.getElementsByClassName(
+  //     'dataTable'
+  //   );
+
+  //   for (let i = 0; i < tables.length; i++) {
+  //     let attr = tables[i];
+  //     attr.style.width = '100%';
+  //     attr = tables[i].firstElementChild;
+  //     attr.style.width = '100%';
+  //   }
+  // });
   $('.selectNavigation').click(function (e) {
     e.preventDefault();
-    
-    if (this.id == 'link-process') {
-      $('.cardMachines').hide();
-      $('.cardCreateMachines').hide(800);
-      $('.cardImportMachines').hide(800);
-      $('.cardProcess').show();
-    }
-    else if (this.id == 'link-machines') {
-      $('.cardProcess').hide();
-      $('.cardCreateProcess').hide(800);
-      $('.cardImportProcess').hide(800);
-      $('.cardMachines').show();
-    }
 
-    let tables = document.getElementsByClassName(
-      'dataTable'
-    );
+    const sections = {
+      'link-process': ['.cardMachines', '.cardCreateMachines', '.cardImportMachines', '.cardProcess'],
+      'link-machines': ['.cardProcess', '.cardCreateProcess', '.cardImportProcess', '.cardMachines']
+    };
 
-    for (let i = 0; i < tables.length; i++) {
-      let attr = tables[i];
-      attr.style.width = '100%';
-      attr = tables[i].firstElementChild;
-      attr.style.width = '100%';
+    const hideElements = sections[this.id].slice(0, -1);
+    const showElement = sections[this.id].slice(-1)[0];
+
+    hideElements.forEach(selector => $(selector).hide());
+    $(showElement).show();
+
+    let tables = document.getElementsByClassName('dataTable');
+
+    for (let table of tables) {
+      table.style.width = '100%';
+      table.firstElementChild.style.width = '100%';
     }
   });
 
@@ -83,7 +104,7 @@ $(document).ready(function () {
   });
 
   /* Verificar datos */
-  checkDataMachines = async (url, idMachine) => {
+  const checkDataMachines = async (url, idMachine) => {
     let Machine = $("#machine").val();
 
     if (Machine.trim() == "" || Machine.trim() == null) {
@@ -102,7 +123,6 @@ $(document).ready(function () {
   };
 
   /* Eliminar productos */
-
   deleteMachineFunction = () => {
     let row = $(this.activeElement).parent().parent()[0];
     let data = tblMachines.fnGetData(row);
@@ -126,7 +146,7 @@ $(document).ready(function () {
       callback: function (result) {
         if (result) {
           $.get(
-            `../../api/deletePlanMachine/${id_machine}`,
+            `/api/deletePlanMachine/${id_machine}`,
             function (data, textStatus, jqXHR) {
               message(data);
             }
@@ -157,6 +177,4 @@ $(document).ready(function () {
     $("#tblMachines").DataTable().clear();
     $("#tblMachines").DataTable().ajax.reload();
   }
-
-
 });

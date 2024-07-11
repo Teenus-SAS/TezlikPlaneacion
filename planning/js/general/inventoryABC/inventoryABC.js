@@ -14,16 +14,16 @@ $(document).ready(function () {
   $('#btnSaveInventoryABC').click(function (e) {
     e.preventDefault();
       
-    let idInventory = sessionStorage.getItem('id_inventory');
+    // let idInventory = sessionStorage.getItem('id_inventory');
     
-    if (!idInventory) {
-      checkDataInventory('/api/addInventoryABC', idInventory);
-    } else {
-      checkDataInventory('/api/updateInventoryABC', idInventory);
-    }
+    // if (!idInventory) {
+    //   checkDataInventory('/api/addInventoryABC', idInventory);
+    // } else {
+    checkDataInventory('/api/updateInventoryABC');
+    // }
   });
 
-  /* Actualizar categoria */
+  /* Actualizar categoria 
   $(document).on('click', '.updateInventory', function (e) {
     $('.cardInventoryABC').show(800);
     $('.cardImportInventory').hide(800);
@@ -44,12 +44,14 @@ $(document).ready(function () {
       },
       1000
     );
-  });
+  }); */
 
-  const checkDataInventory = async (url, idInventory) => {
+  const checkDataInventory = async (url) => {
     let a = parseInt($('#a').val());
     let b = parseInt($('#b').val());
     let c = parseInt($('#c').val());
+
+    let data = JSON.parse(sessionStorage.getItem('dataInventoryABC'));
 
     let arr = a * b;
 
@@ -70,17 +72,23 @@ $(document).ready(function () {
 
     let dataInventory = new FormData(formInventoryABC);
 
-    if (idInventory != "" || idInventory != null) {
-      dataInventory.append("idInventory", idInventory);
-    }
+    // if (idInventory != "" || idInventory != null) {
+      dataInventory.append("idInventory", data[0].id_inventory);
+    // }
 
     let resp = await sendDataPOST(url, dataInventory);
 
-    message(resp);
+    let cantMonths = $('#cantMonths').val();
+
+    if (cantMonths) { 
+      await searchData(`/api/classification/${cantMonths}`);
+    };
+
+    messageInventory(resp);
   };
 
-  /* Mensaje de exito */
-  message = (data) => {
+  /* Mensaje de exito 
+  const message = (data) => {
     if (data.success == true) {
       $('#btnNewInventoryABC').hide();
       $('.cardInventoryABC').hide(800);
@@ -90,5 +98,5 @@ $(document).ready(function () {
       return false;
     } else if (data.error == true) toastr.error(data.message);
     else if (data.info == true) toastr.info(data.message);
-  }; 
+  }; */
 });

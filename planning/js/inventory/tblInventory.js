@@ -31,7 +31,7 @@ $(document).ready(function () {
 
     // Ocultar card formulario Analisis Inventario ABC
     $(".cardAddMonths").hide(800);
-    $(".cardTblInventoryABC").hide(800);
+    // $(".cardTblInventoryABC").hide(800);
     $(".cardInventoryABC").hide(800);
     $(".cardBtnAddMonths").hide(800);
 
