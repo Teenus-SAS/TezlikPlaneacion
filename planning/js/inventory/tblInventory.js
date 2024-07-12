@@ -26,28 +26,67 @@ $(document).ready(function () {
   loadInventory();
 
   // Seleccionar Categoria
+  // $(".selectNavigation").click(function (e) {
+  //   e.preventDefault();
+
+  //   // Ocultar card formulario Analisis Inventario ABC
+  //   $(".cardAddMonths").hide(800);
+  //   // $(".cardTblInventoryABC").hide(800);
+  //   $(".cardInventoryABC").hide(800);
+  //   $(".cardBtnAddMonths").hide(800);
+
+  //   // Productos
+  //   if (this.id == 'products') {
+  //     $(".cardBtnAddMonths").show(800);
+  //     data = getInventory(products);
+  //     inventoryIndicator(products);
+  //     data["visible"] = true;
+  //   }
+  //   // Materias Prima
+  //   else if (this.id == 'materials') {
+  //     data = getInventory(materials);
+  //     data["visible"] = false;
+  //   } 
+  //   loadTable(data);
+  // });
+
   $(".selectNavigation").click(function (e) {
     e.preventDefault();
 
-    // Ocultar card formulario Analisis Inventario ABC
-    $(".cardAddMonths").hide(800);
-    // $(".cardTblInventoryABC").hide(800);
-    $(".cardInventoryABC").hide(800);
-    $(".cardBtnAddMonths").hide(800);
+    // Ocultar elementos comunes
+    const hideElements = [
+      ".cardAddMonths", 
+      ".cardInventoryABC",
+      ".cardBtnAddMonths"
+    ];
 
-    // Productos
-    if (this.id == 'products') {
-      $(".cardBtnAddMonths").show(800);
-      data = getInventory(products);
-      inventoryIndicator(products);
-      data["visible"] = true;
+    hideElements.forEach(selector => $(selector).hide());
+
+    const options = {
+      'products': {
+        show: [".cardBtnAddMonths"],
+        data: () => {
+          let data = getInventory(products);
+          inventoryIndicator(products);
+          data["visible"] = true;
+          return data;
+        }
+      },
+      'materials': {
+        show: [],
+        data: () => {
+          let data = getInventory(materials);
+          data["visible"] = false;
+          return data;
+        }
+      }
+    };
+
+    if (options[this.id]) {
+      const { show, data } = options[this.id];
+      show.forEach(selector => $(selector).show(800));
+      loadTable(data());
     }
-    // Materias Prima
-    else if (this.id == 'materials') {
-      data = getInventory(materials);
-      data["visible"] = false;
-    } 
-    loadTable(data);
   });
 
   getInventory = (data) => {
@@ -150,7 +189,7 @@ $(document).ready(function () {
           data: null,
           className: "uniqueClassName dt-head-center",
           render: function (data) {
-            data.unit == "UNIDAD"
+            data.abbreviation == "UND"
               ? (number = data.reserved.toLocaleString("es-CO", {
                   maximumFractionDigits: 0,
                 }))
@@ -165,7 +204,7 @@ $(document).ready(function () {
           data: null,
           className: "uniqueClassName dt-head-center",
           render: function (data) {
-            data.unit == "UNIDAD"
+            data.abbreviation == "UND"
               ? (number = data.minimum_stock.toLocaleString("es-CO", {
                   maximumFractionDigits: 0,
                 }))

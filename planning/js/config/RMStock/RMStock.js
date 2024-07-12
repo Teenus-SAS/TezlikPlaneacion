@@ -70,7 +70,7 @@ $(document).ready(function () {
         $(`#client option[value=${data.id_provider}]`).prop('selected', true);
         $('#rMMin').val(data.min_term);
         $('#rMMax').val(data.max_term);
-        $('#rMUsual').val(data.usual_term);
+        $('#rMQuantity').val(data.min_quantity);
 
         $('html, body').animate(
             {
@@ -85,9 +85,9 @@ $(document).ready(function () {
         let provider = parseFloat($('#client').val());
         let min = parseFloat($('#rMMin').val());
         let max = parseFloat($('#rMMax').val());
-        let usual = parseFloat($('#rMUsual').val());
+        let quantity = parseFloat($('#rMQuantity').val());
 
-        let data = material * provider * min * max * usual;
+        let data = material * provider * min * max * quantity;
 
         if (isNaN(data) || data <= 0) {
             toastr.error('Ingrese todos los campos');

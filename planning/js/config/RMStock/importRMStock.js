@@ -58,7 +58,7 @@ $(document).ready(function () {
             client: item.proveedor,
             min: item.plazo_minimo,
             max: item.plazo_maximo,
-            usual: item.plazo_habitual,
+            quantity: item.cantidad_minima,
           };
         });
         checkStock(StockToImport);
@@ -164,7 +164,7 @@ $(document).ready(function () {
           proveedor: stock[i].client,
           plazo_minimo: parseFloat(stock[i].min_term),
           plazo_maximo: parseFloat(stock[i].max_term),
-          plazo_habitual: parseFloat(stock[i].usual_term),
+          cantidad_minima: parseFloat(stock[i].min_quantity),
         });
       }
 

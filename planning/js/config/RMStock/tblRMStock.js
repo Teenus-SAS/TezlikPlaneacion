@@ -45,15 +45,13 @@ $(document).ready(function () {
         className: "uniqueClassName dt-head-center",
       },
       {
-        title: "Plazo Habitual",
-        data: "usual_term",
+        title: "Cantidad Minima",
+        data: "min_quantity",
         className: "uniqueClassName dt-head-center",
       },
       {
         title: "Tiempo Promedio",
-        data: function (data) {
-          return parseFloat(data.max_term) - parseFloat(data.min_term);
-        },
+        data: 'average',
         className: "uniqueClassName dt-head-center",
       },
       {

@@ -10,10 +10,10 @@ $(document).ready(function () {
     let $select = $(`#client`);
     $select.empty();
 
-    $select.append(`<option disabled selected>Seleccionar</option>`);
+    $select.append(`<option disabled selected value='0'>Seleccionar</option>`);
     $.each(data, function (i, value) {
       $select.append(
-        `<option value = ${value.id_client}> ${value.client} </option>`
+        `<option value =${value.id_client}> ${value.client} </option>`
       );
     });
   }

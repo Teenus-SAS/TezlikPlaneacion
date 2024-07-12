@@ -30,7 +30,7 @@ $(document).ready(function () {
     if (idRequisition == '' || idRequisition == null) {
       checkDataRequisition('/api/addRequisition', idRequisition);
     } else {
-      checkDataRequisition('/api/updateRequisition', idRequisition); 
+      checkDataRequisition('/api/updateRequisition', idRequisition);
     }
   });
   
@@ -66,6 +66,51 @@ $(document).ready(function () {
     loadTblRequisitions(firtsDate, lastDate);
   });
 
+  $('#material').change(function (e) {
+    e.preventDefault();
+
+    $('#client option').removeAttr('selected');
+    $(`#client option[value='0']`).prop('selected', true);
+    $('#rMQuantity').val('');
+    $('#rMAverage').val('');
+
+    let dataStock = JSON.parse(sessionStorage.getItem('stock'));
+    let arr = dataStock.filter(item => item.id_material == this.value);
+
+    if (arr.length == 1) {
+      $(`#client option[value=${arr[0].id_provider}]`).prop('selected', true);
+      $('#rMQuantity').val(arr[0].min_quantity);
+      $('#rMAverage').val(arr[0].average);
+    } else if (arr.length > 1) {
+      arr = arr.sort((a, b) => a.average - b.average);
+
+      // Verificar si todos los tiempos promedio son iguales 
+      const firstValue = arr[0]['average'];
+      const allSame = arr.every(item => item['average'] === firstValue);
+
+      if (allSame == true) {
+        arr = arr.sort((a, b) => a.min_quantity - b.min_quantity);
+      }
+
+      $(`#client option[value=${arr[0].id_provider}]`).prop('selected', true);
+      $('#rMQuantity').val(arr[0].min_quantity);
+      $('#rMAverage').val(parseFloat(arr[0].max_term) - parseFloat(arr[0].min_term));
+    }
+  });
+
+  $('#client').change(function (e) {
+    e.preventDefault();
+    let id_material = $('#material').val();
+
+    let dataStock = JSON.parse(sessionStorage.getItem('stock'));
+    let arr = dataStock.find(item => item.id_material == id_material && item.id_provider == this.value);
+
+    if (arr) {
+      $('#rMQuantity').val(arr.min_quantity);
+      $('#rMAverage').val(arr.average);
+    }
+  });
+
   /* Actualizar productos materials */
 
   $(document).on('click', '.updateRequisition', async function (e) {
@@ -82,7 +127,15 @@ $(document).ready(function () {
     $(`#client option[value=${data.id_provider}]`).prop('selected', true);
     $('#applicationDate').val(data.application_date);
     $('#deliveryDate').val(data.delivery_date);
-    $('#purchaseOrder').val(data.purchase_order); 
+    $('#purchaseOrder').val(data.purchase_order);
+    
+    let dataStock = JSON.parse(sessionStorage.getItem('stock'));
+    let arr = dataStock.find(item => item.id_material == data.id_material && item.id_provider == data.id_provider);
+
+    if (arr) {
+      $('#rMQuantity').val(arr.min_quantity);
+      $('#rMAverage').val(arr.average);
+    }
 
     let quantity = data.quantity
             

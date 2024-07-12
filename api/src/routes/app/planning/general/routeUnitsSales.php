@@ -66,7 +66,7 @@ $app->get('/unitSales', function (Request $request, Response $response, $args) u
 
     for ($i = 0; $i < $unitSalesCount; $i++) {
         if ($total_days > 0) {
-            $unitSales[$i]['average_day'] = $unitSales[$i]['average_month'] / $total_days;
+            $unitSales[$i]['average_day'] = $unitSales[$i]['average_month'] / ($total_days / 12);
         } else {
             $unitSales[$i]['average_day'] = 0;
         }
@@ -239,19 +239,21 @@ $app->post('/addUnitSales', function (Request $request, Response $response, $arg
                 $data = [];
                 $arr2 = $generalOrdersDao->findLastNumOrder($id_company);
                 $client = $generalClientsDao->findInternalClient($id_company);
+                if ($client) {
 
-                $data['order'] = $arr2['num_order'];
-                $data['dateOrder'] = date('Y-m-d');
-                $data['minDate'] = '';
-                $data['maxDate'] = '';
-                $data['idProduct'] = $dataSale['idProduct'];
-                $data['idClient'] = $client['id_client'];
-                $data['route'] = 1;
-                // $data['originalQuantity'] = $dataOrder['quantity'] - $dataOrder['stock'];
-                $data['originalQuantity'] =  abs($product['stock']);
+                    $data['order'] = $arr2['num_order'];
+                    $data['dateOrder'] = date('Y-m-d');
+                    $data['minDate'] = '';
+                    $data['maxDate'] = '';
+                    $data['idProduct'] = $dataSale['idProduct'];
+                    $data['idClient'] = $client['id_client'];
+                    $data['route'] = 1;
+                    // $data['originalQuantity'] = $dataOrder['quantity'] - $dataOrder['stock'];
+                    $data['originalQuantity'] =  abs($product['stock']);
 
-                $resolution = $ordersDao->insertOrderByCompany($data, $id_company);
-                $generalProductsDao->updateAccumulatedQuantity($dataSale['idProduct'], $product['stock'], 2);
+                    $resolution = $ordersDao->insertOrderByCompany($data, $id_company);
+                    $generalProductsDao->updateAccumulatedQuantity($dataSale['idProduct'], $product['stock'], 2);
+                }
             }
         }
         if ($resolution == null) {
@@ -408,7 +410,7 @@ $app->post('/updateUnitSale', function (Request $request, Response $response, $a
             // Calcular stock material
             $materials = $productMaterialsDao->findAllProductsmaterials($dataSale['idProduct'], $id_company);
             $orders = $generalOrdersDao->findAllOrdersByProduct($dataSale['idProduct']);
-            $stock = 0;
+            // $stock = 0;
 
             for ($i = 0; $i < sizeof($materials); $i++) {
                 if (isset($resolution['info'])) break;
@@ -468,18 +470,20 @@ $app->post('/updateUnitSale', function (Request $request, Response $response, $a
                 $arr2 = $generalOrdersDao->findLastNumOrder($id_company);
                 $client = $generalClientsDao->findInternalClient($id_company);
 
-                $data['order'] = $arr2['num_order'];
-                $data['dateOrder'] = date('Y-m-d');
-                $data['minDate'] = '';
-                $data['maxDate'] = '';
-                $data['idProduct'] = $dataSale['idProduct'];
-                $data['idClient'] = $client['id_client'];
-                $data['route'] = 1;
-                // $data['originalQuantity'] = $dataOrder['quantity'] - $dataOrder['stock'];
-                $data['originalQuantity'] =  abs($product['stock']);
+                if ($client) {
+                    $data['order'] = $arr2['num_order'];
+                    $data['dateOrder'] = date('Y-m-d');
+                    $data['minDate'] = '';
+                    $data['maxDate'] = '';
+                    $data['idProduct'] = $dataSale['idProduct'];
+                    $data['idClient'] = $client['id_client'];
+                    $data['route'] = 1;
+                    // $data['originalQuantity'] = $dataOrder['quantity'] - $dataOrder['stock'];
+                    $data['originalQuantity'] =  abs($product['stock']);
 
-                $resolution = $ordersDao->insertOrderByCompany($data, $id_company);
-                $generalProductsDao->updateAccumulatedQuantity($dataSale['idProduct'], $product['stock'], 2);
+                    $resolution = $ordersDao->insertOrderByCompany($data, $id_company);
+                    $generalProductsDao->updateAccumulatedQuantity($dataSale['idProduct'], $product['stock'], 2);
+                }
             }
         }
 
@@ -606,19 +610,21 @@ $app->post('/deleteUnitSale', function (Request $request, Response $response, $a
             $data = [];
             $arr2 = $generalOrdersDao->findLastNumOrder($id_company);
             $client = $generalClientsDao->findInternalClient($id_company);
+            if ($client) {
 
-            $data['order'] = $arr2['num_order'];
-            $data['dateOrder'] = date('Y-m-d');
-            $data['minDate'] = '';
-            $data['maxDate'] = '';
-            $data['idProduct'] = $dataSale['idProduct'];
-            $data['idClient'] = $client['id_client'];
-            $data['route'] = 1;
-            // $data['originalQuantity'] = $dataOrder['quantity'] - $dataOrder['stock'];
-            $data['originalQuantity'] =  abs($product['stock']);
+                $data['order'] = $arr2['num_order'];
+                $data['dateOrder'] = date('Y-m-d');
+                $data['minDate'] = '';
+                $data['maxDate'] = '';
+                $data['idProduct'] = $dataSale['idProduct'];
+                $data['idClient'] = $client['id_client'];
+                $data['route'] = 1;
+                // $data['originalQuantity'] = $dataOrder['quantity'] - $dataOrder['stock'];
+                $data['originalQuantity'] =  abs($product['stock']);
 
-            $resolution = $ordersDao->insertOrderByCompany($data, $id_company);
-            $generalProductsDao->updateAccumulatedQuantity($dataSale['idProduct'], $product['stock'], 2);
+                $resolution = $ordersDao->insertOrderByCompany($data, $id_company);
+                $generalProductsDao->updateAccumulatedQuantity($dataSale['idProduct'], $product['stock'], 2);
+            }
         }
     }
 

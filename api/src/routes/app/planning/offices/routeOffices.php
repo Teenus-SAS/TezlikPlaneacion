@@ -94,19 +94,20 @@ $app->post('/changeOffices', function (Request $request, Response $response, $ar
         $data = [];
         $arr = $generalOrdersDao->findLastNumOrder($id_company);
         $client = $generalClientsDao->findInternalClient($id_company);
+        if ($client) {
 
-        $data['order'] = $arr['num_order'];
-        $data['dateOrder'] = date('Y-m-d');
-        $data['minDate'] = '';
-        $data['maxDate'] = '';
-        $data['idProduct'] = $dataOrder['idProduct'];
-        $data['idClient'] = $client['id_client'];
-        $data['route'] = 1;
-        // $data['originalQuantity'] = $dataOrder['quantity'] - $dataOrder['stock'];
-        $data['originalQuantity'] =  $dataOrder['stock'] - ($dataOrder['quantity'] - $dataOrder['originalQuantity']);
+            $data['order'] = $arr['num_order'];
+            $data['dateOrder'] = date('Y-m-d');
+            $data['minDate'] = '';
+            $data['maxDate'] = '';
+            $data['idProduct'] = $dataOrder['idProduct'];
+            $data['idClient'] = $client['id_client'];
+            $data['route'] = 1;
+            // $data['originalQuantity'] = $dataOrder['quantity'] - $dataOrder['stock'];
+            $data['originalQuantity'] =  $dataOrder['stock'] - ($dataOrder['quantity'] - $dataOrder['originalQuantity']);
 
-        $resolution = $ordersDao->insertOrderByCompany($data, $id_company);
-
+            $resolution = $ordersDao->insertOrderByCompany($data, $id_company);
+        }
         // $status = true;
 
         // // Checkear cantidades

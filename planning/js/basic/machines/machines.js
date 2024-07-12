@@ -1,31 +1,4 @@
-$(document).ready(function () {
-  // $('.selectNavigation').click(function (e) {
-  //   e.preventDefault();
-    
-  //   if (this.id == 'link-process') {
-  //     $('.cardMachines').hide();
-  //     $('.cardCreateMachines').hide(800);
-  //     $('.cardImportMachines').hide(800);
-  //     $('.cardProcess').show();
-  //   }
-  //   else if (this.id == 'link-machines') {
-  //     $('.cardProcess').hide();
-  //     $('.cardCreateProcess').hide(800);
-  //     $('.cardImportProcess').hide(800);
-  //     $('.cardMachines').show();
-  //   }
-
-  //   let tables = document.getElementsByClassName(
-  //     'dataTable'
-  //   );
-
-  //   for (let i = 0; i < tables.length; i++) {
-  //     let attr = tables[i];
-  //     attr.style.width = '100%';
-  //     attr = tables[i].firstElementChild;
-  //     attr.style.width = '100%';
-  //   }
-  // });
+$(document).ready(function () { 
   $('.selectNavigation').click(function (e) {
     e.preventDefault();
 

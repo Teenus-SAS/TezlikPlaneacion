@@ -2,37 +2,72 @@ $(document).ready(function () {
   products = [];
   materials = [];
 
+  // $(".selectNavigation").click(function (e) {
+  //   e.preventDefault();
+  //   let option = this.id;
+
+  //   switch (option) {
+  //     case 'sProducts':
+  //       $(".cardProducts").show();
+  //       $(".cardMaterials").hide();
+  //       $(".cardRawMaterials").hide(800);
+  //       $(".cardImportMaterials").hide(800);
+  //       loadTblProduct(products);
+  //       inventoryIndicator(products);
+  //       break;
+  //     case 'sMaterials':
+  //       $(".cardMaterials").show();
+  //       $(".cardProducts").hide();
+  //       $(".cardCreateProduct").hide(800);
+  //       $(".cardImportProducts").hide(800);
+  //       loadTblMaterials(materials);
+  //       inventoryIndicator(materials);
+  //       break;
+  //   }
+
+  //   let tables = document.getElementsByClassName("dataTable");
+
+  //   for (let i = 0; i < tables.length; i++) {
+  //     let attr = tables[i];
+  //     attr.style.width = "100%";
+  //     attr = tables[i].firstElementChild;
+  //     attr.style.width = "100%";
+  //   }
+  // }); 
+
   $(".selectNavigation").click(function (e) {
     e.preventDefault();
-    let option = this.id;
+    const option = this.id;
 
-    switch (option) {
-      case 'sProducts':
-        $(".cardProducts").show();
-        $(".cardMaterials").hide();
-        $(".cardRawMaterials").hide(800);
-        $(".cardImportMaterials").hide(800);
-        loadTblProduct(products);
-        inventoryIndicator(products);
-        break;
-      case 'sMaterials':
-        $(".cardMaterials").show();
-        $(".cardProducts").hide();
-        $(".cardCreateProduct").hide(800);
-        $(".cardImportProducts").hide(800);
-        loadTblMaterials(materials);
-        inventoryIndicator(materials);
-        break;
+    const cards = {
+      'sProducts': {
+        show: [".cardProducts"],
+        hide: [".cardMaterials", ".cardRawMaterials", ".cardImportMaterials"],
+        load: loadTblProduct,
+        data: products
+      },
+      'sMaterials': {
+        show: [".cardMaterials"],
+        hide: [".cardProducts", ".cardCreateProduct", ".cardImportProducts"],
+        load: loadTblMaterials,
+        data: materials
+      }
+    };
+
+    if (cards[option]) {
+      const { show, hide, load, data } = cards[option];
+
+      show.forEach(selector => $(selector).show());
+      hide.forEach(selector => $(selector).hide());
+
+      load(data);
+      inventoryIndicator(data);
     }
 
-    let tables = document.getElementsByClassName("dataTable");
-
-    for (let i = 0; i < tables.length; i++) {
-      let attr = tables[i];
-      attr.style.width = "100%";
-      attr = tables[i].firstElementChild;
-      attr.style.width = "100%";
-    }
+    Array.from(document.getElementsByClassName("dataTable")).forEach(table => {
+      table.style.width = "100%";
+      table.firstElementChild.style.width = "100%";
+    });
   });
 
   loadAllData = async () => {

@@ -169,8 +169,8 @@ if (sizeof($_SESSION) == 0)
                                                     <input type="number" class="form-control text-center" id="rMMax" name="max">
                                                 </div>
                                                 <div class="col-xs-1 floating-label enable-floating-label show-label" style="margin-bottom:0px">
-                                                    <label for="">Plazo Habitual</label>
-                                                    <input type="number" class="form-control text-center" id="rMUsual" name="usual">
+                                                    <label for="">Cantidad Minima</label>
+                                                    <input type="number" class="form-control text-center" id="rMQuantity" name="quantity">
                                                 </div>
                                                 <div class="col-sm mt-1">
                                                     <button class="btn btn-success" id="btnCreateRMStock">Crear Stock</button>

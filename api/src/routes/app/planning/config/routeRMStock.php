@@ -58,7 +58,7 @@ $app->post('/rMStockDataValidation', function (Request $request, Response $respo
         for ($i = 0; $i < sizeof($stock); $i++) {
             if (
                 empty($stock[$i]['refRawMaterial']) || empty($stock[$i]['nameRawMaterial']) ||
-                $stock[$i]['min'] == '' || $stock[$i]['max'] == '' || $stock[$i]['usual'] == ''
+                $stock[$i]['min'] == '' || $stock[$i]['max'] == '' || $stock[$i]['quantity'] == ''
             ) {
                 $i = $i + 2;
                 $dataImportStock = array('error' => true, 'message' => "Columna vacia en la fila: {$i}");
@@ -67,7 +67,7 @@ $app->post('/rMStockDataValidation', function (Request $request, Response $respo
 
             if (
                 empty(trim($stock[$i]['refRawMaterial'])) || empty(trim($stock[$i]['nameRawMaterial'])) ||
-                trim($stock[$i]['min']) == '' || trim($stock[$i]['max']) == '' || trim($stock[$i]['usual']) == ''
+                trim($stock[$i]['min']) == '' || trim($stock[$i]['max']) == '' || trim($stock[$i]['quantity']) == ''
             ) {
                 $i = $i + 2;
                 $dataImportStock = array('error' => true, 'message' => "Columna vacia en la fila: {$i}");
@@ -76,9 +76,9 @@ $app->post('/rMStockDataValidation', function (Request $request, Response $respo
 
             $min = str_replace(',', '.', $stock[$i]['min']);
             $max = str_replace(',', '.', $stock[$i]['max']);
-            $usual = str_replace(',', '.', $stock[$i]['usual']);
+            $quantity = str_replace(',', '.', $stock[$i]['quantity']);
 
-            $data = $min * $max * $usual;
+            $data = $min * $max * $quantity;
 
             if ($data <= 0 || is_nan($data)) {
                 $i = $i + 2;
