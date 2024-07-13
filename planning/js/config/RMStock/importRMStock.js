@@ -38,7 +38,7 @@ $(document).ready(function () {
 
     importFile(selectedFile)
       .then((data) => {
-        const expectedHeaders = ['referencia_material', 'material', 'proveedor', 'plazo_minimo', 'plazo_maximo', 'plazo_habitual'];
+        const expectedHeaders = ['referencia_material', 'material', 'proveedor', 'plazo_minimo', 'plazo_maximo', 'cantidad_minima'];
         const actualHeaders = Object.keys(data[0]);
 
         const missingHeaders = expectedHeaders.filter(header => !actualHeaders.includes(header));
