@@ -5,12 +5,7 @@ $(document).ready(function () {
   $('#btnImportNewSales').click(function (e) {
     e.preventDefault();
     $('.cardImportSales').toggle(800);
-  });
-
-  // $('#fileSales').change(function (e) {
-  //   e.preventDefault();
-  //   selectedFile = e.target.files[0];
-  // });
+  }); 
 
   $('#btnImportSales').click(function (e) {
     e.preventDefault();
@@ -52,7 +47,7 @@ $(document).ready(function () {
         }
 
 
-        let SalesToImport = data.map((item) => {
+        let salesToImport = data.map((item) => {
           return {
             referenceProduct: item.referencia,
             product: item.producto,
@@ -70,7 +65,7 @@ $(document).ready(function () {
             december: item.diciembre,
           };
         });
-        checkSales(SalesToImport);
+        checkSales(salesToImport);
       })
       .catch(() => {
           $('.cardLoading').remove();
@@ -82,7 +77,7 @@ $(document).ready(function () {
   });
 
   /* Mensaje de advertencia */
-  checkSales = (data) => {
+  const checkSales = (data) => {
     $.ajax({
       type: 'POST',
       url: '/api/unitSalesDataValidation',
@@ -125,10 +120,10 @@ $(document).ready(function () {
     });
   };
 
-  saveSalesTable = (data) => {
+  const saveSalesTable = (data) => {
     $.ajax({
       type: 'POST',
-      url: '../../api/addUnitSales',
+      url: '/api/addUnitSales',
       data: { importUnitSales: data },
       success: function (r) {
         $('.cardLoading').remove();

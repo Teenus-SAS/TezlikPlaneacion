@@ -105,7 +105,11 @@ class MinimumStockDao
             $stmt = $connection->prepare("SELECT 
                                             SUM(
                                                 (  
-                                                    IFNULL(s.max_term, 0) - IFNULL(s.usual_term, 0)
+                                                    (
+                                                        SELECT (IFNULL(max_term, 0) - IFNULL(min_term, 0)) FROM stock_materials 
+                                                        WHERE id_material = pm.id_material  
+                                                        ORDER BY `(IFNULL(max_term, 0) - IFNULL(min_term, 0))` DESC LIMIT 1
+                                                    )
                                                 ) * 
                                                 (
                                                     (
@@ -140,8 +144,7 @@ class MinimumStockDao
                                                     )
                                                 ) * pm.quantity
                                             ) AS stock  
-                                          FROM products_materials pm
-                                          LEFT JOIN stock_materials s ON s.id_material = pm.id_material
+                                          FROM products_materials pm 
                                           LEFT JOIN plan_unit_sales u ON u.id_product = pm.id_product
                                           WHERE pm.id_material = :id_material");
             $stmt->execute(['id_material' => $id_material]);

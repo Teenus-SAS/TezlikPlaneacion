@@ -71,7 +71,7 @@ $(document).ready(function () {
   });
 
   /* Mensaje de advertencia */
-  checkCiclesMachine = (data) => {
+  const checkCiclesMachine = (data) => {
     $.ajax({
       type: 'POST',
       url: '/api/planCiclesMachineDataValidation',
@@ -114,7 +114,7 @@ $(document).ready(function () {
     });
   };
 
-  saveCiclesMachineTable = (data) => {
+  const saveCiclesMachineTable = (data) => {
     $.ajax({
       type: 'POST',
       url: '/api/addPlanCiclesMachine',

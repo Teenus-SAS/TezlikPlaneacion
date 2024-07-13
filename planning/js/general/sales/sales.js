@@ -30,58 +30,16 @@ $(document).ready(function () {
   $('#btnCreateSale').click(function (e) {
     e.preventDefault();
 
-    let idSales = sessionStorage.getItem('id_unit_sales');
+    let idSale = sessionStorage.getItem('id_unit_sales');
 
-    if (idSales == '' || idSales == null) {
-      idProduct = $('#selectNameProduct').val();
-      january = $('#january').val();
-      february = $('#february').val();
-      march = $('#march').val();
-      april = $('#april').val();
-      may = $('#may').val();
-      june = $('#june').val();
-      july = $('#july').val();
-      august = $('#august').val();
-      september = $('#september').val();
-      october = $('#october').val();
-      november = $('#november').val();
-      december = $('#december').val();
-
-      data =
-        january +
-        february +
-        march +
-        april +
-        may +
-        june +
-        july +
-        august +
-        september +
-        october +
-        november +
-        december;
-
-      if (!idProduct || !data || data == 0 || isNaN(data)) {
-        toastr.error('Ingrese todos los campos');
-        return false;
-      }
-
-      sales = $('#formCreateSale').serialize();
-
-      $.post(
-        '../../api/addUnitSales',
-        sales,
-        function (data, textStatus, jqXHR) {
-          message(data);
-        }
-      );
+    if (idSale == '' || idSale == null) {
+      checkDataSales('/api/addUnitSales', idSale); 
     } else {
-      updateSale();
+      checkDataSales('/api/updateUnitSale', idSale);
     }
   });
 
   /* Actualizar venta */
-
   $(document).on('click', '.updateSale', function (e) {
     $('.cardImportSales').hide(800);
     $('#createSale').modal('show');
@@ -118,22 +76,65 @@ $(document).ready(function () {
     );
   });
 
-  updateSale = () => {
-    let data = $('#formCreateSale').serialize();
-    idSale = sessionStorage.getItem('id_unit_sales');
-    data = data + '&idSale=' + idSale;
+  const checkDataSales = async (url, idSale) => {
+    let idProduct = $('#selectNameProduct').val();
+    let january = $('#january').val();
+    let february = $('#february').val();
+    let march = $('#march').val();
+    let april = $('#april').val();
+    let may = $('#may').val();
+    let june = $('#june').val();
+    let july = $('#july').val();
+    let august = $('#august').val();
+    let september = $('#september').val();
+    let october = $('#october').val();
+    let november = $('#november').val();
+    let december = $('#december').val();
 
-    $.post(
-      '../../api/updateUnitSale',
-      data,
-      function (data, textStatus, jqXHR) {
-        message(data);
-      }
-    );
-  }; 
+    let data =
+      january +
+      february +
+      march +
+      april +
+      may +
+      june +
+      july +
+      august +
+      september +
+      october +
+      november +
+      december;
+
+    if (!idProduct || !data || data == 0 || isNaN(data)) {
+      toastr.error('Ingrese todos los campos');
+      return false;
+    };
+
+    let dataSale = new FormData(formCreateSale);
+
+    if (idSale != '' || idSale != null)
+      dataSale.append('idSale', idSale);
+
+    let resp = await sendDataPOST(url, dataSale);
+
+    message(resp);
+  };
+
+  // updateSale = () => {
+  //   let data = $('#formCreateSale').serialize();
+  //   idSale = sessionStorage.getItem('id_unit_sales');
+  //   data = data + '&idSale=' + idSale;
+
+  //   $.post(
+  //     '/api/updateUnitSale',
+  //     data,
+  //     function (data, textStatus, jqXHR) {
+  //       message(data);
+  //     }
+  //   );
+  // }; 
 
   /* Eliminar venta */
-
   deleteFunction = () => {
     let row = $(this.activeElement).parent().parent()[0];
     let data = tblSales.fnGetData(row);
@@ -219,7 +220,7 @@ $(document).ready(function () {
     );
   });
 
-  checkDataSaleDays = async (url, idSaleDay) => {
+  const checkDataSaleDays = async (url, idSaleDay) => {
     let year = parseInt($('#year').val());
     let month = parseInt($('#month').val());
     let days = parseInt($('#days').val());

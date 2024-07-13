@@ -84,6 +84,16 @@ $(document).ready(function () {
     $(`#material option[value=${data.id_material}]`).prop('selected', true);
     
     $('#quantity').val(data.quantity);
+    
+    if (data.id_magnitude == 0 || data.id_unit == 0) {
+      let dataMaterials = JSON.parse(sessionStorage.getItem('dataMaterials'));
+
+      let arr = dataMaterials.find(item => item.id_material == data.id_material);
+
+      data.id_magnitude = arr.id_magnitude;
+      data.id_unit = arr.id_unit;
+    }
+
     loadUnitsByMagnitude(data, 2);
     $(`#units option[value=${data.id_unit}]`).prop('selected', true);
 

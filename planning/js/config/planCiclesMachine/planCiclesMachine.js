@@ -53,7 +53,7 @@ $(document).ready(function () {
     );
   });
 
-  checkPlanCiclesMachine = async (url, idCiclesMachine) => {
+  const checkPlanCiclesMachine = async (url, idCiclesMachine) => {
     let idProcess = parseInt($('#idProcess').val());
     let idMachine = parseInt($('#idMachine').val());
     let idProduct = parseInt($('#selectNameProduct').val());

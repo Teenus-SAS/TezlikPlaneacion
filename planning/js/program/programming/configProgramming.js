@@ -144,6 +144,7 @@ $(document).ready(function () {
     let num_order = $('#order :selected').text().trim();
     $("#formCreateProgramming").trigger("reset");
     $(`#order option[value=${value}]`).prop('selected', true);
+    $('#refProduct').empty();
     $('#selectNameProduct').empty();
     $('#classification').empty();
     $('#idProcess').empty();
@@ -457,12 +458,21 @@ $(document).ready(function () {
 
     $('#quantityOrder').val('');
     
-    let $select = $(`#selectNameProduct`);
+    let $select = $(`#refProduct`);
     $select.empty();
 
     $select.append(`<option disabled selected>Seleccionar</option>`);
     $.each(orders, function (i, value) {
       $select.append(
+        `<option value ='${value.id_product}'> ${value.reference} </option>`
+      );
+    });
+    let $select1 = $(`#selectNameProduct`);
+    $select1.empty();
+
+    $select1.append(`<option disabled selected>Seleccionar</option>`);
+    $.each(orders, function (i, value) {
+      $select1.append(
         `<option value ='${value.id_product}'> ${value.product} </option>`
       );
     });
@@ -470,7 +480,25 @@ $(document).ready(function () {
     selectProduct = true;
   };
 
-  $('#selectNameProduct').change(function (e) {
+  $('#refProduct').change(async function (e) {
+    e.preventDefault();
+    let id = this.value;
+
+    $('#selectNameProduct option').prop('selected', function () {
+      return $(this).val() == id;
+    });
+  });
+
+  $('#selectNameProduct').change(async function (e) {
+    e.preventDefault();
+    let id = this.value;
+
+    $('#refProduct option').prop('selected', function () {
+      return $(this).val() == id;
+    });
+  });
+
+  $('.slctProduct').change(function (e) {
     e.preventDefault();
 
     if (selectProduct == true) { 

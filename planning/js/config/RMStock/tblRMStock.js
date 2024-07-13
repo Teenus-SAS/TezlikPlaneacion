@@ -30,6 +30,11 @@ $(document).ready(function () {
         className: "uniqueClassName dt-head-center",
       },
       {
+        title: "Medida",
+        data: "abbreviation",
+        className: "uniqueClassName dt-head-center",
+      },
+      {
         title: "Proveedor",
         data: "client",
         className: "uniqueClassName dt-head-center",

@@ -43,7 +43,7 @@ $(document).ready(function () {
   });
 
   /* Mensaje de advertencia */
-  checkProductProcess = (data) => {
+  const checkProductProcess = (data) => {
     $.ajax({
       type: 'POST',
       url: '/api/productsProcessDataValidation',
@@ -78,7 +78,7 @@ $(document).ready(function () {
     });
   };
 
-  saveProductProcessTable = (data) => {
+  const saveProductProcessTable = (data) => {
     $.ajax({
       type: 'POST',
       url: '/api/addProductsProcess',

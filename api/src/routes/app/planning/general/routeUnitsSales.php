@@ -189,7 +189,7 @@ $app->post('/addUnitSales', function (Request $request, Response $response, $arg
 
                 if (isset($resolution['info'])) break;
 
-                if ($arr['stock'] > $materials[$i]['quantity_material']) {
+                if (isset($arr['stock']) > $materials[$i]['quantity_material']) {
                     $data = [];
                     $data['idMaterial'] = $materials[$i]['id_material'];
                     $data['idProvider'] = '';
@@ -234,7 +234,7 @@ $app->post('/addUnitSales', function (Request $request, Response $response, $arg
             }
 
             if (
-                $product['quantity'] > 0 && $product['quantity'] < $product['stock']
+                $product['quantity'] > 0 && $product['quantity'] < isset($product['stock'])
             ) {
                 $data = [];
                 $arr2 = $generalOrdersDao->findLastNumOrder($id_company);
@@ -409,7 +409,7 @@ $app->post('/updateUnitSale', function (Request $request, Response $response, $a
         if ($resolution == null) {
             // Calcular stock material
             $materials = $productMaterialsDao->findAllProductsmaterials($dataSale['idProduct'], $id_company);
-            $orders = $generalOrdersDao->findAllOrdersByProduct($dataSale['idProduct']);
+            // $orders = $generalOrdersDao->findAllOrdersByProduct($dataSale['idProduct']);
             // $stock = 0;
 
             for ($i = 0; $i < sizeof($materials); $i++) {
@@ -419,7 +419,7 @@ $app->post('/updateUnitSale', function (Request $request, Response $response, $a
                 if (isset($arr['stock']))
                     $resolution = $generalMaterialDao->updateStockMaterial($materials[$i]['id_material'], $arr['stock']);
 
-                if ($arr['stock'] > $materials[$i]['quantity_material']) {
+                if (isset($arr['stock']) > $materials[$i]['quantity_material']) {
                     $data = [];
                     $data['idMaterial'] = $materials[$i]['id_material'];
                     $data['idProvider'] = '';
@@ -465,7 +465,7 @@ $app->post('/updateUnitSale', function (Request $request, Response $response, $a
                     $resolution = $generalProductsDao->updateStockByProduct($dataSale['idProduct'], $product['stock']);
             }
 
-            if ($product['quantity'] > 0 && $product['quantity'] < $product['stock']) {
+            if ($product['quantity'] > 0 && $product['quantity'] < isset($product['stock'])) {
                 $data = [];
                 $arr2 = $generalOrdersDao->findLastNumOrder($id_company);
                 $client = $generalClientsDao->findInternalClient($id_company);
@@ -606,7 +606,7 @@ $app->post('/deleteUnitSale', function (Request $request, Response $response, $a
             if (isset($product['stock']))
                 $resolution = $generalProductsDao->updateStockByProduct($dataSale['idProduct'], $product['stock']);
         }
-        if ($product['quantity'] > 0 && $product['quantity'] < $product['stock']) {
+        if ($product['quantity'] > 0 && $product['quantity'] < isset($product['stock'])) {
             $data = [];
             $arr2 = $generalOrdersDao->findLastNumOrder($id_company);
             $client = $generalClientsDao->findInternalClient($id_company);

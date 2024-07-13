@@ -15,7 +15,7 @@ $(document).ready(function () {
 
   // visible = inventory_abc == '1' ? true : false;
 
-  /* Cargue tabla de Categorias */
+  /* Cargue tabla de Categorias 
   const loadTblInventoryABC = (data) => {
     tblInventoryABC = $('#tblInventoryABC').dataTable({
       destroy: true,
@@ -68,7 +68,7 @@ $(document).ready(function () {
         },
       ],
     });
-  };
+  }; */
 
   loadAllData();
 });

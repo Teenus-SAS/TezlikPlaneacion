@@ -1,12 +1,5 @@
 $(document).ready(function () {
   let programming = [];
-  // Obtener referencia producto
-  $("#selectNameProduct").change(function (e) {
-    e.preventDefault();
-    id = this.value;
-    $(`#refProduct option[value=${id}]`).prop("selected", true);
-  });
-
   /* Ocultar panel crear programa de producción */
   $(".cardCreateProgramming").hide();
   $('.cardBottons').hide();
@@ -29,6 +22,7 @@ $(document).ready(function () {
     }
 
     $(".date").hide();
+    $("#refProduct").empty();
     $("#selectNameProduct").empty();
     $("#idMachine").empty();
     $("#idProcess").empty();
@@ -66,6 +60,11 @@ $(document).ready(function () {
     $("#order").append(`<option disabled>Seleccionar</option>`);
     $("#order").append(
       `<option value ='${data.id_order}' selected> ${data.num_order} </option>`
+    );
+    $("#refProduct").empty();
+    $("#refProduct").append(`<option disabled>Seleccionar</option>`);
+    $("#refProduct").append(
+      `<option value ='${data.id_product}' selected> ${data.product} </option>`
     );
     $("#selectNameProduct").empty();
     $("#selectNameProduct").append(`<option disabled>Seleccionar</option>`);

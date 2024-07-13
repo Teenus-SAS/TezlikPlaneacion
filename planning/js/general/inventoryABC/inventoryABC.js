@@ -12,15 +12,8 @@ $(document).ready(function () {
 
   /* Crear nuevo categoria */
   $('#btnSaveInventoryABC').click(function (e) {
-    e.preventDefault();
-      
-    // let idInventory = sessionStorage.getItem('id_inventory');
-    
-    // if (!idInventory) {
-    //   checkDataInventory('/api/addInventoryABC', idInventory);
-    // } else {
-    checkDataInventory('/api/updateInventoryABC');
-    // }
+    e.preventDefault(); 
+    checkDataInventory('/api/updateInventoryABC'); 
   });
 
   /* Actualizar categoria 
@@ -71,10 +64,8 @@ $(document).ready(function () {
     }
 
     let dataInventory = new FormData(formInventoryABC);
-
-    // if (idInventory != "" || idInventory != null) {
-      dataInventory.append("idInventory", data[0].id_inventory);
-    // }
+ 
+    dataInventory.append("idInventory", data[0].id_inventory); 
 
     let resp = await sendDataPOST(url, dataInventory);
 

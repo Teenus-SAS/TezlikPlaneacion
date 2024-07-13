@@ -96,7 +96,7 @@ $(document).ready(function () {
     );
   });
 
-  checkDataPlanningMachines = async (url, idProgramMachine) => {
+  const checkDataPlanningMachines = async (url, idProgramMachine) => {
     let idMachine = parseInt($('#idMachine').val());
     let numberWorkers = parseInt($('#numberWorkers').val());
     let hoursDay = parseInt($('#hoursDay').val()); 

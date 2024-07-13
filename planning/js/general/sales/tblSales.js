@@ -18,7 +18,7 @@ $(document).ready(function () {
   tblSales = $('#tblSales').dataTable({
     pageLength: 50,
     ajax: {
-      url: '../../api/unitSales',
+      url: '/api/unitSales',
       dataSrc: '',
     },
     language: {
@@ -149,7 +149,7 @@ $(document).ready(function () {
   tblSalesDays = $('#tblSalesDays').dataTable({
     pageLength: 50,
     ajax: {
-      url: '../../api/saleDays',
+      url: '/api/saleDays',
       dataSrc: '',
     },
     language: {
@@ -189,7 +189,6 @@ $(document).ready(function () {
         className: 'uniqueClassName dt-head-center',
         render: function (data) {
           return `<a href="javascript:;" <i id="${data}" class="bx bx-edit-alt updateDays" data-toggle='tooltip' title='Actualizar Dias' style="font-size: 30px;"></i></a>`;
-          // <a href="javascript:;" <i id="${data}" class="mdi mdi-delete-forever" data-toggle='tooltip' title='Eliminar Venta' style="font-size: 30px;color:red" onclick="deleteFunction()"></i></a>
         },
       },
     ],
