@@ -19,7 +19,7 @@ class RMStockDao
     public function findAllStockByCompany($id_company)
     {
         $connection = Connection::getInstance()->getConnection();
-        $stmt = $connection->prepare("SELECT s.id_stock_material, s.id_material, m.reference, m.material, IFNULL(mg.id_magnitude, 0) AS id_magnitude, IFNULL(mg.magnitude, '') AS magnitude, IFNULL(u.id_unit, 0) AS id_unit, IFNULL(u.unit, '') AS unit, IFNULL(u.abbreviation, '') AS abbreviation,
+        $stmt = $connection->prepare("SELECT s.id_stock_material, s.id_material, m.reference, m.material, -- IFNULL(mg.id_magnitude, 0) AS id_magnitude, IFNULL(mg.magnitude, '') AS magnitude, IFNULL(u.id_unit, 0) AS id_unit, IFNULL(u.unit, '') AS unit, IFNULL(u.abbreviation, '') AS abbreviation,
                                              IFNULL(s.id_provider, 0) AS id_provider, IFNULL(c.client, '') AS client, m.unit, m.quantity, s.min_term, s.max_term, s.min_quantity, (s.max_term - s.min_term) AS average
                                       FROM stock_materials s
                                         INNER JOIN materials m ON m.id_material = s.id_material

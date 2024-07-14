@@ -63,7 +63,7 @@
                                             </div>
                                         </div>
 
-                                        <div class="col-12 col-lg-4">
+                                        <div class="col-12 col-lg-8">
                                             <div class="input-group floating-label enable-floating-label show-label date">
                                                 <select id="client" name="idClient" class="form-control"></select>
                                                 <label for="">Cliente<span class="text-danger">*</span></label>

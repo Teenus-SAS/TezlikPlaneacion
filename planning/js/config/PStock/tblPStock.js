@@ -30,12 +30,12 @@ $(document).ready(function () {
         className: "uniqueClassName dt-head-center",
       },
       {
-        title: "Plazo Max",
+        title: "Tiempo Máximo de Producción",
         data: "max_term",
         className: "uniqueClassName dt-head-center",
       },
       {
-        title: "Plazo Habitual",
+        title: "Tiempo Mínimo de Producción",
         data: "usual_term",
         className: "uniqueClassName dt-head-center",
       },
