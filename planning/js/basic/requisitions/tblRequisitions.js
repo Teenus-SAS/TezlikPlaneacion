@@ -162,7 +162,7 @@ $(document).ready(function () {
           data: null,
           className: "uniqueClassName dt-head-center",
           render: function (data) {
-            let quantity = data.quantity;
+            let quantity = data.quantity_required;
 
             if (data.abbreviation === "UND")
               quantity = quantity.toLocaleString("es-CO", {
@@ -187,7 +187,7 @@ $(document).ready(function () {
           data: null,
           className: "uniqueClassName dt-head-center",
           render: function (data) {
-            let quantity = data.quantity;
+            let quantity = data.quantity_requested;
 
             if (data.abbreviation === "UND")
               quantity = quantity.toLocaleString("es-CO", {
@@ -230,7 +230,7 @@ $(document).ready(function () {
           quantity += parseFloat(data[display[i]].quantity);
         }
 
-        $(this.api().column(7).footer()).html(
+        $(this.api().column(8).footer()).html(
           quantity.toLocaleString("es-CO", {
             minimumFractionDigits: 0,
             maximumFractionDigits: 0,

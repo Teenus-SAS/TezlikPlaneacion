@@ -135,13 +135,41 @@ $(document).ready(function () {
     if (arr) {
       $('#rMQuantity').val(arr.min_quantity);
       $('#rMAverage').val(arr.average);
+    } else {
+      let arr = dataStock.filter(item => item.id_material == data.id_material);
+
+      if (arr.length == 1) {
+        $(`#client option[value=${arr[0].id_provider}]`).prop('selected', true);
+        $('#rMQuantity').val(arr[0].min_quantity);
+        $('#rMAverage').val(arr[0].average);
+      } else if (arr.length > 1) {
+        arr = arr.sort((a, b) => a.average - b.average);
+
+        // Verificar si todos los tiempos promedio son iguales 
+        const firstValue = arr[0]['average'];
+        const allSame = arr.every(item => item['average'] === firstValue);
+
+        if (allSame == true) {
+          arr = arr.sort((a, b) => a.min_quantity - b.min_quantity);
+        }
+
+        $(`#client option[value=${arr[0].id_provider}]`).prop('selected', true);
+        $('#rMQuantity').val(arr[0].min_quantity);
+        $('#rMAverage').val(parseFloat(arr[0].max_term) - parseFloat(arr[0].min_term));
+      }
     }
 
-    let quantity = data.quantity
+    let quantity_required = data.quantity_required
             
-    if (data.abbreviation === 'UND') quantity = Math.floor(quantity);
+    if (data.abbreviation === 'UND') quantity_required = Math.floor(quantity_required);
     
-    $('#quantity').val(quantity);
+    $('#requiredQuantity').val(quantity_required);
+    
+    let quantity_requested = data.quantity_requested
+            
+    if (data.abbreviation === 'UND') quantity_requested = Math.floor(quantity_requested);
+
+    $('#requestedQuantity').val(quantity_requested);
     
     $('html, body').animate(
       {
@@ -151,14 +179,15 @@ $(document).ready(function () {
     );
   });
 
-  checkDataRequisition = async (url, idRequisition) => {
+  const checkDataRequisition = async (url, idRequisition) => {
     let material = $('#material').val();
     let provider = $('#client').val();
     let applicationDate = $('#applicationDate').val();
     let deliveryDate = $('#deliveryDate').val();
-    let quan = $('#quantity').val();
+    let quan = $('#requiredQuantity').val();
+    let r_quan = $('#requestedQuantity').val();
 
-    let data = quan * material * provider;
+    let data = quan * r_quan * material * provider;
 
     if (!data || applicationDate == '' || deliveryDate == '' || quan == '') {
       toastr.error('Ingrese todos los campos');
