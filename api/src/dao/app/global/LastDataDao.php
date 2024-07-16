@@ -67,6 +67,16 @@ class LastDataDao
         $id_product = $query->fetch($connection::FETCH_ASSOC);
         return $id_product;
     }
+    /* Material */
+    public function lastInsertedMaterialId($id_company)
+    {
+        $connection = Connection::getInstance()->getConnection();
+        $sql = "SELECT MAX(id_material) AS id_material FROM materials WHERE id_company = :id_company";
+        $query = $connection->prepare($sql);
+        $query->execute(['id_company' => $id_company]);
+        $material = $query->fetch($connection::FETCH_ASSOC);
+        return $material;
+    }
 
     public function findLastInsertedClient()
     {

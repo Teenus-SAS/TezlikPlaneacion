@@ -81,6 +81,23 @@ class GeneralProductsDao
         return $product;
     }
 
+    // Buscar producto por el idMaterial
+    public function findProductByMaterial($idMaterial, $id_company)
+    {
+        $connection = Connection::getInstance()->getConnection();
+
+        $stmt = $connection->prepare("SELECT pm.id_product, m.id_magnitude
+                                      FROM products p
+                                        INNER JOIN products_materials pm ON pm.id_product = p.id_product
+                                        INNER JOIN convert_units c ON c.id_unit = pm.id_unit
+                                        INNER JOIN convert_magnitudes m ON m.id_magnitude = c.id_magnitude
+                                      WHERE pm.id_material =:id_material AND p.id_company = :id_company");
+        $stmt->execute(['id_material' => $idMaterial, 'id_company' => $id_company]);
+        $dataProduct = $stmt->fetchAll($connection::FETCH_ASSOC);
+
+        return $dataProduct;
+    }
+
     /* Consultar si existe referencia o nombre de producto en BD por compañia */
     public function findProductByReferenceOrName($dataProduct, $id_company)
     {

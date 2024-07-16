@@ -95,6 +95,24 @@ class GeneralMaterialsDao
         return $findMaterial;
     }
 
+    public function findMaterialAndUnits($id_material, $id_company)
+    {
+        $connection = Connection::getInstance()->getConnection();
+
+        $stmt = $connection->prepare("SELECT m.id_material, m.reference, m.material, mg.id_magnitude, mg.magnitude, 
+                                             u.id_unit, u.abbreviation, m.quantity
+                                      FROM materials m
+                                        INNER JOIN convert_units u ON u.id_unit = m.unit
+                                        INNER JOIN convert_magnitudes mg ON mg.id_magnitude = u.id_magnitude
+                                      WHERE m.id_material = :id_material AND id_company = :id_company");
+        $stmt->execute([
+            'id_material' => $id_material,
+            'id_company' => $id_company,
+        ]);
+        $findMaterial = $stmt->fetch($connection::FETCH_ASSOC);
+        return $findMaterial;
+    }
+
     // Calcular inventario Materia Prima Recibida
     public function calcMaterialRecieved($id_material)
     {
