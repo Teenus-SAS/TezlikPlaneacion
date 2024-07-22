@@ -16,5 +16,33 @@ $(document).ready(function () {
         `<option value =${value.id_client}> ${value.client} </option>`
       );
     });
-  }
+  };
+
+  setInputClient = async (data) => {
+    let $select = $(`#client`);
+    $select.empty();
+
+    $select.append(`<option disabled selected value='0'>Seleccionar</option>`);
+    $.each(data, function (i, value) {
+      $select.append(
+        `<option value =${value.id_client}> ${value.client} </option>`
+      );
+    });
+  };
+
+  // loadProviders = async () => {
+  //   let data = await searchData('/api/clients');
+
+  //   data = data.filter(item => item.type_client == 2);
+    
+  //   let $select = $(`#client`);
+  //   $select.empty();
+
+  //   $select.append(`<option disabled selected value='0'>Seleccionar</option>`);
+  //   $.each(data, function (i, value) {
+  //     $select.append(
+  //       `<option value =${value.id_client}> ${value.client} </option>`
+  //     );
+  //   });
+  // };
 });

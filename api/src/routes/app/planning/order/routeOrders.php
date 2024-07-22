@@ -11,6 +11,7 @@ use TezlikPlaneacion\dao\GeneralOrderTypesDao;
 use TezlikPlaneacion\dao\GeneralPlanCiclesMachinesDao;
 use TezlikPlaneacion\dao\GeneralProductsDao;
 use TezlikPlaneacion\dao\GeneralRequisitionsDao;
+use TezlikPlaneacion\dao\GeneralRMStockDao;
 use TezlikPlaneacion\dao\LastDataDao;
 use TezlikPlaneacion\dao\MallasDao;
 use TezlikPlaneacion\dao\OrdersDao;
@@ -23,6 +24,7 @@ $generalOrdersDao = new GeneralOrdersDao();
 $generalProductsDao = new GeneralProductsDao();
 $convertDataDao = new ConvertDataDao();
 $productsDao = new GeneralProductsDao();
+$generalRMStockDao = new GeneralRMStockDao();
 $clientsDao = new ClientsDao();
 $generalClientsDao = new GeneralClientsDao();
 $orderTypesDao = new GeneralOrderTypesDao();
@@ -174,7 +176,7 @@ $app->post('/addOrder', function (Request $request, Response $response, $args) u
     $generalOrdersDao,
     $convertDataDao,
     $productsDao,
-    $programmingRoutesDao,
+    $generalRMStockDao,
     $generalProductsDao,
     $generalClientsDao,
     $lastDataDao,
@@ -450,11 +452,19 @@ $app->post('/addOrder', function (Request $request, Response $response, $args) u
         if ($materials[$i]['available'] < 0) {
             $data = [];
             $data['idMaterial'] = $materials[$i]['id_material'];
-            $data['idProvider'] = '';
+
+            $provider = $generalRMStockDao->findProviderByStock($materials[$i]['id_material']);
+
+            $id_provider = 0;
+
+            if ($provider) $id_provider = $provider['id_provider'];
+
+            $data['idProvider'] = $id_provider;
             $data['applicationDate'] = '';
             $data['deliveryDate'] = '';
-            $data['quantity'] = abs($materials[$i]['available']);
+            $data['requestedQuantity'] = abs($materials[$i]['available']);
             $data['purchaseOrder'] = '';
+            $data['requiredQuantity'] = 0;
 
             $requisition = $generalRequisitionsDao->findRequisitionByApplicationDate($materials[$i]['id_material']);
 
@@ -476,7 +486,7 @@ $app->post('/updateOrder', function (Request $request, Response $response, $args
     $generalOrdersDao,
     $generalProductsDao,
     $convertDataDao,
-    $filterDataDao,
+    $generalRMStockDao,
     $explosionMaterialsDao,
     $requisitionsDao,
     $generalRequisitionsDao,
@@ -596,11 +606,19 @@ $app->post('/updateOrder', function (Request $request, Response $response, $args
             if ($materials[$i]['available'] < 0) {
                 $data = [];
                 $data['idMaterial'] = $materials[$i]['id_material'];
-                $data['idProvider'] = '';
+
+                $provider = $generalRMStockDao->findProviderByStock($materials[$i]['id_material']);
+
+                $id_provider = 0;
+
+                if ($provider) $id_provider = $provider['id_provider'];
+
+                $data['idProvider'] = $id_provider;
                 $data['applicationDate'] = '';
                 $data['deliveryDate'] = '';
-                $data['quantity'] = abs($materials[$i]['available']);
+                $data['requestedQuantity'] = abs($materials[$i]['available']);
                 $data['purchaseOrder'] = '';
+                $data['requiredQuantity'] = 0;
 
                 $requisition = $generalRequisitionsDao->findRequisitionByApplicationDate($materials[$i]['id_material']);
 
@@ -626,6 +644,7 @@ $app->post('/updateOrder', function (Request $request, Response $response, $args
 
 $app->get('/deleteOrder/{id_order}', function (Request $request, Response $response, $args) use (
     $ordersDao,
+    $generalRMStockDao,
     $explosionMaterialsDao,
     $generalRequisitionsDao,
     $requisitionsDao
@@ -640,11 +659,19 @@ $app->get('/deleteOrder/{id_order}', function (Request $request, Response $respo
         if ($materials[$i]['available'] < 0) {
             $data = [];
             $data['idMaterial'] = $materials[$i]['id_material'];
-            $data['idProvider'] = '';
+
+            $provider = $generalRMStockDao->findProviderByStock($materials[$i]['id_material']);
+
+            $id_provider = 0;
+
+            if ($provider) $id_provider = $provider['id_provider'];
+
+            $data['idProvider'] = $id_provider;
             $data['applicationDate'] = '';
             $data['deliveryDate'] = '';
-            $data['quantity'] = abs($materials[$i]['available']);
+            $data['requestedQuantity'] = abs($materials[$i]['available']);
             $data['purchaseOrder'] = '';
+            $data['requiredQuantity'] = 0;
 
             $requisition = $generalRequisitionsDao->findRequisitionByApplicationDate($materials[$i]['id_material']);
 

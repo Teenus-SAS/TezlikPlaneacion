@@ -191,7 +191,7 @@ if (sizeof($_SESSION) == 0)
                                                 <!-- <div class="w-100"></div> -->
                                                 <div class="col-sm-2 floating-label enable-floating-label show-label mt-2" style="margin-bottom:5px">
                                                     <label for="">Cantidad Requerida</label>
-                                                    <input class="form-control text-center" type="number" name="requiredQuantity" id="requiredQuantity" readonly>
+                                                    <input class="form-control text-center" type="number" name="requiredQuantity" id="requiredQuantity">
                                                 </div>
                                                 <div class="col-sm-2 floating-label enable-floating-label show-label mt-2" style="margin-bottom:5px">
                                                     <label for="">Cantidad Solicitada</label>

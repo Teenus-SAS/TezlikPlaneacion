@@ -10,6 +10,7 @@ use TezlikPlaneacion\dao\GeneralOrdersDao;
 use TezlikPlaneacion\dao\GeneralPlanCiclesMachinesDao;
 use TezlikPlaneacion\dao\GeneralProgrammingDao;
 use TezlikPlaneacion\dao\GeneralRequisitionsDao;
+use TezlikPlaneacion\dao\GeneralRMStockDao;
 use TezlikPlaneacion\dao\LastDataDao;
 use TezlikPlaneacion\dao\LotsProductsDao;
 use TezlikPlaneacion\dao\MachinesDao;
@@ -38,6 +39,7 @@ $productsMaterialsDao = new ProductsMaterialsDao();
 $storeDao = new StoreDao();
 $explosionMaterialsDao = new ExplosionMaterialsDao();
 $generalRequisitionsDao = new GeneralRequisitionsDao();
+$generalRMStockDao = new GeneralRMStockDao();
 $requisitionsDao = new RequisitionsDao();
 
 use Psr\Http\Message\ResponseInterface as Response;
@@ -201,6 +203,7 @@ $app->post('/saveProgramming', function (Request $request, Response $response, $
     $generalMaterialsDao,
     $ordersDao,
     $lastDataDao,
+    $generalRMStockDao,
     $explosionMaterialsDao,
     $requisitionsDao,
     $generalRequisitionsDao
@@ -294,11 +297,20 @@ $app->post('/saveProgramming', function (Request $request, Response $response, $
             if ($materials[$i]['available'] < 0) {
                 $data = [];
                 $data['idMaterial'] = $materials[$i]['id_material'];
-                $data['idProvider'] = '';
+
+                $provider = $generalRMStockDao->findProviderByStock($materials[$i]['id_material']);
+
+                $id_provider = 0;
+
+                if ($provider) $id_provider = $provider['id_provider'];
+
+                $data['idProvider'] = $id_provider;
+
                 $data['applicationDate'] = '';
                 $data['deliveryDate'] = '';
-                $data['quantity'] = abs($materials[$i]['available']);
+                $data['requestedQuantity'] = abs($materials[$i]['available']);
                 $data['purchaseOrder'] = '';
+                $data['requiredQuantity'] = 0;
 
                 $requisition = $generalRequisitionsDao->findRequisitionByApplicationDate($materials[$i]['id_material']);
 
@@ -311,7 +323,6 @@ $app->post('/saveProgramming', function (Request $request, Response $response, $
             }
         }
     }
-
 
     if ($result == null)
         $resp = array('success' => true, 'message' => 'Programa de producción creado correctamente');

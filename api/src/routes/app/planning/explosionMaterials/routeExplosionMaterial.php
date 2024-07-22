@@ -2,17 +2,20 @@
 
 use TezlikPlaneacion\dao\ExplosionMaterialsDao;
 use TezlikPlaneacion\dao\GeneralRequisitionsDao;
+use TezlikPlaneacion\dao\GeneralRMStockDao;
 use TezlikPlaneacion\dao\RequisitionsDao;
 
 $explosionMaterialsDao = new ExplosionMaterialsDao();
 $requisitionsDao = new RequisitionsDao();
 $generalRequisitionsDao = new GeneralRequisitionsDao();
+$generalRMStockDao = new GeneralRMStockDao();
 
 use Psr\Http\Message\ResponseInterface as Response;
 use Psr\Http\Message\ServerRequestInterface as Request;
 
 $app->get('/explosionMaterials', function (Request $request, Response $response, $args) use (
     $explosionMaterialsDao,
+    $generalRMStockDao,
     $requisitionsDao,
     $generalRequisitionsDao
 ) {
@@ -24,11 +27,20 @@ $app->get('/explosionMaterials', function (Request $request, Response $response,
         if ($materials[$i]['available'] < 0) {
             $data = [];
             $data['idMaterial'] = $materials[$i]['id_material'];
-            $data['idProvider'] = '';
+
+            $provider = $generalRMStockDao->findProviderByStock($materials[$i]['id_material']);
+
+            $id_provider = 0;
+
+            if ($provider) $id_provider = $provider['id_provider'];
+
+            $data['idProvider'] = $id_provider;
+
             $data['applicationDate'] = '';
             $data['deliveryDate'] = '';
-            $data['quantity'] = abs($materials[$i]['available']);
+            $data['requestedQuantity'] = abs($materials[$i]['available']);
             $data['purchaseOrder'] = '';
+            $data['requestedQuantity'] = 0;
 
             $requisition = $generalRequisitionsDao->findRequisitionByApplicationDate($materials[$i]['id_material']);
 

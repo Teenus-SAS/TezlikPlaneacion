@@ -1,6 +1,4 @@
 $(document).ready(function () {
-  loadClients(2);
-
   /* Ocultar panel crear producto */
 
   $('.cardAddRequisitions').hide();
@@ -14,6 +12,7 @@ $(document).ready(function () {
     $('.cardTableConfigMaterials').show(800);
     $('.cardAddRequisitions').toggle(800);
     $('#btnAddRequisition').html('Asignar');
+    document.getElementById('requiredQuantity').readOnly = false;
 
     sessionStorage.removeItem('id_requisition');
 
@@ -75,7 +74,9 @@ $(document).ready(function () {
     $('#rMAverage').val('');
 
     let dataStock = JSON.parse(sessionStorage.getItem('stock'));
-    let arr = dataStock.filter(item => item.id_material == this.value);
+    let arr = dataStock.filter(item => item.id_material == this.value); 
+
+    setInputClient(arr);
 
     if (arr.length == 1) {
       $(`#client option[value=${arr[0].id_provider}]`).prop('selected', true);
@@ -124,13 +125,19 @@ $(document).ready(function () {
     sessionStorage.setItem('id_requisition', data.id_requisition);
  
     $(`#material option[value=${data.id_material}]`).prop('selected', true);
-    $(`#client option[value=${data.id_provider}]`).prop('selected', true);
+    // $(`#client option[value=${data.id_provider}]`).prop('selected', true);
     $('#applicationDate').val(data.application_date);
     $('#deliveryDate').val(data.delivery_date);
     $('#purchaseOrder').val(data.purchase_order);
+    document.getElementById('requiredQuantity').readOnly = true;
     
     let dataStock = JSON.parse(sessionStorage.getItem('stock'));
     let arr = dataStock.find(item => item.id_material == data.id_material && item.id_provider == data.id_provider);
+
+    let $select = $(`#client`);
+    $select.empty();
+    $select.append(`<option disabled value='0'>Seleccionar</option>`);
+    $select.append(`<option value='${arr.id_client}' selected> ${arr.client} </option>`);
 
     if (arr) {
       $('#rMQuantity').val(arr.min_quantity);
@@ -184,12 +191,12 @@ $(document).ready(function () {
     let provider = $('#client').val();
     let applicationDate = $('#applicationDate').val();
     let deliveryDate = $('#deliveryDate').val();
-    let quan = $('#requiredQuantity').val();
+    // let quan = $('#requiredQuantity').val();
     let r_quan = $('#requestedQuantity').val();
 
-    let data = quan * r_quan * material * provider;
+    let data = r_quan * material * provider;
 
-    if (!data || applicationDate == '' || deliveryDate == '' || quan == '') {
+    if (!data || applicationDate == '' || deliveryDate == '') {
       toastr.error('Ingrese todos los campos');
       return false;
     }
@@ -207,7 +214,7 @@ $(document).ready(function () {
     let resp = await sendDataPOST(url, dataRequisition);
 
     message(resp);
-  } 
+  }  
 
   /* Eliminar materia prima */
 
