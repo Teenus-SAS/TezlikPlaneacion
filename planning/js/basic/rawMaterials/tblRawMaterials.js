@@ -10,10 +10,10 @@ $(document).ready(function () {
     
     tblRawMaterials = $("#tblRawMaterials").dataTable({
       pageLength: 50,
-      ajax: {
-        url: "../../api/materials",
-        dataSrc: "",
-      },
+      // ajax: {
+      //   url: "/api/materials",
+      // },
+      data: data,
       language: {
         url: "/assets/plugins/i18n/Spanish.json",
       },
@@ -98,14 +98,14 @@ $(document).ready(function () {
         },
       ],
       footerCallback: function (row, data, start, end, display) {
-        let quantity = 0; 
-        let reserved = 0; 
-        let minimum_stock = 0; 
+        let quantity = 0;
+        let reserved = 0;
+        let minimum_stock = 0;
 
         for (i = 0; i < display.length; i++) {
-          quantity += parseFloat(data[display[i]].quantity); 
-          reserved += parseFloat(data[display[i]].reserved); 
-          minimum_stock += parseFloat(data[display[i]].minimum_stock); 
+          quantity += parseFloat(data[display[i]].quantity);
+          reserved += parseFloat(data[display[i]].reserved);
+          minimum_stock += parseFloat(data[display[i]].minimum_stock);
         }
 
         $(this.api().column(4).footer()).html(
@@ -113,21 +113,21 @@ $(document).ready(function () {
             minimumFractionDigits: 0,
             maximumFractionDigits: 0,
           })
-        ); 
+        );
         
         $(this.api().column(5).footer()).html(
           reserved.toLocaleString('es-CO', {
             minimumFractionDigits: 0,
             maximumFractionDigits: 0,
           })
-        ); 
+        );
 
         $(this.api().column(6).footer()).html(
           minimum_stock.toLocaleString('es-CO', {
             minimumFractionDigits: 0,
             maximumFractionDigits: 0,
           })
-        ); 
+        );
       },
     });
   }

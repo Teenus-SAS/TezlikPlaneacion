@@ -71,7 +71,7 @@ $(document).ready(function () {
   });
 
   /* Mensaje de advertencia */
-  checkRawMaterial = (data) => {
+  const checkRawMaterial = (data) => {
     $.ajax({
       type: 'POST',
       url: '/api/materialsDataValidation',
@@ -112,7 +112,7 @@ $(document).ready(function () {
     });
   };
 
-  saveMaterialTable = (data) => {
+  const saveMaterialTable = (data) => {
     $.ajax({
       type: 'POST',
       url: '../api/addMaterials',
@@ -147,18 +147,19 @@ $(document).ready(function () {
     let data = [];
 
     namexlsx = 'Materia_prima.xlsx';
-    url = '/api/materials';
+    // url = '/api/materials';
     
-    let materials = await searchData(url);
+    // let materials = await searchData(url);
+    let dataMaterials = JSON.parse(sessionStorage.getItem('dataMaterials'));
 
-    if (materials.length > 0) {
-      for (i = 0; i < materials.length; i++) {
+    if (dataMaterials.length > 0) {
+      for (i = 0; i < dataMaterials.length; i++) {
         data.push({
-          referencia: materials[i].reference,
-          material: materials[i].material,
-          magnitud: materials[i].magnitude,
-          unidad: materials[i].unit,
-          existencia: materials[i].quantity,
+          referencia: dataMaterials[i].reference,
+          material: dataMaterials[i].material,
+          magnitud: dataMaterials[i].magnitude,
+          unidad: dataMaterials[i].unit,
+          existencia: dataMaterials[i].quantity,
         });
       }
 

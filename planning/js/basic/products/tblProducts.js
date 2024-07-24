@@ -1,6 +1,6 @@
 $(document).ready(function () {
-  products = [];
-  materials = [];
+  // products = [];
+  // materials = [];
 
   // $(".selectNavigation").click(function (e) {
   //   e.preventDefault();
@@ -39,18 +39,21 @@ $(document).ready(function () {
     e.preventDefault();
     const option = this.id;
 
+    let dataProducts = JSON.parse(sessionStorage.getItem('dataProducts'));
+    let dataMaterials = JSON.parse(sessionStorage.getItem('dataMaterials'));
+
     const cards = {
       'sProducts': {
         show: [".cardProducts"],
         hide: [".cardMaterials", ".cardRawMaterials", ".cardImportMaterials"],
         load: loadTblProduct,
-        data: products
+        data: dataProducts
       },
       'sMaterials': {
         show: [".cardMaterials"],
         hide: [".cardProducts", ".cardCreateProduct", ".cardImportProducts"],
         load: loadTblMaterials,
-        data: materials
+        data: dataMaterials
       }
     };
 
@@ -77,17 +80,19 @@ $(document).ready(function () {
         searchData('/api/materials')
       ]);
 
-      products = dataProducts;
-      materials = dataMaterials;
+      // products = dataProducts;
+      // materials = dataMaterials;
+      sessionStorage.setItem('dataProducts', JSON.stringify(dataProducts));
+      sessionStorage.setItem('dataMaterials', JSON.stringify(dataMaterials));
 
       const card = document.querySelector('.selectNavigation');
 
       if (card.classList.contains('active')) {
-        loadTblProduct(products);
-        inventoryIndicator(products);
+        loadTblProduct(dataProducts);
+        inventoryIndicator(dataProducts);
       } else {
-        loadTblMaterials(materials);
-        inventoryIndicator(materials);
+        loadTblMaterials(dataMaterials);
+        inventoryIndicator(dataMaterials);
       }
     } catch (error) {
       console.error('Error loading data:', error);

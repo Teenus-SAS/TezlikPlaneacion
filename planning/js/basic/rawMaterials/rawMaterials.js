@@ -149,12 +149,5 @@ $(document).ready(function () {
       return false;
     } else if (data.error == true) toastr.error(data.message);
     else if (data.info == true) toastr.info(data.message);
-  };
-
-  /* Actualizar tabla */
-
-  // function updateTable() {
-  //   $('#tblRawMaterials').DataTable().clear();
-  //   $('#tblRawMaterials').DataTable().ajax.reload();
-  // }
+  }; 
 });

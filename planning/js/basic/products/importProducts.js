@@ -69,7 +69,7 @@ $(document).ready(function () {
   });
 
   /* Mensaje de advertencia */
-  checkProduct = (data) => {
+  const checkProduct = (data) => {
     $.ajax({
       type: 'POST',
       url: '/api/productsDataValidation',
@@ -111,7 +111,7 @@ $(document).ready(function () {
   };
 
   /* Guardar Importacion */
-  saveProductTable = (data) => {
+  const saveProductTable = (data) => {
     $.ajax({
       type: 'POST',
       url: '/api/addProduct',
@@ -147,16 +147,17 @@ $(document).ready(function () {
     let data = [];
 
     namexlsx = 'Productos.xlsx';
-    url = '/api/products';
+    // url = '/api/products';
     
-    let products = await searchData(url);
+    // let products = await searchData(url);
+    let dataProducts = JSON.parse(sessionStorage.getItem('dataProducts'));
 
-    if (products.length > 0) {
-      for (i = 0; i < products.length; i++) {
+    if (dataProducts.length > 0) {
+      for (i = 0; i < dataProducts.length; i++) {
         data.push({
-          referencia_producto: products[i].reference,
-          producto: products[i].product,
-          existencias: products[i].quantity
+          referencia_producto: dataProducts[i].reference,
+          producto: dataProducts[i].product,
+          existencias: dataProducts[i].quantity
         });
       }
 
