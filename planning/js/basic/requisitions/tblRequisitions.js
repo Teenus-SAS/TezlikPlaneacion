@@ -137,11 +137,12 @@ $(document).ready(function () {
           },
         },
         {
-          title: "Estado",
-          data: "status",
+          title: "Acciones",
+          data: null,
           className: "uniqueClassName dt-head-center",
-          render: renderRequisitionStatus,
+          render: renderRequisitionActions,
         },
+
         {
           title: "Referencia",
           data: "reference",
@@ -157,8 +158,33 @@ $(document).ready(function () {
           data: "abbreviation",
           className: "uniqueClassName dt-head-center",
         },
+
         {
-          title: "Cantidad Requerida",
+          title: "Proveedor",
+          data: "provider",
+          className: "uniqueClassName dt-head-center",
+        },
+        {
+          title: "Cant. Requerida",
+          data: null,
+          className: "uniqueClassName dt-head-center",
+          render: function (data) {
+            let quantity = data.quantity_requested;
+
+            if (data.abbreviation === "UND")
+              quantity = quantity.toLocaleString("es-CO", {
+                maximumFractionDigits: 0,
+              });
+            else
+              quantity = quantity.toLocaleString("es-CO", {
+                minimumFractionDigits: 2,
+              });
+
+            return quantity;
+          },
+        },
+        {
+          title: "Cant. Solicitada",
           data: null,
           className: "uniqueClassName dt-head-center",
           render: function (data) {
@@ -178,33 +204,15 @@ $(document).ready(function () {
         },
 
         {
-          title: "Proveedor",
-          data: "provider",
-          className: "uniqueClassName dt-head-center",
-        },
-        {
-          title: "Cantidad Solicitada",
-          data: null,
-          className: "uniqueClassName dt-head-center",
-          render: function (data) {
-            let quantity = data.quantity_requested;
-
-            if (data.abbreviation === "UND")
-              quantity = quantity.toLocaleString("es-CO", {
-                maximumFractionDigits: 0,
-              });
-            else
-              quantity = quantity.toLocaleString("es-CO", {
-                minimumFractionDigits: 2,
-              });
-
-            return quantity;
-          },
-        },
-        {
           title: "Fecha Solicitud",
           data: "application_date",
           className: "uniqueClassName dt-head-center",
+        },
+        {
+          title: "Estado",
+          data: "status",
+          className: "uniqueClassName dt-head-center",
+          render: renderRequisitionStatus,
         },
         {
           title: "Fecha Entrega",
@@ -215,12 +223,6 @@ $(document).ready(function () {
           title: "Orden de Compra",
           data: "purchase_order",
           className: "uniqueClassName dt-head-center",
-        },
-        {
-          title: "Acciones",
-          data: null,
-          className: "uniqueClassName dt-head-center",
-          render: renderRequisitionActions,
         },
       ],
       footerCallback: function (row, data, start, end, display) {

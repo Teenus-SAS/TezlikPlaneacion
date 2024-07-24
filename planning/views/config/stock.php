@@ -42,15 +42,15 @@ if (sizeof($_SESSION) == 0)
                             <div class="row align-items-center">
                                 <div class="col-sm-5 col-xl-6">
                                     <div class="page-title">
-                                        <h3 class="mb-1 font-weight-bold text-dark">Tiempos Productos Stock Minimo</h3>
+                                        <h3 class="mb-1 font-weight-bold text-dark">Tiempos Producción Productos</h3>
                                         <ol class="breadcrumb mb-3 mb-md-0">
-                                            <li class="breadcrumb-item active">Creación de Tiempos Stock Minimo Productos</li>
+                                            <li class="breadcrumb-item active">Creación de Tiempos Producción Productos</li>
                                         </ol>
                                     </div>
                                 </div>
                                 <div class="col-sm-7 col-xl-6 form-inline justify-content-sm-end">
                                     <div class="col-xs-2 mr-2">
-                                        <button class="btn btn-warning" id="btnNewPStock" name="btnNewPStock"><i class="bi bi-plus-circle"></i> Nuevo Stock</button>
+                                        <button class="btn btn-warning" id="btnNewPStock" name="btnNewPStock"><i class="bi bi-plus-circle"></i> Nuevo</button>
                                     </div>
                                     <div class="col-xs-2 py-2 mr-2">
                                         <button class="btn btn-info" id="btnImportNewPStock"><i class="bi bi-cloud-arrow-up-fill"></i> Importar</button>
@@ -62,15 +62,15 @@ if (sizeof($_SESSION) == 0)
                             <div class="row align-items-center">
                                 <div class="col-sm-5 col-xl-6">
                                     <div class="page-title">
-                                        <h3 class="mb-1 font-weight-bold text-dark">Tiempos Proveedores Stock Minimo</h3>
+                                        <h3 class="mb-1 font-weight-bold text-dark">Tiempos Entrega Materia Prima Proveedores</h3>
                                         <ol class="breadcrumb mb-3 mb-md-0">
-                                            <li class="breadcrumb-item active">Creación de Tiempos Stock Minimo Materia Prima</li>
+                                            <li class="breadcrumb-item active">Creación de Tiempos de Entrega Materia Prima</li>
                                         </ol>
                                     </div>
                                 </div>
                                 <div class="col-sm-7 col-xl-6 form-inline justify-content-sm-end">
                                     <div class="col-xs-2 mr-2">
-                                        <button class="btn btn-warning" id="btnNewRMStock" name="btnNewRMStock"><i class="bi bi-plus-circle"></i> Nuevo Stock</button>
+                                        <button class="btn btn-warning" id="btnNewRMStock" name="btnNewRMStock"><i class="bi bi-plus-circle"></i> Nuevo</button>
                                     </div>
                                     <div class="col-xs-2 py-2 mr-2">
                                         <button class="btn btn-info" id="btnImportNewRMStock"><i class="bi bi-cloud-arrow-up-fill"></i> Importar</button>
@@ -99,11 +99,11 @@ if (sizeof($_SESSION) == 0)
                                                     <select class="form-control selectNameProduct" name="selectNameProduct" id="selectNameProduct"></select>
                                                 </div>
                                                 <div class="col-xs-1 floating-label enable-floating-label show-label" style="margin-bottom:0px">
-                                                    <label for="">Plazo Max</label>
+                                                    <label for="">Tiempo Max Producción</label>
                                                     <input type="number" class="form-control text-center" id="pMax" name="max">
                                                 </div>
                                                 <div class="col-xs-1 floating-label enable-floating-label show-label" style="margin-bottom:0px">
-                                                    <label for="">Plazo Habitual</label>
+                                                    <label for="">Tiempo Min Producción</label>
                                                     <input type="number" class="form-control text-center" id="pUsual" name="usual">
                                                 </div>
                                                 <div class="col-sm mt-1">

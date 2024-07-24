@@ -52,7 +52,7 @@ if (sizeof($_SESSION) == 0)
                             </div>
                             <div class="col-sm-7 col-xl-6 form-inline justify-content-sm-end">
                                 <div class="col-xs-2 mr-2">
-                                    <button class="btn btn-warning" id="btnNewClient" name="btnNewClient"><i class="bi bi-person-plus-fill"></i> Nuevo Cliente</button>
+                                    <button class="btn btn-warning" id="btnNewClient" name="btnNewClient"><i class="bi bi-person-plus-fill"></i> Adicionar Tercero</button>
                                 </div>
                                 <div class="col-xs-2 py-2 mr-2">
                                     <button class="btn btn-info" id="btnImportNewClient"><i class="bi bi-cloud-arrow-up-fill"></i> Importar</button>
@@ -104,7 +104,7 @@ if (sizeof($_SESSION) == 0)
                                             <div class="form-row" id="formClients">
                                                 <div class="col-sm-6 floating-label enable-floating-label show-label drag-area" style="margin-bottom:10px!important">
                                                     <input class="form-control" type="file" id="fileClients" accept=".xls,.xlsx">
-                                                    <label for="formFile" class="form-label">Importar Clientes</label>
+                                                    <label for="formFile" class="form-label">Importar Terceros</label>
                                                 </div>
                                                 <div class="col-xs-2 cardBottons" style="margin-top:7px">
                                                     <button type="text" class="btn btn-success" id="btnImportClients">Importar</button>

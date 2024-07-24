@@ -40,22 +40,22 @@ $(document).ready(function () {
         className: "uniqueClassName dt-head-center",
       },
       {
-        title: "Plazo Min",
+        title: "Plazo Min Despacho",
         data: "min_term",
         className: "uniqueClassName dt-head-center",
       },
       {
-        title: "Plazo Max",
+        title: "Plazo Max Despacho",
         data: "max_term",
         className: "uniqueClassName dt-head-center",
       },
       {
-        title: "Cantidad Minima",
+        title: "Cantidad Min de Venta",
         data: "min_quantity",
         className: "uniqueClassName dt-head-center",
       },
       {
-        title: "Tiempo Promedio",
+        title: "Tiempo Promedio Despacho",
         data: 'average',
         className: "uniqueClassName dt-head-center",
       },

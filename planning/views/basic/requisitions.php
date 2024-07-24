@@ -165,19 +165,19 @@ if (sizeof($_SESSION) == 0)
                                         <form id="formAddRequisition">
                                             <div class="form-row">
                                                 <div class="col-sm-5 floating-label enable-floating-label show-label" style="margin-bottom:5px">
-                                                    <label for="">Material</label>
+                                                    <label for="">Materia Prima</label>
                                                     <select class="form-control" name="idMaterial" id="material"></select>
                                                 </div>
                                                 <div class="col-sm-3 floating-label enable-floating-label show-label" style="margin-bottom:5px">
-                                                    <label for="">Provedoores</label>
+                                                    <label for="">Proveedor</label>
                                                     <select class="form-control" name="idProvider" id="client"></select>
                                                 </div>
                                                 <div class="col-sm-2 floating-label enable-floating-label show-label" style="margin-bottom:5px">
-                                                    <label for="">Cantidad Minima</label>
+                                                    <label for="">Cantidad Minima Compra</label>
                                                     <input class="form-control text-center" type="number" id="rMQuantity" readonly>
                                                 </div>
                                                 <div class="col-sm-2 floating-label enable-floating-label show-label" style="margin-bottom:5px">
-                                                    <label for="">Tiempo Promedio</label>
+                                                    <label for="">Tiempo Promedio (días)</label>
                                                     <input class="form-control text-center" type="number" id="rMAverage" readonly>
                                                 </div>
                                                 <div class="col-sm-2 floating-label enable-floating-label show-label mt-2" style="margin-bottom:5px">
@@ -191,11 +191,11 @@ if (sizeof($_SESSION) == 0)
                                                 <!-- <div class="w-100"></div> -->
                                                 <div class="col-sm-2 floating-label enable-floating-label show-label mt-2" style="margin-bottom:5px">
                                                     <label for="">Cantidad Requerida</label>
-                                                    <input class="form-control text-center" type="number" name="requiredQuantity" id="requiredQuantity">
+                                                    <input class="form-control text-center" type="number" name="requestedQuantity" id="requestedQuantity">
                                                 </div>
                                                 <div class="col-sm-2 floating-label enable-floating-label show-label mt-2" style="margin-bottom:5px">
                                                     <label for="">Cantidad Solicitada</label>
-                                                    <input class="form-control text-center" type="number" name="requestedQuantity" id="requestedQuantity">
+                                                    <input class="form-control text-center" type="number" name="requiredQuantity" id="requiredQuantity">
                                                 </div>
                                                 <div class="col-sm-2 floating-label enable-floating-label show-label mt-2" style="margin-bottom:5px">
                                                     <label for="">Orden de Compra</label>

@@ -77,7 +77,7 @@ $(document).ready(function () {
     $("#quantityMissing").val(accumulated_quantity.toLocaleString()); 
     let productsMaterials = allProductsMaterials.filter(item => item.id_product == data.id_product);
     productsMaterials = productsMaterials.sort((a, b) => a.quantity - b.quantity);
-    $('#quantityMP').val(productsMaterials[0].quantity.toLocaleString('es-CO', { maximumfractiondigits: 2 }));
+    $('#quantityMP').val(Math.floor(productsMaterials[0].quantity).toLocaleString('es-CO', { maximumFractionDigits: 0 }));
  
     let $select = $(`#idMachine`);
     $select.empty();

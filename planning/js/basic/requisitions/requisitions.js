@@ -12,7 +12,7 @@ $(document).ready(function () {
     $('.cardTableConfigMaterials').show(800);
     $('.cardAddRequisitions').toggle(800);
     $('#btnAddRequisition').html('Asignar');
-    document.getElementById('requiredQuantity').readOnly = false;
+    document.getElementById('requestedQuantity').readOnly = false;
 
     sessionStorage.removeItem('id_requisition');
 
@@ -129,7 +129,7 @@ $(document).ready(function () {
     $('#applicationDate').val(data.application_date);
     $('#deliveryDate').val(data.delivery_date);
     $('#purchaseOrder').val(data.purchase_order);
-    document.getElementById('requiredQuantity').readOnly = true;
+    document.getElementById('requestedQuantity').readOnly = true;
     
     let dataStock = JSON.parse(sessionStorage.getItem('stock'));
     let arr = dataStock.find(item => item.id_material == data.id_material && item.id_provider == data.id_provider);

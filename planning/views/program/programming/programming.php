@@ -92,11 +92,11 @@ if (sizeof($_SESSION) == 0)
                                                     <div class="col-sm-1" id="classification" style="display: flex; flex-direction: column; align-items: center;">
                                                     </div>
                                                     <div class="col-sm-2 floating-label enable-floating-label show-label">
-                                                        <label for="">Cant Pedido</label>
+                                                        <label for="">Cantidad Requerida</label>
                                                         <input type="text" class="form-control text-center" id="quantityOrder" name="quantityOrder" readonly>
                                                     </div>
                                                     <div class="col-sm-2 floating-label enable-floating-label show-label">
-                                                        <label for="">Pendiente Fabricar</label>
+                                                        <label for="">Cantidad Pendiente Fabricar</label>
                                                         <input type="text" class="form-control text-center" id="quantityMissing" name="quantityMissing" readonly>
                                                     </div>
                                                     <div class="col-sm-2 floating-label enable-floating-label show-label">

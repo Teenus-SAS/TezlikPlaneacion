@@ -110,7 +110,7 @@
                                                                 <li class="planStock" style="display: none;">
                                                                 <?php } ?>
                                                                 <i class="fas fa-truck"></i>
-                                                                <a href="/planning/stock">Stock Minimo (Tiempos)</a>
+                                                                <a href="/planning/stock">Proveedores (Tiempos Entrega)</a>
                                                                 </li>
                                                 </ul>
                                                 </div>
