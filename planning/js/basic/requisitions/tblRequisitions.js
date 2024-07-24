@@ -169,7 +169,7 @@ $(document).ready(function () {
           data: null,
           className: "uniqueClassName dt-head-center",
           render: function (data) {
-            let quantity = data.quantity_requested;
+            let quantity = data.quantity_required;
 
             if (data.abbreviation === "UND")
               quantity = quantity.toLocaleString("es-CO", {
@@ -188,7 +188,7 @@ $(document).ready(function () {
           data: null,
           className: "uniqueClassName dt-head-center",
           render: function (data) {
-            let quantity = data.quantity_required;
+            let quantity = data.quantity_requested;
 
             if (data.abbreviation === "UND")
               quantity = quantity.toLocaleString("es-CO", {

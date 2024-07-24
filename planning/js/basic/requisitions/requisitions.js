@@ -10,6 +10,7 @@ $(document).ready(function () {
 
     $('.cardImportRequisitions').hide(800);
     $('.cardTableConfigMaterials').show(800);
+    $('.cardRequired').hide();
     $('.cardAddRequisitions').toggle(800);
     $('#btnAddRequisition').html('Asignar');
     document.getElementById('requestedQuantity').readOnly = false;
@@ -80,7 +81,7 @@ $(document).ready(function () {
 
     if (arr.length == 1) {
       $(`#client option[value=${arr[0].id_provider}]`).prop('selected', true);
-      $('#rMQuantity').val(arr[0].min_quantity);
+      $('#rMQuantity').val(`${arr[0].min_quantity} ${arr[0].abbreviation}`);
       $('#rMAverage').val(arr[0].average);
     } else if (arr.length > 1) {
       arr = arr.sort((a, b) => a.average - b.average);
@@ -94,7 +95,7 @@ $(document).ready(function () {
       }
 
       $(`#client option[value=${arr[0].id_provider}]`).prop('selected', true);
-      $('#rMQuantity').val(arr[0].min_quantity);
+      $('#rMQuantity').val(`${arr[0].min_quantity} ${arr[0].abbreviation}`);
       $('#rMAverage').val(parseFloat(arr[0].max_term) - parseFloat(arr[0].min_term));
     }
   });
@@ -107,7 +108,7 @@ $(document).ready(function () {
     let arr = dataStock.find(item => item.id_material == id_material && item.id_provider == this.value);
 
     if (arr) {
-      $('#rMQuantity').val(arr.min_quantity);
+      $('#rMQuantity').val(`${arr.min_quantity} ${arr.abbreviation}`);
       $('#rMAverage').val(arr.average);
     }
   });
@@ -117,6 +118,7 @@ $(document).ready(function () {
   $(document).on('click', '.updateRequisition', async function (e) {
     $('.cardImportRequisitions').hide(800);
     $('.cardAddRequisitions').show(800);
+    $('.cardRequired').show();
     $('#btnAddRequisition').html('Actualizar');
 
     let row = $(this).parent().parent()[0];
@@ -125,48 +127,40 @@ $(document).ready(function () {
     sessionStorage.setItem('id_requisition', data.id_requisition);
  
     $(`#material option[value=${data.id_material}]`).prop('selected', true);
-    // $(`#client option[value=${data.id_provider}]`).prop('selected', true);
-    $('#applicationDate').val(data.application_date);
-    $('#deliveryDate').val(data.delivery_date);
-    $('#purchaseOrder').val(data.purchase_order);
-    document.getElementById('requestedQuantity').readOnly = true;
+
+    if (data.application_date != '0000-00-00' && data.application_date)
+      $('#applicationDate').val(data.application_date);
+    if (data.delivery_date != '0000-00-00' && data.delivery_date)
+      $('#deliveryDate').val(data.delivery_date);
+    if (data.purchase_order != '0000-00-00' && data.purchase_order)
+      $('#purchaseOrder').val(data.purchase_order);
     
     let dataStock = JSON.parse(sessionStorage.getItem('stock'));
-    let arr = dataStock.find(item => item.id_material == data.id_material && item.id_provider == data.id_provider);
+    let arr = dataStock.filter(item => item.id_material == data.id_material);
 
-    let $select = $(`#client`);
-    $select.empty();
-    $select.append(`<option disabled value='0'>Seleccionar</option>`);
-    $select.append(`<option value='${arr.id_client}' selected> ${arr.client} </option>`);
+    setInputClient(arr);
+ 
+    $(`#client option[value=${data.id_provider}]`).prop('selected', true);
 
-    if (arr) {
-      $('#rMQuantity').val(arr.min_quantity);
-      $('#rMAverage').val(arr.average);
-    } else {
-      let arr = dataStock.filter(item => item.id_material == data.id_material);
+    if (arr.length == 1 && data.id_provider != 0) {
+      $('#rMQuantity').val(`${arr[0].min_quantity} ${arr[0].abbreviation}`);
+      $('#rMAverage').val(arr[0].average);
+    } else if (arr.length > 1) {
+      arr = arr.sort((a, b) => a.average - b.average);
 
-      if (arr.length == 1) {
-        $(`#client option[value=${arr[0].id_provider}]`).prop('selected', true);
-        $('#rMQuantity').val(arr[0].min_quantity);
-        $('#rMAverage').val(arr[0].average);
-      } else if (arr.length > 1) {
-        arr = arr.sort((a, b) => a.average - b.average);
+      // Verificar si todos los tiempos promedio son iguales 
+      const firstValue = arr[0]['average'];
+      const allSame = arr.every(item => item['average'] === firstValue);
 
-        // Verificar si todos los tiempos promedio son iguales 
-        const firstValue = arr[0]['average'];
-        const allSame = arr.every(item => item['average'] === firstValue);
-
-        if (allSame == true) {
-          arr = arr.sort((a, b) => a.min_quantity - b.min_quantity);
-        }
-
-        $(`#client option[value=${arr[0].id_provider}]`).prop('selected', true);
-        $('#rMQuantity').val(arr[0].min_quantity);
-        $('#rMAverage').val(parseFloat(arr[0].max_term) - parseFloat(arr[0].min_term));
+      if (allSame == true) {
+        arr = arr.sort((a, b) => a.min_quantity - b.min_quantity);
       }
+
+      $('#rMQuantity').val(`${arr[0].min_quantity} ${arr[0].abbreviation}`);
+      $('#rMAverage').val(parseFloat(arr[0].max_term) - parseFloat(arr[0].min_term));
     }
 
-    let quantity_required = data.quantity_required
+    let quantity_required = (data.quantity_required).toFixed(2);
             
     if (data.abbreviation === 'UND') quantity_required = Math.floor(quantity_required);
     
