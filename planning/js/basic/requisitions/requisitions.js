@@ -160,11 +160,11 @@ $(document).ready(function () {
       $('#rMAverage').val(parseFloat(arr[0].max_term) - parseFloat(arr[0].min_term));
     }
 
-    let quantity_required = (data.quantity_required).toFixed(2);
+    let quantity_required = parseFloat(data.quantity_required).toLocaleString('es-CO', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
             
-    if (data.abbreviation === 'UND') quantity_required = Math.floor(quantity_required);
+    if (data.abbreviation === 'UND') quantity_required = Math.floor(data.quantity_required);
     
-    $('#requiredQuantity').val(quantity_required);
+    $('#requiredQuantity').val(`${quantity_required} ${data.abbreviation}`);
     
     let quantity_requested = data.quantity_requested
             

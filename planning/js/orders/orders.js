@@ -133,7 +133,10 @@ $(document).ready(function () {
     let row = $(this.activeElement).parent().parent()[0];
     let data = tblOrder.fnGetData(row);
 
-    let id_order = data.id_order;
+    let dataOrder = {}; 
+
+    dataOrder['idOrder'] = data.id_order;
+    dataOrder['idProduct'] = data.id_product;
 
     bootbox.confirm({
       title: 'Eliminar',
@@ -151,12 +154,11 @@ $(document).ready(function () {
       },
       callback: function (result) {
         if (result) {
-          $.get(
-            `../../api/deleteOrder/${id_order}`,
+          $.post('/api/deleteOrder', dataOrder,
             function (data, textStatus, jqXHR) {
-              message(data);
-            }
-          );
+              message(data);              
+            }, 
+          ); 
         }
       },
     });

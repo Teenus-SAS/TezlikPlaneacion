@@ -108,7 +108,7 @@ class MinimumStockDao
                                                     (
                                                         SELECT (IFNULL(max_term, 0) - IFNULL(min_term, 0)) FROM stock_materials 
                                                         WHERE id_material = pm.id_material  
-                                                        ORDER BY `(IFNULL(max_term, 0) - IFNULL(min_term, 0))` DESC LIMIT 1
+                                                        ORDER BY `(IFNULL(max_term, 0) - IFNULL(min_term, 0))`, `min_quantity` ASC LIMIT 1
                                                     )
                                                 ) * 
                                                 (

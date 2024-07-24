@@ -642,7 +642,7 @@ $app->post('/updateOrder', function (Request $request, Response $response, $args
     return $response->withStatus(200)->withHeader('Content-Type', 'application/json');
 });
 
-$app->get('/deleteOrder/{id_order}', function (Request $request, Response $response, $args) use (
+$app->post('/deleteOrder', function (Request $request, Response $response, $args) use (
     $ordersDao,
     $generalRMStockDao,
     $explosionMaterialsDao,
@@ -651,9 +651,9 @@ $app->get('/deleteOrder/{id_order}', function (Request $request, Response $respo
 ) {
     session_start();
     $id_company = $_SESSION['id_company'];
-    $order = $ordersDao->deleteOrder($args['id_order']);
-    // $generalProductsDao->updateAccumulatedQuantity($dataOrder['idProduct'], 0, 1);
-    $materials = $explosionMaterialsDao->findAllMaterialsConsolidated($id_company);
+    $dataOrder = $request->getParsedBody();
+
+    $materials = $explosionMaterialsDao->findAllMaterialsConsolidatedByProduct($dataOrder['idProduct']);
 
     for ($i = 0; $i < sizeof($materials); $i++) {
         if ($materials[$i]['available'] < 0) {
@@ -669,20 +669,22 @@ $app->get('/deleteOrder/{id_order}', function (Request $request, Response $respo
             $data['idProvider'] = $id_provider;
             $data['applicationDate'] = '';
             $data['deliveryDate'] = '';
-            $data['requestedQuantity'] = abs($materials[$i]['available']);
+            // $data['requestedQuantity'] = abs($materials[$i]['available']);
             $data['purchaseOrder'] = '';
             $data['requiredQuantity'] = 0;
 
             $requisition = $generalRequisitionsDao->findRequisitionByApplicationDate($materials[$i]['id_material']);
 
-            if (!$requisition)
-                $requisitionsDao->insertRequisitionByCompany($data, $id_company);
-            else {
+            if ($requisition) {
+                $data['requestedQuantity'] = abs($materials[$i]['available']) - $data['quantity_requested'];
                 $data['idRequisition'] = $requisition['id_requisition'];
                 $requisitionsDao->updateRequisition($data);
             }
         }
     }
+
+    $order = $ordersDao->deleteOrder($dataOrder['idOrder']);
+
     if ($order == null)
         $resp = array('success' => true, 'message' => 'Pedido eliminado correctamente');
     else if ($order['info'])
