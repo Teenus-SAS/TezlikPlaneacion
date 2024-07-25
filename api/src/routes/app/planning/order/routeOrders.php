@@ -675,14 +675,13 @@ $app->post('/deleteOrder', function (Request $request, Response $response, $args
             $data['idProvider'] = $id_provider;
             $data['applicationDate'] = '';
             $data['deliveryDate'] = '';
-            // $data['requestedQuantity'] = abs($materials[$i]['available']);
             $data['purchaseOrder'] = '';
-            $data['requiredQuantity'] = 0;
+            $data['requestedQuantity'] = 0;
 
             $requisition = $generalRequisitionsDao->findRequisitionByApplicationDate($materials[$i]['id_material']);
 
             if ($requisition) {
-                $data['requestedQuantity'] = abs($materials[$i]['available']) - $requisition['quantity_required'];
+                $data['requiredQuantity'] = abs($materials[$i]['available']) - $requisition['quantity_required'];
                 $data['idRequisition'] = $requisition['id_requisition'];
                 $requisitionsDao->updateRequisition($data);
             }

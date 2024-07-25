@@ -59,7 +59,24 @@ class GeneralProductsMaterialsDao
                                       INNER JOIN plan_unit_sales u ON u.id_product = pm.id_product
                                       WHERE id_material = :id_material");
         $stmt->execute(['id_material' => $id_material]);
+
         $products = $stmt->fetchAll($connection::FETCH_ASSOC);
         return $products;
+    }
+
+    public function saveQuantityConverted($id_product_material, $quantity)
+    {
+        try {
+            $connection = Connection::getInstance()->getConnection();
+
+            $stmt = $connection->prepare("UPDATE products_materials SET quantity_converted = :quantity_converted
+                                      WHERE id_product_material = :id_product_material");
+            $stmt->execute([
+                'id_product_material' => $id_product_material,
+                'quantity_converted' => $quantity
+            ]);
+        } catch (\Exception $e) {
+            return ['info' => true, 'message' => $e->getMessage()];
+        }
     }
 }

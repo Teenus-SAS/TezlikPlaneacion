@@ -160,6 +160,7 @@ $app->post('/addUnitSales', function (Request $request, Response $response, $arg
     $generalMaterialDao,
     $ordersDao,
     $productMaterialsDao,
+    $generalProductsMaterialsDao,
     $generalRMStockDao,
     $classificationDao,
     $minimumStockDao,
@@ -194,7 +195,10 @@ $app->post('/addUnitSales', function (Request $request, Response $response, $arg
                 // Convertir unidades
                 $quantity = $conversionUnitsDao->convertUnits($material, $materials[$i], $materials[$i]['quantity']);
 
-                $arr = $minimumStockDao->calcStockByMaterial($materials[$i]['id_material'], $quantity);
+                // Guardar Unidad convertida
+                $generalProductsMaterialsDao->saveQuantityConverted($materials[$i]['id_product_material'], $quantity);
+
+                $arr = $minimumStockDao->calcStockByMaterial($materials[$i]['id_material']);
 
                 if (isset($arr['stock']))
                     $resolution = $generalMaterialDao->updateStockMaterial($materials[$i]['id_material'], $arr['stock']);
@@ -324,7 +328,10 @@ $app->post('/addUnitSales', function (Request $request, Response $response, $arg
                 // Convertir unidades
                 $quantity = $conversionUnitsDao->convertUnits($material, $materials[$i], $materials[$i]['quantity']);
 
-                $arr = $minimumStockDao->calcStockByMaterial($materials[$i]['id_material'], $quantity);
+                // Guardar Unidad convertida
+                $generalProductsMaterialsDao->saveQuantityConverted($materials[$i]['id_product_material'], $quantity);
+
+                $arr = $minimumStockDao->calcStockByMaterial($materials[$i]['id_material']);
 
                 if (isset($arr['stock']))
                     $resolution = $generalMaterialDao->updateStockMaterial($materials[$i]['id_material'], $arr['stock']);
@@ -383,6 +390,7 @@ $app->post('/updateUnitSale', function (Request $request, Response $response, $a
     $generalProductsDao,
     $generalMaterialDao,
     $productMaterialsDao,
+    $generalProductsMaterialsDao,
     $conversionUnitsDao,
     $inventoryDaysDao,
     $generalRMStockDao,
@@ -420,7 +428,10 @@ $app->post('/updateUnitSale', function (Request $request, Response $response, $a
                 // Convertir unidades
                 $quantity = $conversionUnitsDao->convertUnits($material, $materials[$i], $materials[$i]['quantity']);
 
-                $arr = $minimumStockDao->calcStockByMaterial($materials[$i]['id_material'], $quantity);
+                // Guardar Unidad convertida
+                $generalProductsMaterialsDao->saveQuantityConverted($materials[$i]['id_product_material'], $quantity);
+
+                $arr = $minimumStockDao->calcStockByMaterial($materials[$i]['id_material']);
 
                 if (isset($arr['stock']))
                     $resolution = $generalMaterialDao->updateStockMaterial($materials[$i]['id_material'], $arr['stock']);
@@ -530,6 +541,7 @@ $app->post('/deleteUnitSale', function (Request $request, Response $response, $a
     $generalProductsDao,
     $generalRMStockDao,
     $productMaterialsDao,
+    $generalProductsMaterialsDao,
     $conversionUnitsDao,
     $inventoryDaysDao,
     $companiesLicenseDao,
@@ -560,7 +572,10 @@ $app->post('/deleteUnitSale', function (Request $request, Response $response, $a
             // Convertir unidades
             $quantity = $conversionUnitsDao->convertUnits($material, $materials[$i], $materials[$i]['quantity']);
 
-            $arr = $minimumStockDao->calcStockByMaterial($materials[$i]['id_material'], $quantity);
+            // Guardar Unidad convertida
+            $generalProductsMaterialsDao->saveQuantityConverted($materials[$i]['id_product_material'], $quantity);
+
+            $arr = $minimumStockDao->calcStockByMaterial($materials[$i]['id_material']);
 
             if (isset($arr['stock']))
                 $resolution = $generalMaterialDao->updateStockMaterial($materials[$i]['id_material'], $arr['stock']);
