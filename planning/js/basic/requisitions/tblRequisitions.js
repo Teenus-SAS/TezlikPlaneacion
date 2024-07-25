@@ -226,14 +226,22 @@ $(document).ready(function () {
         },
       ],
       footerCallback: function (row, data, start, end, display) {
-        let quantity = 0;
+        let quantity_required = 0;
+        let quantity_requested = 0;
 
         for (i = 0; i < display.length; i++) {
-          quantity += parseFloat(data[display[i]].quantity);
+          quantity_required += parseFloat(data[display[i]].quantity_required);
+          quantity_requested += parseFloat(data[display[i]].quantity_requested);
         }
 
-        $(this.api().column(8).footer()).html(
-          quantity.toLocaleString("es-CO", {
+        $(this.api().column(6).footer()).html(
+          quantity_required.toLocaleString("es-CO", {
+            minimumFractionDigits: 0,
+            maximumFractionDigits: 0,
+          })
+        );
+        $(this.api().column(7).footer()).html(
+          quantity_requested.toLocaleString("es-CO", {
             minimumFractionDigits: 0,
             maximumFractionDigits: 0,
           })

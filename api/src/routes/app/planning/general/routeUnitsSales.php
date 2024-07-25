@@ -215,8 +215,9 @@ $app->post('/addUnitSales', function (Request $request, Response $response, $arg
 
                     $data['applicationDate'] = '';
                     $data['deliveryDate'] = '';
-                    $data['requestedQuantity'] = abs($arr['stock']);
+                    $data['requiredQuantity'] = abs($arr['stock']);
                     $data['purchaseOrder'] = '';
+                    $data['requestedQuantity'] = '';
 
                     $requisition = $generalRequisitionsDao->findRequisitionByApplicationDate($materials[$i]['id_material']);
 
@@ -327,37 +328,6 @@ $app->post('/addUnitSales', function (Request $request, Response $response, $arg
 
                 if (isset($arr['stock']))
                     $resolution = $generalMaterialDao->updateStockMaterial($materials[$i]['id_material'], $arr['stock']);
-
-                // if ($arr['stock'] < 0) {
-                //     $data = [];
-                //     $data['idMaterial'] = $materials[$i]['id_material'];
-                //     $data['idProvider'] = '';
-                //     $data['applicationDate'] = '';
-                //     $data['deliveryDate'] = '';
-                //     $data['quantity'] = abs($arr['stock']);
-                //     $data['purchaseOrder'] = '';
-
-                //     $requisition = $generalRequisitionsDao->findRequisitionByApplicationDate($materials[$i]['id_material']);
-
-                //     if (!$requisition)
-                //         $requisitionsDao->insertRequisitionByCompany($data, $id_company);
-                //     else {
-                //         $data['idRequisition'] = $requisition['id_requisition'];
-                //         $requisitionsDao->updateRequisition($data);
-                //     }
-                // }
-
-                // if (isset($resolution['info'])) break;
-                // // Calcular stock producto
-                // $products = $generalProductsMaterialsDao->findAllProductByMaterial($materials[$j]['id_material']);
-
-                // foreach ($products as $arr) {
-                //     $product = $minimumStockDao->calcStockByProduct($arr['id_product']);
-                //     if (isset($product['stock']))
-                //         $resolution = $generalProductsDao->updateStockByProduct($arr['id_product'], $product['stock']);
-
-                //     if (isset($resolution['info'])) break;
-                // }
             }
 
             // Calcular stock producto
@@ -468,9 +438,9 @@ $app->post('/updateUnitSale', function (Request $request, Response $response, $a
 
                     $data['applicationDate'] = '';
                     $data['deliveryDate'] = '';
-                    $data['requestedQuantity'] = abs($arr['stock']);
+                    $data['requiredQuantity'] = abs($arr['stock']);
                     $data['purchaseOrder'] = '';
-                    $data['requiredQuantity'] = 0;
+                    $data['requestedQuantity'] = 0;
 
                     $requisition = $generalRequisitionsDao->findRequisitionByApplicationDate($materials[$i]['id_material']);
 
@@ -481,25 +451,6 @@ $app->post('/updateUnitSale', function (Request $request, Response $response, $a
                         $requisitionsDao->updateRequisition($data);
                     }
                 }
-
-                // Calcular stock producto
-                // if (isset($resolution['info'])) break;
-                // $products = $generalProductsMaterialsDao->findAllProductByMaterial($materials[$i]['id_material']);
-                // $quantity = 0;
-                // $stock = 0;
-
-                // foreach ($products as $arr) {
-                //     $product = $minimumStockDao->calcStockByProduct($arr['id_product']);
-                //     if (isset($product['stock']))
-                //         $resolution = $generalProductsDao->updateStockByProduct($arr['id_product'], $product['stock']);
-
-                //     if ($arr['id_product'] === $dataSale['idProduct']) {
-                //         $quantity = 0;
-                //         $stock = $product['stock'];
-                //     }
-
-                //     if (isset($resolution['info'])) break;
-                // }
             }
 
             // Calcular stock producto
@@ -628,9 +579,9 @@ $app->post('/deleteUnitSale', function (Request $request, Response $response, $a
 
                 $data['applicationDate'] = '';
                 $data['deliveryDate'] = '';
-                $data['requestedQuantity'] = abs($arr['stock']);
+                $data['requiredQuantity'] = abs($arr['stock']);
                 $data['purchaseOrder'] = '';
-                $data['requiredQuantity'] = 0;
+                $data['requestedQuantity'] = 0;
 
                 $requisition = $generalRequisitionsDao->findRequisitionByApplicationDate($materials[$i]['id_material']);
 
@@ -643,23 +594,6 @@ $app->post('/deleteUnitSale', function (Request $request, Response $response, $a
             }
 
             if (isset($resolution['info'])) break;
-            // Calcular stock producto
-            // $products = $generalProductsMaterialsDao->findAllProductByMaterial($materials[$i]['id_material']);
-            // $quantity = 0;
-            // $stock = 0;
-
-            // foreach ($products as $arr) {
-            //     $product = $minimumStockDao->calcStockByProduct($arr['id_product']);
-            //     if (isset($product['stock']))
-            //         $resolution = $generalProductsDao->updateStockByProduct($arr['id_product'], $product['stock']);
-
-            //     if ($arr['id_product'] === $dataSale['idProduct']) {
-            //         $quantity = $arr['quantity'];
-            //         $stock = $product['stock'];
-            //     }
-
-            //     if (isset($resolution['info'])) break;
-            // }
         }
         // Calcular stock producto
         if ($resolution == null) {

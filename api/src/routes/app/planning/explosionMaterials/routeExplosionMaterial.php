@@ -21,7 +21,9 @@ $app->get('/explosionMaterials', function (Request $request, Response $response,
 ) {
     session_start();
     $id_company = $_SESSION['id_company'];
-    $materials = $explosionMaterialsDao->findAllMaterialsConsolidated($id_company);
+    $arr = $explosionMaterialsDao->findAllMaterialsConsolidated($id_company);
+
+    $materials = $explosionMaterialsDao->setDataEXMaterials($arr);
 
     for ($i = 0; $i < sizeof($materials); $i++) {
         if ($materials[$i]['available'] < 0) {
@@ -38,7 +40,7 @@ $app->get('/explosionMaterials', function (Request $request, Response $response,
 
             $data['applicationDate'] = '';
             $data['deliveryDate'] = '';
-            $data['requestedQuantity'] = abs($materials[$i]['available']);
+            $data['requiredQuantity'] = abs($materials[$i]['available']);
             $data['purchaseOrder'] = '';
             $data['requestedQuantity'] = 0;
 
