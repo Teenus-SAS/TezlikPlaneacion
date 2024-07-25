@@ -308,9 +308,9 @@ $app->post('/saveProgramming', function (Request $request, Response $response, $
 
                 $data['applicationDate'] = '';
                 $data['deliveryDate'] = '';
-                $data['requestedQuantity'] = abs($materials[$i]['available']);
+                $data['requiredQuantity'] = abs($materials[$i]['available']);
                 $data['purchaseOrder'] = '';
-                $data['requiredQuantity'] = 0;
+                $data['requestedQuantity'] = 0;
 
                 $requisition = $generalRequisitionsDao->findRequisitionByApplicationDate($materials[$i]['id_material']);
 

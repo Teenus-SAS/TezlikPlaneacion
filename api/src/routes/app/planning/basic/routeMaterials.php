@@ -369,7 +369,11 @@ $app->post('/updateMaterials', function (Request $request, Response $response, $
     $productsMaterialsDao,
     $generalProgrammingDao,
     $conversionUnitsDao,
-    $minimumStockDao
+    $minimumStockDao,
+    $explosionMaterialsDao,
+    $generalRMStockDao,
+    $generalRequisitionsDao,
+    $requisitionsDao
 ) {
     session_start();
     $dataMaterial = $request->getParsedBody();
@@ -410,6 +414,42 @@ $app->post('/updateMaterials', function (Request $request, Response $response, $
 
                         if (isset($arr['stock']))
                             $resolution = $generalMaterialsDao->updateStockMaterial($dataMaterial['idMaterial'], $arr['stock']);
+                    }
+                }
+            }
+        }
+
+        if ($resolution == null) {
+            $arr = $explosionMaterialsDao->findAllMaterialsConsolidated($id_company);
+
+            $materials = $explosionMaterialsDao->setDataEXMaterials($arr);
+
+            for ($i = 0; $i < sizeof($materials); $i++) {
+                if ($materials[$i]['available'] < 0) {
+                    $data = [];
+                    $data['idMaterial'] = $materials[$i]['id_material'];
+
+                    $provider = $generalRMStockDao->findProviderByStock($materials[$i]['id_material']);
+
+                    $id_provider = 0;
+
+                    if ($provider) $id_provider = $provider['id_provider'];
+
+                    $data['idProvider'] = $id_provider;
+
+                    $data['applicationDate'] = '';
+                    $data['deliveryDate'] = '';
+                    $data['requestedQuantity'] = abs($materials[$i]['available']);
+                    $data['purchaseOrder'] = '';
+                    $data['requestedQuantity'] = 0;
+
+                    $requisition = $generalRequisitionsDao->findRequisitionByApplicationDate($materials[$i]['id_material']);
+
+                    if (!$requisition)
+                        $requisitionsDao->insertRequisitionByCompany($data, $id_company);
+                    else {
+                        $data['idRequisition'] = $requisition['id_requisition'];
+                        $requisitionsDao->updateRequisition($data);
                     }
                 }
             }

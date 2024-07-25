@@ -149,7 +149,9 @@ $app->post('/addRequisition', function (Request $request, Response $response, $a
             $resp = array('error' => true, 'message' => 'Ocurrio un error mientras importaba la información. Intente nuevamente');
     }
 
-    $materials = $explosionMaterialsDao->findAllMaterialsConsolidated($id_company);
+    $arr = $explosionMaterialsDao->findAllMaterialsConsolidated($id_company);
+
+    $materials = $explosionMaterialsDao->setDataEXMaterials($arr);
 
     for ($i = 0; $i < sizeof($materials); $i++) {
         if ($materials[$i]['available'] < 0) {
@@ -165,9 +167,9 @@ $app->post('/addRequisition', function (Request $request, Response $response, $a
             $data['idProvider'] = $id_provider;
             $data['applicationDate'] = '';
             $data['deliveryDate'] = '';
-            $data['requestedQuantity'] = abs($materials[$i]['available']);
+            $data['requiredQuantity'] = abs($materials[$i]['available']);
             $data['purchaseOrder'] = '';
-            $data['requiredQuantity'] = 0;
+            $data['requestedQuantity'] = 0;
 
             $requisition = $generalRequisitionsDao->findRequisitionByApplicationDate($materials[$i]['id_material']);
 
