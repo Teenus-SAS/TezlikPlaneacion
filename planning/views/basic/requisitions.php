@@ -177,7 +177,7 @@ if (sizeof($_SESSION) == 0)
                                                     <input class="form-control text-center" type="text" id="rMQuantity" readonly>
                                                 </div>
                                                 <div class="col-sm-2 floating-label enable-floating-label show-label" style="margin-bottom:5px">
-                                                    <label for="">Tiempo Promedio (días)</label>
+                                                    <label for="">Tiempo Prom Entrega (días)</label>
                                                     <input class="form-control text-center" type="number" id="rMAverage" readonly>
                                                 </div>
                                                 <div class="col-sm-2 floating-label enable-floating-label show-label mt-2" style="margin-bottom:5px">
