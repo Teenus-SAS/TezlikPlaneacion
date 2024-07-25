@@ -61,19 +61,7 @@ if (sizeof($_SESSION) == 0)
                                             </div>
                                         </div>
                                     </div>
-                                    <div class="col-md-6 col-xl-3" style="padding-right: 0px;">
-                                        <div class="card bg-warning">
-                                            <div class="card-body" style="padding: 10px;">
-                                                <div class="media text-white">
-                                                    <div class="media-body" style="text-align: center;">
-                                                        <span class="text-uppercase font-size-12 font-weight-bold" style="font-size: x-small;"><i class="bi bi-arrow-clockwise mr-1" id="lblProcess"></i></span>
-                                                        <!-- <h2 class="mb-0 mt-1 text-white text-center" style="font-size: large;"><i class="bi bi-arrow-clockwise mr-1"></i>2</h2> -->
-                                                    </div>
 
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
                                     <div class="col-md-6 col-xl-3" style="padding-right: 0px;">
                                         <div class="card bg-danger">
                                             <div class="card-body" style="padding: 10px;">
@@ -88,6 +76,21 @@ if (sizeof($_SESSION) == 0)
                                         </div>
 
                                     </div>
+
+                                    <div class="col-md-6 col-xl-3" style="padding-right: 0px;">
+                                        <div class="card bg-warning">
+                                            <div class="card-body" style="padding: 10px;">
+                                                <div class="media text-white">
+                                                    <div class="media-body" style="text-align: center;">
+                                                        <span class="text-uppercase font-size-12 font-weight-bold" style="font-size: x-small;"><i class="bi bi-arrow-clockwise mr-1" id="lblProcess"></i></span>
+                                                        <!-- <h2 class="mb-0 mt-1 text-white text-center" style="font-size: large;"><i class="bi bi-arrow-clockwise mr-1"></i>2</h2> -->
+                                                    </div>
+
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+
                                     <div class="col-md-6 col-xl-3" style="padding-right: 0px;">
                                         <div class="card bg-success">
                                             <div class="card-body" style="padding: 10px;">
@@ -164,40 +167,44 @@ if (sizeof($_SESSION) == 0)
                                     <div class="card-body">
                                         <form id="formAddRequisition">
                                             <div class="form-row">
-                                                <div class="col-sm-5 floating-label enable-floating-label show-label" style="margin-bottom:5px">
+                                                <div class="col-sm-3 floating-label enable-floating-label show- mb-3 label">
+                                                    <label for="idRefMaterial">Referencia</label>
+                                                    <select class="form-control" name="idRefMaterial" id="idRefMaterial"></select>
+                                                </div>
+                                                <div class="col-sm-9 floating-label enable-floating-label show- mb-3 label">
                                                     <label for="">Materia Prima</label>
                                                     <select class="form-control" name="idMaterial" id="material"></select>
                                                 </div>
-                                                <div class="col-sm-3 floating-label enable-floating-label show-label" style="margin-bottom:5px">
+                                                <div class="col-sm-8 floating-label enable-floating-label show- mb-3 label">
                                                     <label for="">Proveedor</label>
                                                     <select class="form-control" name="idProvider" id="client"></select>
                                                 </div>
-                                                <div class="col-sm-2 floating-label enable-floating-label show-label" style="margin-bottom:5px">
-                                                    <label for="">Cantidad Minima Compra</label>
+                                                <div class="col-sm-2 floating-label enable-floating-label show- mb-3 label">
+                                                    <label for="">Cantidad Min Venta</label>
                                                     <input class="form-control text-center" type="text" id="rMQuantity" readonly>
                                                 </div>
-                                                <div class="col-sm-2 floating-label enable-floating-label show-label" style="margin-bottom:5px">
+                                                <div class="col-sm-2 floating-label enable-floating-label show- mb-3 label">
                                                     <label for="">Tiempo Prom Entrega (días)</label>
                                                     <input class="form-control text-center" type="number" id="rMAverage" readonly>
                                                 </div>
-                                                <div class="col-sm-2 floating-label enable-floating-label show-label mt-2" style="margin-bottom:5px">
+                                                <div class="col-sm-2 floating-label enable-floating-label show-label mt-2">
                                                     <label for="">Fecha Solicitud</label>
                                                     <input class="form-control" type="date" name="applicationDate" id="applicationDate" min="<?php echo date('Y-m-d'); ?>">
                                                 </div>
-                                                <div class="col-sm-2 floating-label enable-floating-label show-label mt-2" style="margin-bottom:5px">
+                                                <div class="col-sm-2 floating-label enable-floating-label show-label mt-2">
                                                     <label for="">Fecha Entrega</label>
                                                     <input class="form-control" type="date" name="deliveryDate" id="deliveryDate">
                                                 </div>
                                                 <!-- <div class="w-100"></div> -->
-                                                <div class="col-sm-2 cardRequired floating-label enable-floating-label show-label mt-2" style="margin-bottom:5px">
+                                                <div class="col-sm-2 cardRequired floating-label enable-floating-label show-label mt-2">
                                                     <label for="">Cantidad Requerida</label>
                                                     <input class="form-control text-center" type="text" name="requiredQuantity" id="requiredQuantity" readonly>
                                                 </div>
-                                                <div class="col-sm-2 floating-label enable-floating-label show-label mt-2" style="margin-bottom:5px">
+                                                <div class="col-sm-2 floating-label enable-floating-label show-label mt-2">
                                                     <label for="">Cantidad Solicitada</label>
                                                     <input class="form-control text-center" type="number" name="requestedQuantity" id="requestedQuantity">
                                                 </div>
-                                                <div class="col-sm-2 floating-label enable-floating-label show-label mt-2" style="margin-bottom:5px">
+                                                <div class="col-sm-2 floating-label enable-floating-label show-label mt-2">
                                                     <label for="">Orden de Compra</label>
                                                     <input class="form-control text-center" type="text" name="purchaseOrder" id="purchaseOrder">
                                                 </div>

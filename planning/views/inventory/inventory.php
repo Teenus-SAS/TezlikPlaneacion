@@ -127,24 +127,24 @@ if (sizeof($_SESSION) == 0)
                                     <form id="formInventoryABC">
                                         <div class="card-body">
                                             <div class="form-row">
-                                                <div class="col-sm-3 floating-label enable-floating-label show-label" style="margin-bottom:0px">
-                                                    <label for="cantMonths">Meses a Analizar:</label>
-                                                    <input type="number" class="form-control text-center" id="cantMonths" name="cantMonths" style="width:200px" value="<?php echo $_SESSION['months'] ?>">
+                                                <div class="col-sm-2 floating-label enable-floating-label show-label" style="margin-bottom:0px">
+                                                    <label for="cantMonths">Rotación (Meses)</label>
+                                                    <input type="number" class="form-control text-center" id="cantMonths" name="cantMonths" value="<?php echo $_SESSION['months'] ?>">
                                                 </div>
                                                 <div class="col-sm mt-1">
                                                     <button class="btn btn-success" id="btnAddMonths">Calcular</button>
                                                 </div>
                                                 <div class="col-sm-2 floating-label enable-floating-label show-label" style="margin-bottom:10px!important">
                                                     <input type="number" class="text-center form-control" name="a" id="a" max="100">
-                                                    <label for="">a</label>
+                                                    <label for="">Tipo A</label>
                                                 </div>
                                                 <div class="col-sm-2 floating-label enable-floating-label show-label" style="margin-bottom:10px!important">
                                                     <input type="number" class="text-center form-control" name="b" id="b" max="100">
-                                                    <label for="">b</label>
+                                                    <label for="">Tipo B</label>
                                                 </div>
                                                 <div class="col-sm-2 floating-label enable-floating-label show-label" style="margin-bottom:10px!important">
                                                     <input type="number" class="text-center form-control" name="c" id="c" max="100">
-                                                    <label for="">c</label>
+                                                    <label for="">Tipo C</label>
                                                 </div>
                                                 <div class="col-xs-2" style="margin-top:7px">
                                                     <button class="btn btn-success" id="btnSaveInventoryABC">Guardar</button>

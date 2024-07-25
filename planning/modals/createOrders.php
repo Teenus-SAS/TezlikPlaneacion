@@ -31,14 +31,14 @@
                                         <div class="col-12 col-lg-3">
                                             <div class="form-group floating-label enable-floating-label show-label">
                                                 <input class="form-control" type="date" name="minDate" id="minDate"></input>
-                                                <label for="minDate">Fecha Minima<span class="text-danger">*</span></label>
+                                                <label for="minDate">Fecha Min Entrega<span class="text-danger">*</span></label>
                                                 <div class="validation-error d-none font-size-13">Requerido</div>
                                             </div>
                                         </div>
                                         <div class="col-12 col-lg-3">
                                             <div class="form-group floating-label enable-floating-label show-label">
                                                 <input class="form-control" type="date" name="maxDate" id="maxDate"></input>
-                                                <label for="maxDate">Fecha Maxima<span class="text-danger">*</span></label>
+                                                <label for="maxDate">Fecha Max Entrega<span class="text-danger">*</span></label>
                                                 <div class="validation-error d-none font-size-13">Requerido</div>
                                             </div>
                                         </div>

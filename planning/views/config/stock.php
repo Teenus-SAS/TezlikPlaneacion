@@ -90,22 +90,25 @@ if (sizeof($_SESSION) == 0)
                                     <form id="formCreatePStock">
                                         <div class="card-body">
                                             <div class="form-row">
-                                                <div class="col-sm-4 floating-label enable-floating-label show-label" style="margin-bottom:20px">
+                                                <div class="col-sm-2 floating-label enable-floating-label show-label" style="margin-bottom:20px">
                                                     <label for="">Referencia</label>
                                                     <select class="form-control refProduct" name="refProduct" id="refProduct"></select>
                                                 </div>
-                                                <div class="col-sm-8 floating-label enable-floating-label show-label" style="margin-bottom:5px">
+                                                <div class="col-sm-5 floating-label enable-floating-label show-label" style="margin-bottom:5px">
                                                     <label for="">Producto</label>
                                                     <select class="form-control selectNameProduct" name="selectNameProduct" id="selectNameProduct"></select>
                                                 </div>
-                                                <div class="col-xs-1 floating-label enable-floating-label show-label" style="margin-bottom:0px">
-                                                    <label for="">Tiempo Max Producción</label>
-                                                    <input type="number" class="form-control text-center" id="pMax" name="max">
-                                                </div>
+
                                                 <div class="col-xs-1 floating-label enable-floating-label show-label" style="margin-bottom:0px">
                                                     <label for="">Tiempo Min Producción</label>
                                                     <input type="number" class="form-control text-center" id="pUsual" name="usual">
                                                 </div>
+
+                                                <div class="col-xs-1 floating-label enable-floating-label show-label" style="margin-bottom:0px">
+                                                    <label for="">Tiempo Max Producción</label>
+                                                    <input type="number" class="form-control text-center" id="pMax" name="max">
+                                                </div>
+
                                                 <div class="col-sm mt-1">
                                                     <button class="btn btn-success" id="btnCreatePStock">Crear Stock</button>
                                                 </div>
@@ -151,26 +154,34 @@ if (sizeof($_SESSION) == 0)
                                     <form id="formCreateRMStock">
                                         <div class="card-body">
                                             <div class="form-row">
-                                                <div class="col-sm-4 floating-label enable-floating-label show-label" style="margin-bottom:20px">
+                                                <div class="col-sm-2 floating-label enable-floating-label show-label" style="margin-bottom:20px">
+                                                    <label for="refMaterial">Referencia</label>
+                                                    <select class="form-control" name="refMaterial" id=""></select>
+                                                </div>
+                                                <div class="col-sm-10 floating-label enable-floating-label show-label" style="margin-bottom:20px">
                                                     <label for="">Materia Prima</label>
                                                     <select class="form-control" name="material" id="material"></select>
                                                 </div>
-                                                <div class="col-sm-3 floating-label enable-floating-label show-label" style="margin-bottom:20px">
-                                                    <label for="">Provedoores</label>
+                                                <div class="col-sm-4 floating-label enable-floating-label show-label" style="margin-bottom:20px">
+                                                    <label for="">Proveedores</label>
                                                     <select class="form-control" name="idProvider" id="client"></select>
                                                 </div>
-                                                <div class="w-100"></div>
-                                                <div class="col-xs-1 floating-label enable-floating-label show-label" style="margin-bottom:0px">
-                                                    <label for="">Plazo Min</label>
+
+                                                <div class="col-sm-2 floating-label enable-floating-label show-label" style="margin-bottom:0px">
+                                                    <label for="">Tiempo Min Despacho (días)</label>
                                                     <input type="number" class="form-control text-center" id="rMMin" name="min">
                                                 </div>
-                                                <div class="col-xs-1 floating-label enable-floating-label show-label" style="margin-bottom:0px">
-                                                    <label for="">Plazo Max</label>
+                                                <div class="col-sm-2 floating-label enable-floating-label show-label" style="margin-bottom:0px">
+                                                    <label for="">Tiempo Max Despacho (días)</label>
                                                     <input type="number" class="form-control text-center" id="rMMax" name="max">
                                                 </div>
-                                                <div class="col-xs-1 floating-label enable-floating-label show-label" style="margin-bottom:0px">
-                                                    <label for="">Cantidad Minima</label>
+                                                <div class="col-sm-2 floating-label enable-floating-label show-label" style="margin-bottom:0px">
+                                                    <label for="">Cantidad Min de Venta</label>
                                                     <input type="number" class="form-control text-center" id="rMQuantity" name="quantity">
+                                                </div>
+                                                <div class="col-sm-1 floating-label enable-floating-label show-label" style="margin-bottom:0px">
+                                                    <label for="">Medida</label>
+                                                    <input type="number" class="form-control text-center" id="rMQuantity" name="quantity" readonly>
                                                 </div>
                                                 <div class="col-sm mt-1">
                                                     <button class="btn btn-success" id="btnCreateRMStock">Crear Stock</button>

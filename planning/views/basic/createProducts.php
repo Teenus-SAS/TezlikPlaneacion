@@ -123,33 +123,28 @@ if (sizeof($_SESSION) == 0)
                                     <div class="card-body">
                                         <form id="formCreateProduct">
                                             <div class="form-row">
-                                                <div class="col-sm-3 floating-label enable-floating-label show-label">
-                                                    <label for="">Referencia</label>
-                                                    <input type="text" class="form-control" name="referenceProduct" id="referenceProduct">
+                                                <div class="col-sm-2 floating-label enable-floating-label show-label">
+                                                    <label for="referenceProduct">Referencia</label>
+                                                    <input type="text" class="form-control text-center" name="referenceProduct" id="referenceProduct">
                                                 </div>
-                                                <div class="col-sm-6 floating-label enable-floating-label show-label">
+                                                <div class="col-sm-8 floating-label enable-floating-label show-label">
                                                     <label for="">Nombre Producto</label>
                                                     <input type="text" class="form-control" name="product" id="product">
                                                 </div>
-                                                <div class="col-sm-3 floating-label enable-floating-label show-label">
+                                                <div class="col-sm-2 floating-label enable-floating-label show-label">
                                                     <label for="">Existencias</label>
                                                     <input type="text" class="form-control text-center number" id="pQuantity" name="quantity">
                                                 </div>
-                                            </div>
-                                            <div class="row">
-                                                <div class="col-sm-8">
-                                                    <div class="form-row">
-                                                        <div class="col-sm-6 floating-label enable-floating-label show-label">
-                                                            <label for="formFile" class="form-label"> Cargar imagen</label>
-                                                            <input class="form-control" type="file" id="formFile">
-                                                        </div>
-                                                        <div class="col-sm-4 mt-1">
-                                                            <button type="text" class="btn btn-success" id="btnCreateProduct">Crear</button>
-                                                        </div>
-                                                    </div>
+                                                <div class="col-sm-6 floating-label enable-floating-label show-label">
+                                                    <label for="formFile" class="form-label">Subir imagen</label>
+                                                    <input class="form-control" type="file" id="formFile">
                                                 </div>
-                                                <div class="col-sm-4 mt-5" id="preview"></div>
+                                                <div class="col-sm-2 mt-1">
+                                                    <button type="text" class="btn btn-success" id="btnCreateProduct">Crear</button>
+                                                </div>
+                                                <!-- <div class="col-sm-4 mt-5" id="preview"></div> -->
                                             </div>
+                                            
                                         </form>
                                     </div>
                                 </div>
@@ -191,11 +186,11 @@ if (sizeof($_SESSION) == 0)
                                     <div class="card-body">
                                         <form id="formCreateMaterial">
                                             <div class="form-row">
-                                                <div class="col-md-4 floating-label enable-floating-label show-label">
+                                                <div class="col-md-3 floating-label enable-floating-label show-label">
                                                     <label for="refRawMaterial">Referencia</label>
                                                     <input type="text" class="form-control" id="refRawMaterial" name="refRawMaterial">
                                                 </div>
-                                                <div class="col-md-8 floating-label enable-floating-label show-label">
+                                                <div class="col-md-9 floating-label enable-floating-label show-label">
                                                     <label for="nameRawMaterial">Nombre Materia Prima</label>
                                                     <input type="text" class="form-control" id="nameRawMaterial" name="nameRawMaterial">
                                                 </div>

@@ -77,7 +77,7 @@ $(document).ready(function () {
       done = [...delayed, ...process, ...done1];
 
       $("#lblPending").html(` Pendientes: ${pending.length}`);
-      $("#lblProcess").html(` Proceso: ${process.length}`);
+      $("#lblProcess").html(` Procesado: ${process.length}`);
       $("#lblDelayed").html(` Retrasadas: ${delayed.length}`);
       $("#lblReceived").html(` Recibido: ${done1.length}`);
 
@@ -160,7 +160,7 @@ $(document).ready(function () {
         },
 
         {
-          title: "Proveedor",
+          title: "Proveedor Sugerido",
           data: "provider",
           className: "uniqueClassName dt-head-center",
         },
