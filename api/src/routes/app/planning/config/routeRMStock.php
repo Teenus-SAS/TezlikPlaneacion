@@ -1,13 +1,16 @@
 <?php
 
 use TezlikPlaneacion\Dao\ConversionUnitsDao;
+use TezlikPlaneacion\dao\ExplosionMaterialsDao;
 use TezlikPlaneacion\dao\GeneralClientsDao;
 use TezlikPlaneacion\dao\GeneralMaterialsDao;
 use TezlikPlaneacion\dao\GeneralProductsDao;
 use TezlikPlaneacion\dao\GeneralProductsMaterialsDao;
+use TezlikPlaneacion\dao\GeneralRequisitionsDao;
 use TezlikPlaneacion\dao\GeneralRMStockDao;
 use TezlikPlaneacion\dao\MinimumStockDao;
 use TezlikPlaneacion\dao\ProductsMaterialsDao;
+use TezlikPlaneacion\dao\RequisitionsDao;
 use TezlikPlaneacion\dao\RMStockDao;
 
 $stockDao = new RMStockDao();
@@ -19,7 +22,11 @@ $productMaterialsDao = new ProductsMaterialsDao();
 $generalProductsMaterialsDao = new GeneralProductsMaterialsDao();
 $generalClientsDao = new GeneralClientsDao();
 $productsMaterialsDao = new ProductsMaterialsDao();
+$explosionMaterialsDao = new ExplosionMaterialsDao();
 $conversionUnitsDao = new ConversionUnitsDao();
+$generalRMStockDao = new GeneralRMStockDao();
+$requisitionsDao = new RequisitionsDao();
+$generalRequisitionsDao = new GeneralRequisitionsDao();
 
 use Psr\Http\Message\ResponseInterface as Response;
 use Psr\Http\Message\ServerRequestInterface as Request;
@@ -127,6 +134,10 @@ $app->post('/addRMStock', function (Request $request, Response $response, $args)
     $conversionUnitsDao,
     $generalProductsDao,
     $minimumStockDao,
+    $explosionMaterialsDao,
+    $generalRMStockDao,
+    $requisitionsDao,
+    $generalRequisitionsDao
 ) {
     session_start();
     $dataStock = $request->getParsedBody();
@@ -161,6 +172,42 @@ $app->post('/addRMStock', function (Request $request, Response $response, $args)
 
                             if (isset($arr['stock']))
                                 $resolution = $generalMaterialsDao->updateStockMaterial($dataStock['idMaterial'], $arr['stock']);
+                        }
+                    }
+                }
+            }
+
+            if ($resolution == null) {
+                $arr = $explosionMaterialsDao->findAllMaterialsConsolidatedByMaterial($dataStock['idMaterial']);
+
+                $materials = $explosionMaterialsDao->setDataEXMaterials($arr);
+
+                for ($i = 0; $i < sizeof($materials); $i++) {
+                    if ($materials[$i]['available'] < 0) {
+                        $data = [];
+                        $data['idMaterial'] = $materials[$i]['id_material'];
+
+                        $provider = $generalRMStockDao->findProviderByStock($materials[$i]['id_material']);
+
+                        $id_provider = 0;
+
+                        if ($provider) $id_provider = $provider['id_provider'];
+
+                        $data['idProvider'] = $id_provider;
+
+                        $data['applicationDate'] = '';
+                        $data['deliveryDate'] = '';
+                        $data['requestedQuantity'] = abs($materials[$i]['available']);
+                        $data['purchaseOrder'] = '';
+                        $data['requestedQuantity'] = 0;
+
+                        $requisition = $generalRequisitionsDao->findRequisitionByApplicationDate($materials[$i]['id_material']);
+
+                        if (!$requisition)
+                            $requisitionsDao->insertRequisitionByCompany($data, $id_company);
+                        else {
+                            $data['idRequisition'] = $requisition['id_requisition'];
+                            $requisitionsDao->updateRequisition($data);
                         }
                     }
                 }
@@ -269,7 +316,11 @@ $app->post('/updateRMStock', function (Request $request, Response $response, $ar
     $generalProductsDao,
     $generalMaterialsDao,
     $minimumStockDao,
-    $conversionUnitsDao
+    $conversionUnitsDao,
+    $explosionMaterialsDao,
+    $generalRMStockDao,
+    $requisitionsDao,
+    $generalRequisitionsDao
 ) {
     session_start();
 
@@ -304,6 +355,42 @@ $app->post('/updateRMStock', function (Request $request, Response $response, $ar
 
                         if (isset($arr['stock']))
                             $resolution = $generalMaterialsDao->updateStockMaterial($dataStock['idMaterial'], $arr['stock']);
+                    }
+                }
+            }
+        }
+
+        if ($resolution == null) {
+            $arr = $explosionMaterialsDao->findAllMaterialsConsolidatedByMaterial($dataStock['idMaterial']);
+
+            $materials = $explosionMaterialsDao->setDataEXMaterials($arr);
+
+            for ($i = 0; $i < sizeof($materials); $i++) {
+                if ($materials[$i]['available'] < 0) {
+                    $data = [];
+                    $data['idMaterial'] = $materials[$i]['id_material'];
+
+                    $provider = $generalRMStockDao->findProviderByStock($materials[$i]['id_material']);
+
+                    $id_provider = 0;
+
+                    if ($provider) $id_provider = $provider['id_provider'];
+
+                    $data['idProvider'] = $id_provider;
+
+                    $data['applicationDate'] = '';
+                    $data['deliveryDate'] = '';
+                    $data['requestedQuantity'] = abs($materials[$i]['available']);
+                    $data['purchaseOrder'] = '';
+                    $data['requestedQuantity'] = 0;
+
+                    $requisition = $generalRequisitionsDao->findRequisitionByApplicationDate($materials[$i]['id_material']);
+
+                    if (!$requisition)
+                        $requisitionsDao->insertRequisitionByCompany($data, $id_company);
+                    else {
+                        $data['idRequisition'] = $requisition['id_requisition'];
+                        $requisitionsDao->updateRequisition($data);
                     }
                 }
             }

@@ -428,7 +428,7 @@ $app->post('/updateMaterials', function (Request $request, Response $response, $
         }
 
         if ($resolution == null) {
-            $arr = $explosionMaterialsDao->findAllMaterialsConsolidated($id_company);
+            $arr = $explosionMaterialsDao->findAllMaterialsConsolidatedByMaterial($dataMaterial['idMaterial']);
 
             $materials = $explosionMaterialsDao->setDataEXMaterials($arr);
 

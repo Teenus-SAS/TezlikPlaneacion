@@ -682,7 +682,7 @@ $app->post('/deleteOrder', function (Request $request, Response $response, $args
             $requisition = $generalRequisitionsDao->findRequisitionByApplicationDate($materials[$i]['id_material']);
 
             if ($requisition) {
-                $data['requestedQuantity'] = abs($materials[$i]['available']) - $requisition['quantity_requested'];
+                $data['requestedQuantity'] = abs($materials[$i]['available']) - $requisition['quantity_required'];
                 $data['idRequisition'] = $requisition['id_requisition'];
                 $requisitionsDao->updateRequisition($data);
             }
