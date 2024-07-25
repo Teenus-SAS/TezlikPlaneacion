@@ -1,16 +1,20 @@
 <?php
 
 use TezlikPlaneacion\Dao\ConversionUnitsDao;
+use TezlikPlaneacion\dao\ExplosionMaterialsDao;
 use TezlikPlaneacion\dao\FilterDataDao;
 use TezlikPlaneacion\dao\GeneralMaterialsDao;
 use TezlikPlaneacion\dao\GeneralOrdersDao;
 use TezlikPlaneacion\dao\GeneralProductsDao;
 use TezlikPlaneacion\dao\GeneralProgrammingDao;
+use TezlikPlaneacion\dao\GeneralRequisitionsDao;
+use TezlikPlaneacion\dao\GeneralRMStockDao;
 use TezlikPlaneacion\dao\LastDataDao;
 use TezlikPlaneacion\Dao\MagnitudesDao;
 use TezlikPlaneacion\dao\MaterialsDao;
 use TezlikPlaneacion\dao\MinimumStockDao;
 use TezlikPlaneacion\dao\ProductsMaterialsDao;
+use TezlikPlaneacion\dao\RequisitionsDao;
 use TezlikPlaneacion\dao\UnitsDao;
 
 $materialsDao = new MaterialsDao();
@@ -26,6 +30,10 @@ $generalProductsDao = new GeneralProductsDao();
 $conversionUnitsDao = new ConversionUnitsDao();
 $minimumStockDao = new MinimumStockDao();
 $lastDataDao = new LastDataDao();
+$explosionMaterialsDao = new ExplosionMaterialsDao();
+$generalRMStockDao = new GeneralRMStockDao();
+$generalRequisitionsDao = new GeneralRequisitionsDao();
+$requisitionsDao = new RequisitionsDao();
 
 use Psr\Http\Message\ResponseInterface as Response;
 use Psr\Http\Message\ServerRequestInterface as Request;
