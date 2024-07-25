@@ -192,7 +192,10 @@ $app->post('/addProductsMaterials', function (Request $request, Response $respon
                     // Convertir unidades
                     $quantity = $conversionUnitsDao->convertUnits($material, $arr, $arr['quantity']);
 
-                    $arr = $minimumStockDao->calcStockByMaterial($dataProductMaterial['material'], $quantity);
+                    // Guardar Unidad convertida
+                    $generalProductsMaterialsDao->saveQuantityConverted($arr['id_product_material'], $quantity);
+
+                    $arr = $minimumStockDao->calcStockByMaterial($dataProductMaterial['material']);
 
                     if (isset($arr['stock']))
                         $resolution = $generalMaterialsDao->updateStockMaterial($dataProductMaterial['material'], $arr['stock']);
@@ -264,26 +267,14 @@ $app->post('/addProductsMaterials', function (Request $request, Response $respon
                 // Convertir unidades
                 $quantity = $conversionUnitsDao->convertUnits($material, $arr, $arr['quantity']);
 
-                $arr = $minimumStockDao->calcStockByMaterial($productMaterials[$i]['material'], $quantity);
+                // Guardar Unidad convertida
+                $generalProductsMaterialsDao->saveQuantityConverted($arr['id_product_material'], $quantity);
+
+                $arr = $minimumStockDao->calcStockByMaterial($productMaterials[$i]['material']);
 
                 if (isset($arr['stock']))
                     $resolution = $generalMaterialsDao->updateStockMaterial($productMaterials[$i]['material'], $arr['stock']);
             }
-            // if (isset($resolution['info'])) break;
-            // $arr = $minimumStockDao->calcStockByMaterial($productMaterials[$i]['material']);
-            // if (isset($arr['stock']))
-            //     $resolution = $generalMaterialsDao->updateStockMaterial($productMaterials[$i]['material'], $arr['stock']);
-
-            // if (isset($resolution['info'])) break;
-            // $products = $generalProductsMaterialsDao->findAllProductByMaterial($productMaterials[$i]['material']);
-
-            // foreach ($products as $arr) {
-            //     $product = $minimumStockDao->calcStockByProduct($arr['id_product']);
-            //     if (isset($product['stock']))
-            //         $resolution = $productsDao->updateStockByProduct($arr['id_product'], $product['stock']);
-
-            //     if (isset($resolution['info'])) break;
-            // }
         }
 
         if ($resolution == null)

@@ -113,14 +113,21 @@ $(document).ready(function () {
 
   /* Cargue tabla de Productos Materiales */
   loadTblRequisitions = (data, visible) => {
-    if ($.fn.dataTable.isDataTable("#tblRequisitions")) {
-      $("#tblRequisitions").DataTable().clear();
-      $("#tblRequisitions").DataTable().rows.add(data).draw();
-      return;
-    }
+    let title_delivery_date = visible ? 'Fecha Entrega' : 'Fecha Recibido';
 
-    tblRequisitions = $("#tblRequisitions").dataTable({
-      // destroy: true,
+    if ($.fn.dataTable.isDataTable("#tblRequisitions")) {
+        // Actualizar el título de la columna
+        let table = $("#tblRequisitions").DataTable();
+        let column = table.column(10); // Asumiendo que la columna de "Fecha Entrega/Recibido" es la décima (índice 10)
+        column.header().textContent = title_delivery_date;
+        
+        // Actualizar los datos en la tabla
+        table.clear();
+        table.rows.add(data).draw();
+        return;
+    } 
+
+    tblRequisitions = $("#tblRequisitions").dataTable({ 
       pageLength: 50,
       order: [[0, "asc"]],
       data: data,
@@ -172,7 +179,7 @@ $(document).ready(function () {
             let quantity = data.quantity_required;
 
             if (data.abbreviation === "UND")
-              quantity = quantity.toLocaleString("es-CO", {
+              quantity = Math.floor(quantity).toLocaleString("es-CO", {
                 maximumFractionDigits: 0,
               });
             else
@@ -191,7 +198,7 @@ $(document).ready(function () {
             let quantity = data.quantity_requested;
 
             if (data.abbreviation === "UND")
-              quantity = quantity.toLocaleString("es-CO", {
+              quantity = Math.floor(quantity).toLocaleString("es-CO", {
                 maximumFractionDigits: 0,
               });
             else
@@ -202,7 +209,6 @@ $(document).ready(function () {
             return quantity;
           },
         },
-
         {
           title: "Fecha Solicitud",
           data: "application_date",
@@ -215,7 +221,7 @@ $(document).ready(function () {
           render: renderRequisitionStatus,
         },
         {
-          title: "Fecha Entrega",
+          title: title_delivery_date,
           data: "delivery_date",
           className: "uniqueClassName dt-head-center",
         },

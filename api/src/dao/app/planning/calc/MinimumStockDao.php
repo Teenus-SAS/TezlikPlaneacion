@@ -92,7 +92,7 @@ class MinimumStockDao
         }
     }
 
-    public function calcStockByMaterial($id_material, $quantity)
+    public function calcStockByMaterial($id_material)
     {
         try {
             $connection = Connection::getInstance()->getConnection();
@@ -142,14 +142,12 @@ class MinimumStockDao
                                                             (u.dece > 0)
                                                         , 0)
                                                     )
-                                                ) * :quantity
-                                                -- pm.quantity
+                                                ) * pm.quantity_converted
                                             ) AS stock  
                                           FROM products_materials pm 
                                           LEFT JOIN plan_unit_sales u ON u.id_product = pm.id_product
                                           WHERE pm.id_material = :id_material");
             $stmt->execute([
-                'quantity' => $quantity,
                 'id_material' => $id_material,
             ]);
             $material = $stmt->fetch($connection::FETCH_ASSOC);

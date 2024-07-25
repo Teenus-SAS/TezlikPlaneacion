@@ -21,8 +21,7 @@ class ExplosionMaterialsDao
     $connection = Connection::getInstance()->getConnection();
 
     $stmt = $connection->prepare("SELECT p.id_product, o.id_order, pm.id_product_material, p.reference AS reference_product, p.product, SUM(pi.quantity) AS quantity_product, m.id_material, m.reference AS reference_material, m.material, m.quantity AS quantity_material, u.abbreviation, 
-                                         IFNULL(SUM(IF(IFNULL(r.admission_date, 0) = 0 AND r.application_date != '0000-00-00' AND r.delivery_date != '0000-00-00', r.quantity_required, 0)), 0) AS transit, (o.original_quantity * pm.quantity) AS need, m.minimum_stock
-                                         -- ((o.original_quantity * pm.quantity) - IF(m.status = 1, (IFNULL(SUM(pg.quantity * pm.quantity), 0)), 0)) AS need
+                                         IFNULL(SUM(IF(IFNULL(r.admission_date, 0) = 0 AND r.application_date != '0000-00-00' AND r.delivery_date != '0000-00-00', r.quantity_required, 0)), 0) AS transit, (o.original_quantity * pm.quantity_converted) AS need, m.minimum_stock
                                       FROM products p
                                         INNER JOIN products_inventory pi ON pi.id_product = p.id_product
                                         INNER JOIN products_materials pm ON pm.id_product = p.id_product
@@ -31,7 +30,7 @@ class ExplosionMaterialsDao
                                         INNER JOIN plan_orders o ON o.id_product = p.id_product
                                         LEFT JOIN requisitions r ON r.id_material = pm.id_material
                                         LEFT JOIN programming pg ON pg.id_order = o.id_order
-                                      WHERE p.id_company = :id_company AND o.status IN (1,4,5,6) -- AND (o.status = 'Programar' OR o.status = 'Programado' OR o.status = 'Sin Ficha Tecnica' OR o.status = 'Sin Materia Prima') -- OR o.status = 'En Produccion')
+                                      WHERE p.id_company = :id_company AND o.status IN (1,4,5,6)
                                       GROUP BY pm.id_product_material, o.id_order");
     $stmt->execute(['id_company' => $id_company]);
 
@@ -48,7 +47,7 @@ class ExplosionMaterialsDao
     $connection = Connection::getInstance()->getConnection();
 
     $stmt = $connection->prepare("SELECT p.id_product, o.id_order, pm.id_product_material, p.reference AS reference_product, p.product, SUM(pi.quantity) AS quantity_product, m.id_material, m.reference AS reference_material, m.material, m.quantity AS quantity_material, u.abbreviation, 
-                                         IFNULL(SUM(IF(IFNULL(r.admission_date, 0) = 0 AND r.application_date != '0000-00-00' AND r.delivery_date != '0000-00-00', r.quantity_required, 0)), 0) AS transit, (o.original_quantity * pm.quantity) AS need, m.minimum_stock
+                                         IFNULL(SUM(IF(IFNULL(r.admission_date, 0) = 0 AND r.application_date != '0000-00-00' AND r.delivery_date != '0000-00-00', r.quantity_required, 0)), 0) AS transit, (o.original_quantity * pm.quantity_converted) AS need, m.minimum_stock
                                       FROM products p
                                         INNER JOIN products_inventory pi ON pi.id_product = p.id_product
                                         INNER JOIN products_materials pm ON pm.id_product = p.id_product
@@ -74,7 +73,7 @@ class ExplosionMaterialsDao
     $connection = Connection::getInstance()->getConnection();
 
     $stmt = $connection->prepare("SELECT p.id_product, o.id_order, pm.id_product_material, p.reference AS reference_product, p.product, SUM(pi.quantity) AS quantity_product, m.id_material, m.reference AS reference_material, m.material, m.quantity AS quantity_material, u.abbreviation, 
-                                         IFNULL(SUM(IF(IFNULL(r.admission_date, 0) = 0 AND r.application_date != '0000-00-00' AND r.delivery_date != '0000-00-00', r.quantity_required, 0)), 0) AS transit, (o.original_quantity * pm.quantity) AS need, m.minimum_stock
+                                         IFNULL(SUM(IF(IFNULL(r.admission_date, 0) = 0 AND r.application_date != '0000-00-00' AND r.delivery_date != '0000-00-00', r.quantity_required, 0)), 0) AS transit, (o.original_quantity * pm.quantity_converted) AS need, m.minimum_stock 
                                       FROM materials m
                                         INNER JOIN products_materials pm ON pm.id_material = m.id_material
                                         INNER JOIN products_inventory pi ON pi.id_product = pm.id_product

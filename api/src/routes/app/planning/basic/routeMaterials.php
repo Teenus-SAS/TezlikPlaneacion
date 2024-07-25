@@ -6,6 +6,7 @@ use TezlikPlaneacion\dao\FilterDataDao;
 use TezlikPlaneacion\dao\GeneralMaterialsDao;
 use TezlikPlaneacion\dao\GeneralOrdersDao;
 use TezlikPlaneacion\dao\GeneralProductsDao;
+use TezlikPlaneacion\dao\GeneralProductsMaterialsDao;
 use TezlikPlaneacion\dao\GeneralProgrammingDao;
 use TezlikPlaneacion\dao\GeneralRequisitionsDao;
 use TezlikPlaneacion\dao\GeneralRMStockDao;
@@ -23,6 +24,7 @@ $magnitudesDao = new MagnitudesDao();
 $unitsDao = new UnitsDao();
 $generalOrdersDao = new GeneralOrdersDao();
 $productsMaterialsDao = new ProductsMaterialsDao();
+$generalProductsMaterialsDao = new GeneralProductsMaterialsDao();
 $productsDao = new GeneralProductsDao();
 $generalProgrammingDao = new GeneralProgrammingDao();
 $filterDataDao = new FilterDataDao();
@@ -187,6 +189,7 @@ $app->post('/addMaterials', function (Request $request, Response $response, $arg
     $materialsDao,
     $generalOrdersDao,
     $productsMaterialsDao,
+    $generalProductsMaterialsDao,
     $productsDao,
     $generalProgrammingDao,
     $generalMaterialsDao,
@@ -228,7 +231,10 @@ $app->post('/addMaterials', function (Request $request, Response $response, $arg
                             // Convertir unidades
                             $quantity = $conversionUnitsDao->convertUnits($material, $k, $k['quantity']);
 
-                            $arr = $minimumStockDao->calcStockByMaterial($lastData['id_material'], $quantity);
+                            // Guardar Unidad convertida
+                            $generalProductsMaterialsDao->saveQuantityConverted($k['id_product_material'], $quantity);
+
+                            $arr = $minimumStockDao->calcStockByMaterial($lastData['id_material']);
 
                             if (isset($arr['stock']))
                                 $materials = $generalMaterialsDao->updateStockMaterial($lastData['id_material'], $arr['stock']);
@@ -287,7 +293,10 @@ $app->post('/addMaterials', function (Request $request, Response $response, $arg
                         // Convertir unidades
                         $quantity = $conversionUnitsDao->convertUnits($material, $k, $k['quantity']);
 
-                        $arr = $minimumStockDao->calcStockByMaterial($materials[$i]['idMaterial'], $quantity);
+                        // Guardar Unidad convertida
+                        $generalProductsMaterialsDao->saveQuantityConverted($k['id_product_material'], $quantity);
+
+                        $arr = $minimumStockDao->calcStockByMaterial($materials[$i]['idMaterial']);
 
                         if (isset($arr['stock']))
                             $resolution = $generalMaterialsDao->updateStockMaterial($materials[$i]['idMaterial'], $arr['stock']);
@@ -375,6 +384,7 @@ $app->post('/updateMaterials', function (Request $request, Response $response, $
     $generalProductsDao,
     $productsDao,
     $productsMaterialsDao,
+    $generalProductsMaterialsDao,
     $generalProgrammingDao,
     $conversionUnitsDao,
     $minimumStockDao,
@@ -418,7 +428,10 @@ $app->post('/updateMaterials', function (Request $request, Response $response, $
                         // Convertir unidades
                         $quantity = $conversionUnitsDao->convertUnits($material, $k, $k['quantity']);
 
-                        $arr = $minimumStockDao->calcStockByMaterial($dataMaterial['idMaterial'], $quantity);
+                        // Guardar Unidad convertida
+                        $generalProductsMaterialsDao->saveQuantityConverted($k['id_product_material'], $quantity);
+
+                        $arr = $minimumStockDao->calcStockByMaterial($dataMaterial['idMaterial']);
 
                         if (isset($arr['stock']))
                             $resolution = $generalMaterialsDao->updateStockMaterial($dataMaterial['idMaterial'], $arr['stock']);
@@ -447,7 +460,7 @@ $app->post('/updateMaterials', function (Request $request, Response $response, $
 
                     $data['applicationDate'] = '';
                     $data['deliveryDate'] = '';
-                    $data['requestedQuantity'] = abs($materials[$i]['available']);
+                    $data['requiredQuantity'] = abs($materials[$i]['available']);
                     $data['purchaseOrder'] = '';
                     $data['requestedQuantity'] = 0;
 
