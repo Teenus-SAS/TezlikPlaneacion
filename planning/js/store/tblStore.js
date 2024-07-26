@@ -88,8 +88,8 @@ $(document).ready(function () {
           className: "uniqueClassName dt-head-center",
         },
         {
-          title: "Cantidad",
-          data: "quantity",
+          title: "Cantidad Requerida",
+          data: "quantity_required",
           className: "uniqueClassName dt-head-center",
           render: $.fn.dataTable.render.number(".", ",", 0),
         },
