@@ -71,7 +71,7 @@ $(document).ready(function () {
   });
 
   /* Revision data materia prima */
-  checkDataMaterial = async (url, idMaterial) => {
+  const checkDataMaterial = async (url, idMaterial) => {
     let ref = $('#refRawMaterial').val();
     let material = $('#nameRawMaterial').val();
     let unity = $('#unit').val();
@@ -126,7 +126,7 @@ $(document).ready(function () {
       callback: function (result) {
         if (result) {
           $.get(
-            `../../api/deleteMaterial/${idMaterial}`,
+            `/api/deleteMaterial/${idMaterial}`,
             function (data, textStatus, jqXHR) {
               messageMaterials(data);
             }
