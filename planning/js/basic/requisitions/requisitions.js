@@ -126,6 +126,7 @@ $(document).ready(function () {
 
     sessionStorage.setItem('id_requisition', data.id_requisition);
  
+    $(`#refMaterial option[value=${data.id_material}]`).prop('selected', true);
     $(`#material option[value=${data.id_material}]`).prop('selected', true);
 
     if (data.application_date != '0000-00-00' && data.application_date)

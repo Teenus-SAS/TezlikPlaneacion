@@ -168,8 +168,8 @@ if (sizeof($_SESSION) == 0)
                                         <form id="formAddRequisition">
                                             <div class="form-row">
                                                 <div class="col-sm-3 floating-label enable-floating-label show- mb-3 label">
-                                                    <label for="idRefMaterial">Referencia</label>
-                                                    <select class="form-control" name="idRefMaterial" id="idRefMaterial"></select>
+                                                    <label for="refMaterial">Referencia</label>
+                                                    <select class="form-control" name="refMaterial" id="refMaterial"></select>
                                                 </div>
                                                 <div class="col-sm-9 floating-label enable-floating-label show- mb-3 label">
                                                     <label for="">Materia Prima</label>
