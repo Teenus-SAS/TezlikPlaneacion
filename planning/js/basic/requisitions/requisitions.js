@@ -66,8 +66,8 @@ $(document).ready(function () {
     loadTblRequisitions(firtsDate, lastDate);
   });
 
-  $('#material').change(function (e) {
-    e.preventDefault();
+  function handleMaterialChange(event) {
+    event.preventDefault();
 
     $('#client option').removeAttr('selected');
     $(`#client option[value='0']`).prop('selected', true);
@@ -75,30 +75,103 @@ $(document).ready(function () {
     $('#rMAverage').val('');
 
     let dataStock = JSON.parse(sessionStorage.getItem('stock'));
-    let arr = dataStock.filter(item => item.id_material == this.value); 
+    let arr = dataStock.filter(item => item.id_material == this.value);
 
     setInputClient(arr);
 
     if (arr.length == 1) {
-      $(`#client option[value=${arr[0].id_provider}]`).prop('selected', true);
-      $('#rMQuantity').val(`${arr[0].min_quantity} ${arr[0].abbreviation}`);
-      $('#rMAverage').val(arr[0].average);
+      updateClientSelection(arr[0]);
     } else if (arr.length > 1) {
-      arr = arr.sort((a, b) => a.average - b.average);
+      arr.sort((a, b) => a.average - b.average);
 
       // Verificar si todos los tiempos promedio son iguales 
       const firstValue = arr[0]['average'];
       const allSame = arr.every(item => item['average'] === firstValue);
 
-      if (allSame == true) {
-        arr = arr.sort((a, b) => a.min_quantity - b.min_quantity);
+      if (allSame) {
+        arr.sort((a, b) => a.min_quantity - b.min_quantity);
       }
 
-      $(`#client option[value=${arr[0].id_provider}]`).prop('selected', true);
-      $('#rMQuantity').val(`${arr[0].min_quantity} ${arr[0].abbreviation}`);
-      $('#rMAverage').val(parseFloat(arr[0].max_term) - parseFloat(arr[0].min_term));
+      updateClientSelection(arr[0], true);
     }
-  });
+  }
+
+  function updateClientSelection(item, isMultiple = false) {
+    $(`#client option[value=${item.id_provider}]`).prop('selected', true);
+    $('#rMQuantity').val(`${item.min_quantity} ${item.abbreviation}`);
+    $('#rMAverage').val(isMultiple ? (parseFloat(item.max_term) - parseFloat(item.min_term)) : item.average);
+  }
+
+  $('#refMaterial').change(handleMaterialChange);
+  $('#material').change(handleMaterialChange);
+
+  // $('#refMaterial').change(function (e) {
+  //   e.preventDefault();
+
+  //   $('#client option').removeAttr('selected');
+  //   $(`#client option[value='0']`).prop('selected', true);
+  //   $('#rMQuantity').val('');
+  //   $('#rMAverage').val('');
+
+  //   let dataStock = JSON.parse(sessionStorage.getItem('stock'));
+  //   let arr = dataStock.filter(item => item.id_material == this.value); 
+
+  //   setInputClient(arr);
+
+  //   if (arr.length == 1) {
+  //     $(`#client option[value=${arr[0].id_provider}]`).prop('selected', true);
+  //     $('#rMQuantity').val(`${arr[0].min_quantity} ${arr[0].abbreviation}`);
+  //     $('#rMAverage').val(arr[0].average);
+  //   } else if (arr.length > 1) {
+  //     arr = arr.sort((a, b) => a.average - b.average);
+
+  //     // Verificar si todos los tiempos promedio son iguales 
+  //     const firstValue = arr[0]['average'];
+  //     const allSame = arr.every(item => item['average'] === firstValue);
+
+  //     if (allSame == true) {
+  //       arr = arr.sort((a, b) => a.min_quantity - b.min_quantity);
+  //     }
+
+  //     $(`#client option[value=${arr[0].id_provider}]`).prop('selected', true);
+  //     $('#rMQuantity').val(`${arr[0].min_quantity} ${arr[0].abbreviation}`);
+  //     $('#rMAverage').val(parseFloat(arr[0].max_term) - parseFloat(arr[0].min_term));
+  //   }
+  // });
+
+  // $('#material').change(function (e) {
+  //   e.preventDefault();
+
+  //   $('#client option').removeAttr('selected');
+  //   $(`#client option[value='0']`).prop('selected', true);
+  //   $('#rMQuantity').val('');
+  //   $('#rMAverage').val('');
+
+  //   let dataStock = JSON.parse(sessionStorage.getItem('stock'));
+  //   let arr = dataStock.filter(item => item.id_material == this.value); 
+
+  //   setInputClient(arr);
+
+  //   if (arr.length == 1) {
+  //     $(`#client option[value=${arr[0].id_provider}]`).prop('selected', true);
+  //     $('#rMQuantity').val(`${arr[0].min_quantity} ${arr[0].abbreviation}`);
+  //     $('#rMAverage').val(arr[0].average);
+  //   } else if (arr.length > 1) {
+  //     arr = arr.sort((a, b) => a.average - b.average);
+
+  //     // Verificar si todos los tiempos promedio son iguales 
+  //     const firstValue = arr[0]['average'];
+  //     const allSame = arr.every(item => item['average'] === firstValue);
+
+  //     if (allSame == true) {
+  //       arr = arr.sort((a, b) => a.min_quantity - b.min_quantity);
+  //     }
+
+  //     $(`#client option[value=${arr[0].id_provider}]`).prop('selected', true);
+  //     $('#rMQuantity').val(`${arr[0].min_quantity} ${arr[0].abbreviation}`);
+  //     $('#rMAverage').val(parseFloat(arr[0].max_term) - parseFloat(arr[0].min_term));
+  //   }
+  // });
 
   $('#client').change(function (e) {
     e.preventDefault();
@@ -209,7 +282,7 @@ $(document).ready(function () {
     let resp = await sendDataPOST(url, dataRequisition);
 
     message(resp);
-  }  
+  }
 
   /* Eliminar materia prima */
 
@@ -307,12 +380,11 @@ $(document).ready(function () {
       $('.cardImportRequisitions').hide(800);
       $('#formImportRequisitions').trigger('reset');
       $('.cardAddRequisitions').hide(800);
-      $('#formAddRequisition').trigger('reset'); 
+      $('#formAddRequisition').trigger('reset');
       loadAllData(null, null, null);
       toastr.success(data.message);
       return false;
     } else if (data.error == true) toastr.error(data.message);
     else if (data.info == true) toastr.info(data.message);
   };
- 
 });

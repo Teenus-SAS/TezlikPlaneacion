@@ -21,7 +21,7 @@ class ProductsMaterialsDao
         $connection = Connection::getInstance()->getConnection();
         $stmt = $connection->prepare("SELECT pm.id_product, pm.id_product_material, pm.id_material, m.reference, m.material, m.status, IFNULL(mg.id_magnitude, 0) AS id_magnitude, 
                                              IFNULL(mg.magnitude, '') AS magnitude, IFNULL(u.id_unit, 0) AS id_unit, IFNULL(u.unit, '') AS unit, IFNULL(u.abbreviation, '') AS abbreviation, pm.quantity, m.quantity AS quantity_material, m.reserved,
-                                             ((m.quantity / pm.quantity) - IFNULL((SELECT SUM(quantity) FROM programming WHERE id_product = pm.id_product), 0)) AS total_quantity
+                                             ((m.quantity / pm.quantity_converted) - IFNULL((SELECT SUM(quantity) FROM programming WHERE id_product = pm.id_product), 0)) AS total_quantity
                                       FROM products_materials pm
                                         LEFT JOIN materials m ON m.id_material = pm.id_material
                                         LEFT JOIN convert_units u ON u.id_unit = pm.id_unit

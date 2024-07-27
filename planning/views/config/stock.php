@@ -162,9 +162,13 @@ if (sizeof($_SESSION) == 0)
                                                     <label for="">Materia Prima</label>
                                                     <select class="form-control" name="material" id="material"></select>
                                                 </div>
-                                                <div class="col-sm-4 floating-label enable-floating-label show-label" style="margin-bottom:20px">
+                                                <div class="col-sm-4 floating-label enable-floating-label show-label cardSelectProvider" style="margin-bottom:20px">
                                                     <label for="">Proveedores</label>
                                                     <select class="form-control" name="idProvider" id="client"></select>
+                                                </div>
+                                                <div class="col-sm-4 floating-label enable-floating-label show-label cardProviderName" style="margin-bottom:20px; display: none;">
+                                                    <label for="">Proveedores</label>
+                                                    <input type="text" class="form-control" id="providerName" name="providerName" readonly>
                                                 </div>
 
                                                 <div class="col-sm-2 floating-label enable-floating-label show-label" style="margin-bottom:0px">

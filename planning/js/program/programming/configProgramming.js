@@ -218,7 +218,7 @@ $(document).ready(function () {
       }
     }
 
-    if (cont == 0) {
+    if (cont == 0 && !isNaN(machine)) {
       let productMaterial = false;
       
       for (let i = 0; i < allProductsMaterials.length; i++) {
@@ -578,7 +578,7 @@ $(document).ready(function () {
             
       let $select = $(`#idMachine`);
       $select.empty();
-      $select.append(`<option disabled selected>Seleccionar</option>`);
+      $select.append(`<option disabled selected value=''>Seleccionar</option>`);
       // $select.append(`<option value="0"> PROCESO MANUAL </option>`);
        
       $.each(ciclesMachine, function (i, value) {

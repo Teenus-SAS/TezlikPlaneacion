@@ -39,6 +39,8 @@ $(document).ready(function () {
         $('.cardCreateRMStock').toggle(800);
         $('#formCreateRMStock').trigger('reset');
         $('#btnCreateRMStock').html('Crear');
+        $('.cardSelectProvider').show();
+        $('.cardProviderName').hide();
 
         sessionStorage.removeItem('idStock');
     });
@@ -59,6 +61,7 @@ $(document).ready(function () {
 
     $(document).on('click', '.updateRMStock', function (e) {
         $('.cardImportRMStock').hide(800);
+        $('.cardSelectProvider').hide();
         $('.cardCreateRMStock').show(800);
         $('#btnCreateRMStock').html('Actualizar');
 
@@ -66,11 +69,16 @@ $(document).ready(function () {
         let data = tblRMStock.fnGetData(row);
 
         sessionStorage.setItem('idStock', data.id_stock_material);
+        $(`#refMaterial option[value=${data.id_material}]`).prop('selected', true);
         $(`#material option[value=${data.id_material}]`).prop('selected', true);
+        $('.cardProviderName').show();
+        $('#providerName').val(data.client);
+
         $(`#client option[value=${data.id_provider}]`).prop('selected', true);
         $('#rMMin').val(data.min_term);
         $('#rMMax').val(data.max_term);
         $('#rMQuantity').val(data.min_quantity);
+        $('#abbreviation').val(data.abbreviation);
 
         $('html, body').animate(
             {
@@ -86,7 +94,7 @@ $(document).ready(function () {
         let min = parseFloat($('#rMMin').val());
         let max = parseFloat($('#rMMax').val());
         let quantity = parseFloat($('#rMQuantity').val());
-
+         
         let data = material * provider * min * max * quantity;
 
         if (isNaN(data) || data <= 0) {
