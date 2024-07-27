@@ -76,35 +76,35 @@ if (sizeof($_SESSION) == 0)
                                                 <h5 class="card-title text-secondary fw-bold">Datos del pedido</h5>
                                                 <hr class="mt-0 mb-2">
                                                 <div class="row mt-3">
-                                                    <div class="col-sm-2 programmingSelect floating-label enable-floating-label show-label" id="orders">
+                                                    <div class="col-sm-2 programmingSelect floating-label enable-floating-label show-label mb-2 p-1" id="orders">
                                                         <label for="">No. Pedido</label>
                                                         <select class="form-control text-center" id="order" name="order">
                                                         </select>
                                                     </div>
-                                                    <div class="col-sm-3 programmingSelect floating-label enable-floating-label show-label" id="products">
+                                                    <div class="col-sm-2 programmingSelect floating-label enable-floating-label show-label mb-2 p-1" id="products">
                                                         <label for="">Referencia</label>
                                                         <select class="form-control input slctProduct" id="refProduct" name="idProduct"></select>
                                                     </div>
-                                                    <div class="col-sm-6 programmingSelect floating-label enable-floating-label show-label" id="products">
+                                                    <div class="col-sm-7 programmingSelect floating-label enable-floating-label show-label mb-2 p-1" id="products">
                                                         <label for="">Producto</label>
                                                         <select class="form-control input slctProduct" id="selectNameProduct" name="idProduct"></select>
                                                     </div>
                                                     <div class="col-sm-1" id="classification" style="display: flex; flex-direction: column; align-items: center;">
                                                     </div>
-                                                    <div class="col-sm-2 floating-label enable-floating-label show-label">
+                                                    <div class="col-sm-2 floating-label enable-floating-label show-label mb-2 p-1">
                                                         <label for="">Cantidad Requerida</label>
                                                         <input type="text" class="form-control text-center" id="quantityOrder" name="quantityOrder" readonly>
                                                     </div>
-                                                    <div class="col-sm-2 floating-label enable-floating-label show-label">
+                                                    <div class="col-sm-2 floating-label enable-floating-label show-label mb-2 p-1">
                                                         <label for="">Cantidad Pendiente Fabricar</label>
                                                         <input type="text" class="form-control text-center" id="quantityMissing" name="quantityMissing" readonly>
                                                     </div>
-                                                    <div class="col-sm-2 floating-label enable-floating-label show-label">
-                                                        <label for="">Cantidad MP</label>
+                                                    <div class="col-sm-2 floating-label enable-floating-label show-label mb-2 p-1">
+                                                        <label for="">MP Disponible para (UND)</label>
                                                         <input type="text" class="form-control text-center" id="quantityMP" name="quantityMP" readonly>
                                                     </div>
 
-                                                    <div class="col-sm-2 floating-label enable-floating-label show-label">
+                                                    <div class="col-sm-2 floating-label enable-floating-label show-label mb-2 p-1">
                                                         <label for="">Cantidad a Fabricar</label>
                                                         <input type="number" class="form-control text-center input" id="quantity" name="quantity">
                                                     </div>
