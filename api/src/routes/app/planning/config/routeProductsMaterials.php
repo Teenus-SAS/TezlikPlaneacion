@@ -447,7 +447,10 @@ $app->post('/updatePlanProductsMaterials', function (Request $request, Response 
                 // Convertir unidades
                 $quantity = $conversionUnitsDao->convertUnits($material, $arr, $arr['quantity']);
 
-                $arr = $minimumStockDao->calcStockByMaterial($dataProductMaterial['material'], $quantity);
+                // Guardar Unidad convertida
+                $generalProductsMaterialsDao->saveQuantityConverted($arr['id_product_material'], $quantity);
+
+                $arr = $minimumStockDao->calcStockByMaterial($dataProductMaterial['material']);
 
                 if (isset($arr['stock']))
                     $resolution = $generalMaterialsDao->updateStockMaterial($dataProductMaterial['material'], $arr['stock']);

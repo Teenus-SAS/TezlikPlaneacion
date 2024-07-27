@@ -25,7 +25,7 @@ class ConversionUnitsDao
 
             $arr = [];
 
-            if (!empty($magnitude) || !empty($unitProductMaterial) || !empty($unitMaterial))
+            if (empty($magnitude) || empty($unitProductMaterial) || empty($unitMaterial))
                 return $quantity;
 
             if ($unitProductMaterial != $unitMaterial && $magnitude != 'UNIDAD') {
