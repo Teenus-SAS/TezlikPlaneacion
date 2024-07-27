@@ -113,13 +113,11 @@ $(document).ready(function () {
 
   /* Cargue tabla de Productos Materiales */
   loadTblRequisitions = (data, visible) => {
-    let title_delivery_date = visible ? 'Fecha Entrega' : 'Fecha Recibido';
-
     if ($.fn.dataTable.isDataTable("#tblRequisitions")) {
         // Actualizar el título de la columna
         let table = $("#tblRequisitions").DataTable();
-        let column = table.column(10); // Asumiendo que la columna de "Fecha Entrega/Recibido" es la décima (índice 10)
-        column.header().textContent = title_delivery_date;
+        // let column = table.column(10); // Asumiendo que la columna de "Fecha Entrega/Recibido" es la décima (índice 10)
+        // column.header().textContent = title_delivery_date;
         
         // Actualizar los datos en la tabla
         table.clear();
@@ -221,9 +219,19 @@ $(document).ready(function () {
           render: renderRequisitionStatus,
         },
         {
-          title: title_delivery_date,
-          data: "delivery_date",
+          title: 'Fecha',
+          data: null,
           className: "uniqueClassName dt-head-center",
+          render: function (data) { 
+            let delivery_date = data.delivery_date;
+            let status = data.status;
+            let nameDate = 'Fecha Entrega';
+
+            if (status == 'Recibido')
+              nameDate = 'Fecha Recibido';
+
+            return `<a href="javascript:;"><i title="${nameDate}" style="color:black;">${delivery_date}</i></a>`;
+          }
         },
         {
           title: "Orden de Compra",
