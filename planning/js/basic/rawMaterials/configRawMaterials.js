@@ -76,5 +76,31 @@ $(document).ready(function () {
         }
       }
     });
+  } else {
+     $('#refMaterial').change(function (e) {
+      e.preventDefault();
+      let id = this.value;
+
+      $('#material option').prop('selected', function () {
+        return $(this).val() == id;
+      }); 
+       
+      let data = JSON.parse(sessionStorage.getItem('dataMaterials'));
+      let arr = data.find(item => item.id_material == id);
+      $('#abbreviation').val(arr.abbreviation);
+    });
+
+    $('#material').change(function (e) {
+      e.preventDefault();
+      let id = this.value;
+
+      $('#refMaterial option').prop('selected', function () {
+        return $(this).val() == id;
+      }); 
+
+      let data = JSON.parse(sessionStorage.getItem('dataMaterials'));
+      let arr = data.find(item => item.id_material == id);
+      $('#abbreviation').val(arr.abbreviation);
+    });
   }
 });

@@ -9,10 +9,7 @@ $(document).ready(function () {
     }
     
     tblRawMaterials = $("#tblRawMaterials").dataTable({
-      pageLength: 50,
-      // ajax: {
-      //   url: "/api/materials",
-      // },
+      pageLength: 50, 
       data: data,
       language: {
         url: "/assets/plugins/i18n/Spanish.json",
@@ -77,11 +74,11 @@ $(document).ready(function () {
           className: "uniqueClassName dt-head-center",
           render: function (data) {
             data.unit == "UNIDAD"
-              ? (number = data.minimum_stock.toLocaleString("es-CO", {
+              ? (number = parseFloat(data.minimum_stock).toLocaleString("es-CO", {
                 maximumFractionDigits: 0,
               }))
-              : (number = data.minimum_stock.toLocaleString("es-CO", {
-                minimumFractionDigits: 2,
+              : (number = parseFloat(data.minimum_stock).toLocaleString("es-CO", {
+                minimumFractionDigits: 2, maximumFractionDigits:2,
               }));
             return number;
           },

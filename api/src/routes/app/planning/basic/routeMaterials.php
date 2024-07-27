@@ -211,37 +211,6 @@ $app->post('/addMaterials', function (Request $request, Response $response, $arg
 
         if (!$material) {
             $materials = $materialsDao->insertMaterialsByCompany($dataMaterial, $id_company);
-            if ($materials == null) {
-                $lastData = $lastDataDao->lastInsertedMaterialId($id_company);
-
-                $dataProducts = $generalProductsDao->findProductByMaterial($lastData['id_material'], $id_company);
-
-                foreach ($dataProducts as $j) {
-                    if ($j['id_product'] != 0) {
-                        if (isset($materials['info'])) break;
-
-                        // Calcular precio total materias
-                        // Consultar todos los datos del producto
-                        $productsMaterial = $productsMaterialsDao->findAllProductsmaterials($j['id_product'], $id_company);
-
-                        foreach ($productsMaterial as $k) {
-                            // Obtener materia prima
-                            $material = $generalMaterialsDao->findMaterialAndUnits($k['id_material'], $id_company);
-
-                            // Convertir unidades
-                            $quantity = $conversionUnitsDao->convertUnits($material, $k, $k['quantity']);
-
-                            // Guardar Unidad convertida
-                            $generalProductsMaterialsDao->saveQuantityConverted($k['id_product_material'], $quantity);
-
-                            $arr = $minimumStockDao->calcStockByMaterial($lastData['id_material']);
-
-                            if (isset($arr['stock']))
-                                $materials = $generalMaterialsDao->updateStockMaterial($lastData['id_material'], $arr['stock']);
-                        }
-                    }
-                }
-            }
             if ($materials == null)
                 $resp = array('success' => true, 'message' => 'Materia Prima creada correctamente');
             else if (isset($materials['info']))
@@ -252,6 +221,7 @@ $app->post('/addMaterials', function (Request $request, Response $response, $arg
             $resp = array('info' => true, 'message' => 'La materia prima ya existe. Ingrese una nueva');
     } else {
         $materials = $dataMaterial['importMaterials'];
+        $resolution = null;
 
         for ($i = 0; $i < sizeof($materials); $i++) {
 
@@ -273,36 +243,39 @@ $app->post('/addMaterials', function (Request $request, Response $response, $arg
             } else {
                 $materials[$i]['idMaterial'] = $material['id_material'];
                 $resolution = $materialsDao->updateMaterialsByCompany($materials[$i]);
-            }
 
-            if (isset($resolution['info'])) break;
-            $dataProducts = $generalProductsDao->findProductByMaterial($materials[$i]['idMaterial'], $id_company);
+                if ($material['unit'] != $materials[$i]['unit']) {
+                    $dataProducts = $generalProductsDao->findProductByMaterial($materials[$i]['idMaterial'], $id_company);
 
-            foreach ($dataProducts as $j) {
-                if ($j['id_product'] != 0) {
-                    if (isset($resolution['info'])) break;
+                    foreach ($dataProducts as $j) {
+                        if ($j['id_product'] != 0) {
+                            if (isset($resolution['info'])) break;
 
-                    // Calcular precio total materias
-                    // Consultar todos los datos del producto
-                    $productsMaterial = $productsMaterialsDao->findAllProductsmaterials($j['id_product'], $id_company);
+                            // Calcular precio total materias
+                            // Consultar todos los datos del producto
+                            $productsMaterial = $productsMaterialsDao->findAllProductsmaterials($j['id_product'], $id_company);
 
-                    foreach ($productsMaterial as $k) {
-                        // Obtener materia prima
-                        $material = $generalMaterialsDao->findMaterialAndUnits($k['id_material'], $id_company);
+                            foreach ($productsMaterial as $k) {
+                                // Obtener materia prima
+                                $material = $generalMaterialsDao->findMaterialAndUnits($k['id_material'], $id_company);
 
-                        // Convertir unidades
-                        $quantity = $conversionUnitsDao->convertUnits($material, $k, $k['quantity']);
+                                // Convertir unidades
+                                $quantity = $conversionUnitsDao->convertUnits($material, $k, $k['quantity']);
 
-                        // Guardar Unidad convertida
-                        $generalProductsMaterialsDao->saveQuantityConverted($k['id_product_material'], $quantity);
+                                // Guardar Unidad convertida
+                                $generalProductsMaterialsDao->saveQuantityConverted($k['id_product_material'], $quantity);
 
-                        $arr = $minimumStockDao->calcStockByMaterial($materials[$i]['idMaterial']);
+                                $arr = $minimumStockDao->calcStockByMaterial($materials[$i]['idMaterial']);
 
-                        if (isset($arr['stock']))
-                            $resolution = $generalMaterialsDao->updateStockMaterial($materials[$i]['idMaterial'], $arr['stock']);
+                                if (isset($arr['stock']))
+                                    $resolution = $generalMaterialsDao->updateStockMaterial($materials[$i]['idMaterial'], $arr['stock']);
+                            }
+                        }
                     }
                 }
             }
+
+            if (isset($resolution['info'])) break;
         }
 
         $orders = $generalOrdersDao->findAllOrdersByCompany($id_company);
@@ -410,7 +383,7 @@ $app->post('/updateMaterials', function (Request $request, Response $response, $
     if ($status == true) {
         $resolution = $materialsDao->updateMaterialsByCompany($dataMaterial);
 
-        if ($resolution == null) {
+        if ($resolution == null && $materials[0]['unit'] != $dataMaterial['unit']) {
             $dataProducts = $generalProductsDao->findProductByMaterial($dataMaterial['idMaterial'], $id_company);
 
             foreach ($dataProducts as $j) {

@@ -156,7 +156,7 @@ if (sizeof($_SESSION) == 0)
                                             <div class="form-row">
                                                 <div class="col-sm-2 floating-label enable-floating-label show-label" style="margin-bottom:20px">
                                                     <label for="refMaterial">Referencia</label>
-                                                    <select class="form-control" name="refMaterial" id=""></select>
+                                                    <select class="form-control" name="refMaterial" id="refMaterial"></select>
                                                 </div>
                                                 <div class="col-sm-10 floating-label enable-floating-label show-label" style="margin-bottom:20px">
                                                     <label for="">Materia Prima</label>
@@ -181,7 +181,7 @@ if (sizeof($_SESSION) == 0)
                                                 </div>
                                                 <div class="col-sm-1 floating-label enable-floating-label show-label" style="margin-bottom:0px">
                                                     <label for="">Medida</label>
-                                                    <input type="number" class="form-control text-center" id="rMQuantity" name="quantity" readonly>
+                                                    <input type="text" class="form-control text-center" id="abbreviation" name="abbreviation" readonly>
                                                 </div>
                                                 <div class="col-sm mt-1">
                                                     <button class="btn btn-success" id="btnCreateRMStock">Crear Stock</button>
