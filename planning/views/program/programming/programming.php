@@ -100,7 +100,7 @@ if (sizeof($_SESSION) == 0)
                                                         <input type="text" class="form-control text-center" id="quantityMissing" name="quantityMissing" readonly>
                                                     </div>
                                                     <div class="col-sm-2 floating-label enable-floating-label show-label mb-2 p-1">
-                                                        <label for="">MP Disponible para (UND)</label>
+                                                        <label for="">MP Disponible</label>
                                                         <input type="text" class="form-control text-center" id="quantityMP" name="quantityMP" readonly>
                                                     </div>
 

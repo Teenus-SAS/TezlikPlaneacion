@@ -173,16 +173,22 @@ $(document).ready(function () {
           data: "description",
           className: "uniqueClassName dt-head-center",
         },
-        {
+        /* {
           title: "Medida",
           data: "abbreviation",
           className: "uniqueClassName dt-head-center",
-        },
+        }, */
         {
           title: "Existencia",
-          data: "quantity",
-          className: "uniqueClassName dt-head-center",
-          render: $.fn.dataTable.render.number(".", ",", 0),
+          data: null,
+          //data: "quantity",
+          className: "uniqueClassName dt-head-Right",
+          //render: $.fn.dataTable.render.number(".", ",", 0),
+          render: function (data, type, row) {
+            const formattedQuantity = $.fn.dataTable.render.number(".", ",", 0).display(data.quantity);
+            const formattedAbbreviation = data.abbreviation.charAt(0).toUpperCase() + data.abbreviation.slice(1).toLowerCase();
+            return `${formattedQuantity} ${formattedAbbreviation}`;
+          },
         },
         {
           title: "Reservado",

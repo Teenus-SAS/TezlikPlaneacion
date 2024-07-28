@@ -1,6 +1,6 @@
 $(document).ready(function () {
-  $('#btnExportStore').hide();
-  
+  $("#btnExportStore").hide();
+
   $(".selectNavigation").click(function (e) {
     e.preventDefault();
 
@@ -11,10 +11,9 @@ $(document).ready(function () {
 
     if (this.id == "receive") {
       loadTblStoreMaterial(requisitions);
-      $('#btnExportStore').hide();
-    }
-    else if (this.id == "deliver") {
-      $('#btnExportStore').show();
+      $("#btnExportStore").hide();
+    } else if (this.id == "deliver") {
+      $("#btnExportStore").show();
       loadTblStoreOrder(store);
     }
   });
@@ -78,21 +77,29 @@ $(document).ready(function () {
           className: "uniqueClassName dt-head-center",
         },
         {
-          title: "Unidad",
-          data: "abbreviation",
-          className: "uniqueClassName dt-head-center",
-        },
-        {
           title: "Proveedor",
           data: "provider",
           className: "uniqueClassName dt-head-center",
         },
         {
-          title: "Cantidad Requerida",
-          data: "quantity_required",
+          title: "Cantidad a Recibir",
+          data: null,
           className: "uniqueClassName dt-head-center",
-          render: $.fn.dataTable.render.number(".", ",", 0),
+          render: function (data, type, row) {
+            return (
+              $.fn.dataTable.render
+                .number(".", ",", 0)
+                .display(data.quantity_requested) +
+              " " +
+              data.abbreviation
+            );
+          },
         },
+        /* {
+          title: "Unidad",
+          data: "abbreviation",
+          className: "uniqueClassName dt-head-center",
+        }, */
         {
           title: "Orden de Compra",
           data: "purchase_order",
