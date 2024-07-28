@@ -291,7 +291,8 @@ $app->post('/saveProgramming', function (Request $request, Response $response, $
     }
 
     if ($result == null) {
-        $materials = $explosionMaterialsDao->findAllMaterialsConsolidated($id_company);
+        $arr = $explosionMaterialsDao->findAllMaterialsConsolidated($id_company);
+        $materials = $explosionMaterialsDao->setDataEXMaterials($arr);
 
         for ($i = 0; $i < sizeof($materials); $i++) {
             if ($materials[$i]['available'] < 0) {

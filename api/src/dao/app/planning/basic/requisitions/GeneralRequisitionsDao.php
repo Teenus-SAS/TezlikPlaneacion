@@ -103,4 +103,16 @@ class GeneralRequisitionsDao
             return $error;
         }
     }
+
+    public function deleteAllRequisitionPending()
+    {
+        $connection = Connection::getInstance()->getConnection();
+
+        $stmt = $connection->prepare("DELETE FROM requisitions 
+                                      WHERE application_date = '0000-00-00' AND delivery_date = '0000-00-00' AND purchase_order = ''");
+        $stmt->execute();
+        $this->logger->info(__FUNCTION__, array('query' => $stmt->queryString, 'errors' => $stmt->errorInfo()));
+        $molds = $stmt->fetch($connection::FETCH_ASSOC);
+        return $molds;
+    }
 }

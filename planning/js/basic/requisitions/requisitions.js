@@ -13,6 +13,8 @@ $(document).ready(function () {
     $('.cardRequired').hide();
     $('.cardAddRequisitions').toggle(800);
     $('#btnAddRequisition').html('Asignar');
+    $('.cardSelect').show();
+    $('.cardDescription').hide();
     document.getElementById('requestedQuantity').readOnly = false;
 
     sessionStorage.removeItem('id_requisition');
@@ -193,6 +195,8 @@ $(document).ready(function () {
     $('.cardAddRequisitions').show(800);
     $('.cardRequired').show();
     $('#btnAddRequisition').html('Actualizar');
+    $('.cardDescription').show();
+    $('.cardSelect').hide();
 
     let row = $(this).parent().parent()[0];
     let data = tblRequisitions.fnGetData(row);
@@ -201,6 +205,8 @@ $(document).ready(function () {
  
     $(`#refMaterial option[value=${data.id_material}]`).prop('selected', true);
     $(`#material option[value=${data.id_material}]`).prop('selected', true);
+    $('#referenceMName').val(data.reference);
+    $('#materialName').val(data.material);
 
     if (data.application_date != '0000-00-00' && data.application_date)
       $('#applicationDate').val(data.application_date);

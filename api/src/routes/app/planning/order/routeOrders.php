@@ -657,51 +657,60 @@ $app->post('/deleteOrder', function (Request $request, Response $response, $args
     $id_company = $_SESSION['id_company'];
     $dataOrder = $request->getParsedBody();
 
-    $arr = $explosionMaterialsDao->findAllMaterialsConsolidatedByProduct($dataOrder['idProduct']);
+    $orders = $ordersDao->findAllOrdersByCompany($id_company);
 
-    $materials = $explosionMaterialsDao->setDataEXMaterials($arr);
+    $resolution = $ordersDao->deleteOrder($dataOrder['idOrder']);
 
-    for ($i = 0; $i < sizeof($materials); $i++) {
-        if ($materials[$i]['available'] < 0) {
-            $data = [];
-            $data['idMaterial'] = $materials[$i]['id_material'];
+    if ($resolution == null) {
+        // Si solo hay un pedido el cual se va a eliminar, entonces borra todos los requerimientos pendientes
+        if (sizeof($orders) == 1) {
+            $generalRequisitionsDao->deleteAllRequisitionPending();
+        } else {
+            $arr = $explosionMaterialsDao->findAllMaterialsConsolidated($id_company);
 
-            $provider = $generalRMStockDao->findProviderByStock($materials[$i]['id_material']);
+            $materials = $explosionMaterialsDao->setDataEXMaterials($arr);
 
-            $id_provider = 0;
+            for ($i = 0; $i < sizeof($materials); $i++) {
+                if ($materials[$i]['available'] < 0) {
+                    $data = [];
+                    $data['idMaterial'] = $materials[$i]['id_material'];
 
-            if ($provider) $id_provider = $provider['id_provider'];
+                    $provider = $generalRMStockDao->findProviderByStock($materials[$i]['id_material']);
 
-            $data['idProvider'] = $id_provider;
-            $data['applicationDate'] = '';
-            $data['deliveryDate'] = '';
-            $data['purchaseOrder'] = '';
-            $data['requestedQuantity'] = 0;
+                    $id_provider = 0;
 
-            $requisition = $generalRequisitionsDao->findRequisitionByApplicationDate($materials[$i]['id_material']);
+                    if ($provider) $id_provider = $provider['id_provider'];
 
-            if ($requisition) {
-                $available = abs($materials[$i]['available']);
-                $quantity_required = floatval($requisition['quantity_required']);
+                    $data['idProvider'] = $id_provider;
+                    $data['applicationDate'] = '';
+                    $data['deliveryDate'] = '';
+                    $data['purchaseOrder'] = '';
+                    $data['requestedQuantity'] = 0;
 
-                $data['requiredQuantity'] = $available - $quantity_required;
+                    $requisition = $generalRequisitionsDao->findRequisitionByApplicationDate($materials[$i]['id_material']);
 
-                if ($data['requiredQuantity'] <= 0 || $data['requiredQuantity'] < 0.01) {
-                    $requisitionsDao->deleteRequisition($requisition['id_requisition']);
-                } else {
-                    $data['idRequisition'] = $requisition['id_requisition'];
-                    $requisitionsDao->updateRequisition($data);
+                    if ($requisition) {
+                        $available = abs($materials[$i]['available']);
+                        $quantity_required = floatval($requisition['quantity_required']);
+
+                        $data['requiredQuantity'] = $quantity_required - $available;
+
+                        if ($data['requiredQuantity'] <= 0 || $data['requiredQuantity'] < 0.01) {
+                            $requisitionsDao->deleteRequisition($requisition['id_requisition']);
+                        } else {
+                            $data['idRequisition'] = $requisition['id_requisition'];
+                            $requisitionsDao->updateRequisition($data);
+                        }
+                    }
                 }
             }
         }
     }
 
-    $order = $ordersDao->deleteOrder($dataOrder['idOrder']);
-
-    if ($order == null)
+    if ($resolution == null)
         $resp = array('success' => true, 'message' => 'Pedido eliminado correctamente');
-    else if ($order['info'])
-        $resp = array('info' => true, 'message' => $order['info']);
+    else if ($resolution['info'])
+        $resp = array('info' => true, 'message' => $resolution['info']);
     else
         $resp = array('error' => true, 'message' => 'No se pudo eliminar el pedido. Existe información asociada a el');
 

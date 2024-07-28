@@ -39,9 +39,10 @@ $(document).ready(function () {
         $('.cardCreateRMStock').toggle(800);
         $('#formCreateRMStock').trigger('reset');
         $('#btnCreateRMStock').html('Crear');
-        $('.cardSelectProvider').show();
-        $('.cardProviderName').hide();
-
+        $('.cardSelect').show();
+        $('.cardDescription').hide();
+        $('#client').empty();
+        
         sessionStorage.removeItem('idStock');
     });
 
@@ -61,9 +62,10 @@ $(document).ready(function () {
 
     $(document).on('click', '.updateRMStock', function (e) {
         $('.cardImportRMStock').hide(800);
-        $('.cardSelectProvider').hide();
+        $('.cardSelect').hide();
         $('.cardCreateRMStock').show(800);
         $('#btnCreateRMStock').html('Actualizar');
+        $('.cardDescription').show();
 
         let row = $(this).parent().parent()[0];
         let data = tblRMStock.fnGetData(row);
@@ -71,7 +73,9 @@ $(document).ready(function () {
         sessionStorage.setItem('idStock', data.id_stock_material);
         $(`#refMaterial option[value=${data.id_material}]`).prop('selected', true);
         $(`#material option[value=${data.id_material}]`).prop('selected', true);
-        $('.cardProviderName').show();
+        $('#referenceMName').val(data.reference);
+        $('#materialName').val(data.material);
+
         $('#providerName').val(data.client);
 
         $(`#client option[value=${data.id_provider}]`).prop('selected', true);
