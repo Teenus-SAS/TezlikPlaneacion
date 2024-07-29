@@ -41,7 +41,7 @@ $(document).ready(function () {
         $('#btnCreateRMStock').html('Crear');
         $('.cardSelect').show();
         $('.cardDescription').hide();
-        $('#client').empty();
+        // $('#client').empty();
         
         sessionStorage.removeItem('idStock');
     });

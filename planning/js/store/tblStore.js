@@ -25,11 +25,13 @@ $(document).ready(function () {
         searchData("/api/store"),
       ]);
 
+      let arr = assignOpToGroups(dataStore, 'id_programming');
+
       if (op == 1) loadTblStoreMaterial(dataRequisitions);
-      else loadTblStoreOrder(dataStore);
+      else loadTblStoreOrder(arr);
 
       requisitions = dataRequisitions;
-      store = dataStore;
+      store = arr;
     } catch (error) {
       console.error("Error loading data:", error);
     }
@@ -184,9 +186,10 @@ $(document).ready(function () {
           render: function (data, type, full, meta) {
             const store = full.delivery_store;
             const pending = full.delivery_pending;
+            const deliver = full.deliver;
             if (pending > 0)
-              return `Entregado: ${store}<br><span class="badge badge-warning">Pendiente: ${pending}</span>`;
-            else return `Entregado: ${store}<br>Pendiente: ${pending}`;
+              return `Entregado: ${store}<br><span class="badge badge-warning">Pendiente: ${pending}</span><br>Por Entregar: ${deliver}`;
+            else return `Entregado: ${store}<br>Pendiente: ${pending}<br>Por Entregar: ${deliver}`;
           },
         },
         {
@@ -219,8 +222,8 @@ $(document).ready(function () {
         },
       ],
       rowGroup: {
-        dataSrc: function (row) {
-          return `<th class="text-center" colspan="8" style="font-weight: bold;"> No Pedido - ${row.num_order} </th>`;
+        dataSrc: function (row) { 
+          return `<th class="text-center" colspan="8" style="font-weight: bold;"> No Pedido - ${row.num_order} Orden Produccion - ${row.op} </th>`;
         },
         startRender: function (rows, group) {
           return $("<tr/>").append(group);

@@ -120,7 +120,8 @@ $(document).ready(function () {
             cell.innerHTML = `Inicio: ${moment(minDate).format("DD/MM/YYYY hh:mm A")}<br>Fin: ${moment(final_date).format("DD/MM/YYYY hh:mm A")}`;
             break;
           case 'Orden Produccion':
-            cell.innerHTML = `<button class="btn btn-warning changeStatus" id="${arr.id_programming}" name="${arr.id_programming}">Crear OP</button>`;
+            arr.bd_status == 1 ? cell.innerHTML = `<button class="btn btn-warning changeStatus" id="${arr.id_programming}" name="${arr.id_programming}">Crear OP</button>` :
+              '';
             break;
           case 'Acciones':
             cell.innerHTML = $('#searchMachine').val() != '0' && $('#searchMachine').val() ?
