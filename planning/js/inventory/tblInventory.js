@@ -197,11 +197,12 @@ $(document).ready(function () {
           render: function (data) {
             data.abbreviation == "UND"
               ? (number = data.reserved.toLocaleString("es-CO", {
-                  maximumFractionDigits: 0,
-                }))
+                maximumFractionDigits: 0,
+              }))
               : (number = data.reserved.toLocaleString("es-CO", {
-                  minimumFractionDigits: 2,
-                }));
+                minimumFractionDigits: 2,
+                maximumFractionDigits: 2
+              }));
             return number;
           },
         },
@@ -212,11 +213,12 @@ $(document).ready(function () {
           render: function (data) {
             data.abbreviation == "UND"
               ? (number = data.minimum_stock.toLocaleString("es-CO", {
-                  maximumFractionDigits: 0,
-                }))
+                maximumFractionDigits: 0,
+              }))
               : (number = data.minimum_stock.toLocaleString("es-CO", {
-                  minimumFractionDigits: 2,
-                }));
+                minimumFractionDigits: 2,
+                maximumFractionDigits: 2
+              }));
             return number;
           },
         },
