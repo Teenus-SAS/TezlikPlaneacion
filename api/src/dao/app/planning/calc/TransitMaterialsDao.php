@@ -20,9 +20,33 @@ class TransitMaterialsDao
     {
         try {
             $connection = Connection::getInstance()->getconnection();
-            $stmt = $connection->prepare("");
+            $stmt = $connection->prepare("SELECT COALESCE(SUM(
+                                                CASE
+                                                    WHEN r.admission_date IS NULL 
+                                                        AND r.application_date != '0000-00-00' 
+                                                        AND r.delivery_date != '0000-00-00' 
+                                                    THEN r.quantity_required 
+                                                    ELSE 0 
+                                                END
+                                            ), 0) AS transit
+                                          FROM requisitions r
+                                          WHERE r.id_material = :id_material");
             $stmt->execute([
                 'id_material' => $id_material
+            ]);
+        } catch (\Exception $e) {
+            return ['info' => true, 'message' => $e->getMessage()];
+        }
+    }
+
+    public function updateQuantityTransitByMaterial($id_material, $quantity)
+    {
+        try {
+            $connection = Connection::getInstance()->getconnection();
+            $stmt = $connection->prepare("UPDATE materials SET transit = :transit WHERE id_material = :id_material");
+            $stmt->execute([
+                'transit' => $quantity,
+                'id_material' => $id_material,
             ]);
         } catch (\Exception $e) {
             return ['info' => true, 'message' => $e->getMessage()];

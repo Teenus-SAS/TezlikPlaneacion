@@ -166,7 +166,7 @@ $(document).ready(function () {
           title: 'Existencia',
           data: 'quantity',
           className: 'uniqueClassName dt-head-center',
-          render: (data) => formatNumber(data, 'es-CO'),
+          render: (data) => data.toLocaleString('es-CO', { minimumFractionDigits: 0, maximumFractionDigits: 0 }),
         },
         {
           title: 'Stock Min',
@@ -178,7 +178,7 @@ $(document).ready(function () {
           title: "Dias Inv",
           data: "days",
           className: "uniqueClassName dt-head-center",
-          render: (data) => formatNumber(data, 'es-CO'),
+          render: (data) => data.toLocaleString('es-CO', { minimumFractionDigits: 0, maximumFractionDigits: 0 }),
         },
         {
           title: 'Img',

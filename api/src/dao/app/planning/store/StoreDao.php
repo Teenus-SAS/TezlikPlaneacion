@@ -27,9 +27,9 @@ class StoreDao
                                         INNER JOIN products_materials pm ON pm.id_product = pg.id_product
                                         INNER JOIN materials m ON m.id_material = pm.id_material
                                         INNER JOIN convert_units u ON u.id_unit = m.unit
-                                      WHERE pg.id_company = :id_company AND pg.status = 1 -- AND m.status = 0 AND o.status = 'Programado'
+                                      WHERE pg.id_company = :id_company AND pg.status = 1
                                       GROUP BY pg.id_programming, o.id_order, o.num_order, m.id_material, m.reference, m.material, m.quantity, u.unit
-                                      ORDER BY o.num_order ASC -- , `m`.`delivery_date` ASC");
+                                      ORDER BY o.num_order ASC");
         $stmt->execute(['id_company' => $id_company]);
 
         $this->logger->info(__FUNCTION__, array('query' => $stmt->queryString, 'errors' => $stmt->errorInfo()));

@@ -691,9 +691,9 @@ $app->post('/deleteOrder', function (Request $request, Response $response, $args
 
                     if ($requisition) {
                         $available = abs($materials[$i]['available']);
-                        $quantity_required = floatval($requisition['quantity_required']);
+                        // $quantity_required = floatval($requisition['quantity_required']);
 
-                        $data['requiredQuantity'] = $quantity_required - $available;
+                        $data['requiredQuantity'] = $available;
 
                         if ($data['requiredQuantity'] <= 0 || $data['requiredQuantity'] < 0.01) {
                             $requisitionsDao->deleteRequisition($requisition['id_requisition']);

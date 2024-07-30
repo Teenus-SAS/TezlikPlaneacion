@@ -221,14 +221,7 @@ $(document).ready(function () {
               }));
             return number;
           },
-        },
-        // {
-        //   title: "Dias",
-        //   data: "days",
-        //   visible: visible,
-        //   className: "uniqueClassName dt-head-center",
-        //   render: $.fn.dataTable.render.number('.', ',', 0),
-        // },
+        }, 
         {
           title: "Clasificación",
           data: null,

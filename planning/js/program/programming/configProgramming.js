@@ -203,6 +203,7 @@ $(document).ready(function () {
         toastr.error('Cantidad a programar mayor a el inventario de MP');
         return false;
       }
+
       $('.cardFormProgramming2').show(800);
     }
     
@@ -264,7 +265,7 @@ $(document).ready(function () {
       if (isNaN(data) || data <= 0) {
         toastr.error('Ingrese todos los campos');
         return false;
-      };
+      }; 
 
       if (machines.length > 0) {
         dataProgramming['min_date'] = machines[machines.length - 1].max_date;
