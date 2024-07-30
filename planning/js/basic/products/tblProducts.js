@@ -172,7 +172,7 @@ $(document).ready(function () {
           title: 'Stock Min',
           data: 'minimum_stock',
           className: 'uniqueClassName dt-head-center',
-          render: (data) => formatNumber(data, 'es-CO'),
+          render: (data) => data.toLocaleString('es-CO', { minimumFractionDigits: 0, maximumFractionDigits: 0 }),
         },
         {
           title: "Dias Inv",
