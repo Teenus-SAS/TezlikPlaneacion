@@ -174,13 +174,13 @@ $(document).ready(function () {
           render: $.fn.dataTable.render.number(".", ",", 0),
         },
         {
-          title: "Reservado",
+          title: "Cantidad a Entregar",
           data: "reserved",
           className: "uniqueClassName dt-head-center",
           render: $.fn.dataTable.render.number(".", ",", 0),
         },
         {
-          title: "Cantidades",
+          title: "Estado Entregas",
           data: null,
           className: "uniqueClassName dt-head-center",
           render: function (data, type, full, meta) {
