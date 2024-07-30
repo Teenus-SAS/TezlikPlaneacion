@@ -114,7 +114,7 @@ if (sizeof($_SESSION) == 0)
                                     </div>
                                 </div>
                             </div>
-                            <div class="row">
+                            <div class="row cardFormProgramming2">
                                 <div class="col-12">
                                     <div class="card">
                                         <div class="card-body" style="padding-bottom:0px">

@@ -195,6 +195,17 @@ $(document).ready(function () {
     let machine = parseFloat($('#idMachine').val());
     let quantity = parseFloat($('#quantity').val());
 
+    if (!isNaN(quantity)) { 
+      let productsMaterials = allProductsMaterials.filter(item => item.id_product == product);
+      productsMaterials = productsMaterials.sort((a, b) => a.quantity - b.quantity);
+        
+      if (productsMaterials[0].quantity < quantity) {
+        toastr.error('Cantidad a programar mayor a el inventario de MP');
+        return false;
+      }
+      $('.cardFormProgramming2').show(800);
+    }
+    
     if (op == 1 && !isNaN(machine)) {
       machines = [];
 
@@ -235,8 +246,6 @@ $(document).ready(function () {
       }
 
       if (id == 'quantity') {
-        let productMaterial = true;
-
         for (let i = 0; i < allProductsMaterials.length; i++) {
           if (allProductsMaterials[i].id_product == product && allProductsMaterials[i].quantity < quantity) {
             productMaterial = false;

@@ -2,6 +2,7 @@ $(document).ready(function () {
   let programming = [];
   /* Ocultar panel crear programa de producción */
   $(".cardCreateProgramming").hide();
+  $(".cardFormProgramming2").hide();
   $('.cardBottons').hide();
   $('.cardSaveBottons').hide();
 
@@ -27,6 +28,7 @@ $(document).ready(function () {
     $("#idMachine").empty();
     $("#idProcess").empty();
     $(".cardCreateProgramming").toggle(800);
+    $('.cardFormProgramming2').hide(800);
     $("#btnCreateProgramming").html("Crear");
     $("#formCreateProgramming").trigger("reset");
   });
@@ -142,13 +144,13 @@ $(document).ready(function () {
     let id_process = $('#idProcess').val();
     let process = $('#idProcess :selected').text().trim();
 
-    let productsMaterials = allProductsMaterials.filter(item => item.id_product == id_product);
-    productsMaterials = productsMaterials.sort((a, b) => a.quantity - b.quantity);
+    // let productsMaterials = allProductsMaterials.filter(item => item.id_product == id_product);
+    // productsMaterials = productsMaterials.sort((a, b) => a.quantity - b.quantity);
         
-    if (productsMaterials[0].quantity < quantityProgramming) {
-      toastr.error('Cantidad a programar mayor a el inventario de MP');
-      return false;
-    }
+    // if (productsMaterials[0].quantity < quantityProgramming) {
+    //   toastr.error('Cantidad a programar mayor a el inventario de MP');
+    //   return false;
+    // }
 
     for (let i = 0; i < productsMaterials.length; i++) {
       productsMaterials[i].quantity -= quantityProgramming;
