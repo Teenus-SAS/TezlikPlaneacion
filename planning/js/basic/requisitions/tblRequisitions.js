@@ -183,6 +183,7 @@ $(document).ready(function () {
             else
               quantity = quantity.toLocaleString("es-CO", {
                 minimumFractionDigits: 2,
+                maximumFractionDigits: 2
               });
 
             return quantity;
@@ -202,6 +203,7 @@ $(document).ready(function () {
             else
               quantity = quantity.toLocaleString("es-CO", {
                 minimumFractionDigits: 2,
+                maximumFractionDigits: 2
               });
 
             return quantity;
