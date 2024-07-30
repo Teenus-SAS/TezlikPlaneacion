@@ -59,7 +59,7 @@ if (sizeof($_SESSION) == 0)
                                 <button class="btn btn-warning" id="btnNewProgramming" name="btnNewProgramming">Programar</button>
                             </div>
                             <div class="col-sm-7 col-xl-1 form-inline justify-content-sm-end mt-3 cardSaveBottons">
-                                <button class="btn btn-primary" id="btnSavePrograming" name="btnSavePrograming">Guardar</button>
+                                <button class="btn btn-primary" id="btnSavePrograming" name="btnSavePrograming">Guardar Planeación</button>
                             </div>
                         </div>
                     </div>
