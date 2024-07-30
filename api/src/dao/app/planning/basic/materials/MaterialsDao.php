@@ -20,7 +20,8 @@ class MaterialsDao
   {
     $connection = Connection::getInstance()->getConnection();
     $stmt = $connection->prepare("SELECT m.id_material, m.reference, m.material, m.material AS descript, mg.id_magnitude, mg.magnitude, u.id_unit, 
-                                         u.unit, u.abbreviation, m.quantity, m.transit, m.reserved, m.minimum_stock                               
+                                         u.unit, u.abbreviation, m.quantity, m.transit, m.minimum_stock    
+                                        -- , m.reserved                           
                                   FROM materials m
                                     INNER JOIN convert_units u ON u.id_unit = m.unit
                                     INNER JOIN convert_magnitudes mg ON mg.id_magnitude = u.id_magnitude 
