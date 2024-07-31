@@ -20,12 +20,13 @@ class ExplosionMaterialsDao
   {
     $connection = Connection::getInstance()->getConnection();
 
-    $stmt = $connection->prepare("SELECT p.id_product, o.id_order, pm.id_product_material, p.reference AS reference_product, p.product, SUM(pi.quantity) AS quantity_product, m.id_material, m.reference AS reference_material, m.material, m.quantity AS quantity_material, u.abbreviation, 
-                                         IFNULL(SUM(IF(IFNULL(r.admission_date, 0) = 0 AND r.application_date != '0000-00-00' AND r.delivery_date != '0000-00-00', r.quantity_required, 0)), 0) AS transit, (o.original_quantity * pm.quantity_converted) AS need, m.minimum_stock
+    $stmt = $connection->prepare("SELECT p.id_product, o.id_order, pm.id_product_material, p.reference AS reference_product, p.product, SUM(pi.quantity) AS quantity_product, m.id_material, m.reference AS reference_material, m.material, mi.quantity AS quantity_material, u.abbreviation, 
+                                         IFNULL(SUM(IF(IFNULL(r.admission_date, 0) = 0 AND r.application_date != '0000-00-00' AND r.delivery_date != '0000-00-00', r.quantity_required, 0)), 0) AS transit, (o.original_quantity * pm.quantity_converted) AS need, mi.minimum_stock
                                       FROM products p
                                         INNER JOIN products_inventory pi ON pi.id_product = p.id_product
                                         INNER JOIN products_materials pm ON pm.id_product = p.id_product
                                         INNER JOIN materials m ON m.id_material = pm.id_material
+                                        INNER JOIN materials_inventory mi ON mi.id_material = pm.id_material
                                         INNER JOIN convert_units u ON u.id_unit = m.unit
                                         INNER JOIN plan_orders o ON o.id_product = p.id_product
                                         LEFT JOIN requisitions r ON r.id_material = pm.id_material
@@ -46,12 +47,13 @@ class ExplosionMaterialsDao
   {
     $connection = Connection::getInstance()->getConnection();
 
-    $stmt = $connection->prepare("SELECT p.id_product, o.id_order, pm.id_product_material, p.reference AS reference_product, p.product, SUM(pi.quantity) AS quantity_product, m.id_material, m.reference AS reference_material, m.material, m.quantity AS quantity_material, u.abbreviation, 
-                                         IFNULL(SUM(IF(IFNULL(r.admission_date, 0) = 0 AND r.application_date != '0000-00-00' AND r.delivery_date != '0000-00-00', r.quantity_required, 0)), 0) AS transit, (o.original_quantity * pm.quantity_converted) AS need, m.minimum_stock
+    $stmt = $connection->prepare("SELECT p.id_product, o.id_order, pm.id_product_material, p.reference AS reference_product, p.product, SUM(pi.quantity) AS quantity_product, m.id_material, m.reference AS reference_material, m.material, mi.quantity AS quantity_material, u.abbreviation, 
+                                         IFNULL(SUM(IF(IFNULL(r.admission_date, 0) = 0 AND r.application_date != '0000-00-00' AND r.delivery_date != '0000-00-00', r.quantity_required, 0)), 0) AS transit, (o.original_quantity * pm.quantity_converted) AS need, mi.minimum_stock
                                       FROM products p
                                         INNER JOIN products_inventory pi ON pi.id_product = p.id_product
                                         INNER JOIN products_materials pm ON pm.id_product = p.id_product
                                         INNER JOIN materials m ON m.id_material = pm.id_material
+                                        INNER JOIN materials_inventory mi ON mi.id_material = pm.id_material
                                         INNER JOIN convert_units u ON u.id_unit = m.unit
                                         INNER JOIN plan_orders o ON o.id_product = p.id_product
                                         LEFT JOIN requisitions r ON r.id_material = pm.id_material
@@ -72,9 +74,10 @@ class ExplosionMaterialsDao
   {
     $connection = Connection::getInstance()->getConnection();
 
-    $stmt = $connection->prepare("SELECT p.id_product, o.id_order, pm.id_product_material, p.reference AS reference_product, p.product, SUM(pi.quantity) AS quantity_product, m.id_material, m.reference AS reference_material, m.material, m.quantity AS quantity_material, u.abbreviation, 
-                                         IFNULL(SUM(IF(IFNULL(r.admission_date, 0) = 0 AND r.application_date != '0000-00-00' AND r.delivery_date != '0000-00-00', r.quantity_required, 0)), 0) AS transit, (o.original_quantity * pm.quantity_converted) AS need, m.minimum_stock 
+    $stmt = $connection->prepare("SELECT p.id_product, o.id_order, pm.id_product_material, p.reference AS reference_product, p.product, SUM(pi.quantity) AS quantity_product, m.id_material, m.reference AS reference_material, m.material, mi.quantity AS quantity_material, u.abbreviation, 
+                                         IFNULL(SUM(IF(IFNULL(r.admission_date, 0) = 0 AND r.application_date != '0000-00-00' AND r.delivery_date != '0000-00-00', r.quantity_required, 0)), 0) AS transit, (o.original_quantity * pm.quantity_converted) AS need, mi.minimum_stock 
                                       FROM materials m
+                                        INNER JOIN materials_inventory mi ON mi.id_material = m.id_material
                                         INNER JOIN products_materials pm ON pm.id_material = m.id_material
                                         INNER JOIN products_inventory pi ON pi.id_product = pm.id_product
                                         INNER JOIN products p ON p.id_product = pm.id_product

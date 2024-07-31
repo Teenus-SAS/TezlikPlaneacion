@@ -13,6 +13,7 @@ use TezlikPlaneacion\dao\GeneralRMStockDao;
 use TezlikPlaneacion\dao\LastDataDao;
 use TezlikPlaneacion\Dao\MagnitudesDao;
 use TezlikPlaneacion\dao\MaterialsDao;
+use TezlikPlaneacion\dao\MaterialsInventoryDao;
 use TezlikPlaneacion\dao\MinimumStockDao;
 use TezlikPlaneacion\dao\ProductsMaterialsDao;
 use TezlikPlaneacion\dao\RequisitionsDao;
@@ -20,6 +21,7 @@ use TezlikPlaneacion\dao\UnitsDao;
 
 $materialsDao = new MaterialsDao();
 $generalMaterialsDao = new GeneralMaterialsDao();
+$materialsInventoryDao = new MaterialsInventoryDao();
 $magnitudesDao = new MagnitudesDao();
 $unitsDao = new UnitsDao();
 $generalOrdersDao = new GeneralOrdersDao();
@@ -193,6 +195,7 @@ $app->post('/addMaterials', function (Request $request, Response $response, $arg
     $productsDao,
     $generalProgrammingDao,
     $generalMaterialsDao,
+    $materialsInventoryDao,
     $magnitudesDao,
     $unitsDao,
     $generalProductsDao,
@@ -211,6 +214,14 @@ $app->post('/addMaterials', function (Request $request, Response $response, $arg
 
         if (!$material) {
             $materials = $materialsDao->insertMaterialsByCompany($dataMaterial, $id_company);
+
+            if ($materials == null) {
+                $lastData = $lastDataDao->lastInsertedMaterialId($id_company);
+                $dataMaterial['idMaterial'] = $lastData['id_material'];
+
+                $materials = $materialsInventoryDao->insertMaterialInventory($dataMaterial, $id_company);
+            }
+
             if ($materials == null)
                 $resp = array('success' => true, 'message' => 'Materia Prima creada correctamente');
             else if (isset($materials['info']))
@@ -273,6 +284,16 @@ $app->post('/addMaterials', function (Request $request, Response $response, $arg
                         }
                     }
                 }
+            }
+
+            if (isset($resolution['info'])) break;
+
+            $inventory = $materialsInventoryDao->findMaterialInventory($materials[$i]['idMaterial']);
+
+            if (!$inventory) {
+                $resolution = $materialsInventoryDao->insertMaterialInventory($materials[$i], $id_company);
+            } else {
+                $resolution = $materialsInventoryDao->updateMaterialInventory($materials[$i]);
             }
 
             if (isset($resolution['info'])) break;
@@ -353,6 +374,7 @@ $app->post('/addMaterials', function (Request $request, Response $response, $arg
 $app->post('/updateMaterials', function (Request $request, Response $response, $args) use (
     $materialsDao,
     $generalMaterialsDao,
+    $materialsInventoryDao,
     $generalOrdersDao,
     $generalProductsDao,
     $productsDao,
@@ -382,6 +404,16 @@ $app->post('/updateMaterials', function (Request $request, Response $response, $
 
     if ($status == true) {
         $resolution = $materialsDao->updateMaterialsByCompany($dataMaterial);
+
+        if ($resolution == null) {
+            $inventory = $materialsInventoryDao->findMaterialInventory($dataMaterial['idMaterial']);
+
+            if (!$inventory) {
+                $resolution = $materialsInventoryDao->insertMaterialInventory($dataMaterial, $id_company);
+            } else {
+                $resolution = $materialsInventoryDao->updateMaterialInventory($dataMaterial);
+            }
+        }
 
         if ($resolution == null && $materials[0]['unit'] != $dataMaterial['unit']) {
             $dataProducts = $generalProductsDao->findProductByMaterial($dataMaterial['idMaterial'], $id_company);

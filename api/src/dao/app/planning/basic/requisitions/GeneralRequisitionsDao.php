@@ -23,6 +23,7 @@ class GeneralRequisitionsDao
                                              r.admission_date, u.abbreviation, IFNULL(r.id_provider, 0) AS id_provider, IFNULL(c.client, '') AS provider
                                       FROM requisitions r
                                         INNER JOIN materials m ON m.id_material = r.id_material
+                                        -- INNER JOIN materials_inventory mi ON mi.id_material = r.id_material
                                         INNER JOIN convert_units u ON u.id_unit = m.unit
                                         LEFT JOIN plan_clients c ON c.id_client = r.id_provider
                                       WHERE r.id_company = :id_company 

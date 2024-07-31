@@ -702,6 +702,11 @@ $app->post('/deleteOrder', function (Request $request, Response $response, $args
                             $requisitionsDao->updateRequisition($data);
                         }
                     }
+                } else {
+                    $requisition = $generalRequisitionsDao->findRequisitionByApplicationDate($materials[$i]['id_material']);
+                    if ($requisition) {
+                        $requisitionsDao->deleteRequisition($requisition['id_requisition']);
+                    }
                 }
             }
         }

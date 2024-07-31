@@ -34,7 +34,7 @@ class GeneralProgrammingDao
 
         $stmt = $connection->prepare("SELECT pg.id_programming, o.id_order, o.num_order, o.date_order, o.original_quantity AS quantity_order, o.accumulated_quantity, pg.quantity AS quantity_programming, p.id_product, 
                                              p.reference, p.product, m.id_machine, m.machine, c.client, pg.min_date, HOUR(pg.min_date) AS min_hour, pm.hour_start, pg.max_date, HOUR(pg.max_date) AS max_hour,
-                                             (SELECT IFNULL((1*cm.quantity/cpm.quantity), 0) FROM products_materials cpm INNER JOIN materials cm ON cm.id_material = cpm.id_material WHERE cpm.id_product = pg.id_product ORDER BY `IFNULL((1*cm.quantity/cpm.quantity), 0)` ASC LIMIT 1) AS quantity_mp,
+                                             (SELECT IFNULL((1*cm.quantity/cpm.quantity), 0) FROM products_materials cpm INNER JOIN materials_inventory cm ON cm.id_material = cpm.id_material WHERE cpm.id_product = pg.id_product ORDER BY `IFNULL((1*cm.quantity/cpm.quantity), 0)` ASC LIMIT 1) AS quantity_mp,
                                              pg.status
                                       FROM programming pg
                                         INNER JOIN plan_orders o ON o.id_order = pg.id_order
@@ -57,7 +57,7 @@ class GeneralProgrammingDao
 
         $stmt = $connection->prepare("SELECT pg.id_programming, o.id_order, o.num_order, o.date_order, o.original_quantity AS quantity_order, o.accumulated_quantity, pg.quantity AS quantity_programming, p.id_product, 
                                              p.reference, p.product, m.id_machine, m.machine, c.client, pg.min_date, HOUR(pg.min_date) AS min_hour, pm.hour_start, pg.max_date, HOUR(pg.max_date) AS max_hour,
-                                             (SELECT IFNULL((1*cm.quantity/cpm.quantity), 0) FROM products_materials cpm INNER JOIN materials cm ON cm.id_material = cpm.id_material WHERE cpm.id_product = pg.id_product ORDER BY `IFNULL((1*cm.quantity/cpm.quantity), 0)` ASC LIMIT 1) AS quantity_mp, pc.id_process, pc.process,
+                                             (SELECT IFNULL((1*cm.quantity/cpm.quantity), 0) FROM products_materials cpm INNER JOIN materials_inventory cm ON cm.id_material = cpm.id_material WHERE cpm.id_product = pg.id_product ORDER BY `IFNULL((1*cm.quantity/cpm.quantity), 0)` ASC LIMIT 1) AS quantity_mp, pc.id_process, pc.process,
                                              pg.status
                                       FROM programming pg
                                         INNER JOIN plan_orders o ON o.id_order = pg.id_order

@@ -20,8 +20,9 @@ class MaterialsDao
   {
     $connection = Connection::getInstance()->getConnection();
     $stmt = $connection->prepare("SELECT m.id_material, m.reference, m.material, m.material AS descript, mg.id_magnitude, mg.magnitude, u.id_unit, 
-                                         u.unit, u.abbreviation, m.quantity, m.reserved, m.minimum_stock, m.transit                         
+                                         u.unit, u.abbreviation, mi.quantity, mi.reserved, mi.minimum_stock, mi.transit                         
                                   FROM materials m
+                                    INNER JOIN materials_inventory mi ON mi.id_material = m.id_material
                                     INNER JOIN convert_units u ON u.id_unit = m.unit
                                     INNER JOIN convert_magnitudes mg ON mg.id_magnitude = u.id_magnitude 
                                   WHERE m.id_company = :id_company ORDER BY m.reference ASC");
@@ -39,18 +40,14 @@ class MaterialsDao
   {
     $connection = Connection::getInstance()->getConnection();
 
-    $quantity = str_replace('.', '', $dataMaterial['quantity']);
-    $quantity = str_replace(',', '.', $quantity);
-
     try {
-      $stmt = $connection->prepare("INSERT INTO materials (id_company, reference, material, unit, quantity) 
-                                      VALUES(:id_company, :reference, :material, :unit, :quantity)");
+      $stmt = $connection->prepare("INSERT INTO materials (id_company, reference, material, unit) 
+                                      VALUES(:id_company, :reference, :material, :unit)");
       $stmt->execute([
         'id_company' => $id_company,
         'reference' => trim($dataMaterial['refRawMaterial']),
         'material' => strtoupper(trim($dataMaterial['nameRawMaterial'])),
-        'unit' => $dataMaterial['unit'],
-        'quantity' => $quantity
+        'unit' => $dataMaterial['unit']
       ]);
       $this->logger->info(__FUNCTION__, array('query' => $stmt->queryString, 'errors' => $stmt->errorInfo()));
     } catch (\Exception $e) {
@@ -68,18 +65,14 @@ class MaterialsDao
   {
     $connection = Connection::getInstance()->getConnection();
 
-    $quantity = str_replace('.', '', $dataMaterial['quantity']);
-    $quantity = str_replace(',', '.', $quantity);
-
     try {
-      $stmt = $connection->prepare("UPDATE materials SET reference = :reference, material = :material, unit = :unit, quantity = :quantity
+      $stmt = $connection->prepare("UPDATE materials SET reference = :reference, material = :material, unit = :unit
                                     WHERE id_material = :id_material");
       $stmt->execute([
         'id_material' => $dataMaterial['idMaterial'],
         'reference' => trim($dataMaterial['refRawMaterial']),
         'material' => strtoupper(trim($dataMaterial['nameRawMaterial'])),
-        'unit' => trim($dataMaterial['unit']),
-        'quantity' => $quantity
+        'unit' => trim($dataMaterial['unit'])
       ]);
       $this->logger->info(__FUNCTION__, array('query' => $stmt->queryString, 'errors' => $stmt->errorInfo()));
     } catch (\Exception $e) {
