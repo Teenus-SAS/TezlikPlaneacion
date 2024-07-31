@@ -77,10 +77,10 @@ class InventoryDaysDao
                                                     )
                                                 )
                                             , 0) AS days
-                                      FROM materials_inventory m
-                                      INNER JOIN products_materials pm ON pm.id_material = m.id_material
-                                      LEFT JOIN plan_unit_sales u ON u.id_product = pm.id_product
-                                      WHERE m.id_material = :id_material;");
+                                            FROM materials_inventory m
+                                            INNER JOIN products_materials pm ON pm.id_material = m.id_material
+                                            LEFT JOIN plan_unit_sales u ON u.id_product = pm.id_product
+                                            WHERE m.id_material = :id_material");
             $stmt->execute(['id_material' => $id_material]);
             // $this->logger->info(__FUNCTION__, array('query' => $stmt->queryString, 'errors' => $stmt->errorInfo()));
             $product = $stmt->fetch($connection::FETCH_ASSOC);
