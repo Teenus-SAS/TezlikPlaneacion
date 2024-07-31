@@ -10,6 +10,7 @@ use TezlikPlaneacion\dao\GeneralProductsMaterialsDao;
 use TezlikPlaneacion\dao\GeneralProgrammingDao;
 use TezlikPlaneacion\dao\GeneralRequisitionsDao;
 use TezlikPlaneacion\dao\GeneralRMStockDao;
+use TezlikPlaneacion\dao\InventoryDaysDao;
 use TezlikPlaneacion\dao\LastDataDao;
 use TezlikPlaneacion\Dao\MagnitudesDao;
 use TezlikPlaneacion\dao\MaterialsDao;
@@ -25,6 +26,7 @@ $materialsInventoryDao = new MaterialsInventoryDao();
 $magnitudesDao = new MagnitudesDao();
 $unitsDao = new UnitsDao();
 $generalOrdersDao = new GeneralOrdersDao();
+$inventoryDaysDao = new InventoryDaysDao();
 $productsMaterialsDao = new ProductsMaterialsDao();
 $generalProductsMaterialsDao = new GeneralProductsMaterialsDao();
 $productsDao = new GeneralProductsDao();
@@ -191,6 +193,7 @@ $app->post('/addMaterials', function (Request $request, Response $response, $arg
     $materialsDao,
     $generalOrdersDao,
     $productsMaterialsDao,
+    $inventoryDaysDao,
     $generalProductsMaterialsDao,
     $productsDao,
     $generalProgrammingDao,
@@ -220,6 +223,13 @@ $app->post('/addMaterials', function (Request $request, Response $response, $arg
                 $dataMaterial['idMaterial'] = $lastData['id_material'];
 
                 $materials = $materialsInventoryDao->insertMaterialInventory($dataMaterial, $id_company);
+            }
+
+            // Calcular Dias Inventario Material
+            if ($materials == null) {
+                $inventory = $inventoryDaysDao->calcInventoryMaterialDays($dataMaterial['idMaterial']);
+                if (isset($inventory['days']))
+                    $materials = $inventoryDaysDao->updateInventoryMaterialDays($dataMaterial['idMaterial'], $inventory['days']);
             }
 
             if ($materials == null)
@@ -297,6 +307,11 @@ $app->post('/addMaterials', function (Request $request, Response $response, $arg
             }
 
             if (isset($resolution['info'])) break;
+
+            // Calcular Dias Inventario Material 
+            $inventory = $inventoryDaysDao->calcInventoryMaterialDays($materials[$i]['idMaterial']);
+            if (isset($inventory['days']))
+                $resolution = $inventoryDaysDao->updateInventoryMaterialDays($materials[$i]['idMaterial'], $inventory['days']);
         }
 
         $orders = $generalOrdersDao->findAllOrdersByCompany($id_company);
@@ -377,6 +392,7 @@ $app->post('/updateMaterials', function (Request $request, Response $response, $
     $materialsInventoryDao,
     $generalOrdersDao,
     $generalProductsDao,
+    $inventoryDaysDao,
     $productsDao,
     $productsMaterialsDao,
     $generalProductsMaterialsDao,
@@ -413,6 +429,13 @@ $app->post('/updateMaterials', function (Request $request, Response $response, $
             } else {
                 $resolution = $materialsInventoryDao->updateMaterialInventory($dataMaterial);
             }
+        }
+
+        // Calcular Dias Inventario Material
+        if ($resolution == null) {
+            $inventory = $inventoryDaysDao->calcInventoryMaterialDays($dataMaterial['idMaterial']);
+            if (isset($inventory['days']))
+                $resolution = $inventoryDaysDao->updateInventoryMaterialDays($dataMaterial['idMaterial'], $inventory['days']);
         }
 
         if ($resolution == null && $materials[0]['unit'] != $dataMaterial['unit']) {

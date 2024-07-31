@@ -25,7 +25,7 @@
                                         <div class="col-12 col-lg-6">
                                             <div class="form-group floating-label enable-floating-label show-label">
                                                 <!-- <select class="form-control" name="idProcess" id="idProcess"></select> -->
-                                                <input id="numberWorkers" name="numberWorkers" type="text" class="form-control number">
+                                                <input id="numberWorkers" name="numberWorkers" type="number" class="form-control">
                                                 <label for="numberWorkers">No Trabajadores<span class="text-danger">*</span></label>
                                                 <div class="validation-error d-none font-size-13">Requerido</div>
                                             </div>

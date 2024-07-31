@@ -66,6 +66,6 @@
 
 <script src="/global/js/global/searchData.js"></script>
 <script src="/global/js/global/orderData.js"></script>
-<script src="/global/js/global/number.js"></script>
+<!-- <script src="/global/js/global/number.js"></script> -->
 <script src="/global/js/global/lastText.js"></script>
 <script src="/global/js/global/convertDate.js"></script>

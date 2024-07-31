@@ -500,11 +500,11 @@ $app->post('/updatePlanProduct', function (Request $request, Response $response,
 
         // Calcular Dias inventario
         if ($products == null) {
-            $inventory = $inventoryDaysDao->calcInventoryDays($dataProduct['idProduct']);
+            $inventory = $inventoryDaysDao->calcInventoryProductDays($dataProduct['idProduct']);
 
             !$inventory['days'] ? $days = 0 : $days = $inventory['days'];
 
-            $products = $inventoryDaysDao->updateInventoryDays($dataProduct['idProduct'], $days);
+            $products = $inventoryDaysDao->updateInventoryProductDays($dataProduct['idProduct'], $days);
         }
 
         if ($products == null)

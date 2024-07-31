@@ -89,7 +89,7 @@ if (sizeof($_SESSION) == 0)
                                                 </div>
                                                 <div class="col-sm-2 floating-label enable-floating-label show-label">
                                                     <label for="quantity">Existencias</label>
-                                                    <input type="text" class="form-control text-center number" id="quantity" name="quantity">
+                                                    <input type="number" class="form-control text-center" id="quantity" name="quantity">
                                                 </div>
                                                 <div class="col-sm mt-1">
                                                     <button class="btn btn-info" type="submit" id="btnCreateMaterial" name="btnCreateMaterial">Crear</button>

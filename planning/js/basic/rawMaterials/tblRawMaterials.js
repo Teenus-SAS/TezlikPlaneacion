@@ -54,6 +54,21 @@ $(document).ready(function () {
           },
         },
         {
+          title: "Transito",
+          data: null,
+          className: "uniqueClassName dt-head-center",
+          render: function (data) {
+            data.unit == "UNIDAD"
+              ? (number = data.transit.toLocaleString("es-CO", {
+                maximumFractionDigits: 0,
+              }))
+              : (number = data.transit.toLocaleString("es-CO", {
+                minimumFractionDigits: 2,
+              }));
+            return number;
+          },
+        },
+        {
           title: "Reservado",
           data: null,
           className: "uniqueClassName dt-head-center",
@@ -84,6 +99,12 @@ $(document).ready(function () {
           },
         },
         {
+          title: "Dias Inv",
+          data: "days",
+          className: "uniqueClassName dt-head-center",
+          render: (data) => data.toLocaleString('es-CO', { minimumFractionDigits: 0, maximumFractionDigits: 0 }),
+        },
+        {
           title: "Acciones",
           data: "id_material",
           className: "uniqueClassName dt-head-center",
@@ -96,13 +117,17 @@ $(document).ready(function () {
       ],
       footerCallback: function (row, data, start, end, display) {
         let quantity = 0;
+        let transit = 0;
         let reserved = 0;
         let minimum_stock = 0;
+        let days = 0;
 
         for (i = 0; i < display.length; i++) {
           quantity += parseFloat(data[display[i]].quantity);
+          transit += parseFloat(data[display[i]].transit);
           reserved += parseFloat(data[display[i]].reserved);
           minimum_stock += parseFloat(data[display[i]].minimum_stock);
+          days += parseFloat(data[display[i]].days);
         }
 
         $(this.api().column(4).footer()).html(
@@ -113,14 +138,26 @@ $(document).ready(function () {
         );
         
         $(this.api().column(5).footer()).html(
-          reserved.toLocaleString('es-CO', {
+          transit.toLocaleString('es-CO', {
             minimumFractionDigits: 0,
             maximumFractionDigits: 0,
           })
         );
 
         $(this.api().column(6).footer()).html(
+          reserved.toLocaleString('es-CO', {
+            minimumFractionDigits: 0,
+            maximumFractionDigits: 0,
+          })
+        );
+        $(this.api().column(7).footer()).html(
           minimum_stock.toLocaleString('es-CO', {
+            minimumFractionDigits: 0,
+            maximumFractionDigits: 0,
+          })
+        );
+        $(this.api().column(8).footer()).html(
+          days.toLocaleString('es-CO', {
             minimumFractionDigits: 0,
             maximumFractionDigits: 0,
           })

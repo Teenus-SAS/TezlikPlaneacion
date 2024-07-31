@@ -6,9 +6,11 @@ use TezlikPlaneacion\dao\GeneralMaterialsDao;
 use TezlikPlaneacion\dao\GeneralRequisitionsDao;
 use TezlikPlaneacion\dao\GeneralRMStockDao;
 use TezlikPlaneacion\dao\requisitionsDao;
+use TezlikPlaneacion\dao\TransitMaterialsDao;
 
 $requisitionsDao = new requisitionsDao();
 $generalRequisitionsDao = new GeneralRequisitionsDao();
+$transitMaterialsDao = new TransitMaterialsDao();
 $generalMaterialsDao = new GeneralMaterialsDao();
 $generalClientsDao = new GeneralClientsDao();
 $explosionMaterialsDao = new ExplosionMaterialsDao();
@@ -98,6 +100,7 @@ $app->post('/requisitionDataValidation', function (Request $request, Response $r
 
 $app->post('/addRequisition', function (Request $request, Response $response, $args) use (
     $requisitionsDao,
+    $transitMaterialsDao,
     $generalRequisitionsDao,
     $generalMaterialsDao,
     $generalClientsDao,
@@ -187,6 +190,7 @@ $app->post('/addRequisition', function (Request $request, Response $response, $a
 
 $app->post('/updateRequisition', function (Request $request, Response $response, $args) use (
     $requisitionsDao,
+    $transitMaterialsDao,
     $generalRequisitionsDao
 ) {
     // session_start();
@@ -198,6 +202,13 @@ $app->post('/updateRequisition', function (Request $request, Response $response,
 
     // if ($data['id_requisition'] == $dataRequisition['idRequisition'] || $data['id_requisition'] == 0) {
     $requisition = $requisitionsDao->updateRequisition($dataRequisition);
+
+    if ($requisition == null) {
+        $material = $transitMaterialsDao->calcQuantityTransitByMaterial($dataRequisition['idMaterial']);
+
+        if (isset($material['transit']))
+            $requisition = $transitMaterialsDao->updateQuantityTransitByMaterial($dataRequisition['idMaterial'], $material['transit']);
+    }
 
     if ($requisition == null)
         $resp = array('success' => true, 'message' => 'Requisicion modificada correctamente');

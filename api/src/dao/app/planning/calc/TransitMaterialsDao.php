@@ -29,11 +29,15 @@ class TransitMaterialsDao
                                                     ELSE 0 
                                                 END
                                             ), 0) AS transit
-                                          FROM requisitions r
-                                          WHERE r.id_material = :id_material");
+                                          FROM materials m
+                                          LEFT JOIN requisitions r ON r.id_material = m.id_material
+                                          WHERE m.id_material = :id_material");
             $stmt->execute([
                 'id_material' => $id_material
             ]);
+            $material = $stmt->fetch($connection::FETCH_ASSOC);
+
+            return $material;
         } catch (\Exception $e) {
             return ['info' => true, 'message' => $e->getMessage()];
         }

@@ -133,7 +133,7 @@ if (sizeof($_SESSION) == 0)
                                                 </div>
                                                 <div class="col-sm-2 floating-label enable-floating-label show-label">
                                                     <label for="">Existencias</label>
-                                                    <input type="text" class="form-control text-center number" id="pQuantity" name="quantity">
+                                                    <input type="number" class="form-control text-center" id="pQuantity" name="quantity">
                                                 </div>
                                                 <div class="col-sm-6 floating-label enable-floating-label show-label">
                                                     <label for="formFile" class="form-label">Subir imagen</label>
@@ -144,7 +144,7 @@ if (sizeof($_SESSION) == 0)
                                                 </div>
                                                 <!-- <div class="col-sm-4 mt-5" id="preview"></div> -->
                                             </div>
-                                            
+
                                         </form>
                                     </div>
                                 </div>
@@ -317,6 +317,7 @@ if (sizeof($_SESSION) == 0)
                                                             <td></td>
                                                             <td></td>
                                                             <td>Total: </td>
+                                                            <td></td>
                                                             <td></td>
                                                             <td></td>
                                                             <td></td>

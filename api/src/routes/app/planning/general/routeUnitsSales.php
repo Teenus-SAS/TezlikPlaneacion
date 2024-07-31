@@ -13,6 +13,7 @@ use TezlikPlaneacion\dao\GeneralProductsMaterialsDao;
 use TezlikPlaneacion\dao\GeneralRequisitionsDao;
 use TezlikPlaneacion\dao\GeneralRMStockDao;
 use TezlikPlaneacion\dao\GeneralUnitSalesDao;
+use TezlikPlaneacion\dao\InventoryDaysDao;
 use TezlikPlaneacion\dao\MinimumStockDao;
 use TezlikPlaneacion\dao\OrdersDao;
 use TezlikPlaneacion\dao\ProductsDao;
@@ -28,6 +29,7 @@ $minimumStockDao = new MinimumStockDao();
 $generalMaterialDao = new GeneralMaterialsDao();
 $productMaterialsDao = new ProductsMaterialsDao();
 $generalProductsMaterialsDao = new GeneralProductsMaterialsDao();
+$inventoryDaysDao = new InventoryDaysDao();
 $ordersDao = new OrdersDao();
 $generalOrdersDao = new GeneralOrdersDao();
 $generalClientsDao = new GeneralClientsDao();
@@ -190,17 +192,12 @@ $app->post('/addUnitSales', function (Request $request, Response $response, $arg
 
             for ($i = 0; $i < sizeof($materials); $i++) {
                 if (isset($resolution['info'])) break;
+                // Calculo Dias Inventario Materiales  
+                $inventory = $inventoryDaysDao->calcInventoryMaterialDays($materials[$i]['id_material']);
+                if (isset($inventory['days']))
+                    $resolution = $inventoryDaysDao->updateInventoryMaterialDays($materials[$i]['id_material'], $inventory['days']);
 
-                // Calcular stock material
-                // Obtener materia prima
-                // $material = $generalMaterialDao->findMaterialAndUnits($materials[$i]['id_material'], $id_company);
-
-                // Convertir unidades
-                // $quantity = $conversionUnitsDao->convertUnits($material, $materials[$i], $materials[$i]['quantity']);
-
-                // // Guardar Unidad convertida
-                // $generalProductsMaterialsDao->saveQuantityConverted($materials[$i]['id_product_material'], $quantity);
-
+                if (isset($resolution['info'])) break;
                 $arr = $minimumStockDao->calcStockByMaterial($materials[$i]['id_material']);
 
                 if (isset($arr['stock']))
@@ -281,13 +278,13 @@ $app->post('/addUnitSales', function (Request $request, Response $response, $arg
             }
         }
 
+        // Calcular Dias inventario Producto
         if ($resolution == null) {
-            // Calcular Dias inventario 
-            $inventory = $inventoryDaysDao->calcInventoryDays($dataSale['idProduct']);
+            $inventory = $inventoryDaysDao->calcInventoryProductDays($dataSale['idProduct']);
 
             !$inventory['days'] ? $days = 0 : $days = $inventory['days'];
 
-            $resolution = $inventoryDaysDao->updateInventoryDays($dataSale['idProduct'], $days);
+            $resolution = $inventoryDaysDao->updateInventoryProductDays($dataSale['idProduct'], $days);
         }
 
         if ($resolution == null)
@@ -320,17 +317,12 @@ $app->post('/addUnitSales', function (Request $request, Response $response, $arg
 
             for ($j = 0; $j < sizeof($materials); $j++) {
                 if (isset($resolution['info'])) break;
+                // Calculo Dias Inventario Materiales  
+                $inventory = $inventoryDaysDao->calcInventoryMaterialDays($materials[$i]['id_material']);
+                if (isset($inventory['days']))
+                    $resolution = $inventoryDaysDao->updateInventoryMaterialDays($materials[$i]['id_material'], $inventory['days']);
 
-                // Calcular stock material
-                // Obtener materia prima
-                // $material = $generalMaterialDao->findMaterialAndUnits($materials[$i]['id_material'], $id_company);
-
-                // Convertir unidades
-                // $quantity = $conversionUnitsDao->convertUnits($material, $materials[$i], $materials[$i]['quantity']);
-
-                // // Guardar Unidad convertida
-                // $generalProductsMaterialsDao->saveQuantityConverted($materials[$i]['id_product_material'], $quantity);
-
+                if (isset($resolution['info'])) break;
                 $arr = $minimumStockDao->calcStockByMaterial($materials[$i]['id_material']);
 
                 if (isset($arr['stock']))
@@ -345,12 +337,12 @@ $app->post('/addUnitSales', function (Request $request, Response $response, $arg
             }
 
             if (isset($resolution['info'])) break;
-            // Calcular Dias inventario
-            $inventory = $inventoryDaysDao->calcInventoryDays($unitSales[$i]['idProduct']);
+            // Calcular Dias inventario Producto
+            $inventory = $inventoryDaysDao->calcInventoryProductDays($unitSales[$i]['idProduct']);
 
             !isset($inventory['days']) ? $days = 0 : $days = $inventory['days'];
 
-            $resolution = $inventoryDaysDao->updateInventoryDays($unitSales[$i]['idProduct'], $days);
+            $resolution = $inventoryDaysDao->updateInventoryProductDays($unitSales[$i]['idProduct'], $days);
         }
         if ($resolution == null)
             $resp = array('success' => true, 'message' => 'Venta importada correctamente');
@@ -416,21 +408,16 @@ $app->post('/updateUnitSale', function (Request $request, Response $response, $a
         if ($resolution == null) {
             // Calcular stock material
             $materials = $productMaterialsDao->findAllProductsmaterials($dataSale['idProduct'], $id_company);
-            // $orders = $generalOrdersDao->findAllOrdersByProduct($dataSale['idProduct']);
-            // $stock = 0;
 
             for ($i = 0; $i < sizeof($materials); $i++) {
                 if (isset($resolution['info'])) break;
 
-                // Calcular stock material
-                // Obtener materia prima
-                // $material = $generalMaterialDao->findMaterialAndUnits($materials[$i]['id_material'], $id_company);
+                // Calculo Dias Inventario Materiales  
+                $inventory = $inventoryDaysDao->calcInventoryMaterialDays($materials[$i]['id_material']);
+                if (isset($inventory['days']))
+                    $resolution = $inventoryDaysDao->updateInventoryMaterialDays($materials[$i]['id_material'], $inventory['days']);
 
-                // Convertir unidades
-                // $quantity = $conversionUnitsDao->convertUnits($material, $materials[$i], $materials[$i]['quantity']);
-
-                // // Guardar Unidad convertida
-                // $generalProductsMaterialsDao->saveQuantityConverted($materials[$i]['id_product_material'], $quantity);
+                if (isset($resolution['info'])) break;
 
                 $arr = $minimumStockDao->calcStockByMaterial($materials[$i]['id_material']);
 
@@ -507,13 +494,13 @@ $app->post('/updateUnitSale', function (Request $request, Response $response, $a
                 }
             }
         }
+        // Calcular Dias inventario Producto
         if ($resolution == null) {
-            // Calcular Dias inventario 
-            $inventory = $inventoryDaysDao->calcInventoryDays($dataSale['idProduct']);
+            $inventory = $inventoryDaysDao->calcInventoryProductDays($dataSale['idProduct']);
 
             !$inventory['days'] ? $days = 0 : $days = $inventory['days'];
 
-            $resolution = $inventoryDaysDao->updateInventoryDays($dataSale['idProduct'], $days);
+            $resolution = $inventoryDaysDao->updateInventoryProductDays($dataSale['idProduct'], $days);
         }
 
         if ($resolution == null) {
@@ -573,54 +560,21 @@ $app->post('/deleteUnitSale', function (Request $request, Response $response, $a
 
     if ($resolution == null) {
         $materials = $productMaterialsDao->findAllProductsmaterials($dataSale['idProduct'], $id_company);
-        $orders = $generalOrdersDao->findAllOrdersByProduct($dataSale['idProduct']);
-        $stock = 0;
+        // $orders = $generalOrdersDao->findAllOrdersByProduct($dataSale['idProduct']);
+        // $stock = 0;
 
         for ($i = 0; $i < sizeof($materials); $i++) {
             if (isset($resolution['info'])) break;
+            // Calculo Dias Inventario Materiales  
+            $inventory = $inventoryDaysDao->calcInventoryMaterialDays($materials[$i]['id_material']);
+            if (isset($inventory['days']))
+                $resolution = $inventoryDaysDao->updateInventoryMaterialDays($materials[$i]['id_material'], $inventory['days']);
 
-            // Calcular stock material
-            // Obtener materia prima
-            // $material = $generalMaterialDao->findMaterialAndUnits($materials[$i]['id_material'], $id_company);
-
-            // Convertir unidades
-            // $quantity = $conversionUnitsDao->convertUnits($material, $materials[$i], $materials[$i]['quantity']);
-
-            // // Guardar Unidad convertida
-            // $generalProductsMaterialsDao->saveQuantityConverted($materials[$i]['id_product_material'], $quantity);
-
+            if (isset($resolution['info'])) break;
             $arr = $minimumStockDao->calcStockByMaterial($materials[$i]['id_material']);
 
             if (isset($arr['stock']))
                 $resolution = $generalMaterialDao->updateStockMaterial($materials[$i]['id_material'], $arr['stock']);
-
-            // if ($arr['stock'] > $materials[$i]['quantity_material']) {
-            //     $data = [];
-            //     $data['idMaterial'] = $materials[$i]['id_material'];
-
-            //     $provider = $generalRMStockDao->findProviderByStock($materials[$i]['id_material']);
-
-            //     $id_provider = 0;
-
-            //     if ($provider) $id_provider = $provider['id_provider'];
-
-            //     $data['idProvider'] = $id_provider;
-
-            //     $data['applicationDate'] = '';
-            //     $data['deliveryDate'] = '';
-            //     $data['requiredQuantity'] = abs($arr['stock']);
-            //     $data['purchaseOrder'] = '';
-            //     $data['requestedQuantity'] = 0;
-
-            //     $requisition = $generalRequisitionsDao->findRequisitionByApplicationDate($materials[$i]['id_material']);
-
-            //     if (!$requisition)
-            //         $requisitionsDao->insertRequisitionByCompany($data, $id_company);
-            //     else {
-            //         $data['idRequisition'] = $requisition['id_requisition'];
-            //         $requisitionsDao->updateRequisition($data);
-            //     }
-            // }
 
             if (isset($resolution['info'])) break;
         }
@@ -652,13 +606,13 @@ $app->post('/deleteUnitSale', function (Request $request, Response $response, $a
         }
     }
 
+    // Calcular Dias inventario Producto
     if ($resolution == null) {
-        // Calcular Dias inventario 
-        $inventory = $inventoryDaysDao->calcInventoryDays($dataSale['idProduct']);
+        $inventory = $inventoryDaysDao->calcInventoryProductDays($dataSale['idProduct']);
 
         !$inventory['days'] ? $days = 0 : $days = $inventory['days'];
 
-        $resolution = $inventoryDaysDao->updateInventoryDays($dataSale['idProduct'], $days);
+        $resolution = $inventoryDaysDao->updateInventoryProductDays($dataSale['idProduct'], $days);
     }
 
     if ($resolution == null) {

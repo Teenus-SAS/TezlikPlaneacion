@@ -16,7 +16,7 @@ class InventoryDaysDao
         $this->logger->pushHandler(new RotatingFileHandler(Constants::LOGS_PATH . 'querys.log', 20, Logger::DEBUG));
     }
 
-    public function calcInventoryDays($id_product)
+    public function calcInventoryProductDays($id_product)
     {
         try {
             $connection = Connection::getInstance()->getconnection();
@@ -36,7 +36,7 @@ class InventoryDaysDao
         }
     }
 
-    public function updateInventoryDays($id_product, $inventoryDay)
+    public function updateInventoryProductDays($id_product, $inventoryDay)
     {
         $connection = Connection::getInstance()->getConnection();
 
@@ -54,7 +54,7 @@ class InventoryDaysDao
         }
     }
 
-    public function calcInventoryDaysMaterial($id_material)
+    public function calcInventoryMaterialDays($id_material)
     {
         try {
             $connection = Connection::getInstance()->getconnection();
@@ -91,7 +91,7 @@ class InventoryDaysDao
         }
     }
 
-    public function updateInventoryDaysMaterial($id_material, $inventoryDay)
+    public function updateInventoryMaterialDays($id_material, $inventoryDay)
     {
         $connection = Connection::getInstance()->getConnection();
 

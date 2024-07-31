@@ -140,9 +140,9 @@ if (sizeof($_SESSION) == 0)
                                                     </div>
                                                     <div class="col-sm-3 floating-label enable-floating-label show-label date">
                                                         <label for="">Fecha Final</label>
-                                                        <input type="datetime-local" class="form-control text-center number" id="maxDate" name="maxDate" readonly min="<?php
-                                                                                                                                                                        date_default_timezone_set('America/Bogota');
-                                                                                                                                                                        echo date('Y-m-d', strtotime('+1 day')); ?>">
+                                                        <input type="datetime-local" class="form-control text-center" id="maxDate" name="maxDate" readonly min="<?php
+                                                                                                                                                                date_default_timezone_set('America/Bogota');
+                                                                                                                                                                echo date('Y-m-d', strtotime('+1 day')); ?>">
                                                     </div>
                                                     <div class="col-sm-1 mt-2">
                                                         <button class="btn btn-info" type="submit" id="btnCreateProgramming" name="btnCreateProgramming">Crear</button>

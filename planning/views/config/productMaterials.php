@@ -212,7 +212,7 @@ if (sizeof($_SESSION) == 0)
                                                     <label for="">Maquina</label>
                                                 </div>
                                                 <div class="col-sm-2 floating-label enable-floating-label show-label" style="margin-bottom:0px">
-                                                    <input type="text" class="form-control text-center number" name="ciclesHour" id="ciclesHour">
+                                                    <input type="number" class="form-control text-center" name="ciclesHour" id="ciclesHour">
                                                     <label for="">Ciclo x Hora</label>
                                                 </div>
                                                 <div class="col-sm mt-1">
