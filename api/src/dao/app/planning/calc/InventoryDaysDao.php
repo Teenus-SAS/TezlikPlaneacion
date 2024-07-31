@@ -61,7 +61,7 @@ class InventoryDaysDao
             $stmt = $connection->prepare("SELECT 
                                             IFNULL(
                                                 SUM(
-                                                    mi.quantity / 
+                                                    m.quantity / 
                                                     (
                                                         (
                                                             IFNULL(u.jan, 0) + IFNULL(u.feb, 0) + IFNULL(u.mar, 0) + IFNULL(u.apr, 0) + IFNULL(u.may, 0) + IFNULL(u.jun, 0) + 
