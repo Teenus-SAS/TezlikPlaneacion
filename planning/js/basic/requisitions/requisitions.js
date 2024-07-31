@@ -292,12 +292,15 @@ $(document).ready(function () {
 
   /* Eliminar materia prima */
 
-  deleteFunction = () => {
+  deleteFunction = (op) => {
     let row = $(this.activeElement).parent().parent()[0];
 
     let data = tblRequisitions.fnGetData(row);
 
-    idRequisition = data.id_requisition;
+    let dataRequisition = {};
+    dataRequisition['idRequisition'] = data.id_requisition;
+    dataRequisition['idMaterial'] = data.id_material;
+    dataRequisition['op'] = op;
 
     bootbox.confirm({
       title: 'Eliminar',
@@ -315,11 +318,10 @@ $(document).ready(function () {
       },
       callback: function (result) {
         if (result) {
-          $.get(
-            `/api/deleteRequisition/${idRequisition}`,
+          $.post('/api/deleteRequisition', dataRequisition,
             function (data, textStatus, jqXHR) {
               message(data);
-            }
+            }, 
           );
         }
       },

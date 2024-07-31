@@ -2,8 +2,8 @@ $(document).ready(function () {
   $(".selectNavigation").click(function (e) {
     e.preventDefault();
 
-    if (this.id == "pending") loadTblRequisitions(pending, true);
-    else if (this.id == "done") loadTblRequisitions(done, false);
+    if (this.id == "pending") loadTblRequisitions(pending, false);
+    else if (this.id == "done") loadTblRequisitions(done, true);
   });
 
   loadAllData = async (op, min_date, max_date) => {
@@ -81,11 +81,11 @@ $(document).ready(function () {
       $("#lblDelayed").html(` Retrasadas: ${delayed.length}`);
       $("#lblReceived").html(` Recibido: ${done1.length}`);
 
-      let visible = true;
+      let visible = false;
       if (op === 1) dataToLoad = pending;
       else if (op === 2) {
         dataToLoad = done;
-        visible = false;
+        visible = true;
       } else {
         if (pending == 1)
           dataToLoad = dateRequisitions.filter(
@@ -113,19 +113,20 @@ $(document).ready(function () {
 
   /* Cargue tabla de Productos Materiales */
   loadTblRequisitions = (data, visible) => {
-    if ($.fn.dataTable.isDataTable("#tblRequisitions")) {
-        // Actualizar el título de la columna
-        let table = $("#tblRequisitions").DataTable();
-        // let column = table.column(10); // Asumiendo que la columna de "Fecha Entrega/Recibido" es la décima (índice 10)
-        // column.header().textContent = title_delivery_date;
+    // if ($.fn.dataTable.isDataTable("#tblRequisitions")) {
+    //     // Actualizar el título de la columna
+    //     let table = $("#tblRequisitions").DataTable();
+    //     // let column = table.column(10); // Asumiendo que la columna de "Fecha Entrega/Recibido" es la décima (índice 10)
+    //     // column.header().textContent = title_delivery_date;
         
-        // Actualizar los datos en la tabla
-        table.clear();
-        table.rows.add(data).draw();
-        return;
-    } 
+    //     // Actualizar los datos en la tabla
+    //     table.clear();
+    //     table.rows.add(data).draw();
+    //     return;
+    // } 
 
-    tblRequisitions = $("#tblRequisitions").dataTable({ 
+    tblRequisitions = $("#tblRequisitions").dataTable({
+      destroy: true,
       pageLength: 50,
       order: [[0, "asc"]],
       data: data,
@@ -145,9 +146,8 @@ $(document).ready(function () {
           title: "Acciones",
           data: null,
           className: "uniqueClassName dt-head-center",
-          render: renderRequisitionActions,
+          render: (data) => renderRequisitionActions(data, visible),
         },
-
         {
           title: "Referencia",
           data: "reference",
@@ -174,7 +174,7 @@ $(document).ready(function () {
           data: null,
           className: "uniqueClassName dt-head-center",
           render: function (data) {
-            let quantity = data.quantity_required;
+            let quantity = parseFloat(data.quantity_required);
 
             if (data.abbreviation === "UND")
               quantity = Math.floor(quantity).toLocaleString("es-CO", {
@@ -192,9 +192,10 @@ $(document).ready(function () {
         {
           title: "Cant. Solicitada",
           data: null,
+          visible: visible,
           className: "uniqueClassName dt-head-center",
           render: function (data) {
-            let quantity = data.quantity_requested;
+            let quantity = parseFloat(data.quantity_requested);
 
             if (data.abbreviation === "UND")
               quantity = Math.floor(quantity).toLocaleString("es-CO", {
@@ -224,7 +225,7 @@ $(document).ready(function () {
           title: 'Fecha',
           data: null,
           className: "uniqueClassName dt-head-center",
-          render: function (data) { 
+          render: function (data) {
             let delivery_date = data.delivery_date;
             let status = data.status;
             let nameDate = 'Fecha Entrega';
@@ -278,11 +279,11 @@ $(document).ready(function () {
     return `<span class="badge ${badge}">${data}</span>`;
   }
 
-  function renderRequisitionActions(data) {
+  function renderRequisitionActions(data, visible) {
     let action = "";
     if (data.status != "Recibido") {
       action = `<a href="javascript:;" <i id="upd-${data.id_requisition}" class="bx bx-edit-alt updateRequisition" data-toggle='tooltip' title='Actualizar Requisicion' style="font-size: 30px;"></i></a>
-              <a href="javascript:;" <i id="${data.id_requisition}" class="mdi mdi-delete-forever" data-toggle='tooltip' title='Eliminar Requisicion' style="font-size: 30px;color:red" onclick="deleteFunction()"></i></a>`;
+              <a href="javascript:;" <i id="${data.id_requisition}" class="mdi mdi-delete-forever" data-toggle='tooltip' title='Eliminar Requisicion' style="font-size: 30px;color:red" onclick="deleteFunction(${visible == true ? '2' : '1'})"></i></a>`;
     } else {
       action = data.admission_date;
     }

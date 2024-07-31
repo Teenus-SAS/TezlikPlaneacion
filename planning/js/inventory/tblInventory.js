@@ -8,8 +8,7 @@ $(document).ready(function () {
         searchData(`/api/allProductsMaterials`),
         searchData(`/api/unitSales`),
       ]);
-
-      // dataProducts = JSON.stringify(inventory.products);  
+ 
       data = inventory;
       products = inventory.products;
       materials = inventory.rawMaterials;
@@ -23,32 +22,7 @@ $(document).ready(function () {
     }
   };
 
-  loadInventory();
-
-  // Seleccionar Categoria
-  // $(".selectNavigation").click(function (e) {
-  //   e.preventDefault();
-
-  //   // Ocultar card formulario Analisis Inventario ABC
-  //   $(".cardAddMonths").hide(800);
-  //   // $(".cardTblInventoryABC").hide(800);
-  //   $(".cardInventoryABC").hide(800);
-  //   $(".cardBtnAddMonths").hide(800);
-
-  //   // Productos
-  //   if (this.id == 'products') {
-  //     $(".cardBtnAddMonths").show(800);
-  //     data = getInventory(products);
-  //     inventoryIndicator(products);
-  //     data["visible"] = true;
-  //   }
-  //   // Materias Prima
-  //   else if (this.id == 'materials') {
-  //     data = getInventory(materials);
-  //     data["visible"] = false;
-  //   } 
-  //   loadTable(data);
-  // });
+  loadInventory(); 
 
   $(".selectNavigation").click(function (e) {
     e.preventDefault();
@@ -89,7 +63,7 @@ $(document).ready(function () {
     }
   });
 
-  getInventory = (data) => {
+  const getInventory = (data) => {
     let dataInventory = [];
     for (i = 0; i < data.length; i++) {
       data[i].classification
@@ -196,10 +170,10 @@ $(document).ready(function () {
           className: "uniqueClassName dt-head-center",
           render: function (data) {
             data.abbreviation == "UND"
-              ? (number = data.reserved.toLocaleString("es-CO", {
+              ? (number = parseFloat(data.reserved).toLocaleString("es-CO", {
                 maximumFractionDigits: 0,
               }))
-              : (number = data.reserved.toLocaleString("es-CO", {
+              : (number = parseFloat(data.reserved).toLocaleString("es-CO", {
                 minimumFractionDigits: 2,
                 maximumFractionDigits: 2
               }));
@@ -212,10 +186,10 @@ $(document).ready(function () {
           className: "uniqueClassName dt-head-center",
           render: function (data) {
             data.abbreviation == "UND"
-              ? (number = data.minimum_stock.toLocaleString("es-CO", {
+              ? (number = parseFloat(data.minimum_stock).toLocaleString("es-CO", {
                 maximumFractionDigits: 0,
               }))
-              : (number = data.minimum_stock.toLocaleString("es-CO", {
+              : (number = parseFloat(data.minimum_stock).toLocaleString("es-CO", {
                 minimumFractionDigits: 2,
                 maximumFractionDigits: 2
               }));

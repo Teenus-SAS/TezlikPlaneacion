@@ -44,10 +44,10 @@ $(document).ready(function () {
           className: "uniqueClassName dt-head-center",
           render: function (data) {
             data.unit == "UNIDAD"
-              ? (number = data.quantity.toLocaleString("es-CO", {
+              ? (number = parseFloat(data.quantity).toLocaleString("es-CO", {
                 maximumFractionDigits: 0,
               }))
-              : (number = data.quantity.toLocaleString("es-CO", {
+              : (number = parseFloat(data.quantity).toLocaleString("es-CO", {
                 minimumFractionDigits: 2,
               }));
             return number;
@@ -59,10 +59,10 @@ $(document).ready(function () {
           className: "uniqueClassName dt-head-center",
           render: function (data) {
             data.unit == "UNIDAD"
-              ? (number = data.transit.toLocaleString("es-CO", {
+              ? (number = parseFloat(data.transit).toLocaleString("es-CO", {
                 maximumFractionDigits: 0,
               }))
-              : (number = data.transit.toLocaleString("es-CO", {
+              : (number = parseFloat(data.transit).toLocaleString("es-CO", {
                 minimumFractionDigits: 2,
               }));
             return number;
@@ -74,10 +74,10 @@ $(document).ready(function () {
           className: "uniqueClassName dt-head-center",
           render: function (data) {
             data.unit == "UNIDAD"
-              ? (number = data.reserved.toLocaleString("es-CO", {
+              ? (number = parseFloat(data.reserved).toLocaleString("es-CO", {
                 maximumFractionDigits: 0,
               }))
-              : (number = data.reserved.toLocaleString("es-CO", {
+              : (number = parseFloat(data.reserved).toLocaleString("es-CO", {
                 minimumFractionDigits: 2,
               }));
             return number;
@@ -102,7 +102,7 @@ $(document).ready(function () {
           title: "Dias Inv",
           data: "days",
           className: "uniqueClassName dt-head-center",
-          render: (data) => data.toLocaleString('es-CO', { minimumFractionDigits: 0, maximumFractionDigits: 0 }),
+          render: (data) => parseFloat(data).toLocaleString('es-CO', { minimumFractionDigits: 0, maximumFractionDigits: 0 }),
         },
         {
           title: "Acciones",

@@ -105,6 +105,24 @@ class GeneralRequisitionsDao
         }
     }
 
+    public function clearDataRequisition($id_requisition)
+    {
+        $connection = Connection::getInstance()->getConnection();
+
+        try {
+            $stmt = $connection->prepare("UPDATE requisitions SET application_date = '0000-00-00', delivery_date = '0000-00-00', quantity_requested = 0, purchase_order = ''
+                                          WHERE id_requisition = :id_requisition");
+            $stmt->execute([
+                'id_requisition' => $id_requisition,
+            ]);
+            $this->logger->info(__FUNCTION__, array('query' => $stmt->queryString, 'errors' => $stmt->errorInfo()));
+        } catch (\Exception $e) {
+            $message = $e->getMessage();
+            $error = array('info' => true, 'message' => $message);
+            return $error;
+        }
+    }
+
     public function deleteAllRequisitionPending()
     {
         $connection = Connection::getInstance()->getConnection();

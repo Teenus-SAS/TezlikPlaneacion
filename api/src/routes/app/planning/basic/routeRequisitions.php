@@ -118,6 +118,12 @@ $app->post('/addRequisition', function (Request $request, Response $response, $a
         // if (!$findRequisition) {
         $requisition = $requisitionsDao->insertRequisitionByCompany($dataRequisition, $id_company);
 
+        if ($requisition == null) {
+            $material = $transitMaterialsDao->calcQuantityTransitByMaterial($dataRequisition['idMaterial']);
+
+            if (isset($material['transit']))
+                $requisition = $transitMaterialsDao->updateQuantityTransitByMaterial($dataRequisition['idMaterial'], $material['transit']);
+        }
         if ($requisition == null)
             $resp = array('success' => true, 'message' => 'Requisicion creada correctamente');
         else if (isset($requisition['info']))
@@ -145,6 +151,13 @@ $app->post('/addRequisition', function (Request $request, Response $response, $a
             //     $requisition[$i]['idRequisition'] = $findRequisition['id_requisition'];
             //     $resolution = $requisitionsDao->updateRequisition($dataRequisition);
             // }
+
+            if ($resolution != null) break;
+
+            $material = $transitMaterialsDao->calcQuantityTransitByMaterial($requisition[$i]['idMaterial']);
+
+            if (isset($material['transit']))
+                $resolution = $transitMaterialsDao->updateQuantityTransitByMaterial($requisition[$i]['idMaterial'], $material['transit']);
         }
         if ($resolution == null)
             $resp = array('success' => true, 'message' => 'Requisicions importados correctamente');
@@ -184,6 +197,7 @@ $app->post('/addRequisition', function (Request $request, Response $response, $a
             }
         }
     }
+
     $response->getBody()->write(json_encode($resp));
     return $response->withStatus(200)->withHeader('Content-Type', 'application/json');
 });
@@ -247,8 +261,26 @@ $app->post('/saveAdmissionDate', function (Request $request, Response $response,
     return $response->withStatus(200)->withHeader('Content-Type', 'application/json');
 });
 
-$app->get('/deleteRequisition/{id_requisition}', function (Request $request, Response $response, $args) use ($requisitionsDao) {
-    $requisitions = $requisitionsDao->deleteRequisition($args['id_requisition']);
+$app->post('/deleteRequisition', function (Request $request, Response $response, $args) use (
+    $requisitionsDao,
+    $generalRequisitionsDao,
+    $transitMaterialsDao
+) {
+
+    $dataRequisition = $request->getParsedBody();
+
+    if ($dataRequisition['op'] == 1) {
+        $requisitions = $requisitionsDao->deleteRequisition($dataRequisition['idRequisition']);
+    } else {
+        $requisitions = $generalRequisitionsDao->clearDataRequisition($dataRequisition['idRequisition']);
+
+        if ($requisitions == null) {
+            $material = $transitMaterialsDao->calcQuantityTransitByMaterial($dataRequisition['idMaterial']);
+
+            if (isset($material['transit']))
+                $requisitions = $transitMaterialsDao->updateQuantityTransitByMaterial($dataRequisition['idMaterial'], $material['transit']);
+        }
+    }
 
     if ($requisitions == null)
         $resp = array('success' => true, 'message' => 'Requisicion eliminada correctamente');

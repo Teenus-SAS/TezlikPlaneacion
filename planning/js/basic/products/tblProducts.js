@@ -1,40 +1,4 @@
 $(document).ready(function () {
-  // products = [];
-  // materials = [];
-
-  // $(".selectNavigation").click(function (e) {
-  //   e.preventDefault();
-  //   let option = this.id;
-
-  //   switch (option) {
-  //     case 'sProducts':
-  //       $(".cardProducts").show();
-  //       $(".cardMaterials").hide();
-  //       $(".cardRawMaterials").hide(800);
-  //       $(".cardImportMaterials").hide(800);
-  //       loadTblProduct(products);
-  //       inventoryIndicator(products);
-  //       break;
-  //     case 'sMaterials':
-  //       $(".cardMaterials").show();
-  //       $(".cardProducts").hide();
-  //       $(".cardCreateProduct").hide(800);
-  //       $(".cardImportProducts").hide(800);
-  //       loadTblMaterials(materials);
-  //       inventoryIndicator(materials);
-  //       break;
-  //   }
-
-  //   let tables = document.getElementsByClassName("dataTable");
-
-  //   for (let i = 0; i < tables.length; i++) {
-  //     let attr = tables[i];
-  //     attr.style.width = "100%";
-  //     attr = tables[i].firstElementChild;
-  //     attr.style.width = "100%";
-  //   }
-  // }); 
-
   $(".selectNavigation").click(function (e) {
     e.preventDefault();
     const option = this.id;
@@ -166,19 +130,19 @@ $(document).ready(function () {
           title: 'Existencia',
           data: 'quantity',
           className: 'uniqueClassName dt-head-center',
-          render: (data) => data.toLocaleString('es-CO', { minimumFractionDigits: 0, maximumFractionDigits: 0 }),
+          render: (data) => parseFloat(data).toLocaleString('es-CO', { minimumFractionDigits: 0, maximumFractionDigits: 0 }),
         },
         {
           title: 'Stock Min',
           data: 'minimum_stock',
           className: 'uniqueClassName dt-head-center',
-          render: (data) => data.toLocaleString('es-CO', { minimumFractionDigits: 0, maximumFractionDigits: 0 }),
+          render: (data) => parseFloat(data).toLocaleString('es-CO', { minimumFractionDigits: 0, maximumFractionDigits: 0 }),
         },
         {
           title: "Dias Inv",
           data: "days",
           className: "uniqueClassName dt-head-center",
-          render: (data) => data.toLocaleString('es-CO', { minimumFractionDigits: 0, maximumFractionDigits: 0 }),
+          render: (data) => parseFloat(data).toLocaleString('es-CO', { minimumFractionDigits: 0, maximumFractionDigits: 0 }),
         },
         {
           title: 'Img',

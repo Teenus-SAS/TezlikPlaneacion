@@ -44,11 +44,9 @@ $(document).ready(function () {
   messageInventory = async (data) => {
     if (data.success == true) {
       $('.cardImportInventory').hide(800);
-      $('.cardAddMonths').hide(800);
-      // $('#formAddMonths').trigger('reset');
+      $('.cardAddMonths').hide(800); 
 
-      await loadInventory();
-      // $('#category').val(1).trigger('change');
+      await loadInventory(); 
 
       toastr.success(data.message);
       return false;
