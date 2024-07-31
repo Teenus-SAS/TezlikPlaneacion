@@ -269,10 +269,10 @@ $app->post('/addUnitSales', function (Request $request, Response $response, $arg
                     $requisition = $generalRequisitionsDao->findRequisitionByApplicationDate($materials[$i]['id_material']);
 
                     if (!$requisition)
-                        $requisitionsDao->insertRequisitionByCompany($data, $id_company);
+                        $generalRequisitionsDao->insertRequisitionAutoByCompany($data, $id_company);
                     else {
                         $data['idRequisition'] = $requisition['id_requisition'];
-                        $requisitionsDao->updateRequisition($data);
+                        $generalRequisitionsDao->updateRequisitionAuto($data);
                     }
                 }
             }
@@ -486,10 +486,10 @@ $app->post('/updateUnitSale', function (Request $request, Response $response, $a
                     $requisition = $generalRequisitionsDao->findRequisitionByApplicationDate($materials[$i]['id_material']);
 
                     if (!$requisition)
-                        $requisitionsDao->insertRequisitionByCompany($data, $id_company);
+                        $generalRequisitionsDao->insertRequisitionAutoByCompany($data, $id_company);
                     else {
                         $data['idRequisition'] = $requisition['id_requisition'];
-                        $requisitionsDao->updateRequisition($data);
+                        $generalRequisitionsDao->updateRequisitionAuto($data);
                     }
                 }
             }

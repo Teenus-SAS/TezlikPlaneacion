@@ -471,10 +471,10 @@ $app->post('/addOrder', function (Request $request, Response $response, $args) u
             $requisition = $generalRequisitionsDao->findRequisitionByApplicationDate($materials[$i]['id_material']);
 
             if (!$requisition)
-                $requisitionsDao->insertRequisitionByCompany($data, $id_company);
+                $generalRequisitionsDao->insertRequisitionAutoByCompany($data, $id_company);
             else {
                 $data['idRequisition'] = $requisition['id_requisition'];
-                $requisitionsDao->updateRequisition($data);
+                $generalRequisitionsDao->updateRequisitionAuto($data);
             }
         }
     }
@@ -627,10 +627,10 @@ $app->post('/updateOrder', function (Request $request, Response $response, $args
                 $requisition = $generalRequisitionsDao->findRequisitionByApplicationDate($materials[$i]['id_material']);
 
                 if (!$requisition)
-                    $requisitionsDao->insertRequisitionByCompany($data, $id_company);
+                    $generalRequisitionsDao->insertRequisitionAutoByCompany($data, $id_company);
                 else {
                     $data['idRequisition'] = $requisition['id_requisition'];
-                    $requisitionsDao->updateRequisition($data);
+                    $generalRequisitionsDao->updateRequisitionAuto($data);
                 }
             }
         }
@@ -699,7 +699,7 @@ $app->post('/deleteOrder', function (Request $request, Response $response, $args
                             $requisitionsDao->deleteRequisition($requisition['id_requisition']);
                         } else {
                             $data['idRequisition'] = $requisition['id_requisition'];
-                            $requisitionsDao->updateRequisition($data);
+                            $generalRequisitionsDao->updateRequisitionAuto($data);
                         }
                     }
                 } else {

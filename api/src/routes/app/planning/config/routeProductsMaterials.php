@@ -451,15 +451,14 @@ $app->post('/addProductsMaterials', function (Request $request, Response $respon
             $data['deliveryDate'] = '';
             $data['requiredQuantity'] = abs($materials[$i]['available']);
             $data['purchaseOrder'] = '';
-            $data['requestedQuantity'] = 0;
 
             $requisition = $generalRequisitionsDao->findRequisitionByApplicationDate($materials[$i]['id_material']);
 
             if (!$requisition)
-                $requisitionsDao->insertRequisitionByCompany($data, $id_company);
+                $generalRequisitionsDao->insertRequisitionAutoByCompany($data, $id_company);
             else {
                 $data['idRequisition'] = $requisition['id_requisition'];
-                $requisitionsDao->updateRequisition($data);
+                $generalRequisitionsDao->updateRequisitionAuto($data);
             }
         } else {
             $requisition = $generalRequisitionsDao->findRequisitionByApplicationDate($materials[$i]['id_material']);
@@ -550,10 +549,10 @@ $app->post('/updatePlanProductsMaterials', function (Request $request, Response 
                     $requisition = $generalRequisitionsDao->findRequisitionByApplicationDate($materials[$i]['id_material']);
 
                     if (!$requisition)
-                        $requisitionsDao->insertRequisitionByCompany($data, $id_company);
+                        $generalRequisitionsDao->insertRequisitionAutoByCompany($data, $id_company);
                     else {
                         $data['idRequisition'] = $requisition['id_requisition'];
-                        $requisitionsDao->updateRequisition($data);
+                        $generalRequisitionsDao->updateRequisitionAuto($data);
                     }
                 } else {
                     $requisition = $generalRequisitionsDao->findRequisitionByApplicationDate($materials[$i]['id_material']);
@@ -645,10 +644,10 @@ $app->post('/deletePlanProductMaterial', function (Request $request, Response $r
                 $requisition = $generalRequisitionsDao->findRequisitionByApplicationDate($materials[$i]['id_material']);
 
                 if (!$requisition)
-                    $requisitionsDao->insertRequisitionByCompany($data, $id_company);
+                    $generalRequisitionsDao->insertRequisitionAutoByCompany($data, $id_company);
                 else {
                     $data['idRequisition'] = $requisition['id_requisition'];
-                    $requisitionsDao->updateRequisition($data);
+                    $generalRequisitionsDao->updateRequisitionAuto($data);
                 }
             } else {
                 $requisition = $generalRequisitionsDao->findRequisitionByApplicationDate($materials[$i]['id_material']);

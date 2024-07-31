@@ -316,10 +316,10 @@ $app->post('/saveProgramming', function (Request $request, Response $response, $
                 $requisition = $generalRequisitionsDao->findRequisitionByApplicationDate($materials[$i]['id_material']);
 
                 if (!$requisition)
-                    $requisitionsDao->insertRequisitionByCompany($data, $id_company);
+                    $generalRequisitionsDao->insertRequisitionAutoByCompany($data, $id_company);
                 else {
                     $data['idRequisition'] = $requisition['id_requisition'];
-                    $requisitionsDao->updateRequisition($data);
+                    $generalRequisitionsDao->updateRequisitionAuto($data);
                 }
             }
         }

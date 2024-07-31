@@ -34,12 +34,12 @@ class RequisitionsDao
     }
 
     /* Insertar requisicion */
-    public function insertRequisitionByCompany($dataRequisition, $id_company)
+    public function insertRequisitionManualByCompany($dataRequisition, $id_company)
     {
         $connection = Connection::getInstance()->getConnection();
 
         try {
-            $stmt = $connection->prepare("INSERT INTO requisitions (id_company, id_material, id_provider, application_date, delivery_date, quantity_requested, purchase_order) 
+            $stmt = $connection->prepare("INSERT INTO requisitions (id_company, id_material, id_provider, application_date, delivery_date, , quantity_requested, purchase_order) 
                                           VALUES (:id_company, :id_material, :id_provider, :application_date, :delivery_date, :quantity_requested, :purchase_order)");
             $stmt->execute([
                 'id_company' => $id_company,
@@ -59,7 +59,7 @@ class RequisitionsDao
     }
 
     /* Actualizar requisicion */
-    public function updateRequisition($dataRequisition)
+    public function updateRequisitionManual($dataRequisition)
     {
         $connection = Connection::getInstance()->getConnection();
 

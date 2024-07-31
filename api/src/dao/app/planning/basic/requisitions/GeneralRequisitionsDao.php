@@ -87,6 +87,57 @@ class GeneralRequisitionsDao
         return $molds;
     }
 
+    /* Insertar requisicion Auto*/
+    public function insertRequisitionAutoByCompany($dataRequisition, $id_company)
+    {
+        $connection = Connection::getInstance()->getConnection();
+
+        try {
+            $stmt = $connection->prepare("INSERT INTO requisitions (id_company, id_material, id_provider, application_date, delivery_date, , quantity_required, purchase_order) 
+                                          VALUES (:id_company, :id_material, :id_provider, :application_date, :delivery_date, :quantity_required, :purchase_order)");
+            $stmt->execute([
+                'id_company' => $id_company,
+                'id_material' => $dataRequisition['idMaterial'],
+                'id_provider' => $dataRequisition['idProvider'],
+                'application_date' => $dataRequisition['applicationDate'],
+                'delivery_date' => $dataRequisition['deliveryDate'],
+                'quantity_required' => $dataRequisition['requiredQuantity'],
+                'purchase_order' => $dataRequisition['purchaseOrder']
+            ]);
+            $this->logger->info(__FUNCTION__, array('query' => $stmt->queryString, 'errors' => $stmt->errorInfo()));
+        } catch (\Exception $e) {
+            $message = $e->getMessage();
+            $error = array('info' => true, 'message' => $message);
+            return $error;
+        }
+    }
+
+    /* Actualizar requisicion Auto*/
+    public function updateRequisitionAuto($dataRequisition)
+    {
+        $connection = Connection::getInstance()->getConnection();
+
+        try {
+            $stmt = $connection->prepare("UPDATE requisitions SET id_material = :id_material, id_provider = :id_provider, application_date = :application_date, 
+                                                                  delivery_date = :delivery_date, quantity_required = :quantity_required, purchase_order = :purchase_order
+                                    WHERE id_requisition = :id_requisition");
+            $stmt->execute([
+                'id_requisition' => $dataRequisition['idRequisition'],
+                'id_material' => $dataRequisition['idMaterial'],
+                'id_provider' => $dataRequisition['idProvider'],
+                'application_date' => $dataRequisition['applicationDate'],
+                'delivery_date' => $dataRequisition['deliveryDate'],
+                'quantity_required' => $dataRequisition['requiredQuantity'],
+                'purchase_order' => $dataRequisition['purchaseOrder']
+            ]);
+            $this->logger->info(__FUNCTION__, array('query' => $stmt->queryString, 'errors' => $stmt->errorInfo()));
+        } catch (\Exception $e) {
+            $message = $e->getMessage();
+            $error = array('info' => true, 'message' => $message);
+            return $error;
+        }
+    }
+
     public function updateDateRequisition($dataRequisition)
     {
         $connection = Connection::getInstance()->getConnection();

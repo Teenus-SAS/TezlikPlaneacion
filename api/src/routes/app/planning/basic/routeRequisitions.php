@@ -116,7 +116,7 @@ $app->post('/addRequisition', function (Request $request, Response $response, $a
     if ($count > 1) {
         // $findRequisition = $generalRequisitionsDao->findRequisition($dataRequisition, $id_company);
         // if (!$findRequisition) {
-        $requisition = $requisitionsDao->insertRequisitionByCompany($dataRequisition, $id_company);
+        $requisition = $requisitionsDao->insertRequisitionManualByCompany($dataRequisition, $id_company);
 
         if ($requisition == null) {
             $material = $transitMaterialsDao->calcQuantityTransitByMaterial($dataRequisition['idMaterial']);
@@ -146,7 +146,7 @@ $app->post('/addRequisition', function (Request $request, Response $response, $a
             // $findRequisition = $generalRequisitionsDao->findRequisition($requisition[$i], $id_company);
 
             // if (!$findRequisition) 
-            $resolution = $requisitionsDao->insertRequisitionByCompany($requisition[$i], $id_company);
+            $resolution = $requisitionsDao->insertRequisitionManualByCompany($requisition[$i], $id_company);
             // else {
             //     $requisition[$i]['idRequisition'] = $findRequisition['id_requisition'];
             //     $resolution = $requisitionsDao->updateRequisition($dataRequisition);
@@ -185,15 +185,14 @@ $app->post('/addRequisition', function (Request $request, Response $response, $a
             $data['deliveryDate'] = '';
             $data['requiredQuantity'] = abs($materials[$i]['available']);
             $data['purchaseOrder'] = '';
-            $data['requestedQuantity'] = 0;
 
             $requisition = $generalRequisitionsDao->findRequisitionByApplicationDate($materials[$i]['id_material']);
 
             if (!$requisition)
-                $requisitionsDao->insertRequisitionByCompany($data, $id_company);
+                $generalRequisitionsDao->insertRequisitionAutoByCompany($data, $id_company);
             else {
                 $data['idRequisition'] = $requisition['id_requisition'];
-                $requisitionsDao->updateRequisition($data);
+                $generalRequisitionsDao->updateRequisitionAuto($data);
             }
         }
     }
@@ -215,7 +214,7 @@ $app->post('/updateRequisition', function (Request $request, Response $response,
     // !is_array($requisition) ? $data['id_requisition'] = 0 : $data = $requisition;
 
     // if ($data['id_requisition'] == $dataRequisition['idRequisition'] || $data['id_requisition'] == 0) {
-    $requisition = $requisitionsDao->updateRequisition($dataRequisition);
+    $requisition = $requisitionsDao->updateRequisitionManual($dataRequisition);
 
     if ($requisition == null) {
         $material = $transitMaterialsDao->calcQuantityTransitByMaterial($dataRequisition['idMaterial']);
