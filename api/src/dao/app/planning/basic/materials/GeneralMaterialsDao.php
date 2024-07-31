@@ -106,7 +106,7 @@ class GeneralMaterialsDao
                                         INNER JOIN materials_inventory mi ON mi.id_material = m.id_material
                                         INNER JOIN convert_units u ON u.id_unit = m.unit
                                         INNER JOIN convert_magnitudes mg ON mg.id_magnitude = u.id_magnitude
-                                      WHERE m.id_material = :id_material AND id_company = :id_company");
+                                      WHERE m.id_material = :id_material AND m.id_company = :id_company");
         $stmt->execute([
             'id_material' => $id_material,
             'id_company' => $id_company,
