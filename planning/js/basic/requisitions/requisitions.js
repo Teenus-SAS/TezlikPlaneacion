@@ -65,7 +65,7 @@ $(document).ready(function () {
       return false;
     }
 
-    loadTblRequisitions(firtsDate, lastDate);
+    loadAllData(3, firtsDate, lastDate);
   });
 
   function handleMaterialChange(event) {

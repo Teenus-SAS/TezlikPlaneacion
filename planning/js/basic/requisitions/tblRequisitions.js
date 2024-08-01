@@ -206,6 +206,7 @@ $(document).ready(function () {
           title: "Fecha Solicitud",
           data: "application_date",
           className: "uniqueClassName dt-head-center",
+          visible: visible,
         },
         {
           title: "Estado",
@@ -217,6 +218,7 @@ $(document).ready(function () {
           title: 'Fecha',
           data: null,
           className: "uniqueClassName dt-head-center",
+          visible: visible,
           render: function (data) {
             let delivery_date = data.delivery_date;
             let status = data.status;
@@ -232,6 +234,7 @@ $(document).ready(function () {
           title: "Orden de Compra",
           data: "purchase_order",
           className: "uniqueClassName dt-head-center",
+          visible:visible,
         },
         {
           title: "Ejecutado Por",

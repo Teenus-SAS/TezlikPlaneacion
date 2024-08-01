@@ -21,7 +21,7 @@ class StoreDao
         $connection = Connection::getInstance()->getConnection();
         $stmt = $connection->prepare("SELECT pg.id_programming, o.id_order, o.num_order, m.id_material, m.reference, mi.delivery_store, mi.delivery_pending, mi.delivery_date,
                                              m.material, mi.quantity, u.abbreviation, IFNULL(SUM(pg.quantity * pm.quantity), 0) AS reserved, pg.quantity AS deliver,
-                                             IF(m.delivery_pending = 0, IFNULL(SUM(pg.quantity * pm.quantity), 0) , mi.delivery_pending) AS reserved1
+                                             IF(mi.delivery_pending = 0, IFNULL(SUM(pg.quantity * pm.quantity), 0) , mi.delivery_pending) AS reserved1
                                       FROM programming pg
                                         INNER JOIN plan_orders o ON o.id_order = pg.id_order
                                         INNER JOIN products_materials pm ON pm.id_product = pg.id_product
@@ -29,7 +29,7 @@ class StoreDao
                                         INNER JOIN materials_inventory mi ON mi.id_material = pm.id_material
                                         INNER JOIN convert_units u ON u.id_unit = m.unit
                                       WHERE pg.id_company = :id_company AND pg.status = 1
-                                      GROUP BY pg.id_programming, o.id_order, o.num_order, m.id_material, m.reference, m.material, m.quantity, u.unit
+                                      GROUP BY pg.id_programming, o.id_order, o.num_order, m.id_material, m.reference, m.material, mi.quantity, u.unit
                                       ORDER BY o.num_order ASC");
         $stmt->execute(['id_company' => $id_company]);
 

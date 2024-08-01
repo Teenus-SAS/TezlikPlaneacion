@@ -114,7 +114,7 @@ $(document).ready(function () {
                     sessionStorage.setItem('stored', (quantity - store));
                     sessionStorage.setItem('pending', pending);
                     sessionStorage.setItem('delivered', store);
-                    $('#deliverMaterial').modal('show');
+                    // $('#deliverMaterial').modal('show');
                 }
             },
         });
@@ -123,36 +123,36 @@ $(document).ready(function () {
         
     });
 
-    $('.btnCloseDeliver').click(function (e) {
-        e.preventDefault();
+    // $('.btnCloseDeliver').click(function (e) {
+    //     e.preventDefault();
         
-        sessionStorage.removeItem('idMaterial');
-        sessionStorage.removeItem('stored');
-        sessionStorage.removeItem('pending');
-        sessionStorage.removeItem('delivered');
+    //     sessionStorage.removeItem('idMaterial');
+    //     sessionStorage.removeItem('stored');
+    //     sessionStorage.removeItem('pending');
+    //     sessionStorage.removeItem('delivered');
 
-        $('#formDeliverMaterial').trigger('reset');
-        $('#deliverMaterial').modal('hide');
-    });
+    //     $('#formDeliverMaterial').trigger('reset');
+    //     $('#deliverMaterial').modal('hide');
+    // });
 
     $('#btnSaveDeliver').click(function (e) {
         e.preventDefault();
         
-        let email = $('#email').val();
-        let password = $('#password').val();
+        // let email = $('#email').val();
+        // let password = $('#password').val();
 
-        if (!email || !password) {
-            toastr.error('Ingrese los datos');
-            return false;
-        }
+        // if (!email || !password) {
+        //     toastr.error('Ingrese los datos');
+        //     return false;
+        // }
 
         let dataStore = {};
         dataStore['idMaterial'] = sessionStorage.getItem('idMaterial');
         dataStore['stored'] = sessionStorage.getItem('stored');
         dataStore['pending'] = sessionStorage.getItem('pending');
         dataStore['delivered'] = sessionStorage.getItem('delivered');
-        dataStore['email'] = email;
-        dataStore['password'] = password;
+        // dataStore['email'] = email;
+        // dataStore['password'] = password;
 
         $.ajax({
             type: "POST",

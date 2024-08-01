@@ -58,28 +58,30 @@ $app->post('/deliverStore', function (Request $request, Response $response, $arg
     $autenticationDao,
     $generalMaterialsDao
 ) {
+    session_start();
+    $id_rol = $_SESSION['rol'];
     $dataStore = $request->getParsedBody();
 
-    $user = $autenticationDao->findByEmail($dataStore['email'], 1);
+    // $user = $autenticationDao->findByEmail($dataStore['email'], 1);
 
-    if (!$user) {
-        $resp = array('error' => true, 'message' => 'Usuario y/o password incorrectos, valide nuevamente');
-        $response->getBody()->write(json_encode($resp));
-        return $response->withStatus(200)->withHeader('Content-Type', 'application/json');
-    }
-
-    /* Valida el password del usuario */
-    if (!password_verify($dataStore['password'], $user['password'])) {
-        $resp = array('error' => true, 'message' => 'Usuario y/o password incorrectos, valide nuevamente');
-        $response->getBody()->write(json_encode($resp));
-        return $response->withStatus(200)->withHeader('Content-Type', 'application/json');
-    }
-
-    // if ($user['id_rol'] != 2) {
-    //     $resp = array('error' => true, 'message' => 'Usuario no autorizado, valide nuevamente');
+    // if (!$user) {
+    //     $resp = array('error' => true, 'message' => 'Usuario y/o password incorrectos, valide nuevamente');
     //     $response->getBody()->write(json_encode($resp));
     //     return $response->withStatus(200)->withHeader('Content-Type', 'application/json');
     // }
+
+    // /* Valida el password del usuario */
+    // if (!password_verify($dataStore['password'], $user['password'])) {
+    //     $resp = array('error' => true, 'message' => 'Usuario y/o password incorrectos, valide nuevamente');
+    //     $response->getBody()->write(json_encode($resp));
+    //     return $response->withStatus(200)->withHeader('Content-Type', 'application/json');
+    // }
+
+    if ($id_rol != 2) {
+        $resp = array('error' => true, 'message' => 'Usuario no autorizado, valide nuevamente');
+        $response->getBody()->write(json_encode($resp));
+        return $response->withStatus(200)->withHeader('Content-Type', 'application/json');
+    }
 
     $store = $storeDao->saveDelivery($dataStore, 1);
     if ($store == null) {
