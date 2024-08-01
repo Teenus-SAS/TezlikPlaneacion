@@ -242,8 +242,12 @@ $app->post('/updateRequisition', function (Request $request, Response $response,
 
 $app->post('/saveAdmissionDate', function (Request $request, Response $response, $args) use (
     $generalRequisitionsDao,
-    $generalMaterialsDao
+    $generalMaterialsDao,
+    $transitMaterialsDao
 ) {
+    session_start();
+    $id_user = $_SESSION['idUser'];
+
     $dataRequisition = $request->getParsedBody();
 
     $requisition = $generalRequisitionsDao->updateDateRequisition($dataRequisition);
@@ -252,6 +256,17 @@ $app->post('/saveAdmissionDate', function (Request $request, Response $response,
         $material = $generalMaterialsDao->calcMaterialRecieved($dataRequisition['idMaterial']);
 
         $requisition = $generalMaterialsDao->updateQuantityMaterial($dataRequisition['idMaterial'], $material['quantity']);
+    }
+
+    if ($requisition == null) {
+        $requisition = $generalRequisitionsDao->saveUserDeliveredRequisition($dataRequisition['idRequisition'], $id_user);
+    }
+
+    if ($requisition == null) {
+        $material = $transitMaterialsDao->calcQuantityTransitByMaterial($dataRequisition['idMaterial']);
+
+        if (isset($material['transit']))
+            $requisition = $transitMaterialsDao->updateQuantityTransitByMaterial($dataRequisition['idMaterial'], $material['transit']);
     }
 
     if ($requisition == null)

@@ -118,7 +118,7 @@ $(document).ready(function () {
               // let fechaHora = new Date(data.admission_date);
               // let fechaHoraFormateada = fechaHora.toLocaleDateString("es-CO", { day: "2-digit", month: "2-digit", year: "numeric" });
 
-              action = `Recibido: <br>${data.admission_date}`;
+              action = `Recibido: <br>${data.firstname_deliver} ${data.lastname_deliver}<br>${data.admission_date}`;
             }
 
             return action;

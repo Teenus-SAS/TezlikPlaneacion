@@ -240,7 +240,7 @@ $(document).ready(function () {
           title: "Ejecutado Por",
           data: null,
           className: "uniqueClassName dt-head-center",
-          render: (data) => `${data.firstname} ${data.lastname}`,
+          render: (data) => `${data.firstname_requisition} ${data.lastname_requisition}`,
           visible: visible,
         },
       ],

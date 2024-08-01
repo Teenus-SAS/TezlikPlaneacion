@@ -24,7 +24,7 @@ class RequisitionsDao
                                       FROM requisitions r
                                         INNER JOIN materials m ON m.id_material = r.id_material
                                         LEFT JOIN plan_clients c ON c.id_client = r.id_provider
-                                        LEFT JOIN users u ON u.id_user = r.id_user
+                                        LEFT JOIN users u ON u.id_user = r.id_user_requisition
                                       WHERE r.id_company = :id_company");
         $stmt->execute(['id_company' => $id_company]);
 
@@ -40,7 +40,7 @@ class RequisitionsDao
         $connection = Connection::getInstance()->getConnection();
 
         try {
-            $stmt = $connection->prepare("INSERT INTO requisitions (id_company, id_material, id_provider, application_date, delivery_date, , quantity_requested, purchase_order, id_user) 
+            $stmt = $connection->prepare("INSERT INTO requisitions (id_company, id_material, id_provider, application_date, delivery_date, , quantity_requested, purchase_order, id_user_requisition) 
                                           VALUES (:id_company, :id_material, :id_provider, :application_date, :delivery_date, :quantity_requested, :purchase_order, :id_user)");
             $stmt->execute([
                 'id_company' => $id_company,
@@ -67,7 +67,7 @@ class RequisitionsDao
 
         try {
             $stmt = $connection->prepare("UPDATE requisitions SET id_material = :id_material, id_provider = :id_provider, application_date = :application_date, 
-                                                                  delivery_date = :delivery_date, quantity_requested = :quantity_requested, purchase_order = :purchase_order, id_user = :id_user
+                                                                  delivery_date = :delivery_date, quantity_requested = :quantity_requested, purchase_order = :purchase_order, id_user_requisition = :id_user
                                     WHERE id_requisition = :id_requisition");
             $stmt->execute([
                 'id_requisition' => $dataRequisition['idRequisition'],
