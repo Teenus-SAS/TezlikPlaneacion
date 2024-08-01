@@ -197,7 +197,7 @@ $(document).ready(function () {
           data: null,
           className: "uniqueClassName dt-head-center",
           render: function (data) {
-            if (!data.delivery_date)
+            if (!data.delivery_date || data.delivery_date == "0000-00-00 00:00:00")
               action = `<button class="btn btn-info deliver" id="delivery">Entregar MP</button>`;
             else {
               let fechaHora = new Date(data.delivery_date);
@@ -214,12 +214,12 @@ $(document).ready(function () {
                   hour12: true,
                 });
 
-              action = `Entregado: <br>${fechaHoraFormateada}`;
+              action = `Entregado: ${data.firstname_delivered} ${data.lastname_delivered}<br>${fechaHoraFormateada}`;
             }
 
             return action;
           },
-        },
+        }, 
       ],
       rowGroup: {
         dataSrc: function (row) { 

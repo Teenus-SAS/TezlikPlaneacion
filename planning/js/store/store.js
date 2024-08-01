@@ -103,10 +103,10 @@ $(document).ready(function () {
                         return false;
                     }
                     
-                    if (store > delivery_pending) {
-                        toastr.error('Cantidad a entregar mayor');
-                        return false;                        
-                    }
+                    // if (store > delivery_pending) {
+                    //     toastr.error('Cantidad a entregar mayor');
+                    //     return false;                        
+                    // }
 
                     store <= reserved ? pending = (reserved - store) : pending = 0;
 
@@ -114,13 +114,11 @@ $(document).ready(function () {
                     sessionStorage.setItem('stored', (quantity - store));
                     sessionStorage.setItem('pending', pending);
                     sessionStorage.setItem('delivered', store);
+                    saveDeliverMaterial();
                     // $('#deliverMaterial').modal('show');
                 }
             },
-        });
-
-
-        
+        });        
     });
 
     // $('.btnCloseDeliver').click(function (e) {
@@ -135,24 +133,12 @@ $(document).ready(function () {
     //     $('#deliverMaterial').modal('hide');
     // });
 
-    $('#btnSaveDeliver').click(function (e) {
-        e.preventDefault();
-        
-        // let email = $('#email').val();
-        // let password = $('#password').val();
-
-        // if (!email || !password) {
-        //     toastr.error('Ingrese los datos');
-        //     return false;
-        // }
-
+    const saveDeliverMaterial = () => {
         let dataStore = {};
         dataStore['idMaterial'] = sessionStorage.getItem('idMaterial');
         dataStore['stored'] = sessionStorage.getItem('stored');
         dataStore['pending'] = sessionStorage.getItem('pending');
-        dataStore['delivered'] = sessionStorage.getItem('delivered');
-        // dataStore['email'] = email;
-        // dataStore['password'] = password;
+        dataStore['delivered'] = sessionStorage.getItem('delivered'); 
 
         $.ajax({
             type: "POST",
@@ -162,7 +148,35 @@ $(document).ready(function () {
                 message(resp, 2);
             }
         });
-    });
+    }
+    // $('#btnSaveDeliver').click(function (e) {
+    //     e.preventDefault();
+        
+    //     let email = $('#email').val();
+    //     let password = $('#password').val();
+
+    //     if (!email || !password) {
+    //         toastr.error('Ingrese los datos');
+    //         return false;
+    //     }
+
+    //     let dataStore = {};
+    //     dataStore['idMaterial'] = sessionStorage.getItem('idMaterial');
+    //     dataStore['stored'] = sessionStorage.getItem('stored');
+    //     dataStore['pending'] = sessionStorage.getItem('pending');
+    //     dataStore['delivered'] = sessionStorage.getItem('delivered');
+    //     // dataStore['email'] = email;
+    //     // dataStore['password'] = password;
+
+    //     $.ajax({
+    //         type: "POST",
+    //         url: '/api/deliverStore',
+    //         data: dataStore,
+    //         success: function (resp) {
+    //             message(resp, 2);
+    //         }
+    //     });
+    // });
 
     message = (data, op) => {
         if (data.success == true) {

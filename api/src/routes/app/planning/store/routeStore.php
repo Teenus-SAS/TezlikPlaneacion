@@ -60,6 +60,7 @@ $app->post('/deliverStore', function (Request $request, Response $response, $arg
 ) {
     session_start();
     $id_rol = $_SESSION['rol'];
+    $id_user = $_SESSION['idUser'];
     $dataStore = $request->getParsedBody();
 
     // $user = $autenticationDao->findByEmail($dataStore['email'], 1);
@@ -96,6 +97,9 @@ $app->post('/deliverStore', function (Request $request, Response $response, $arg
         }
     }
 
+    if ($store == null) {
+        $store = $generalMaterialsDao->saveUserDeliveredMaterial($dataStore['idMaterial'], $id_user);
+    }
     if ($store == null)
         $resp = array('success' => true, 'message' => 'Materia prima entregada correctamente');
     else if (isset($store['info']))

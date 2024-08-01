@@ -144,8 +144,8 @@ $(document).ready(function () {
     let id_process = $('#idProcess').val();
     let process = $('#idProcess :selected').text().trim();
 
-    // let productsMaterials = allProductsMaterials.filter(item => item.id_product == id_product);
-    // productsMaterials = productsMaterials.sort((a, b) => a.quantity - b.quantity);
+    let productsMaterials = allProductsMaterials.filter(item => item.id_product == id_product);
+    productsMaterials = productsMaterials.sort((a, b) => a.quantity - b.quantity);
         
     // if (productsMaterials[0].quantity < quantityProgramming) {
     //   toastr.error('Cantidad a programar mayor a el inventario de MP');

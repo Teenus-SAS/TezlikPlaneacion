@@ -259,7 +259,7 @@ $app->post('/saveAdmissionDate', function (Request $request, Response $response,
     }
 
     if ($requisition == null) {
-        $requisition = $generalRequisitionsDao->saveUserDeliveredRequisition($dataRequisition['idRequisition'], $id_user);
+        $requisition = $generalRequisitionsDao->saveUserDeliverRequisition($dataRequisition['idRequisition'], $id_user);
     }
 
     if ($requisition == null) {

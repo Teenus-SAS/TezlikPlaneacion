@@ -160,7 +160,7 @@ class GeneralRequisitionsDao
         }
     }
 
-    public function saveUserDeliveredRequisition($id_requisition, $id_user)
+    public function saveUserDeliverRequisition($id_requisition, $id_user)
     {
         $connection = Connection::getInstance()->getConnection();
 
