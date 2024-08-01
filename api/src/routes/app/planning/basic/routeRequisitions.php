@@ -5,6 +5,7 @@ use TezlikPlaneacion\dao\GeneralClientsDao;
 use TezlikPlaneacion\dao\GeneralMaterialsDao;
 use TezlikPlaneacion\dao\GeneralRequisitionsDao;
 use TezlikPlaneacion\dao\GeneralRMStockDao;
+use TezlikPlaneacion\dao\LastDataDao;
 use TezlikPlaneacion\dao\requisitionsDao;
 use TezlikPlaneacion\dao\TransitMaterialsDao;
 
@@ -15,6 +16,7 @@ $generalMaterialsDao = new GeneralMaterialsDao();
 $generalClientsDao = new GeneralClientsDao();
 $explosionMaterialsDao = new ExplosionMaterialsDao();
 $generalRMStockDao = new GeneralRMStockDao();
+$lastDataDao = new LastDataDao();
 
 use Psr\Http\Message\ResponseInterface as Response;
 use Psr\Http\Message\ServerRequestInterface as Request;
@@ -101,6 +103,7 @@ $app->post('/requisitionDataValidation', function (Request $request, Response $r
 $app->post('/addRequisition', function (Request $request, Response $response, $args) use (
     $requisitionsDao,
     $transitMaterialsDao,
+    $lastDataDao,
     $generalRequisitionsDao,
     $generalMaterialsDao,
     $generalClientsDao,
@@ -109,6 +112,7 @@ $app->post('/addRequisition', function (Request $request, Response $response, $a
 ) {
     session_start();
     $id_company = $_SESSION['id_company'];
+    $id_user = $_SESSION['idUser'];
     $dataRequisition = $request->getParsedBody();
 
     $count = sizeof($dataRequisition);
@@ -116,6 +120,7 @@ $app->post('/addRequisition', function (Request $request, Response $response, $a
     if ($count > 1) {
         // $findRequisition = $generalRequisitionsDao->findRequisition($dataRequisition, $id_company);
         // if (!$findRequisition) {
+        $dataRequisition['idUser'] = $id_user;
         $requisition = $requisitionsDao->insertRequisitionManualByCompany($dataRequisition, $id_company);
 
         if ($requisition == null) {
@@ -142,17 +147,14 @@ $app->post('/addRequisition', function (Request $request, Response $response, $a
             $requisition[$i]['idProvider'] = $findClient['id_client'];
 
             !isset($requisition[$i]['purchaseOrder']) ? $requisition[$i]['purchaseOrder'] = '' : $requisition[$i]['purchaseOrder'];
+            $requisition[$i]['idUser'] = $id_user;
 
-            // $findRequisition = $generalRequisitionsDao->findRequisition($requisition[$i], $id_company);
-
-            // if (!$findRequisition) 
             $resolution = $requisitionsDao->insertRequisitionManualByCompany($requisition[$i], $id_company);
-            // else {
-            //     $requisition[$i]['idRequisition'] = $findRequisition['id_requisition'];
-            //     $resolution = $requisitionsDao->updateRequisition($dataRequisition);
-            // }
+            // $lastData = $lastDataDao->lastInsertedRequisitionId($id_company);
 
-            if ($resolution != null) break;
+            // $resolution = $generalRequisitionsDao->saveUserRequisition($lastData['id_requisition'], $id_user);
+
+            if (isset($resolution['info'])) break;
 
             $material = $transitMaterialsDao->calcQuantityTransitByMaterial($requisition[$i]['idMaterial']);
 
@@ -161,6 +163,8 @@ $app->post('/addRequisition', function (Request $request, Response $response, $a
         }
         if ($resolution == null)
             $resp = array('success' => true, 'message' => 'Requisicions importados correctamente');
+        else if (isset($resolution['info']))
+            $resp = array('info' => true, 'message' => $resolution['message']);
         else
             $resp = array('error' => true, 'message' => 'Ocurrio un error mientras importaba la información. Intente nuevamente');
     }
@@ -206,9 +210,10 @@ $app->post('/updateRequisition', function (Request $request, Response $response,
     $transitMaterialsDao,
     $generalRequisitionsDao
 ) {
-    // session_start();
-    // $id_company = $_SESSION['id_company'];
+    session_start();
+    $id_user = $_SESSION['idUser'];
     $dataRequisition = $request->getParsedBody();
+    $dataRequisition['idUser'] = $id_user;
 
     // $requisition = $generalRequisitionsDao->findRequisition($dataRequisition, $id_company);
     // !is_array($requisition) ? $data['id_requisition'] = 0 : $data = $requisition;

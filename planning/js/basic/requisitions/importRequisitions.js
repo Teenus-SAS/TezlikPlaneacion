@@ -38,7 +38,7 @@ $(document).ready(function () {
 
     importFile(selectedFile)
       .then((data) => {
-        const expectedHeaders = ['referencia_material', 'material', 'proveedor', 'fecha_solicitud', 'fecha_entrega','cantidad','orden_compra'];
+        const expectedHeaders = ['referencia_material', 'material', 'proveedor', 'fecha_solicitud', 'fecha_entrega','cantidad_solicitada','orden_compra'];
         const actualHeaders = Object.keys(data[0]);
 
         const missingHeaders = expectedHeaders.filter(header => !actualHeaders.includes(header));
@@ -58,7 +58,7 @@ $(document).ready(function () {
             client: item.proveedor,
             applicationDate: item.fecha_solicitud,
             deliveryDate: item.fecha_entrega,
-            quantity: item.cantidad,
+            requestedQuantity: item.cantidad_solicitada,
             purchaseOrder: item.orden_compra,
           };
         });
@@ -74,7 +74,7 @@ $(document).ready(function () {
   });
 
   /* Mensaje de advertencia */
-  checkRequisition = (data) => {
+  const checkRequisition = (data) => {
     $.ajax({
       type: 'POST',
       url: '/api/requisitionDataValidation',
@@ -117,7 +117,7 @@ $(document).ready(function () {
     });
   };
 
-  saveMachineTable = (data) => {
+  const saveMachineTable = (data) => {
     $.ajax({
       type: 'POST',
       url: '/api/addRequisition',

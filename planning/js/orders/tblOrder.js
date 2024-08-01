@@ -66,6 +66,19 @@ $(document).ready(function () {
           },
         },
         {
+          title: "Acciones",
+          data: null,
+          className: "uniqueClassName dt-head-center",
+          render: function (data) {
+            !data.delivery_date &&
+            (data.status == "PROGRAMAR" || data.status == "POR PROCESAR")
+              ? (action = `<a href="javascript:;" <i class="bx bx-edit-alt updateOrder" id="${data.id_order}" data-toggle='tooltip' title='Actualizar Pedido' style="font-size: 30px;"></i></a><a href="javascript:;" <i class="mdi mdi-delete-forever" id="${data.id_order}" data-toggle='tooltip' title='Eliminar Pedido' style="font-size: 30px;color:red" onclick="deleteFunction()"></i></a>`)
+              : (action = "");
+
+            return action;
+          },
+        },
+        {
           title: "Fecha",
           data: "date_order",
           className: "uniqueClassName dt-head-center",
@@ -126,20 +139,7 @@ $(document).ready(function () {
             else badge = "badge-danger";
             return `<span class="badge ${badge}" style="font-size: large;">${data.classification}</span>`;
           },
-        },
-        {
-          title: "Acciones",
-          data: null,
-          className: "uniqueClassName dt-head-center",
-          render: function (data) {
-            !data.delivery_date &&
-            (data.status == "PROGRAMAR" || data.status == "POR PROCESAR")
-              ? (action = `<a href="javascript:;" <i class="bx bx-edit-alt updateOrder" id="${data.id_order}" data-toggle='tooltip' title='Actualizar Pedido' style="font-size: 30px;"></i></a><a href="javascript:;" <i class="mdi mdi-delete-forever" id="${data.id_order}" data-toggle='tooltip' title='Eliminar Pedido' style="font-size: 30px;color:red" onclick="deleteFunction()"></i></a>`)
-              : (action = "");
-
-            return action;
-          },
-        },
+        }, 
       ],
     });
   };

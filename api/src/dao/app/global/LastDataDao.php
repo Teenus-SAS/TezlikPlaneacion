@@ -78,6 +78,17 @@ class LastDataDao
         return $material;
     }
 
+    /* Requisicion */
+    public function lastInsertedRequisitionId($id_company)
+    {
+        $connection = Connection::getInstance()->getConnection();
+        $sql = "SELECT MAX(id_requisition) AS id_requisition FROM requisitions WHERE id_company = :id_company";
+        $query = $connection->prepare($sql);
+        $query->execute(['id_company' => $id_company]);
+        $material = $query->fetch($connection::FETCH_ASSOC);
+        return $material;
+    }
+
     public function findLastInsertedClient()
     {
         $connection = Connection::getInstance()->getConnection();

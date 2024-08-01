@@ -20,12 +20,14 @@ class GeneralRequisitionsDao
     {
         $connection = Connection::getInstance()->getConnection();
         $stmt = $connection->prepare("SELECT r.id_requisition, r.id_material, m.reference, m.material, r.application_date, r.delivery_date, r.quantity_requested, r.quantity_required, r.purchase_order, 
-                                             r.admission_date, u.abbreviation, IFNULL(r.id_provider, 0) AS id_provider, IFNULL(c.client, '') AS provider
+                                             r.admission_date, cu.abbreviation, IFNULL(r.id_provider, 0) AS id_provider, IFNULL(c.client, '') AS provider,
+                                             IFNULL(u.id_user, 0) AS id_user, IFNULL(u.firstname, '') AS firstname, IFNULL(u.lastname, '') AS lastname
                                       FROM requisitions r
                                         INNER JOIN materials m ON m.id_material = r.id_material
                                         -- INNER JOIN materials_inventory mi ON mi.id_material = r.id_material
-                                        INNER JOIN convert_units u ON u.id_unit = m.unit
+                                        INNER JOIN convert_units cu ON cu.id_unit = m.unit
                                         LEFT JOIN plan_clients c ON c.id_client = r.id_provider
+                                        LEFT JOIN users u ON u.id_user = r.id_user
                                       WHERE r.id_company = :id_company 
                                       AND (r.admission_date IS NULL OR MONTH(r.admission_date) = MONTH(CURRENT_DATE))
                                       ORDER BY r.admission_date ASC");
@@ -41,11 +43,13 @@ class GeneralRequisitionsDao
     {
         $connection = Connection::getInstance()->getConnection();
         $stmt = $connection->prepare("SELECT r.id_requisition, r.id_material, m.reference, m.material, r.application_date, r.delivery_date, r.quantity_requested, r.quantity_required, 
-                                             r.purchase_order, r.admission_date, u.abbreviation, IFNULL(r.id_provider, 0) AS id_provider, IFNULL(c.client, '') AS provider
+                                             r.purchase_order, r.admission_date, cu.abbreviation, IFNULL(r.id_provider, 0) AS id_provider, IFNULL(c.client, '') AS provider,
+                                             IFNULL(u.id_user, 0) AS id_user, IFNULL(u.firstname, '') AS firstname, IFNULL(u.lastname, '') AS lastname
                                       FROM requisitions r
                                         INNER JOIN materials m ON m.id_material = r.id_material
-                                        INNER JOIN convert_units u ON u.id_unit = m.unit
+                                        INNER JOIN convert_units cu ON cu.id_unit = m.unit
                                         LEFT JOIN plan_clients c ON c.id_client = r.id_provider
+                                        LEFT JOIN users u ON u.id_user = r.id_user
                                       WHERE r.id_company = :id_company
                                       AND (r.application_date BETWEEN :min_date AND :max_date)");
         $stmt->execute([
@@ -93,7 +97,7 @@ class GeneralRequisitionsDao
         $connection = Connection::getInstance()->getConnection();
 
         try {
-            $stmt = $connection->prepare("INSERT INTO requisitions (id_company, id_material, id_provider, application_date, delivery_date, , quantity_required, purchase_order) 
+            $stmt = $connection->prepare("INSERT INTO requisitions (id_company, id_material, id_provider, application_date, delivery_date, quantity_required, purchase_order) 
                                           VALUES (:id_company, :id_material, :id_provider, :application_date, :delivery_date, :quantity_required, :purchase_order)");
             $stmt->execute([
                 'id_company' => $id_company,
@@ -156,12 +160,31 @@ class GeneralRequisitionsDao
         }
     }
 
+    public function saveUserRequisition($id_requisition, $id_user)
+    {
+        $connection = Connection::getInstance()->getConnection();
+
+        try {
+            $stmt = $connection->prepare("UPDATE requisitions SET id_user = :id_user
+                                          WHERE id_requisition = :id_requisition");
+            $stmt->execute([
+                'id_user' => $id_user,
+                'id_requisition' => $id_requisition,
+            ]);
+            $this->logger->info(__FUNCTION__, array('query' => $stmt->queryString, 'errors' => $stmt->errorInfo()));
+        } catch (\Exception $e) {
+            $message = $e->getMessage();
+            $error = array('info' => true, 'message' => $message);
+            return $error;
+        }
+    }
+
     public function clearDataRequisition($id_requisition)
     {
         $connection = Connection::getInstance()->getConnection();
 
         try {
-            $stmt = $connection->prepare("UPDATE requisitions SET application_date = '0000-00-00', delivery_date = '0000-00-00', quantity_requested = 0, purchase_order = ''
+            $stmt = $connection->prepare("UPDATE requisitions SET application_date = '0000-00-00', delivery_date = '0000-00-00', quantity_requested = 0, purchase_order = '', id_user = 0
                                           WHERE id_requisition = :id_requisition");
             $stmt->execute([
                 'id_requisition' => $id_requisition,

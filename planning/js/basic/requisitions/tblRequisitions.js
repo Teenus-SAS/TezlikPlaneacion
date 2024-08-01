@@ -2,6 +2,10 @@ $(document).ready(function () {
   $(".selectNavigation").click(function (e) {
     e.preventDefault();
 
+    $('.cardAddRequisitions').hide(800);
+    $('.cardSearchDate').hide(800);
+    $('.cardImportRequisitions').hide(800);
+
     if (this.id == "pending") loadTblRequisitions(pending, false);
     else if (this.id == "done") loadTblRequisitions(done, true);
   });
@@ -112,19 +116,7 @@ $(document).ready(function () {
   };
 
   /* Cargue tabla de Productos Materiales */
-  loadTblRequisitions = (data, visible) => {
-    // if ($.fn.dataTable.isDataTable("#tblRequisitions")) {
-    //     // Actualizar el título de la columna
-    //     let table = $("#tblRequisitions").DataTable();
-    //     // let column = table.column(10); // Asumiendo que la columna de "Fecha Entrega/Recibido" es la décima (índice 10)
-    //     // column.header().textContent = title_delivery_date;
-        
-    //     // Actualizar los datos en la tabla
-    //     table.clear();
-    //     table.rows.add(data).draw();
-    //     return;
-    // } 
-
+  loadTblRequisitions = (data, visible) => { 
     tblRequisitions = $("#tblRequisitions").dataTable({
       destroy: true,
       pageLength: 50,
@@ -240,6 +232,13 @@ $(document).ready(function () {
           title: "Orden de Compra",
           data: "purchase_order",
           className: "uniqueClassName dt-head-center",
+        },
+        {
+          title: "Ejecutado Por",
+          data: null,
+          className: "uniqueClassName dt-head-center",
+          render: (data) => `${data.firstname} ${data.lastname}`,
+          visible: visible,
         },
       ],
       footerCallback: function (row, data, start, end, display) {
