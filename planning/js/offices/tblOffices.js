@@ -78,16 +78,16 @@ $(document).ready(function () {
 
   /* Cargar pedidos */
   loadTblOffices = (data, visible) => {
-    if ($.fn.dataTable.isDataTable("#tblOffices")) {
-      $("#tblOffices").DataTable().clear();
-      $('#tblOffices').DataTable().column(8).visible(visible);
-      $('#tblOffices').DataTable().column(10).visible(visible);
-      $("#tblOffices").DataTable().rows.add(data).draw();
-      return;
-    }
+    // if ($.fn.dataTable.isDataTable("#tblOffices")) {
+    //   $("#tblOffices").DataTable().clear();
+    //   $('#tblOffices').DataTable().column(8).visible(visible);
+    //   $('#tblOffices').DataTable().column(10).visible(visible);
+    //   $("#tblOffices").DataTable().rows.add(data).draw();
+    //   return;
+    // }
 
     tblOffices = $("#tblOffices").dataTable({
-      // destroy: true,
+      destroy: true,
       pageLength: 50,
       data: data,
       language: {
@@ -165,21 +165,7 @@ $(document).ready(function () {
           data: "quantity",
           className: "uniqueClassName dt-head-center",
           render: $.fn.dataTable.render.number(".", ",", 0),
-        },
-        /* {
-          title: "Estado",
-          data: "status",
-          className: "uniqueClassName dt-head-center",
-          render: function (data) {
-            if (data == "ENTREGADO") badge = "badge-success";
-            else if (data == "Sin Ficha Tecnica" || data == "Sin Materia Prima")
-              badge = "badge-danger";
-            else if (data == "DESPACHO") badge = "badge-info";
-            else badge = "badge-light";
-
-            return `<span class="badge ${badge}">${data}</span>`;
-          },
-        }, */
+        }, 
         {
           title: "F.Entrega",
           data: null,
@@ -187,7 +173,7 @@ $(document).ready(function () {
           render: function (data) {
             data.status == "DESPACHO"
               ? (action = `<button class="btn btn-info changeDate" id="${data.id_order}" name="${data.id_order}">Entregar</button>`)
-              : (action = data.delivery_date);
+              : (action = `${data.firstname_order} ${data.lastname_order}<br>${data.delivery_date}`);
 
             return action;
           },

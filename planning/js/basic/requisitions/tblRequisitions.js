@@ -150,12 +150,11 @@ $(document).ready(function () {
           data: "material",
           className: "uniqueClassName dt-head-center",
         },
-        {
-          title: "Medida",
-          data: "abbreviation",
-          className: "uniqueClassName dt-head-center",
-        },
-
+        // {
+        //   title: "Medida",
+        //   data: "abbreviation",
+        //   className: "uniqueClassName dt-head-center",
+        // },
         {
           title: "Proveedor Sugerido",
           data: "provider",
@@ -178,7 +177,7 @@ $(document).ready(function () {
                 maximumFractionDigits: 2
               });
 
-            return quantity;
+            return `${quantity} ${data.abbreviation}`;
           },
         },
         {
@@ -199,7 +198,7 @@ $(document).ready(function () {
                 maximumFractionDigits: 2
               });
 
-            return quantity;
+            return `${quantity} ${data.abbreviation}`;
           },
         },
         {
@@ -253,13 +252,13 @@ $(document).ready(function () {
           quantity_requested += parseFloat(data[display[i]].quantity_requested);
         }
 
-        $(this.api().column(6).footer()).html(
+        $(this.api().column(5).footer()).html(
           quantity_required.toLocaleString("es-CO", {
             minimumFractionDigits: 0,
             maximumFractionDigits: 0,
           })
         );
-        $(this.api().column(7).footer()).html(
+        $(this.api().column(6).footer()).html(
           quantity_requested.toLocaleString("es-CO", {
             minimumFractionDigits: 0,
             maximumFractionDigits: 0,

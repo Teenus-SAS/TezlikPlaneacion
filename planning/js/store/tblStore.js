@@ -96,12 +96,7 @@ $(document).ready(function () {
               data.abbreviation
             );
           },
-        },
-        /* {
-          title: "Unidad",
-          data: "abbreviation",
-          className: "uniqueClassName dt-head-center",
-        }, */
+        }, 
         {
           title: "Orden de Compra",
           data: "purchase_order",
@@ -112,12 +107,9 @@ $(document).ready(function () {
           data: null,
           className: "uniqueClassName dt-head-center",
           render: function (data) {
-            if (!data.admission_date)
+            if (!data.admission_date || data.admission_date == "0000-00-00 00:00:00")
               action = `<button class="btn btn-info changeDate" id="delivery">Recibir MP</button>`;
-            else {
-              // let fechaHora = new Date(data.admission_date);
-              // let fechaHoraFormateada = fechaHora.toLocaleDateString("es-CO", { day: "2-digit", month: "2-digit", year: "numeric" });
-
+            else { 
               action = `Recibido: <br>${data.firstname_deliver} ${data.lastname_deliver}<br>${data.admission_date}`;
             }
 

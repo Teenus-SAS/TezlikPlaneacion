@@ -81,9 +81,10 @@ $app->post('/changeOffices', function (Request $request, Response $response, $ar
 ) {
     session_start();
     $id_company = $_SESSION['id_company'];
+    $id_user = $_SESSION['idUser'];
     $dataOrder = $request->getParsedBody();
 
-    $resolution = $officesDao->updateDeliveryDate($dataOrder);
+    $resolution = $officesDao->updateDeliveryDate($dataOrder, $id_user);
 
     $generalOrdersDao->changeStatus($dataOrder['idOrder'], 3);
     $arr = $generalProductsDao->findProductReserved($dataOrder['idProduct']);

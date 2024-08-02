@@ -103,10 +103,10 @@ $(document).ready(function () {
                         return false;
                     }
                     
-                    // if (store > delivery_pending) {
-                    //     toastr.error('Cantidad a entregar mayor');
-                    //     return false;                        
-                    // }
+                    if (store > delivery_pending) {
+                        toastr.error('Cantidad a entregar mayor');
+                        return false;                        
+                    }
 
                     store <= reserved ? pending = (reserved - store) : pending = 0;
 
@@ -114,25 +114,12 @@ $(document).ready(function () {
                     sessionStorage.setItem('stored', (quantity - store));
                     sessionStorage.setItem('pending', pending);
                     sessionStorage.setItem('delivered', store);
-                    saveDeliverMaterial();
-                    // $('#deliverMaterial').modal('show');
+                    saveDeliverMaterial(); 
                 }
             },
         });        
     });
-
-    // $('.btnCloseDeliver').click(function (e) {
-    //     e.preventDefault();
-        
-    //     sessionStorage.removeItem('idMaterial');
-    //     sessionStorage.removeItem('stored');
-    //     sessionStorage.removeItem('pending');
-    //     sessionStorage.removeItem('delivered');
-
-    //     $('#formDeliverMaterial').trigger('reset');
-    //     $('#deliverMaterial').modal('hide');
-    // });
-
+ 
     const saveDeliverMaterial = () => {
         let dataStore = {};
         dataStore['idMaterial'] = sessionStorage.getItem('idMaterial');

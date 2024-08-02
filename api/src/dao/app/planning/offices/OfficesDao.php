@@ -37,14 +37,15 @@ class OfficesDao
         return $orders;
     }
 
-    public function updateDeliveryDate($dataOrder)
+    public function updateDeliveryDate($dataOrder, $id_user)
     {
         $connection = Connection::getInstance()->getConnection();
 
         try {
-            $stmt = $connection->prepare("UPDATE plan_orders SET delivery_date = :delivery_date WHERE id_order = :id_order");
+            $stmt = $connection->prepare("UPDATE plan_orders SET delivery_date = :delivery_date, id_user_order = :id_user WHERE id_order = :id_order");
             $stmt->execute([
                 'delivery_date' => $dataOrder['date'],
+                'id_user' => $id_user,
                 'id_order' => $dataOrder['idOrder']
             ]);
         } catch (\Exception $e) {
