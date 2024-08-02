@@ -3,7 +3,7 @@ $(document).ready(function () {
   allOrdersProgramming = [];
   allProcess = [];
   let machines = [];
-  let allCiclesMachines = [];
+  allCiclesMachines = [];
   let allPlanningMachines = [];
   allOrders = [];
   allProgramming = [];

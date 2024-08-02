@@ -46,8 +46,7 @@ class GeneralOrdersDao
                                              IFNULL((SELECT id_programming FROM programming WHERE id_order = o.id_order LIMIT 1), 0) AS programming
                                       FROM plan_orders o
                                         INNER JOIN products p ON p.id_product = o.id_product
-                                        LEFT JOIN products_materials pm ON pm.id_product = o.id_product
-                                        -- LEFT JOIN materials m ON m.id_material = pm.id_material
+                                        LEFT JOIN products_materials pm ON pm.id_product = o.id_product 
                                         LEFT JOIN materials_inventory m ON mi.id_material = pm.id_material
                                         INNER JOIN products_inventory pi ON pi.id_product = o.id_product
                                         INNER JOIN plan_clients c ON c.id_client = o.id_client  
@@ -56,7 +55,8 @@ class GeneralOrdersDao
                                         o.status_order = 0 
                                         AND o.id_company = :id_company 
                                         AND o.status NOT IN (3, 7, 8) 
-                                        AND o.max_date != '0000-00-00' ORDER BY p.id_product ASC");
+                                        AND o.max_date != '0000-00-00' 
+                                        ORDER BY p.id_product ASC");
         $stmt->execute(['id_company' => $id_company]);
 
         $this->logger->info(__FUNCTION__, array('query' => $stmt->queryString, 'errors' => $stmt->errorInfo()));
@@ -147,18 +147,6 @@ class GeneralOrdersDao
         $orders = $stmt->fetch($connection::FETCH_ASSOC);
         return $orders;
     }
-
-    // public function findAllOrdersConcat($id_company)
-    // {
-    //     $connection = Connection::getInstance()->getConnection();
-
-    //     $stmt = $connection->prepare("SELECT CONCAT(num_order, '-' , id_product) AS concate, id_order, id_product FROM plan_orders WHERE id_company = :id_company");
-    //     $stmt->execute(['id_company' => $id_company]);
-    //     $this->logger->info(__FUNCTION__, array('query' => $stmt->queryString, 'errors' => $stmt->errorInfo()));
-
-    //     $orders = $stmt->fetchAll($connection::FETCH_ASSOC);
-    //     return $orders;
-    // }
 
     public function checkAccumulatedQuantityOrder($id_order)
     {

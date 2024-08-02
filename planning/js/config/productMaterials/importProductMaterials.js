@@ -57,7 +57,7 @@ $(document).ready(function () {
           }
         });
 
-        checkData(dataToImport);
+        checkDataPM(dataToImport);
       })
       .catch(() => {
         $('.cardLoading').remove();
@@ -69,7 +69,7 @@ $(document).ready(function () {
   });
 
   /* Mensaje de advertencia */
-  checkData = (data) => {
+  const checkDataPM = (data) => {
     $.ajax({
       type: 'POST',
       url: '/api/productsMaterialsDataValidation',
@@ -112,7 +112,7 @@ $(document).ready(function () {
     });
   };
 
-  saveProduct = (data) => {
+  const saveProduct = (data) => {
     // console.log(data);
     $.ajax({
       type: 'POST',

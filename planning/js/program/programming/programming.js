@@ -134,7 +134,7 @@ $(document).ready(function () {
   });
 
   /* Revision data programa de produccion */
-  checkdataProgramming = async (idProgramming) => {
+  const checkdataProgramming = async (idProgramming) => {
     let id_order = $('#order').val();
     let id_product = parseInt($('#selectNameProduct').val());
     let quantityMissing = parseInt($('#quantityMissing').val().replace('.', ''));
@@ -144,16 +144,15 @@ $(document).ready(function () {
     let id_process = $('#idProcess').val();
     let process = $('#idProcess :selected').text().trim();
 
-    let productsMaterials = allProductsMaterials.filter(item => item.id_product == id_product);
-    productsMaterials = productsMaterials.sort((a, b) => a.quantity - b.quantity);
-        
-    // if (productsMaterials[0].quantity < quantityProgramming) {
-    //   toastr.error('Cantidad a programar mayor a el inventario de MP');
-    //   return false;
-    // }
+    let ciclesMachine = allCiclesMachines.filter(item => item.id_product == id_product);
 
-    for (let i = 0; i < productsMaterials.length; i++) {
-      productsMaterials[i].quantity -= quantityProgramming;
+    if (ciclesMachine.length == 1) {
+      let productsMaterials = allProductsMaterials.filter(item => item.id_product == id_product);
+      productsMaterials = productsMaterials.sort((a, b) => a.quantity - b.quantity); 
+
+      for (let i = 0; i < productsMaterials.length; i++) {
+        productsMaterials[i].quantity -= quantityProgramming;
+      }
     }
 
     dataProgramming['machine'] = machine;
@@ -314,10 +313,13 @@ $(document).ready(function () {
             const quantityOrder = allTblData[id].quantity_order;
             const accumulatedQuantity = allTblData[id].accumulated_quantity;
 
-            let productsMaterials = allProductsMaterials.filter(item => item.id_product == idProduct);
-            productsMaterials = productsMaterials.sort((a, b) => a.quantity - b.quantity);
-            for (let i = 0; i < productsMaterials.length; i++) {
-              productsMaterials[i].quantity -= quantityProgramming;
+            let ciclesMachine = allCiclesMachines.filter(item => item.id_product == idProduct);
+            if (ciclesMachine.length == 1) {
+              let productsMaterials = allProductsMaterials.filter(item => item.id_product == idProduct);
+              productsMaterials = productsMaterials.sort((a, b) => a.quantity - b.quantity);
+              for (let i = 0; i < productsMaterials.length; i++) {
+                productsMaterials[i].quantity -= quantityProgramming;
+              }
             }
 
             for (const orderList of [allOrders, allOrdersProgramming]) {
@@ -338,7 +340,9 @@ $(document).ready(function () {
               }
             }
 
-            changeStatus(allTblData[id].id_order, 1, 'Programa de producción eliminado correctamente');
+            let arr = allTblData.filter(item => item.id_order == allTblData[id].id_order);
+            if(arr.length == 1)
+              changeStatus(allTblData[id].id_order, 1, 'Programa de producción eliminado correctamente');
 
             allTblData.splice(id, 1);
             loadTblProgramming(allTblData, 1);
@@ -449,33 +453,33 @@ $(document).ready(function () {
     setTblStatusProgramming();
   });
 
-  $("#btnSaveProgramming").click(function (e) {
-    e.preventDefault();
+  // $("#btnSaveProgramming").click(function (e) {
+  //   e.preventDefault();
 
-    if (programming.length == 0) {
-      toastr.error("No hay ningún dato para guardar");
-      return false;
-    }
+  //   if (programming.length == 0) {
+  //     toastr.error("No hay ningún dato para guardar");
+  //     return false;
+  //   }
 
-    $.ajax({
-      type: "POST",
-      url: "/api/changeStatusProgramming",
-      data: { data: programming },
-      success: function (resp) {
-        programming = [];
-        $("#changeStatusProgramming").modal("hide");
+  //   $.ajax({
+  //     type: "POST",
+  //     url: "/api/changeStatusProgramming",
+  //     data: { data: programming },
+  //     success: function (resp) {
+  //       programming = [];
+  //       $("#changeStatusProgramming").modal("hide");
 
-        message(resp);
-      },
-    });
-  });
+  //       message(resp);
+  //     },
+  //   });
+  // });
 
-  $(".btnCloseStatusProgramming").click(function (e) {
-    e.preventDefault();
-    programming = [];
-    $("#changeStatusProgramming").modal("hide");
-    $("#tblStatusProgrammingBody").empty();
-  });
+  // $(".btnCloseStatusProgramming").click(function (e) {
+  //   e.preventDefault();
+  //   programming = [];
+  //   $("#changeStatusProgramming").modal("hide");
+  //   $("#tblStatusProgrammingBody").empty();
+  // });
 
   $('#btnSavePrograming').click(function (e) { 
     e.preventDefault();
@@ -498,7 +502,7 @@ $(document).ready(function () {
   });
 
   /* Mensaje de exito */
-  message = async (data) => {
+  const message = async (data) => {
     try { 
       if (data.success) {
         sessionStorage.setItem('dataProgramming', JSON.stringify(allTblData));

@@ -105,7 +105,7 @@ $(document).ready(function () {
     );
   });
 
-  checkDataPMaterial = async (url, idProductMaterial) => {
+  const checkDataPMaterial = async (url, idProductMaterial) => {
     let ref = $('#material').val();
     let quan = $('#quantity').val();
     let idProduct = $('#selectNameProduct').val();

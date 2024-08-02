@@ -33,6 +33,7 @@ $(document).ready(function () {
      
     if (allTblData.length > 0) {
       $('.cardSaveBottons').show(800);
+      $('#machines1').show(800);
     } else {
       $('#machines1').hide();
     }

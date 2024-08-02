@@ -49,16 +49,23 @@ $app->get('/actualOffices', function (Request $request, Response $response, $arg
 
 $app->post('/cancelOffice', function (Request $request, Response $response, $args) use (
     $generalProductsDao,
+    $officesDao,
     $generalOrdersDao,
 ) {
     $dataOrder = $request->getParsedBody();
 
     // $order = $generalProductsDao->updateAccumulatedQuantity($dataOrder['idProduct'], $dataOrder['quantity'] + $dataOrder['originalQuantity'], 1);
-    $order = $generalOrdersDao->changeStatus($dataOrder['idOrder'], 9);
+    $dataOrder['date'] = '0000-00-00';
+    $order = $officesDao->updateDeliveryDate($dataOrder, 0);
 
-    $arr = $generalProductsDao->findProductReserved($dataOrder['idProduct']);
-    !isset($arr['reserved']) ? $arr['reserved'] = 0 : $arr;
-    $generalProductsDao->updateReservedByProduct($dataOrder['idProduct'], $arr['reserved']);
+    if ($order == null)
+        $order = $generalOrdersDao->changeStatus($dataOrder['idOrder'], 9);
+
+    if ($order == null) {
+        $arr = $generalProductsDao->findProductReserved($dataOrder['idProduct']);
+        !isset($arr['reserved']) ? $arr['reserved'] = 0 : $arr;
+        $generalProductsDao->updateReservedByProduct($dataOrder['idProduct'], $arr['reserved']);
+    }
 
     if ($order == null)
         $resp = array('success' => true, 'message' => 'Despacho cancelado correctamente');
@@ -96,7 +103,6 @@ $app->post('/changeOffices', function (Request $request, Response $response, $ar
         $arr = $generalOrdersDao->findLastNumOrder($id_company);
         $client = $generalClientsDao->findInternalClient($id_company);
         if ($client) {
-
             $data['order'] = $arr['num_order'];
             $data['dateOrder'] = date('Y-m-d');
             $data['minDate'] = '';
