@@ -42,11 +42,11 @@
                                     <i class="bx bx-chevron-down"></i>
                                 </a>
                                 <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-                                    <a class="dropdown-item" href="/planning/consolidated">
+                                    <!-- <a class="dropdown-item" href="/planning/consolidated">
                                         <i class="bx bxs-customize mr-1"></i>
                                         <span> Consolidado</span>
                                         <i class="bx bx-chevron-right"></i>
-                                    </a>
+                                    </a> -->
                                     <a class="dropdown-item" href="/planning/programming"><i class="bx bxs-customize mr-1"></i>
                                         <span> Programación</span>
                                         <i class="bx bx-chevron-right"></i></a>
