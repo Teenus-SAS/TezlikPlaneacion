@@ -25,7 +25,7 @@ class TransitMaterialsDao
                                                     WHEN r.admission_date IS NULL 
                                                         AND r.application_date != '0000-00-00' 
                                                         AND r.delivery_date != '0000-00-00' 
-                                                    THEN r.quantity_required 
+                                                    THEN r.quantity_requested
                                                     ELSE 0 
                                                 END
                                             ), 0) AS transit

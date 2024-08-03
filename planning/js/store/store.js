@@ -103,10 +103,10 @@ $(document).ready(function () {
                         return false;
                     }
                     
-                    if (store > delivery_pending) {
-                        toastr.error('Cantidad a entregar mayor');
-                        return false;                        
-                    }
+                    // if (store > delivery_pending) {
+                    //     toastr.error('Cantidad a entregar mayor');
+                    //     return false;                        
+                    // }
 
                     store <= reserved ? pending = (reserved - store) : pending = 0;
 

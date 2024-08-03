@@ -88,13 +88,19 @@ $(document).ready(function () {
           data: null,
           className: "uniqueClassName dt-head-center",
           render: function (data, type, row) {
-            return (
-              $.fn.dataTable.render
-                .number(".", ",", 0)
-                .display(data.quantity_requested) +
-              " " +
-              data.abbreviation
-            );
+            let quantity = parseFloat(data.quantity_requested);
+
+            if (data.abbreviation === "UND")
+              quantity = Math.floor(quantity).toLocaleString("es-CO", {
+                maximumFractionDigits: 0,
+              });
+            else
+              quantity = quantity.toLocaleString("es-CO", {
+                minimumFractionDigits: 2,
+                maximumFractionDigits: 2
+              });
+
+            return `${quantity} ${data.abbreviation}`;
           },
         }, 
         {
@@ -154,22 +160,50 @@ $(document).ready(function () {
           data: "material",
           className: "uniqueClassName dt-head-center",
         },
-        {
-          title: "Unidad",
-          data: "abbreviation",
-          className: "uniqueClassName dt-head-center",
-        },
+        // {
+        //   title: "Unidad",
+        //   data: "abbreviation",
+        //   className: "uniqueClassName dt-head-center",
+        // },
         {
           title: "Existencias",
-          data: "quantity",
+          data: null,
           className: "uniqueClassName dt-head-center",
-          render: $.fn.dataTable.render.number(".", ",", 0),
+          render: function (data) {
+            let quantity = parseFloat(data.quantity);
+
+            if (data.abbreviation === "UND")
+              quantity = Math.floor(quantity).toLocaleString("es-CO", {
+                maximumFractionDigits: 0,
+              });
+            else
+              quantity = quantity.toLocaleString("es-CO", {
+                minimumFractionDigits: 2,
+                maximumFractionDigits: 2
+              });
+
+            return `${quantity} ${data.abbreviation}`;
+          },
         },
         {
           title: "Cantidad a Entregar",
-          data: "reserved",
+          data: null,
           className: "uniqueClassName dt-head-center",
-          render: $.fn.dataTable.render.number(".", ",", 0),
+          render: function (data) {
+            let reserved = parseFloat(data.reserved);
+
+            if (data.abbreviation === "UND")
+              reserved = Math.floor(reserved).toLocaleString("es-CO", {
+                maximumFractionDigits: 0,
+              });
+            else
+              reserved = reserved.toLocaleString("es-CO", {
+                minimumFractionDigits: 2,
+                maximumFractionDigits: 2
+              });
+
+            return reserved;
+          },
         },
         {
           title: "Estado Entregas",
@@ -215,7 +249,7 @@ $(document).ready(function () {
       ],
       rowGroup: {
         dataSrc: function (row) { 
-          return `<th class="text-center" colspan="8" style="font-weight: bold;"> No Pedido - ${row.num_order} Orden Produccion - ${row.op} </th>`;
+          return `<th class="text-center" colspan="7" style="font-weight: bold;"> No Pedido - ${row.num_order} Orden Produccion - ${row.op} </th>`;
         },
         startRender: function (rows, group) {
           return $("<tr/>").append(group);

@@ -263,10 +263,10 @@ $app->post('/saveAdmissionDate', function (Request $request, Response $response,
     }
 
     if ($requisition == null) {
-        $material = $transitMaterialsDao->calcQuantityTransitByMaterial($dataRequisition['idMaterial']);
+        // $material = $transitMaterialsDao->calcQuantityTransitByMaterial($dataRequisition['idMaterial']);
 
-        if (isset($material['transit']))
-            $requisition = $transitMaterialsDao->updateQuantityTransitByMaterial($dataRequisition['idMaterial'], $material['transit']);
+        // if (isset($material['transit']))
+        $requisition = $transitMaterialsDao->updateQuantityTransitByMaterial(0, $material['transit']);
     }
 
     if ($requisition == null)

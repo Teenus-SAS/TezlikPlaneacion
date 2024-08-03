@@ -145,11 +145,12 @@ $(document).ready(function () {
     let process = $('#idProcess :selected').text().trim();
 
     let ciclesMachine = allCiclesMachines.filter(item => item.id_product == id_product);
+    
+    let productsMaterials = allProductsMaterials.filter(item => item.id_product == id_product);
+    productsMaterials = productsMaterials.sort((a, b) => a.quantity - b.quantity); 
+    let quantityFTM = productsMaterials[0].quantity - quantityProgramming;
 
     if (ciclesMachine.length == 1) {
-      let productsMaterials = allProductsMaterials.filter(item => item.id_product == id_product);
-      productsMaterials = productsMaterials.sort((a, b) => a.quantity - b.quantity); 
-
       for (let i = 0; i < productsMaterials.length; i++) {
         productsMaterials[i].quantity -= quantityProgramming;
       }
@@ -215,7 +216,7 @@ $(document).ready(function () {
 
     // Recorre allProcess para actualizar la ruta
     for (let i = 0; i < allProcess.length; i++) {
-      if (quantityMissing == 0 && allProcess[i].id_product == id_product) {
+      if ((quantityMissing == 0 || quantityFTM == 0) && allProcess[i].id_product == id_product) {
 
         allProcess[i].route += 1;
         if (process[process.length - 1].route >= allProcess[i].route)
