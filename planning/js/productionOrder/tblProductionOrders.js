@@ -100,11 +100,14 @@ $(document).ready(function () {
         },
         {
           title: "Acciones",
-          data: "status",
+          data: null,
           className: "uniqueClassName dt-head-center",
           render: function (data) {
-            if (data == "EN PRODUCCION") {
-              return `<button type="button" id="${data}" class="btn btn-sm btn-warning changeStatus" style="font-size: 12px;">Fabricado</button>`;
+            if (data.status == "EN PRODUCCION") {
+              return `
+                <a href="/planning/details-production-order" <i id="${data.id_programming}" class="mdi mdi-playlist-check" data-toggle='tooltip' title='Ver Orden' style="font-size: 30px;color:black" onclick="seePO()"></i></a>
+                <button type="button" id="${data.status}" class="btn btn-sm btn-warning changeStatus" style="font-size: 12px;">Fabricado</button>
+              `;
             } else {
               return "";
             }

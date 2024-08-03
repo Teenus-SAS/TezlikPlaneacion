@@ -126,12 +126,7 @@ $(document).ready(function () {
       },
       1000
     );
-  });
-
-  $(document).on("blur", "#quantity", function () {
-    sessionStorage.removeItem("minDate");
-    checkData(2, this.id);
-  });
+  }); 
 
   /* Revision data programa de produccion */
   const checkdataProgramming = async (idProgramming) => {

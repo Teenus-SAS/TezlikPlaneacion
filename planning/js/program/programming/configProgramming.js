@@ -11,7 +11,7 @@ $(document).ready(function () {
   allTblData = [];
   let selectProduct = false;
   let selectProcess = false;
-  // sessionStorage.removeItem('dataProgramming');
+  sessionStorage.removeItem('dataProgramming');
 
   loadAllDataProgramming = async () => {
     try {
@@ -161,6 +161,11 @@ $(document).ready(function () {
     checkData(1, this.id);
   });
 
+  $(document).on("blur", "#quantity", function () {
+    sessionStorage.removeItem("minDate");
+    checkData(2, this.id);
+  });
+
   $(document).on('click', '#minDate', function () {
     if (sessionStorage.getItem('minDate') && $('#btnCreateProgramming').html() == 'Crear') {
       $('#minDate').val('');
@@ -171,7 +176,7 @@ $(document).ready(function () {
     }
   });
 
-  checkData = async (op, id) => {
+  const checkData = async (op, id) => {
     let inputs = document.getElementsByClassName('input');
     let cont = 0;
     
@@ -361,7 +366,7 @@ $(document).ready(function () {
     calcMaxDate(min_date, 0, 2);
   })
 
-  calcMaxDate = async (min_date, last_hour, op) => {
+  const calcMaxDate = async (min_date, last_hour, op) => {
     try {
       let id_order = parseFloat($('#order').val());
       let product = parseFloat($('#selectNameProduct').val());
