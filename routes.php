@@ -49,6 +49,7 @@ get('/planning/product-process', '/planning/views/config/productProcess.php');
 // get('/planning/cicles-machines', '/planning/views/config/planCiclesMachine.php');
 get('/planning/planning-machines', '/planning/views/config/planningMachines.php');
 get('/planning/stock', '/planning/views/config/stock.php');
+get('/planning/calendar', '/planning/views/config/calender.php');
 //General
 get('/planning/categories', '/planning/views/general/categories.php');
 get('/planning/sales', '/planning/views/general/sales.php');

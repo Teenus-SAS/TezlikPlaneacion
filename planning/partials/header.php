@@ -138,6 +138,10 @@
                                                                     <i class="fas fa-balance-scale"></i>
                                                                     <a href="/planning/sales">Ventas Unidades</a>
                                                                     </li>
+                                                                    <li class="planCalendar">
+                                                                        <i class="fas fa-calendar-alt"></i>
+                                                                        <a href="/planning/calendar">Calendario Producción</a>
+                                                                    </li>
                                                                     <!-- <li class="inventoryABC">
                                                                         <i class="fas fa-clipboard-list"></i>
                                                                         <a href="/planning/inventoryABC">Inventario ABC</a>
