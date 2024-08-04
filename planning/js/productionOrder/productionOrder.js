@@ -36,6 +36,15 @@ $(document).ready(function () {
         });
     });
 
+    seePO = () => {
+        let row = $(this.activeElement).parent().parent()[0];
+        let data = tblQuotes.fnGetData(row);
+
+        let idProgramming = data.id_programming;
+
+        sessionStorage.setItem('id_programming', idProgramming);
+    };
+
     /* Mensaje de exito */
     message = (data) => {
         if (data.success == true) {

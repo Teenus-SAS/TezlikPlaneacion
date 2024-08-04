@@ -165,7 +165,7 @@ $(document).ready(function () {
     //     });
     // });
 
-    message = (data, op) => {
+    const message = (data, op) => {
         if (data.success == true) {
             sessionStorage.removeItem('idMaterial');
             sessionStorage.removeItem('stored');

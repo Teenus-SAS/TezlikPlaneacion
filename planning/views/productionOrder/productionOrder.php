@@ -48,84 +48,10 @@ if (sizeof($_SESSION) == 0)
                                 </div>
                             </div>
                             <div class="col-sm-7 col-xl-6 form-inline justify-content-sm-end">
-                                <!-- <div class="col-xs-2 py-2 mr-2">
-                                    <button class="btn btn-info" id="btnImportNewProcess">Importar Procesos</button>
-                                </div> -->
                             </div>
                         </div>
                     </div>
                 </div>
-
-                <!-- <div class="page-content-wrapper mt--45 mb-5 cardCreateProcess">
-                    <div class="container-fluid">
-                        <div class="row">
-                            <div class="col-12">
-                                <div class="card">
-                                    <form id="formCreateProcess">
-                                        <div class="card-body">
-                                            <div class="form-row">
-                                                <div class="col-sm-10 floating-label enable-floating-label show-label" style="margin-bottom:0px">
-                                                    <label for="">Proceso</label>
-                                                    <input type="text" class="form-control" id="process" name="process">
-                                                </div>
-                                                <div class="col-sm mt-1">
-                                                    <button class="btn btn-success" id="btnCreateProcess">Crear Proceso</button>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </form>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="page-content-wrapper mt--45 mb-5 cardImportProcess">
-                    <div class="container-fluid">
-                        <div class="row">
-                            <form class="col-12" id="formImportProcess" enctype="multipart/form-data">
-                                <div class="card">
-                                    <div class="card-body pt-3">
-                                        <div class="form-row">
-                                            <div class="col-sm-6 floating-label enable-floating-label show-label drag-area" style="margin-bottom:10px!important">
-                                                <input class="form-control" type="file" id="fileProcess" accept=".xls,.xlsx">
-                                                <label for="formFile" class="form-label"> Importar Process</label>
-                                            </div>
-                                            <div class="col-xs-2" style="margin-top:7px">
-                                                <button type="text" class="btn btn-success" id="btnImportProcess">Importar</button>
-                                            </div>
-                                            <div class="col-xs-2" style="margin-top:7px">
-                                                <button type="text" class="btn btn-info" id="btnDownloadImportsProcess">Descarga Formato</button>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </form>
-                        </div>
-                    </div>
-                </div> -->
-
-                <!-- page content -->
-                <!-- <div class="page-content-wrapper mt--45">
-                    <div class="container-fluid">
-                        <div class="row">
-                            <div class="col-12">
-                                <div class="card">
-                                    <div class="card-header">
-                                        <h5 class="card-title"></h5>
-                                    </div>
-                                    <div class="card-body">
-                                        <div class="table-responsive">
-                                            <table class="fixed-table-loading table table-hover" id="tblProductionOrders">
-
-                                            </table>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div> -->
 
                 <div class="page-content-wrapper mt--45">
                     <div class="container-fluid">
@@ -153,7 +79,6 @@ if (sizeof($_SESSION) == 0)
                             <div class="col-12">
                                 <div class="card">
                                     <div class="card-body">
-                                        <!-- <div class="tab-content mt-4 pt-3" id="pills-tabContent"> -->
                                         <div class="tab-pane fade show active" role="tabpanel" aria-labelledby="pills-activity-tab">
                                             <div class="table-responsive">
                                                 <div class="table-responsive">
@@ -163,14 +88,6 @@ if (sizeof($_SESSION) == 0)
                                                 </div>
                                             </div>
                                         </div>
-                                        <!-- </div> -->
-                                        <!-- <div class="tab-pane fade" id="pills-projects" role="tabpanel" aria-labelledby="pills-projects-tab">
-                                            <div class="table-responsive">
-                                                <table class="fixed-table-loading table table-hover" id="tblInventories">
-
-                                                </table>
-                                            </div>
-                                        </div> -->
                                     </div>
                                 </div>
                             </div>
