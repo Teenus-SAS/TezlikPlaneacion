@@ -149,6 +149,7 @@ $(document).ready(function () {
     $('#classification').empty();
     $('#idProcess').empty();
     $('#idMachine').empty();
+    $('.cardFormProgramming2').hide(800);
     selectProduct = false;
     
     loadProducts(num_order);
@@ -190,6 +191,7 @@ $(document).ready(function () {
     if (dataProgramming['update'] == 0) {
       $('#minDate').val('');
       $('#maxDate').val('');
+
       document.getElementById('minDate').readOnly = false;
       document.getElementById('minDate').type = 'date';
       $('.date').hide();
@@ -275,10 +277,10 @@ $(document).ready(function () {
       if (machines.length > 0) {
         dataProgramming['min_date'] = machines[machines.length - 1].max_date;
 
-        let hour = new Date(machines[machines.length - 1].max_date).getHours();
-        let min_date = machines[machines.length - 1].max_date;
+        hour = new Date(machines[machines.length - 1].max_date).getHours();
+        min_date = machines[machines.length - 1].max_date;
         let date = new Date();
-        let dateFormat = `${date.getFullYear()}-${(date.getMonth() + 1).toString().padStart(2, '0')}-${date.getDate().toString().padStart(2, '0')}`;;
+        let dateFormat = `${date.getFullYear()}-${(date.getMonth() + 1).toString().padStart(2, '0')}-${date.getDate().toString().padStart(2, '0')}`;
 
         if (min_date < dateFormat) {
           $('#minDate').val('');
@@ -609,28 +611,40 @@ $(document).ready(function () {
 
     if (allTblData.length > 0) {
       let id_product = $('#selectNameProduct').val();
+      let machine = parseFloat($('#idMachine').val());
 
       let data = allTblData.filter(item => item.id_product == id_product);
       data.sort((a, b) => a.id_machine - b.id_machine);
 
       if (data[data.length - 1].id_machine != this.value) {
-        let minProgramming = allTblData.reduce((total, arr) => total + arr.min_programming, 0);
+        let arr = allTblData.filter(item => item.id_machine == machine);
+        let min_date, max_date;
 
-        let min_date = new Date(allTblData[0].min_date);
+        if (arr.length > 0) {
+          let minProgramming = allTblData.reduce((total, arr) => total + arr.min_programming, 0);
 
-        let max_date = new Date(allTblData[0].min_date);
-        max_date.setMinutes(min_date.getMinutes() + Math.floor(minProgramming));
+          min_date = new Date(allTblData[0].min_date);
 
-        max_date =
-          max_date.getFullYear() + "-" +
-          ("00" + (max_date.getMonth() + 1)).slice(-2) + "-" +
-          ("00" + max_date.getDate()).slice(-2) + " " + ("00" + max_date.getHours()).slice(-2) + ':' + ("00" + max_date.getMinutes()).slice(-2) + ':' + '00';
+          max_date = new Date(allTblData[0].min_date);
+          max_date.setMinutes(min_date.getMinutes() + Math.floor(minProgramming));
 
+          max_date =
+            max_date.getFullYear() + "-" +
+            ("00" + (max_date.getMonth() + 1)).slice(-2) + "-" +
+            ("00" + max_date.getDate()).slice(-2) + " " + ("00" + max_date.getHours()).slice(-2) + ':' + ("00" + max_date.getMinutes()).slice(-2) + ':' + '00';
+
+          } else {
+            let date = allTblData[0].max_date;
+            date = getFirstText(date);
+            planningMachine = allPlanningMachines.find(item => item.id_machine == machine);
+            max_date = `${date} ${planningMachine.hour_start < 10 ? `0${planningMachine.hour_start}` : planningMachine.hour_start}:00:00`;
+            // dataProgramming['min_date'] = planningMachine
+          }
+        dataProgramming['update'] = 1;
         document.getElementById('minDate').type = 'datetime-local';
         let minDate = document.getElementById('minDate');
 
         minDate.value = max_date;
-        dataProgramming['update'] = 1;
       }
     }
   });
