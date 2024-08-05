@@ -143,7 +143,7 @@ $(document).ready(function () {
     
     let productsMaterials = allProductsMaterials.filter(item => item.id_product == id_product);
     productsMaterials = productsMaterials.sort((a, b) => a.quantity - b.quantity); 
-    let quantityFTM = productsMaterials[0].quantity - quantityProgramming;
+    let quantityFTM = Math.floor(productsMaterials[0].quantity) - quantityProgramming;
 
     if (ciclesMachine.length == 1) {
       for (let i = 0; i < productsMaterials.length; i++) {

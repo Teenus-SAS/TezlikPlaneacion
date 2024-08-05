@@ -11,7 +11,7 @@ $(document).ready(function () {
   allTblData = [];
   let selectProduct = false;
   let selectProcess = false;
-  sessionStorage.removeItem('dataProgramming');
+  // sessionStorage.removeItem('dataProgramming');
 
   loadAllDataProgramming = async () => {
     try {
