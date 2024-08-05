@@ -66,81 +66,96 @@ if (sizeof($_SESSION) == 0)
 				<div class="page-content-wrapper">
 					<div class="container-fluid">
 						<!-- Row 5 -->
-						<!-- <div class="row">
-							<div class="col-12">
-								<div class="card">
-									<div class="card-body align-items-center" style="padding-right: 100px; padding-left: 100px">
-										<div id="invoice">
-											<div class="invoice py-4">
-												<div class="row mb-4">
-													<div class="col-sm-12 col-xl-8">
-														<div class="page-title">
-															<h3 class="mb-1 font-weight-bold text-dark">Orden de Producción</h3>
-														</div>
-													</div>
-													<div class="col-sm-2 col-xl-2">
-														<p> [Número de Orden]</p>
-													</div>
-												</div>
-												<div class="row mb-4">
-													<div class="col-sm-12 col-xl-6">
-														<p class="font-weight-bold text-dark">Fecha de Emisión: </p>
-													</div>
-													<div class="w-100"></div>
-													<div class="col-sm-12 col-xl-6 py-2">
-														<p class="font-weight-bold text-dark">Fecha de Inicio de Producción: </p>
-													</div>
-													<div class="col-sm-12 col-xl-6">
-														<p class="font-weight-bold text-dark">Fecha Estimada de Finalización: </p>
-													</div>
-												</div>
-												<div class="row mb-4">
-													<div class="col-sm-12 col-xl-8 py-2">
-														<div class="page-title">
-															<h4 class="mb-1 font-weight-bold text-dark">1. Información del Producto</h4>
-														</div>
-													</div>
-													<div class="w-100"></div>
-													<div class="col-sm-4 col-xl-4">
-														<p> [Código del Producto]</p>
-													</div>
-													<div class="col-sm-4 col-xl-4">
-														<p> [Nombre del Producto]</p>
-													</div>
-													<div class="col-sm-4 col-xl-4">
-														<p> [Cantidad a Producir]</p>
-													</div>
-												</div>
-											</div>
-										</div>
-									</div>
-								</div>
-							</div>
-						</div> -->
-						<div class="row">
-							<div class="col-12">
+						<div class="row justify-content-center">
+							<div class="col-12 col-md-10">
 								<div class="card">
 									<div class="card-body">
-										<div class="row justify-content-around">
-											<div class="col-6">
+										<div class="row py-4">
+											<div class="col-5">
 												<div class="page-title">
 													<h3 class="mb-1 font-weight-bold text-dark">Orden de Producción</h3>
 												</div>
 											</div>
-											<div class="col-2">
-												<p> [Número de Orden]</p>
+											<div class="col-3">
+												<p id="txtNumOrder"></p>
 											</div>
 										</div>
-										<div class="row justify-content-around">
-											<div class="col-6">
-												<p class="font-weight-bold text-dark">Fecha de Emisión: </p>
+										<div class="row">
+											<div class="col-10" id="txtEDate">
+
 											</div>
-											<div class="w-100"></div>
-											<div class="col-sm-12 col-xl-6 py-2">
-												<p class="font-weight-bold text-dark">Fecha de Inicio de Producción: </p>
+										</div>
+										<div class="row">
+											<div class="col-5" id="txtMinDate">
+
 											</div>
-											<div class="col-sm-12 col-xl-6">
-												<p class="font-weight-bold text-dark">Fecha Estimada de Finalización: </p>
+											<div class="col-5" id="txtMaxDate">
+
+											</div>
+										</div>
+										<div class="row py-4">
+											<div class="col-10">
+												<h5 class=" font-weight-bold text-dark">1. Información del Producto</h5>
+											</div>
+										</div>
+										<div class="row">
+											<div class="col-4">
+												<p class="font-weight-bold text-dark" id="txtReferenceP"> </p>
+											</div>
+											<div class="col-4">
+												<p class="font-weight-bold text-dark" id="txtNameP"></p>
+											</div>
+											<div class="col-4">
+												<p class="font-weight-bold text-dark" id="txtQuantityP"></p>
+											</div>
+										</div>
+										<div class="row py-4">
+											<div class="col-10">
+												<h5 class="font-weight-bold text-dark">2. Materiales y Componentes</h5>
+											</div>
+										</div>
+										<div class="row">
+											<div class="col-12">
+												<div class="table-responsive">
+													<table class="fixed-table-loading table table-hover text-center">
+														<thead class="thead-dark">
+															<tr>
+																<th>Código</th>
+																<th>Descripción</th>
+																<th>Cantidad por Unidad de Producto</th>
+																<th>Cantidad Total</th>
+																<th>Unidad</th>
+																<th>Recibido</th>
+																<th>Pendiente</th>
+															</tr>
+														</thead>
+														<tbody id="tblPOMaterialsBody">
+														</tbody>
+													</table>
+												</div>
+											</div>
+										</div>
+										<div class="row py-4">
+											<div class="col-10">
+												<h5 class="font-weight-bold text-dark">3. Instrucciones de Producción</h5>
+											</div>
+										</div>
+										<div class="row">
+											<div class="col-12">
+												<div class="table-responsive">
+													<table class="fixed-table-loading table table-hover">
+														<thead class="thead-dark">
+															<tr>
+																<th>Proceso de Producción</th>
+																<th></th>
+																<th></th>
+																<th></th>
+															</tr>
+														</thead>
+														<tbody id="tblPOProcessBody">
+														</tbody>
+													</table>
+												</div>
 											</div>
 										</div>
 									</div>
@@ -159,7 +174,7 @@ if (sizeof($_SESSION) == 0)
 	<!-- Page End -->
 
 	<?php include_once dirname(dirname(dirname(__DIR__))) . '/global/partials/scriptsJS.php'; ?>
-
+	<script src="/planning/js/productionOrder/detailsProductionOrder.js"></script>
 </body>
 
 </html>

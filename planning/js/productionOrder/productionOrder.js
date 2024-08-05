@@ -38,7 +38,7 @@ $(document).ready(function () {
 
     seePO = () => {
         let row = $(this.activeElement).parent().parent()[0];
-        let data = tblQuotes.fnGetData(row);
+        let data = tblProductionOrders.fnGetData(row);
 
         let idProgramming = data.id_programming;
 
@@ -46,9 +46,9 @@ $(document).ready(function () {
     };
 
     /* Mensaje de exito */
-    message = (data) => {
+    const message = (data) => {
         if (data.success == true) {
-            loadData();
+            loadData(2);
             toastr.success(data.message);
             return false;
         } else if (data.error == true) toastr.error(data.message);

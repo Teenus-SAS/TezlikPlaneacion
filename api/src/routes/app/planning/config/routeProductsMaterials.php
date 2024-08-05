@@ -436,7 +436,7 @@ $app->post('/addProductsMaterials', function (Request $request, Response $respon
     $materials = $explosionMaterialsDao->setDataEXMaterials($arr);
 
     for ($i = 0; $i < sizeof($materials); $i++) {
-        if ($materials[$i]['available'] < 0) {
+        if (intval($materials[$i]['available']) < 0) {
             $data = [];
             $data['idMaterial'] = $materials[$i]['id_material'];
 
@@ -529,7 +529,7 @@ $app->post('/updatePlanProductsMaterials', function (Request $request, Response 
             $materials = $explosionMaterialsDao->setDataEXMaterials($arr);
 
             for ($i = 0; $i < sizeof($materials); $i++) {
-                if ($materials[$i]['available'] < 0) {
+                if (intval($materials[$i]['available']) < 0) {
                     $data = [];
                     $data['idMaterial'] = $materials[$i]['id_material'];
 
@@ -624,7 +624,7 @@ $app->post('/deletePlanProductMaterial', function (Request $request, Response $r
         $materials = $explosionMaterialsDao->setDataEXMaterials($arr);
 
         for ($i = 0; $i < sizeof($materials); $i++) {
-            if ($materials[$i]['available'] < 0) {
+            if (intval($materials[$i]['available']) < 0) {
                 $data = [];
                 $data['idMaterial'] = $materials[$i]['id_material'];
 

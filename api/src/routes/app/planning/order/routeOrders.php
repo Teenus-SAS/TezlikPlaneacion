@@ -451,7 +451,7 @@ $app->post('/addOrder', function (Request $request, Response $response, $args) u
     $materials = $explosionMaterialsDao->setDataEXMaterials($arr);
 
     for ($i = 0; $i < sizeof($materials); $i++) {
-        if ($materials[$i]['available'] < 0) {
+        if (intval($materials[$i]['available']) < 0) {
             $data = [];
             $data['idMaterial'] = $materials[$i]['id_material'];
 
@@ -607,7 +607,7 @@ $app->post('/updateOrder', function (Request $request, Response $response, $args
         $materials = $explosionMaterialsDao->setDataEXMaterials($arr);
 
         for ($i = 0; $i < sizeof($materials); $i++) {
-            if ($materials[$i]['available'] < 0) {
+            if (intval($materials[$i]['available']) < 0) {
                 $data = [];
                 $data['idMaterial'] = $materials[$i]['id_material'];
 
@@ -671,7 +671,7 @@ $app->post('/deleteOrder', function (Request $request, Response $response, $args
             $materials = $explosionMaterialsDao->setDataEXMaterials($arr);
 
             for ($i = 0; $i < sizeof($materials); $i++) {
-                if ($materials[$i]['available'] < 0) {
+                if (intval($materials[$i]['available']) < 0) {
                     $data = [];
                     $data['idMaterial'] = $materials[$i]['id_material'];
 

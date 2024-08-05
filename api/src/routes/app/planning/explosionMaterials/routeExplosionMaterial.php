@@ -26,7 +26,7 @@ $app->get('/explosionMaterials', function (Request $request, Response $response,
     $materials = $explosionMaterialsDao->setDataEXMaterials($arr);
 
     for ($i = 0; $i < sizeof($materials); $i++) {
-        if ($materials[$i]['available'] < 0) {
+        if (intval($materials[$i]['available']) < 0) {
             $data = [];
             $data['idMaterial'] = $materials[$i]['id_material'];
 

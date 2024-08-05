@@ -20,13 +20,16 @@ class GeneralProductsMaterialsDao
     {
         $connection = Connection::getInstance()->getConnection();
         $stmt = $connection->prepare("SELECT p.id_product, p.reference AS reference_product, p.product, m.id_material, m.reference AS reference_material, 
-                                             m.material, (mi.quantity / pm.quantity_converted) AS quantity
+                                             m.material, (mi.quantity / pm.quantity_converted) AS quantity, pm.quantity AS quantity_ftm,
+                                             IFNULL(mg.id_magnitude, 0) AS id_magnitude, IFNULL(mg.magnitude, '') AS magnitude, IFNULL(u.id_unit, 0) AS id_unit, IFNULL(u.unit, '') AS unit, IFNULL(u.abbreviation, '') AS abbreviation
                                              -- ((m.quantity / pm.quantity) - IFNULL((SELECT SUM(quantity) FROM programming WHERE id_product = pm.id_product), 0)) AS quantity
                                       FROM products p
                                         INNER JOIN products_materials pm ON pm.id_product = p.id_product
                                         INNER JOIN materials m ON m.id_material = pm.id_material
                                         INNER JOIN materials_inventory mi ON mi.id_material = pm.id_material
-                                      WHERE  pm.id_company = :id_company AND pm.id_material IN (SELECT id_material FROM materials INNER JOIN convert_units ON convert_units.id_unit = materials.unit WHERE id_material = pm.id_material )
+                                        LEFT JOIN convert_units u ON u.id_unit = pm.id_unit
+                                        LEFT JOIN convert_magnitudes mg ON mg.id_magnitude = u.id_magnitude
+                                      WHERE  pm.id_company = :id_company -- AND pm.id_material IN (SELECT id_material FROM materials INNER JOIN convert_units ON convert_units.id_unit = materials.unit WHERE id_material = pm.id_material )
                                       ORDER BY m.material ASC");
         $stmt->execute(['id_company' => $id_company]);
         $productsmaterials = $stmt->fetchAll($connection::FETCH_ASSOC);

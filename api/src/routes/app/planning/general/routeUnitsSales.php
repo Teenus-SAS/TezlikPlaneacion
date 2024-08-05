@@ -248,7 +248,7 @@ $app->post('/addUnitSales', function (Request $request, Response $response, $arg
                 $i++
             ) {
                 if (
-                    $materials[$i]['available'] < 0
+                    intval($materials[$i]['available']) < 0
                 ) {
                     $data = [];
                     $data['idMaterial'] = $materials[$i]['id_material'];
@@ -465,7 +465,7 @@ $app->post('/updateUnitSale', function (Request $request, Response $response, $a
                 $i++
             ) {
                 if (
-                    $materials[$i]['available'] < 0
+                    intval($materials[$i]['available']) < 0
                 ) {
                     $data = [];
                     $data['idMaterial'] = $materials[$i]['id_material'];

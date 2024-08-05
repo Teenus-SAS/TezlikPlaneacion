@@ -3,28 +3,39 @@ $(document).ready(function () {
 
   $('.selectNavigation').click(function (e) {
     e.preventDefault();
-    
+    let data = [];
+
     if (this.id == 'processOP')
-      loadTblProductionOrders(dataOP);
+      data = JSON.parse(sessionStorage.getItem('dataPOP'));
     else if (this.id == 'completeOP')
-      loadTblProductionOrders(dataNOP);
+      data = JSON.parse(sessionStorage.getItem('dataPON'));
+
+    loadTblProductionOrders(data);
   });
 
-  loadData = async () => {
-    try {
-      const data = await searchData('/api/productionOrder');
+  loadData = async (op) => {
+    try { 
+      const [dataPO, dataFTMaterials] = await Promise.all([
+        searchData('/api/productionOrder'),
+        op == 1 ? searchData('/api/allProductsMaterials') : ''
+      ]);
 
-      dataOP = data.filter(item => item.status == 'EN PRODUCCION');
-      dataNOP = data.filter(item => item.status != 'EN PRODUCCION');
+      let dataPOP = dataPO.filter(item => item.status == 'EN PRODUCCION');
+      let dataPON = dataPO.filter(item => item.status != 'EN PRODUCCION');
+
+      sessionStorage.setItem('dataPOP', JSON.stringify(dataPOP));
+      sessionStorage.setItem('dataPON', JSON.stringify(dataPON));
+
+      if(op == 1)
+        sessionStorage.setItem('dataFTMaterials', JSON.stringify(dataFTMaterials));
       
-      loadTblProductionOrders(dataOP);
-      // $('.selectNavigation').show();
+      loadTblProductionOrders(dataPOP); 
     } catch (error) {
       console.error('Error loading data:', error);
     }
   };
 
-  loadTblProductionOrders = (data) => {
+  const loadTblProductionOrders = (data) => {
     if ($.fn.dataTable.isDataTable("#tblProductionOrders")) {
       $("#tblProductionOrders").DataTable().clear();
       $("#tblProductionOrders").DataTable().rows.add(data).draw();
@@ -117,5 +128,5 @@ $(document).ready(function () {
     });
   }
 
-  loadData();
+  loadData(1);
 });
