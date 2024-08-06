@@ -42,8 +42,8 @@ $(document).ready(function () {
         sessionStorage.setItem('idStock', data.id_stock_product);
         $(`#refProduct option[value=${data.id_product}]`).prop('selected', true);
         $(`#selectNameProduct option[value=${data.id_product}]`).prop('selected', true);
+        $('#pMin').val(data.min_term);
         $('#pMax').val(data.max_term);
-        $('#pUsual').val(data.usual_term);
 
         $('html, body').animate(
             {
@@ -55,14 +55,19 @@ $(document).ready(function () {
 
     const checkDataPStock = async (url, idStock) => {
         let id_product = parseFloat($('#refProduct').val()); 
+        let min = parseFloat($('#pMin').val());
         let max = parseFloat($('#pMax').val());
-        let usual = parseFloat($('#pUsual').val());
 
-        let data = id_product * max * usual;
+        let data = id_product * max * min;
 
         if (isNaN(data) || data <= 0) {
             toastr.error('Ingrese todos los campos');
             return false;
+        }
+        
+        if (min > max) {
+            toastr.error('Tiempo minimo de producción mayor a el tiempo maximo');
+            return false;            
         }
 
         let dataStock = new FormData(formCreatePStock);

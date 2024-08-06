@@ -36,6 +36,22 @@ $(document).ready(function () {
   /* Crear nuevo programa de produccion */
   $("#btnCreateProgramming").click(function (e) {
     e.preventDefault();
+
+    let id_order = parseInt($('#order').val());
+    let id_product = parseInt($('#selectNameProduct').val()); 
+    let quantityProgramming = parseInt($('#quantity').val());  
+    let id_process = parseInt($('#idProcess').val());
+    let id_machine = parseInt($('#idMachine').val()); 
+    let min_date = $('#minDate').val();
+    let max_date = $('#maxDate').val();
+
+    let checkDT = id_order * id_product * quantityProgramming * id_process * id_machine;
+
+    if (isNaN(checkDT) || checkDT <= 0 || min_date == '' || max_date == '') {
+      toastr.error('Ingrese todos los campos');
+      return false;
+    }
+
     let idProgramming = sessionStorage.getItem("id_programming");
     
     if (idProgramming == "" || idProgramming == null) {

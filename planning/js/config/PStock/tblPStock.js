@@ -36,7 +36,7 @@ $(document).ready(function () {
       },
       {
         title: "Tiempo Mínimo de Producción",
-        data: "usual_term",
+        data: "min_term",
         className: "uniqueClassName dt-head-center",
       },
       {

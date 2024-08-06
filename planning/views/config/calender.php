@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="es">
 
 <head>
    <meta charset="utf-8" />
@@ -26,26 +26,6 @@
    <link rel="stylesheet" href="/assets/css/bootstrap.css" />
    <link rel="stylesheet" href="/assets/css/styles.css" />
    <!-- ================== END APP CSS ================== -->
-
-   <!-- ================== BEGIN PAGE LEVEL CSS START ================== -->
-   <!-- <link rel="stylesheet" href="/assets/css/icons.css" />
-  <link rel="stylesheet" href="/assets/libs/wave-effect/css/waves.min.css" />
-  <link rel="stylesheet" href="/assets/libs/owl-carousel/css/owl.carousel.min.css" />
-   -->
-   <!-- ================== Plugins CSS  ================== -->
-   <!-- <link href="/assets/libs/fullcalendar/fullcalendar.min.css" rel="stylesheet" />
-  <link href="/assets/libs/select2/css/select2.min.css" rel="stylesheet" type="text/css" />
-   -->
-   <!-- ================== BEGIN APP CSS  ================== -->
-   <!-- <link rel="stylesheet" href="/assets/css/bootstrap.css" />
-  <link rel="stylesheet" href="/assets/css/styles.css" />
-   -->
-   <!-- ================== BEGIN POLYFILLS  ================== -->
-   <!--[if lt IE 9]>
-     <script src="assets/libs/html5shiv/js/html5shiv.js"></script>
-     <script src="assets/libs/respondjs/js/respond.min.js"></script>
-  <![endif]-->
-   <!-- ================== END POLYFILLS  ================== -->
 </head>
 
 <body class="horizontal-navbar">
@@ -192,7 +172,7 @@
    <?php include_once dirname(dirname(dirname(__DIR__))) . '/global/partials/scriptsJS.php'; ?>
    <!-- Page End -->
    <!-- ================== BEGIN BASE JS ================== -->
-   <script src="/assets/js/vendor.min.js"></script>
+   <!-- <script src="/assets/js/vendor.min.js"></script> -->
    <!-- <script src="https://polyfill.io/v3/polyfill.min.js?features=default"></script> -->
    <!-- ================== END BASE JS ================== -->
 
@@ -205,7 +185,7 @@
    <script src="/assets/js/pages/calender.init.js"></script>
    <!-- ================== END PAGE LEVEL JS ================== -->
    <!-- ================== BEGIN PAGE JS ================== -->
-   <script src="/assets/js/app.js"></script>
+   <!-- <script src="/assets/js/app.js"></script> -->
    <!-- ================== END PAGE JS ================== -->
 </body>
 

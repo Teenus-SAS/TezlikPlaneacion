@@ -56,7 +56,7 @@ $app->post('/pStockDataValidation', function (Request $request, Response $respon
         for ($i = 0; $i < sizeof($stock); $i++) {
             if (
                 empty($stock[$i]['referenceProduct']) || empty($stock[$i]['product']) ||
-                $stock[$i]['max'] == '' || $stock[$i]['usual'] == ''
+                $stock[$i]['max'] == '' || $stock[$i]['min'] == ''
             ) {
                 $i = $i + 2;
                 $dataImportStock = array('error' => true, 'message' => "Columna vacia en la fila: {$i}");
@@ -65,7 +65,7 @@ $app->post('/pStockDataValidation', function (Request $request, Response $respon
 
             if (
                 empty(trim($stock[$i]['referenceProduct'])) || empty(trim($stock[$i]['product'])) ||
-                trim($stock[$i]['max']) == '' || trim($stock[$i]['usual']) == ''
+                trim($stock[$i]['max']) == '' || trim($stock[$i]['min']) == ''
             ) {
                 $i = $i + 2;
                 $dataImportStock = array('error' => true, 'message' => "Columna vacia en la fila: {$i}");
@@ -73,13 +73,19 @@ $app->post('/pStockDataValidation', function (Request $request, Response $respon
             }
 
             $max = str_replace(',', '.', $stock[$i]['max']);
-            $usual = str_replace(',', '.', $stock[$i]['usual']);
+            $min = str_replace(',', '.', $stock[$i]['min']);
 
-            $data = $max * $usual;
+            $data = $max * $min;
 
             if ($data <= 0 || is_nan($data)) {
                 $i = $i + 2;
                 $dataImportStock = array('error' => true, 'message' => "La cantidad debe ser mayor a cero (0)<br>Fila: {$i}");
+                break;
+            }
+
+            if ($min > $max) {
+                $i = $i + 2;
+                $dataImportStock = array('error' => true, 'message' => "Tiempo minimo de producción mayor a el tiempo maximo<br>Fila: {$i}");
                 break;
             }
 

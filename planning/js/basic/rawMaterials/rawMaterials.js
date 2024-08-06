@@ -54,12 +54,12 @@ $(document).ready(function () {
 
     quantity = data.quantity;
 
-    if (quantity.isInteger) quantity = quantity.toLocaleString('es-CO');
-    else
-      quantity = quantity.toLocaleString(undefined, {
-        minimumFractionDigits: 2,
-        maximumFractionDigits: 2,
-      });
+    // if (quantity.isInteger) quantity = quantity.toLocaleString('es-CO');
+    // else
+    //   quantity = quantity.toLocaleString(undefined, {
+    //     minimumFractionDigits: 2,
+    //     maximumFractionDigits: 2,
+    //   });
     $('#mQuantity').val(quantity);
 
     $('html, body').animate(
@@ -75,14 +75,14 @@ $(document).ready(function () {
     let ref = $('#refRawMaterial').val();
     let material = $('#nameRawMaterial').val();
     let unity = $('#unit').val();
-    let quantity = $('#mQuantity').val();
+    let quantity = parseFloat($('#mQuantity').val());
 
     if (ref == '' || material == '' || unity == '') {
       toastr.error('Ingrese todos los campos');
       return false;
     }
 
-    quantity = parseFloat(strReplaceNumber(quantity));
+    // quantity = parseFloat(strReplaceNumber(quantity));
 
     quantity = 1 * quantity;
 

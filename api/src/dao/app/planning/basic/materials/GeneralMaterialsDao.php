@@ -42,7 +42,7 @@ class GeneralMaterialsDao
     {
         $connection = Connection::getInstance()->getConnection();
 
-        $stmt = $connection->prepare("SELECT SUM(pg.quantity * pm.quantity) AS reserved
+        $stmt = $connection->prepare("SELECT IFNULL(SUM(pg.quantity * pm.quantity), 0) AS reserved
                                       FROM programming pg 
                                         LEFT JOIN plan_orders o ON o.id_order = pg.id_order
                                         LEFT JOIN products_materials pm ON pm.id_product = o.id_product 

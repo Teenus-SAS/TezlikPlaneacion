@@ -19,7 +19,7 @@ class PStockDao
     public function findAllStockByCompany($id_company)
     {
         $connection = Connection::getInstance()->getConnection();
-        $stmt = $connection->prepare("SELECT s.id_stock_product, p.id_product, p.reference, p.product, pi.quantity, s.max_term, s.usual_term
+        $stmt = $connection->prepare("SELECT s.id_stock_product, p.id_product, p.reference, p.product, pi.quantity, s.max_term, s.min_term
                                       FROM stock_products s
                                         INNER JOIN products p ON p.id_product = s.id_product
                                         INNER JOIN products_inventory pi ON pi.id_product = s.id_product
@@ -38,13 +38,13 @@ class PStockDao
         $connection = Connection::getInstance()->getConnection();
 
         try {
-            $stmt = $connection->prepare("INSERT INTO stock_products (id_company, id_product, max_term, usual_term) 
-                                          VALUES (:id_company, :id_product, :max_term, :usual_term)");
+            $stmt = $connection->prepare("INSERT INTO stock_products (id_company, id_product, max_term, min_term) 
+                                          VALUES (:id_company, :id_product, :max_term, :min_term)");
             $stmt->execute([
                 'id_company' => $id_company,
                 'id_product' => $dataStock['idProduct'],
+                'min_term' => $dataStock['min'],
                 'max_term' => $dataStock['max'],
-                'usual_term' => $dataStock['usual']
             ]);
             $this->logger->info(__FUNCTION__, array('query' => $stmt->queryString, 'errors' => $stmt->errorInfo()));
         } catch (\Exception $e) {
@@ -59,13 +59,13 @@ class PStockDao
         $connection = Connection::getInstance()->getConnection();
 
         try {
-            $stmt = $connection->prepare("UPDATE stock_products SET id_product = :id_product, max_term = :max_term, usual_term = :usual_term 
+            $stmt = $connection->prepare("UPDATE stock_products SET id_product = :id_product, max_term = :max_term, min_term = :min_term 
                                           WHERE id_stock_product = :id_stock_product");
             $stmt->execute([
                 'id_stock_product' => $dataStock['idStock'],
                 'id_product' => $dataStock['idProduct'],
+                'min_term' => $dataStock['min'],
                 'max_term' => $dataStock['max'],
-                'usual_term' => $dataStock['usual']
             ]);
             $this->logger->info(__FUNCTION__, array('query' => $stmt->queryString, 'errors' => $stmt->errorInfo()));
         } catch (\Exception $e) {

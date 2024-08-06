@@ -38,7 +38,7 @@ $(document).ready(function () {
 
     importFile(selectedFile)
       .then((data) => {
-        const expectedHeaders = ['referencia_producto', 'producto', 'plazo_maximo', 'plazo_habitual'];
+        const expectedHeaders = ['referencia_producto', 'producto', 'plazo_minimo', 'plazo_maximo'];
         const actualHeaders = Object.keys(data[0]);
 
         const missingHeaders = expectedHeaders.filter(header => !actualHeaders.includes(header));
@@ -55,8 +55,8 @@ $(document).ready(function () {
           return {
             referenceProduct: item.referencia_producto,
             product: item.producto,
+            min: item.plazo_minimo,
             max: item.plazo_maximo,
-            usual: item.plazo_habitual,
           };
         });
         checkPStock(StockToImport);
@@ -159,8 +159,8 @@ $(document).ready(function () {
         data.push({
           referencia_producto: stock[i].reference,
           producto: stock[i].product,
+          plazo_minimo: parseFloat(stock[i].min_term),
           plazo_maximo: parseFloat(stock[i].max_term),
-          plazo_habitual: parseFloat(stock[i].usual_term),
         });
       }
 

@@ -275,10 +275,10 @@ $app->post('/addProduct', function (Request $request, Response $response, $args)
             // Checkear cantidades
             // $order = $generalOrdersDao->checkAccumulatedQuantityOrder($orders[$i]['id_order']);
 
+            // Ficha tecnica
+            $productsMaterials = $productsMaterialsDao->findAllProductsmaterials($orders[$i]['id_product'], $id_company);
             if ($orders[$i]['status'] != 'EN PRODUCCION' && $orders[$i]['status'] != 'FABRICADO' && $orders[$i]['status'] != 'PROGRAMADO') {
                 if ($orders[$i]['original_quantity'] > $orders[$i]['accumulated_quantity']) {
-                    // Ficha tecnica
-                    $productsMaterials = $productsMaterialsDao->findAllProductsmaterials($orders[$i]['id_product'], $id_company);
 
                     if (sizeof($productsMaterials) == 0) {
                         $resolution = $generalOrdersDao->changeStatus($orders[$i]['id_order'], 5);
@@ -320,13 +320,13 @@ $app->post('/addProduct', function (Request $request, Response $response, $args)
 
                         // $productsMaterials = $productsMaterialsDao->findAllProductsmaterials($orders[$i]['id_product'], $id_company);
 
-                        foreach ($productsMaterials as $arr) {
-                            $k = $generalMaterialsDao->findReservedMaterial($arr['id_material']);
-                            !isset($k['reserved']) ? $k['reserved'] = 0 : $k;
-                            $generalMaterialsDao->updateReservedMaterial($arr['id_material'], $k['reserved']);
-                        }
                     }
                 }
+            }
+            foreach ($productsMaterials as $arr) {
+                $k = $generalMaterialsDao->findReservedMaterial($arr['id_material']);
+                !isset($k['reserved']) ? $k['reserved'] = 0 : $k;
+                $generalMaterialsDao->updateReservedMaterial($arr['id_material'], $k['reserved']);
             }
         }
     }
@@ -442,12 +442,11 @@ $app->post('/updatePlanProduct', function (Request $request, Response $response,
             $status = true;
             // Checkear cantidades
             // $order = $generalOrdersDao->checkAccumulatedQuantityOrder($orders[$i]['id_order']);
+            // Ficha tecnica
+            $productsMaterials = $productsMaterialsDao->findAllProductsmaterials($orders[$i]['id_product'], $id_company);
 
             if ($orders[$i]['status'] != 'EN PRODUCCION' && $orders[$i]['status'] != 'FABRICADO' && $orders[$i]['status'] != 'PROGRAMADO') {
                 if ($orders[$i]['original_quantity'] > $orders[$i]['accumulated_quantity']) {
-                    // Ficha tecnica
-                    $productsMaterials = $productsMaterialsDao->findAllProductsmaterials($orders[$i]['id_product'], $id_company);
-
                     if (sizeof($productsMaterials) == 0) {
                         $generalOrdersDao->changeStatus($orders[$i]['id_order'], 5);
                         $status = false;
@@ -488,13 +487,14 @@ $app->post('/updatePlanProduct', function (Request $request, Response $response,
 
                         // $productsMaterials = $productsMaterialsDao->findAllProductsmaterials($orders[$i]['id_product'], $id_company);
 
-                        foreach ($productsMaterials as $arr) {
-                            $k = $generalMaterialsDao->findReservedMaterial($arr['id_material']);
-                            !isset($k['reserved']) ? $k['reserved'] = 0 : $k;
-                            $generalMaterialsDao->updateReservedMaterial($arr['id_material'], $k['reserved']);
-                        }
                     }
                 }
+            }
+
+            foreach ($productsMaterials as $arr) {
+                $k = $generalMaterialsDao->findReservedMaterial($arr['id_material']);
+                !isset($k['reserved']) ? $k['reserved'] = 0 : $k;
+                $generalMaterialsDao->updateReservedMaterial($arr['id_material'], $k['reserved']);
             }
         }
 

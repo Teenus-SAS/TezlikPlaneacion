@@ -96,6 +96,12 @@ $app->post('/rMStockDataValidation', function (Request $request, Response $respo
                 break;
             }
 
+            if ($min > $max) {
+                $i = $i + 2;
+                $dataImportStock = array('error' => true, 'message' => "Tiempo minimo de producción mayor a el tiempo maximo<br>Fila: {$i}");
+                break;
+            }
+
             // Obtener id materia prima
             $findMaterial = $generalMaterialsDao->findMaterial($stock[$i], $id_company);
             if (!$findMaterial) {

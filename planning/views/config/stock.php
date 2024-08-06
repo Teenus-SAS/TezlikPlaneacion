@@ -101,7 +101,7 @@ if (sizeof($_SESSION) == 0)
 
                                                 <div class="col-xs-1 floating-label enable-floating-label show-label" style="margin-bottom:0px">
                                                     <label for="">Tiempo Min Producción</label>
-                                                    <input type="number" class="form-control text-center" id="pUsual" name="usual">
+                                                    <input type="number" class="form-control text-center" id="pMin" name="min">
                                                 </div>
 
                                                 <div class="col-xs-1 floating-label enable-floating-label show-label" style="margin-bottom:0px">

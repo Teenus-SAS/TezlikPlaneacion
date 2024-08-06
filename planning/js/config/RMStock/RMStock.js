@@ -106,6 +106,11 @@ $(document).ready(function () {
             return false;
         }
 
+        if (min > max) {
+            toastr.error('Tiempo minimo de producción mayor a el tiempo maximo');
+            return false;            
+        }
+
         let dataStock = new FormData(formCreateRMStock);
         dataStock.append('idMaterial', material);
 
