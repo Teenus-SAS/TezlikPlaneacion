@@ -146,10 +146,10 @@ if (sizeof($_SESSION) == 0)
 													<table class="fixed-table-loading table table-hover">
 														<thead class="thead-dark">
 															<tr>
+																<th>No</th>
 																<th>Proceso de Producción</th>
-																<th></th>
-																<th></th>
-																<th></th>
+																<th>Fecha Inicio</th>
+																<th>Fecha Final</th>
 															</tr>
 														</thead>
 														<tbody id="tblPOProcessBody">

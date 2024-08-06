@@ -14,18 +14,18 @@
    <?php include_once dirname(dirname(dirname(__DIR__))) . '/global/partials/scriptsCSS.php'; ?>
 
    <!-- ================== BEGIN PAGE LEVEL CSS START ================== -->
-  <link rel="stylesheet" href="/assets/css/icons.css" />
-  <link rel="stylesheet" href="/assets/libs/wave-effect/css/waves.min.css" />
-  <link rel="stylesheet" href="/assets/libs/owl-carousel/css/owl.carousel.min.css" />
-  <!-- ================== BEGIN PAGE LEVEL END ================== -->
-  <!-- ================== Plugins CSS  ================== -->
-  <link href="/assets/libs/fullcalendar/fullcalendar.min.css" rel="stylesheet" />
-  <link href="/assets/libs/select2/css/select2.min.css" rel="stylesheet" type="text/css" />
-  <!-- ================== Plugins CSS ================== -->
-  <!-- ================== BEGIN APP CSS  ================== -->
-  <link rel="stylesheet" href="/assets/css/bootstrap.css" />
-  <link rel="stylesheet" href="/assets/css/styles.css" />
-  <!-- ================== END APP CSS ================== -->
+   <link rel="stylesheet" href="/assets/css/icons.css" />
+   <link rel="stylesheet" href="/assets/libs/wave-effect/css/waves.min.css" />
+   <link rel="stylesheet" href="/assets/libs/owl-carousel/css/owl.carousel.min.css" />
+   <!-- ================== BEGIN PAGE LEVEL END ================== -->
+   <!-- ================== Plugins CSS  ================== -->
+   <link href="/assets/libs/fullcalendar/fullcalendar.min.css" rel="stylesheet" />
+   <link href="/assets/libs/select2/css/select2.min.css" rel="stylesheet" type="text/css" />
+   <!-- ================== Plugins CSS ================== -->
+   <!-- ================== BEGIN APP CSS  ================== -->
+   <link rel="stylesheet" href="/assets/css/bootstrap.css" />
+   <link rel="stylesheet" href="/assets/css/styles.css" />
+   <!-- ================== END APP CSS ================== -->
 
    <!-- ================== BEGIN PAGE LEVEL CSS START ================== -->
    <!-- <link rel="stylesheet" href="/assets/css/icons.css" />
@@ -115,9 +115,10 @@
                                                                <div class="mt-4 mt-lg-0">
                                                                   <h5 class="mt-0 mb-1 font-weight-bold">Bienvenido</h5>
                                                                   <p class="text-muted mb-2">Este calendario muestra los dias laborales y no laborales del área de producción.
-                                                                    <!--  Click on event to see or edit the details. You can create new event by
+                                                                     <!--  Click on event to see or edit the details. You can create new event by
                                                                      clicking on "Create New event" button or any cell available
-                                                                     in calendar below. --></p>
+                                                                     in calendar below. -->
+                                                                  </p>
                                                                   <!-- <button class="btn btn-primary mt-2" data-effect="wave" id="btn-new-event" data-toggle="modal" data-target="#addeventmodal"><i class="uil-plus-circle"></i>
                                                                      Create New Event</button> -->
                                                                </div>
@@ -147,7 +148,7 @@
                                                                   <!-- <div class='fc-event bg-success'>My Event 5</div> -->
                                                                </div>
                                                                <!-- checkbox -->
-                                                              <!--  <div class="custom-control custom-checkbox mt-3">
+                                                               <!--  <div class="custom-control custom-checkbox mt-3">
                                                                   <input type="checkbox" class="custom-control-input" id="drop-remove" data-parsley-multiple="groups" data-parsley-mincheck="2">
                                                                   <label class="custom-control-label" for="drop-remove">Remove after drop</label>
                                                                </div> -->

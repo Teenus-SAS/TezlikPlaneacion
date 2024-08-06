@@ -11,8 +11,8 @@ $(document).ready(function () {
         $('#txtNumOrder').html(data.num_order);
 
         let date_order = moment(data.date_order).format("DD/MM/YYYY");
-        let min_date = moment(data.min_date).format("DD/MM/YYYY HH:mm A");
-        let max_date = moment(data.max_date).format("DD/MM/YYYY HH:mm A");
+        let min_date = moment(data.min_date_order).format("DD/MM/YYYY");
+        let max_date = moment(data.max_date_order).format("DD/MM/YYYY");
         
         $('#txtEDate').html(
             `<p><b class="font-weight-bold text-dark">Fecha de Emisión:</b>  ${date_order}</p>`
@@ -27,14 +27,14 @@ $(document).ready(function () {
         // Producto
         $('#txtReferenceP').html(data.reference);
         $('#txtNameP').html(data.product);
-        $('#txtQuantityP').html(data.quantity_programming);
+        $('#txtQuantityP').html(data.quantity_order);
 
         // Materiales 
         let body = document.getElementById('tblPOMaterialsBody');
         
         for (let i = 0; i < dataFT.length; i++) {
             let quantity_ftm = formatQuantity(dataFT[i].quantity_ftm, dataFT[i].abbreviation); 
-            let quantity_total = parseFloat(dataFT[i].quantity_ftm) * parseFloat(data.quantity_programming);
+            let quantity_total = parseFloat(dataFT[i].quantity_ftm) * parseFloat(data.quantity_order);
             quantity_total = formatQuantity(quantity_total, dataFT[i].abbreviation);
 
             body.insertAdjacentHTML('beforeend',
@@ -50,6 +50,20 @@ $(document).ready(function () {
         }
         
         // Procesos
+        body = document.getElementById('tblPOProcessBody');
+
+        min_date = moment(data.min_date_programming).format("DD/MM/YYYY HH:mm A");
+        max_date = moment(data.max_date_programming).format("DD/MM/YYYY HH:mm A");
+        
+
+        body.insertAdjacentHTML('beforeend',
+            `<tr>
+                <td>1</td>
+                <td>${data.process}</td>
+                <td>${min_date}</td>
+                <td>${max_date}</td>
+            </tr>`
+        );
     };
 
     const formatQuantity = (quantity, abbreviation) => {
