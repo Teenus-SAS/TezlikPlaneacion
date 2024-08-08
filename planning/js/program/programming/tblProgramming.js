@@ -44,7 +44,7 @@ $(document).ready(function () {
       $('#tblProgramming').append(`<tbody id="tblProgrammingBody"></tbody>`);
     }
     // Encabezados de la tabla
-    var headers = ['No.', 'Pedido', 'Referencia', 'Producto', 'Maquina', 'Cantidades', 'Cliente', 'Fecha y Hora', 'Orden Produccion', 'Acciones'];
+    var headers = ['No.', 'Pedido', 'Referencia', 'Producto', 'Proceso', 'Maquina', 'Cantidades', 'Cliente', 'Fecha y Hora', 'Orden Produccion', 'Acciones'];
     
     // Obtén la tabla
     var table = document.getElementById('tblProgramming');
@@ -80,6 +80,9 @@ $(document).ready(function () {
             break;
           case 'Producto':
             cell.textContent = arr.product;
+            break;
+          case 'Proceso':
+            cell.textContent = arr.process;
             break;
           case 'Maquina':
             cell.textContent = arr.machine;

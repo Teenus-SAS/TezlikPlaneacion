@@ -14,22 +14,27 @@ $(document).ready(function () {
         let min_date = moment(data.min_date_order).format("DD/MM/YYYY");
         let max_date = moment(data.max_date_order).format("DD/MM/YYYY");
         
-        $('#txtEDate').html(
+                $('#txtEDate').html(
             `<p><b class="font-weight-bold text-dark">Fecha de Emisión:</b>  ${date_order}</p>`
         ); 
-        $('#txtMinDate').html(
+        
+        $('#txtMinDate').val(min_date);
+        $('#txtMaxDate').val(max_date);
+        $('#txtQuantityP').val(data.quantity_order);
+
+        /*$('#txtMinDate').html(
             `<p><b class="font-weight-bold text-dark">Fecha de Inicio de Producción:</b>  ${min_date}</p>`
         );
         $('#txtMaxDate').html(
             `<p><b class="font-weight-bold text-dark">Fecha Estimada de Finalización:</b> ${max_date}</p>`
-        );
+        ); */
 
-        // Producto
-        $('#txtReferenceP').html(data.reference);
-        $('#txtNameP').html(data.product);
-        $('#txtQuantityP').html(data.quantity_order);
+        // Info Producto
+        $('#txtReferenceP').val(data.reference);
+        $('#txtNameP').val(data.product);
+        /* $('#txtQuantityP').html(data.quantity_order); */
 
-        // Materiales 
+        // Datatable Materiales 
         let body = document.getElementById('tblPOMaterialsBody');
         
         for (let i = 0; i < dataFT.length; i++) {

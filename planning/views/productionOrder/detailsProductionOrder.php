@@ -67,38 +67,69 @@ if (sizeof($_SESSION) == 0)
 					<div class="container-fluid">
 						<!-- Row 5 -->
 						<div class="row justify-content-center">
-							<div class="col-12 col-md-10">
+							<div class="col-12 col-md-10 mt-3">
 								<div class="card">
-									<div class="card-body">
-										<div class="row py-4">
-											<div class="col-5">
-												<div class="page-title">
-													<h3 class="mb-1 font-weight-bold text-dark">Orden de Producción</h3>
+									<div class="card-body" style="padding-right: 35px; padding-left: 35px">
+										<div class="toolbar hidden-print noImprimir">
+											<div class="d-flex justify-content-end">
+												<button class="btn btn-warning mr-2" id="btnImprimirQuote"><i class="fa fa-print"></i> Imprimir</button>
+												<button class="btn btn-danger mr-2" id="btnNewSend"><i class="fa fa-mail-bulk"></i> Enviar</button>
+											</div>
+											<hr>
+										</div>
+
+										<div class="row">
+											<div class="col-md-10 mt-3 mb-3 text-right">
+												<h3 class="mb-1 font-weight-bold text-dark">Orden de Producción No.</h3>
+												<p id="txtEDate"></p>
+											</div>
+											<div class="col-md-2 mt-2">
+												<h1 id="txtNumOrder"></h1>
+											</div>
+										</div>						
+
+										<div class="row">
+											<div class="col-4">
+												<div class="form-group floating-label enable-floating-label show-label">
+													<label for="numberWorkers">Fecha de Inicio de Producción<span class="text-danger">*</span></label>
+													<input id="txtMinDate" type="text" class="form-control text-center">
 												</div>
 											</div>
-											<div class="col-3">
-												<p id="txtNumOrder"></p>
+											<div class="col-4">
+												<div class="form-group floating-label enable-floating-label show-label">
+													<label for="numberWorkers">Fecha de Finalización<span class="text-danger">*</span></label>
+													<input id="txtMaxDate" type="text" class="form-control text-center">
+												</div>
 											</div>
-										</div>
-										<div class="row">
-											<div class="col-10" id="txtEDate">
 
+											<div class="col-4">
+												<div class="form-group floating-label enable-floating-label show-label">
+													<label for="numberWorkers">Cantidad a Producir<span class="text-danger">*</span></label>
+													<input id="txtQuantityP" type="text" class="form-control text-center">
+												</div>
 											</div>
-										</div>
-										<div class="row">
-											<div class="col-5" id="txtMinDate">
 
-											</div>
-											<div class="col-5" id="txtMaxDate">
-
-											</div>
 										</div>
+										<hr>
+
 										<div class="row py-4">
-											<div class="col-10">
-												<h5 class=" font-weight-bold text-dark">1. Información del Producto</h5>
+											<div class="col-10 mb-3">
+												<h5 class=" font-weight-bold text-dark">1. INFORMACIÓN DEL PRODUCTO</h5>
+											</div>
+											<div class="col-4">
+												<div class="form-group floating-label enable-floating-label show-label">
+													<label for="numberWorkers">Referencia<span class="text-danger">*</span></label>
+													<input id="txtReferenceP" type="text" class="form-control text-center">
+												</div>
+											</div>
+											<div class="col-8">
+												<div class="form-group floating-label enable-floating-label show-label">
+													<label for="numberWorkers">Producto<span class="text-danger">*</span></label>
+													<input id="txtNameP" type="text" class="form-control text-center">
+												</div>
 											</div>
 										</div>
-										<div class="row">
+										<!-- <div class="row">
 											<div class="col-4">
 												<p class="font-weight-bold text-dark" id="txtReferenceP"> </p>
 											</div>
@@ -108,7 +139,8 @@ if (sizeof($_SESSION) == 0)
 											<div class="col-4">
 												<p class="font-weight-bold text-dark" id="txtQuantityP"></p>
 											</div>
-										</div>
+										</div> -->
+										<hr>
 										<div class="row py-4">
 											<div class="col-10">
 												<h5 class="font-weight-bold text-dark">2. Materiales y Componentes</h5>
@@ -118,7 +150,7 @@ if (sizeof($_SESSION) == 0)
 											<div class="col-12">
 												<div class="table-responsive">
 													<table class="fixed-table-loading table table-hover text-center">
-														<thead class="thead-dark">
+														<thead class="thead-light">
 															<tr>
 																<th>Código</th>
 																<th>Descripción</th>
@@ -135,6 +167,7 @@ if (sizeof($_SESSION) == 0)
 												</div>
 											</div>
 										</div>
+										<hr>
 										<div class="row py-4">
 											<div class="col-10">
 												<h5 class="font-weight-bold text-dark">3. Instrucciones de Producción</h5>
@@ -144,7 +177,7 @@ if (sizeof($_SESSION) == 0)
 											<div class="col-12">
 												<div class="table-responsive">
 													<table class="fixed-table-loading table table-hover">
-														<thead class="thead-dark">
+														<thead class="thead-light">
 															<tr>
 																<th>No</th>
 																<th>Proceso de Producción</th>
