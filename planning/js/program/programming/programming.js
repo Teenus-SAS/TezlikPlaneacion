@@ -1,5 +1,5 @@
 $(document).ready(function () {
-  let programming = [];
+  let processProgramming = [];
   /* Ocultar panel crear programa de producción */
   $(".cardCreateProgramming").hide();
   $(".cardFormProgramming2").hide();
@@ -156,6 +156,7 @@ $(document).ready(function () {
     let quantityProgramming = parseInt($('#quantity').val());
     let quantityOrder = parseInt($('#quantityOrder').val().replace('.', ''));
     let machine = $('#idMachine :selected').text().trim();
+    let id_machine = $('#idMachine').val();
     let id_process = $('#idProcess').val();
     let process = $('#idProcess :selected').text().trim();
 
@@ -177,6 +178,8 @@ $(document).ready(function () {
     dataProgramming['quantity_order'] = quantityOrder;
     dataProgramming['quantity_programming'] = quantityProgramming;
     dataProgramming['status'] = 'PROGRAMADO';
+
+
     
     for (let i = 0; i < allOrders.length; i++) {
       if (allOrders[i].id_order == id_order) {
@@ -186,15 +189,15 @@ $(document).ready(function () {
         
         if (quantityProgramming < allOrders[i].original_quantity /*&& productsMaterials[0].quantity > allOrders[i].original_quantity*/) {
           quantity = allOrders[i].original_quantity - quantityProgramming;
-          if (allOrders[i].accumulated_quantity_order == 0 || allOrders[i].accumulated_quantity_order == null) {
+          if (allOrders[i].accumulated_quantity == 0 || allOrders[i].accumulated_quantity == null) {
             allOrders[i].quantity_programming = quantity;
             allOrders[i].accumulated_quantity_order = quantity;
             allOrders[i].accumulated_quantity = quantity;
           }
           else {
-            allOrders[i].accumulated_quantity_order = (allOrders[i].accumulated_quantity_order - quantityProgramming) < 0 ? 0 : allOrders[i].accumulated_quantity_order - quantityProgramming;
-            allOrders[i].accumulated_quantity = (allOrders[i].accumulated_quantity_order - quantityProgramming) < 0 ? 0 : allOrders[i].accumulated_quantity_order - quantityProgramming;
-            allOrders[i].quantity_programming = (allOrders[i].accumulated_quantity_order - quantityProgramming) < 0 ? 0 : allOrders[i].accumulated_quantity_order - quantityProgramming;
+            allOrders[i].accumulated_quantity_order = (allOrders[i].accumulated_quantity - quantityProgramming) < 0 ? 0 : allOrders[i].accumulated_quantity - quantityProgramming;
+            allOrders[i].accumulated_quantity = (allOrders[i].accumulated_quantity - quantityProgramming) < 0 ? 0 : allOrders[i].accumulated_quantity - quantityProgramming;
+            allOrders[i].quantity_programming = (allOrders[i].accumulated_quantity - quantityProgramming) < 0 ? 0 : allOrders[i].accumulated_quantity - quantityProgramming;
           }
         } else {
           allOrders[i].accumulated_quantity_order = quantity;
@@ -282,6 +285,13 @@ $(document).ready(function () {
       }
     
       allTblData.push(dataProgramming);
+
+      processProgramming.push({
+        id_process: id_process,
+        id_machine: id_machine,
+        quantity_order: quantityOrder,
+        quantity_programming: quantityProgramming,
+      });
 
       changeStatus(id_order, 4, 'Programa de producción creado correctamente');
     } else {
@@ -416,6 +426,13 @@ $(document).ready(function () {
     let dataProgramming = {};
     dataProgramming["idProgramming"] = data.id_programming;
     dataProgramming["idOrder"] = data.id_order;
+
+    for (let i = 0; i < allTblData.length; i++) {
+      if (allTblData[i].id_programming == data.id_programming) {
+        allTblData.splice(i, 1);
+        break;
+      }
+    }
 
     bootbox.confirm({
       title: "Orden de Producción",

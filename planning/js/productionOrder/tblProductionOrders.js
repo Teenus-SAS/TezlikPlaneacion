@@ -101,8 +101,8 @@ $(document).ready(function () {
           className: "uniqueClassName dt-head-center",
           width: "200px",
           render: function (data, type, full, meta) {
-            const minDate = full.min_date;
-            const maxDate = full.max_date;
+            const minDate = full.min_date_programming;
+            const maxDate = full.max_date_programming;
 
             return `Inicio: ${moment(minDate).format(
               "DD/MM/YYYY HH:mm A"
