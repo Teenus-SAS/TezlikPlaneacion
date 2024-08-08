@@ -44,10 +44,14 @@ $(document).ready(function () {
     let id_machine = parseInt($('#idMachine').val()); 
     let min_date = $('#minDate').val();
     let max_date = $('#maxDate').val();
+ 
+    let checkDT1 = id_order * id_product * quantityProgramming * id_process * id_machine;
+    
+    if (min_date == '' || max_date == '') { 
+      $('.cardFormProgramming2').show(800); 
+    }
 
-    let checkDT = id_order * id_product * quantityProgramming * id_process * id_machine;
-
-    if (isNaN(checkDT) || checkDT <= 0 || min_date == '' || max_date == '') {
+    if (isNaN(checkDT1) || checkDT1 <= 0 || min_date == '' || max_date == '') {
       toastr.error('Ingrese todos los campos');
       return false;
     }
