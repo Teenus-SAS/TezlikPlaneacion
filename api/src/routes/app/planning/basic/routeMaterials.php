@@ -380,6 +380,8 @@ $app->post('/addMaterials', function (Request $request, Response $response, $arg
         }
         if ($resolution == null)
             $resp = array('success' => true, 'message' => 'Materia Prima Importada correctamente');
+        else if (isset($resolution['info']))
+            $resp = array('info' => true, 'message' => $resolution['message']);
         else
             $resp = array('error' => true, 'message' => 'Ocurrio un error mientras ingresaba la información. Intente nuevamente');
     }
@@ -653,8 +655,9 @@ $app->get('/deleteMaterial/{id_material}', function (Request $request, Response 
     $materials = $materialsDao->deleteMaterial($args['id_material']);
     if ($materials == null)
         $resp = array('success' => true, 'message' => 'Material eliminado correctamente');
-
-    if ($materials != null)
+    else if (isset($materials['info']))
+        $resp = array('info' => true, 'message' => $materials['message']);
+    else
         $resp = array('error' => true, 'message' => 'No es posible eliminar el material, existe información asociada a él');
 
     $response->getBody()->write(json_encode($resp));

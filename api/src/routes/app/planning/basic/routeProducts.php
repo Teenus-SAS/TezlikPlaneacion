@@ -132,7 +132,7 @@ $app->post('/addProduct', function (Request $request, Response $response, $args)
     $generalOrdersDao,
     $productsMaterialsDao,
     $generalProgrammingDao,
-    $filterDataDao
+    $inventoryDaysDao
 ) {
     session_start();
     $id_company = $_SESSION['id_company'];
@@ -192,6 +192,14 @@ $app->post('/addProduct', function (Request $request, Response $response, $args)
                 // if ($products == null) {
                 //     $products = $generalProductsDao->updateAccumulatedQuantity($dataProduct['idProduct'], $$products[$i]['quantity'], 1);
                 // }
+
+                if (isset($resolution['info'])) break;
+
+                $inventory = $inventoryDaysDao->calcInventoryProductDays($products[$i]['idProduct']);
+
+                !$inventory['days'] ? $days = 0 : $days = $inventory['days'];
+
+                $products = $inventoryDaysDao->updateInventoryProductDays($products[$i]['idProduct'], $days);
             }
             $resolution = $generalProductsDao->updateAccumulatedQuantity($products[$i]['idProduct'], $products[$i]['quantity'], 1);
         }
@@ -200,6 +208,8 @@ $app->post('/addProduct', function (Request $request, Response $response, $args)
 
         if ($resolution == null)
             $resp = array('success' => true, 'message' => 'Productos importados correctamente');
+        else if (isset($resolution['info']))
+            $resp = array('info' => true, 'message' => $resolution['message']);
         else
             $resp = array('error' => true, 'message' => 'Ocurrió un error mientras importaba los datos. Intente nuevamente');
 
@@ -525,6 +535,8 @@ $app->get('/deletePlanProduct/{id_product}', function (Request $request, Respons
 
     if ($product == null)
         $resp = array('success' => true, 'message' => 'Producto eliminado correctamente');
+    else if (isset($product['info']))
+        $resp = array('info' => true, 'message' => $product['message']);
     else
         $resp = array('error' => true, 'message' => 'No es posible eliminar el producto, existe información asociada a él');
 

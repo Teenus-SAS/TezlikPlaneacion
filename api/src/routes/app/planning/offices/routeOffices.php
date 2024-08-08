@@ -4,6 +4,7 @@ use TezlikPlaneacion\dao\GeneralClientsDao;
 use TezlikPlaneacion\dao\GeneralOfficesDao;
 use TezlikPlaneacion\dao\GeneralOrdersDao;
 use TezlikPlaneacion\dao\GeneralProductsDao;
+use TezlikPlaneacion\dao\InventoryDaysDao;
 use TezlikPlaneacion\dao\OfficesDao;
 use TezlikPlaneacion\dao\OrdersDao;
 use TezlikPlaneacion\dao\ProductsMaterialsDao;
@@ -15,6 +16,7 @@ $generalClientsDao = new GeneralClientsDao();
 $generalOfficesDao = new GeneralOfficesDao();
 $productsMaterialsDao = new ProductsMaterialsDao();
 $generalProductsDao = new GeneralProductsDao();
+$inventoryDaysDao = new InventoryDaysDao();
 
 use Psr\Http\Message\ResponseInterface as Response;
 use Psr\Http\Message\ServerRequestInterface as Request;
@@ -84,7 +86,8 @@ $app->post('/changeOffices', function (Request $request, Response $response, $ar
     $ordersDao,
     $generalOrdersDao,
     $generalClientsDao,
-    $productsMaterialsDao
+    $productsMaterialsDao,
+    $inventoryDaysDao
 ) {
     session_start();
     $id_company = $_SESSION['id_company'];
@@ -159,6 +162,14 @@ $app->post('/changeOffices', function (Request $request, Response $response, $ar
 
     $generalProductsDao->updateAccumulatedQuantity($dataOrder['idProduct'], $dataOrder['quantity'] - $dataOrder['originalQuantity'], 2);
 
+    if ($resolution == null) {
+        // Calcular Dias inventario 
+        $inventory = $inventoryDaysDao->calcInventoryProductDays($dataOrder['idProduct']);
+
+        !$inventory['days'] ? $days = 0 : $days = $inventory['days'];
+
+        $resolution = $inventoryDaysDao->updateInventoryProductDays($dataOrder['idProduct'], $days);
+    }
     if ($resolution == null)
         $resp = array('success' => true, 'message' => 'Pedido modificado correctamente');
     else if (isset($resolution['info']))
