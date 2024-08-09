@@ -178,8 +178,6 @@ $(document).ready(function () {
     dataProgramming['quantity_order'] = quantityOrder;
     dataProgramming['quantity_programming'] = quantityProgramming;
     dataProgramming['status'] = 'PROGRAMADO';
-
-
     
     for (let i = 0; i < allOrders.length; i++) {
       if (allOrders[i].id_order == id_order) {
@@ -192,16 +190,16 @@ $(document).ready(function () {
           if (allOrders[i].accumulated_quantity == 0 || allOrders[i].accumulated_quantity == null) {
             allOrders[i].quantity_programming = quantity;
             allOrders[i].accumulated_quantity_order = quantity;
-            allOrders[i].accumulated_quantity = quantity;
+            allOrders[i].accumulated_quantity = ciclesMachine.length == 1 ? quantity : allOrders[i].original_quantity;
           }
           else {
             allOrders[i].accumulated_quantity_order = (allOrders[i].accumulated_quantity - quantityProgramming) < 0 ? 0 : allOrders[i].accumulated_quantity - quantityProgramming;
-            allOrders[i].accumulated_quantity = (allOrders[i].accumulated_quantity - quantityProgramming) < 0 ? 0 : allOrders[i].accumulated_quantity - quantityProgramming;
+            allOrders[i].accumulated_quantity = ciclesMachine.length == 1 ? (allOrders[i].accumulated_quantity - quantityProgramming) < 0 ? 0 : allOrders[i].accumulated_quantity - quantityProgramming : allOrders[i].original_quantity;
             allOrders[i].quantity_programming = (allOrders[i].accumulated_quantity - quantityProgramming) < 0 ? 0 : allOrders[i].accumulated_quantity - quantityProgramming;
           }
         } else {
           allOrders[i].accumulated_quantity_order = quantity;
-          allOrders[i].accumulated_quantity = quantity;
+          allOrders[i].accumulated_quantity = ciclesMachine.length == 1 ? quantity: allOrders[i].original_quantity;
         }
       }
     }
@@ -216,11 +214,11 @@ $(document).ready(function () {
           quantityMissing = allOrdersProgramming[i].original_quantity - quantityProgramming;
           if (allOrdersProgramming[i].accumulated_quantity == 0 || allOrdersProgramming[i].accumulated_quantity == null) {
             allOrdersProgramming[i].quantity_programming = quantityMissing;
-            allOrdersProgramming[i].accumulated_quantity = quantityMissing;
+            allOrdersProgramming[i].accumulated_quantity = ciclesMachine.length == 1 ? quantityMissing : allOrdersProgramming[i].original_quantity;
             allOrdersProgramming[i].accumulated_quantity_order = quantityMissing;
           } else {
             allOrdersProgramming[i].accumulated_quantity_order = (allOrdersProgramming[i].accumulated_quantity - quantityProgramming) < 0 ? 0 : allOrdersProgramming[i].accumulated_quantity - quantityProgramming;
-            allOrdersProgramming[i].accumulated_quantity = (allOrdersProgramming[i].accumulated_quantity - quantityProgramming) < 0 ? 0 : allOrdersProgramming[i].accumulated_quantity - quantityProgramming;
+            allOrdersProgramming[i].accumulated_quantity = ciclesMachine.length == 1 ? (allOrdersProgramming[i].accumulated_quantity - quantityProgramming) < 0 ? 0 : allOrdersProgramming[i].accumulated_quantity - quantityProgramming : allOrdersProgramming[i].original_quantity;
             allOrdersProgramming[i].quantity_programming = (allOrdersProgramming[i].accumulated_quantity - quantityProgramming) < 0 ? 0 : allOrdersProgramming[i].accumulated_quantity - quantityProgramming;
             quantityMissing = allOrdersProgramming[i].accumulated_quantity_order;
           }

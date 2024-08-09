@@ -111,7 +111,9 @@ class GeneralProgrammingDao
     {
         $connection = Connection::getInstance()->getConnection();
 
-        $stmt = $connection->prepare("SELECT * FROM plan_orders o
+        $stmt = $connection->prepare("SELECT o.id_order, o.id_client, o.id_product, o.num_order, ps.status, o.date_order, o.accumulated_quantity, o.original_quantity, o.min_date, o.max_date, o.delivery_date, o.office_date
+                                      FROM plan_orders o
+                                        INNER JOIN plan_status ps ON ps.id_status = o.status
                                       WHERE o.id_company = :id_company
                                       AND o.status IN (1, 4) AND (o.accumulated_quantity IS NULL OR o.accumulated_quantity != 0)");
         $stmt->execute(['id_company' => $id_company]);

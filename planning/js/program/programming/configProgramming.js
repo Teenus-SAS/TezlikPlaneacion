@@ -434,6 +434,20 @@ $(document).ready(function () {
 
       final_date.setMinutes(final_date.getMinutes() + Math.floor(minutes));
       final_date.setHours(final_date.getHours() + Math.floor(hours));
+
+      // Checkear si la hora de la fecha final calculada es mayor a la hora de finalizacion de la maquina
+      let hour_check = parseFloat(`${final_date.getHours()}.${final_date.getMinutes()}`);
+      
+      if (hour_check > planningMachine.hour_end) {
+        hours = Math.floor(planningMachine.hour_start);
+        minutes = parseInt((planningMachine.hour_start).toFixed(2).toString().split(".")[1]);
+
+        isNaN(minutes) ? minutes = 0 : minutes;
+
+        final_date.setMinutes(Math.floor(minutes));
+        final_date.setHours(Math.floor(hours));
+        final_date.setDate(final_date.getDate() + 1);
+      };
         
       final_date =
         final_date.getFullYear() + "-" +
@@ -559,10 +573,10 @@ $(document).ready(function () {
           
           $('#quantityOrder').val(parseFloat(productOrders[i].original_quantity).toLocaleString());
 
-          if (productOrders[i].accumulated_quantity_order == 0 || productOrders[i].accumulated_quantity_order == null)
-            accumulated_quantity = parseFloat(productOrders[i].original_quantity_order).toLocaleString();
+          if (productOrders[i].accumulated_quantity == 0 || productOrders[i].accumulated_quantity == null)
+            accumulated_quantity = parseFloat(productOrders[i].original_quantity).toLocaleString();
           else
-            accumulated_quantity = parseFloat(productOrders[i].accumulated_quantity_order).toLocaleString();
+            accumulated_quantity = parseFloat(productOrders[i].accumulated_quantity).toLocaleString();
 
           $('#quantityMissing').val(accumulated_quantity);
 
