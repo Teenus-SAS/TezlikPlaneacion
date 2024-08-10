@@ -492,23 +492,24 @@ $app->post('/deleteProgramming', function (Request $request, Response $response,
 
 $app->post('/changeStatusProgramming', function (Request $request, Response $response, $args) use ($generalProgrammingDao, $generalOrdersDao) {
     $dataProgramming = $request->getParsedBody();
-    if (isset($dataProgramming['idProgramming'])) {
-        $result = $generalProgrammingDao->changeStatusProgramming($dataProgramming['idProgramming'], 1);
+    // if (isset($dataProgramming['idProgramming'])) {
+    //     $result = $generalProgrammingDao->changeStatusProgramming($dataProgramming['idProgramming'], 1);
 
-        $orders = $generalProgrammingDao->findProgrammingByOrder($dataProgramming['idOrder']);
+    //     $orders = $generalProgrammingDao->findProgrammingByOrder($dataProgramming['idOrder']);
 
-        if (sizeof($orders) == 1) {
-            $generalOrdersDao->changeStatus($dataProgramming['idOrder'], 7);
-        }
-    } else {
-        $programming = $dataProgramming['data'];
+    //     if (sizeof($orders) == 1) {
+    //         $generalOrdersDao->changeStatus($dataProgramming['idOrder'], 7);
+    //     }
+    // } else {
+    $programming = $dataProgramming['data'];
 
-        for ($i = 0; $i < sizeof($programming); $i++) {
-            $result = $generalProgrammingDao->changeStatusProgramming($programming[$i]['idProgramming'], 1);
+    for ($i = 0; $i < sizeof($programming); $i++) {
+        $result = $generalProgrammingDao->changeStatusProgramming($programming[$i]['id_programming'], 1);
 
-            if (isset($result['info'])) break;
-        }
+        if (isset($result['info'])) break;
+        $result = $generalOrdersDao->changeStatus($programming[$i]['id_order'], 7);
     }
+    // }
 
     if ($result == null)
         $resp = array('success' => true, 'message' => 'Programa de producción eliminado correctamente');

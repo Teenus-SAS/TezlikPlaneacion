@@ -40,7 +40,7 @@ if (sizeof($_SESSION) == 0)
                 <div class="page-title-box">
                     <div class="container-fluid">
                         <div class="row align-items-center">
-                            <div class="col-sm-5 col-xl-6">
+                            <div class="col-sm-5 col-xl-4">
                                 <div class="page-title">
                                     <h3 class="mb-1 font-weight-bold text-dark">Programa de Producción</h3>
                                     <ol class="breadcrumb mb-3 mb-md-0">
@@ -48,19 +48,33 @@ if (sizeof($_SESSION) == 0)
                                     </ol>
                                 </div>
                             </div>
-                            <div class="col-sm-7 col-xl-4 form-inline justify-content-sm-end cardBottons">
-                                <div id="machines1">
-                                    <label class="font-weight-bold text-dark">Maquina</label>
-                                    <select class="form-control idMachine" id="searchMachine">
-                                    </select>
+                            <div class="col-sm-7 col-xl-8 form-inline justify-content-sm-end">
+                                <div class="col-sm-7 col-xl-2 form-inline justify-content-sm-end mt-3 cardBottons">
+                                    <div id="machines1">
+                                        <label class="font-weight-bold text-dark">Maquina</label>
+                                        <select class="form-control idMachine" id="searchMachine">
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="col-sm-7 col-xl-2 form-inline justify-content-sm-end mt-3 cardBottons">
+                                    <button class="btn btn-warning" id="btnNewProgramming" name="btnNewProgramming">Programar</button>
+                                </div>
+                                <div class="col-sm-7 col-xl-2 form-inline justify-content-sm-end mt-3 cardSaveBottons">
+                                    <button class="btn btn-primary" id="btnSavePrograming" name="btnSavePrograming">Guardar Planeación</button>
+                                </div>
+                                <div class="col-sm-7 col-xl-2 form-inline justify-content-sm-end mt-3 cardAddOP">
+                                    <button class="btn btn-info" id="btnAddOP" name="btnAddOP">Crear Orden Produccion</button>
                                 </div>
                             </div>
-                            <div class="col-sm-7 col-xl-1 form-inline justify-content-sm-end mt-3 cardBottons">
+                            <!-- <div class="col-sm-7 col-xl-2 form-inline justify-content-sm-end mt-3 cardBottons">
                                 <button class="btn btn-warning" id="btnNewProgramming" name="btnNewProgramming">Programar</button>
                             </div>
-                            <div class="col-sm-7 col-xl-1 form-inline justify-content-sm-end mt-3 cardSaveBottons">
+                            <div class="col-sm-7 col-xl-2 form-inline justify-content-sm-end mt-3 cardSaveBottons">
                                 <button class="btn btn-primary" id="btnSavePrograming" name="btnSavePrograming">Guardar Planeación</button>
                             </div>
+                            <div class="col-sm-7 col-xl-2 form-inline justify-content-sm-end mt-3 ">
+                                <button class="btn btn-info" id="btnAddOP" name="btnAddOP">Crear Orden de Produccion</button>
+                            </div> -->
                         </div>
                     </div>
                 </div>

@@ -163,7 +163,7 @@ $(document).ready(function () {
     let ciclesMachine = allCiclesMachines.filter(item => item.id_product == id_product);
     
     let productsMaterials = allProductsMaterials.filter(item => item.id_product == id_product);
-    productsMaterials = productsMaterials.sort((a, b) => a.quantity - b.quantity); 
+    productsMaterials = productsMaterials.sort((a, b) => a.quantity - b.quantity);
     let quantityFTM = Math.floor(productsMaterials[0].quantity) - quantityProgramming;
 
     if (ciclesMachine.length == 1) {
@@ -199,7 +199,7 @@ $(document).ready(function () {
           }
         } else {
           allOrders[i].accumulated_quantity_order = quantity;
-          allOrders[i].accumulated_quantity = ciclesMachine.length == 1 ? quantity: allOrders[i].original_quantity;
+          allOrders[i].accumulated_quantity = ciclesMachine.length == 1 ? quantity : allOrders[i].original_quantity;
         }
       }
     }
@@ -255,7 +255,7 @@ $(document).ready(function () {
     // Recorre allOrdersProgramming en sentido inverso
     for (let i = allOrdersProgramming.length - 1; i >= 0; i--) {
       if (allOrdersProgramming[i].id_product == id_product && quantityMissing === 0 && process.length === 1) {
-        allOrdersProgramming[i].flag_tbl = 0; 
+        allOrdersProgramming[i].flag_tbl = 0;
       }
     }
 
@@ -300,13 +300,26 @@ $(document).ready(function () {
           allTblData[i].quantity_programming = quantityProgramming;
           allTblData[i].min_date = dataProgramming['min_date'];
           allTblData[i].max_date = dataProgramming['max_date'];
-          allTblData[i].min_programming = dataProgramming['min_programming']; 
+          allTblData[i].min_programming = dataProgramming['min_programming'];
         }
       }
 
       toastr.success('Programa de producción modificado correctamente');
     }
+ 
+    let uniqueIdsSet = new Set(); // Conjunto para almacenar IDs únicas
+    let uniqueArray = []; // Array para almacenar elementos únicos
 
+    allTblData.forEach(item => {
+      // Verificamos si el ID ya existe en el conjunto
+      if (!uniqueIdsSet.has(item.id_machine)) {
+        uniqueIdsSet.add(item.id_machine); // Si no existe, lo agregamos al conjunto
+        uniqueArray.push(item); // También agregamos el elemento al array de elementos únicos
+      }
+    });
+
+    // Cargar selects de maquinas por pedidos programados
+    loadDataMachinesProgramming(uniqueArray);
     checkProcessMachines(allTblData);
     loadTblProgramming(allTblData, 1);
     dataProgramming = [];
@@ -418,19 +431,12 @@ $(document).ready(function () {
   }
 
   /* Cambiar estado */
-  $(document).on("click", ".changeStatus", function () {
-    let data = allProgramming.find(item => item.id_programming == this.id);
+  $(document).on("click", "#btnAddOP", function () {
+    // let data = allProgramming.find(item => item.id_programming == this.id);
 
-    let dataProgramming = {};
-    dataProgramming["idProgramming"] = data.id_programming;
-    dataProgramming["idOrder"] = data.id_order;
-
-    for (let i = 0; i < allTblData.length; i++) {
-      if (allTblData[i].id_programming == data.id_programming) {
-        allTblData.splice(i, 1);
-        break;
-      }
-    }
+    // let dataProgramming = {};
+    // dataProgramming["idProgramming"] = data.id_programming;
+    // dataProgramming["idOrder"] = data.id_order; 
 
     bootbox.confirm({
       title: "Orden de Producción",
@@ -448,13 +454,17 @@ $(document).ready(function () {
       },
       callback: function (result) {
         if (result) {
-          $.post(
-            `/api/changeStatusProgramming`,
-            dataProgramming,
-            function (data, textStatus, jqXHR) {
+          $.ajax({
+            type: 'POST',
+            url: '/api/changeStatusProgramming',
+            data: { data: allProgramming },
+            success: function (data) {
+              allTblData = [];
+              $('.cardAddOP').hide(800);
+
               message(data);
             }
-          );
+          });
         }
       },
     });
@@ -526,7 +536,7 @@ $(document).ready(function () {
       data: {data:allTblData},
       success: function (resp) {
         allTblData = [];
-        
+        $('.cardAddOP').show(800);
         message(resp);
       }
     });

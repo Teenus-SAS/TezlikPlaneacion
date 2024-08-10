@@ -35,6 +35,7 @@ $(document).ready(function () {
       $('.cardSaveBottons').show(800);
       $('#machines1').show(800);
     } else {
+      $('.cardAddOP').hide(800);
       $('#machines1').hide();
     }
 
@@ -123,10 +124,10 @@ $(document).ready(function () {
             }
             cell.innerHTML = `Inicio: ${moment(minDate).format("DD/MM/YYYY hh:mm A")}<br>Fin: ${moment(final_date).format("DD/MM/YYYY hh:mm A")}`;
             break;
-          case 'Orden Produccion':
-            arr.bd_status == 1 ? cell.innerHTML = `<button class="btn btn-warning changeStatus" id="${arr.id_programming}" name="${arr.id_programming}">Crear OP</button>` :
-              '';
-            break;
+          // case 'Orden Produccion':
+          //   arr.bd_status == 1 ? cell.innerHTML = `<button class="btn btn-warning changeStatus" id="${arr.id_programming}" name="${arr.id_programming}">Crear OP</button>` :
+          //     '';
+          //   break;
           case 'Acciones':
             cell.innerHTML = $('#searchMachine').val() != '0' && $('#searchMachine').val() ?
               `<a href="javascript:;" <i id="${arr.id_programming}" class="bx bx-edit-alt updateProgramming" data-toggle='tooltip' title='Actualizar Programa' style="font-size: 30px;"></i></a>
