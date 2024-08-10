@@ -18,7 +18,7 @@ if (sizeof($_SESSION) == 0)
     <meta name="keywords" content="">
     <meta name="author" content="Teenus SAS">
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>Tezlik - Planning | Users</title>
+    <title>TezlikPlanner | Users</title>
     <link rel="shortcut icon" href="/assets/images/favicon/favicon_tezlik.jpg" type="image/x-icon" />
 
     <?php include_once dirname(dirname(dirname(__DIR__))) . '/global/partials/scriptsCSS.php'; ?>

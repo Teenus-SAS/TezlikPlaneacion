@@ -17,7 +17,7 @@ if (sizeof($_SESSION) == 0)
     <meta name="keywords" content="admin, panels, dashboard, admin panel, multipurpose, bootstrap, bootstrap4, all type of dashboards">
     <meta name="author" content="MatrrDigital">
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>Tezlik - Planning | Process</title>
+    <title>TezlikPlanner | Process</title>
     <link rel="shortcut icon" href="/assets/images/favicon/favicon_tezlik.jpg" type="image/x-icon" />
 
     <?php include_once dirname(dirname(dirname(__DIR__))) . '/global/partials/scriptsCSS.php'; ?>
