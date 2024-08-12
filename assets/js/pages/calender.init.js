@@ -34,53 +34,53 @@
           r("#drop-remove").is(":checked") && r(this).remove();
       },
       events: [
-       /*  {
-          title: "All Day Event",
-          start: new Date(l, n, 1),
-          className: "bg-info",
-        },
-        {
-          title: "Long Event",
-          start: new Date(l, n, t - 5),
-          end: new Date(l, n, t - 2),
-        },
-        {
-          id: 999,
-          title: "Repeating Event",
-          start: new Date(l, n, t - 3, 16, 0),
-          allDay: !1,
-          className: "bg-danger",
-        },
-        {
-          id: 999,
-          title: "Repeating Event",
-          start: new Date(l, n, t + 4, 16, 0),
-          allDay: !1,
-        },
-        {
-          title: "Meeting",
-          start: new Date(l, n, t, 10, 30),
-          allDay: !1,
-          className: "bg-warning",
-        },
-        {
-          title: "Lunch",
-          start: new Date(l, n, t, 12, 0),
-          end: new Date(l, n, t, 14, 0),
-          allDay: !1,
-        },
-        {
-          title: "Birthday Party",
-          start: new Date(l, n, t + 1, 19, 0),
-          end: new Date(l, n, t + 1, 22, 30),
-          allDay: !1,
-        },
-        {
-          title: "Click for Google",
-          start: new Date(l, n, 28),
-          end: new Date(l, n, 29),
-          url: "http://google.com/",
-        }, */
+        // {
+        //   title: "All Day Event",
+        //   start: new Date(l, n, 1),
+        //   className: "bg-info",
+        // },
+        // {
+        //   title: "Long Event",
+        //   start: new Date(l, n, t - 5),
+        //   end: new Date(l, n, t - 2),
+        // },
+        // {
+        //   id: 999,
+        //   title: "Repeating Event",
+        //   start: new Date(l, n, t - 3, 16, 0),
+        //   allDay: !1,
+        //   className: "bg-danger",
+        // },
+        // {
+        //   id: 999,
+        //   title: "Repeating Event",
+        //   start: new Date(l, n, t + 4, 16, 0),
+        //   allDay: !1,
+        // },
+        // {
+        //   title: "Meeting",
+        //   start: new Date(l, n, t, 10, 30),
+        //   allDay: !1,
+        //   className: "bg-warning",
+        // },
+        // {
+        //   title: "Lunch",
+        //   start: new Date(l, n, t, 12, 0),
+        //   end: new Date(l, n, t, 14, 0),
+        //   allDay: !1,
+        // },
+        // {
+        //   title: "Birthday Party",
+        //   start: new Date(l, n, t + 1, 19, 0),
+        //   end: new Date(l, n, t + 1, 22, 30),
+        //   allDay: !1,
+        // },
+        // {
+        //   title: "Click for Google",
+        //   start: new Date(l, n, 28),
+        //   end: new Date(l, n, 29),
+        //   url: "http://google.com/",
+        // }, 
       ],
     }),
       r("#add_event_form").on("submit", function (e) {
