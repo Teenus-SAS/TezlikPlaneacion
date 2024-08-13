@@ -86,6 +86,7 @@ require_once('../api/src/routes/app/planning/config/routeCalender.php');
 require_once('../api/src/routes/app/planning/general/routeCategories.php');
 require_once('../api/src/routes/app/planning/general/routeUnitsSales.php');
 require_once('../api/src/routes/app/planning/general/routeInventoryABC.php');
+require_once('../api/src/routes/app/planning/general/routeSeller.php');
 // Administrador
 require_once('../api/src/routes/app/planning/admin/routeUserAccess.php');
 require_once('../api/src/routes/app/planning/admin/routeClients.php');

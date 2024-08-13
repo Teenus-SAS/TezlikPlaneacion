@@ -101,6 +101,18 @@ class LastDataDao
         return $client;
     }
 
+    public function findLastInsertedSeller()
+    {
+        $connection = Connection::getInstance()->getConnection();
+
+        $stmt = $connection->prepare("SELECT MAX(id_seller) AS id_seller FROM sellers");
+        $stmt->execute();
+        $this->logger->info(__FUNCTION__, array('query' => $stmt->queryString, 'errors' => $stmt->errorInfo()));
+
+        $seller = $stmt->fetch($connection::FETCH_ASSOC);
+        return $seller;
+    }
+
     public function findLastInsertedProgramming($id_company)
     {
         $connection = Connection::getInstance()->getConnection();
