@@ -65,6 +65,7 @@
                                                 <i class="fas fa-dolly-flatbed"></i>
                                                 <a href="/planning/products">Inventarios</a>
                                                 </li>
+
                                                 <?php if ($_SESSION['planning_machine'] == 1) { ?>
                                                     <li class="planMachines">
                                                     <?php } else { ?>
@@ -73,7 +74,10 @@
                                                     <i class="fas fa-cogs"></i>
                                                     <a href="/planning/machines">Procesos y Máquinas</a>
                                                     </li>
-
+                                                    <li class="planClients">
+                                                        <i class="fas fa-users"></i>
+                                                        <a href="/planning/sellers">Nómina Producción</a>
+                                                    </li>
                                         </ul>
                                         </div>
 
@@ -125,10 +129,7 @@
                                                         <?php } ?>
                                                         <h5 class="font-size-14 font-weight-600">General</h5>
                                                         <ul class="list-unstyled megamenu-list">
-                                                            <li class="planClients">
-                                                                <i class="fas fa-users"></i>
-                                                                <a href="/planning/sellers">Nómina Producción</a>
-                                                            </li>
+
                                                             <?php if ($_SESSION['client'] == 1) { ?>
                                                                 <li class="planClients">
                                                                 <?php } else { ?>
