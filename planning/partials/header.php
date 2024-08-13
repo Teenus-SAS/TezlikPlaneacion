@@ -44,7 +44,7 @@
                                     <?php } else { ?>
                                         <div class="col-md-3" id="navPlanBasics">
                                         <?php } ?>
-                                        <h5 class="font-size-14 font-weight-600">Básico</h5>
+                                        <h5 class="font-size-14 font-weight-600">Maestros</h5>
                                         <ul class="list-unstyled megamenu-list">
                                             <?php // if ($_SESSION['create_mold'] == 1) { 
                                             ?>
@@ -53,10 +53,16 @@
                                             ?>
                                             <?php if ($_SESSION['planning_product'] == 1) { ?>
                                                 <li class="planProducts">
+                                                    <i class="fas fa-cube"></i>
+                                                    <a href="/planning/products">Productos</a>
+                                                </li>
+
+
+                                                <li class="planProducts">
                                                 <?php } else { ?>
                                                 <li class="planProducts" style="display: none;">
                                                 <?php } ?>
-                                                <i class="fas fa-cube"></i>
+                                                <i class="fas fa-dolly-flatbed"></i>
                                                 <a href="/planning/products">Inventarios</a>
                                                 </li>
                                                 <?php if ($_SESSION['planning_machine'] == 1) { ?>
@@ -112,6 +118,10 @@
                                                                 <i class="fas fa-truck"></i>
                                                                 <a href="/planning/stock">Proveedores (Tiempos Entrega)</a>
                                                                 </li>
+                                                                <li class="planCalendar">
+                                                                    <i class="fas fa-calendar-alt"></i>
+                                                                    <a href="/planning/calendar">Calendario Producción</a>
+                                                                </li>
                                                 </ul>
                                                 </div>
 
@@ -130,6 +140,10 @@
                                                                 <i class="fas fa-users"></i>
                                                                 <a href="/planning/clients">Clientes y Proveedores</a>
                                                                 </li>
+                                                                <li class="planClients">
+                                                                    <i class="fas fa-user-friends"></i>
+                                                                    <a href="/planning/sellers">Vendedores</a>
+                                                                </li>
                                                                 <?php if ($_SESSION['sale'] == 1) { ?>
                                                                     <li class="planSales">
                                                                     <?php } else { ?>
@@ -138,10 +152,7 @@
                                                                     <i class="fas fa-balance-scale"></i>
                                                                     <a href="/planning/sales">Ventas Unidades</a>
                                                                     </li>
-                                                                    <li class="planCalendar">
-                                                                        <i class="fas fa-calendar-alt"></i>
-                                                                        <a href="/planning/calendar">Calendario Producción</a>
-                                                                    </li>
+
                                                                     <!-- <li class="inventoryABC">
                                                                         <i class="fas fa-clipboard-list"></i>
                                                                         <a href="/planning/inventoryABC">Inventario ABC</a>
