@@ -26,7 +26,7 @@
                             <li class="nav-link planRequisitions" style="display: none;">
                             <?php } ?>
                             <a class="nav-link" href="/planning/requisitions">
-                                <i class="fas fa-file-upload mr-1"></i>Requisiciones
+                                <i class="fas fa-shopping-cart mr-1"></i>Requisiciones
                                 <i class="bx bx-chevron-down"></i>
                             </a>
                             </li>
@@ -69,7 +69,7 @@
                                         <li class="nav-item planExplosionMaterials" style="display: none;">
                                         <?php } ?>
                                         <a class="nav-link" href="/planning/explosion-materials">
-                                            <i class="fas fa-fire mr-1"></i>Explosión MP<i class="bx bx-chevron-down"></i>
+                                            <i class="fas fa-bahai mr-1"></i>Explosión MP<i class="bx bx-chevron-down"></i>
                                         </a>
                                         </li>
 
@@ -100,7 +100,7 @@
                                                     <li class="nav-item planStore" style="display: none;">
                                                     <?php } ?>
                                                     <a class="nav-link" href="/planning/offices">
-                                                        <i class="bx bxs-truck mr-1"></i>Despachos<i class="bx bx-chevron-down"></i>
+                                                        <i class="fas fa-truck mr-1"></i>Despachos<i class="bx bx-chevron-down"></i>
                                                     </a>
 
                                                     </li>
