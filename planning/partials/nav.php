@@ -69,7 +69,7 @@
                                         <li class="nav-item planExplosionMaterials" style="display: none;">
                                         <?php } ?>
                                         <a class="nav-link" href="/planning/explosion-materials">
-                                            <i class="fas fa-fire mr-1"></i>Explosion<i class="bx bx-chevron-down"></i>
+                                            <i class="fas fa-fire mr-1"></i>Explosión MP<i class="bx bx-chevron-down"></i>
                                         </a>
                                         </li>
 
