@@ -25,7 +25,6 @@
                             <?php } else { ?>
                             <li class="nav-link planRequisitions" style="display: none;">
                             <?php } ?>
-                            <a href="/planning/requisitions">Control Requisiciones</a>
                             <a class="nav-link" href="/planning/requisitions">
                                 <i class="fas fa-file-upload mr-1"></i>Control Requisiciones
                                 <i class="bx bx-chevron-down"></i>
