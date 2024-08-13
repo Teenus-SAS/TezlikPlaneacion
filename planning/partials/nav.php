@@ -10,16 +10,16 @@
                         </a>
                     </li>
 
-                    <?php //if ($_SESSION['inventory'] == 1 && $_SESSION['plan_planning_inventory'] == 1) { ?>
-                       <!--  <li class="nav-item planInventories"> -->
-                        <?php //} else { ?>
+                    <?php if ($_SESSION['inventory'] == 1 && $_SESSION['plan_planning_inventory'] == 1) { ?>
+                        <li class="nav-item planInventories">
+                        <?php } else { ?>
                         <li class="nav-item planInventories" style="display: none;">
-                        <?php //} ?>
-                        <!-- <a class="nav-link" href="/planning/inventory">
+                        <?php } ?>
+                        <a class="nav-link" href="/planning/inventory">
                             <i class="bx bxs-box mr-1"></i> Inventarios
                             <i class="bx bx-chevron-down"></i>
                         </a>
-                        </li> -->
+                        </li>
                         <?php if ($_SESSION['requisition'] == 1) { ?>
                             <li class="planRequisitions">
                             <?php } else { ?>
