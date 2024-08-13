@@ -6,6 +6,7 @@ use TezlikPlaneacion\dao\FilterDataDao;
 use TezlikPlaneacion\dao\GeneralCategoriesDao;
 use TezlikPlaneacion\dao\GeneralMaterialsDao;
 use TezlikPlaneacion\dao\GeneralOrdersDao;
+use TezlikPlaneacion\dao\GeneralPlanCiclesMachinesDao;
 use TezlikPlaneacion\dao\GeneralProgrammingDao;
 use TezlikPlaneacion\dao\InventoryDaysDao;
 use TezlikPlaneacion\dao\InvMoldsDao;
@@ -27,6 +28,7 @@ $productsMaterialsDao = new ProductsMaterialsDao();
 $generalProgrammingDao = new GeneralProgrammingDao();
 $inventoryDaysDao = new InventoryDaysDao();
 $filterDataDao = new FilterDataDao();
+$generalPlanCiclesMachinesDao = new GeneralPlanCiclesMachinesDao();
 
 use Psr\Http\Message\ResponseInterface as Response;
 use Psr\Http\Message\ServerRequestInterface as Request;
@@ -129,6 +131,7 @@ $app->post('/addProduct', function (Request $request, Response $response, $args)
     $generalMaterialsDao,
     $lastDataDao,
     $FilesDao,
+    $generalPlanCiclesMachinesDao,
     $generalOrdersDao,
     $productsMaterialsDao,
     $generalProgrammingDao,
@@ -287,10 +290,12 @@ $app->post('/addProduct', function (Request $request, Response $response, $args)
 
             // Ficha tecnica
             $productsMaterials = $productsMaterialsDao->findAllProductsmaterials($orders[$i]['id_product'], $id_company);
+            $planCicles = $generalPlanCiclesMachinesDao->findAllPlanCiclesMachineByProduct($orders[$i]['id_product'], $id_company);
+
             if ($orders[$i]['status'] != 'EN PRODUCCION' && $orders[$i]['status'] != 'FABRICADO' && $orders[$i]['status'] != 'PROGRAMADO') {
                 if ($orders[$i]['original_quantity'] > $orders[$i]['accumulated_quantity']) {
 
-                    if (sizeof($productsMaterials) == 0) {
+                    if (sizeof($productsMaterials) == 0 || sizeof($planCicles) == 0) {
                         $resolution = $generalOrdersDao->changeStatus($orders[$i]['id_order'], 5);
                         $status = false;
                     } else {
@@ -348,6 +353,7 @@ $app->post('/addProduct', function (Request $request, Response $response, $args)
 $app->post('/updatePlanProduct', function (Request $request, Response $response, $args) use (
     $productsDao,
     $generalProductsDao,
+    $generalPlanCiclesMachinesDao,
     $generalMaterialsDao,
     $generalOrdersDao,
     $productsInventoryDao,
@@ -454,10 +460,11 @@ $app->post('/updatePlanProduct', function (Request $request, Response $response,
             // $order = $generalOrdersDao->checkAccumulatedQuantityOrder($orders[$i]['id_order']);
             // Ficha tecnica
             $productsMaterials = $productsMaterialsDao->findAllProductsmaterials($orders[$i]['id_product'], $id_company);
+            $planCicles = $generalPlanCiclesMachinesDao->findAllPlanCiclesMachineByProduct($orders[$i]['id_product'], $id_company);
 
             if ($orders[$i]['status'] != 'EN PRODUCCION' && $orders[$i]['status'] != 'FABRICADO' && $orders[$i]['status'] != 'PROGRAMADO') {
                 if ($orders[$i]['original_quantity'] > $orders[$i]['accumulated_quantity']) {
-                    if (sizeof($productsMaterials) == 0) {
+                    if (sizeof($productsMaterials) == 0 || sizeof($planCicles) == 0) {
                         $generalOrdersDao->changeStatus($orders[$i]['id_order'], 5);
                         $status = false;
                     } else {

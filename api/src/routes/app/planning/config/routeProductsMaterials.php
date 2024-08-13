@@ -6,6 +6,7 @@ use TezlikPlaneacion\dao\ExplosionMaterialsDao;
 use TezlikPlaneacion\dao\FilterDataDao;
 use TezlikPlaneacion\dao\GeneralMaterialsDao;
 use TezlikPlaneacion\dao\GeneralOrdersDao;
+use TezlikPlaneacion\dao\GeneralPlanCiclesMachinesDao;
 use TezlikPlaneacion\dao\GeneralProductsDao;
 use TezlikPlaneacion\dao\GeneralProductsMaterialsDao;
 use TezlikPlaneacion\dao\GeneralProgrammingDao;
@@ -21,6 +22,7 @@ use TezlikPlaneacion\dao\UnitsDao;
 $productsMaterialsDao = new ProductsMaterialsDao();
 $conversionUnitsDao = new ConversionUnitsDao();
 $generalProductsMaterialsDao = new GeneralProductsMaterialsDao();
+$generalPlanCiclesMachinesDao = new GeneralPlanCiclesMachinesDao();
 $generalProductsDao = new GeneralProductsDao();
 $convertDataDao = new ConvertDataDao();
 $productsDao = new GeneralProductsDao();
@@ -164,6 +166,7 @@ $app->post('/addProductsMaterials', function (Request $request, Response $respon
     $productsMaterialsDao,
     $generalProductsMaterialsDao,
     $generalProductsDao,
+    $generalPlanCiclesMachinesDao,
     $conversionUnitsDao,
     $explosionMaterialsDao,
     $inventoryDaysDao,
@@ -377,10 +380,12 @@ $app->post('/addProductsMaterials', function (Request $request, Response $respon
         // $order = $generalOrdersDao->checkAccumulatedQuantityOrder($orders[$i]['id_order']);
         // Ficha tecnica
         $productsMaterials = $productsMaterialsDao->findAllProductsmaterials($orders[$i]['id_product'], $id_company);
+        $planCicles = $generalPlanCiclesMachinesDao->findAllPlanCiclesMachineByProduct($orders[$i]['id_product'], $id_company);
+
         if ($orders[$i]['status'] != 'EN PRODUCCION' && $orders[$i]['status'] != 'FABRICADO') {
             if ($orders[$i]['original_quantity'] > $orders[$i]['accumulated_quantity']) {
 
-                if (sizeof($productsMaterials) == 0) {
+                if (sizeof($productsMaterials) == 0 || sizeof($planCicles) == 0) {
                     $generalOrdersDao->changeStatus($orders[$i]['id_order'], 5);
                     $status = false;
                 } else {

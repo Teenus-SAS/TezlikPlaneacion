@@ -20,7 +20,8 @@ class CalenderDao
     {
         $connection = Connection::getInstance()->getConnection();
         $stmt = $connection->prepare("SELECT * FROM calender
-                                      WHERE id_company = :id_company AND month = MONTH(CURRENT_DATE)");
+                                      WHERE id_company = :id_company AND month = MONTH(CURRENT_DATE)
+                                      ORDER BY `calender`.`day` ASC");
         $stmt->execute([
             'id_company' => $id_company
         ]);

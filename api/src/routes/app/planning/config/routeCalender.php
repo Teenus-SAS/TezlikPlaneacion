@@ -22,9 +22,8 @@ $app->get('/saveCalenderAuto', function (Request $request, Response $response, $
     $calenderDao,
     $generalCalenderDao
 ) {
-    // session_start();
-    // $id_company = $_SESSION['id_company'];
-    $id_company = 6;
+    session_start();
+    $id_company = $_SESSION['id_company'];
 
     // Obtener Dias del mes actual, con festivos o domingos
     $calender = $generalCalenderDao->getAllDaysActualMonth();
