@@ -132,12 +132,17 @@
                                                         <?php } ?>
                                                         <h5 class="font-size-14 font-weight-600">General</h5>
                                                         <ul class="list-unstyled megamenu-list">
+                                                            <li class="planClients">
+                                                                <i class="fas fa-users"></i>
+                                                                <a href="/planning/sellers">Nómina Producción</a>
+                                                            </li>
                                                             <?php if ($_SESSION['client'] == 1) { ?>
                                                                 <li class="planClients">
                                                                 <?php } else { ?>
                                                                 <li class="planClients" style="display: none;">
                                                                 <?php } ?>
-                                                                <i class="fas fa-users"></i>
+
+                                                                <i class="fas fa-user-tie"></i>
                                                                 <a href="/planning/clients">Clientes y Proveedores</a>
                                                                 </li>
                                                                 <li class="planClients">
