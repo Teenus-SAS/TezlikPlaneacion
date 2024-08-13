@@ -10,23 +10,23 @@
                         </a>
                     </li>
 
-                    <?php if ($_SESSION['inventory'] == 1 && $_SESSION['plan_planning_inventory'] == 1) { ?>
-                        <li class="nav-item planInventories">
-                        <?php } else { ?>
+                    <?php //if ($_SESSION['inventory'] == 1 && $_SESSION['plan_planning_inventory'] == 1) { ?>
+                       <!--  <li class="nav-item planInventories"> -->
+                        <?php //} else { ?>
                         <li class="nav-item planInventories" style="display: none;">
-                        <?php } ?>
-                        <a class="nav-link" href="/planning/inventory">
+                        <?php //} ?>
+                        <!-- <a class="nav-link" href="/planning/inventory">
                             <i class="bx bxs-box mr-1"></i> Inventarios
                             <i class="bx bx-chevron-down"></i>
                         </a>
-                        </li>
+                        </li> -->
                         <?php if ($_SESSION['requisition'] == 1) { ?>
                             <li class="planRequisitions">
                             <?php } else { ?>
                             <li class="nav-link planRequisitions" style="display: none;">
                             <?php } ?>
                             <a class="nav-link" href="/planning/requisitions">
-                                <i class="fas fa-file-upload mr-1"></i>Control Requisiciones
+                                <i class="fas fa-file-upload mr-1"></i>Requisiciones
                                 <i class="bx bx-chevron-down"></i>
                             </a>
                             </li>
@@ -37,7 +37,7 @@
                                 <li class="nav-item planOrders" style="display: none;">
                                 <?php } ?>
                                 <a class="nav-link" href="/planning/orders">
-                                    <i class="fas fa-clipboard-check mr-1"></i> Pedidos
+                                    <i class="fas fa-clipboard-check mr-1"></i>Pedidos
                                     <i class="bx bx-chevron-down"></i>
                                 </a>
                                 </li>
@@ -48,7 +48,7 @@
                                     <li class="nav-item dropdown planPrograms" style="display: none;">
                                     <?php } ?>
                                     <a class="nav-link dropdown-toggle" href="javascript:void(0)" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                        <i class="bx bxs-customize mr-1"></i> Programa de Producción
+                                        <i class="bx bxs-customize mr-1"></i>Programa Producción
                                         <i class="bx bx-chevron-down"></i>
                                     </a>
                                     <div class="dropdown-menu" aria-labelledby="navbarDropdown">
@@ -69,8 +69,7 @@
                                         <li class="nav-item planExplosionMaterials" style="display: none;">
                                         <?php } ?>
                                         <a class="nav-link" href="/planning/explosion-materials">
-                                            <i class="fas fa-fire mr-1"></i> Explosión Materiales
-                                            <i class="bx bx-chevron-down"></i>
+                                            <i class="fas fa-fire mr-1"></i>Explosion<i class="bx bx-chevron-down"></i>
                                         </a>
                                         </li>
 
@@ -81,8 +80,7 @@
                                             <li class="nav-item planProductionOrder" style="display: none;">
                                             <?php } ?>
                                             <a class="nav-link" href="/planning/production-order">
-                                                <i class="fas fa-tasks mr-1"></i> Order Producción
-                                                <i class="bx bx-chevron-down"></i>
+                                                <i class="fas fa-tasks mr-1"></i>OP<i class="bx bx-chevron-down"></i>
                                             </a>
                                             </li>
 
@@ -92,8 +90,7 @@
                                                 <li class="nav-item planOffices" style="display: none;">
                                                 <?php } ?>
                                                 <a class="nav-link" href="/planning/store">
-                                                    <i class="fas fa-warehouse mr-1"></i> Almacen
-                                                    <i class="bx bx-chevron-down"></i>
+                                                    <i class="fas fa-warehouse mr-1"></i>Almacen<i class="bx bx-chevron-down"></i>
                                                 </a>
                                                 </li>
 
@@ -103,8 +100,7 @@
                                                     <li class="nav-item planStore" style="display: none;">
                                                     <?php } ?>
                                                     <a class="nav-link" href="/planning/offices">
-                                                        <i class="bx bxs-truck mr-1"></i> Despachos
-                                                        <i class="bx bx-chevron-down"></i>
+                                                        <i class="bx bxs-truck mr-1"></i>Despachos<i class="bx bx-chevron-down"></i>
                                                     </a>
 
                                                     </li>
