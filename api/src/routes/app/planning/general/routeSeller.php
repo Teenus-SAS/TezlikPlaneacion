@@ -120,17 +120,17 @@ $app->post('/addSeller', function (Request $request, Response $response, $args) 
         for ($i = 0; $i < sizeof($sellers); $i++) {
             $findSeller = $generalSellersDao->findSeller($sellers[$i], $id_company);
 
-            if (!$findSeller) { 
+            if (!$findSeller) {
                 $resolution = $sellersDao->insertSellerByCompany($sellers[$i], $id_company);
             } else {
                 $sellers[$i]['idSeller'] = $findSeller['id_seller'];
                 $resolution = $sellersDao->updateSeller($sellers[$i]);
             }
 
-            if(isset($resolution['info']))break;
+            if (isset($resolution['info'])) break;
         }
         if ($resolution == null)
-            $resp = array('success' => true, 'message' => 'Clientes importados correctamente');
+            $resp = array('success' => true, 'message' => 'Vendedores importados correctamente');
         else
             $resp = array('error' => true, 'message' => 'Ocurrio un error mientras importaba la información. Intente nuevamente');
     }
@@ -138,7 +138,7 @@ $app->post('/addSeller', function (Request $request, Response $response, $args) 
     return $response->withStatus(200)->withHeader('Content-Type', 'application/json');
 });
 
-$app->post('/updateClient', function (Request $request, Response $response, $args) use (
+$app->post('/updateSeller', function (Request $request, Response $response, $args) use (
     $sellersDao,
     $generalSellersDao,
     $FilesDao
@@ -147,50 +147,40 @@ $app->post('/updateClient', function (Request $request, Response $response, $arg
     $id_company = $_SESSION['id_company'];
     $dataSeller = $request->getParsedBody();
 
-    if (
-        empty($dataSeller['idClient']) || empty($dataSeller['firstname']) || empty($dataSeller['lastname']) ||
-        empty($dataSeller['email']) || empty($dataSeller['phone']) || empty($dataSeller['city'])
-    )
-        $resp = array('error' => true, 'message' => 'No hubo cambio alguno');
-    else {
-        $client = $generalSellersDao->find$findSeller($dataSeller, $id_company);
-        $status = true;
+    $seller = $generalSellersDao->findSeller($dataSeller, $id_company);
 
-        foreach ($client as $arr) {
-            if ($arr['id_client'] != $dataSeller['idClient']) {
-                $status = false;
-                break;
+    !is_array($seller) ? $data['id_seller'] = 0 : $data = $seller;
+    if ($data['id_seller'] == $dataSeller['idSeller'] || $data['id_seller'] == 0) {
+        $resolution = $sellersDao->updateSeller($dataSeller);
+
+        if ($resolution == null) {
+            if (sizeof($_FILES) > 0) {
+                // Insertar imagen
+                $FilesDao->avatarSeller($dataSeller['idSeller'], $id_company);
             }
         }
 
-        if ($status == true) {
-            $client = $sellersDao->updateClient($dataSeller);
-
-            if (sizeof($_FILES) > 0) {
-                // Insertar imagen
-                $FilesDao->imageClient($dataSeller['idClient'], $id_company);
-            }
-
-            if ($client == null)
-                $resp = array('success' => true, 'message' => 'Cliente actualizado correctamente');
-            else if (isset($client['info']))
-                $resp = array('info' => true, 'message' => $client['message']);
-            else
-                $resp = array('error' => true, 'message' => 'Ocurrio un error mientras actualizaba la información. Intente nuevamente');
-        } else
-            $resp = array('info' => true, 'message' => 'Ya existe un cliente con el mismo nit. Ingrese nuevo nit');
-    }
+        if ($resolution == null)
+            $resp = array('success' => true, 'message' => 'Vendedor actualizado correctamente');
+        else if (isset($resolution['info']))
+            $resp = array('info' => true, 'message' => $resolution['message']);
+        else
+            $resp = array('error' => true, 'message' => 'Ocurrio un error mientras actualizaba la información. Intente nuevamente');
+    } else
+        $resp = array('info' => true, 'message' => 'Ya existe un vendedor con el mismo nit. Ingrese nuevo nit');
     $response->getBody()->write(json_encode($resp));
     return $response->withStatus(200)->withHeader('Content-Type', 'application/json');
 });
 
-$app->get('/deleteClient/{id_client}', function (Request $request, Response $response, $args) use ($sellersDao) {
-    $client = $sellersDao->deleteClient($args['id_client']);
+$app->get('/deleteSeller/{id_seller}', function (Request $request, Response $response, $args) use ($sellersDao) {
+    $resolution = $sellersDao->deleteSeller($args['id_seller']);
 
-    if ($client == null)
-        $resp = array('success' => true, 'message' => 'Cliente eliminado correctamente');
+    if ($resolution == null)
+        $resp = array('success' => true, 'message' => 'Vendedor eliminado correctamente');
+    else if (isset($resolution['info']))
+        $resp = array('info' => true, 'message' => $resolution['message']);
     else
-        $resp = array('error' => true, 'message' => 'No es posible eliminar el cliente, existe información asociada a él');
+        $resp = array('error' => true, 'message' => 'No es posible eliminar el vendedor, existe información asociada a él');
     $response->getBody()->write(json_encode($resp));
     return $response->withStatus(200)->withHeader('Content-Type', 'application/json');
 });
