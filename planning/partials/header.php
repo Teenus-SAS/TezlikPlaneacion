@@ -73,14 +73,7 @@
                                                     <i class="fas fa-cogs"></i>
                                                     <a href="/planning/machines">Procesos y Máquinas</a>
                                                     </li>
-                                                    <?php if ($_SESSION['requisition'] == 1) { ?>
-                                                        <li class="planRequisitions">
-                                                        <?php } else { ?>
-                                                        <li class="planRequisitions" style="display: none;">
-                                                        <?php } ?>
-                                                        <i class="fas fa-file-upload"></i>
-                                                        <a href="/planning/requisitions">Control Requisiciones</a>
-                                                        </li>
+
                                         </ul>
                                         </div>
 
