@@ -175,7 +175,6 @@ class FilesDao
         $type       = $_FILES['img']['type'];
         $error      = $_FILES['img']['error'];
 
-
         /* Verifica si directorio esta creado y lo crea */
         if (!is_dir($targetDir))
             mkdir($targetDir, 0777, true);
@@ -194,6 +193,42 @@ class FilesDao
             ]);
 
             $targetDir = dirname(dirname(dirname(__DIR__))) . '/assets/images/clients/' . $id_company;
+            $targetFilePath = $targetDir . '/' . $image_name;
+
+            move_uploaded_file($tmp_name, $targetFilePath);
+        }
+    }
+
+    public function avatarSeller($id_seller, $id_company)
+    {
+        $connection = Connection::getInstance()->getConnection();
+        $targetDir = dirname(dirname(dirname(__DIR__))) . '/assets/images/sellers/' . $id_company;
+        $allowTypes = array('jpg', 'jpeg', 'png');
+
+        $image_name = str_replace(' ', '', $_FILES['avatar']['name']);
+        $tmp_name   = $_FILES['avatar']['tmp_name'];
+        $size       = $_FILES['avatar']['size'];
+        $type       = $_FILES['avatar']['type'];
+        $error      = $_FILES['avatar']['error'];
+
+        /* Verifica si directorio esta creado y lo crea */
+        if (!is_dir($targetDir))
+            mkdir($targetDir, 0777, true);
+
+        $targetDir = '/assets/images/sellers/' . $id_company;
+        $targetFilePath = $targetDir . '/' . $image_name;
+
+        $fileType = pathinfo($targetFilePath, PATHINFO_EXTENSION);
+
+        if (in_array($fileType, $allowTypes)) {
+            $sql = "UPDATE sellers SET avatar = :avatar WHERE id_seller = :id_seller";
+            $query = $connection->prepare($sql);
+            $query->execute([
+                'avatar' => $targetFilePath,
+                'id_seller' => $id_seller
+            ]);
+
+            $targetDir = dirname(dirname(dirname(__DIR__))) . '/assets/images/sellers/' . $id_company;
             $targetFilePath = $targetDir . '/' . $image_name;
 
             move_uploaded_file($tmp_name, $targetFilePath);

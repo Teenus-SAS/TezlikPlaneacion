@@ -199,6 +199,7 @@ $app->post('/saveProgramming', function (Request $request, Response $response, $
     $programmingRoutesDao,
     $generalProgrammingDao,
     $generalOrdersDao,
+    $generalPlanCiclesMachinesDao,
     $productsMaterialsDao,
     $generalMaterialsDao,
     $ordersDao,
@@ -252,8 +253,9 @@ $app->post('/saveProgramming', function (Request $request, Response $response, $
 
         if ($result != null) break;
         $productsMaterials = $productsMaterialsDao->findAllProductsmaterials($programmings[$i]['id_product'], $id_company);
+        $planCicles = $generalPlanCiclesMachinesDao->findAllPlanCiclesMachineByProduct($programmings[$i]['id_product'], $id_company);
 
-        if (sizeof($productsMaterials) == 0) {
+        if (sizeof($productsMaterials) == 0 || sizeof($planCicles) == 0) {
             $generalOrdersDao->changeStatus($programmings[$i]['id_order'], 5);
         } else {
             foreach ($productsMaterials as $k) {
@@ -275,8 +277,9 @@ $app->post('/saveProgramming', function (Request $request, Response $response, $
             if ($arr['status'] != 'EN PRODUCCION' && $arr['status'] != 'ENTREGADO' && $arr['status'] != 'PROGRAMADO' && $arr['id_product'] == $programmings[$i]['id_product']) {
                 // Ficha tecnica
                 $productsMaterials = $productsMaterialsDao->findAllProductsmaterials($arr['id_product'], $id_company);
+                $planCicles = $generalPlanCiclesMachinesDao->findAllPlanCiclesMachineByProduct($arr['id_product'], $id_company);
 
-                if (sizeof($productsMaterials) == 0) {
+                if (sizeof($productsMaterials) == 0 || sizeof($planCicles) == 0) {
                     $generalOrdersDao->changeStatus($arr['id_order'], 5);
                 } else {
                     foreach ($productsMaterials as $k) {
@@ -419,6 +422,7 @@ $app->post('/deleteProgramming', function (Request $request, Response $response,
     $generalOrdersDao,
     $generalProgrammingDao,
     $productsMaterialsDao,
+    $generalPlanCiclesMachinesDao,
     $generalMaterialsDao,
     $ordersDao
 ) {
@@ -461,8 +465,9 @@ $app->post('/deleteProgramming', function (Request $request, Response $response,
 
                 // Ficha tecnica
                 $productsMaterials = $productsMaterialsDao->findAllProductsmaterials($arr['id_product'], $id_company);
+                $planCicles = $generalPlanCiclesMachinesDao->findAllPlanCiclesMachineByProduct($arr['id_product'], $id_company);
 
-                if (sizeof($productsMaterials) == 0) {
+                if (sizeof($productsMaterials) == 0 || sizeof($planCicles) == 0) {
                     $generalOrdersDao->changeStatus($arr['id_order'], 5);
                 } else {
                     foreach ($productsMaterials as $k) {

@@ -380,8 +380,9 @@ $app->post('/addOrder', function (Request $request, Response $response, $args) u
             if ($orders[$i]['original_quantity'] > $orders[$i]['accumulated_quantity']) {
                 // Ficha tecnica
                 $productsMaterials = $productsMaterialsDao->findAllProductsmaterials($orders[$i]['id_product'], $id_company);
+                $planCicles = $generalPlanCiclesMachinesDao->findAllPlanCiclesMachineByProduct($orders[$i]['id_product'], $id_company);
 
-                if (sizeof($productsMaterials) == 0) {
+                if (sizeof($productsMaterials) == 0 || sizeof($planCicles) == 0) {
                     $generalOrdersDao->changeStatus($orders[$i]['id_order'], 5);
                     $status = false;
                 } else {
@@ -489,6 +490,7 @@ $app->post('/updateOrder', function (Request $request, Response $response, $args
     $generalProductsDao,
     $convertDataDao,
     $generalRMStockDao,
+    $generalPlanCiclesMachinesDao,
     $explosionMaterialsDao,
     $requisitionsDao,
     $generalRequisitionsDao,
@@ -564,8 +566,9 @@ $app->post('/updateOrder', function (Request $request, Response $response, $args
             if ($order['original_quantity'] > $order['accumulated_quantity']) {
                 // Ficha tecnica
                 $productsMaterials = $productsMaterialsDao->findAllProductsmaterials($dataOrder['idProduct'], $id_company);
+                $planCicles = $generalPlanCiclesMachinesDao->findAllPlanCiclesMachineByProduct($dataOrder['idProduct'], $id_company);
 
-                if (sizeof($productsMaterials) == 0) {
+                if (sizeof($productsMaterials) == 0 || sizeof($planCicles) == 0) {
                     $generalOrdersDao->changeStatus($dataOrder['idOrder'], 5);
                     $status = false;
                 } else {

@@ -5,6 +5,7 @@ use TezlikPlaneacion\dao\ExplosionMaterialsDao;
 use TezlikPlaneacion\dao\FilterDataDao;
 use TezlikPlaneacion\dao\GeneralMaterialsDao;
 use TezlikPlaneacion\dao\GeneralOrdersDao;
+use TezlikPlaneacion\dao\GeneralPlanCiclesMachinesDao;
 use TezlikPlaneacion\dao\GeneralProductsDao;
 use TezlikPlaneacion\dao\GeneralProductsMaterialsDao;
 use TezlikPlaneacion\dao\GeneralProgrammingDao;
@@ -29,6 +30,7 @@ $generalOrdersDao = new GeneralOrdersDao();
 $inventoryDaysDao = new InventoryDaysDao();
 $productsMaterialsDao = new ProductsMaterialsDao();
 $generalProductsMaterialsDao = new GeneralProductsMaterialsDao();
+$generalPlanCiclesMachinesDao = new GeneralPlanCiclesMachinesDao();
 $productsDao = new GeneralProductsDao();
 $generalProgrammingDao = new GeneralProgrammingDao();
 $filterDataDao = new FilterDataDao();
@@ -197,6 +199,7 @@ $app->post('/addMaterials', function (Request $request, Response $response, $arg
     $generalProductsMaterialsDao,
     $productsDao,
     $generalProgrammingDao,
+    $generalPlanCiclesMachinesDao,
     $generalMaterialsDao,
     $materialsInventoryDao,
     $magnitudesDao,
@@ -322,12 +325,13 @@ $app->post('/addMaterials', function (Request $request, Response $response, $arg
             // $order = $generalOrdersDao->checkAccumulatedQuantityOrder($orders[$i]['id_order']);
 
             $productsMaterials = $productsMaterialsDao->findAllProductsmaterials($orders[$i]['id_product'], $id_company);
+            $planCicles = $generalPlanCiclesMachinesDao->findAllPlanCiclesMachineByProduct($orders[$i]['id_product'], $id_company);
 
             if ($orders[$i]['status'] != 'EN PRODUCCION' && $orders[$i]['status'] != 'FABRICADO') {
                 if ($orders[$i]['original_quantity'] > $orders[$i]['accumulated_quantity']) {
                     // Ficha tecnica
 
-                    if (sizeof($productsMaterials) == 0) {
+                    if (sizeof($productsMaterials) == 0 || sizeof($planCicles) == 0) {
                         $generalOrdersDao->changeStatus($orders[$i]['id_order'], 5);
                         $status = false;
                     } else {
@@ -397,6 +401,7 @@ $app->post('/updateMaterials', function (Request $request, Response $response, $
     $generalOrdersDao,
     $generalProductsDao,
     $inventoryDaysDao,
+    $generalPlanCiclesMachinesDao,
     $productsDao,
     $productsMaterialsDao,
     $generalProductsMaterialsDao,
@@ -581,11 +586,12 @@ $app->post('/updateMaterials', function (Request $request, Response $response, $
             // $order = $generalOrdersDao->checkAccumulatedQuantityOrder($orders[$i]['id_order']);
             // Ficha tecnica
             $productsMaterials = $productsMaterialsDao->findAllProductsmaterials($orders[$i]['id_product'], $id_company);
+            $planCicles = $generalPlanCiclesMachinesDao->findAllPlanCiclesMachineByProduct($orders[$i]['id_product'], $id_company);
 
             if ($orders[$i]['status'] != 'EN PRODUCCION' && $orders[$i]['status'] != 'FABRICADO') {
                 if ($orders[$i]['original_quantity'] > $orders[$i]['accumulated_quantity']) {
 
-                    if (sizeof($productsMaterials) == 0) {
+                    if (sizeof($productsMaterials) == 0 || sizeof($planCicles) == 0) {
                         $generalOrdersDao->changeStatus($orders[$i]['id_order'], 5);
                         $status = false;
                     } else {
