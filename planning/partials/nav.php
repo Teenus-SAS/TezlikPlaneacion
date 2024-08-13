@@ -23,10 +23,13 @@
                         <?php if ($_SESSION['requisition'] == 1) { ?>
                             <li class="planRequisitions">
                             <?php } else { ?>
-                            <li class="planRequisitions" style="display: none;">
+                            <li class="nav-link planRequisitions" style="display: none;">
                             <?php } ?>
-                            <i class="fas fa-file-upload"></i>
                             <a href="/planning/requisitions">Control Requisiciones</a>
+                            <a class="nav-link" href="/planning/requisitions">
+                                <i class="fas fa-file-upload mr-1"></i>Control Requisiciones
+                                <i class="bx bx-chevron-down"></i>
+                            </a>
                             </li>
 
                             <?php if ($_SESSION['plan_order'] == 1 && $_SESSION['plan_planning_order'] == 1) { ?>
