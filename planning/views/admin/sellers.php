@@ -8,8 +8,6 @@ if (sizeof($_SESSION) == 0)
     header('location: /');
 ?>
 
-<?php require_once dirname(dirname(dirname(__DIR__))) . '/planning/modals/createClients.php'; ?>
-
 <!DOCTYPE html>
 <html lang="es">
 
@@ -62,6 +60,42 @@ if (sizeof($_SESSION) == 0)
                     </div>
                 </div>
 
+                <div class="page-content-wrapper mt--45 mb-5 cardCreateSeller">
+                    <div class="container-fluid">
+                        <div class="row">
+                            <div class="col-12">
+                                <form id="formCreateSeller">
+                                    <div class="card">
+                                        <div class="card-body">
+                                            <div class="form-row">
+                                                <div class="col-sm floating-label enable-floating-label show-label" style="margin-bottom:0px">
+                                                    <label for="">Nombre</label>
+                                                    <input type="text" class="form-control text-center" id="firstname" name="firstname">
+                                                </div>
+                                                <div class="col-sm floating-label enable-floating-label show-label" style="margin-bottom:0px">
+                                                    <label for="">Apellido</label>
+                                                    <input type="text" class="form-control text-center" id="lastname" name="lastname">
+                                                </div>
+                                                <div class="col-sm-6 floating-label enable-floating-label show-label" style="margin-bottom:0px">
+                                                    <label for="">Email</label>
+                                                    <input type="text" class="form-control text-center" id="email" name="email">
+                                                </div>
+                                                <div class="col-sm-6 floating-label enable-floating-label show-label drag-area mt-4">
+                                                    <input class="form-control" type="file" id="formFile">
+                                                    <label for="formFile" class="form-label"> Cargar imagen vendedor</label>
+                                                </div>
+                                                <div class="col-sm mt-4">
+                                                    <button class="btn btn-success" id="btnCreateSeller">Crear</button>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
                 <div class="page-content-wrapper mt--45 mb-5 cardImportSellers">
                     <div class="container-fluid">
                         <div class="row">
@@ -72,7 +106,7 @@ if (sizeof($_SESSION) == 0)
                                             <div class="form-row" id="formSellers">
                                                 <div class="col-sm-6 floating-label enable-floating-label show-label drag-area" style="margin-bottom:10px!important">
                                                     <input class="form-control" type="file" id="fileSellers" accept=".xls,.xlsx">
-                                                    <label for="formFile" class="form-label">Importar Vendedores</label>
+                                                    <label for="fileSellers" class="form-label">Importar Vendedores</label>
                                                 </div>
                                                 <div class="col-xs-2 cardBottons" style="margin-top:7px">
                                                     <button type="text" class="btn btn-success" id="btnImportSellers">Importar</button>
@@ -120,11 +154,13 @@ if (sizeof($_SESSION) == 0)
 
     <?php include_once dirname(dirname(dirname(__DIR__))) . '/global/partials/scriptsJS.php'; ?>
 
-    <script src="/planning/js/admin/clients/tblClients.js"></script>
-    <script src="/planning/js/admin/clients/clients.js"></script>
+    <script src="/planning/js/general/seller/tblSellers.js"></script>
+    <script src="/planning/js/general/seller/sellers.js"></script>
     <script src="../global/js/import/import.js"></script>
-    <script src="/planning/js/admin/clients/importClients.js"></script>
-    <script src="../global/js/import/file.js"></script>
+    <script src="/planning/js/general/seller/importSellers.js"></script>
+    <script src="/global/js/import/file.js"></script>
+    <script src="/global/js/global/validateImgExt.js"></script>
+
 </body>
 
 </html>

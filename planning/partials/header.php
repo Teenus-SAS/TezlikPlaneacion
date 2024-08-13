@@ -127,7 +127,7 @@
                                                         <ul class="list-unstyled megamenu-list">
                                                             <li class="planClients">
                                                                 <i class="fas fa-users"></i>
-                                                                <a href="/planning/sellers">Nómina Producción</a>
+                                                                <a href="/planning/payrroll">Nómina Producción</a>
                                                             </li>
                                                             <?php if ($_SESSION['client'] == 1) { ?>
                                                                 <li class="planClients">

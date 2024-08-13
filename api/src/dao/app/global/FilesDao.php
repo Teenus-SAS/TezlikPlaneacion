@@ -202,7 +202,7 @@ class FilesDao
     public function avatarSeller($id_seller, $id_company)
     {
         $connection = Connection::getInstance()->getConnection();
-        $targetDir = dirname(dirname(dirname(__DIR__))) . '/assets/images/sellers/' . $id_company;
+        $targetDir = dirname(dirname(dirname(dirname(dirname(__DIR__))))) . '/assets/images/sellers/' . $id_company;
         $allowTypes = array('jpg', 'jpeg', 'png');
 
         $image_name = str_replace(' ', '', $_FILES['avatar']['name']);
@@ -228,7 +228,7 @@ class FilesDao
                 'id_seller' => $id_seller
             ]);
 
-            $targetDir = dirname(dirname(dirname(__DIR__))) . '/assets/images/sellers/' . $id_company;
+            $targetDir = dirname(dirname(dirname(dirname(dirname(__DIR__))))) . '/assets/images/sellers/' . $id_company;
             $targetFilePath = $targetDir . '/' . $image_name;
 
             move_uploaded_file($tmp_name, $targetFilePath);

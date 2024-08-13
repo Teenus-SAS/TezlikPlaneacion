@@ -51,7 +51,7 @@ get('/planning/product-process', '/planning/views/config/productProcess.php');
 get('/planning/planning-machines', '/planning/views/config/planningMachines.php');
 get('/planning/stock', '/planning/views/config/stock.php');
 get('/planning/calendar', '/planning/views/config/calender.php');
-//General
+//General 
 get('/planning/categories', '/planning/views/general/categories.php');
 get('/planning/sales', '/planning/views/general/sales.php');
 get('/planning/inventoryABC', '/planning/views/general/inventoryABC.php');

@@ -1,6 +1,6 @@
 $(document).ready(function() {
     //$('input[type="file"]').on('change', function() {
-    $('#formFile').on('change', function() {
+    $('#formFile').on('change', function () { 
         var ext = $(this).val().split('.').pop();
         if ($(this).val() != '') {
             if (ext != "png" && ext != "jpg" && ext != "jpge") {
