@@ -38,8 +38,8 @@ class SellersDao
                                           VALUES (:id_company, :firstname, :lastname, :email, :status)");
             $stmt->execute([
                 'id_company' => $id_company,
-                'firstname' => $dataSeller['firstname'],
-                'lastname' => $dataSeller['lastname'],
+                'firstname' => strtoupper(trim($dataSeller['firstname'])),
+                'lastname' => strtoupper(trim($dataSeller['lastname'])),
                 'email' => $dataSeller['email'],
                 'status' => 1
             ]);
@@ -57,10 +57,28 @@ class SellersDao
                                           WHERE id_seller = :id_seller");
             $stmt->execute([
                 'id_seller' => $dataSeller['idSeller'],
-                'firstname' => $dataSeller['firstname'],
-                'lastname' => $dataSeller['lastname'],
+                'firstname' => strtoupper(trim($dataSeller['firstname'])),
+                'lastname' => strtoupper(trim($dataSeller['lastname'])),
                 'email' => $dataSeller['email'],
             ]);
+        } catch (\Exception $e) {
+            return ['info' => true, 'message' => $e->getMessage()];
+        }
+    }
+
+    public function deleteSeller($id_seller)
+    {
+        try {
+            $connection = Connection::getInstance()->getConnection();
+
+            $stmt = $connection->prepare("SELECT * FROM sellers WHERE id_seller = :id_seller");
+            $stmt->execute(['id_seller' => $id_seller]);
+            $rows = $stmt->rowCount();
+
+            if ($rows > 0) {
+                $stmt = $connection->prepare("DELETE FROM sellers WHERE id_seller = :id_seller");
+                $stmt->execute(['id_seller' => $id_seller]);
+            }
         } catch (\Exception $e) {
             return ['info' => true, 'message' => $e->getMessage()];
         }
