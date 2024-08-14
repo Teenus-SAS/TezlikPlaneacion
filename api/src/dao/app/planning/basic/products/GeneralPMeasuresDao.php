@@ -20,7 +20,8 @@ class GeneralPMeasuresDao
     {
         $connection = Connection::getInstance()->getConnection();
 
-        $stmt = $connection->prepare("SELECT * FROM products_measures WHERE id_product = :id_product AND id_company = :id_company");
+        $sql = "SELECT * FROM products_measures WHERE id_product = :id_product AND id_company = :id_company";
+        $stmt = $connection->prepare($sql);
         $stmt->execute([
             'id_product' => $dataProduct['idProduct'],
             'id_company' => $id_company

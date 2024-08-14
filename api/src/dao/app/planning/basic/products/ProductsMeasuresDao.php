@@ -19,10 +19,11 @@ class ProductsMeasuresDao
     public function findAllProductsMeasuresByCompany($id_company)
     {
         $connection = Connection::getInstance()->getConnection();
-        $stmt = $connection->prepare("SELECT pm.id_product_measure, pm.id_product, p.reference, p.product, p.img, pm.grammage, pm.width, pm.high, pm.length, pm.useful_length, pm.total_width, pm.window, pm.weight 
+        $sql = "SELECT pm.id_product_measure, pm.id_product, p.reference, p.product, p.img, pm.width, pm.high, pm.length, pm.useful_length, pm.total_width, pm.window, pm.weight 
                                       FROM products_measures pm
                                         INNER JOIN products p ON p.id_product = pm.id_product
-                                      WHERE pm.id_company = :id_company");
+                                      WHERE pm.id_company = :id_company";
+        $stmt = $connection->prepare($sql);
         $stmt->execute([
             'id_company' => $id_company
         ]);
@@ -36,12 +37,12 @@ class ProductsMeasuresDao
         try {
             $connection = Connection::getInstance()->getConnection();
 
-            $stmt = $connection->prepare("INSERT INTO products_measures (id_product, id_company, grammage, width, high, length, useful_length, total_width, window, weight) 
-                                          VALUES (:id_product, :id_company, :grammage, :width, :high, :length, :useful_length, :total_width, :window, :weight)");
+            $sql = "INSERT INTO products_measures (id_product, id_company, grammage, width, high, length, useful_length, total_width, window, weight) 
+                    VALUES (:id_product, :id_company, :width, :high, :length, :useful_length, :total_width, :window, :weight)";
+            $stmt = $connection->prepare($sql);
             $stmt->execute([
                 'id_company' => $id_company,
                 'id_product' => $dataProduct['idProduct'],
-                'grammage' => $dataProduct['grammage'],
                 'width' => $dataProduct['width'],
                 'high' => $dataProduct['high'],
                 'length' => $dataProduct['length'],
@@ -60,11 +61,13 @@ class ProductsMeasuresDao
         try {
             $connection = Connection::getInstance()->getConnection();
 
-            $stmt = $connection->prepare("UPDATE products_measures SET grammage = :grammage, width = :width, high = :high, length = :length, useful_length = :useful_length, total_width = :total_width, window = :window, weight = :weight
-                                          WHERE id_product_measure = :id_product_measure");
+            $sql = "UPDATE products_measures 
+                    SET width = :width, high = :high, length = :length, useful_length = :useful_length, total_width = :total_width, 
+                        window = :window, weight = :weight
+                    WHERE id_product_measure = :id_product_measure";
+            $stmt = $connection->prepare($sql);
             $stmt->execute([
                 'id_product_measure' => $dataProduct['idProductMeasure'],
-                'grammage' => $dataProduct['grammage'],
                 'width' => $dataProduct['width'],
                 'high' => $dataProduct['high'],
                 'length' => $dataProduct['length'],
@@ -83,7 +86,8 @@ class ProductsMeasuresDao
         try {
             $connection = Connection::getInstance()->getConnection();
 
-            $stmt = $connection->prepare("SELECT * FROM products_measures WHERE id_product_measure = :id_product_measure");
+            $sql = "SELECT * FROM products_measures WHERE id_product_measure = :id_product_measure";
+            $stmt = $connection->prepare($sql);
             $stmt->execute(['id_product_measure' => $id_product_measure]);
             $rows = $stmt->rowCount();
 
