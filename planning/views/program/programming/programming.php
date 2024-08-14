@@ -49,21 +49,21 @@ if (sizeof($_SESSION) == 0)
                                 </div>
                             </div>
                             <div class="col-sm-7 col-xl-8 form-inline justify-content-sm-end">
-                                <div class="col-sm-7 col-xl-2 form-inline justify-content-sm-end mt-3 cardBottons">
+                                <div class="col-sm-7 col-xl-2 floating-label enable-floating-label show-label form-inline justify-content-sm-end p-1 mb-0 cardBottons">
                                     <div id="machines1">
                                         <label class="font-weight-bold text-dark">Maquina</label>
                                         <select class="form-control idMachine" id="searchMachine">
                                         </select>
                                     </div>
                                 </div>
-                                <div class="col-sm-7 col-xl-2 form-inline justify-content-sm-end mt-3 cardBottons">
+                                <div class="col-sm-7 col-xl-2 form-inline justify-content-sm-end p-1 cardBottons">
                                     <button class="btn btn-warning" id="btnNewProgramming" name="btnNewProgramming">Programar</button>
                                 </div>
-                                <div class="col-sm-7 col-xl-2 form-inline justify-content-sm-end mt-3 cardSaveBottons">
-                                    <button class="btn btn-primary" id="btnSavePrograming" name="btnSavePrograming">Guardar Planeación</button>
+                                <div class="col-sm-7 col-xl-2 form-inline justify-content-sm-end p-1 cardSaveBottons">
+                                    <button class="btn btn-primary" id="btnSavePrograming" name="btnSavePrograming">Guardar</button>
                                 </div>
-                                <div class="col-sm-7 col-xl-2 form-inline justify-content-sm-end mt-3 cardAddOP">
-                                    <button class="btn btn-info" id="btnAddOP" name="btnAddOP">Crear Orden Produccion</button>
+                                <div class="col-sm-7 col-xl-2 form-inline justify-content-sm-end p-1 cardAddOP">
+                                    <button class="btn btn-info" id="btnAddOP" name="btnAddOP">Crear OP</button>
                                 </div>
                             </div>
                             <!-- <div class="col-sm-7 col-xl-2 form-inline justify-content-sm-end mt-3 cardBottons">

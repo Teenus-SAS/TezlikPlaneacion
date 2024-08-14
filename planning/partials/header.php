@@ -63,7 +63,7 @@
                                                 <li class="planProducts" style="display: none;">
                                                 <?php } ?>
                                                 <i class="fas fa-dolly-flatbed"></i>
-                                                <a href="/planning/products">Inventarios</a>
+                                                <a href="/planning/invProducts">Inventarios</a>
                                                 </li>
 
                                                 <?php if ($_SESSION['planning_machine'] == 1) { ?>
@@ -76,7 +76,7 @@
                                                     </li>
                                                     <li class="planClients">
                                                         <i class="fas fa-users"></i>
-                                                        <a href="/planning/sellers">Nómina Producción</a>
+                                                        <a href="/planning/productionPayroll">Nómina Producción</a>
                                                     </li>
                                         </ul>
                                         </div>
@@ -129,10 +129,7 @@
                                                         <?php } ?>
                                                         <h5 class="font-size-14 font-weight-600">General</h5>
                                                         <ul class="list-unstyled megamenu-list">
-                                                            <li class="planClients">
-                                                                <i class="fas fa-users"></i>
-                                                                <a href="/planning/payroll">Nómina Producción</a>
-                                                            </li>
+                                                            
                                                             <?php if ($_SESSION['client'] == 1) { ?>
                                                                 <li class="planClients">
                                                                 <?php } else { ?>

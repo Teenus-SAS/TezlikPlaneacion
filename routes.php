@@ -38,12 +38,14 @@ get('/planning/production-order', '/planning/views/productionOrder/productionOrd
 get('/planning/details-production-order', '/planning/views/productionOrder/detailsProductionOrder.php');
 get('/planning/store', '/planning/views/store/store.php');
 //Basic
+get('/planning/products', '/planning/views/basic/products.php');
 get('/planning/molds', '/planning/views/basic/invMolds.php');
-get('/planning/products', '/planning/views/basic/createProducts.php');
+get('/planning/invProducts', '/planning/views/basic/createProducts.php');
 get('/planning/materials', '/planning/views/basic/createRawMaterials.php');
 get('/planning/machines', '/planning/views/basic/createMachines.php');
 get('/planning/process', '/planning/views/basic/createProcess.php');
 get('/planning/requisitions', '/planning/views/basic/requisitions.php');
+get('/planning/productionPayroll', '/planning/views/basic/productionPayroll.php');
 //Config
 get('/planning/product-materials', '/planning/views/config/productMaterials.php');
 get('/planning/product-process', '/planning/views/config/productProcess.php');
