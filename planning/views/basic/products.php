@@ -76,10 +76,10 @@ if (sizeof($_SESSION) == 0)
                                                     <label for="">Producto</label>
                                                     <select class="form-control selectNameProduct" name="idProduct" id="selectNameProduct"></select>
                                                 </div>
-                                                <div class="col-sm-2 floating-label enable-floating-label show-label">
+                                                <!-- <div class="col-sm-2 floating-label enable-floating-label show-label">
                                                     <label for="">Gramaje</label>
                                                     <input type="number" class="form-control text-center inputsCalc" id="grammage" name="grammage"></input>
-                                                </div>
+                                                </div> -->
                                                 <div class="col-sm-1 floating-label enable-floating-label show-label">
                                                     <label for="">Ancho</label>
                                                     <input type="number" class="form-control text-center" id="width" name="width"></input>
@@ -104,10 +104,10 @@ if (sizeof($_SESSION) == 0)
                                                     <label for="">Ventanilla</label>
                                                     <input type="number" class="form-control text-center" id="window" name="window">
                                                 </div>
-                                                <div class="col-sm-2 floating-label enable-floating-label show-label">
+                                                <!-- <div class="col-sm-2 floating-label enable-floating-label show-label">
                                                     <label for="">Peso</label>
                                                     <input type="number" class="form-control text-center" id="weight" name="weight" readonly>
-                                                </div>
+                                                </div> -->
                                                 <div class="col-sm-2 ml-2">
                                                     <button class="btn btn-success" id="btnCreatePMeasure">Crear</button>
                                                 </div>
