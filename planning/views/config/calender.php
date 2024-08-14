@@ -183,6 +183,7 @@
    <script src="/assets/libs/fullcalendar/fullcalendar.min.js"></script>
    <script src="/assets/libs/select2/js/select2.min.js"></script>
    <script src="/assets/js/pages/calender.init.js"></script>
+   <script src="/planning/js/config/calender/generalCalender.js"></script>
    <!-- ================== END PAGE LEVEL JS ================== -->
    <!-- ================== BEGIN PAGE JS ================== -->
    <!-- <script src="/assets/js/app.js"></script> -->

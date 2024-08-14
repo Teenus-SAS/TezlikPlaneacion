@@ -105,7 +105,7 @@ class CompaniesLicenseDao
             $stmt->execute([
                 'license_start' => $dataLicense['license_start'],
                 'license_end' => $dataLicense['license_end'],
-                'flag_products_measure' => 1,
+                'flag_products_measure' => $dataLicense['productsMeasures'],
                 'quantity_user' => $dataLicense['quantityUsers'],
                 'plan' => $dataLicense['plan'],
                 'id_company' => $dataLicense['company']

@@ -49,7 +49,11 @@ $app->post('/productsMeasuresDataValidation', function (Request $request, Respon
                 break;
             }
             if (
-                empty(trim($products[$i]['referenceProduct'])) || empty(trim($products[$i]['product']))
+                empty(trim($products[$i]['referenceProduct'])) || empty(trim($products[$i]['product'])) ||
+                empty(trim($products[$i]['grammage'])) || empty(trim($products[$i]['width'])) ||
+                empty(trim($products[$i]['high'])) || empty(trim($products[$i]['length'])) ||
+                empty(trim($products[$i]['usefulLength'])) || empty(trim($products[$i]['totalWidth'])) ||
+                empty(trim($products[$i]['window']))
             ) {
                 $i = $i + 2;
                 $dataImportProduct = array('error' => true, 'message' => "Campos vacios, fila: $i");

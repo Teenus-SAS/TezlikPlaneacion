@@ -115,6 +115,7 @@ if (sizeof($_SESSION) == 0)
                     </div>
                 </div>
 
+                <!-- Productos -->
                 <div class="page-content-wrapper mt--45 mb-5 cardCreateProduct">
                     <div class="container-fluid">
                         <div class="row">
@@ -178,6 +179,7 @@ if (sizeof($_SESSION) == 0)
                     </div>
                 </div>
 
+                <!-- Materiales -->
                 <div class="page-content-wrapper mt--45 mb-5 cardRawMaterials">
                     <div class="container-fluid">
                         <div class="row">

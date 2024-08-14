@@ -1,23 +1,23 @@
 $(document).ready(function () {
   let selectedFile;
 
-  $('.cardImportMachines').hide();
+  $('.cardImportAreas').hide();
 
-  $('#btnImportNewMachines').click(function (e) {
+  $('#btnNewImportAreas').click(function (e) {
     e.preventDefault();
-    $('.cardCreateMachines').hide(800);
-    $('.cardImportMachines').toggle(800);
+    $('.cardCreateArea').hide(800);
+    $('.cardImportAreas').toggle(800);
   });
 
-  $('#fileMachines').change(function (e) {
+  $('#fileAreas').change(function (e) {
     e.preventDefault();
     selectedFile = e.target.files[0];
   });
 
-  $('#btnImportMachines').click(function (e) {
+  $('#btnImportAreas').click(function (e) {
     e.preventDefault();
 
-    file = $('#fileMachines').val();
+    file = $('#fileAreas').val();
 
     if (!file) {
       toastr.error('Seleccione un archivo');
@@ -26,7 +26,7 @@ $(document).ready(function () {
 
     $('.cardBottons').hide();
 
-    let form = document.getElementById('formMachines');
+    let form = document.getElementById('formAreas');
     form.insertAdjacentHTML(
       'beforeend',
       `<div class="col-sm-1 cardLoading" style="margin-top: 7px; margin-left: 15px">
@@ -38,7 +38,7 @@ $(document).ready(function () {
 
     importFile(selectedFile)
       .then((data) => {
-        const expectedHeaders = ['maquina'];
+        const expectedHeaders = ['area'];
         const actualHeaders = Object.keys(data[0]);
 
         const missingHeaders = expectedHeaders.filter(header => !actualHeaders.includes(header));
@@ -46,39 +46,39 @@ $(document).ready(function () {
         if (missingHeaders.length > 0) {
           $('.cardLoading').remove();
           $('.cardBottons').show(400);
-          $('#fileMachines').val('');
+          $('#fileAreas').val('');
           toastr.error('Archivo no corresponde a el formato. Verifique nuevamente');
           return false;
         }
 
-        let machinesToImport = data.map((item) => {
+        let areaToImport = data.map((item) => {
           return {
-            machine: item.maquina,
+            area: item.area,
           };
         });
-        checkMachine(machinesToImport);
+        checkArea(areaToImport);
       })
       .catch(() => {
         $('.cardLoading').remove();
         $('.cardBottons').show(400);
-        $('#fileMachines').val('');
+        $('#fileAreas').val('');
         
         toastr.error('Ocurrio un error. Intente Nuevamente');
       });
   });
 
   /* Mensaje de advertencia */
-  const checkMachine = (data) => {
+  const checkArea = (data) => {
     $.ajax({
       type: 'POST',
-      url: '/api/machinesDataValidation',
-      data: { importMachines: data },
+      url: '/api/areasDataValidation',
+      data: { importAreas: data },
       success: function (resp) {
         if (resp.error == true) {
           $('.cardLoading').remove();
           $('.cardBottons').show(400);
-          $('#fileMachines').val('');
-          $('#formImportMachines').trigger('reset');
+          $('#fileAreas').val('');
+          $('#formImportAreas').trigger('reset');
           toastr.error(resp.message);
           return false;
         }
@@ -98,11 +98,11 @@ $(document).ready(function () {
           },
           callback: function (result) {
             if (result) {
-              saveMachineTable(data);
+              saveAreaTable(data);
             } else {
               $('.cardLoading').remove();
               $('.cardBottons').show(400);
-              $('#fileMachines').val('');
+              $('#fileAreas').val('');
             }
           },
         });
@@ -110,25 +110,25 @@ $(document).ready(function () {
     });
   };
 
-  const saveMachineTable = (data) => {
+  const saveAreaTable = (data) => {
     $.ajax({
       type: 'POST',
-      url: '/api/addPlanMachines',
-      data: { importMachines: data },
+      url: '/api/addPlanArea',
+      data: { importAreas: data },
       success: function (r) {
         $('.cardLoading').remove();
         $('.cardBottons').show(400);
-        $('#fileMachines').val('');
-        messageMachine(r);
+        $('#fileAreas').val('');
+        messageArea(r);
       },
     });
   };
 
   /* Descargar formato */
-  $('#btnDownloadImportsMachines').click(function (e) {
+  $('#btnDownloadImportsAreas').click(function (e) {
     e.preventDefault();
 
-    url = 'assets/formatsXlsx/Maquinas.xlsx';
+    url = 'assets/formatsXlsx/Areas.xlsx';
 
     link = document.createElement('a');
 

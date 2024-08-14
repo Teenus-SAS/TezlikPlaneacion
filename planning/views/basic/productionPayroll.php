@@ -72,32 +72,26 @@ if (sizeof($_SESSION) == 0)
                                                     <label for="">Nombres</label>
                                                     <input type="text" class="form-control text-center" id="firstname" name="firstname">
                                                 </div>
-                                                
                                                 <div class="col-sm-3 floating-label enable-floating-label show-label" style="margin-bottom:0px">
                                                     <label for="">Apellidos</label>
                                                     <input type="text" class="form-control text-center" id="lastname" name="lastname">
                                                 </div>
-                                                
                                                 <div class="col-sm-2 floating-label enable-floating-label show-label" style="margin-bottom:0px">
                                                     <label for="">Área</label>
-                                                    <select type="text" class="form-control text-center" id="area" name="area"></select>
+                                                    <select type="text" class="form-control text-center" id="idArea" name="idArea"></select>
                                                 </div>
-                                                
                                                 <div class="col-sm-2 floating-label enable-floating-label show-label" style="margin-bottom:0px">
                                                     <label for="">Proceso</label>
-                                                    <select type="text" class="form-control text-center" id="process" name="process"></select>
+                                                    <select type="text" class="form-control text-center" id="idProcess" name="idProcess"></select>
                                                 </div>
-                                                
                                                 <div class="col-sm-2 floating-label enable-floating-label show-label" style="margin-bottom:0px">
                                                     <label for="">Posición</label>
                                                     <input type="text" class="form-control text-center" id="position" name="position">
                                                 </div>
-                                                
-                                                <div class="col-sm-6 floating-label enable-floating-label show-label drag-area mt-4">
+                                                <!-- <div class="col-sm-6 floating-label enable-floating-label show-label drag-area mt-4">
                                                     <input class="form-control" type="file" id="formFile">
                                                     <label for="formFile" class="form-label"> Cargar imagen</label>
-                                                </div>
-
+                                                </div> -->
                                                 <div class="col-sm mt-4">
                                                     <button class="btn btn-success" id="btnCreateEmployee">Crear</button>
                                                 </div>
@@ -168,10 +162,12 @@ if (sizeof($_SESSION) == 0)
 
     <?php include_once dirname(dirname(dirname(__DIR__))) . '/global/partials/scriptsJS.php'; ?>
 
-    <script src="/planning/js/general/seller/tblSellers.js"></script>
-    <script src="/planning/js/general/seller/sellers.js"></script>
+    <script src="/planning/js/basic/areas/configAreas.js"></script>
+    <script src="/planning/js/basic/process/configProcess.js"></script>
+    <script src="/planning/js/basic/payroll/tblPayroll.js"></script>
+    <script src="/planning/js/basic/payroll/payroll.js"></script>
     <script src="../global/js/import/import.js"></script>
-    <script src="/planning/js/general/seller/importSellers.js"></script>
+    <script src="/planning/js/basic/payroll/importPayroll.js"></script>
     <script src="/global/js/import/file.js"></script>
     <script src="/global/js/global/validateImgExt.js"></script>
 

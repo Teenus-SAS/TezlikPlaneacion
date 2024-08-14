@@ -74,6 +74,24 @@ if (sizeof($_SESSION) == 0)
                                 </div>
                             </div>
                         </div>
+                        <div class="row align-items-center cardAreas" style="display: none;">
+                            <div class="col-sm-5 col-xl-6">
+                                <div class="page-title">
+                                    <h3 class="mb-1 font-weight-bold text-dark"><i class="fas fa-cogs mr-1"></i>Procesos y Máquinas</h3>
+                                    <ol class="breadcrumb mb-3 mb-md-0">
+                                        <li class="breadcrumb-item active">Creación de Procesos y Máquinas</li>
+                                    </ol>
+                                </div>
+                            </div>
+                            <div class="col-sm-7 col-xl-6 form-inline justify-content-sm-end">
+                                <div class="col-xs-2 mr-2">
+                                    <button class="btn btn-warning" id="btnNewArea" name="btnNewArea"><i class="bi bi-plus-circle mr-1"></i>Adicionar</button>
+                                </div>
+                                <div class="col-xs-2 py-2 mr-2">
+                                    <button class="btn btn-info" id="btnNewImportAreas" name="btnNewImportAreas"><i class="bi bi-cloud-arrow-up-fill mr-1"></i>Importar</button>
+                                </div>
+                            </div>
+                        </div>
                     </div>
                 </div>
 
@@ -177,6 +195,56 @@ if (sizeof($_SESSION) == 0)
                     </div>
                 </div>
 
+                <!-- Areas -->
+                <div class="page-content-wrapper mt--45 mb-5 cardCreateArea">
+                    <div class="container-fluid">
+                        <div class="row">
+                            <div class="col-12">
+                                <div class="card">
+                                    <div class="card-body">
+                                        <form id="formCreateArea">
+                                            <div class="form-row">
+                                                <div class="col-sm-10 floating-label enable-floating-label show-label">
+                                                    <input type="text" class="form-control" name="area" id="area">
+                                                    <label for="">Nombre</label>
+                                                </div>
+                                                <div class="col-sm mt-1">
+                                                    <button class="btn btn-success" id="btnCreateArea">Crear</button>
+                                                </div>
+                                            </div>
+                                        </form>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="page-content-wrapper mt--45 mb-5 cardImportAreas">
+                    <div class="container-fluid">
+                        <div class="row">
+                            <form class="col-12" id="formImportAreas" enctype="multipart/form-data">
+                                <div class="card">
+                                    <div class="card-body pt-3">
+                                        <div class="form-row" id="formAreas">
+                                            <div class="col-sm-6 floating-label enable-floating-label show-label drag-area" style="margin-bottom:10px!important">
+                                                <input class="form-control" type="file" id="fileAreas" accept=".xls,.xlsx">
+                                                <label for="fileAreas" class="form-label"> Importar Areas</label>
+                                            </div>
+                                            <div class="col-xs-2 cardBottons" style="margin-top:7px">
+                                                <button type="text" class="btn btn-success" id="btnImportAreas">Importar</button>
+                                            </div>
+                                            <div class="col-xs-2 cardBottons" style="margin-top:7px">
+                                                <button type="text" class="btn btn-info" id="btnDownloadImportsAreas">Descarga Formato</button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+
                 <div class="page-content-wrapper mt--45">
                     <div class="container-fluid">
                         <!-- Row 5 -->
@@ -191,6 +259,11 @@ if (sizeof($_SESSION) == 0)
                                     <li class="nav-item">
                                         <a class="nav-link selectNavigation" id="link-machines" data-toggle="pill" href="javascript:;" role="tab" aria-controls="pills-projects" aria-selected="false">
                                             <i class="bi bi-gear-wide mr-1"></i>Máquinas
+                                        </a>
+                                    </li>
+                                    <li class="nav-item">
+                                        <a class="nav-link selectNavigation" id="link-areas" data-toggle="pill" href="javascript:;" role="tab" aria-controls="pills-projects" aria-selected="false">
+                                            <i class="bi bi-gear-wide mr-1"></i>Areas
                                         </a>
                                     </li>
                                 </ul>
@@ -209,6 +282,11 @@ if (sizeof($_SESSION) == 0)
                                         </div>
                                         <div class="tab-pane cardMachines" style="display: none;">
                                             <table class="fixed-table-loading table table-hover" id="tblMachines">
+
+                                            </table>
+                                        </div>
+                                        <div class="tab-pane cardAreas" style="display: none;">
+                                            <table class="fixed-table-loading table table-hover" id="tblAreas">
 
                                             </table>
                                         </div>
@@ -232,10 +310,13 @@ if (sizeof($_SESSION) == 0)
     <script src="/planning/js/basic/process/process.js"></script>
     <script src="/planning/js/basic/process/tblProcess.js"></script>
     <script src="/planning/js/basic/machines/tblMachines.js"></script>
+    <script src="/planning/js/basic/areas/tblAreas.js"></script>
     <script src="/planning/js/basic/machines/machines.js"></script>
+    <script src="/planning/js/basic/areas/areas.js"></script>
     <script src="../global/js/import/import.js"></script>
     <script src="/planning/js/basic/machines/importMachines.js"></script>
     <script src="/planning/js/basic/process/importProcess.js"></script>
+    <script src="/planning/js/basic/areas/importAreas.js"></script>
     <script src="../global/js/import/file.js"></script>
     <script src="../global/js/global/validateExt.js"></script>
 </body>

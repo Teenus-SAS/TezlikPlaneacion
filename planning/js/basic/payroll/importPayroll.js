@@ -1,23 +1,23 @@
 $(document).ready(function () {
   let selectedFile;
 
-  $('.cardImportMachines').hide();
+  $('.cardImportEmployees').hide();
 
-  $('#btnImportNewMachines').click(function (e) {
+  $('#btnImportNewEmployee').click(function (e) {
     e.preventDefault();
-    $('.cardCreateMachines').hide(800);
-    $('.cardImportMachines').toggle(800);
+    $('.cardCreateEmployee').hide(800);
+    $('.cardImportEmployees').toggle(800);
   });
 
-  $('#fileMachines').change(function (e) {
+  $('#fileEmployees').change(function (e) {
     e.preventDefault();
     selectedFile = e.target.files[0];
   });
 
-  $('#btnImportMachines').click(function (e) {
+  $('#btnImportEmployees').click(function (e) {
     e.preventDefault();
 
-    file = $('#fileMachines').val();
+    file = $('#fileEmployees').val();
 
     if (!file) {
       toastr.error('Seleccione un archivo');
@@ -26,7 +26,7 @@ $(document).ready(function () {
 
     $('.cardBottons').hide();
 
-    let form = document.getElementById('formMachines');
+    let form = document.getElementById('formEmployees');
     form.insertAdjacentHTML(
       'beforeend',
       `<div class="col-sm-1 cardLoading" style="margin-top: 7px; margin-left: 15px">
@@ -38,7 +38,7 @@ $(document).ready(function () {
 
     importFile(selectedFile)
       .then((data) => {
-        const expectedHeaders = ['maquina'];
+        const expectedHeaders = ['nombre', 'apellido', 'area', 'proceso', 'posicion'];
         const actualHeaders = Object.keys(data[0]);
 
         const missingHeaders = expectedHeaders.filter(header => !actualHeaders.includes(header));
@@ -46,39 +46,43 @@ $(document).ready(function () {
         if (missingHeaders.length > 0) {
           $('.cardLoading').remove();
           $('.cardBottons').show(400);
-          $('#fileMachines').val('');
+          $('#fileEmployees').val('');
           toastr.error('Archivo no corresponde a el formato. Verifique nuevamente');
           return false;
         }
 
-        let machinesToImport = data.map((item) => {
+        let payrollToImport = data.map((item) => {
           return {
-            machine: item.maquina,
+            firstname: item.nombre,
+            lastname: item.apellido,
+            area: item.area,
+            process: item.proceso,
+            position: item.posicion,
           };
         });
-        checkMachine(machinesToImport);
+        checkPayroll(payrollToImport);
       })
       .catch(() => {
         $('.cardLoading').remove();
         $('.cardBottons').show(400);
-        $('#fileMachines').val('');
+        $('#fileEmployees').val('');
         
         toastr.error('Ocurrio un error. Intente Nuevamente');
       });
   });
 
   /* Mensaje de advertencia */
-  const checkMachine = (data) => {
+  const checkPayroll = (data) => {
     $.ajax({
       type: 'POST',
-      url: '/api/machinesDataValidation',
-      data: { importMachines: data },
+      url: '/api/payrollDataValidation',
+      data: { importPayroll: data },
       success: function (resp) {
         if (resp.error == true) {
           $('.cardLoading').remove();
           $('.cardBottons').show(400);
-          $('#fileMachines').val('');
-          $('#formImportMachines').trigger('reset');
+          $('#fileEmployees').val('');
+          $('#formImportEmployees').trigger('reset');
           toastr.error(resp.message);
           return false;
         }
@@ -98,11 +102,11 @@ $(document).ready(function () {
           },
           callback: function (result) {
             if (result) {
-              saveMachineTable(data);
+              saveAreaTable(data);
             } else {
               $('.cardLoading').remove();
               $('.cardBottons').show(400);
-              $('#fileMachines').val('');
+              $('#fileEmployees').val('');
             }
           },
         });
@@ -110,25 +114,25 @@ $(document).ready(function () {
     });
   };
 
-  const saveMachineTable = (data) => {
+  const saveAreaTable = (data) => {
     $.ajax({
       type: 'POST',
-      url: '/api/addPlanMachines',
-      data: { importMachines: data },
+      url: '/api/addPayroll',
+      data: { importPayroll: data },
       success: function (r) {
         $('.cardLoading').remove();
         $('.cardBottons').show(400);
-        $('#fileMachines').val('');
-        messageMachine(r);
+        $('#fileEmployees').val('');
+        messagePayroll(r);
       },
     });
   };
 
   /* Descargar formato */
-  $('#btnDownloadImportsMachines').click(function (e) {
+  $('#btnDownloadImportsEmployees').click(function (e) {
     e.preventDefault();
 
-    url = 'assets/formatsXlsx/Maquinas.xlsx';
+    url = 'assets/formatsXlsx/Nomina.xlsx';
 
     link = document.createElement('a');
 

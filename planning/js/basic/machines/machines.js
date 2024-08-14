@@ -2,16 +2,28 @@ $(document).ready(function () {
   $('.selectNavigation').click(function (e) {
     e.preventDefault();
 
-    const sections = {
-      'link-process': ['.cardMachines', '.cardCreateMachines', '.cardImportMachines', '.cardProcess'],
-      'link-machines': ['.cardProcess', '.cardCreateProcess', '.cardImportProcess', '.cardMachines']
-    };
+    let option = this.id;
+    $('.cardMachines').hide();
+    $('.cardCreateMachines').hide();
+    $('.cardImportMachines').hide();
+    $('.cardProcess').hide();
+    $('.cardCreateProcess').hide();
+    $('.cardImportProcess').hide();
+    $('.cardAreas').hide();
+    $('.cardCreateArea').hide();
+    $('.cardImportAreas').hide();
 
-    const hideElements = sections[this.id].slice(0, -1);
-    const showElement = sections[this.id].slice(-1)[0];
-
-    hideElements.forEach(selector => $(selector).hide());
-    $(showElement).show();
+    switch (option) {
+      case 'link-process':
+        $('.cardProcess').show();
+        break;
+      case 'link-machines':
+        $('.cardMachines').show();
+        break;
+      case 'link-areas':
+        $('.cardAreas').show();
+        break;
+    }
 
     let tables = document.getElementsByClassName('dataTable');
 
@@ -92,7 +104,7 @@ $(document).ready(function () {
 
     let resp = await sendDataPOST(url, dataMachine);
 
-    message(resp);
+    messageMachine(resp);
   };
 
   /* Eliminar productos */
@@ -121,7 +133,7 @@ $(document).ready(function () {
           $.get(
             `/api/deletePlanMachine/${id_machine}`,
             function (data, textStatus, jqXHR) {
-              message(data);
+              messageMachine(data);
             }
           );
         }
@@ -131,7 +143,7 @@ $(document).ready(function () {
 
   /* Mensaje de exito */
 
-  message = (data) => {
+  messageMachine = (data) => {
     if (data.success == true) {
       $(".cardImportMachines").hide(800);
       $("#formImportMachines").trigger("reset");
