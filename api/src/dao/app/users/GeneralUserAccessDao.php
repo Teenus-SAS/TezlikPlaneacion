@@ -99,7 +99,8 @@ class GeneralUserAccessDao
                                                 pa.plan_explosion_of_material AS plan_planning_explosion_of_material, 
                                                 pa.plan_production_order, 
                                                 pa.plan_store, 
-                                                pa.plan_office AS plan_planning_office    
+                                                pa.plan_office AS plan_planning_office,
+                                                cl.flag_products_measure
                                       FROM users u
                                         LEFT JOIN planning_user_access pua ON pua.id_user = u.id_user
                                         INNER JOIN companies_licenses cl ON cl.id_company = u.id_company
@@ -143,5 +144,6 @@ class GeneralUserAccessDao
         $_SESSION['plan_production_order'] = $userAccess['plan_production_order'];
         $_SESSION['plan_store'] = $userAccess['plan_store'];
         $_SESSION['plan_planning_office'] = $userAccess['plan_planning_office'];
+        $_SESSION['flag_products_measure'] = $userAccess['flag_products_measure'];
     }
 }

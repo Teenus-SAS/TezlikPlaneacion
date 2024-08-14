@@ -61,47 +61,197 @@ if (sizeof($_SESSION) == 0)
                     <div class="container-fluid">
                         <div class="row">
                             <div class="col-12">
-                                <div class="card">
-                                    <div class="card-body">
-                                        <form id="formAddLicense">
-                                            <div class="row align-items-center">
-                                                <div class="col-sm">
+                                <form id="formAddLicense">
+                                    <div class="card">
+                                        <div class="card-body">
+                                            <div class="row">
+                                                <div class="col-sm-4 floating-label enable-floating-label show-label">
                                                     <div class="form-group m-0">
                                                         <label for="company">Empresa</label>
-                                                        <select name="company" class="form-control" id="company"></select>
+                                                        <select name="company" class="form-control company" id="company" disabled="">
+                                                            <option disabled="" selected="">Seleccionar</option>
+                                                            <option value="1"> Samara Cosmetics </option>
+                                                            <option value="2"> Teenus SAs </option>
+                                                            <option value="5"> Teenus SAS </option>
+                                                            <option value="6"> Vialy SAS </option>
+                                                            <option value="7"> Proyecformas </option>
+                                                        </select>
                                                     </div>
                                                 </div>
-                                                <div class="col-sm">
+                                                <div class="col-sm-2 floating-label enable-floating-label show-label">
                                                     <div class="form-group m-0">
                                                         <label for="license_start">Inicio Licencia</label>
                                                         <input id="license_start" name="license_start" type="date" class="form-control">
                                                     </div>
                                                 </div>
-                                                <div class="col-sm">
+                                                <div class="col-sm-2 floating-label enable-floating-label show-label">
                                                     <div class="form-group m-0">
                                                         <label for="license_end">Final Licencia</label>
                                                         <input id="license_end" name="license_end" type="date" class="form-control">
                                                     </div>
                                                 </div>
-                                                <div class="col-sm">
+                                                <div class="col-sm-2 floating-label enable-floating-label show-label">
                                                     <div class="form-group m-0">
                                                         <label for="quantityUsers">Usuarios</label>
                                                         <input id="quantityUsers" name="quantityUsers" type="number" class="form-control text-center">
                                                     </div>
                                                 </div>
-                                                <div class="col-sm">
+                                                <div class="col-sm-2 floating-label enable-floating-label show-label">
                                                     <div class="form-group m-0">
-                                                        <label for="">Tipo de Plan</label>
-                                                        <select name="plan" id="plan" class="form-control"></select>
+                                                        <label>Tipo de Plan</label>
+                                                        <select name="plan" id="plan" class="form-control">
+                                                            <option disabled="" selected="">Seleccionar</option>
+                                                            <option value="1"> Premium </option>
+                                                            <option value="2"> Pro </option>
+                                                            <option value="3"> Pyme </option>
+                                                            <option value="4"> Emprendedor </option>
+                                                        </select>
                                                     </div>
                                                 </div>
-                                                <div class="col-xs">
-                                                    <button class="btn btn-primary" id="btnAddLicense" style="margin-top: 25px">Crear</button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="card">
+                                        <div class="card-body">
+                                            <h5>Funciones Adicionales</h5>
+                                            <div class="row mt-4">
+                                                <div class="col-sm-2 floating-label enable-floating-label show-label">
+                                                    <div class="form-group m-0">
+                                                        <label>Medidas Productos</label>
+                                                        <select name="productsMeasures" id="productsMeasures" class="form-control">
+                                                            <option selected disabled value="0">Seleccionar</option>
+                                                            <option value="1">Si</option>
+                                                            <option value="2">No</option>
+                                                        </select>
+                                                    </div>
+                                                </div>
+                                                <!-- <div class="col-sm-2 floating-label enable-floating-label show-label">
+                                                            <div class="form-group m-0">
+                                                                <label>Moneda EUR</label>
+                                                                <select name="currencyEUR" id="currencyEUR" class="form-control">
+                                                                    <option selected disabled value="0">Seleccionar</option>
+                                                                    <option value="1">Si</option>
+                                                                    <option value="2">No</option>
+                                                                </select>
+                                                            </div>
+                                                        </div>
+                                                        <div class="col-sm-2 floating-label enable-floating-label show-label">
+                                                            <div class="form-group m-0">
+                                                                <label>Procesos Nomina</label>
+                                                                <select name="payrollEmployee" id="payrollEmployee" class="form-control">
+                                                                    <option selected disabled value="0">Seleccionar</option>
+                                                                    <option value="1">Si</option>
+                                                                    <option value="2">No</option>
+                                                                </select>
+                                                            </div>
+                                                        </div>
+                                                        <div class="col-sm-2 floating-label enable-floating-label show-label">
+                                                            <div class="form-group m-0">
+                                                                <label>Productos Compuestos</label>
+                                                                <select name="compositeProducts" id="compositeProducts" class="form-control">
+                                                                    <option selected disabled value="0">Seleccionar</option>
+                                                                    <option value="1">Si</option>
+                                                                    <option value="2">No</option>
+                                                                </select>
+                                                            </div>
+                                                        </div>
+                                                        <div class="col-sm-2 floating-label enable-floating-label show-label economyScale">
+                                                            <div class="form-group m-0">
+                                                                <label>Negociaciones Eficientes</label>
+                                                                <select name="economyScale" id="economyScale" class="form-control">
+                                                                    <option selected disabled value="0">Seleccionar</option>
+                                                                    <option value="1">Si</option>
+                                                                    <option value="2">No</option>
+                                                                </select>
+                                                            </div>
+                                                        </div>
+                                                        <div class="col-sm-2 floating-label enable-floating-label show-label economyScale">
+                                                            <div class="form-group m-0">
+                                                                <label>Objetivos De Ventas</label>
+                                                                <select name="salesObjective" id="salesObjective" class="form-control">
+                                                                    <option selected disabled value="0">Seleccionar</option>
+                                                                    <option value="1">Si</option>
+                                                                    <option value="2">No</option>
+                                                                </select>
+                                                            </div>
+                                                        </div>
+                                                        <div class="col-sm-2 floating-label enable-floating-label show-label economyScale">
+                                                            <div class="form-group m-0">
+                                                                <label>Objetivos De Precios</label>
+                                                                <select name="priceObjective" id="priceObjective" class="form-control">
+                                                                    <option selected disabled value="0">Seleccionar</option>
+                                                                    <option value="1">Si</option>
+                                                                    <option value="2">No</option>
+                                                                </select>
+                                                            </div>
+                                                        </div>
+                                                        <div class="col-sm-2 floating-label enable-floating-label show-label">
+                                                            <div class="form-group m-0">
+                                                                <label>Historico</label>
+                                                                <select name="historical" id="historical" class="form-control">
+                                                                    <option selected="" disabled value="0">Seleccionar</option>
+                                                                    <option value="1">Si</option>
+                                                                    <option value="2">No</option>
+                                                                </select>
+                                                            </div>
+                                                        </div>
+                                                        <div class="col-sm-2 floating-label enable-floating-label show-label">
+                                                            <div class="form-group m-0">
+                                                                <label>Materiales</label>
+                                                                <select name="indirect" id="indirect" class="form-control">
+                                                                    <option selected disabled value="0">Seleccionar</option>
+                                                                    <option value="1">Si</option>
+                                                                    <option value="2">No</option>
+                                                                </select>
+                                                            </div>
+                                                        </div>
+                                                        <div class="col-sm-2 floating-label enable-floating-label show-label">
+                                                            <div class="form-group m-0">
+                                                                <label>Importar/Nacionalizar</label>
+                                                                <select name="exportImport" id="exportImport" class="form-control">
+                                                                    <option selected disabled value="0">Seleccionar</option>
+                                                                    <option value="1">Si</option>
+                                                                    <option value="2">No</option>
+                                                                </select>
+                                                            </div>
+                                                        </div>
+                                                        <div class="col-sm-2 floating-label enable-floating-label show-label">
+                                                            <div class="form-group m-0">
+                                                                <label>Inyección</label>
+                                                                <select name="inyection" id="inyection" class="form-control">
+                                                                    <option selected disabled value="0">Seleccionar</option>
+                                                                    <option value="1">Si</option>
+                                                                    <option value="2">No</option>
+                                                                </select>
+                                                            </div>
+                                                        </div>
+                                                        <div class="col-sm-2 floating-label enable-floating-label show-label">
+                                                            <div class="form-group m-0">
+                                                                <label>U. Produccion</label>
+                                                                <select name="production" id="production" class="form-control">
+                                                                    <option selected disabled value="0">Seleccionar</option>
+                                                                    <option value="1">Si</option>
+                                                                    <option value="2">No</option>
+                                                                </select>
+                                                            </div>
+                                                        </div>
+                                                        <div class="col-sm-2 floating-label enable-floating-label show-label">
+                                                            <div class="form-group m-0">
+                                                                <label>Gastos Anuales</label>
+                                                                <select name="anualExpenses" id="anualExpenses" class="form-control">
+                                                                    <option selected disabled value="0">Seleccionar</option>
+                                                                    <option value="1">Si</option>
+                                                                    <option value="2">No</option>
+                                                                </select>
+                                                            </div>
+                                                        </div> -->
+                                                <div class="col-sm">
+                                                    <button class="btn btn-primary" id="btnAddLicense">Actualizar</button>
                                                 </div>
                                             </div>
-                                        </form>
+                                        </div>
                                     </div>
-                                </div>
+                                </form>
                             </div>
                         </div>
                     </div>

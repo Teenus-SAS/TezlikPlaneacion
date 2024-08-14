@@ -51,33 +51,36 @@
                                             <!-- <li class="invMolds"><a href="/planning/molds">Moldes</a></li> -->
                                             <?php //} 
                                             ?>
-                                            <?php if ($_SESSION['planning_product'] == 1) { ?>
-                                                <li class="planProducts">
-                                                    <i class="fas fa-cube"></i>
-                                                    <a href="/planning/products">Productos</a>
-                                                </li>
-
-
-                                                <li class="planProducts">
+                                            <?php if ($_SESSION['flag_products_measure'] == 1) { ?>
+                                                <li class="planProductsM">
                                                 <?php } else { ?>
-                                                <li class="planProducts" style="display: none;">
+                                                <li class="planProductsM" style="display: none;">
                                                 <?php } ?>
-                                                <i class="fas fa-dolly-flatbed"></i>
-                                                <a href="/planning/invProducts">Inventarios</a>
+                                                <i class="fas fa-cube"></i>
+                                                <a href="/planning/products">Productos</a>
                                                 </li>
 
-                                                <?php if ($_SESSION['planning_machine'] == 1) { ?>
-                                                    <li class="planMachines">
+                                                <?php if ($_SESSION['planning_product'] == 1) { ?>
+                                                    <li class="planProducts">
                                                     <?php } else { ?>
-                                                    <li class="planMachines" style="display: none;">
+                                                    <li class="planProducts" style="display: none;">
                                                     <?php } ?>
-                                                    <i class="fas fa-cogs"></i>
-                                                    <a href="/planning/machines">Procesos y Máquinas</a>
+                                                    <i class="fas fa-dolly-flatbed"></i>
+                                                    <a href="/planning/invProducts">Inventarios</a>
                                                     </li>
-                                                    <li class="planClients">
-                                                        <i class="fas fa-users"></i>
-                                                        <a href="/planning/productionPayroll">Nómina Producción</a>
-                                                    </li>
+
+                                                    <?php if ($_SESSION['planning_machine'] == 1) { ?>
+                                                        <li class="planMachines">
+                                                        <?php } else { ?>
+                                                        <li class="planMachines" style="display: none;">
+                                                        <?php } ?>
+                                                        <i class="fas fa-cogs"></i>
+                                                        <a href="/planning/machines">Procesos y Máquinas</a>
+                                                        </li>
+                                                        <li class="planClients">
+                                                            <i class="fas fa-users"></i>
+                                                            <a href="/planning/productionPayroll">Nómina Producción</a>
+                                                        </li>
                                         </ul>
                                         </div>
 
@@ -129,7 +132,7 @@
                                                         <?php } ?>
                                                         <h5 class="font-size-14 font-weight-600">General</h5>
                                                         <ul class="list-unstyled megamenu-list">
-                                                            
+
                                                             <?php if ($_SESSION['client'] == 1) { ?>
                                                                 <li class="planClients">
                                                                 <?php } else { ?>

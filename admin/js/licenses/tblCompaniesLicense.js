@@ -47,7 +47,7 @@ $(document).ready(function () {
         title: 'Estado',
         data: 'license_status',
         render: function (data) {
-          if (data === 1) {
+          if (data == 1) {
             return 'Activo';
           } else {
             return 'Inactivo';
@@ -60,7 +60,7 @@ $(document).ready(function () {
         render: function (data) {
           if (data == 0) {
             return '';
-          } else if (data === 1) {
+          } else if (data == 1) {
             return 'Premium';
           } else if (data == 2) {
             return 'Pro';
@@ -69,6 +69,41 @@ $(document).ready(function () {
           } else if (data == 4) {
             return 'Emprendedor';
           }
+        },
+      }, 
+      {
+        title: "Accesos",
+        data: null,
+        //width: "200px",
+        render: function (data, type, row) {
+          const permissions = [];
+
+          // permissions.push({
+          //   name: "Materiales USD",
+          //   icon: data.flag_materials_usd == 1
+          //     ? "bi bi-check-circle-fill text-success"
+          //     : "bi bi-x-circle-fill text-danger",
+          //   color: { text: "black" },
+          // });
+          
+          permissions.push({
+            name: "Medidas Producto",
+            icon: data.flag_products_measure == 1
+              ? "bi bi-check-circle-fill text-success"
+              : "bi bi-x-circle-fill text-danger",
+            color: { text: "black" },
+          }); 
+
+          let output =
+            '<div class="stacked-column text-left" style="width:190px">';
+          for (const permission of permissions) {
+            output += `<span class="text-${permission.color} mx-1" style="display: flex; justify-content: flex-start;">
+            <i class="${permission.icon}"></i> ${permission.name}
+          </span>`;
+          }
+          output += "</div>";
+
+          return output;
         },
       },
       {

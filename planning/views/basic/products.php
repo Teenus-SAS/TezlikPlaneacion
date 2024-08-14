@@ -44,87 +44,72 @@ if (sizeof($_SESSION) == 0)
                                 <div class="page-title">
                                     <h3 class="mb-1 font-weight-bold text-dark">Productos</h3>
                                     <ol class="breadcrumb mb-3 mb-md-0">
-                                        <li class="breadcrumb-item active">Creación de Productos</li>
+                                        <li class="breadcrumb-item active">Creación Medidas de Productos</li>
                                     </ol>
                                 </div>
                             </div>
                             <div class="col-sm-7 col-xl-6 form-inline justify-content-sm-end">
                                 <div class="col-xs-2 mr-2">
-                                    <button class="btn btn-warning" id="btnNewProduct" name="btnNewProduct"><i class="bi bi-person-plus-fill"></i> Adicionar Producto</button>
+                                    <button class="btn btn-warning" id="btnNewPMeasure" name="btnNewPMeasure"><i class="bi bi-person-plus-fill"></i> Adicionar Medidas</button>
                                 </div>
                                 <div class="col-xs-2 py-2 mr-2">
-                                    <button class="btn btn-info" id="btnImportNewProduct"><i class="bi bi-cloud-arrow-up-fill"></i> Importar</button>
+                                    <button class="btn btn-info" id="btnImportNewPMeasure"><i class="bi bi-cloud-arrow-up-fill"></i> Importar</button>
                                 </div>
                             </div>
                         </div>
                     </div>
                 </div>
 
-                <div class="page-content-wrapper mt--45 mb-5 cardCreateProduct">
+                <div class="page-content-wrapper mt--45 mb-5 cardCreatePMeasure">
                     <div class="container-fluid">
                         <div class="row">
                             <div class="col-12">
-                                <form id="formCreateProduct">
+                                <form id="formCreatePMeasure">
                                     <div class="card">
                                         <div class="card-body">
                                             <div class="form-row">
-                                                <div class="col-sm-3 floating-label enable-floating-label show-label">
+                                                <div class="col-sm-4 floating-label enable-floating-label show-label" style="margin-bottom:20px">
                                                     <label for="">Referencia</label>
-                                                    <input type="text" class="form-control text-center" id="reference" name="reference">
+                                                    <select class="form-control refProduct" name="idProduct" id="refProduct"></select>
                                                 </div>
-                                                
-                                                <div class="col-sm-7 floating-label enable-floating-label show-label">
+                                                <div class="col-sm-8 floating-label enable-floating-label show-label" style="margin-bottom:5px">
                                                     <label for="">Producto</label>
-                                                    <input type="text" class="form-control text-center" id="product" name="product">
+                                                    <select class="form-control selectNameProduct" name="idProduct" id="selectNameProduct"></select>
                                                 </div>
-                                                
                                                 <div class="col-sm-2 floating-label enable-floating-label show-label">
                                                     <label for="">Gramaje</label>
-                                                    <input type="text" class="form-control text-center" id="grammage" name="grammage"></input>
+                                                    <input type="number" class="form-control text-center inputsCalc" id="grammage" name="grammage"></input>
                                                 </div>
-                                                
                                                 <div class="col-sm-1 floating-label enable-floating-label show-label">
                                                     <label for="">Ancho</label>
-                                                    <input type="text" class="form-control text-center" id="width" name="width"></input>
+                                                    <input type="number" class="form-control text-center" id="width" name="width"></input>
                                                 </div>
-                                                
                                                 <div class="col-sm-1 floating-label enable-floating-label show-label">
                                                     <label for="">Alto</label>
-                                                    <input type="text" class="form-control text-center" id="high" name="high">
+                                                    <input type="number" class="form-control text-center" id="high" name="high">
                                                 </div>
-                                                
                                                 <div class="col-sm-1 floating-label enable-floating-label show-label">
                                                     <label for="">Largo</label>
-                                                    <input type="text" class="form-control text-center" id="length" name="length">
+                                                    <input type="number" class="form-control text-center" id="length" name="length">
                                                 </div>
-                                                
                                                 <div class="col-sm-2 floating-label enable-floating-label show-label">
                                                     <label for="">Largo Útil</label>
-                                                    <input type="text" class="form-control text-center" id="usefulLength" name="usefulLength">
+                                                    <input type="number" class="form-control text-center inputsCalc" id="usefulLength" name="usefulLength">
                                                 </div>
-                                                
                                                 <div class="col-sm-2 floating-label enable-floating-label show-label">
                                                     <label for="">Ancho Total</label>
-                                                    <input type="text" class="form-control text-center" id="totalWidth" name="totalWidth">
+                                                    <input type="number" class="form-control text-center inputsCalc" id="totalWidth" name="totalWidth">
                                                 </div>
-                                                
                                                 <div class="col-sm-2 floating-label enable-floating-label show-label">
                                                     <label for="">Ventanilla</label>
-                                                    <input type="text" class="form-control text-center" id="window" name="window">
+                                                    <input type="number" class="form-control text-center" id="window" name="window">
                                                 </div>
-                                                
                                                 <div class="col-sm-2 floating-label enable-floating-label show-label">
                                                     <label for="">Peso</label>
-                                                    <input type="text" class="form-control text-center" id="weight" name="weight">
+                                                    <input type="number" class="form-control text-center" id="weight" name="weight" readonly>
                                                 </div>
-                                                
-                                                <div class="col-sm-6 floating-label enable-floating-label show-label drag-area">
-                                                    <input class="form-control" type="file" id="formFile">
-                                                    <label for="formFile" class="form-label">Cargar imagen</label>
-                                                </div>
-
                                                 <div class="col-sm-2 ml-2">
-                                                    <button class="btn btn-success" id="btnCreateProduct">Crear</button>
+                                                    <button class="btn btn-success" id="btnCreatePMeasure">Crear</button>
                                                 </div>
                                             </div>
                                         </div>
@@ -135,7 +120,7 @@ if (sizeof($_SESSION) == 0)
                     </div>
                 </div>
 
-                <div class="page-content-wrapper mt--45 mb-5 cardImportProducts">
+                <div class="page-content-wrapper mt--45 mb-5 cardImportPMeasure">
                     <div class="container-fluid">
                         <div class="row">
                             <div class="col-12">
@@ -145,7 +130,7 @@ if (sizeof($_SESSION) == 0)
                                             <div class="form-row" id="formProducts">
                                                 <div class="col-sm-6 floating-label enable-floating-label show-label drag-area" style="margin-bottom:10px!important">
                                                     <input class="form-control" type="file" id="fileProducts" accept=".xls,.xlsx">
-                                                    <label for="fileProducts" class="form-label">Importar Productos</label>
+                                                    <label for="fileProducts" class="form-label">Importar Medidas</label>
                                                 </div>
                                                 <div class="col-xs-2 cardBottons" style="margin-top:7px">
                                                     <button type="text" class="btn btn-success" id="btnImportProducts">Importar</button>
@@ -192,11 +177,12 @@ if (sizeof($_SESSION) == 0)
     </div>
 
     <?php include_once dirname(dirname(dirname(__DIR__))) . '/global/partials/scriptsJS.php'; ?>
+    <script src="/planning/js/basic/products/configProducts.js"></script>
 
-    <script src="/planning/js/general/seller/tblSellers.js"></script>
-    <script src="/planning/js/general/seller/sellers.js"></script>
+    <script src="/planning/js/basic/productsMeasures/tblPMeasures.js"></script>
+    <script src="/planning/js/basic/productsMeasures/pMeausers.js"></script>
     <script src="../global/js/import/import.js"></script>
-    <script src="/planning/js/general/seller/importSellers.js"></script>
+    <script src="/planning/js/basic/productsMeasures/importPMeasures.js"></script>
     <script src="/global/js/import/file.js"></script>
     <script src="/global/js/global/validateImgExt.js"></script>
 
