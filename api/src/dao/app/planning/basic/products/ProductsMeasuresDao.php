@@ -19,10 +19,10 @@ class ProductsMeasuresDao
     public function findAllProductsMeasuresByCompany($id_company)
     {
         $connection = Connection::getInstance()->getConnection();
-        $sql = "SELECT pm.id_product_measure, pm.id_product, p.reference, p.product, p.img, pm.width, pm.high, pm.length, pm.useful_length, pm.total_width, pm.window, pm.weight 
-                                      FROM products_measures pm
-                                        INNER JOIN products p ON p.id_product = pm.id_product
-                                      WHERE pm.id_company = :id_company";
+        $sql = "SELECT pm.id_product_measure, pm.id_product, p.reference, p.product, p.img, pm.width, pm.high, pm.length, pm.useful_length, pm.total_width, pm.window
+                FROM products_measures pm
+                INNER JOIN products p ON p.id_product = pm.id_product
+                WHERE pm.id_company = :id_company";
         $stmt = $connection->prepare($sql);
         $stmt->execute([
             'id_company' => $id_company
@@ -37,8 +37,10 @@ class ProductsMeasuresDao
         try {
             $connection = Connection::getInstance()->getConnection();
 
-            $sql = "INSERT INTO products_measures (id_product, id_company, grammage, width, high, length, useful_length, total_width, window, weight) 
-                    VALUES (:id_product, :id_company, :width, :high, :length, :useful_length, :total_width, :window, :weight)";
+            $sql = "INSERT INTO products_measures (id_product, id_company, width, high, length, useful_length, 
+                                                    total_width, window) 
+                    VALUES (:id_product, :id_company, :width, :high, :length, :useful_length, 
+                            :total_width, :window)";
             $stmt = $connection->prepare($sql);
             $stmt->execute([
                 'id_company' => $id_company,
@@ -49,7 +51,6 @@ class ProductsMeasuresDao
                 'useful_length' => $dataProduct['usefulLength'],
                 'total_width' => $dataProduct['totalWidth'],
                 'window' => $dataProduct['window'],
-                'weight' => $dataProduct['weight']
             ]);
         } catch (\Exception $e) {
             return ['info' => true, 'message' => $e->getMessage()];
@@ -74,7 +75,6 @@ class ProductsMeasuresDao
                 'useful_length' => $dataProduct['usefulLength'],
                 'total_width' => $dataProduct['totalWidth'],
                 'window' => $dataProduct['window'],
-                'weight' => $dataProduct['weight']
             ]);
         } catch (\Exception $e) {
             return ['info' => true, 'message' => $e->getMessage()];

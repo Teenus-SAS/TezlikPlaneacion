@@ -11,9 +11,9 @@ $(document).ready(function () {
     },
     columns: [
       {
-        title: 'Acciones',
-        data: 'id_product_measure',
-        className: 'uniqueClassName dt-head-center',
+        title: "Acciones",
+        data: "id_product_measure",
+        className: "uniqueClassName dt-head-center",
         render: (data) => `
           <a href="javascript:;">
             <i id="upd-${data}" class="bx bx-edit-alt updatePMeasure" data-toggle='tooltip' title='Actualizar Medida' style="font-size: 30px;"></i>
@@ -45,9 +45,12 @@ $(document).ready(function () {
         title: "Imagen",
         data: "img",
         className: "uniqueClassName dt-head-center",
-        render: (data) => data ? `<img src="${data}" alt="" style="width:80px;border-radius:100px">` : '',
+        render: (data) =>
+          data
+            ? `<img src="${data}" alt="" style="width:80px;border-radius:100px">`
+            : "",
       },
-     /*  {
+      /*  {
         title: "Gramaje",
         data: 'grammage',
         className: "uniqueClassName dt-head-center",
@@ -55,46 +58,58 @@ $(document).ready(function () {
       }, */
       {
         title: "Ancho",
-        data: 'width',
+        data: "width",
         className: "uniqueClassName dt-head-center",
-        render: (data) => parseFloat(data).toLocaleString('es-CO', { maximumFractionDigits: 2 }),
+        render: (data) =>
+          parseFloat(data).toLocaleString("es-CO", {
+            maximumFractionDigits: 2,
+          }),
       },
       {
         title: "Alto",
-        data: 'high',
+        data: "high",
         className: "uniqueClassName dt-head-center",
-        render: (data) => parseFloat(data).toLocaleString('es-CO', { maximumFractionDigits: 2 }),
+        render: (data) =>
+          parseFloat(data).toLocaleString("es-CO", {
+            maximumFractionDigits: 2,
+          }),
       },
       {
         title: "Largo",
-        data: 'length',
+        data: "length",
         className: "uniqueClassName dt-head-center",
-        render: (data) => parseFloat(data).toLocaleString('es-CO', { maximumFractionDigits: 2 }),
+        render: (data) =>
+          parseFloat(data).toLocaleString("es-CO", {
+            maximumFractionDigits: 2,
+          }),
       },
       {
         title: "Largo Útil",
-        data: 'useful_length',
+        data: "useful_length",
         className: "uniqueClassName dt-head-center",
-        render: (data) => parseFloat(data).toLocaleString('es-CO', { maximumFractionDigits: 2 }),
+        render: (data) =>
+          parseFloat(data).toLocaleString("es-CO", {
+            maximumFractionDigits: 2,
+          }),
       },
       {
         title: "Ancho Total",
-        data: 'total_width',
+        data: "total_width",
         className: "uniqueClassName dt-head-center",
-        render: (data) => parseFloat(data).toLocaleString('es-CO', { maximumFractionDigits: 2 }),
+        render: (data) =>
+          parseFloat(data).toLocaleString("es-CO", {
+            maximumFractionDigits: 2,
+          }),
       },
       {
         title: "Ventanilla",
-        data: 'window',
+        data: "window",
         className: "uniqueClassName dt-head-center",
-        render: (data) => parseFloat(data).toLocaleString('es-CO', { maximumFractionDigits: 2 }),
+        render: (data) =>
+          parseFloat(data).toLocaleString("es-CO", {
+            maximumFractionDigits: 2,
+          }),
       },
-      {
-        title: "Peso",
-        data: 'weight',
-        className: "uniqueClassName dt-head-center",
-        render: (data) => parseFloat(data).toLocaleString('es-CO', { maximumFractionDigits: 2 }),
-      }, 
     ],
   });
 });
