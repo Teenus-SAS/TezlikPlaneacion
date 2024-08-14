@@ -16,7 +16,7 @@ $(document).ready(function () {
   });
 
   // Calcular Peso
-  $(document).on('keyup', '.inputsCalc', function () {
+  /* $(document).on('keyup', '.inputsCalc', function () {
     let grammage = parseFloat($('#grammage').val());
     let usefulLength = parseFloat($('#usefulLength').val());
     let totalWidth = parseFloat($('#totalWidth').val());
@@ -29,7 +29,7 @@ $(document).ready(function () {
     !isFinite(weight) ? (weight = 0) : weight;
 
     $('#weight').val(weight);
-  });
+  }); */
 
   /* Crear producto */
   $('#btnCreatePMeasure').click(function (e) {
@@ -62,14 +62,14 @@ $(document).ready(function () {
     $(`#refProduct option[value=${data.id_product}]`).prop('selected', true);
     $(`#selectNameProduct option[value=${data.id_product}]`).prop('selected', true);
 
-    $("#grammage").val(data.grammage);
+    //$("#grammage").val(data.grammage);
     $("#width").val(data.width);
     $("#high").val(data.high);
     $("#length").val(data.length);
     $("#usefulLength").val(data.useful_length);
     $("#totalWidth").val(data.total_width);
     $("#window").val(data.window);
-    $("#weight").val(data.weight); 
+    //$("#weight").val(data.weight); 
 
     $("html, body").animate({ scrollTop: 0 }, 1000);
   });
@@ -77,16 +77,16 @@ $(document).ready(function () {
   /* Revisar datos */
   const checkDataProduct = async (url, idProductMeasure) => {
     let idProduct = parseFloat($("#refProduct").val());
-    let grammage = parseFloat($("#grammage").val());
+    //let grammage = parseFloat($("#grammage").val());
     let width = parseFloat($("#width").val());
     let high = parseFloat($("#high").val());
     let length = parseFloat($("#length").val());
     let usefulLength = parseFloat($("#usefulLength").val());
     let totalWidth = parseFloat($("#totalWidth").val());
     let window = parseFloat($("#window").val());
-    let weight = parseFloat($("#weight").val());
+    //let weight = parseFloat($("#weight").val());
 
-    let data = idProduct * grammage * width * high * length * usefulLength * totalWidth * window * weight;
+    let data = idProduct * width * high * length * usefulLength * totalWidth;
 
     if (isNaN(data) || data <= 0) {
       toastr.error("Ingrese todos los campos");
