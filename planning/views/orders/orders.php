@@ -164,7 +164,7 @@ if (sizeof($_SESSION) == 0)
 
     <script src="/planning/js/basic/products/configProducts.js"></script>
     <script src="/planning/js/admin/clients/configClients.js"></script>
-    <!-- <script src="/planning/js/admin/orderTypes/configOrderTypes.js"></script> -->
+    <script src="/planning/js/general/seller/configSellers.js"></script>
     <script src="../planning/js/orders/tblOrder.js"></script>
     <script src="../global/js/import/import.js"></script>
     <script src="../planning/js/orders/orders.js"></script>

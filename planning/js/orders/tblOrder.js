@@ -89,6 +89,14 @@ $(document).ready(function () {
           className: "uniqueClassName dt-head-center",
         },
         {
+          title: "Vendedor",
+          data: null,
+          className: "uniqueuniqueClassName dt-head-center",
+          render: function (data) {
+            return `${data.firstname} ${data.lastname}`;
+          }
+        },
+        {
           title: "Cliente",
           data: "client",
           className: "uniqueuniqueClassName dt-head-center",

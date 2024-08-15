@@ -62,22 +62,20 @@
                                                 <div class="validation-error d-none font-size-13">Requerido</div>
                                             </div>
                                         </div>
-
-                                        <div class="col-12 col-lg-8">
+                                        <div class="col-12 col-lg-4">
+                                            <div class="input-group floating-label enable-floating-label show-label date">
+                                                <select id="seller" name="idSeller" class="form-control"></select>
+                                                <label for="">Vendedor<span class="text-danger">*</span></label>
+                                                <div class="validation-error d-none font-size-13">Requerido</div>
+                                            </div>
+                                        </div>
+                                        <div class="col-12 col-lg-4">
                                             <div class="input-group floating-label enable-floating-label show-label date">
                                                 <select id="client" name="idClient" class="form-control"></select>
                                                 <label for="">Cliente<span class="text-danger">*</span></label>
                                                 <div class="validation-error d-none font-size-13">Requerido</div>
                                             </div>
                                         </div>
-
-                                        <!-- <div class="col-12 col-lg-4">
-                                            <div class="input-group floating-label enable-floating-label show-label date">
-                                                <select id="orderType" name="idOrderType" class="form-control"></select>
-                                                <label for="">Tipo de Pedido<span class="text-danger">*</span></label>
-                                                <div class="validation-error d-none font-size-13">Requerido</div>
-                                            </div>
-                                        </div> -->
 
                                         <!-- <div class="col-12 col-lg-12 titlePayroll">
                                             <label for=""><b></b></label>

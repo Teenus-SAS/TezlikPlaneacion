@@ -113,7 +113,7 @@ $app->post('/addSeller', function (Request $request, Response $response, $args) 
             else
                 $resp = array('error' => true, 'message' => 'Ocurrio un error mientras ingresaba la información. Intente nuevamente');
         } else
-            $resp = array('info' => true, 'message' => 'Ya existe un vendedor con la misma información. Ingrese nuevo vendedor');
+            $resp = array('info' => true, 'message' => 'Ya existe un vendedor con el mismo correo. Ingrese nuevo correo');
     } else {
         $sellers = $dataSeller['importSellers'];
 
@@ -167,7 +167,7 @@ $app->post('/updateSeller', function (Request $request, Response $response, $arg
         else
             $resp = array('error' => true, 'message' => 'Ocurrio un error mientras actualizaba la información. Intente nuevamente');
     } else
-        $resp = array('info' => true, 'message' => 'Ya existe un vendedor con el mismo nit. Ingrese nuevo nit');
+        $resp = array('info' => true, 'message' => 'Ya existe un vendedor con el mismo correo. Ingrese nuevo correo');
     $response->getBody()->write(json_encode($resp));
     return $response->withStatus(200)->withHeader('Content-Type', 'application/json');
 });

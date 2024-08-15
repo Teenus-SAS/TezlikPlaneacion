@@ -12,6 +12,7 @@ use TezlikPlaneacion\dao\GeneralPlanCiclesMachinesDao;
 use TezlikPlaneacion\dao\GeneralProductsDao;
 use TezlikPlaneacion\dao\GeneralRequisitionsDao;
 use TezlikPlaneacion\dao\GeneralRMStockDao;
+use TezlikPlaneacion\dao\GeneralSellersDao;
 use TezlikPlaneacion\dao\LastDataDao;
 use TezlikPlaneacion\dao\MallasDao;
 use TezlikPlaneacion\dao\OrdersDao;
@@ -26,6 +27,7 @@ $convertDataDao = new ConvertDataDao();
 $productsDao = new GeneralProductsDao();
 $generalRMStockDao = new GeneralRMStockDao();
 $clientsDao = new ClientsDao();
+$generalSellersDao = new GeneralSellersDao();
 $generalClientsDao = new GeneralClientsDao();
 $orderTypesDao = new GeneralOrderTypesDao();
 $mallasDao = new MallasDao();
@@ -50,7 +52,7 @@ $app->get('/orders', function (Request $request, Response $response, $args) use 
 
     $orders = $ordersDao->findAllOrdersByCompany($id_company);
 
-    $response->getBody()->write(json_encode($orders, JSON_NUMERIC_CHECK));
+    $response->getBody()->write(json_encode($orders));
     return $response->withHeader('Content-Type', 'application/json');
 });
 
@@ -59,14 +61,14 @@ $app->get('/orders/{id_order}', function (Request $request, Response $response, 
     $id_company = $_SESSION['id_company'];
     $data['order'] = $args['id_order'];
     $order = $generalOrdersDao->findOrdersByCompany($data, $id_company);
-    $response->getBody()->write(json_encode($order, JSON_NUMERIC_CHECK));
+    $response->getBody()->write(json_encode($order));
     return $response->withHeader('Content-Type', 'application/json');
 });
 
 $app->post('/orderDataValidation', function (Request $request, Response $response, $args) use (
     $generalOrdersDao,
     $productsDao,
-    $clientsDao,
+    $generalSellersDao,
     $generalClientsDao,
     $orderTypesDao
 ) {
@@ -85,8 +87,18 @@ $app->post('/orderDataValidation', function (Request $request, Response $respons
         for ($i = 0; $i < sizeof($order); $i++) {
             if (
                 empty($order[$i]['referenceProduct'])  || empty($order[$i]['product']) || empty($order[$i]['client']) ||
-                empty($order[$i]['order'])  || empty($order[$i]['dateOrder']) || empty($order[$i]['minDate']) ||
-                empty($order[$i]['maxDate']) || empty($order[$i]['originalQuantity'])
+                empty($order[$i]['email'])  || empty($order[$i]['order'])  || empty($order[$i]['dateOrder']) ||
+                empty($order[$i]['minDate']) || empty($order[$i]['maxDate']) || empty($order[$i]['originalQuantity'])
+            ) {
+                $i = $i + 2;
+                $dataImportOrder = array('error' => true, 'message' => "Campos vacios en fila: {$i}");
+                break;
+            }
+
+            if (
+                trim($order[$i]['referenceProduct']) == '' || trim($order[$i]['product']) == '' || trim($order[$i]['client']) == '' ||
+                trim($order[$i]['email']) == '' || trim($order[$i]['order']) == '' || trim($order[$i]['dateOrder']) == '' ||
+                trim($order[$i]['minDate']) == '' || trim($order[$i]['maxDate']) == '' || trim($order[$i]['originalQuantity']) == ''
             ) {
                 $i = $i + 2;
                 $dataImportOrder = array('error' => true, 'message' => "Campos vacios en fila: {$i}");
@@ -119,6 +131,14 @@ $app->post('/orderDataValidation', function (Request $request, Response $respons
                 break;
             } else $order[$i]['idProduct'] = $findProduct['id_product'];
 
+            // Obtener id vendedor
+            $findSeller = $generalSellersDao->findSeller($order[$i], $id_company, 1);
+            if (!$findSeller) {
+                $i = $i + 2;
+                $dataImportOrder = array('error' => true, 'message' => "Cliente no existe en la base de datos o es tipo proveedor.<br>Fila: {$i}");
+                break;
+            } else $order[$i]['idSeller'] = $findSeller['id_seller'];
+
             // Obtener id cliente
             $findClient = $generalClientsDao->findClientByName($order[$i], $id_company, 1);
             if (!$findClient) {
@@ -135,7 +155,7 @@ $app->post('/orderDataValidation', function (Request $request, Response $respons
                 $repeat = false;
 
                 for ($i = 0; $i < sizeof($importOrder); $i++) {
-                    if ($importOrder[$i]['referenceProduct'] == trim($arr['referenceProduct']) && $importOrder[$i]['client'] == strtoupper(trim($arr['client']))) {
+                    if ($importOrder[$i]['referenceProduct'] == trim($arr['referenceProduct']) && $importOrder[$i]['email'] == trim($arr['email']) && $importOrder[$i]['client'] == strtoupper(trim($arr['client']))) {
                         $importOrder[$i]['originalQuantity'] += $arr['originalQuantity'];
                         $repeat = true;
                         break;
@@ -147,6 +167,8 @@ $app->post('/orderDataValidation', function (Request $request, Response $respons
                         'idProduct' => $arr['idProduct'],
                         'referenceProduct' => trim($arr['referenceProduct']),
                         'product' => $arr['product'],
+                        'idSeller' => $arr['idSeller'],
+                        'email' => trim($arr['email']),
                         'idClient' => $arr['idClient'],
                         'client' => strtoupper(trim($arr['client'])),
                         'order' => $arr['order'],
@@ -183,6 +205,7 @@ $app->post('/addOrder', function (Request $request, Response $response, $args) u
     $productsMaterialsDao,
     $generalPlanCiclesMachinesDao,
     $filterDataDao,
+    $generalSellersDao,
     $explosionMaterialsDao,
     $generalRequisitionsDao,
     $requisitionsDao
@@ -226,6 +249,10 @@ $app->post('/addOrder', function (Request $request, Response $response, $args) u
             $findProduct = $productsDao->findProduct($arr, $id_company);
             $arr['idProduct'] = $findProduct['id_product'];
 
+            // Obtener id vendedor
+            $findSeller = $generalSellersDao->findSeller($arr, $id_company, 1);
+            $arr['idSeller'] = $findSeller['id_seller'];
+
             // Obtener id cliente
             $findClient = $generalClientsDao->findClientByName($arr, $id_company, 1);
             $arr['idClient'] = $findClient['id_client'];
@@ -236,7 +263,7 @@ $app->post('/addOrder', function (Request $request, Response $response, $args) u
             if ($k) $arr['originalQuantity'] += $k['original_quantity'];
 
             for ($i = 0; $i < sizeof($importOrder); $i++) {
-                if ($importOrder[$i]['referenceProduct'] == trim($arr['referenceProduct']) && $importOrder[$i]['client'] == strtoupper(trim($arr['client']))) {
+                if ($importOrder[$i]['referenceProduct'] == trim($arr['referenceProduct']) && $importOrder[$i]['eamil'] == trim($arr['email']) && $importOrder[$i]['client'] == strtoupper(trim($arr['client']))) {
                     $importOrder[$i]['originalQuantity'] += $arr['originalQuantity'];
                     $repeat = true;
                     break;
@@ -248,6 +275,8 @@ $app->post('/addOrder', function (Request $request, Response $response, $args) u
                     'idProduct' => $arr['idProduct'],
                     'referenceProduct' => trim($arr['referenceProduct']),
                     'product' => $arr['product'],
+                    'idSeller' => $arr['idSeller'],
+                    'email' => trim($arr['email']),
                     'idClient' => $arr['idClient'],
                     'client' => strtoupper(trim($arr['client'])),
                     'order' => $arr['order'],

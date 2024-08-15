@@ -38,7 +38,7 @@ $(document).ready(function () {
 
     importFile(selectedFile)
       .then((data) => {
-        const expectedHeaders = ['pedido','fecha_pedido','fecha_minima','fecha_maxima','referencia_producto','producto','cliente','cantidad_original'];
+        const expectedHeaders = ['pedido','fecha_pedido','fecha_minima','fecha_maxima','referencia_producto','producto', 'email_vendedor', 'cliente','cantidad_original'];
         const actualHeaders = Object.keys(data[0]);
 
         const missingHeaders = expectedHeaders.filter(header => !actualHeaders.includes(header));
@@ -57,6 +57,7 @@ $(document).ready(function () {
             dateOrder: item.fecha_pedido,
             minDate: item.fecha_minima,
             maxDate: item.fecha_maxima,
+            email: item.email_vendedor, 
             referenceProduct: item.referencia_producto,
             product: item.producto,
             client: item.cliente,
@@ -74,7 +75,7 @@ $(document).ready(function () {
   });
 
   /* Mensaje de advertencia */
-  checkOrder = (data) => {
+  const checkOrder = (data) => {
     $.ajax({
       type: 'POST',
       url: '/api/orderDataValidation',
@@ -116,7 +117,7 @@ $(document).ready(function () {
     });
   };
 
-  saveOrderTable = (data) => {
+  const saveOrderTable = (data) => {
     $.ajax({
       type: 'POST',
       url: '../../api/addOrder',

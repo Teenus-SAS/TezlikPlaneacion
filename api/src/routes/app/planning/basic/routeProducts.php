@@ -202,8 +202,11 @@ $app->post('/addProduct', function (Request $request, Response $response, $args)
 
                 !$inventory['days'] ? $days = 0 : $days = $inventory['days'];
 
-                $products = $inventoryDaysDao->updateInventoryProductDays($products[$i]['idProduct'], $days);
+                $resolution = $inventoryDaysDao->updateInventoryProductDays($products[$i]['idProduct'], $days);
             }
+
+            if (isset($resolution['info'])) break;
+
             $resolution = $generalProductsDao->updateAccumulatedQuantity($products[$i]['idProduct'], $products[$i]['quantity'], 1);
         }
 

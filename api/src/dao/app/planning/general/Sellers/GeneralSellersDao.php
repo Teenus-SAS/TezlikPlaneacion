@@ -20,11 +20,8 @@ class GeneralSellersDao
     {
         $connection = Connection::getInstance()->getConnection();
 
-        $stmt = $connection->prepare("SELECT * FROM sellers WHERE firstname = :firstname AND lastname = :lastname 
-                                      AND email = :email AND id_company = :id_company");
+        $stmt = $connection->prepare("SELECT * FROM sellers WHERE email = :email AND id_company = :id_company");
         $stmt->execute([
-            'firstname' => strtoupper(trim($dataSeller['firstname'])),
-            'lastname' => strtoupper(trim($dataSeller['lastname'])),
             'email' => trim($dataSeller['email']),
             'id_company' => $id_company,
         ]);

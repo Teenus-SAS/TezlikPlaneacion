@@ -26,58 +26,9 @@ $(document).ready(function () {
     let idOrder = sessionStorage.getItem('id_order');
 
     if (!idOrder || idOrder == null) {
-      order = $('#order').val();
-      dateOrder = $('#dateOrder').val();
-      minDate = $('#minDate').val();
-      maxDate = $('#maxDate').val();
-      idProduct = $('#refProduct').val();
-      idClient = $('#client').val();
-      // orderType = $('#orderType').val();
-      originalQuantity = $('#originalQuantity').val();
-      // quantity = $('#quantity').val();
-
-      data =
-        idProduct * idClient * originalQuantity;
-
-      if (
-        !data ||
-        data == '' ||
-        !order ||
-        order == '' ||
-        !dateOrder ||
-        dateOrder == '' ||
-        !minDate ||
-        minDate == '' ||
-        !maxDate ||
-        maxDate == ''
-      ) {
-        toastr.error('Ingrese todos los campos');
-        return false;
-      }
-      
-      if (dateOrder > minDate) {
-        toastr.error('Fecha de pedido mayor a la fecha minima');
-        return false;        
-      }
-      
-      if (minDate > maxDate) {
-        toastr.error('Fecha minima mayor a la fecha maxima');
-        return false;        
-      }
-      
-      let date = new Date().toISOString().split('T')[0];
-      
-      if (minDate < date || maxDate < date || dateOrder < date) {
-        toastr.error('Fecha por debajo de la fecha actual');
-        return false;      
-      }
-
-      dataOrder = $('#formCreateOrder').serialize();
-
-      $.post('../api/addOrder', dataOrder, function (data, textStatus, jqXHR) {
-        message(data);
-      });
-    } else updateOrder();
+      checkDataOrder('/api/addOrder', idOrder);
+    } else
+      checkDataOrder('/api/updateOrder', idOrder);
   });
 
   $(document).on('click', '.updateOrder', function () {
@@ -99,8 +50,8 @@ $(document).ready(function () {
       'selected',
       true
     );
+    $(`#seller option[value=${data.id_seller}]`).prop('selected', true);
     $(`#client option[value=${data.id_client}]`).prop('selected', true);
-    // $(`#orderType option[value=${data.id_order_type}]`).prop('selected', true);
     $('#originalQuantity').val(data.original_quantity);
     // $('#quantity').val(data.quantity);
 
@@ -112,11 +63,44 @@ $(document).ready(function () {
     );
   });
 
-  updateOrder = () => {
-    let data = $('#formCreateOrder').serialize();
-    idOrder = sessionStorage.getItem('id_order');
-    data = data + '&idOrder=' + idOrder;
+  const checkDataOrder = async(url, idOrder) => {
+    let order = $('#order').val();
+    let dateOrder = $('#dateOrder').val();
+    let minDate = $('#minDate').val();
+    let maxDate = $('#maxDate').val();
+    let idProduct = parseFloat($('#refProduct').val());
+    let idClient = parseFloat($('#client').val());
+    let seller = parseFloat($('#seller').val());
+    let originalQuantity = parseFloat($('#originalQuantity').val());
 
+    let data = idProduct * idClient * originalQuantity * seller;
+
+    if (
+      isNaN(data)
+      || data <= 0 ||
+      !order ||
+      order == '' ||
+      !dateOrder ||
+      dateOrder == '' ||
+      !minDate ||
+      minDate == '' ||
+      !maxDate ||
+      maxDate == ''
+    ) {
+      toastr.error('Ingrese todos los campos');
+      return false;
+    }
+      
+    if (dateOrder > minDate) {
+      toastr.error('Fecha de pedido mayor a la fecha minima');
+      return false;
+    }
+      
+    if (minDate > maxDate) {
+      toastr.error('Fecha minima mayor a la fecha maxima');
+      return false;
+    }
+      
     let date = new Date().toISOString().split('T')[0];
       
     if (minDate < date || maxDate < date || dateOrder < date) {
@@ -124,10 +108,16 @@ $(document).ready(function () {
       return false;
     }
 
-    $.post('/api/updateOrder', data, function (data, textStatus, jqXHR) {
-      message(data);
-    });
-  };
+    let dataOrder = new FormData(formCreateOrder);
+
+    if (idOrder) {
+      dataOrder.append('idOrder', idOrder);
+    }
+
+    let resp = await sendDataPOST(url, dataOrder);
+
+    message(resp);
+  }; 
 
   deleteFunction = () => {
     let row = $(this.activeElement).parent().parent()[0];
@@ -177,11 +167,5 @@ $(document).ready(function () {
       return false;
     } else if (data.error == true) toastr.error(data.message);
     else if (data.info == true) toastr.info(data.message);
-  };
-
-  /* Actualizar tabla */
-  // function updateTable() {
-  //   $('#tblOrder').DataTable().clear();
-  //   $('#tblOrder').DataTable().ajax.reload();
-  // }
+  }; 
 });
