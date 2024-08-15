@@ -43,7 +43,7 @@ class MinimumStockDao
             $connection = Connection::getInstance()->getConnection();
             $stmt = $connection->prepare("SELECT 
                                             (
-                                                IFNULL(s.max_term, 0) - IFNULL(s.usual_term, 0)
+                                                IFNULL(s.max_term, 0) - IFNULL(s.min_term, 0)
                                             ) * 
                                             (
                                                 (
