@@ -192,7 +192,7 @@ class GeneralMaterialsDao
         try {
             $connection = Connection::getInstance()->getConnection();
 
-            $stmt = $connection->prepare("UPDATE materials_inventory SET grammage = :grammage WHERE id_material = :id_material");
+            $stmt = $connection->prepare("UPDATE materials SET grammage = :grammage WHERE id_material = :id_material");
             $stmt->execute([
                 'id_material' => $id_material,
                 'grammage' => $grammage

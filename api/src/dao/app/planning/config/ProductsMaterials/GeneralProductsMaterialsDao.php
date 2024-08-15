@@ -37,6 +37,20 @@ class GeneralProductsMaterialsDao
         return $productsmaterials;
     }
 
+    public function findAllDistinctMaterials($id_company)
+    {
+        $connection = Connection::getInstance()->getConnection();
+        $stmt = $connection->prepare("SELECT pm.id_material
+                                      FROM products_materials pm 
+                                        INNER JOIN plan_unit_sales us ON us.id_product = pm.id_product 
+                                      WHERE pm.id_company = :id_company
+                                      GROUP BY pm.id_material");
+        $stmt->execute(['id_company' => $id_company]);
+        $productsmaterials = $stmt->fetchAll($connection::FETCH_ASSOC);
+        $this->logger->notice("products", array('products' => $productsmaterials));
+        return $productsmaterials;
+    }
+
     // Consultar si existe el product_material en la BD
     public function findProductMaterial($dataProductMaterial)
     {

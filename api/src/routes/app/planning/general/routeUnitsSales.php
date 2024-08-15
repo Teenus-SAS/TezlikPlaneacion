@@ -666,7 +666,12 @@ $app->get('/saleDays', function (Request $request, Response $response, $args) us
     return $response->withHeader('Content-Type', 'application/json');
 });
 
-$app->post('/addSaleDays', function (Request $request, Response $response, $args) use ($generalUnitSalesDao) {
+$app->post('/addSaleDays', function (Request $request, Response $response, $args) use (
+    $generalUnitSalesDao,
+    $unitSalesDao,
+    $generalProductsMaterialsDao,
+    $inventoryDaysDao
+) {
     session_start();
     $id_company = $_SESSION['id_company'];
     $dataSales = $request->getParsedBody();
@@ -675,6 +680,42 @@ $app->post('/addSaleDays', function (Request $request, Response $response, $args
 
     if (!$saleDay) {
         $resolution = $generalUnitSalesDao->insertSaleDaysByCompany($dataSales, $id_company);
+
+        // Calcular Dias Inventario
+        if ($resolution == null) {
+            $month = date('m');
+            $year = date('Y');
+
+            if ($dataSales['month'] == $month && $dataSales['year'] == $year) {
+
+                // Materiales
+                $materials = $generalProductsMaterialsDao->findAllDistinctMaterials($id_company);
+
+                foreach ($materials as $arr) {
+                    $inventory = $inventoryDaysDao->calcInventoryMaterialDays($arr['id_material']);
+
+                    !$inventory['days'] ? $days = 0 : $days = $inventory['days'];
+
+                    $resolution = $inventoryDaysDao->updateInventoryMaterialDays($arr['id_material'], $days);
+
+                    if (isset($resolution['info'])) break;
+                }
+
+                // Productos
+                $products = $unitSalesDao->findAllSalesByCompany($id_company);
+
+                foreach ($products as $arr) {
+                    $inventory = $inventoryDaysDao->calcInventoryProductDays($arr['id_product']);
+
+                    !$inventory['days'] ? $days = 0 : $days = $inventory['days'];
+
+                    $resolution = $inventoryDaysDao->updateInventoryProductDays($arr['id_product'], $days);
+
+                    if (isset($resolution['info'])) break;
+                }
+            }
+        }
+
         if ($resolution == null)
             $resp = array('success' => true, 'message' => 'Dias de venta almacenada correctamente');
         else if (isset($resolution['info']))
@@ -690,7 +731,12 @@ $app->post('/addSaleDays', function (Request $request, Response $response, $args
     return $response->withHeader('Content-Type', 'application/json');
 });
 
-$app->post('/updateSaleDays', function (Request $request, Response $response, $args) use ($generalUnitSalesDao) {
+$app->post('/updateSaleDays', function (Request $request, Response $response, $args) use (
+    $generalUnitSalesDao,
+    $unitSalesDao,
+    $generalProductsMaterialsDao,
+    $inventoryDaysDao
+) {
     session_start();
     $id_company = $_SESSION['id_company'];
     $dataSales = $request->getParsedBody();
@@ -700,6 +746,41 @@ $app->post('/updateSaleDays', function (Request $request, Response $response, $a
     !is_array($saleDay) ? $data['id_sale_day'] = 0 : $data = $saleDay;
     if ($data['id_sale_day'] == $dataSales['idSaleDay'] || $data['id_sale_day'] == 0) {
         $resolution = $generalUnitSalesDao->updateSaleDays($dataSales);
+
+        // Calcular Dias Inventario
+        if ($resolution == null) {
+            $month = intval(date('m'));
+            $year = intval(date('Y'));
+
+            if ($dataSales['month'] == $month && $dataSales['year'] == $year) {
+                // Materiales
+                $materials = $generalProductsMaterialsDao->findAllDistinctMaterials($id_company);
+
+                foreach ($materials as $arr) {
+                    $inventory = $inventoryDaysDao->calcInventoryMaterialDays($arr['id_material']);
+
+                    !$inventory['days'] ? $days = 0 : $days = $inventory['days'];
+
+                    $resolution = $inventoryDaysDao->updateInventoryMaterialDays($arr['id_material'], $days);
+
+                    if (isset($resolution['info'])) break;
+                }
+
+                // Productos
+                $products = $unitSalesDao->findAllSalesByCompany($id_company);
+
+                foreach ($products as $arr) {
+                    $inventory = $inventoryDaysDao->calcInventoryProductDays($arr['id_product']);
+
+                    !$inventory['days'] ? $days = 0 : $days = $inventory['days'];
+
+                    $resolution = $inventoryDaysDao->updateInventoryProductDays($arr['id_product'], $days);
+
+                    if (isset($resolution['info'])) break;
+                }
+            }
+        }
+
         if ($resolution == null)
             $resp = array('success' => true, 'message' => 'Dias de venta almacenada correctamente');
         else if (isset($resolution['info']))

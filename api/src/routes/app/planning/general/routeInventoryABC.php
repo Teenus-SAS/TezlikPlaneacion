@@ -27,37 +27,6 @@ $app->get('/inventoryABC', function (Request $request, Response $response, $args
     return $response->withHeader('Content-Type', 'application/json');
 });
 
-// $app->post('/categoriesDataValidation', function (Request $request, Response $response, $args) use ($generalCategoriesDao) {
-//     $dataInventory = $request->getParsedBody();
-
-//     if (isset($dataInventory)) {
-
-//         $insert = 0;
-//         $update = 0;
-
-//         $categories = $dataInventory['importCategories'];
-
-//         for ($i = 0; $i < sizeof($categories); $i++) {
-
-//             if (empty($categories[$i]['category']) || empty($categories[$i]['typeCategory'])) {
-//                 $i = $i + 2;
-//                 $dataimportCategories = array('error' => true, 'message' => "Campos vacios en la fila: {$i}");
-//                 break;
-//             } else {
-//                 $findCategory = $generalCategoriesDao->findCategory($categories[$i]);
-//                 if (!$findCategory) $insert = $insert + 1;
-//                 else $update = $update + 1;
-//                 $dataimportCategories['insert'] = $insert;
-//                 $dataimportCategories['update'] = $update;
-//             }
-//         }
-//     } else
-//         $dataimportCategories = array('error' => true, 'message' => 'El archivo se encuentra vacio. Intente nuevamente');
-
-//     $response->getBody()->write(json_encode($dataimportCategories, JSON_NUMERIC_CHECK));
-//     return $response->withHeader('Content-Type', 'application/json');
-// });
-
 $app->post('/addInventoryABC', function (Request $request, Response $response, $args) use (
     $inventoryABCDao,
 ) {
@@ -65,7 +34,6 @@ $app->post('/addInventoryABC', function (Request $request, Response $response, $
     $id_company = $_SESSION['id_company'];
     $dataInventory = $request->getParsedBody();
 
-    // if (empty($dataInventory['importCategories'])) {
     $category = $inventoryABCDao->insertInventoryABC($dataInventory, $id_company);
 
     if ($category == null)
@@ -74,23 +42,6 @@ $app->post('/addInventoryABC', function (Request $request, Response $response, $
         $resp = array('info' => true, 'message' => $category['message']);
     else
         $resp = array('error' => true, 'message' => 'Ocurrio un error mientras ingresaba la información. Intente nuevamente');
-    // } else {
-    //     $categories = $dataInventory['importCategories'];
-
-    //     for ($i = 0; $i < sizeof($categories); $i++) {
-    //         $findCategory = $generalCategoriesDao->findCategory($categories[$i]);
-    //         if (!$findCategory)
-    //             $resolution = $invCategoriesDao->insertCategory($categories[$i]);
-    //         else {
-    //             $categories[$i]['idCategory'] = $findCategory['id_category'];
-    //             $resolution = $invCategoriesDao->updateCategory($categories[$i]);
-    //         }
-    //     }
-    //     if ($resolution == null)
-    //         $resp = array('success' => true, 'message' => 'Inventario importada correctamente');
-    //     else
-    //         $resp = array('error' => true, 'message' => 'Ocurrio un error mientras importaba la información. Intente nuevamente');
-    // }
 
     $response->getBody()->write(json_encode($resp));
     return $response->withStatus(200)->withHeader('Content-Type', 'application/json');
@@ -138,17 +89,3 @@ $app->post('/updateInventoryABC', function (Request $request, Response $response
     $response->getBody()->write(json_encode($resp));
     return $response->withStatus(200)->withHeader('Content-Type', 'application/json');
 });
-
-// $app->get('/deleteCategory/{id_category}', function (Request $request, Response $response, $args) use ($invCategoriesDao) {
-//     $category = $invCategoriesDao->deleteCategory($args['id_category']);
-
-//     if ($category == null)
-//         $resp = array('success' => true, 'message' => 'Inventario eliminada correctamente');
-//     else if (isset($category['info']))
-//         $resp = array('info' => true, 'message' => $category['message']);
-//     else if ($category != null)
-//         $resp = array('error' => true, 'message' => 'Ocurrio un error mientras eliminaba la información. Intente nuevamente');
-
-//     $response->getBody()->write(json_encode($resp));
-//     return $response->withHeader('Content-Type', 'application/json');
-// });

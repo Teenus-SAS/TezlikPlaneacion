@@ -16,29 +16,6 @@ $(document).ready(function () {
     checkDataInventory('/api/updateInventoryABC'); 
   });
 
-  /* Actualizar categoria 
-  $(document).on('click', '.updateInventory', function (e) {
-    $('.cardInventoryABC').show(800);
-    $('.cardImportInventory').hide(800);
-    $('.cardAddMonths').hide(800);
-    $('#btnSaveInventoryABC').html('Actualizar');
-
-    let row = $(this).parent().parent()[0];
-    let data = tblInventoryABC.fnGetData(row);
-
-    sessionStorage.setItem('id_inventory', data.id_inventory);
-    $('#a').val(data.a);
-    $('#b').val(data.b);
-    $('#c').val(data.c);
-      
-    $('html, body').animate(
-      {
-        scrollTop: 0,
-      },
-      1000
-    );
-  }); */
-
   const checkDataInventory = async (url) => {
     let a = parseInt($('#a').val());
     let b = parseInt($('#b').val());
@@ -77,17 +54,4 @@ $(document).ready(function () {
 
     messageInventory(resp);
   };
-
-  /* Mensaje de exito 
-  const message = (data) => {
-    if (data.success == true) {
-      $('#btnNewInventoryABC').hide();
-      $('.cardInventoryABC').hide(800);
-      $('#formInventoryABC').trigger('reset');
-      loadAllData();
-      toastr.success(data.message);
-      return false;
-    } else if (data.error == true) toastr.error(data.message);
-    else if (data.info == true) toastr.info(data.message);
-  }; */
 });
