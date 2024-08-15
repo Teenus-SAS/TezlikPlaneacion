@@ -354,7 +354,7 @@ if (sizeof($_SESSION) == 0)
     <?php include_once dirname(dirname(dirname(__DIR__))) . '/global/partials/scriptsJS.php'; ?>
 
     <script>
-        flag_products_measure = "<? $_SESSION['flag_products_measure'] ?>";
+        flag_products_measure = "<?= $_SESSION['flag_products_measure'] ?>";
     </script>
     <script src="/global/js/global/configMagnitudes.js"></script>
     <script src="/global/js/global/configUnits.js"></script>
