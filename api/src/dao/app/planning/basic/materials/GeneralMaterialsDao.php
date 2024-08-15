@@ -187,6 +187,23 @@ class GeneralMaterialsDao
         }
     }
 
+    public function updateGrammageMaterial($id_material, $grammage)
+    {
+        try {
+            $connection = Connection::getInstance()->getConnection();
+
+            $stmt = $connection->prepare("UPDATE materials_inventory SET grammage = :grammage WHERE id_material = :id_material");
+            $stmt->execute([
+                'id_material' => $id_material,
+                'grammage' => $grammage
+            ]);
+        } catch (\Exception $e) {
+            $message = $e->getMessage();
+            $error = array('info' => true, 'message' => $message);
+            return $error;
+        }
+    }
+
     public function updateStockMaterial($id_material, $stock)
     {
         try {

@@ -51,7 +51,10 @@
                                             <!-- <li class="invMolds"><a href="/planning/molds">Moldes</a></li> -->
                                             <?php //} 
                                             ?>
-                                            <?php if ($_SESSION['flag_products_measure'] == 1) { ?>
+                                            <?php if (
+                                                $_SESSION['planning_product'] == 1 &&
+                                                $_SESSION['flag_products_measure'] == 1
+                                            ) { ?>
                                                 <li class="planProductsM">
                                                 <?php } else { ?>
                                                 <li class="planProductsM" style="display: none;">

@@ -77,7 +77,7 @@ $app->post('/clientsDataValidation', function (Request $request, Response $respo
                 $duplicateTracker[$nameClient] = true;
             }
 
-            $findClient = $generalClientsDao->findClientsByNitAndName($clients[$i]);
+            $findClient = $generalClientsDao->findClientsByNitAndName($clients[$i], $id_company);
 
             if (sizeof($findClient) > 1) {
                 $i = $i + 2;
@@ -85,7 +85,7 @@ $app->post('/clientsDataValidation', function (Request $request, Response $respo
                 break;
             }
 
-            if ($findClient[0]['nit'] != $nitClient || $findClient[0]['client'] != $nameClient) {
+            if (isset($findClient[0]['nit']) != $nitClient || isset($findClient[0]['client']) != $nameClient) {
                 $i = $i + 2;
                 $dataImportClients =  array('error' => true, 'message' => "NIT o nombre de cliente ya existente, fila: $i.<br>- NIT: $nitClient<br>- Cliente: $nameClient");
                 break;

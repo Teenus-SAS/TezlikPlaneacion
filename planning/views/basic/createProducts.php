@@ -210,8 +210,14 @@ if (sizeof($_SESSION) == 0)
                                                 </div>
                                                 <div class="col-sm-2 floating-label enable-floating-label show-label">
                                                     <label for="mQuantity">Existencias</label>
-                                                    <input type="text" class="form-control text-center number" id="mQuantity" name="quantity">
+                                                    <input type="number" class="form-control text-center" id="mQuantity" name="quantity">
                                                 </div>
+                                                <?php if ($_SESSION['flag_products_measure'] == '1') { ?>
+                                                    <div class="col-sm-2 floating-label enable-floating-label show-label">
+                                                        <label for="mQuantity">Gramaje</label>
+                                                        <input type="number" class="form-control text-center" id="grammage" name="grammage">
+                                                    </div>
+                                                <?php } ?>
                                                 <div class="col-sm mt-1">
                                                     <button class="btn btn-info" type="submit" id="btnCreateMaterial" name="btnCreateMaterial">Crear</button>
                                                 </div>
@@ -320,6 +326,9 @@ if (sizeof($_SESSION) == 0)
                                                             <td></td>
                                                             <td>Total: </td>
                                                             <td></td>
+                                                            <?php if ($_SESSION['flag_products_measure']) { ?>
+                                                                <td></td>
+                                                            <? } ?>
                                                             <td></td>
                                                             <td></td>
                                                             <td></td>
@@ -343,6 +352,10 @@ if (sizeof($_SESSION) == 0)
         <?php include_once  dirname(dirname(dirname(__DIR__))) . '/global/partials/footer.php'; ?>
     </div>
     <?php include_once dirname(dirname(dirname(__DIR__))) . '/global/partials/scriptsJS.php'; ?>
+
+    <script>
+        flag_products_measure = "<? $_SESSION['flag_products_measure'] ?>";
+    </script>
     <script src="/global/js/global/configMagnitudes.js"></script>
     <script src="/global/js/global/configUnits.js"></script>
     <script src="/planning/js/basic/rawMaterials/tblRawMaterials.js"></script>

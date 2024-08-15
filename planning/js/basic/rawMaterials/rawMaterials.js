@@ -61,6 +61,7 @@ $(document).ready(function () {
     //     maximumFractionDigits: 2,
     //   });
     $('#mQuantity').val(quantity);
+    $('#grammage').val(data.grammage);
 
     $('html, body').animate(
       {
@@ -76,6 +77,7 @@ $(document).ready(function () {
     let material = $('#nameRawMaterial').val();
     let unity = $('#unit').val();
     let quantity = parseFloat($('#mQuantity').val());
+    let grammage = parseFloat($('#grammage').val());
 
     if (ref == '' || material == '' || unity == '') {
       toastr.error('Ingrese todos los campos');
@@ -89,6 +91,13 @@ $(document).ready(function () {
     if (quantity <= 0 || isNaN(quantity)) {
       toastr.error('La cantidad debe ser mayor a cero (0)');
       return false;
+    }
+    
+    if (flag_products_measure == '1') {
+      if (isNaN(grammage) || grammage <= 0) {
+          toastr.error('El gramaje debe ser mayor a cero (0)');
+          return false;        
+      }
     }
 
     let dataMaterial = new FormData(formCreateMaterial);

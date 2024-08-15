@@ -230,6 +230,10 @@ $app->post('/addMaterials', function (Request $request, Response $response, $arg
 
             // Calcular Dias Inventario Material
             if ($materials == null) {
+                if ($_SESSION['flag_products_measure'] == '1') {
+                    $materials = $generalMaterialsDao->updateGrammageMaterial($dataMaterial['idMaterial'], $dataMaterial['grammage']);
+                }
+
                 $inventory = $inventoryDaysDao->calcInventoryMaterialDays($dataMaterial['idMaterial']);
                 if (isset($inventory['days']))
                     $materials = $inventoryDaysDao->updateInventoryMaterialDays($dataMaterial['idMaterial'], $inventory['days']);

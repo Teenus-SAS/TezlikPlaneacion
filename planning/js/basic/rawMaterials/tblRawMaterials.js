@@ -54,6 +54,18 @@ $(document).ready(function () {
           },
         },
         {
+          title: "Gramaje",
+          data: null,
+          className: "uniqueClassName dt-head-center",
+          visible: flag_products_measure == '1' ? true: false,
+          render: function (data) {
+            let grammage = parseFloat(data.grammage).toLocaleString("es-CO", {
+              maximumFractionDigits: 2,
+            });
+            return grammage;
+          },
+        },
+        {
           title: "Transito",
           data: null,
           className: "uniqueClassName dt-head-center",

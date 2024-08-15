@@ -37,8 +37,11 @@ $(document).ready(function () {
 
     importFile(selectedFile)
       .then((data) => {
-        const expectedHeaders = ['referencia', 'material', 'magnitud', 'unidad', 'existencia'];
+        const expectedHeaders = ['referencia', 'material', 'magnitud', 'unidad', 'existencia', 'gramaje'];
         const actualHeaders = Object.keys(data[0]);
+
+        if(flag_products_measure=='0')
+          expectedHeaders.splice(expectedHeaders.length - 1, 1);
 
         const missingHeaders = expectedHeaders.filter(header => !actualHeaders.includes(header));
 
@@ -51,13 +54,23 @@ $(document).ready(function () {
         }
 
         let materialsToImport = data.map((item) => {
-          return {
-            refRawMaterial: item.referencia,
-            nameRawMaterial: item.material,
-            magnitude: item.magnitud,
-            unit: item.unidad,
-            quantity: item.existencia,
-          };
+          if (flag_products_measure == '1')
+            return {
+              refRawMaterial: item.referencia,
+              nameRawMaterial: item.material,
+              magnitude: item.magnitud,
+              unit: item.unidad,
+              quantity: item.existencia,
+              grammage: item.gramaje
+            };
+          else
+            return {
+              refRawMaterial: item.referencia,
+              nameRawMaterial: item.material,
+              magnitude: item.magnitud,
+              unit: item.unidad,
+              quantity: item.existencia,
+            };
         });
 
         checkRawMaterial(materialsToImport);
@@ -146,38 +159,56 @@ $(document).ready(function () {
 
     let data = [];
 
-    namexlsx = 'Materia_prima.xlsx';
-    // url = '/api/materials';
-    
-    // let materials = await searchData(url);
+    namexlsx = 'Materia_prima.xlsx'; 
+
     let dataMaterials = JSON.parse(sessionStorage.getItem('dataMaterials'));
 
     if (dataMaterials.length > 0) {
       for (i = 0; i < dataMaterials.length; i++) {
-        data.push({
-          referencia: dataMaterials[i].reference,
-          material: dataMaterials[i].material,
-          magnitud: dataMaterials[i].magnitude,
-          unidad: dataMaterials[i].unit,
-          existencia: dataMaterials[i].quantity,
-        });
+        if (flag_products_measure == '1')
+          data.push({
+            referencia: dataMaterials[i].reference,
+            material: dataMaterials[i].material,
+            magnitud: dataMaterials[i].magnitude,
+            unidad: dataMaterials[i].unit,
+            existencia: dataMaterials[i].quantity,
+            gramaje: dataMaterials[i].grammage,
+          });
+        else
+          data.push({
+            referencia: dataMaterials[i].reference,
+            material: dataMaterials[i].material,
+            magnitud: dataMaterials[i].magnitude,
+            unidad: dataMaterials[i].unit,
+            existencia: dataMaterials[i].quantity,
+          });
       }
 
       let ws = XLSX.utils.json_to_sheet(data);
       XLSX.utils.book_append_sheet(wb, ws, 'Materiales');
       XLSX.writeFile(wb, namexlsx);
     } else {
-      url = 'assets/formatsXlsx/Materia_prima.xlsx';
+      if (flag_products_measure == '1')
+        url = 'assets/formatsXlsx/Materia_prima(bolsas).xlsx';
+      else
+        url = 'assets/formatsXlsx/Materia_prima.xlsx';
 
-      link = document.createElement('a');
-      link.target = '_blank';
+      let newFileName = 'Materia_prima.xlsx';
 
-      link.href = url;
-      document.body.appendChild(link);
-      link.click();
+      fetch(url)
+        .then(response => response.blob())
+        .then(blob => {
+          let link = document.createElement('a');
+          link.href = URL.createObjectURL(blob);
+          link.download = newFileName;
 
-      document.body.removeChild(link);
-      delete link;
+          document.body.appendChild(link);
+          link.click();
+
+          document.body.removeChild(link);
+          URL.revokeObjectURL(link.href); // liberar memoria
+        })
+        .catch(console.error);
     }
 
     $('.cardLoading').remove();
