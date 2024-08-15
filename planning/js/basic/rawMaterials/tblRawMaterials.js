@@ -57,12 +57,15 @@ $(document).ready(function () {
           title: "Gramaje",
           data: null,
           className: "uniqueClassName dt-head-center",
-          visible: flag_products_measure == '1' ? true: false,
+          visible: flag_products_measure == '1' ? true : false,
           render: function (data) {
-            let grammage = parseFloat(data.grammage).toLocaleString("es-CO", {
+            let grammage = parseFloat(data.grammage);
+
+            !grammage ? grammage = 0 : grammage;
+            
+            return grammage.toLocaleString("es-CO", {
               maximumFractionDigits: 2,
-            });
-            return grammage;
+            });;
           },
         },
         {
@@ -129,6 +132,7 @@ $(document).ready(function () {
       ],
       footerCallback: function (row, data, start, end, display) {
         let quantity = 0;
+        let grammage = 0;
         let transit = 0;
         let reserved = 0;
         let minimum_stock = 0;
@@ -136,39 +140,48 @@ $(document).ready(function () {
 
         for (i = 0; i < display.length; i++) {
           quantity += parseFloat(data[display[i]].quantity);
+          grammage += parseFloat(data[display[i]].grammage);
           transit += parseFloat(data[display[i]].transit);
           reserved += parseFloat(data[display[i]].reserved);
           minimum_stock += parseFloat(data[display[i]].minimum_stock);
           days += parseFloat(data[display[i]].days);
         }
 
-        $(this.api().column(4).footer()).html(
+        !grammage ? grammage = 0 : grammage;
+
+        $('#totalQuantity').html(
           quantity.toLocaleString('es-CO', {
             minimumFractionDigits: 0,
             maximumFractionDigits: 0,
           })
         );
+        $('#totalGrammage').html(
+          grammage.toLocaleString('es-CO', {
+            minimumFractionDigits: 0,
+            maximumFractionDigits: 0,
+          })
+        );
         
-        $(this.api().column(5).footer()).html(
+        $('#totalTransit').html(
           transit.toLocaleString('es-CO', {
             minimumFractionDigits: 0,
             maximumFractionDigits: 0,
           })
         );
 
-        $(this.api().column(6).footer()).html(
+        $('#totalReserved').html(
           reserved.toLocaleString('es-CO', {
             minimumFractionDigits: 0,
             maximumFractionDigits: 0,
           })
         );
-        $(this.api().column(7).footer()).html(
+        $('#totalStock').html(
           minimum_stock.toLocaleString('es-CO', {
             minimumFractionDigits: 0,
             maximumFractionDigits: 0,
           })
         );
-        $(this.api().column(8).footer()).html(
+        $('#totalDay').html(
           days.toLocaleString('es-CO', {
             minimumFractionDigits: 0,
             maximumFractionDigits: 0,

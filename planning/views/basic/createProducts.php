@@ -325,14 +325,14 @@ if (sizeof($_SESSION) == 0)
                                                             <td></td>
                                                             <td></td>
                                                             <td>Total: </td>
-                                                            <td></td>
+                                                            <td id="totalQuantity"></td>
                                                             <?php if ($_SESSION['flag_products_measure']) { ?>
-                                                                <td></td>
-                                                            <? } ?>
-                                                            <td></td>
-                                                            <td></td>
-                                                            <td></td>
-                                                            <td></td>
+                                                                <td id="totalGrammage"></td>
+                                                            <?php } ?>
+                                                            <td id="totalTransit"></td>
+                                                            <td id="totalReserved"></td>
+                                                            <td id="totalStock"></td>
+                                                            <td id="totalDay"></td>
                                                         </tr>
                                                     </tfoot>
 

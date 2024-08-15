@@ -305,6 +305,14 @@ $app->post('/addMaterials', function (Request $request, Response $response, $arg
 
             if (isset($resolution['info'])) break;
 
+            if ($_SESSION['flag_products_measure'] == '1') {
+                !isset($materials[$i]['grammage']) ? $grammage = 0 : $grammage = $materials[$i]['grammage'];
+
+                $resolution = $generalMaterialsDao->updateGrammageMaterial($materials[$i]['idMaterial'], $grammage);
+            }
+
+            if (isset($resolution['info'])) break;
+
             $inventory = $materialsInventoryDao->findMaterialInventory($materials[$i]['idMaterial']);
 
             if (!$inventory) {
@@ -444,6 +452,11 @@ $app->post('/updateMaterials', function (Request $request, Response $response, $
             }
         }
 
+        if ($resolution == null) {
+            if ($_SESSION['flag_products_measure'] == '1') {
+                $resolution = $generalMaterialsDao->updateGrammageMaterial($dataMaterial['idMaterial'], $dataMaterial['grammage']);
+            }
+        }
         // Calcular Dias Inventario Material
         if ($resolution == null) {
             $inventory = $inventoryDaysDao->calcInventoryMaterialDays($dataMaterial['idMaterial']);
