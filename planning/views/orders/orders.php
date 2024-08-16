@@ -122,7 +122,7 @@ if (sizeof($_SESSION) == 0)
                                                 
                                                 <div class="col-sm-2 floating-label enable-floating-label show-label mt-2">
                                                     <label for="order">No Pedido</label>
-                                                    <input class="form-control" name="order" id="order">
+                                                    <input class="form-control text-center" name="order" id="order">
                                                 </div>
 
                                                 <div class="col-sm-2 floating-label enable-floating-label show-label mt-2">
@@ -149,7 +149,7 @@ if (sizeof($_SESSION) == 0)
 
                                                 <div class="col-sm-2 floating-label enable-floating-label show-label cardDescription" style="margin-bottom:20px">
                                                     <label for="originalQuantity">Cantidad requerida</label>
-                                                    <input type="text" class="form-control" id="originalQuantity" name="originalQuantity" readonly>
+                                                    <input type="text" class="form-control text-center" id="originalQuantity" name="originalQuantity" readonly>
                                                 </div>
 
                                                 <div class="col-sm-5 floating-label enable-floating-label show- mb-3 label">
