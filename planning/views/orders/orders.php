@@ -7,7 +7,7 @@ if (!isset($_SESSION)) {
 if (sizeof($_SESSION) == 0)
     header('location: /');
 ?>
-<?php require_once dirname(dirname(__DIR__)) . '/modals/createOrders.php'; ?>
+<?php //require_once dirname(dirname(__DIR__)) . '/modals/createOrders.php'; ?>
 <!DOCTYPE html>
 <html lang="es">
 
