@@ -21,7 +21,10 @@ class GeneralProgrammingDao
         $connection = Connection::getInstance()->getConnection();
 
         $stmt = $connection->prepare("SELECT * FROM programming WHERE id_programming = :id_programming AND id_company = :id_company");
-        $stmt->execute(['id_programming' => $id_programming]);
+        $stmt->execute([
+            'id_programming' => $id_programming,
+            'id_company' => $id_company
+        ]);
 
         $this->logger->info(__FUNCTION__, array('query' => $stmt->queryString, 'errors' => $stmt->errorInfo()));
 
