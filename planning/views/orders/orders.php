@@ -139,7 +139,7 @@ if (sizeof($_SESSION) == 0)
 
                                                 <div class="col-sm-2 floating-label enable-floating-label show- mb-3 label cardSelect">
                                                     <label for="refProduct">Referencia</label>
-                                                    <select class="form-control" name="refProduct" id="refProduct"></select>
+                                                    <select class="form-control" name="idProduct" id="refProduct"></select>
                                                 </div>
 
                                                 <div class="col-sm-8 floating-label enable-floating-label show- mb-3 label cardSelect">
