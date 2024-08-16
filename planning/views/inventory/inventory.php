@@ -289,7 +289,7 @@ if (sizeof($_SESSION) == 0)
     </div>
 
     <?php include_once dirname(dirname(dirname(__DIR__))) . '/global/partials/scriptsJS.php'; ?>
-    <script src="/planning/js/general/inventoryABC/tblinventoryABC.js"></script>
+    <script src="/planning/js/general/inventoryABC/tblInventoryABC.js"></script>
     <script src="/planning/js/general/inventoryABC/inventoryABC.js"></script>
     <script src="../planning/js/inventory/tblInventory.js"></script>
     <script src="../planning/js/inventory/inventory.js"></script>
