@@ -106,6 +106,74 @@ if (sizeof($_SESSION) == 0)
                     </div>
                 </div>
 
+                <div class="page-content-wrapper mt--45 mb-5 cardAddOrders">
+                    <div class="container-fluid">
+                        <div class="row">
+                            <div class="col-12">
+                                <div class="card">
+                                    <div class="card-body">
+                                        <form id="formAddOrders">
+                                            <div class="form-row">
+
+                                                <div class="col-sm-2 floating-label enable-floating-label show-label mt-2">
+                                                    <label for="dateOrder">Fecha</label>
+                                                    <input class="form-control" type="date" name="dateOrder" id="dateOrder" min="<?php echo date('Y-m-d'); ?>">
+                                                </div>
+                                                
+                                                <div class="col-sm-2 floating-label enable-floating-label show-label mt-2">
+                                                    <label for="order">No Pedido</label>
+                                                    <input class="form-control" name="order" id="order">
+                                                </div>
+
+                                                <div class="col-sm-2 floating-label enable-floating-label show-label mt-2">
+                                                    <label for="minDate">Fecha Min Entrega</label>
+                                                    <input class="form-control" type="date" name="minDate" id="minDate" min="<?php echo date('Y-m-d'); ?>">
+                                                </div>
+
+                                                <div class="col-sm-2 floating-label enable-floating-label show-label mt-2">
+                                                    <label for="">Fecha Max Entrega</label>
+                                                    <input class="form-control" type="date" name="maxDate" id="maxDate" min="<?php echo date('Y-m-d'); ?>">
+                                                </div>
+
+                                                <div class="w-100"></div>
+
+                                                <div class="col-sm-2 floating-label enable-floating-label show- mb-3 label cardSelect">
+                                                    <label for="refProduct">Referencia</label>
+                                                    <select class="form-control" name="refProduct" id="refProduct"></select>
+                                                </div>
+
+                                                <div class="col-sm-8 floating-label enable-floating-label show- mb-3 label cardSelect">
+                                                    <label for="selectNameProduct">Producto</label>
+                                                    <select class="form-control" name="selectNameProduct" id="selectNameProduct"></select>
+                                                </div>
+
+                                                <div class="col-sm-2 floating-label enable-floating-label show-label cardDescription" style="margin-bottom:20px">
+                                                    <label for="originalQuantity">Cantidad requerida</label>
+                                                    <input type="text" class="form-control" id="originalQuantity" name="originalQuantity" readonly>
+                                                </div>
+
+                                                <div class="col-sm-5 floating-label enable-floating-label show- mb-3 label">
+                                                    <label for="">Cliente</label>
+                                                    <select class="form-control" name="idClient" id="client"></select>
+                                                </div>
+
+                                                <div class="col-sm-5 floating-label enable-floating-label show- mb-3 label">
+                                                    <label for="">Vendedor</label>
+                                                    <select class="form-control" name="idSeller" id="seller"></select>
+                                                </div>
+
+                                                <div class="col-sm-2">
+                                                    <button class="btn btn-success" id="btnCreateOrder">Crear</button>
+                                                </div>
+                                            </div>
+                                        </form>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
                 <div class="page-content-wrapper mt--45 mb-5 cardImportOrder">
                     <div class="container-fluid">
                         <div class="row">
