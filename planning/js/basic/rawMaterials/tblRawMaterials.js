@@ -1,16 +1,16 @@
 $(document).ready(function () {
   /* Cargue tabla de Materias Primas */
-  flag_products_measure == '1' ? visible = true : visible = false;
-  
+  flag_products_measure == "1" ? (visible = true) : (visible = false);
+
   loadTblMaterials = (data) => {
     if ($.fn.dataTable.isDataTable("#tblRawMaterials")) {
       $("#tblRawMaterials").DataTable().clear();
       $("#tblRawMaterials").DataTable().rows.add(data).draw();
       return;
     }
-    
+
     tblRawMaterials = $("#tblRawMaterials").dataTable({
-      pageLength: 50, 
+      pageLength: 50,
       data: data,
       language: {
         url: "/assets/plugins/i18n/Spanish.json",
@@ -25,6 +25,12 @@ $(document).ready(function () {
           },
         },
         {
+          title: "Tipo",
+          data: "material_type",
+          className: "uniqueClassName dt-head-center",
+          visible: visible,
+        },
+        {
           title: "Referencia",
           data: "reference",
           className: "uniqueClassName dt-head-center",
@@ -35,32 +41,6 @@ $(document).ready(function () {
           className: "uniqueClassName dt-head-center",
         },
         {
-          title: "Medida",
-          data: "abbreviation",
-          className: "uniqueClassName dt-head-center",
-        },
-        {
-          title: "Tipo",
-          data: "material_type",
-          className: "uniqueClassName dt-head-center",
-          visible: visible,
-        },
-        {
-          title: "Existencia",
-          data: null,
-          className: "uniqueClassName dt-head-center",
-          render: function (data) {
-            data.unit == "UNIDAD"
-              ? (number = parseFloat(data.quantity).toLocaleString("es-CO", {
-                maximumFractionDigits: 0,
-              }))
-              : (number = parseFloat(data.quantity).toLocaleString("es-CO", {
-                minimumFractionDigits: 2,
-              }));
-            return number;
-          },
-        },
-        {
           title: "Gramaje",
           data: null,
           className: "uniqueClassName dt-head-center",
@@ -68,11 +48,31 @@ $(document).ready(function () {
           render: function (data) {
             let grammage = parseFloat(data.grammage);
 
-            !grammage ? grammage = 0 : grammage;
-            
+            !grammage ? (grammage = 0) : grammage;
+
             return grammage.toLocaleString("es-CO", {
               maximumFractionDigits: 2,
-            });;
+            });
+          },
+        },
+        {
+          title: "Medida",
+          data: "abbreviation",
+          className: "uniqueClassName dt-head-center",
+        },
+        {
+          title: "Existencias",
+          data: null,
+          className: "uniqueClassName dt-head-center",
+          render: function (data) {
+            data.unit == "UNIDAD"
+              ? (number = parseFloat(data.quantity).toLocaleString("es-CO", {
+                  maximumFractionDigits: 0,
+                }))
+              : (number = parseFloat(data.quantity).toLocaleString("es-CO", {
+                  minimumFractionDigits: 2,
+                }));
+            return number;
           },
         },
         {
@@ -82,11 +82,11 @@ $(document).ready(function () {
           render: function (data) {
             data.unit == "UNIDAD"
               ? (number = parseFloat(data.transit).toLocaleString("es-CO", {
-                maximumFractionDigits: 0,
-              }))
+                  maximumFractionDigits: 0,
+                }))
               : (number = parseFloat(data.transit).toLocaleString("es-CO", {
-                minimumFractionDigits: 2,
-              }));
+                  minimumFractionDigits: 2,
+                }));
             return number;
           },
         },
@@ -97,11 +97,11 @@ $(document).ready(function () {
           render: function (data) {
             data.unit == "UNIDAD"
               ? (number = parseFloat(data.reserved).toLocaleString("es-CO", {
-                maximumFractionDigits: 0,
-              }))
+                  maximumFractionDigits: 0,
+                }))
               : (number = parseFloat(data.reserved).toLocaleString("es-CO", {
-                minimumFractionDigits: 2,
-              }));
+                  minimumFractionDigits: 2,
+                }));
             return number;
           },
         },
@@ -111,12 +111,19 @@ $(document).ready(function () {
           className: "uniqueClassName dt-head-center",
           render: function (data) {
             data.unit == "UNIDAD"
-              ? (number = parseFloat(data.minimum_stock).toLocaleString("es-CO", {
-                maximumFractionDigits: 0,
-              }))
-              : (number = parseFloat(data.minimum_stock).toLocaleString("es-CO", {
-                minimumFractionDigits: 2, maximumFractionDigits:2,
-              }));
+              ? (number = parseFloat(data.minimum_stock).toLocaleString(
+                  "es-CO",
+                  {
+                    maximumFractionDigits: 0,
+                  }
+                ))
+              : (number = parseFloat(data.minimum_stock).toLocaleString(
+                  "es-CO",
+                  {
+                    minimumFractionDigits: 2,
+                    maximumFractionDigits: 2,
+                  }
+                ));
             return number;
           },
         },
@@ -124,7 +131,11 @@ $(document).ready(function () {
           title: "Dias Inv",
           data: "days",
           className: "uniqueClassName dt-head-center",
-          render: (data) => parseFloat(data).toLocaleString('es-CO', { minimumFractionDigits: 0, maximumFractionDigits: 0 }),
+          render: (data) =>
+            parseFloat(data).toLocaleString("es-CO", {
+              minimumFractionDigits: 0,
+              maximumFractionDigits: 0,
+            }),
         },
         {
           title: "Acciones",
@@ -154,49 +165,49 @@ $(document).ready(function () {
           days += parseFloat(data[display[i]].days);
         }
 
-        !grammage ? grammage = 0 : grammage;
+        !grammage ? (grammage = 0) : grammage;
 
-        $('#totalQuantity').html(
-          quantity.toLocaleString('es-CO', {
+        $("#totalQuantity").html(
+          quantity.toLocaleString("es-CO", {
             minimumFractionDigits: 0,
             maximumFractionDigits: 0,
           })
         );
-        $('#totalGrammage').html(
-          grammage.toLocaleString('es-CO', {
-            minimumFractionDigits: 0,
-            maximumFractionDigits: 0,
-          })
-        );
-        
-        $('#totalTransit').html(
-          transit.toLocaleString('es-CO', {
+        $("#totalGrammage").html(
+          grammage.toLocaleString("es-CO", {
             minimumFractionDigits: 0,
             maximumFractionDigits: 0,
           })
         );
 
-        $('#totalReserved').html(
-          reserved.toLocaleString('es-CO', {
-            minimumFractionDigits: 0,
-            maximumFractionDigits: 0,
-          })
-        );
-        
-        $('#totalStock').html(
-          minimum_stock.toLocaleString('es-CO', {
+        $("#totalTransit").html(
+          transit.toLocaleString("es-CO", {
             minimumFractionDigits: 0,
             maximumFractionDigits: 0,
           })
         );
 
-        $('#totalDay').html(
-          days.toLocaleString('es-CO', {
+        $("#totalReserved").html(
+          reserved.toLocaleString("es-CO", {
+            minimumFractionDigits: 0,
+            maximumFractionDigits: 0,
+          })
+        );
+
+        $("#totalStock").html(
+          minimum_stock.toLocaleString("es-CO", {
+            minimumFractionDigits: 0,
+            maximumFractionDigits: 0,
+          })
+        );
+
+        $("#totalDay").html(
+          days.toLocaleString("es-CO", {
             minimumFractionDigits: 0,
             maximumFractionDigits: 0,
           })
         );
       },
     });
-  }
+  };
 });
