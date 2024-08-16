@@ -36,6 +36,37 @@ $(document).ready(function () {
     }
   });
 
+  // Tipo Material
+  $('#materialType').change(async function (e) { 
+    e.preventDefault();
+
+    $('#quantity').prop('readonly', false);
+    $('#units').empty();
+
+    let type = this.value;
+
+    let dataMaterials = JSON.parse(sessionStorage.getItem('dataMaterials'));
+    let dataProduct = JSON.parse(sessionStorage.getItem('dataProduct'));
+
+    let data = dataMaterials.filter(item => item.id_material_type == type);
+    await setSelectsMaterials(data);
+
+    switch (type) {
+      case '1':// Papel
+        $('#quantity').prop('readonly', true);
+
+
+        
+        break; 
+      case '2':// Tinta
+        
+        break; 
+      case '3':// Pegante
+        
+        break; 
+    }
+  });
+
   $('.cardAddMaterials').hide();
 
   /* Abrir panel crear producto */

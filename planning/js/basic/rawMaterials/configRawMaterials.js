@@ -7,8 +7,11 @@ $(document).ready(function () {
     let dataMaterials = JSON.stringify(data);
     sessionStorage.setItem('dataMaterials', dataMaterials);
 
+    setSelectsMaterials(data);    
+  };
+  
+  setSelectsMaterials = (data) => {
     let ref = sortFunction(data, 'reference');
-    
     let $select = $(`#refMaterial`);
     $select.empty();
     $select.append(`<option disabled selected>Seleccionar</option>`);
@@ -31,7 +34,6 @@ $(document).ready(function () {
 
   loadDataMaterial();
 
-
   /* Funciones cuando se selecciona una materia prima */
 
   if (viewRawMaterial == 1) {
@@ -43,17 +45,20 @@ $(document).ready(function () {
         return $(this).val() == id;
       });
 
-      let data = sessionStorage.getItem('dataMaterials');
-      if (data) {
-        dataMaterials = JSON.parse(data);
-        sessionStorage.removeItem('dataMaterials');
-      }
+      let data = JSON.parse(sessionStorage.getItem('dataMaterials')); 
 
-      for (i = 0; i < dataMaterials.length; i++) {
-        if (id == dataMaterials[i].id_material) {
-          loadUnitsByMagnitude(dataMaterials[i], 2);
-        }
-      }
+      let arr = data.find(item => item.id_material == id);
+
+      if (flag_products_measure == '1') {
+        let $select = $(`#units`);
+        $select.empty();
+
+        $select.append(`<option disabled>Seleccionar</option>`); 
+        $select.append(
+          `<option value ='${arr.id_unit}' selected> ${arr.unit} </option>`
+        );
+      } else
+        loadUnitsByMagnitude(arr, 2); 
     });
 
     $('#material').change(function (e) {
@@ -64,17 +69,20 @@ $(document).ready(function () {
         return $(this).val() == id;
       });
 
-      let data = sessionStorage.getItem('dataMaterials');
-      if (data) {
-        dataMaterials = JSON.parse(data);
-        sessionStorage.removeItem('dataMaterials');
-      }
+      let data = JSON.parse(sessionStorage.getItem('dataMaterials'));
 
-      for (i = 0; i < dataMaterials.length; i++) {
-        if (id == dataMaterials[i].id_material) {
-          loadUnitsByMagnitude(dataMaterials[i], 2);
-        }
-      }
+      let arr = data.find(item => item.id_material == id);
+
+      if (flag_products_measure == '1') {
+        let $select = $(`#units`);
+        $select.empty();
+
+        $select.append(`<option disabled>Seleccionar</option>`);
+        $select.append(
+          `<option value ='${arr.id_unit}' selected> ${arr.unit} </option>`
+        );
+      } else
+        loadUnitsByMagnitude(arr, 2);
     });
   } else {
      $('#refMaterial').change(function (e) {

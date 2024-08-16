@@ -4,6 +4,7 @@ $(document).ready(function () {
     success: function (r) {
       let $select = $(`#refProduct`);
       $select.empty();
+      sessionStorage.setItem('dataProducts', JSON.stringify(r));
 
       // let ref = r.sort(sortReference);
       let ref = sortFunction(r, 'reference');

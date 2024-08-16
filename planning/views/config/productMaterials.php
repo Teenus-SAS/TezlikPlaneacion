@@ -137,6 +137,12 @@ if (sizeof($_SESSION) == 0)
                                     <div class="card-body pb-0">
                                         <form id="formAddMaterials">
                                             <div class="form-row">
+                                                <?php if ($_SESSION['flag_products_measure'] == '1') { ?>
+                                                    <div class="col-sm-2 floating-label enable-floating-label show-label" style="margin-bottom:20px">
+                                                        <label for="">Tipo Material</label>
+                                                        <select class="form-control" name="idMaterialType" id="materialType"></select>
+                                                    </div>
+                                                <?php } ?>
                                                 <div class="col-sm-3 floating-label enable-floating-label show-label" style="margin-bottom:20px">
                                                     <label for="">Referencia</label>
                                                     <select class="form-control" name="refMaterial" id="refMaterial"></select>
@@ -340,12 +346,12 @@ if (sizeof($_SESSION) == 0)
     </div>
 
     <?php include_once dirname(dirname(dirname(__DIR__))) . '/global/partials/scriptsJS.php'; ?>
-    <!-- <script src="/planning/js/users/usersAccess.js"></script> -->
-
     <script>
         viewRawMaterial = 1;
+        flag_products_measure = "<?= $_SESSION['flag_products_measure'] ?>";
     </script>
     <script src="/global/js/global/configUnits.js"></script>
+    <script src="/planning/js/basic/rawMaterials/configMaterialType.js"></script>
     <script src="/planning/js/config/productMaterials/tblConfigMaterials.js"></script>
     <script src="/planning/js/basic/products/configProducts.js"></script>
     <script src="/planning/js/basic/rawMaterials/configRawMaterials.js"></script>

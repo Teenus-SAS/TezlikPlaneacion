@@ -85,10 +85,12 @@ $app->post('/clientsDataValidation', function (Request $request, Response $respo
                 break;
             }
 
-            if (isset($findClient[0]['nit']) != $nitClient || isset($findClient[0]['client']) != $nameClient) {
-                $i = $i + 2;
-                $dataImportClients =  array('error' => true, 'message' => "NIT o nombre de cliente ya existente, fila: $i.<br>- NIT: $nitClient<br>- Cliente: $nameClient");
-                break;
+            if ($findClient) {
+                if ($findClient[0]['nit'] != $nitClient || $findClient[0]['client'] != $nameClient) {
+                    $i = $i + 2;
+                    $dataImportClients =  array('error' => true, 'message' => "NIT o nombre de cliente ya existente, fila: $i.<br>- NIT: $nitClient<br>- Cliente: $nameClient");
+                    break;
+                }
             }
         }
 
