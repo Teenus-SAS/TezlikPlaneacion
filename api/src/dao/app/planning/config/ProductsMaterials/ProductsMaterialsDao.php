@@ -19,7 +19,7 @@ class ProductsMaterialsDao
     public function findAllProductsmaterials($idProduct, $id_company)
     {
         $connection = Connection::getInstance()->getConnection();
-        $stmt = $connection->prepare("SELECT pm.id_product, pm.id_product_material, pm.id_material, m.reference, m.material, mi.status, IFNULL(mg.id_magnitude, 0) AS id_magnitude, 
+        $stmt = $connection->prepare("SELECT pm.id_product, pm.id_product_material, pm.id_material, m.reference, m.material, mi.status, IFNULL(mg.id_magnitude, 0) AS id_magnitude, m.id_material_type,
                                              IFNULL(mg.magnitude, '') AS magnitude, IFNULL(u.id_unit, 0) AS id_unit, IFNULL(u.unit, '') AS unit, IFNULL(u.abbreviation, '') AS abbreviation, pm.quantity, (mi.quantity - mi.reserved) AS quantity_material, mi.reserved,
                                              ((mi.quantity / pm.quantity_converted) - IFNULL((SELECT SUM(quantity) FROM programming WHERE id_product = pm.id_product), 0)) AS total_quantity
                                       FROM products_materials pm

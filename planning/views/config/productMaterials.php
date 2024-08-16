@@ -155,9 +155,15 @@ if (sizeof($_SESSION) == 0)
                                                     <select class="form-control" id="units" name="unit"></select>
                                                     <label for="">Unidad</label>
                                                 </div>
+                                                <?php if ($_SESSION['flag_products_measure'] == '1') { ?>
+                                                    <div class="col-sm-2 floating-label enable-floating-label show-label inputQuantityCalc" style="margin-bottom:20px">
+                                                        <label for="">Cantidad (Calculo)</label>
+                                                        <input class="form-control calcWeight text-center" type="number" name="quantityCalc" id="quantityCalc">
+                                                    </div>
+                                                <?php } ?>
                                                 <div class="col-sm-2 floating-label enable-floating-label show-label" style="margin-bottom:20px">
                                                     <label for="">Cantidad</label>
-                                                    <input class="form-control calcWeight text-center" type="number" name="quantity" id="quantity">
+                                                    <input class="form-control text-center" type="number" name="quantity" id="quantity">
                                                 </div>
                                                 <div class="col-xs-1 mt-1">
                                                     <button class="btn btn-success" id="btnAddMaterials">Adicionar Materia Prima</button>

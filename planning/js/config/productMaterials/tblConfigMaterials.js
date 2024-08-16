@@ -26,7 +26,7 @@ $(document).ready(function () {
   /* Cargue tabla de Productos Materiales */
 
   loadtableMaterials = (idProduct) => {
-    tblConfigMaterials = $("#tblConfigMaterials").dataTable({
+    tblConfigMaterials = $("#tblConfigMaterials").DataTable({
       destroy: true,
       pageLength: 50,
       ajax: {
@@ -87,8 +87,8 @@ $(document).ready(function () {
           className: "uniqueClassName dt-head-center",
           render: function (data) {
             return `
-                <a href="javascript:;" <i id="${data}" class="bx bx-edit-alt updateMaterials" data-toggle='tooltip' title='Actualizar Materia Prima' style="font-size: 30px;"></i></a>
-                <a href="javascript:;" <i id="${data}" class="mdi mdi-delete-forever" data-toggle='tooltip' title='Eliminar Materia Prima' style="font-size: 30px;color:red" onclick="deleteMaterial()"></i></a>`;
+                <a href="javascript:;" <i id="updt-${data}" class="bx bx-edit-alt updateMaterials" data-toggle='tooltip' title='Actualizar Materia Prima' style="font-size: 30px;"></i></a>
+                <a href="javascript:;" <i id="${data}" class="mdi mdi-delete-forever" data-toggle='tooltip' title='Eliminar Materia Prima' style="font-size: 30px;color:red" onclick="deleteMaterial(${data})"></i></a>`;
           },
         },
       ],

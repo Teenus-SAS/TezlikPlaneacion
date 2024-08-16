@@ -159,6 +159,7 @@ $app->post('/addPlanCiclesMachine', function (Request $request, Response $respon
     $processDao,
     $machinesDao,
     $generalOrdersDao,
+    $productsMaterialsDao,
     $programmingRoutesDao
 ) {
     session_start();
@@ -301,6 +302,67 @@ $app->post('/addPlanCiclesMachine', function (Request $request, Response $respon
         if ($resolution == null) $resp = array('success' => true, 'message' => 'Plan ciclos de maquina importado correctamente');
         else $resp = array('error' => true, 'message' => 'Ocurrio un error al importar los ciclos de maquina. Intente nuevamente');
     }
+
+    // $orders = $generalOrdersDao->findAllOrdersByCompany($id_company);
+
+    // for ($i = 0; $i < sizeof($orders); $i++) {
+    //     $status = true;
+    //     // Ficha tecnica
+    //     $productsMaterials = $productsMaterialsDao->findAllProductsmaterials($orders[$i]['id_product'], $id_company);
+    //     $planCicles = $generalPlanCiclesMachinesDao->findAllPlanCiclesMachineByProduct($orders[$i]['id_product'], $id_company);
+
+    //     if ($orders[$i]['status'] != 'EN PRODUCCION' && $orders[$i]['status'] != 'FABRICADO') {
+    //         if ($orders[$i]['original_quantity'] > $orders[$i]['accumulated_quantity']) {
+
+    //             if (sizeof($productsMaterials) == 0 || sizeof($planCicles) == 0) {
+    //                 $generalOrdersDao->changeStatus($orders[$i]['id_order'], 5);
+    //                 $status = false;
+    //             } else {
+    //                 foreach ($productsMaterials as $arr) {
+    //                     if ($arr['quantity_material'] <= 0) {
+    //                         $generalOrdersDao->changeStatus($orders[$i]['id_order'], 6);
+    //                         $status = false;
+    //                         break;
+    //                     }
+    //                 }
+    //             }
+    //         }
+
+    //         if ($status == true) {
+    //             if ($orders[$i]['original_quantity'] <= $orders[$i]['accumulated_quantity']) {
+    //                 $generalOrdersDao->changeStatus($orders[$i]['id_order'], 2);
+    //                 $accumulated_quantity = $orders[$i]['accumulated_quantity'] - $orders[$i]['original_quantity'];
+    //             } else {
+    //                 $accumulated_quantity = $orders[$i]['accumulated_quantity'];
+    //                 $generalOrdersDao->changeStatus($orders[$i]['id_order'], 1);
+    //             }
+
+    //             if ($orders[$i]['status'] != 'DESPACHO') {
+    //                 $date = date('Y-m-d');
+
+    //                 $generalOrdersDao->updateOfficeDate($orders[$i]['id_order'], $date);
+    //             }
+
+    //             $arr = $productsDao->findProductReserved($orders[$i]['id_product']);
+    //             !isset($arr['reserved']) ? $arr['reserved'] = 0 : $arr;
+    //             $productsDao->updateReservedByProduct($orders[$i]['id_product'], $arr['reserved']);
+
+    //             $productsDao->updateAccumulatedQuantity($orders[$i]['id_product'], $accumulated_quantity, 1);
+    //             $programming = $generalProgrammingDao->findProgrammingByOrder($orders[$i]['id_order']);
+    //             if (sizeof($programming) > 0) {
+    //                 $generalOrdersDao->changeStatus($orders[$i]['id_order'], 4);
+
+    //                 // $productsMaterials = $productsMaterialsDao->findAllProductsmaterials($orders[$i]['id_product'], $id_company);
+
+    //             }
+    //         }
+    //     }
+    //     foreach ($productsMaterials as $arr) {
+    //         $k = $generalMaterialsDao->findReservedMaterial($arr['id_material']);
+    //         !isset($k['reserved']) ? $k['reserved'] = 0 : $k;
+    //         $generalMaterialsDao->updateReservedMaterial($arr['id_material'], $k['reserved']);
+    //     }
+    // }
 
     $response->getBody()->write(json_encode($resp, JSON_NUMERIC_CHECK));
     return $response->withHeader('Content-Type', 'application/json');

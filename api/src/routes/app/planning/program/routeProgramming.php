@@ -216,9 +216,9 @@ $app->post('/saveProgramming', function (Request $request, Response $response, $
     $programmings = $dataProgramming['data'];
 
     for ($i = 0; $i < sizeof($programmings); $i++) {
-        $find = $generalProgrammingDao->findProgramming($programmings[$i]['id_programming']);
+        $find = $generalProgrammingDao->findProgramming($programmings[$i]['id_programming'], $id_company);
 
-        if (!$find)
+        if (!$find || $programmings[$i]['bd_status'] == 0)
             $result = $programmingDao->insertProgrammingByCompany($programmings[$i], $id_company);
         else
             $result = $programmingDao->updateProgramming($programmings[$i]);

@@ -38,40 +38,31 @@ $(document).ready(function () {
 
   // Tipo Material
   $('#materialType').change(async function (e) {
-    e.preventDefault();
-    // let idProduct = $('#selectNameProduct').val();
-    // if (idProduct) {
-    // $('#formAddMaterials').trigger('reset');
-    $('#quantity').prop('readonly', false);
+    e.preventDefault(); 
+
+    $('.inputQuantityCalc').hide();
     $('#units').empty();
+    $('#quantity').val('');
+    $('#quantityCalc').val('');
 
     let type = this.value;
 
     let dataMaterials = JSON.parse(sessionStorage.getItem('dataMaterials'));
 
     let dataM = dataMaterials.filter(item => item.id_material_type == type);
-    await setSelectsMaterials(dataM);
+    await setSelectsMaterials(dataM); 
 
-    // switch (type) {
-    //   case '1':// Papel
-    //     $('#quantity').prop('readonly', true);
-    //     break;
-    //   case '2':// Tinta
-        
-    //     break;
-    //   case '3':// Pegante
-        
-    //     break;
-    // }
-    // }
+    if (type != '1')
+      $('.inputQuantityCalc').show();
   });
+
   if (flag_products_measure == '1') {
+    $('#quantity').prop('readonly', true);
+
     $(document).on('change keyup', '.calcWeight', function () {
       let idProduct = parseInt($('#selectNameProduct').val());
       let idMaterial = parseInt($('#refMaterial').val()); 
-      let type = parseInt($('#materialType').val());
-
-      let quantity = parseFloat($('#quantity').val());
+      let type = parseInt($('#materialType').val()); 
 
       let validate = idProduct * idMaterial * type;
 
@@ -84,20 +75,38 @@ $(document).ready(function () {
 
       let dataM = dataMaterials.find(item => item.id_material == idMaterial);
       let dataP = dataProducts.find(item => item.id_product == idProduct);
+      let weight = 0;
 
       switch (type) {
         case 1:// Papel
-          $('#quantity').prop('readonly', true);
 
-          let weight = (parseFloat(dataM.grammage) * parseFloat(dataP.useful_length) * parseFloat(dataP.total_width)) / 10000000;
+          weight = (parseFloat(dataM.grammage) * parseFloat(dataP.useful_length) * parseFloat(dataP.total_width)) / 10000000;
           !isFinite(weight) ? (weight = 0) : weight;
         
-          $('#quantity').val(weight);
           break; 
         default: // Pegante y Tinta
-          tblConfigMaterials
+          let quantity = parseFloat($('#quantityCalc').val());
+
+          isNaN(quantity) ? quantity = 0 : quantity;
+          
+          let allData = tblConfigMaterials.rows().data().toArray();
+          allData.sort(function (a, b) {
+            return a.id_product_material - b.id_product_material;
+          }); 
+
+          let quantityCalc = 0;
+
+          if(allData){
+            let dataFTP = allData.find(item => item.id_material_type == 1);
+            quantityCalc = dataFTP.quantity;
+          }
+
+          weight = quantity * quantityCalc;
+
           break;
       } 
+
+      $('#quantity').val(weight);
     });
   }
 
@@ -140,8 +149,14 @@ $(document).ready(function () {
     $('#btnAddMaterials').html('Actualizar');
     $('#units').empty();
 
-    let row = $(this).parent().parent()[0];
-    let data = tblConfigMaterials.fnGetData(row);
+    // Obtener el ID del elemento
+    let id = $(this).attr('id');
+    // Obtener la parte después del guion '-'
+    let id_product_material = id.split('-')[1]; 
+
+    let allData = tblConfigMaterials.rows().data().toArray();
+
+    let data = allData.find(item => item.id_product_material == id_product_material);
 
     sessionStorage.setItem('id_product_material', data.id_product_material);
 
@@ -161,6 +176,17 @@ $(document).ready(function () {
 
     loadUnitsByMagnitude(data, 2);
     $(`#units option[value=${data.id_unit}]`).prop('selected', true);
+    
+    if (flag_products_measure == '1') {
+      $(`#materialType option[value=${data.id_material_type}]`).prop('selected', true);
+ 
+      $('#quantity').prop('readonly', true);
+
+      if (data.id_material_type == '1') {
+        $('.inputQuantityCalc').hide();
+      } else
+        $('.inputQuantityCalc').show();
+    }
 
     $('html, body').animate(
       {
@@ -196,10 +222,10 @@ $(document).ready(function () {
 
   /* Eliminar materia prima */
 
-  deleteMaterial = () => {
-    let row = $(this.activeElement).parent().parent()[0];
+  deleteMaterial = (id) => {
+    let allData = tblConfigMaterials.rows().data().toArray();
+    let data = allData.find(item => item.id_product_material == id);
 
-    let data = tblConfigMaterials.fnGetData(row);
     let dataMaterials = {};
 
     dataMaterials['idProductMaterial'] = data.id_product_material;

@@ -533,7 +533,7 @@ $(document).ready(function () {
     $.ajax({
       type: "POST",
       url: '/api/saveProgramming',
-      data: {data:allTblData},
+      data: { data: allTblData },
       success: function (resp) {
         allTblData = [];
         $('.cardAddOP').show(800);
