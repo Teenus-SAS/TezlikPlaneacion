@@ -60,8 +60,8 @@ class OrdersDao
             $this->logger->info(__FUNCTION__, array('query' => $stmt->queryString, 'errors' => $stmt->errorInfo()));
         } catch (\Exception $e) {
             $message = $e->getMessage();
-            if ($e->getCode() == 23000)
-                $message = 'Pedido duplicado. Ingrese una nuevo pedido';
+            // if ($e->getCode() == 23000)
+            //     $message = 'Pedido duplicado. Ingrese una nuevo pedido';
             $error = array('info' => true, 'message' => $message);
             return $error;
         }
