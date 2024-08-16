@@ -16,6 +16,7 @@ use TezlikPlaneacion\dao\LastDataDao;
 use TezlikPlaneacion\Dao\MagnitudesDao;
 use TezlikPlaneacion\dao\MaterialsDao;
 use TezlikPlaneacion\dao\MaterialsInventoryDao;
+use TezlikPlaneacion\dao\MaterialsTypeDao;
 use TezlikPlaneacion\dao\MinimumStockDao;
 use TezlikPlaneacion\dao\ProductsMaterialsDao;
 use TezlikPlaneacion\dao\RequisitionsDao;
@@ -23,6 +24,7 @@ use TezlikPlaneacion\dao\UnitsDao;
 
 $materialsDao = new MaterialsDao();
 $generalMaterialsDao = new GeneralMaterialsDao();
+$materialsTypeDao = new MaterialsTypeDao();
 $materialsInventoryDao = new MaterialsInventoryDao();
 $magnitudesDao = new MagnitudesDao();
 $unitsDao = new UnitsDao();
@@ -58,11 +60,22 @@ $app->get('/materials', function (Request $request, Response $response, $args) u
     return $response->withHeader('Content-Type', 'application/json');
 });
 
+$app->get('/materialsType', function (Request $request, Response $response, $args) use (
+    $materialsTypeDao
+) {
+    session_start();
+    $id_company = $_SESSION['id_company'];
+    $materials = $materialsTypeDao->findAllMaterialsTypeByCompany($id_company);
+    $response->getBody()->write(json_encode($materials));
+    return $response->withHeader('Content-Type', 'application/json');
+});
+
 /* Consultar Materias prima importada */
 $app->post('/materialsDataValidation', function (Request $request, Response $response, $args) use (
     $generalMaterialsDao,
     $magnitudesDao,
-    $unitsDao
+    $unitsDao,
+    $materialsTypeDao
 ) {
     $dataMaterial = $request->getParsedBody();
 
@@ -95,6 +108,19 @@ $app->post('/materialsDataValidation', function (Request $request, Response $res
                 $i = $i + 2;
                 $dataImportMaterial = array('error' => true, 'message' => "Campos vacios, fila: $i");
                 break;
+            }
+
+            if ($_SESSION['flag_products_measure'] == '1') {
+                if (empty($materials[$i]['materialType'])) {
+                    $i = $i + 2;
+                    $dataImportMaterial = array('error' => true, 'message' => "Campos vacios, fila: $i");
+                    break;
+                }
+                if (empty(trim($materials[$i]['materialType']))) {
+                    $i = $i + 2;
+                    $dataImportMaterial = array('error' => true, 'message' => "Campos vacios, fila: $i");
+                    break;
+                }
             }
 
             $item = $materials[$i];
@@ -145,37 +171,20 @@ $app->post('/materialsDataValidation', function (Request $request, Response $res
                 $dataImportMaterial = array('error' => true, 'message' => "Unidad no existe en la base de datos. Fila: $i");
                 break;
             }
+
+            if ($_SESSION['flag_products_measure'] == '1') {
+                // Consultar tipo material
+                $materialType = $materialsTypeDao->findMaterialsType($materials[$i], $id_company);
+
+                if (!$materialType) {
+                    $i = $i + 2;
+                    $dataImportMaterial = array('error' => true, 'message' => "Tipo de material no existe en la base de datos. Fila: $i");
+                    break;
+                }
+            }
         }
 
         if (sizeof($dataImportMaterial) == 0) {
-            // if (
-            //     empty($materials[$i]['refRawMaterial']) || empty($materials[$i]['nameRawMaterial']) ||
-            //     empty($materials[$i]['magnitude']) || empty($materials[$i]['unit'])
-            // ) {
-            //     $i = $i + 2;
-            //     $dataImportMaterial = array('error' => true, 'message' => "Campos vacios. Fila: {$i}");
-            //     break;
-            // }
-
-            // // Consultar magnitud
-            // $magnitude = $magnitudesDao->findMagnitude($materials[$i]);
-
-            // if (!$magnitude) {
-            //     $i = $i + 2;
-            //     $dataImportMaterial = array('error' => true, 'message' => "Magnitud no existe en la base de datos. Fila: $i");
-            //     break;
-            // }
-
-            // $materials[$i]['idMagnitude'] = $magnitude['id_magnitude'];
-
-            // // Consultar unidad
-            // $unit = $unitsDao->findUnit($materials[$i]);
-
-            // if (!$unit) {
-            //     $i = $i + 2;
-            //     $dataImportMaterial = array('error' => true, 'message' => "Unidad no existe en la base de datos. Fila: $i");
-            //     break;
-            // }
             for ($i = 0; $i < count($materials); $i++) {
                 $findMaterial = $generalMaterialsDao->findMaterial($materials[$i], $id_company);
                 if (!$findMaterial) $insert = $insert + 1;
@@ -193,6 +202,7 @@ $app->post('/materialsDataValidation', function (Request $request, Response $res
 
 $app->post('/addMaterials', function (Request $request, Response $response, $args) use (
     $materialsDao,
+    $materialsTypeDao,
     $generalOrdersDao,
     $productsMaterialsDao,
     $inventoryDaysDao,
@@ -260,6 +270,14 @@ $app->post('/addMaterials', function (Request $request, Response $response, $arg
             // Consultar unidad
             $unit = $unitsDao->findUnit($materials[$i]);
             $materials[$i]['unit'] = $unit['id_unit'];
+
+            if ($_SESSION['flag_products_measure'] == '1') {
+                // Obtener tipo material
+                $materialType = $materialsTypeDao->findMaterialsType($materials[$i], $id_company);
+
+                $materials[$i]['idMaterialType'] = $materialType['id_material_type'];
+            } else
+                $materials[$i]['idMaterialType'] = 0;
 
             $material = $generalMaterialsDao->findMaterial($materials[$i], $id_company);
 

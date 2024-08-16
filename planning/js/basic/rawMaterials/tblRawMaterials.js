@@ -1,6 +1,7 @@
 $(document).ready(function () {
   /* Cargue tabla de Materias Primas */
-
+  flag_products_measure == '1' ? visible = true : visible = false;
+  
   loadTblMaterials = (data) => {
     if ($.fn.dataTable.isDataTable("#tblRawMaterials")) {
       $("#tblRawMaterials").DataTable().clear();
@@ -39,6 +40,12 @@ $(document).ready(function () {
           className: "uniqueClassName dt-head-center",
         },
         {
+          title: "Tipo",
+          data: "material_type",
+          className: "uniqueClassName dt-head-center",
+          visible: visible,
+        },
+        {
           title: "Existencia",
           data: null,
           className: "uniqueClassName dt-head-center",
@@ -57,7 +64,7 @@ $(document).ready(function () {
           title: "Gramaje",
           data: null,
           className: "uniqueClassName dt-head-center",
-          visible: flag_products_measure == '1' ? true : false,
+          visible: visible,
           render: function (data) {
             let grammage = parseFloat(data.grammage);
 
@@ -175,12 +182,14 @@ $(document).ready(function () {
             maximumFractionDigits: 0,
           })
         );
+        
         $('#totalStock').html(
           minimum_stock.toLocaleString('es-CO', {
             minimumFractionDigits: 0,
             maximumFractionDigits: 0,
           })
         );
+
         $('#totalDay').html(
           days.toLocaleString('es-CO', {
             minimumFractionDigits: 0,

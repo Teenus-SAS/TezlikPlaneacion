@@ -48,6 +48,7 @@ $(document).ready(function () {
 
     $('#refRawMaterial').val(data.reference);
     $('#nameRawMaterial').val(data.material);
+    $(`#materialType option[value=${data.id_material_type}]`).prop('selected', true);
     $(`#magnitudes option[value=${data.id_magnitude}]`).prop('selected', true);
     loadUnitsByMagnitude(data.id_magnitude, 1);
     $(`#units option[value=${data.id_unit}]`).prop('selected', true);
@@ -75,6 +76,7 @@ $(document).ready(function () {
   const checkDataMaterial = async (url, idMaterial) => {
     let ref = $('#refRawMaterial').val();
     let material = $('#nameRawMaterial').val();
+    let materialType = parseFloat($('#materialType').val());
     let unity = $('#unit').val();
     let quantity = parseFloat($('#mQuantity').val());
     let grammage = parseFloat($('#grammage').val());
@@ -94,13 +96,19 @@ $(document).ready(function () {
     }
     
     if (flag_products_measure == '1') {
-      if (isNaN(grammage) || grammage <= 0) {
-          toastr.error('El gramaje debe ser mayor a cero (0)');
-          return false;        
+      if (
+        isNaN(grammage) || grammage <= 0 ||
+        isNaN(materialType) || materialType <= 0
+      ) {
+        toastr.error('Ingrese todos los campos');
+        return false;
       }
+    } else {
+      materialType = 0;
     }
 
     let dataMaterial = new FormData(formCreateMaterial);
+    dataMaterial.append('idMaterialType', materialType);
 
     if (idMaterial != '' || idMaterial != null)
       dataMaterial.append('idMaterial', idMaterial);

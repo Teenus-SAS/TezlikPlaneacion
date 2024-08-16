@@ -192,10 +192,16 @@ if (sizeof($_SESSION) == 0)
                                                     <label for="refRawMaterial">Referencia</label>
                                                     <input type="text" class="form-control" id="refRawMaterial" name="refRawMaterial">
                                                 </div>
-                                                <div class="col-md-9 floating-label enable-floating-label show-label">
+                                                <div class="col-md-7 floating-label enable-floating-label show-label">
                                                     <label for="nameRawMaterial">Nombre Materia Prima</label>
                                                     <input type="text" class="form-control" id="nameRawMaterial" name="nameRawMaterial">
                                                 </div>
+                                                <?php if ($_SESSION['flag_products_measure'] == '1') { ?>
+                                                    <div class="col-md-2 floating-label enable-floating-label show-label">
+                                                        <select class="form-control" id="materialType" name="materialType"></select>
+                                                        <label for="">Tipo Material</label>
+                                                    </div>
+                                                <?php } ?>
                                             </div>
                                             <div class="form-row">
                                                 <div class="col-sm-3 floating-label enable-floating-label show-label" style="margin-bottom:20px">
@@ -214,7 +220,7 @@ if (sizeof($_SESSION) == 0)
                                                 </div>
                                                 <?php if ($_SESSION['flag_products_measure'] == '1') { ?>
                                                     <div class="col-sm-2 floating-label enable-floating-label show-label">
-                                                        <label for="mQuantity">Gramaje</label>
+                                                        <label for="grammage">Gramaje</label>
                                                         <input type="number" class="form-control text-center" id="grammage" name="grammage">
                                                     </div>
                                                 <?php } ?>
@@ -358,6 +364,7 @@ if (sizeof($_SESSION) == 0)
     </script>
     <script src="/global/js/global/configMagnitudes.js"></script>
     <script src="/global/js/global/configUnits.js"></script>
+    <script src="/planning/js/basic/rawMaterials/configMaterialType.js"></script>
     <script src="/planning/js/basic/rawMaterials/tblRawMaterials.js"></script>
     <script src="/planning/js/basic/rawMaterials/rawMaterials.js"></script>
     <script src="/planning/js/basic/products/tblProducts.js"></script>

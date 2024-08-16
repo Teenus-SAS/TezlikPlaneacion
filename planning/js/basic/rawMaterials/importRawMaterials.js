@@ -37,11 +37,13 @@ $(document).ready(function () {
 
     importFile(selectedFile)
       .then((data) => {
-        const expectedHeaders = ['referencia', 'material', 'magnitud', 'unidad', 'existencia', 'gramaje'];
+        const expectedHeaders = ['referencia', 'material', 'tipo_material', 'magnitud', 'unidad', 'existencia', 'gramaje'];
         const actualHeaders = Object.keys(data[0]);
 
-        if(flag_products_measure=='0')
-          expectedHeaders.splice(expectedHeaders.length - 1, 1);
+        if (flag_products_measure == '0') {
+          expectedHeaders.splice(6, 1);
+          expectedHeaders.splice(2, 1);
+        }
 
         const missingHeaders = expectedHeaders.filter(header => !actualHeaders.includes(header));
 
@@ -58,6 +60,7 @@ $(document).ready(function () {
             return {
               refRawMaterial: item.referencia,
               nameRawMaterial: item.material,
+              materialType: item.tipo_material,
               magnitude: item.magnitud,
               unit: item.unidad,
               quantity: item.existencia,
@@ -169,6 +172,7 @@ $(document).ready(function () {
           data.push({
             referencia: dataMaterials[i].reference,
             material: dataMaterials[i].material,
+            tipo_material: dataMaterials[i].material_type,
             magnitud: dataMaterials[i].magnitude,
             unidad: dataMaterials[i].unit,
             existencia: dataMaterials[i].quantity,
