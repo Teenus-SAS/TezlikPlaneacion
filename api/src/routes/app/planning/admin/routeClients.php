@@ -96,7 +96,9 @@ $app->post('/clientsDataValidation', function (Request $request, Response $respo
 
         if (sizeof($dataImportClients) == 0) {
             for ($i = 0; $i < sizeof($clients); $i++) {
-                $findClient = $generalClientsDao->findClient($clients[$i], $id_company);
+                $clients[$i]['type'] == 'CLIENTE' ? $type = 1 : $type = 2;
+
+                $findClient = $generalClientsDao->findClientByName($clients[$i], $id_company, $type);
                 if (!$findClient) $insert = $insert + 1;
                 else $update = $update + 1;
                 $dataImportClients['insert'] = $insert;
@@ -147,10 +149,11 @@ $app->post('/addClient', function (Request $request, Response $response, $args) 
         $clients = $dataClient['importClients'];
 
         for ($i = 0; $i < sizeof($clients); $i++) {
-            $findClient = $generalClientsDao->findClient($clients[$i], $id_company);
+            $clients[$i]['type'] == 'CLIENTE' ? $type = 1 : $type = 2;
+            $findClient = $generalClientsDao->findClientByName($clients[$i], $id_company, $type);
 
             if (!$findClient) {
-                $clients[$i]['type'] = 1;
+                $clients[$i]['type'] = $type;
                 $resolution = $clientsDao->insertClient($clients[$i], $id_company);
 
                 $lastClient = $lastDataDao->findLastInsertedClient();
@@ -160,7 +163,6 @@ $app->post('/addClient', function (Request $request, Response $response, $args) 
                 $resolution = $clientsDao->updateClient($clients[$i]);
             }
 
-            $clients[$i]['type'] == 'CLIENTE' ? $type = 1 : $type = 2;
 
             $resolution = $generalClientsDao->changeTypeClient($clients[$i]['idClient'], $type);
         }
@@ -188,7 +190,7 @@ $app->post('/updateClient', function (Request $request, Response $response, $arg
     )
         $resp = array('error' => true, 'message' => 'No hubo cambio alguno');
     else {
-        $client = $generalClientsDao->findClient($dataClient, $id_company);
+        $client = $generalClientsDao->findClientByName($dataClient, $id_company, $dataClient['type']);
         $status = true;
 
         foreach ($client as $arr) {

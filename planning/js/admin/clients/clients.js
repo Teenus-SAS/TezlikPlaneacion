@@ -81,6 +81,7 @@ $('#btnCloseClient').click(function (e) {
     let data = tblClients.fnGetData(row);
 
     sessionStorage.setItem('id_client', data.id_client);
+    sessionStorage.setItem('type_client', data.type_client);
 
     $('#nit').val(data.nit);
     $('#companyName').val(data.client);
@@ -102,10 +103,12 @@ $('#btnCloseClient').click(function (e) {
 
   updateClient = () => {
     idClient = sessionStorage.getItem('id_client');
+    let type_client = sessionStorage.getItem('type_client');
     let imgCompany = $('#formFile')[0].files[0];
 
     let company = new FormData(formCreateClient);
     company.append('idClient', idClient);
+    company.append('type', type_client);
     company.append('img', imgCompany);
 
     $.ajax({
