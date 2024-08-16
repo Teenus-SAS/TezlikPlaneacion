@@ -149,7 +149,7 @@ if (sizeof($_SESSION) == 0)
 
                                                 <div class="col-sm-2 floating-label enable-floating-label show-label cardDescription" style="margin-bottom:20px">
                                                     <label for="originalQuantity">Cantidad requerida</label>
-                                                    <input type="text" class="form-control text-center" id="originalQuantity" name="originalQuantity" readonly>
+                                                    <input type="text" class="form-control text-center" id="originalQuantity" name="originalQuantity">
                                                 </div>
 
                                                 <div class="col-sm-5 floating-label enable-floating-label show- mb-3 label">
