@@ -237,7 +237,7 @@ $app->post('/addOrder', function (Request $request, Response $response, $args) u
         if ($order == null)
             $resp = array('success' => true, 'message' => 'Pedido ingresado correctamente');
         else if (isset($order['info']))
-            $resp = array('info' => true, 'message' => $order['info']);
+            $resp = array('info' => true, 'message' => $order['message']);
         else
             $resp = array('error' => true, 'message' => 'Ocurrio un error mientras ingresaba la información. Intente nuevamente');
     } else {

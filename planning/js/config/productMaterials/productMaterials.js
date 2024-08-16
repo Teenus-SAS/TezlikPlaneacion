@@ -37,35 +37,69 @@ $(document).ready(function () {
   });
 
   // Tipo Material
-  $('#materialType').change(async function (e) { 
+  $('#materialType').change(async function (e) {
     e.preventDefault();
-
+    // let idProduct = $('#selectNameProduct').val();
+    // if (idProduct) {
+    // $('#formAddMaterials').trigger('reset');
     $('#quantity').prop('readonly', false);
     $('#units').empty();
 
     let type = this.value;
 
     let dataMaterials = JSON.parse(sessionStorage.getItem('dataMaterials'));
-    let dataProduct = JSON.parse(sessionStorage.getItem('dataProduct'));
 
-    let data = dataMaterials.filter(item => item.id_material_type == type);
-    await setSelectsMaterials(data);
+    let dataM = dataMaterials.filter(item => item.id_material_type == type);
+    await setSelectsMaterials(dataM);
 
-    switch (type) {
-      case '1':// Papel
-        $('#quantity').prop('readonly', true);
-
-
+    // switch (type) {
+    //   case '1':// Papel
+    //     $('#quantity').prop('readonly', true);
+    //     break;
+    //   case '2':// Tinta
         
-        break; 
-      case '2':// Tinta
+    //     break;
+    //   case '3':// Pegante
         
-        break; 
-      case '3':// Pegante
-        
-        break; 
-    }
+    //     break;
+    // }
+    // }
   });
+  if (flag_products_measure == '1') {
+    $(document).on('change keyup', '.calcWeight', function () {
+      let idProduct = parseInt($('#selectNameProduct').val());
+      let idMaterial = parseInt($('#refMaterial').val()); 
+      let type = parseInt($('#materialType').val());
+
+      let quantity = parseFloat($('#quantity').val());
+
+      let validate = idProduct * idMaterial * type;
+
+      if (isNaN(validate) || validate <= 0) {
+        return false;
+      }
+
+      let dataMaterials = JSON.parse(sessionStorage.getItem('dataMaterials'));
+      let dataProducts = JSON.parse(sessionStorage.getItem('dataProducts'));
+
+      let dataM = dataMaterials.find(item => item.id_material == idMaterial);
+      let dataP = dataProducts.find(item => item.id_product == idProduct);
+
+      switch (type) {
+        case 1:// Papel
+          $('#quantity').prop('readonly', true);
+
+          let weight = (parseFloat(dataM.grammage) * parseFloat(dataP.useful_length) * parseFloat(dataP.total_width)) / 10000000;
+          !isFinite(weight) ? (weight = 0) : weight;
+        
+          $('#quantity').val(weight);
+          break; 
+        default: // Pegante y Tinta
+          tblConfigMaterials
+          break;
+      } 
+    });
+  }
 
   $('.cardAddMaterials').hide();
 

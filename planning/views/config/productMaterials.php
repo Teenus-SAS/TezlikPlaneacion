@@ -140,16 +140,16 @@ if (sizeof($_SESSION) == 0)
                                                 <?php if ($_SESSION['flag_products_measure'] == '1') { ?>
                                                     <div class="col-sm-2 floating-label enable-floating-label show-label" style="margin-bottom:20px">
                                                         <label for="">Tipo Material</label>
-                                                        <select class="form-control" name="idMaterialType" id="materialType"></select>
+                                                        <select class="form-control calcWeight" name="idMaterialType" id="materialType"></select>
                                                     </div>
                                                 <?php } ?>
                                                 <div class="col-sm-3 floating-label enable-floating-label show-label" style="margin-bottom:20px">
                                                     <label for="">Referencia</label>
-                                                    <select class="form-control" name="refMaterial" id="refMaterial"></select>
+                                                    <select class="form-control calcWeight" name="refMaterial" id="refMaterial"></select>
                                                 </div>
                                                 <div class="col-sm-6 floating-label enable-floating-label show-label" style="margin-bottom:20px">
                                                     <label for="">Materia Prima</label>
-                                                    <select class="form-control" name="material" id="material"></select>
+                                                    <select class="form-control calcWeight" name="material" id="material"></select>
                                                 </div>
                                                 <div class="col-sm-2 floating-label enable-floating-label show-label" style="margin-bottom:5px">
                                                     <select class="form-control" id="units" name="unit"></select>
@@ -157,7 +157,7 @@ if (sizeof($_SESSION) == 0)
                                                 </div>
                                                 <div class="col-sm-2 floating-label enable-floating-label show-label" style="margin-bottom:20px">
                                                     <label for="">Cantidad</label>
-                                                    <input class="form-control text-center" type="number" name="quantity" id="quantity">
+                                                    <input class="form-control calcWeight text-center" type="number" name="quantity" id="quantity">
                                                 </div>
                                                 <div class="col-xs-1 mt-1">
                                                     <button class="btn btn-success" id="btnAddMaterials">Adicionar Materia Prima</button>

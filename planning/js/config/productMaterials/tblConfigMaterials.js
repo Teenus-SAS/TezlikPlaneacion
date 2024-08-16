@@ -77,7 +77,9 @@ $(document).ready(function () {
           title: "Cantidad",
           data: "quantity",
           className: "uniqueClassName dt-head-center",
-          render: $.fn.dataTable.render.number(".", ",", 4, ""),
+          render: function (data) { 
+            return parseFloat(data).toLocaleString('es-CO', { maximumFractionDigits: 2 });
+          },
         },
         {
           title: "Acciones",
