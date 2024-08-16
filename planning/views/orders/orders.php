@@ -112,7 +112,7 @@ if (sizeof($_SESSION) == 0)
                             <div class="col-12">
                                 <div class="card">
                                     <div class="card-body">
-                                        <form id="formAddOrders">
+                                        <form id="formCreateOrder">
                                             <div class="form-row">
 
                                                 <div class="col-sm-2 floating-label enable-floating-label show-label mt-2">

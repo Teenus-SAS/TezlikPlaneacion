@@ -8,7 +8,7 @@ if (sizeof($_SESSION) == 0)
     header('location: /');
 ?>
 
-<?php require_once dirname(dirname(dirname(__DIR__))) . '/planning/modals/createClients.php'; ?>
+<?php //require_once dirname(dirname(dirname(__DIR__))) . '/planning/modals/createClients.php'; ?>
 
 <!DOCTYPE html>
 <html lang="es">
@@ -62,7 +62,7 @@ if (sizeof($_SESSION) == 0)
                     </div>
                 </div>
 
-                <!-- <div class="page-content-wrapper mt--45 mb-5 cardCreateClient">
+                <div class="page-content-wrapper mt--45 mb-5 cardCreateClient">
                     <div class="container-fluid">
                         <div class="row">
                             <div class="col-12">
@@ -70,18 +70,35 @@ if (sizeof($_SESSION) == 0)
                                     <div class="card-body">
                                         <form id="formCreateClient">
                                             <div class="form-row">
-                                                <div class="col-sm floating-label enable-floating-label show-label" style="margin-bottom:0px">
-                                                    <label for="">Ean Cliente</label>
-                                                    <input type="text" class="form-control text-center number" id="ean" name="ean">
-                                                </div>
-                                                <div class="col-sm floating-label enable-floating-label show-label" style="margin-bottom:0px">
-                                                    <label for="">Nit Cliente</label>
+                                                <div class="col-sm-3 floating-label enable-floating-label show-label">
+                                                    <label for="nit">Nit Cliente</label>
                                                     <input type="text" class="form-control text-center number" id="nit" name="nit">
                                                 </div>
-                                                <div class="col-sm-6 floating-label enable-floating-label show-label" style="margin-bottom:0px">
-                                                    <label for="">Nombre Cliente</label>
-                                                    <input type="text" class="form-control text-center" id="client" name="client">
+                                                <div class="col-sm-9 floating-label enable-floating-label show-label">
+                                                    <label for="client">Nombre Cliente</label>
+                                                    <input type="text" class="form-control text-center" id="companyName" name="client">
                                                 </div>
+                                                <div class="col-sm-4 floating-label enable-floating-label show-label">
+                                                    <label for="address">Dirección</label>
+                                                    <input type="text" class="form-control text-center number" id="address" name="address">
+                                                </div>
+                                                <div class="col-sm-2 floating-label enable-floating-label show-label">
+                                                    <label for="phone">Teléfono</label>
+                                                    <input type="text" class="form-control text-center number" id="phone" name="phone">
+                                                </div>
+                                                <div class="col-sm-2 floating-label enable-floating-label show-label">
+                                                    <label for="city">Ciudad</label>
+                                                    <input type="text" class="form-control text-center number" id="city" name="city">
+                                                </div>
+                                                <!-- <div class="col-sm-2text-center">
+                                                    <div class="picture-container">
+                                                        <div class="picture">
+                                                            <img id="avatar" src="" class="img-fluid">
+                                                            <input class="form-control" type="file" id="formFile">
+                                                        </div>
+                                                    </div>
+                                                    <h5 class="my-3" id="profileName"></h5>
+                                                </div> -->
                                                 <div class="col-sm mt-1">
                                                     <button class="btn btn-success" id="btnCreateClient">Crear</button>
                                                 </div>
@@ -92,7 +109,7 @@ if (sizeof($_SESSION) == 0)
                             </div>
                         </div>
                     </div>
-                </div> -->
+                </div>
 
                 <div class="page-content-wrapper mt--45 mb-5 cardImportClients">
                     <div class="container-fluid">
