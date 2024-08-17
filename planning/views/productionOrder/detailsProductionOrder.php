@@ -79,19 +79,23 @@ if (sizeof($_SESSION) == 0)
 										</div>
 
 										<div class="row">
-											<div class="col-md-10 mt-3 text-right">
-												<h3 class="mb-1 font-weight-bold text-dark">Pedido No.</h3>
-											</div>
-											<div class="col-md-2 mt-3">
-												<h3 id="txtNumOrder"></h3>
-											</div>
 											<div class="col-md-10 text-right">
 												<h3 class="mb-1 font-weight-bold text-dark">Orden Producción No.</h3>
 											</div>
 											<div class="col-md-2">
-												<h3 id="">001</h3>
+												<h3 class="text-center" id="">001</h3>
+											</div>
+
+											<div class="col-md-10 text-right">
+												<h3 class="mb-1 font-weight-bold text-dark">Pedido No.</h3>
+											</div>
+											<div class="col-md-2">
+												<h3 id="txtNumOrder"></h3>
+											</div>
+											<div class="col-md-12 text-right">
 												<p id="txtEDate"></p>
 											</div>
+
 										</div>
 										<hr>
 										<div class="row">
