@@ -22,7 +22,7 @@ class ProgrammingRoutesDao
 
         $stmt = $connection->prepare("SELECT pr.id_programming_routes, pr.id_product, pr.route, pcm.route AS route1, p.id_process, p.process
                                         FROM programming_routes pr
-                                        -- INNER JOIN plan_orders o ON o.id_order = pr.id_order
+                                        INNER JOIN plan_orders o ON o.id_order = pr.id_order
                                         INNER JOIN plan_cicles_machine pcm ON pcm.id_product = pr.id_product -- AND FIND_IN_SET(pcm.route, pr.route) > 0
                                         INNER JOIN process p ON p.id_process = pcm.id_process
                                         WHERE pr.id_company = :id_company");
@@ -36,8 +36,8 @@ class ProgrammingRoutesDao
         try {
             $connection = Connection::getInstance()->getConnection();
 
-            $stmt = $connection->prepare("INSERT INTO programming_routes (id_company, id_product, route) 
-                                          VALUES (:id_company, :id_product, :route)");
+            $stmt = $connection->prepare("INSERT INTO programming_routes (id_company, id_product, id_order, route) 
+                                          VALUES (:id_company, :id_product, :id_order, :route)");
             $stmt->execute([
                 'id_company' => $id_company,
                 'id_order' => $dataProgramming['idOrder'],
