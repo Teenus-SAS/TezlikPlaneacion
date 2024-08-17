@@ -70,11 +70,11 @@ if (sizeof($_SESSION) == 0)
                                             <div class="form-row">
                                                 <div class="col-sm-4 floating-label enable-floating-label show-label" style="margin-bottom:20px">
                                                     <label for="">Referencia</label>
-                                                    <select class="form-control refProduct" name="idProduct" id="refProduct"></select>
+                                                    <input type="text" class="form-control text-center" name="referenceProduct" id="referenceProduct">
                                                 </div>
                                                 <div class="col-sm-8 floating-label enable-floating-label show-label" style="margin-bottom:5px">
                                                     <label for="">Producto</label>
-                                                    <select class="form-control selectNameProduct" name="idProduct" id="selectNameProduct"></select>
+                                                    <input type="text" class="form-control" name="product" id="product">
                                                 </div>
                                                 <!-- <div class="col-sm-2 floating-label enable-floating-label show-label">
                                                     <label for="">Gramaje</label>
@@ -177,7 +177,7 @@ if (sizeof($_SESSION) == 0)
     </div>
 
     <?php include_once dirname(dirname(dirname(__DIR__))) . '/global/partials/scriptsJS.php'; ?>
-    <script src="/planning/js/basic/products/configProducts.js"></script>
+    <!-- <script src="/planning/js/basic/products/configProducts.js"></script> -->
 
     <script src="/planning/js/basic/productsMeasures/tblPMeasures.js"></script>
     <script src="/planning/js/basic/productsMeasures/pMeausers.js"></script>

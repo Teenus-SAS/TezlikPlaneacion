@@ -142,6 +142,20 @@ class GeneralProductsDao
         return $product;
     }
 
+    public function findProductInventory($id_product, $id_company)
+    {
+        $connection = Connection::getInstance()->getConnection();
+
+        $stmt = $connection->prepare("SELECT * FROM products_inventory
+                                      WHERE id_product = :id_product AND id_company = :id_company");
+        $stmt->execute([
+            'id_product' => $id_product,
+            'id_company' => $id_company,
+        ]);
+        $product = $stmt->fetch($connection::FETCH_ASSOC);
+        return $product;
+    }
+
     public function findProductReserved($id_product)
     {
         $connection = Connection::getInstance()->getConnection();
