@@ -9,6 +9,7 @@ use TezlikPlaneacion\dao\GeneralMaterialsDao;
 use TezlikPlaneacion\dao\GeneralOrdersDao;
 use TezlikPlaneacion\dao\GeneralPlanCiclesMachinesDao;
 use TezlikPlaneacion\dao\GeneralProgrammingDao;
+use TezlikPlaneacion\dao\GeneralProgrammingRoutesDao;
 use TezlikPlaneacion\dao\GeneralRequisitionsDao;
 use TezlikPlaneacion\dao\GeneralRMStockDao;
 use TezlikPlaneacion\dao\LastDataDao;
@@ -23,6 +24,7 @@ use TezlikPlaneacion\dao\StoreDao;
 $programmingDao = new ProgrammingDao();
 $generalProgrammingDao = new GeneralProgrammingDao();
 $programmingRoutesDao = new ProgrammingRoutesDao();
+$generalProgrammingRoutesDao = new GeneralProgrammingRoutesDao();
 $generalMaterialsDao = new GeneralMaterialsDao();
 $productsMaterialsDao = new ProductsMaterialsDao();
 $lastDataDao = new LastDataDao();
@@ -197,6 +199,7 @@ $app->get('/statusOrder/{id_order}/{status}', function (Request $request, Respon
 $app->post('/saveProgramming', function (Request $request, Response $response, $args) use (
     $programmingDao,
     $programmingRoutesDao,
+    $generalProgrammingRoutesDao,
     $generalProgrammingDao,
     $generalOrdersDao,
     $generalPlanCiclesMachinesDao,
@@ -224,7 +227,7 @@ $app->post('/saveProgramming', function (Request $request, Response $response, $
             $result = $programmingDao->updateProgramming($programmings[$i]);
 
         if ($result == null) {
-            $arr = $programmingRoutesDao->findProgrammingRoutes($programmings[$i]['id_product']);
+            $arr = $generalProgrammingRoutesDao->findProgrammingRoutes($programmings[$i]['id_product'], $programmings[$i]['id_order']);
 
             if ($arr) {
                 $programmings[$i]['idProgrammingRoutes'] = $arr['id_programming_routes'];

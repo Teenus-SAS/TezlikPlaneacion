@@ -340,11 +340,12 @@ $app->post('/addProduct', function (Request $request, Response $response, $args)
 
                     }
                 }
-            }
-            foreach ($productsMaterials as $arr) {
-                $k = $generalMaterialsDao->findReservedMaterial($arr['id_material']);
-                !isset($k['reserved']) ? $k['reserved'] = 0 : $k;
-                $generalMaterialsDao->updateReservedMaterial($arr['id_material'], $k['reserved']);
+
+                foreach ($productsMaterials as $arr) {
+                    $k = $generalMaterialsDao->findReservedMaterial($arr['id_material']);
+                    !isset($k['reserved']) ? $k['reserved'] = 0 : $k;
+                    $generalMaterialsDao->updateReservedMaterial($arr['id_material'], $k['reserved']);
+                }
             }
         }
     }
@@ -509,12 +510,12 @@ $app->post('/updatePlanProduct', function (Request $request, Response $response,
 
                     }
                 }
-            }
 
-            foreach ($productsMaterials as $arr) {
-                $k = $generalMaterialsDao->findReservedMaterial($arr['id_material']);
-                !isset($k['reserved']) ? $k['reserved'] = 0 : $k;
-                $generalMaterialsDao->updateReservedMaterial($arr['id_material'], $k['reserved']);
+                foreach ($productsMaterials as $arr) {
+                    $k = $generalMaterialsDao->findReservedMaterial($arr['id_material']);
+                    !isset($k['reserved']) ? $k['reserved'] = 0 : $k;
+                    $generalMaterialsDao->updateReservedMaterial($arr['id_material'], $k['reserved']);
+                }
             }
         }
 

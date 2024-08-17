@@ -1,24 +1,19 @@
 $(document).ready(function () { 
-  // Abrir modal crear pedidos
+  $('.cardAddOrders').hide();
+
+  // Abrir card crear pedidos
   $('#btnNewOrder').click(function (e) {
     e.preventDefault();
 
     $('.cardImportOrder').hide(800);
-    $('#createOrder').modal('show');
+    $('.cardAddOrders').toggle(800);
     $('#btnCreatePlanMachine').html('Crear');
 
     sessionStorage.removeItem('id_order');
 
     $('#formCreateOrder').trigger('reset');
     $('#btnCreateOrder').html('Crear');
-  });
-
-  // Ocultar modal Pedidos
-  $('#btnCloseOrder').click(function (e) {
-    e.preventDefault();
-
-    $('#createOrder').modal('hide');
-  });
+  }); 
 
   $('#btnCreateOrder').click(function (e) {
     e.preventDefault();
@@ -33,7 +28,7 @@ $(document).ready(function () {
 
   $(document).on('click', '.updateOrder', function () {
     $('.cardImportOrder').hide(800);
-    $('#createOrder').modal('show');
+    $('.cardAddOrders').show(800);
     $('#btnCreateOrder').html('Actualizar');
 
     let row = $(this).parent().parent()[0];
@@ -52,8 +47,7 @@ $(document).ready(function () {
     );
     $(`#seller option[value=${data.id_seller}]`).prop('selected', true);
     $(`#client option[value=${data.id_client}]`).prop('selected', true);
-    $('#originalQuantity').val(data.original_quantity);
-    // $('#quantity').val(data.quantity);
+    $('#originalQuantity').val(data.original_quantity); 
 
     $('html, body').animate(
       {
@@ -159,8 +153,7 @@ $(document).ready(function () {
     if (data.success == true) {
       $('.cardImportOrder').hide(800);
       $('#formImportOrder').trigger('reset');
-
-      $('#createOrder').modal('hide');
+      $('.cardAddOrders').hide(800);
       $('#formCreateOrder').trigger('reset');
       loadAllData();
       toastr.success(data.message);

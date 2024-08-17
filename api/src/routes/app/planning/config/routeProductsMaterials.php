@@ -422,16 +422,13 @@ $app->post('/addProductsMaterials', function (Request $request, Response $respon
                 $programming = $generalProgrammingDao->findProgrammingByOrder($orders[$i]['id_order']);
                 if (sizeof($programming) > 0) {
                     $generalOrdersDao->changeStatus($orders[$i]['id_order'], 4);
-
-                    // $productsMaterials = $productsMaterialsDao->findAllProductsmaterials($orders[$i]['id_product'], $id_company);
-
                 }
             }
-        }
-        foreach ($productsMaterials as $arr) {
-            $k = $generalMaterialsDao->findReservedMaterial($arr['id_material']);
-            !isset($k['reserved']) ? $k['reserved'] = 0 : $k;
-            $generalMaterialsDao->updateReservedMaterial($arr['id_material'], $k['reserved']);
+            foreach ($productsMaterials as $arr) {
+                $k = $generalMaterialsDao->findReservedMaterial($arr['id_material']);
+                !isset($k['reserved']) ? $k['reserved'] = 0 : $k;
+                $generalMaterialsDao->updateReservedMaterial($arr['id_material'], $k['reserved']);
+            }
         }
     }
 

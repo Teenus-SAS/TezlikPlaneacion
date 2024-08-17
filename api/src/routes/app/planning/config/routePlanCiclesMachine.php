@@ -2,13 +2,17 @@
 
 use TezlikPlaneacion\dao\CiclesMachineDao;
 use TezlikPlaneacion\dao\GeneralMachinesDao;
+use TezlikPlaneacion\dao\GeneralMaterialsDao;
 use TezlikPlaneacion\dao\GeneralOrdersDao;
 use TezlikPlaneacion\dao\GeneralPlanCiclesMachinesDao;
 use TezlikPlaneacion\dao\GeneralProcessDao;
 use TezlikPlaneacion\dao\GeneralProductsDao;
+use TezlikPlaneacion\dao\GeneralProgrammingDao;
+use TezlikPlaneacion\dao\GeneralProgrammingRoutesDao;
 use TezlikPlaneacion\dao\LastDataDao;
 use TezlikPlaneacion\dao\LotsProductsDao;
 use TezlikPlaneacion\dao\PlanCiclesMachineDao;
+use TezlikPlaneacion\dao\ProductsMaterialsDao;
 use TezlikPlaneacion\dao\ProgrammingRoutesDao;
 
 $planCiclesMachineDao = new PlanCiclesMachineDao();
@@ -20,7 +24,11 @@ $machinesDao = new GeneralMachinesDao();
 $productsDao = new GeneralProductsDao();
 $economicLotDao = new LotsProductsDao();
 $programmingRoutesDao = new ProgrammingRoutesDao();
+$generalProgrammingRoutesDao = new GeneralProgrammingRoutesDao();
 $generalOrdersDao = new GeneralOrdersDao();
+$generalProgrammingDao = new GeneralProgrammingDao();
+$generalMaterialsDao = new GeneralMaterialsDao();
+$productsMaterialsDao = new ProductsMaterialsDao();
 
 use Psr\Http\Message\ResponseInterface as Response;
 use Psr\Http\Message\ServerRequestInterface as Request;
@@ -154,13 +162,16 @@ $app->post('/addPlanCiclesMachine', function (Request $request, Response $respon
     $planCiclesMachineDao,
     $generalPlanCiclesMachinesDao,
     $ciclesMachinesDao,
+    $generalProgrammingDao,
+    $generalMaterialsDao,
     $lastDataDao,
     $productsDao,
     $processDao,
     $machinesDao,
     $generalOrdersDao,
     $productsMaterialsDao,
-    $programmingRoutesDao
+    $programmingRoutesDao,
+    $generalProgrammingRoutesDao
 ) {
     session_start();
     $id_company = $_SESSION['id_company'];
@@ -200,12 +211,12 @@ $app->post('/addPlanCiclesMachine', function (Request $request, Response $respon
                 $ciclesMachine = $generalPlanCiclesMachinesDao->findAllPlanCiclesMachineByProduct($dataPlanCiclesMachine['idProduct'], $id_company);
 
                 if (sizeof($ciclesMachine) == 1) {
-                    $arr = $programmingRoutesDao->findProgrammingRoutes($dataPlanCiclesMachine['idProduct']);
+                    $arr = $generalProgrammingRoutesDao->findProgrammingRoutesByProduct($dataPlanCiclesMachine['idProduct']);
 
                     if (!$arr) {
                         $data = [];
                         $data['idProduct'] = $dataPlanCiclesMachine['idProduct'];
-                        // $data['idOrder'] = $arr['id_order'];
+                        $data['idOrder'] = 0;
                         $data['route'] = 1;
 
                         $planCiclesMachine = $programmingRoutesDao->insertProgrammingRoutes($data, $id_company);
@@ -252,12 +263,12 @@ $app->post('/addPlanCiclesMachine', function (Request $request, Response $respon
                 $ciclesMachine = $generalPlanCiclesMachinesDao->findAllPlanCiclesMachineByProduct($planCiclesMachine[$i]['idProduct'], $id_company);
 
                 if (sizeof($ciclesMachine) == 1) {
-                    $arr = $programmingRoutesDao->findProgrammingRoutes($planCiclesMachine[$i]['idProduct']);
+                    $arr = $generalProgrammingRoutesDao->findProgrammingRoutesByProduct($planCiclesMachine[$i]['idProduct']);
 
                     if (!$arr) {
                         $data = [];
                         $data['idProduct'] = $planCiclesMachine[$i]['idProduct'];
-                        // $data['idOrder'] = $arr['id_order'];
+                        $data['idOrder'] = 0;
                         $data['route'] = 1;
 
                         $resolution = $programmingRoutesDao->insertProgrammingRoutes($data, $id_company);
@@ -303,66 +314,64 @@ $app->post('/addPlanCiclesMachine', function (Request $request, Response $respon
         else $resp = array('error' => true, 'message' => 'Ocurrio un error al importar los ciclos de maquina. Intente nuevamente');
     }
 
-    // $orders = $generalOrdersDao->findAllOrdersByCompany($id_company);
+    $orders = $generalOrdersDao->findAllOrdersByCompany($id_company);
 
-    // for ($i = 0; $i < sizeof($orders); $i++) {
-    //     $status = true;
-    //     // Ficha tecnica
-    //     $productsMaterials = $productsMaterialsDao->findAllProductsmaterials($orders[$i]['id_product'], $id_company);
-    //     $planCicles = $generalPlanCiclesMachinesDao->findAllPlanCiclesMachineByProduct($orders[$i]['id_product'], $id_company);
+    for ($i = 0; $i < sizeof($orders); $i++) {
+        $status = true;
+        // Ficha tecnica
+        $productsMaterials = $productsMaterialsDao->findAllProductsmaterials($orders[$i]['id_product'], $id_company);
+        $planCicles = $generalPlanCiclesMachinesDao->findAllPlanCiclesMachineByProduct($orders[$i]['id_product'], $id_company);
 
-    //     if ($orders[$i]['status'] != 'EN PRODUCCION' && $orders[$i]['status'] != 'FABRICADO') {
-    //         if ($orders[$i]['original_quantity'] > $orders[$i]['accumulated_quantity']) {
+        if ($orders[$i]['status'] != 'EN PRODUCCION' && $orders[$i]['status'] != 'FABRICADO') {
+            if ($orders[$i]['original_quantity'] > $orders[$i]['accumulated_quantity']) {
 
-    //             if (sizeof($productsMaterials) == 0 || sizeof($planCicles) == 0) {
-    //                 $generalOrdersDao->changeStatus($orders[$i]['id_order'], 5);
-    //                 $status = false;
-    //             } else {
-    //                 foreach ($productsMaterials as $arr) {
-    //                     if ($arr['quantity_material'] <= 0) {
-    //                         $generalOrdersDao->changeStatus($orders[$i]['id_order'], 6);
-    //                         $status = false;
-    //                         break;
-    //                     }
-    //                 }
-    //             }
-    //         }
+                if (sizeof($productsMaterials) == 0 || sizeof($planCicles) == 0) {
+                    $generalOrdersDao->changeStatus($orders[$i]['id_order'], 5);
+                    $status = false;
+                } else {
+                    foreach ($productsMaterials as $arr) {
+                        if ($arr['quantity_material'] <= 0) {
+                            $generalOrdersDao->changeStatus($orders[$i]['id_order'], 6);
+                            $status = false;
+                            break;
+                        }
+                    }
+                }
+            }
 
-    //         if ($status == true) {
-    //             if ($orders[$i]['original_quantity'] <= $orders[$i]['accumulated_quantity']) {
-    //                 $generalOrdersDao->changeStatus($orders[$i]['id_order'], 2);
-    //                 $accumulated_quantity = $orders[$i]['accumulated_quantity'] - $orders[$i]['original_quantity'];
-    //             } else {
-    //                 $accumulated_quantity = $orders[$i]['accumulated_quantity'];
-    //                 $generalOrdersDao->changeStatus($orders[$i]['id_order'], 1);
-    //             }
+            if ($status == true) {
+                if ($orders[$i]['original_quantity'] <= $orders[$i]['accumulated_quantity']) {
+                    $generalOrdersDao->changeStatus($orders[$i]['id_order'], 2);
+                    $accumulated_quantity = $orders[$i]['accumulated_quantity'] - $orders[$i]['original_quantity'];
+                } else {
+                    $accumulated_quantity = $orders[$i]['accumulated_quantity'];
+                    $generalOrdersDao->changeStatus($orders[$i]['id_order'], 1);
+                }
 
-    //             if ($orders[$i]['status'] != 'DESPACHO') {
-    //                 $date = date('Y-m-d');
+                if ($orders[$i]['status'] != 'DESPACHO') {
+                    $date = date('Y-m-d');
 
-    //                 $generalOrdersDao->updateOfficeDate($orders[$i]['id_order'], $date);
-    //             }
+                    $generalOrdersDao->updateOfficeDate($orders[$i]['id_order'], $date);
+                }
 
-    //             $arr = $productsDao->findProductReserved($orders[$i]['id_product']);
-    //             !isset($arr['reserved']) ? $arr['reserved'] = 0 : $arr;
-    //             $productsDao->updateReservedByProduct($orders[$i]['id_product'], $arr['reserved']);
+                $arr = $productsDao->findProductReserved($orders[$i]['id_product']);
+                !isset($arr['reserved']) ? $arr['reserved'] = 0 : $arr;
+                $productsDao->updateReservedByProduct($orders[$i]['id_product'], $arr['reserved']);
 
-    //             $productsDao->updateAccumulatedQuantity($orders[$i]['id_product'], $accumulated_quantity, 1);
-    //             $programming = $generalProgrammingDao->findProgrammingByOrder($orders[$i]['id_order']);
-    //             if (sizeof($programming) > 0) {
-    //                 $generalOrdersDao->changeStatus($orders[$i]['id_order'], 4);
+                $productsDao->updateAccumulatedQuantity($orders[$i]['id_product'], $accumulated_quantity, 1);
+                $programming = $generalProgrammingDao->findProgrammingByOrder($orders[$i]['id_order']);
+                if (sizeof($programming) > 0) {
+                    $generalOrdersDao->changeStatus($orders[$i]['id_order'], 4);
+                }
+            }
 
-    //                 // $productsMaterials = $productsMaterialsDao->findAllProductsmaterials($orders[$i]['id_product'], $id_company);
-
-    //             }
-    //         }
-    //     }
-    //     foreach ($productsMaterials as $arr) {
-    //         $k = $generalMaterialsDao->findReservedMaterial($arr['id_material']);
-    //         !isset($k['reserved']) ? $k['reserved'] = 0 : $k;
-    //         $generalMaterialsDao->updateReservedMaterial($arr['id_material'], $k['reserved']);
-    //     }
-    // }
+            foreach ($productsMaterials as $arr) {
+                $k = $generalMaterialsDao->findReservedMaterial($arr['id_material']);
+                !isset($k['reserved']) ? $k['reserved'] = 0 : $k;
+                $generalMaterialsDao->updateReservedMaterial($arr['id_material'], $k['reserved']);
+            }
+        }
+    }
 
     $response->getBody()->write(json_encode($resp, JSON_NUMERIC_CHECK));
     return $response->withHeader('Content-Type', 'application/json');
@@ -406,16 +415,79 @@ $app->post('/updatePlanCiclesMachine', function (Request $request, Response $res
 
 $app->get('/deletePlanCiclesMachine/{id_cicles_machine}', function (Request $request, Response $response, $args) use (
     $planCiclesMachineDao,
-    $generalPlanCiclesMachinesDao
+    $generalPlanCiclesMachinesDao,
+    $generalOrdersDao,
+    $productsMaterialsDao,
+    $productsDao,
+    $generalMaterialsDao,
+    $generalProgrammingDao
 ) {
-
+    session_start();
+    $id_company = $_SESSION['id_company'];
     // $planCiclesMachine = $generalPlanCiclesMachinesDao->findPlanCiclesMachine($args['id_cicles_machine']);
 
     $resolution = $planCiclesMachineDao->deletePlanCiclesMachine($args['id_cicles_machine']);
 
-    // if ($resolution == null){
+    if ($resolution == null) {
+        $orders = $generalOrdersDao->findAllOrdersByCompany($id_company);
 
-    // }
+        for ($i = 0; $i < sizeof($orders); $i++) {
+            $status = true;
+            // Ficha tecnica
+            $productsMaterials = $productsMaterialsDao->findAllProductsmaterials($orders[$i]['id_product'], $id_company);
+            $planCicles = $generalPlanCiclesMachinesDao->findAllPlanCiclesMachineByProduct($orders[$i]['id_product'], $id_company);
+
+            if ($orders[$i]['status'] != 'EN PRODUCCION' && $orders[$i]['status'] != 'FABRICADO') {
+                if ($orders[$i]['original_quantity'] > $orders[$i]['accumulated_quantity']) {
+
+                    if (sizeof($productsMaterials) == 0 || sizeof($planCicles) == 0) {
+                        $generalOrdersDao->changeStatus($orders[$i]['id_order'], 5);
+                        $status = false;
+                    } else {
+                        foreach ($productsMaterials as $arr) {
+                            if ($arr['quantity_material'] <= 0) {
+                                $generalOrdersDao->changeStatus($orders[$i]['id_order'], 6);
+                                $status = false;
+                                break;
+                            }
+                        }
+                    }
+                }
+
+                if ($status == true) {
+                    if ($orders[$i]['original_quantity'] <= $orders[$i]['accumulated_quantity']) {
+                        $generalOrdersDao->changeStatus($orders[$i]['id_order'], 2);
+                        $accumulated_quantity = $orders[$i]['accumulated_quantity'] - $orders[$i]['original_quantity'];
+                    } else {
+                        $accumulated_quantity = $orders[$i]['accumulated_quantity'];
+                        $generalOrdersDao->changeStatus($orders[$i]['id_order'], 1);
+                    }
+
+                    if ($orders[$i]['status'] != 'DESPACHO') {
+                        $date = date('Y-m-d');
+
+                        $generalOrdersDao->updateOfficeDate($orders[$i]['id_order'], $date);
+                    }
+
+                    $arr = $productsDao->findProductReserved($orders[$i]['id_product']);
+                    !isset($arr['reserved']) ? $arr['reserved'] = 0 : $arr;
+                    $productsDao->updateReservedByProduct($orders[$i]['id_product'], $arr['reserved']);
+
+                    $productsDao->updateAccumulatedQuantity($orders[$i]['id_product'], $accumulated_quantity, 1);
+                    $programming = $generalProgrammingDao->findProgrammingByOrder($orders[$i]['id_order']);
+                    if (sizeof($programming) > 0) {
+                        $generalOrdersDao->changeStatus($orders[$i]['id_order'], 4);
+                    }
+                }
+
+                foreach ($productsMaterials as $arr) {
+                    $k = $generalMaterialsDao->findReservedMaterial($arr['id_material']);
+                    !isset($k['reserved']) ? $k['reserved'] = 0 : $k;
+                    $generalMaterialsDao->updateReservedMaterial($arr['id_material'], $k['reserved']);
+                }
+            }
+        }
+    }
 
     if ($resolution == null)
         $resp = array('success' => true, 'message' => 'Ciclo de maquina eliminado correctamente');

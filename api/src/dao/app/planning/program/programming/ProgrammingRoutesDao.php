@@ -31,19 +31,6 @@ class ProgrammingRoutesDao
         return $programming;
     }
 
-    public function findProgrammingRoutes($id_product)
-    {
-        $connection = Connection::getInstance()->getConnection();
-
-        $stmt = $connection->prepare("SELECT * FROM programming_routes
-                                      WHERE id_product = :id_product");
-        $stmt->execute([
-            'id_product' => $id_product
-        ]);
-        $programming = $stmt->fetch($connection::FETCH_ASSOC);
-        return $programming;
-    }
-
     public function insertProgrammingRoutes($dataProgramming, $id_company)
     {
         try {
@@ -53,7 +40,7 @@ class ProgrammingRoutesDao
                                           VALUES (:id_company, :id_product, :route)");
             $stmt->execute([
                 'id_company' => $id_company,
-                // 'id_order' => $dataProgramming['idOrder'],
+                'id_order' => $dataProgramming['idOrder'],
                 'id_product' => $dataProgramming['idProduct'],
                 'route' => $dataProgramming['route']
             ]);
