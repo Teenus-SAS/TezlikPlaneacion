@@ -432,12 +432,12 @@ $app->post('/updatePlanProduct', function (Request $request, Response $response,
 
     if ($resolution == null && $status == true) {
         if (sizeof($_FILES) > 0)
-            $products = $FilesDao->imageProduct($dataProduct['idProduct'], $id_company);
+            $resolution = $FilesDao->imageProduct($dataProduct['idProduct'], $id_company);
 
-        if ($products == null) {
-            $products = $productsInventoryDao->updateProductsInventory($dataProduct);
-            $products = $generalProductsDao->updateAccumulatedQuantityGeneral($id_company);
-            $products = $generalProductsDao->updateAccumulatedQuantity($dataProduct['idProduct'], $dataProduct['quantity'], 1);
+        if ($resolution == null) {
+            $resolution = $productsInventoryDao->updateProductsInventory($dataProduct);
+            $resolution = $generalProductsDao->updateAccumulatedQuantityGeneral($id_company);
+            $resolution = $generalProductsDao->updateAccumulatedQuantity($dataProduct['idProduct'], $dataProduct['quantity'], 1);
         }
         // Cambiar estado pedidos
         // $allOrders = $generalOrdersDao->findAllOrdersWithMaterialsByCompany($id_company);
