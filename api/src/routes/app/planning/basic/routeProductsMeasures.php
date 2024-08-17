@@ -2,11 +2,15 @@
 
 use TezlikPlaneacion\dao\GeneralPMeasuresDao;
 use TezlikPlaneacion\dao\GeneralProductsDao;
+use TezlikPlaneacion\dao\LastDataDao;
+use TezlikPlaneacion\dao\ProductsDao;
 use TezlikPlaneacion\dao\ProductsMeasuresDao;
 
 $productsMeasuresDao = new ProductsMeasuresDao();
 $generalPMeasuresDao = new GeneralPMeasuresDao();
+$productsDao = new ProductsDao();
 $generalProductsDao = new GeneralProductsDao();
+$lastDataDao = new LastDataDao();
 
 use Psr\Http\Message\ResponseInterface as Response;
 use Psr\Http\Message\ServerRequestInterface as Request;
@@ -60,57 +64,58 @@ $app->post('/productsMeasuresDataValidation', function (Request $request, Respon
                 break;
             }
 
-            // $item = $products[$i];
-            // $refProduct = trim($item['referenceProduct']);
-            // $nameProduct = trim($item['product']);
+            $item = $products[$i];
+            $refProduct = trim($item['referenceProduct']);
+            $nameProduct = trim($item['product']);
 
-            // if (isset($duplicateTracker[$refProduct]) || isset($duplicateTracker[$nameProduct])) {
-            //     $i = $i + 2;
-            //     $dataImportProduct =  array('error' => true, 'message' => "Duplicación encontrada en la fila: $i.<br>- Referencia: $refProduct<br>- Producto: $nameProduct");
-            //     break;
-            // } else {
-            //     $duplicateTracker[$refProduct] = true;
-            //     $duplicateTracker[$nameProduct] = true;
-            // }
+            if (isset($duplicateTracker[$refProduct]) || isset($duplicateTracker[$nameProduct])) {
+                $i = $i + 2;
+                $dataImportProduct =  array('error' => true, 'message' => "Duplicación encontrada en la fila: $i.<br>- Referencia: $refProduct<br>- Producto: $nameProduct");
+                break;
+            } else {
+                $duplicateTracker[$refProduct] = true;
+                $duplicateTracker[$nameProduct] = true;
+            }
 
-            // $findProduct = $generalProductsDao->findProductByReferenceOrName($products[$i], $id_company);
+            $findProduct = $generalProductsDao->findProductByReferenceOrName($products[$i], $id_company);
 
-            // if (sizeof($findProduct) > 1) {
-            //     $i = $i + 2;
-            //     $dataImportProduct =  array('error' => true, 'message' => "Referencia y nombre de producto ya existente, fila: $i.<br>- Referencia: $refProduct<br>- Producto: $nameProduct");
-            //     break;
-            // }
+            if (sizeof($findProduct) > 1) {
+                $i = $i + 2;
+                $dataImportProduct =  array('error' => true, 'message' => "Referencia y nombre de producto ya existente, fila: $i.<br>- Referencia: $refProduct<br>- Producto: $nameProduct");
+                break;
+            }
 
-            // if ($findProduct) {
-            //     if ($findProduct[0]['product'] != $nameProduct || $findProduct[0]['reference'] != $refProduct) {
-            //         $i = $i + 2;
-            //         $dataImportProduct =  array('error' => true, 'message' => "Referencia o nombre de producto ya existente, fila: $i.<br>- Referencia: $refProduct<br>- Producto: $nameProduct");
-            //         break;
-            //     }
-            // }
+            if ($findProduct) {
+                if ($findProduct[0]['product'] != $nameProduct || $findProduct[0]['reference'] != $refProduct) {
+                    $i = $i + 2;
+                    $dataImportProduct =  array('error' => true, 'message' => "Referencia o nombre de producto ya existente, fila: $i.<br>- Referencia: $refProduct<br>- Producto: $nameProduct");
+                    break;
+                }
+            }
         }
 
         $insert = 0;
-        // $update = 0;
+        $update = 0;
 
         if (sizeof($dataImportProduct) == 0) {
             for ($i = 0; $i < count($products); $i++) {
+                // $findProduct = $generalProductsDao->findProduct($products[$i], $id_company);
+
+                // if (!$findProduct) {
+                //     $i = $i + 2;
+                //     $dataImportProduct =  array('error' => true, 'message' => "Producto no existe en la base de datos. Fila: $i");
+                //     break;
+                // }
+                // $products[$i]['idProduct'] = $findProduct['id_product'];
+
                 $findProduct = $generalProductsDao->findProduct($products[$i], $id_company);
 
-                if (!$findProduct) {
-                    $i = $i + 2;
-                    $dataImportProduct =  array('error' => true, 'message' => "Producto no existe en la base de datos. Fila: $i");
-                    break;
-                }
-                $products[$i]['idProduct'] = $findProduct['id_product'];
+                if (!$findProduct)
+                    $insert = $insert + 1;
+                else $update = $update + 1;
 
-                // $findPMeasure = $generalPMeasuresDao->findProductMeasure($products[$i], $id_company);
-
-                // if (!$findPMeasure) 
-                $insert = $insert + 1;
-                // else $update = $update + 1;
                 $dataImportProduct['insert'] = $insert;
-                // $dataImportProduct['update'] = $update;
+                $dataImportProduct['update'] = $update;
             }
         }
     } else
@@ -122,6 +127,8 @@ $app->post('/productsMeasuresDataValidation', function (Request $request, Respon
 
 $app->post('/addProductMeasure', function (Request $request, Response $response, $args) use (
     $productsMeasuresDao,
+    $lastDataDao,
+    $productsDao,
     $generalPMeasuresDao,
     $generalProductsDao
 ) {
@@ -133,20 +140,27 @@ $app->post('/addProductMeasure', function (Request $request, Response $response,
     $dataProducts = sizeof($dataProduct);
 
     if ($dataProducts > 1) {
-        // $findProduct = $generalPMeasuresDao->findProductMeasure($dataProduct, $id_company);
+        $findProduct = $generalProductsDao->findProductByReferenceOrName($dataProduct, $id_company);
 
-        // if (!$findProduct) {
-        $resolution = $productsMeasuresDao->insertPMeasureByCompany($dataProduct, $id_company);
+        if (!$findProduct) {
+            $resolution = $productsDao->insertProductByCompany($dataProduct, $id_company);
 
-        if ($resolution == null)
-            $resp = array('success' => true, 'message' => 'Medida de producto creada correctamente');
-        else if (isset($resolution['info']))
-            $resp = array('info' => true, 'message' => $resolution['message']);
-        else
-            $resp = array('error' => true, 'message' => 'Ocurrió un error mientras ingresaba la información. Intente nuevamente');
-        // } else {
-        //     $resp = array('info' => true, 'message' => 'El producto ya existe en la base de datos. Ingrese uno nuevo');
-        // }
+            if ($resolution == null) {
+                $lastData = $lastDataDao->lastInsertedProductId($id_company);
+                $dataProduct['idProduct'] = $lastData['id_product'];
+
+                $resolution = $productsMeasuresDao->insertPMeasureByCompany($dataProduct, $id_company);
+            }
+
+            if ($resolution == null)
+                $resp = array('success' => true, 'message' => 'Medida de producto creada correctamente');
+            else if (isset($resolution['info']))
+                $resp = array('info' => true, 'message' => $resolution['message']);
+            else
+                $resp = array('error' => true, 'message' => 'Ocurrió un error mientras ingresaba la información. Intente nuevamente');
+        } else {
+            $resp = array('info' => true, 'message' => 'El producto ya existe en la base de datos. Ingrese uno nuevo');
+        }
     } else {
         $products = $dataProduct['importProducts'];
 
@@ -155,15 +169,29 @@ $app->post('/addProductMeasure', function (Request $request, Response $response,
             $products[$i]['idProduct'] = $findProduct['id_product'];
             $products[$i]['weight'] = (floatval($products[$i]['grammage']) * floatval($products[$i]['usefulLength']) * floatval($products[$i]['totalWidth'])) / 10000000;
 
-            // $findPMeasure = $generalPMeasuresDao->findProductMeasure($products[$i], $id_company);
+            $findProduct = $generalProductsDao->findProduct($products[$i], $id_company);
+            if (!$findProduct) {
+                $resolution = $productsDao->insertProductByCompany($products[$i], $id_company);
+                if (isset($resolution['info'])) break;
 
-            // if (!$findPMeasure) {
-            $resolution = $productsMeasuresDao->insertPMeasureByCompany($products[$i], $id_company);
-            // } else {
-            //     $products[$i]['idProductMeasure'] = $findPMeasure['id_product_measure'];
-            //     $resolution = $productsMeasuresDao->updatePMeasure($products[$i]);
-            // }
+                $lastData = $lastDataDao->lastInsertedProductId($id_company);
+                $products[$i]['idProduct'] = $lastData['id_product'];
+            } else {
+                $products[$i]['idProduct'] = $findProduct['id_product'];
 
+                $resolution = $productsDao->updateProductByCompany($products[$i], $id_company);
+            }
+            if (isset($resolution['info'])) break;
+
+            $findPMeasure = $generalPMeasuresDao->findProductMeasure($products[$i], $id_company);
+
+            if (!$findPMeasure)
+                $resolution = $productsMeasuresDao->insertPMeasureByCompany($products[$i], $id_company);
+            else {
+                $products[$i]['idProductMeasure'] = $findPMeasure['id_product_measure'];
+
+                $resolution = $productsMeasuresDao->updatePMeasure($products[$i]);
+            }
             if (isset($resolution['info'])) break;
         }
 
@@ -179,19 +207,39 @@ $app->post('/addProductMeasure', function (Request $request, Response $response,
     return $response->withStatus(200)->withHeader('Content-Type', 'application/json');
 });
 
-$app->post('/updateProductMeasure', function (Request $request, Response $response, $args) use ($productsMeasuresDao, $generalPMeasuresDao) {
-    // session_start();
-    // $id_company = $_SESSION['id_company'];
+$app->post('/updateProductMeasure', function (Request $request, Response $response, $args) use (
+    $productsMeasuresDao,
+    $productsDao,
+    $generalProductsDao,
+    $generalPMeasuresDao
+) {
+    session_start();
+    $id_company = $_SESSION['id_company'];
     $dataProduct = $request->getParsedBody();
 
-    $resolution = $productsMeasuresDao->updatePMeasure($dataProduct);
+    $products = $generalProductsDao->findProductByReferenceOrName($dataProduct, $id_company);
 
-    if ($resolution == null)
-        $resp = array('success' => true, 'message' => 'Medidas de producto modificada correctamente');
-    else if (isset($resolution['info']))
-        $resp = array('info' => true, 'message' => $resolution['message']);
-    else
-        $resp = array('error' => true, 'message' => 'Ocurrió un error mientras guardaba los datos. Intente nuevamente');
+    foreach ($products as $arr) {
+        if ($arr['id_product'] != $dataProduct['idProduct']) {
+            $status = false;
+            break;
+        }
+    }
+
+    if ($status == true) {
+        $resolution = $productsDao->updateProductByCompany($dataProduct, $id_company);
+
+        if ($resolution == null)
+            $resolution = $productsMeasuresDao->updatePMeasure($dataProduct);
+
+        if ($resolution == null)
+            $resp = array('success' => true, 'message' => 'Medidas de producto modificada correctamente');
+        else if (isset($resolution['info']))
+            $resp = array('info' => true, 'message' => $resolution['message']);
+        else
+            $resp = array('error' => true, 'message' => 'Ocurrió un error mientras guardaba los datos. Intente nuevamente');
+    } else
+        $resp = array('info' => true, 'message' => 'El producto ya existe en la base de datos. Ingrese uno nuevo');
 
     $response->getBody()->write(json_encode($resp));
     return $response->withStatus(200)->withHeader('Content-Type', 'application/json');

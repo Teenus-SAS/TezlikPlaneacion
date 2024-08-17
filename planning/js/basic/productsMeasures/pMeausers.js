@@ -56,12 +56,13 @@ $(document).ready(function () {
     let idProductMeasure = id.split('-')[1]; 
 
     sessionStorage.setItem("id_product_measure", idProductMeasure);
-
+    
     let row = $(this).parent().parent().parent()[0];
     let data = tblProducts.fnGetData(row);
-    $(`#refProduct option[value=${data.id_product}]`).prop('selected', true);
-    $(`#selectNameProduct option[value=${data.id_product}]`).prop('selected', true);
-
+    
+    sessionStorage.setItem("id_product", data.id_product);
+    $("#referenceProduct").val(data.reference);
+    $("#product").val(data.product);
     //$("#grammage").val(data.grammage);
     $("#width").val(data.width);
     $("#high").val(data.high);
@@ -76,7 +77,8 @@ $(document).ready(function () {
 
   /* Revisar datos */
   const checkDataProduct = async (url, idProductMeasure) => {
-    let idProduct = parseFloat($("#refProduct").val());
+    let ref = $("#referenceProduct").val();
+    let prod = $("#product").val(); 
     //let grammage = parseFloat($("#grammage").val());
     let width = parseFloat($("#width").val());
     let high = parseFloat($("#high").val());
@@ -86,17 +88,20 @@ $(document).ready(function () {
     let window = parseFloat($("#window").val());
     //let weight = parseFloat($("#weight").val());
 
-    let data = idProduct * width * high * length * usefulLength * totalWidth;
+    let data = width * high * length * usefulLength * totalWidth;
 
-    if (isNaN(data) || data <= 0) {
+    if (ref.trim() == "" || !ref.trim() || prod.trim() == "" || !prod.trim()|| isNaN(data) || data <= 0) {
       toastr.error("Ingrese todos los campos");
       return false;
     } 
 
     let dataProduct = new FormData(formCreatePMeasure); 
 
-    if (idProductMeasure != "" || idProductMeasure != null) {
+    if (idProductMeasure != null) {
       dataProduct.append("idProductMeasure", idProductMeasure);
+      
+      let idProduct = sessionStorage.getItem('id_product');
+      dataProduct.append("idProduct", idProduct);
     }
 
     let resp = await sendDataPOST(url, dataProduct);

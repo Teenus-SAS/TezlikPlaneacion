@@ -126,11 +126,19 @@ if (sizeof($_SESSION) == 0)
                                             <div class="form-row">
                                                 <div class="col-sm-2 floating-label enable-floating-label show-label">
                                                     <label for="referenceProduct">Referencia</label>
-                                                    <input type="text" class="form-control text-center" name="referenceProduct" id="referenceProduct">
+                                                    <?php if ($_SESSION['flag_products_measure'] == 1) { ?>
+                                                        <select class="form-control refProduct" name="idProduct" id="refProduct"></select>
+                                                    <?php } else { ?>
+                                                        <input type="text" class="form-control text-center" name="referenceProduct" id="referenceProduct">
+                                                    <?php } ?>
                                                 </div>
                                                 <div class="col-sm-8 floating-label enable-floating-label show-label">
                                                     <label for="">Nombre Producto</label>
-                                                    <input type="text" class="form-control" name="product" id="product">
+                                                    <?php if ($_SESSION['flag_products_measure'] == 1) { ?>
+                                                        <select class="form-control selectNameProduct" name="idProduct" id="selectNameProduct"></select>
+                                                    <?php } else { ?>
+                                                        <input type="text" class="form-control" name="product" id="product">
+                                                    <?php } ?>
                                                 </div>
                                                 <div class="col-sm-2 floating-label enable-floating-label show-label">
                                                     <label for="">Existencias</label>
@@ -369,6 +377,7 @@ if (sizeof($_SESSION) == 0)
     <script src="/planning/js/basic/rawMaterials/rawMaterials.js"></script>
     <script src="/planning/js/basic/products/tblProducts.js"></script>
     <script src="/planning/js/basic/products/products.js"></script>
+    <script src="/planning/js/basic/products/configProducts.js"></script>
     <script src="../global/js/import/import.js"></script>
     <script src="/planning/js/basic/products/importProducts.js"></script>
     <script src="/planning/js/basic/rawMaterials/importRawMaterials.js"></script>

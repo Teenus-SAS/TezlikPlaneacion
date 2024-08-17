@@ -80,7 +80,7 @@ $(document).ready(function () {
       switch (type) {
         case 1:// Papel
 
-          weight = (parseFloat(dataM.grammage) * parseFloat(dataP.useful_length) * parseFloat(dataP.total_width)) / 10000000;
+          weight = (parseFloat(dataM.grammage) * parseFloat(dataP.length) * parseFloat(dataP.total_width)) / 10000000;
           !isFinite(weight) ? (weight = 0) : weight;
         
           break; 

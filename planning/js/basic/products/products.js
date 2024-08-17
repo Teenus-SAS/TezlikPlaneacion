@@ -55,8 +55,15 @@ $(document).ready(function () {
 
     let row = $(this).parent().parent().parent()[0];
     let data = tblProducts.fnGetData(row);
-    $("#referenceProduct").val(data.reference);
-    $("#product").val(data.product);
+
+    if (flag_products_measure == '1') {
+      $(`#refProduct option[value=${data.id_product}]`).prop('selected', true);
+      $(`#selectNameProduct option[value=${data.id_product}]`).prop('selected', true);
+    } else {
+      $("#referenceProduct").val(data.reference);
+      $("#product").val(data.product);
+    }
+
     $("#pQuantity").val(data.quantity);
 
     if (data.img)
@@ -68,13 +75,22 @@ $(document).ready(function () {
   });
 
   /* Revisar datos */
-  checkDataProducts = async (url, idProduct) => {
-    let ref = $("#referenceProduct").val();
-    let prod = $("#product").val();
+  const checkDataProducts = async (url, idProduct) => {
+    if (flag_products_measure == '1') {
+      let idProduct = parseFloat($("#refProduct").val());
 
-    if (ref.trim() == "" || !ref.trim() || prod.trim() == "" || !prod.trim()) {
-      toastr.error("Ingrese todos los campos");
-      return false;
+      if (isNaN(idProduct) || idProduct <= 0) {
+        toastr.error("Ingrese todos los campos");
+        return false;
+      }
+    } else {
+      let ref = $("#referenceProduct").val();
+      let prod = $("#product").val();
+      
+      if (ref.trim() == "" || !ref.trim() || prod.trim() == "" || !prod.trim()) {
+        toastr.error("Ingrese todos los campos");
+        return false;
+      }
     }
 
     let imageProd = $("#formFile")[0].files[0];
