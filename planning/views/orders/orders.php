@@ -136,15 +136,16 @@ if (sizeof($_SESSION) == 0)
                                                     <label for="refProduct">Referencia</label>
                                                     <select class="form-control" name="idProduct" id="refProduct"></select>
                                                 </div>
-                                                <div class="col-sm-8 floating-label enable-floating-label show- mb-3 label cardSelect">
+
+                                                <div class="col-sm-6 floating-label enable-floating-label show- mb-3 label cardSelect">
                                                     <label for="selectNameProduct">Producto</label>
                                                     <select class="form-control" name="selectNameProduct" id="selectNameProduct"></select>
                                                 </div>
-                                                <div class="col-sm-2 floating-label enable-floating-label show-label" style="margin-bottom:20px">
-                                                    <label for="inptQuantity">Existencias </label>
+                                                <div class="col-sm-2 floating-label enable-floating-label show-label cardDescription" style="margin-bottom:20px">
+                                                    <label for="">Cantidad Disponible Inv</label>
                                                     <input type="text" class="form-control text-center" id="inptQuantity" name="inptQuantity" readonly>
                                                 </div>
-                                                <div class="col-sm-2 floating-label enable-floating-label show-label" style="margin-bottom:20px">
+                                                <div class="col-sm-2 floating-label enable-floating-label show-label cardDescription" style="margin-bottom:20px">
                                                     <label for="originalQuantity">Cantidad requerida</label>
                                                     <input type="text" class="form-control text-center" id="originalQuantity" name="originalQuantity">
                                                 </div>
