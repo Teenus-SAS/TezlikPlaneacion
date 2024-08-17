@@ -157,7 +157,7 @@ if (sizeof($_SESSION) == 0)
                                                 </div>
                                                 <?php if ($_SESSION['flag_products_measure'] == '1') { ?>
                                                     <div class="col-sm-2 floating-label enable-floating-label show-label inputQuantityCalc" style="margin-bottom:20px">
-                                                        <label for="">Cantidad (Calculo)</label>
+                                                        <label for="">Gramos/M2</label>
                                                         <input class="form-control calcWeight text-center" type="number" name="quantityCalc" id="quantityCalc">
                                                     </div>
                                                 <?php } ?>
