@@ -319,7 +319,7 @@ $app->post('/addPlanCiclesMachine', function (Request $request, Response $respon
     for ($i = 0; $i < sizeof($orders); $i++) {
         $status = true;
         // Ficha tecnica
-        $productsMaterials = $productsMaterialsDao->findAllProductsmaterials($orders[$i]['id_product'], $id_company);
+        $productsMaterials = $productsMaterialsDao->findAllProductsMaterials($orders[$i]['id_product'], $id_company);
         $planCicles = $generalPlanCiclesMachinesDao->findAllPlanCiclesMachineByProduct($orders[$i]['id_product'], $id_company);
 
         if ($orders[$i]['status'] != 'EN PRODUCCION' && $orders[$i]['status'] != 'FABRICADO') {
@@ -434,7 +434,7 @@ $app->get('/deletePlanCiclesMachine/{id_cicles_machine}', function (Request $req
         for ($i = 0; $i < sizeof($orders); $i++) {
             $status = true;
             // Ficha tecnica
-            $productsMaterials = $productsMaterialsDao->findAllProductsmaterials($orders[$i]['id_product'], $id_company);
+            $productsMaterials = $productsMaterialsDao->findAllProductsMaterials($orders[$i]['id_product'], $id_company);
             $planCicles = $generalPlanCiclesMachinesDao->findAllPlanCiclesMachineByProduct($orders[$i]['id_product'], $id_company);
 
             if ($orders[$i]['status'] != 'EN PRODUCCION' && $orders[$i]['status'] != 'FABRICADO') {

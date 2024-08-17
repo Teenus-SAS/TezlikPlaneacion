@@ -73,7 +73,7 @@ class GeneralProductsDao
     {
         $connection = Connection::getInstance()->getConnection();
 
-        $stmt = $connection->prepare("SELECT * FROM products WHERE id_product = :id_product");
+        $stmt = $connection->prepare("SELECT * FROM products_measures WHERE id_product = :id_product");
         $stmt->execute([
             'id_product' => $id_product
         ]);

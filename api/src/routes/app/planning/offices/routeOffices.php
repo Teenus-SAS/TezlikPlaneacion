@@ -126,7 +126,7 @@ $app->post('/changeOffices', function (Request $request, Response $response, $ar
 
         //     if ($order['original_quantity'] > $order['accumulated_quantity']) {
         //         // Ficha tecnica
-        //         $productsMaterials = $productsMaterialsDao->findAllProductsmaterials($dataOrder['idProduct'], $id_company);
+        //         $productsMaterials = $productsMaterialsDao->findAllProductsMaterials($dataOrder['idProduct'], $id_company);
 
         //         if (sizeof($productsMaterials) == 0) {
         //             $order = $generalOrdersDao->changeStatus($dataOrder['idOrder'], 'Sin Ficha Tecnica');

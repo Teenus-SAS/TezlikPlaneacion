@@ -16,7 +16,7 @@ class ProductsMaterialsDao
         $this->logger->pushHandler(new RotatingFileHandler(Constants::LOGS_PATH . 'querys.log', 20, Logger::DEBUG));
     }
 
-    public function findAllProductsmaterials($idProduct, $id_company)
+    public function findAllProductsMaterials($idProduct, $id_company)
     {
         $connection = Connection::getInstance()->getConnection();
         $stmt = $connection->prepare("SELECT pm.id_product, pm.id_product_material, pm.id_material, m.reference, m.material, mi.status, IFNULL(mg.id_magnitude, 0) AS id_magnitude, m.id_material_type,

@@ -8,8 +8,6 @@ if (sizeof($_SESSION) == 0)
     header('location: /');
 ?>
 
-<?php //require_once dirname(dirname(dirname(__DIR__))) . '/planning/modals/createClients.php'; ?>
-
 <!DOCTYPE html>
 <html lang="es">
 
@@ -90,15 +88,15 @@ if (sizeof($_SESSION) == 0)
                                                     <label for="city">Ciudad</label>
                                                     <input type="text" class="form-control text-center number" id="city" name="city">
                                                 </div>
-                                                <!-- <div class="col-sm-2text-center">
+                                                <div class="col-sm-2text-center">
                                                     <div class="picture-container">
-                                                        <div class="picture">
+                                                        <div class="picture" style="width: 100px; border-radius: 0%;">
                                                             <img id="avatar" src="" class="img-fluid">
                                                             <input class="form-control" type="file" id="formFile">
                                                         </div>
                                                     </div>
-                                                    <h5 class="my-3" id="profileName"></h5>
-                                                </div> -->
+                                                    <!-- <h5 class="my-3" id="profileName"></h5> -->
+                                                </div>
                                                 <div class="col-sm mt-1">
                                                     <button class="btn btn-success" id="btnCreateClient">Crear</button>
                                                 </div>

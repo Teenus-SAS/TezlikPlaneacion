@@ -42,18 +42,22 @@ $(document).ready(function () {
       const [dataProducts, dataMaterials] = await Promise.all([
         searchData('/api/products'),
         searchData('/api/materials')
-      ]);
+      ]); 
 
-      // products = dataProducts;
-      // materials = dataMaterials;
+      let products = dataProducts;
+
       sessionStorage.setItem('dataProducts', JSON.stringify(dataProducts));
       sessionStorage.setItem('dataMaterials', JSON.stringify(dataMaterials));
+
+      if (flag_products_measure == '1') {
+        products = products.filter(item => item.id_product_inventory != 0); 
+      }
 
       const card = document.querySelector('.selectNavigation');
 
       if (card.classList.contains('active')) {
-        loadTblProduct(dataProducts);
-        inventoryIndicator(dataProducts);
+        loadTblProduct(products);
+        inventoryIndicator(products);
       } else {
         loadTblMaterials(dataMaterials);
         inventoryIndicator(dataMaterials);

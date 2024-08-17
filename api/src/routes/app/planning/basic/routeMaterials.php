@@ -299,7 +299,7 @@ $app->post('/addMaterials', function (Request $request, Response $response, $arg
 
                             // Calcular precio total materias
                             // Consultar todos los datos del producto
-                            $productsMaterial = $productsMaterialsDao->findAllProductsmaterials($j['id_product'], $id_company);
+                            $productsMaterial = $productsMaterialsDao->findAllProductsMaterials($j['id_product'], $id_company);
 
                             foreach ($productsMaterial as $k) {
                                 // Obtener materia prima
@@ -354,7 +354,7 @@ $app->post('/addMaterials', function (Request $request, Response $response, $arg
             // Checkear cantidades
             // $order = $generalOrdersDao->checkAccumulatedQuantityOrder($orders[$i]['id_order']);
 
-            $productsMaterials = $productsMaterialsDao->findAllProductsmaterials($orders[$i]['id_product'], $id_company);
+            $productsMaterials = $productsMaterialsDao->findAllProductsMaterials($orders[$i]['id_product'], $id_company);
             $planCicles = $generalPlanCiclesMachinesDao->findAllPlanCiclesMachineByProduct($orders[$i]['id_product'], $id_company);
 
             if ($orders[$i]['status'] != 'EN PRODUCCION' && $orders[$i]['status'] != 'FABRICADO') {
@@ -400,7 +400,7 @@ $app->post('/addMaterials', function (Request $request, Response $response, $arg
                     if (sizeof($programming) > 0) {
                         $generalOrdersDao->changeStatus($orders[$i]['id_order'], 4);
 
-                        // $productsMaterials = $productsMaterialsDao->findAllProductsmaterials($orders[$i]['id_product'], $id_company);
+                        // $productsMaterials = $productsMaterialsDao->findAllProductsMaterials($orders[$i]['id_product'], $id_company);
 
                     }
                 }
@@ -491,7 +491,7 @@ $app->post('/updateMaterials', function (Request $request, Response $response, $
 
                     // Calcular precio total materias
                     // Consultar todos los datos del producto
-                    $productsMaterial = $productsMaterialsDao->findAllProductsmaterials($j['id_product'], $id_company);
+                    $productsMaterial = $productsMaterialsDao->findAllProductsMaterials($j['id_product'], $id_company);
 
                     foreach ($productsMaterial as $k) {
                         // Obtener materia prima
@@ -620,7 +620,7 @@ $app->post('/updateMaterials', function (Request $request, Response $response, $
             // Checkear cantidades
             // $order = $generalOrdersDao->checkAccumulatedQuantityOrder($orders[$i]['id_order']);
             // Ficha tecnica
-            $productsMaterials = $productsMaterialsDao->findAllProductsmaterials($orders[$i]['id_product'], $id_company);
+            $productsMaterials = $productsMaterialsDao->findAllProductsMaterials($orders[$i]['id_product'], $id_company);
             $planCicles = $generalPlanCiclesMachinesDao->findAllPlanCiclesMachineByProduct($orders[$i]['id_product'], $id_company);
 
             if ($orders[$i]['status'] != 'EN PRODUCCION' && $orders[$i]['status'] != 'FABRICADO') {
@@ -664,7 +664,7 @@ $app->post('/updateMaterials', function (Request $request, Response $response, $
                     if (sizeof($programming) > 0) {
                         $generalOrdersDao->changeStatus($orders[$i]['id_order'], 4);
 
-                        // $productsMaterials = $productsMaterialsDao->findAllProductsmaterials($orders[$i]['id_product'], $id_company);
+                        // $productsMaterials = $productsMaterialsDao->findAllProductsMaterials($orders[$i]['id_product'], $id_company);
 
                     }
 

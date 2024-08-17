@@ -49,7 +49,7 @@ $(document).ready(function () {
   };
 
   /* Cargar pedidos */
-  loadTblOrders = (data) => {
+  const loadTblOrders = (data) => {
     tblOrder = $("#tblOrder").dataTable({
       destroy: true,
       data: data,

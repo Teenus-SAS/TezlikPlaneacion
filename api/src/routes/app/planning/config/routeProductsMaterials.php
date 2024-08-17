@@ -49,7 +49,7 @@ $app->get('/productsMaterials/{idProduct}', function (Request $request, Response
     session_start();
     $id_company = $_SESSION['id_company'];
 
-    $productMaterials = $productsMaterialsDao->findAllProductsmaterials($args['idProduct'], $id_company);
+    $productMaterials = $productsMaterialsDao->findAllProductsMaterials($args['idProduct'], $id_company);
 
     $response->getBody()->write(json_encode($productMaterials, JSON_NUMERIC_CHECK));
     return $response->withHeader('Content-Type', 'application/json');
@@ -59,7 +59,7 @@ $app->get('/allProductsMaterials', function (Request $request, Response $respons
     session_start();
     $id_company = $_SESSION['id_company'];
 
-    $productMaterials = $generalProductsMaterialsDao->findAllProductsmaterials($id_company);
+    $productMaterials = $generalProductsMaterialsDao->findAllProductsMaterials($id_company);
 
     $response->getBody()->write(json_encode($productMaterials));
     return $response->withHeader('Content-Type', 'application/json');
@@ -186,7 +186,7 @@ $app->post('/addProductsMaterials', function (Request $request, Response $respon
     session_start();
     $id_company = $_SESSION['id_company'];
     $dataProductMaterial = $request->getParsedBody();
-
+    $resolution = null;
     $dataProductMaterials = sizeof($dataProductMaterial);
 
     if ($dataProductMaterials > 1) {
@@ -201,7 +201,7 @@ $app->post('/addProductsMaterials', function (Request $request, Response $respon
 
             if ($resolution == null) {
                 // Consultar todos los datos del producto
-                $products = $productsMaterialsDao->findAllProductsmaterials($dataProductMaterial['idProduct'], $id_company);
+                $products = $productsMaterialsDao->findAllProductsMaterials($dataProductMaterial['idProduct'], $id_company);
 
                 foreach ($products as $arr) {
                     // Calculo Dias Inventario Materiales  
@@ -271,7 +271,7 @@ $app->post('/addProductsMaterials', function (Request $request, Response $respon
             if (isset($resolution['info'])) break;
 
             // Consultar todos los datos del producto
-            $products = $productsMaterialsDao->findAllProductsmaterials($productMaterials[$i]['idProduct'], $id_company);
+            $products = $productsMaterialsDao->findAllProductsMaterials($productMaterials[$i]['idProduct'], $id_company);
 
             foreach ($products as $arr) {
                 // Calculo Dias Inventario Materiales  
@@ -372,104 +372,104 @@ $app->post('/addProductsMaterials', function (Request $request, Response $respon
     //         $generalMaterialsDao->updateQuantityMaterial($orders[$i]['id_product'], $accumulated_quantity, 1);
     //     }
     // }
-    $orders = $generalOrdersDao->findAllOrdersByCompany($id_company);
+    if ($resolution == null) {
+        $orders = $generalOrdersDao->findAllOrdersByCompany($id_company);
 
-    for ($i = 0; $i < sizeof($orders); $i++) {
-        $status = true;
-        // Checkear cantidades
-        // $order = $generalOrdersDao->checkAccumulatedQuantityOrder($orders[$i]['id_order']);
-        // Ficha tecnica
-        $productsMaterials = $productsMaterialsDao->findAllProductsmaterials($orders[$i]['id_product'], $id_company);
-        $planCicles = $generalPlanCiclesMachinesDao->findAllPlanCiclesMachineByProduct($orders[$i]['id_product'], $id_company);
+        for ($i = 0; $i < sizeof($orders); $i++) {
+            $status = true;
+            // Checkear cantidades
+            // $order = $generalOrdersDao->checkAccumulatedQuantityOrder($orders[$i]['id_order']);
+            // Ficha tecnica
+            $productsMaterials = $productsMaterialsDao->findAllProductsMaterials($orders[$i]['id_product'], $id_company);
+            $planCicles = $generalPlanCiclesMachinesDao->findAllPlanCiclesMachineByProduct($orders[$i]['id_product'], $id_company);
 
-        if ($orders[$i]['status'] != 'EN PRODUCCION' && $orders[$i]['status'] != 'FABRICADO') {
-            if ($orders[$i]['original_quantity'] > $orders[$i]['accumulated_quantity']) {
+            if ($orders[$i]['status'] != 'EN PRODUCCION' && $orders[$i]['status'] != 'FABRICADO') {
+                if ($orders[$i]['original_quantity'] > $orders[$i]['accumulated_quantity']) {
 
-                if (sizeof($productsMaterials) == 0 || sizeof($planCicles) == 0) {
-                    $generalOrdersDao->changeStatus($orders[$i]['id_order'], 5);
-                    $status = false;
-                } else {
-                    foreach ($productsMaterials as $arr) {
-                        if ($arr['quantity_material'] <= 0) {
-                            $generalOrdersDao->changeStatus($orders[$i]['id_order'], 6);
-                            $status = false;
-                            break;
+                    if (sizeof($productsMaterials) == 0 || sizeof($planCicles) == 0) {
+                        $generalOrdersDao->changeStatus($orders[$i]['id_order'], 5);
+                        $status = false;
+                    } else {
+                        foreach ($productsMaterials as $arr) {
+                            if ($arr['quantity_material'] <= 0) {
+                                $generalOrdersDao->changeStatus($orders[$i]['id_order'], 6);
+                                $status = false;
+                                break;
+                            }
                         }
                     }
                 }
+
+                if ($status == true) {
+                    if ($orders[$i]['original_quantity'] <= $orders[$i]['accumulated_quantity']) {
+                        $generalOrdersDao->changeStatus($orders[$i]['id_order'], 2);
+                        $accumulated_quantity = $orders[$i]['accumulated_quantity'] - $orders[$i]['original_quantity'];
+                    } else {
+                        $accumulated_quantity = $orders[$i]['accumulated_quantity'];
+                        $generalOrdersDao->changeStatus($orders[$i]['id_order'], 1);
+                    }
+
+                    if ($orders[$i]['status'] != 'DESPACHO') {
+                        $date = date('Y-m-d');
+
+                        $generalOrdersDao->updateOfficeDate($orders[$i]['id_order'], $date);
+                    }
+
+                    $arr = $productsDao->findProductReserved($orders[$i]['id_product']);
+                    !isset($arr['reserved']) ? $arr['reserved'] = 0 : $arr;
+                    $productsDao->updateReservedByProduct($orders[$i]['id_product'], $arr['reserved']);
+
+                    $productsDao->updateAccumulatedQuantity($orders[$i]['id_product'], $accumulated_quantity, 1);
+                    $programming = $generalProgrammingDao->findProgrammingByOrder($orders[$i]['id_order']);
+                    if (sizeof($programming) > 0) {
+                        $generalOrdersDao->changeStatus($orders[$i]['id_order'], 4);
+                    }
+                }
+                foreach ($productsMaterials as $arr) {
+                    $k = $generalMaterialsDao->findReservedMaterial($arr['id_material']);
+                    !isset($k['reserved']) ? $k['reserved'] = 0 : $k;
+                    $generalMaterialsDao->updateReservedMaterial($arr['id_material'], $k['reserved']);
+                }
             }
+        }
 
-            if ($status == true) {
-                if ($orders[$i]['original_quantity'] <= $orders[$i]['accumulated_quantity']) {
-                    $generalOrdersDao->changeStatus($orders[$i]['id_order'], 2);
-                    $accumulated_quantity = $orders[$i]['accumulated_quantity'] - $orders[$i]['original_quantity'];
-                } else {
-                    $accumulated_quantity = $orders[$i]['accumulated_quantity'];
-                    $generalOrdersDao->changeStatus($orders[$i]['id_order'], 1);
+        $arr = $explosionMaterialsDao->findAllMaterialsConsolidated($id_company);
+
+        $materials = $explosionMaterialsDao->setDataEXMaterials($arr);
+
+        for ($i = 0; $i < sizeof($materials); $i++) {
+            if (intval($materials[$i]['available']) < 0) {
+                $data = [];
+                $data['idMaterial'] = $materials[$i]['id_material'];
+
+                $provider = $generalRMStockDao->findProviderByStock($materials[$i]['id_material']);
+
+                $id_provider = 0;
+
+                if ($provider) $id_provider = $provider['id_provider'];
+
+                $data['idProvider'] = $id_provider;
+                $data['applicationDate'] = '';
+                $data['deliveryDate'] = '';
+                $data['requiredQuantity'] = abs($materials[$i]['available']);
+                $data['purchaseOrder'] = '';
+
+                $requisition = $generalRequisitionsDao->findRequisitionByApplicationDate($materials[$i]['id_material']);
+
+                if (!$requisition)
+                    $generalRequisitionsDao->insertRequisitionAutoByCompany($data, $id_company);
+                else {
+                    $data['idRequisition'] = $requisition['id_requisition'];
+                    $generalRequisitionsDao->updateRequisitionAuto($data);
                 }
-
-                if ($orders[$i]['status'] != 'DESPACHO') {
-                    $date = date('Y-m-d');
-
-                    $generalOrdersDao->updateOfficeDate($orders[$i]['id_order'], $date);
+            } else {
+                $requisition = $generalRequisitionsDao->findRequisitionByApplicationDate($materials[$i]['id_material']);
+                if ($requisition) {
+                    $requisitionsDao->deleteRequisition($requisition['id_requisition']);
                 }
-
-                $arr = $productsDao->findProductReserved($orders[$i]['id_product']);
-                !isset($arr['reserved']) ? $arr['reserved'] = 0 : $arr;
-                $productsDao->updateReservedByProduct($orders[$i]['id_product'], $arr['reserved']);
-
-                $productsDao->updateAccumulatedQuantity($orders[$i]['id_product'], $accumulated_quantity, 1);
-                $programming = $generalProgrammingDao->findProgrammingByOrder($orders[$i]['id_order']);
-                if (sizeof($programming) > 0) {
-                    $generalOrdersDao->changeStatus($orders[$i]['id_order'], 4);
-                }
-            }
-            foreach ($productsMaterials as $arr) {
-                $k = $generalMaterialsDao->findReservedMaterial($arr['id_material']);
-                !isset($k['reserved']) ? $k['reserved'] = 0 : $k;
-                $generalMaterialsDao->updateReservedMaterial($arr['id_material'], $k['reserved']);
             }
         }
     }
-
-    // if ($resolution == null) {
-    $arr = $explosionMaterialsDao->findAllMaterialsConsolidated($id_company);
-
-    $materials = $explosionMaterialsDao->setDataEXMaterials($arr);
-
-    for ($i = 0; $i < sizeof($materials); $i++) {
-        if (intval($materials[$i]['available']) < 0) {
-            $data = [];
-            $data['idMaterial'] = $materials[$i]['id_material'];
-
-            $provider = $generalRMStockDao->findProviderByStock($materials[$i]['id_material']);
-
-            $id_provider = 0;
-
-            if ($provider) $id_provider = $provider['id_provider'];
-
-            $data['idProvider'] = $id_provider;
-            $data['applicationDate'] = '';
-            $data['deliveryDate'] = '';
-            $data['requiredQuantity'] = abs($materials[$i]['available']);
-            $data['purchaseOrder'] = '';
-
-            $requisition = $generalRequisitionsDao->findRequisitionByApplicationDate($materials[$i]['id_material']);
-
-            if (!$requisition)
-                $generalRequisitionsDao->insertRequisitionAutoByCompany($data, $id_company);
-            else {
-                $data['idRequisition'] = $requisition['id_requisition'];
-                $generalRequisitionsDao->updateRequisitionAuto($data);
-            }
-        } else {
-            $requisition = $generalRequisitionsDao->findRequisitionByApplicationDate($materials[$i]['id_material']);
-            if ($requisition) {
-                $requisitionsDao->deleteRequisition($requisition['id_requisition']);
-            }
-        }
-    }
-    // }
 
     $response->getBody()->write(json_encode($resp));
     return $response->withStatus(200)->withHeader('Content-Type', 'application/json');
@@ -500,7 +500,7 @@ $app->post('/updatePlanProductsMaterials', function (Request $request, Response 
 
         if ($resolution == null) {
             // Consultar todos los datos del producto
-            $products = $productsMaterialsDao->findAllProductsmaterials($dataProductMaterial['idProduct'], $id_company);
+            $products = $productsMaterialsDao->findAllProductsMaterials($dataProductMaterial['idProduct'], $id_company);
 
             foreach ($products as $arr) {
                 // Calculo Dias Inventario Materiales  
@@ -662,7 +662,7 @@ $app->post('/deletePlanProductMaterial', function (Request $request, Response $r
 
     // Calculo Dias Inventario Materiales  
     if ($resolution == null) {
-        $products = $productsMaterialsDao->findAllProductsmaterials($dataProductMaterial['idProduct'], $id_company);
+        $products = $productsMaterialsDao->findAllProductsMaterials($dataProductMaterial['idProduct'], $id_company);
 
         foreach ($products as $arr) {
             $inventory = $inventoryDaysDao->calcInventoryMaterialDays($arr['id_material']);
@@ -681,5 +681,43 @@ $app->post('/deletePlanProductMaterial', function (Request $request, Response $r
         $resp = array('error' => true, 'message' => 'No es posible eliminar la materia prima asignada, existe información asociada a ella');
 
     $response->getBody()->write(json_encode($resp));
+    return $response->withHeader('Content-Type', 'application/json');
+});
+
+$app->post('/calcQuantityFTM', function (Request $request, Response $response, $args) use (
+    $generalProductsDao,
+    $generalMaterialsDao,
+    $generalProductsMaterialsDao
+) {
+    session_start();
+    $id_company = $_SESSION['id_company'];
+    $arr = $request->getParsedBody();
+
+    $type = $arr['type'];
+    $dataMaterial = $generalMaterialsDao->findMaterialById($arr['idMaterial']);
+    $dataProduct = $generalProductsDao->findProductById($arr['idProduct']);
+    $weight = 0;
+
+    switch ($type) {
+        case '1': // Papel
+            $weight = (floatval($dataMaterial['grammage']) * floatval($dataProduct['length']) * floatval($dataProduct['total_width'])) / 10000000;
+
+            break;
+
+        default:
+            $quantity = floatval($arr['quantityCalc']);
+            $quantityFTM = 0;
+
+            $dataFTM = $generalProductsMaterialsDao->findProductsMaterialsByCompany($arr, $id_company);
+
+            if ($dataFTM) $quantityFTM = $dataFTM['quantity'];
+
+            $weight = $quantity * $quantityFTM;
+            break;
+    }
+
+    $resp = ['weight' => $weight];
+
+    $response->getBody()->write(json_encode($resp, JSON_NUMERIC_CHECK));
     return $response->withHeader('Content-Type', 'application/json');
 });

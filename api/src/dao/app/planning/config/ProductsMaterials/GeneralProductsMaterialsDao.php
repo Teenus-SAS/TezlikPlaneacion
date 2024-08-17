@@ -16,6 +16,25 @@ class GeneralProductsMaterialsDao
         $this->logger->pushHandler(new RotatingFileHandler(Constants::LOGS_PATH . 'querys.log', 20, Logger::DEBUG));
     }
 
+    public function findProductsMaterialsByCompany($arr, $id_company)
+    {
+        $connection = Connection::getInstance()->getConnection();
+        $stmt = $connection->prepare("SELECT pm.quantity 
+                                      FROM products_materials pm
+                                      INNER JOIN materials m ON m.id_material = pm.id_material
+                                      WHERE pm.id_product = :id_product AND pm.id_company = :id_company
+                                      AND m.id_material_type = :id_material_type
+                                      ORDER BY `pm`.`id_product_material` ASC LIMIT 1");
+        $stmt->execute([
+            'id_product' => $arr['idProduct'],
+            'id_material_type' => $arr['type'],
+            'id_company' => $id_company
+        ]);
+        $productsmaterial = $stmt->fetch($connection::FETCH_ASSOC);
+        $this->logger->notice("product", array('product' => $productsmaterial));
+        return $productsmaterial;
+    }
+
     public function findAllProductsMaterials($id_company)
     {
         $connection = Connection::getInstance()->getConnection();

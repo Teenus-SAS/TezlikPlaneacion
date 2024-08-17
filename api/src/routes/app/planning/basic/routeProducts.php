@@ -7,6 +7,7 @@ use TezlikPlaneacion\dao\GeneralCategoriesDao;
 use TezlikPlaneacion\dao\GeneralMaterialsDao;
 use TezlikPlaneacion\dao\GeneralOrdersDao;
 use TezlikPlaneacion\dao\GeneralPlanCiclesMachinesDao;
+use TezlikPlaneacion\dao\GeneralPMeasuresDao;
 use TezlikPlaneacion\dao\GeneralProgrammingDao;
 use TezlikPlaneacion\dao\InventoryDaysDao;
 use TezlikPlaneacion\dao\InvMoldsDao;
@@ -16,6 +17,7 @@ use TezlikPlaneacion\dao\ProductsInventoryDao;
 use TezlikPlaneacion\dao\ProductsMaterialsDao;
 
 $productsDao = new ProductsDao();
+$generalPMeasureDao = new GeneralPMeasuresDao();
 $productsInventoryDao = new ProductsInventoryDao();
 $generalProductsDao = new GeneralProductsDao();
 $generalOrdersDao = new GeneralOrdersDao();
@@ -35,7 +37,9 @@ use Psr\Http\Message\ServerRequestInterface as Request;
 
 /* Consulta todos */
 
-$app->get('/products', function (Request $request, Response $response, $args) use ($productsDao) {
+$app->get('/products', function (Request $request, Response $response, $args) use (
+    $productsDao,
+) {
     session_start();
     $id_company = $_SESSION['id_company'];
     $products = $productsDao->findAllProductsByCompany($id_company);
@@ -155,6 +159,7 @@ $app->post('/addProduct', function (Request $request, Response $response, $args)
 
     /* Inserta datos */
     $dataProducts = sizeof($dataProduct);
+    $resp = [];
 
     if ($dataProducts > 1) {
         $resolution = null;
@@ -163,7 +168,7 @@ $app->post('/addProduct', function (Request $request, Response $response, $args)
             $product = $generalProductsDao->findProductInventory($dataProduct['idProduct'], $id_company);
 
             if (!$product) {
-                $resolution = $productsDao->updateProductByCompany($dataProduct, $id_company);
+                $resolution = $productsInventoryDao->insertProductsInventory($dataProduct, $id_company);
             } else
                 $resp = array('info' => true, 'message' => 'El producto ya existe en la base de datos. Ingrese uno nuevo');
         } else {
@@ -175,26 +180,28 @@ $app->post('/addProduct', function (Request $request, Response $response, $args)
                 $lastProductId = $lastDataDao->lastInsertedProductId($id_company);
 
                 $dataProduct['idProduct'] = $lastProductId['id_product'];
+
+                if ($resolution == null)
+                    $resolution = $productsInventoryDao->insertProductsInventory($dataProduct, $id_company);
             } else
                 $resp = array('info' => true, 'message' => 'El producto ya existe en la base de datos. Ingrese uno nuevo');
         }
 
-        if ($resolution == null) {
-            if (sizeof($_FILES) > 0) $FilesDao->imageProduct($dataProduct['idProduct'], $id_company);
+        if (sizeof($resp) == 0) {
+            if ($resolution == null) {
+                if (sizeof($_FILES) > 0) $FilesDao->imageProduct($dataProduct['idProduct'], $id_company);
+
+                if ($resolution == null)
+                    $resolution = $generalProductsDao->updateAccumulatedQuantity($dataProduct['idProduct'], $dataProduct['quantity'], 1);
+            }
 
             if ($resolution == null)
-                $resolution = $productsInventoryDao->insertProductsInventory($dataProduct, $id_company);
-
-            if ($resolution == null)
-                $resolution = $generalProductsDao->updateAccumulatedQuantity($dataProduct['idProduct'], $dataProduct['quantity'], 1);
+                $resp = array('success' => true, 'message' => 'Producto creado correctamente');
+            else if (isset($resolution['info']))
+                $resp = array('info' => true, 'message' => $resolution['message']);
+            else
+                $resp = array('error' => true, 'message' => 'Ocurrió un error mientras ingresaba la información. Intente nuevamente');
         }
-
-        if ($resolution == null)
-            $resp = array('success' => true, 'message' => 'Producto creado correctamente');
-        else if (isset($resolution['info']))
-            $resp = array('info' => true, 'message' => $resolution['message']);
-        else
-            $resp = array('error' => true, 'message' => 'Ocurrió un error mientras ingresaba la información. Intente nuevamente');
     } else {
         $products = $dataProduct['importProducts'];
 
@@ -285,7 +292,7 @@ $app->post('/addProduct', function (Request $request, Response $response, $args)
         //         $k = $generalMaterialsDao->findReservedMaterial($arr['id_material']);
         //         !isset($k['reserved']) ? $k['reserved'] = 0 : $k;
         //         $generalMaterialsDao->updateReservedMaterial($arr['id_material'], $k['reserved']);
-        //         // $productsMaterials = $productsMaterialsDao->findAllProductsmaterials($orders[$i]['id_product'], $id_company);
+        //         // $productsMaterials = $productsMaterialsDao->findAllProductsMaterials($orders[$i]['id_product'], $id_company);
 
         //         // foreach ($productsMaterials as $arr) {
         //         //     
@@ -328,7 +335,7 @@ $app->post('/addProduct', function (Request $request, Response $response, $args)
                 // $order = $generalOrdersDao->checkAccumulatedQuantityOrder($orders[$i]['id_order']);
 
                 // Ficha tecnica
-                $productsMaterials = $productsMaterialsDao->findAllProductsmaterials($orders[$i]['id_product'], $id_company);
+                $productsMaterials = $productsMaterialsDao->findAllProductsMaterials($orders[$i]['id_product'], $id_company);
                 $planCicles = $generalPlanCiclesMachinesDao->findAllPlanCiclesMachineByProduct($orders[$i]['id_product'], $id_company);
 
                 if ($orders[$i]['status'] != 'EN PRODUCCION' && $orders[$i]['status'] != 'FABRICADO' && $orders[$i]['status'] != 'PROGRAMADO') {
@@ -372,7 +379,7 @@ $app->post('/addProduct', function (Request $request, Response $response, $args)
                         if (sizeof($programming) > 0) {
                             $generalOrdersDao->changeStatus($orders[$i]['id_order'], 4);
 
-                            // $productsMaterials = $productsMaterialsDao->findAllProductsmaterials($orders[$i]['id_product'], $id_company);
+                            // $productsMaterials = $productsMaterialsDao->findAllProductsMaterials($orders[$i]['id_product'], $id_company);
 
                         }
                     }
@@ -509,7 +516,7 @@ $app->post('/updatePlanProduct', function (Request $request, Response $response,
                 // Checkear cantidades
                 // $order = $generalOrdersDao->checkAccumulatedQuantityOrder($orders[$i]['id_order']);
                 // Ficha tecnica
-                $productsMaterials = $productsMaterialsDao->findAllProductsmaterials($orders[$i]['id_product'], $id_company);
+                $productsMaterials = $productsMaterialsDao->findAllProductsMaterials($orders[$i]['id_product'], $id_company);
                 $planCicles = $generalPlanCiclesMachinesDao->findAllPlanCiclesMachineByProduct($orders[$i]['id_product'], $id_company);
 
                 if ($orders[$i]['status'] != 'EN PRODUCCION' && $orders[$i]['status'] != 'FABRICADO' && $orders[$i]['status'] != 'PROGRAMADO') {
@@ -552,7 +559,7 @@ $app->post('/updatePlanProduct', function (Request $request, Response $response,
                         if (sizeof($programming) > 0) {
                             $generalOrdersDao->changeStatus($orders[$i]['id_order'], 4);
 
-                            // $productsMaterials = $productsMaterialsDao->findAllProductsmaterials($orders[$i]['id_product'], $id_company);
+                            // $productsMaterials = $productsMaterialsDao->findAllProductsMaterials($orders[$i]['id_product'], $id_company);
 
                         }
                     }
@@ -588,8 +595,22 @@ $app->post('/updatePlanProduct', function (Request $request, Response $response,
     return $response->withStatus(200)->withHeader('Content-Type', 'application/json');
 });
 
-$app->get('/deletePlanProduct/{id_product}', function (Request $request, Response $response, $args) use ($productsDao) {
-    $product = $productsDao->deleteProduct($args['id_product']);
+$app->get('/deletePlanProduct/{id_product}', function (Request $request, Response $response, $args) use (
+    $productsDao,
+    $productsInventoryDao,
+    $generalPMeasureDao
+) {
+    session_start();
+    $flag_products_measure = $_SESSION['flag_products_measure'];
+
+    if ($flag_products_measure == '0') {
+        $product = $productsDao->deleteProduct($args['id_product']);
+    }
+
+    $product = $productsInventoryDao->deleteProductInventory($args['id_product']);
+
+    // if ($flag_products_measure == '1')
+    //     $product = $generalPMeasureDao->deletePMeasure($args['id_product']);
 
     if ($product == null)
         $resp = array('success' => true, 'message' => 'Producto eliminado correctamente');

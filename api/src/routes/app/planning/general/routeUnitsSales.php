@@ -188,7 +188,7 @@ $app->post('/addUnitSales', function (Request $request, Response $response, $arg
 
         if ($resolution == null) {
             // Calcular stock material
-            $materials = $productMaterialsDao->findAllProductsmaterials($dataSale['idProduct'], $id_company);
+            $materials = $productMaterialsDao->findAllProductsMaterials($dataSale['idProduct'], $id_company);
 
             for ($i = 0; $i < sizeof($materials); $i++) {
                 if (isset($resolution['info'])) break;
@@ -313,7 +313,7 @@ $app->post('/addUnitSales', function (Request $request, Response $response, $arg
 
             if (isset($resolution['info'])) break;
             // Calcular stock material
-            $materials = $productMaterialsDao->findAllProductsmaterials($unitSales[$i]['idProduct'], $id_company);
+            $materials = $productMaterialsDao->findAllProductsMaterials($unitSales[$i]['idProduct'], $id_company);
 
             for ($j = 0; $j < sizeof($materials); $j++) {
                 if (isset($resolution['info'])) break;
@@ -407,7 +407,7 @@ $app->post('/updateUnitSale', function (Request $request, Response $response, $a
 
         if ($resolution == null) {
             // Calcular stock material
-            $materials = $productMaterialsDao->findAllProductsmaterials($dataSale['idProduct'], $id_company);
+            $materials = $productMaterialsDao->findAllProductsMaterials($dataSale['idProduct'], $id_company);
 
             for ($i = 0; $i < sizeof($materials); $i++) {
                 if (isset($resolution['info'])) break;
@@ -559,7 +559,7 @@ $app->post('/deleteUnitSale', function (Request $request, Response $response, $a
     $resolution = $unitSalesDao->deleteSale($dataSale['idUnitSales']);
 
     if ($resolution == null) {
-        $materials = $productMaterialsDao->findAllProductsmaterials($dataSale['idProduct'], $id_company);
+        $materials = $productMaterialsDao->findAllProductsMaterials($dataSale['idProduct'], $id_company);
         // $orders = $generalOrdersDao->findAllOrdersByProduct($dataSale['idProduct']);
         // $stock = 0;
 

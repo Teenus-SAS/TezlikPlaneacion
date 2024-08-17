@@ -28,7 +28,7 @@ $app->get('/store', function (Request $request, Response $response, $args) use (
     $programming = $programmingDao->findAllProgrammingByCompany($id_company);
 
     for ($i = 0; $i < sizeof($programming); $i++) {
-        $materials = $productsMaterialsDao->findAllProductsmaterials($programming[$i]['id_product'], $id_company);
+        $materials = $productsMaterialsDao->findAllProductsMaterials($programming[$i]['id_product'], $id_company);
 
         $status = true;
 

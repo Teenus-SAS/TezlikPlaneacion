@@ -59,7 +59,7 @@ $(document).ready(function () {
   if (flag_products_measure == '1') {
     $('#quantity').prop('readonly', true);
 
-    $(document).on('change keyup', '.calcWeight', function () {
+    $(document).on('change keyup', '.calcWeight',async function () {
       let idProduct = parseInt($('#selectNameProduct').val());
       let idMaterial = parseInt($('#refMaterial').val()); 
       let type = parseInt($('#materialType').val()); 
@@ -70,43 +70,23 @@ $(document).ready(function () {
         return false;
       }
 
-      let dataMaterials = JSON.parse(sessionStorage.getItem('dataMaterials'));
-      let dataProducts = JSON.parse(sessionStorage.getItem('dataProducts'));
+      let quantity = parseFloat($('#quantityCalc').val());
 
-      let dataM = dataMaterials.find(item => item.id_material == idMaterial);
-      let dataP = dataProducts.find(item => item.id_product == idProduct);
-      let weight = 0;
+      isNaN(quantity) ? quantity = 0 : quantity;
 
-      switch (type) {
-        case 1:// Papel
-
-          weight = (parseFloat(dataM.grammage) * parseFloat(dataP.length) * parseFloat(dataP.total_width)) / 10000000;
-          !isFinite(weight) ? (weight = 0) : weight;
-        
-          break; 
-        default: // Pegante y Tinta
-          let quantity = parseFloat($('#quantityCalc').val());
-
-          isNaN(quantity) ? quantity = 0 : quantity;
-          
-          let allData = tblConfigMaterials.rows().data().toArray();
-          allData.sort(function (a, b) {
-            return a.id_product_material - b.id_product_material;
-          }); 
-
-          let quantityCalc = 0;
-
-          if(allData){
-            let dataFTP = allData.find(item => item.id_material_type == 1);
-            quantityCalc = dataFTP.quantity;
-          }
-
-          weight = quantity * quantityCalc;
-
-          break;
-      } 
-
-      $('#quantity').val(weight);
+      $.ajax({
+        type: 'POST',
+        url: '/api/calcQuantityFTM',
+        data: {
+          idProduct: idProduct,
+          idMaterial: idMaterial,
+          type: type,
+          quantityCalc: quantity
+        },
+        success: function (resp) {
+          $('#quantity').val(resp.weight);
+        }
+      }); 
     });
   }
 

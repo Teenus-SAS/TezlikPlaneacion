@@ -1,17 +1,14 @@
 $(document).ready(function () {
   /* Ocultar panel crear cliente */
-$('#btnCloseClient').click(function (e) {
-    e.preventDefault();
-    $('#createClients').modal('hide');
-  });
+  $('.cardCreateClient').hide();
 
   /* Abrir panel crear cliente */
 
   $('#btnNewClient').click(function (e) {
     e.preventDefault();
 
-    $('.cardImportClient').hide(800);
-    $('#createClients').modal('show');
+    $('.cardImportClient').hide(800); 
+    $('.cardCreateClient').toggle(800);
 
     $('#btnCreateClient').html('Crear');
 
@@ -27,47 +24,10 @@ $('#btnCloseClient').click(function (e) {
 
     let idClient = sessionStorage.getItem('id_client');
 
-    if (idClient == '' || idClient == null) {
-      let nit = $('#nit').val();
-      let companyName = $('#companyName').val();
-      let address = $('#address').val();
-      let phone = $('#phone').val();
-      let city = $('#city').val();
-
-      if (
-        nit == '' ||
-        companyName == '' ||
-        address == '' ||
-        phone == '' ||
-        city == ''
-      ) {
-        toastr.error('Ingrese todos los campos');
-        return false;
-      }
-
-      let imgClient = $('#formFile')[0].files[0];
-
-      let client = new FormData(formCreateClient);
-      client.append('img', imgClient);
-
-      $.ajax({
-        type: 'POST',
-        url: '/api/addClient',
-        data: client,
-        contentType: false,
-        cache: false,
-        processData: false,
-
-        success: function (resp) {
-          $('#createClients').modal('hide');
-          $('#formFile').val('');
-          message(resp);
-          updateTable();
-        },
-      });
-      
+    if (idClient == '' || idClient == null) { 
+      checkDataClient('api/addClient', idClient);
     } else {
-      updateClient();
+      checkDataClient('/api/updateClient',idClient);
     }
   });
 
@@ -75,6 +35,7 @@ $('#btnCloseClient').click(function (e) {
 
   $(document).on('click', '.updateClient', function (e) {
     $('.cardImportClient').hide(800); 
+    $('.cardCreateClient').show(800); 
     $('#btnCreateClient').html('Actualizar');
 
     let row = $(this).parent().parent()[0];
@@ -87,10 +48,8 @@ $('#btnCloseClient').click(function (e) {
     $('#companyName').val(data.client);
     $('#address').val(data.address);
     $('#phone').val(data.phone);
-    $('#city').val(data.city);
-    if (data.img) avatar.src = data.img;
+    $('#city').val(data.city); 
 
-    $('#createClients').modal('show');
     $('#btnCreateClient').html('Actualizar');
 
     $('html, body').animate(
@@ -101,32 +60,39 @@ $('#btnCloseClient').click(function (e) {
     );
   });
 
-  updateClient = () => {
-    idClient = sessionStorage.getItem('id_client');
-    let type_client = sessionStorage.getItem('type_client');
-    let imgCompany = $('#formFile')[0].files[0];
+  const checkDataClient = async (url, idClient) => {
+    let nit = $('#nit').val();
+    let companyName = $('#companyName').val();
+    let address = $('#address').val();
+    let phone = $('#phone').val();
+    let city = $('#city').val();
 
-    let company = new FormData(formCreateClient);
-    company.append('idClient', idClient);
-    company.append('type', type_client);
-    company.append('img', imgCompany);
+    if (
+      nit == '' ||
+      companyName == '' ||
+      address == '' ||
+      phone == '' ||
+      city == ''
+    ) {
+      toastr.error('Ingrese todos los campos');
+      return false;
+    }
 
-    $.ajax({
-      type: 'POST',
-      url: '/api/updateClient',
-      data: company,
-      contentType: false,
-      cache: false,
-      processData: false,
+    let imgClient = $('#formFile')[0].files[0];
 
-      success: function (resp) {
-        $('#createClients').modal('hide');
-        $('#formFile').val('');
-        message(resp);
-        updateTable();
-      },
-    });
-  };
+    let client = new FormData(formCreateClient);
+    client.append('img', imgClient);
+    
+    if (idClient) {
+      client.append('idClient', idClient); 
+
+      let type_client = sessionStorage.getItem('type_client');
+      client.append('type', type_client); 
+    }
+
+    let resp = await sendDataPOST(url, client);
+    message(resp);
+  }; 
 
   /* Eliminar cliente */
   deleteFunction = () => {
@@ -152,7 +118,7 @@ $('#btnCloseClient').click(function (e) {
       callback: function (result) {
         if (result) {
           $.get(
-            `../../api/deleteClient/${id_client}`,
+            `/api/deleteClient/${id_client}`,
             function (data, textStatus, jqXHR) {
               message(data);
             }
@@ -319,6 +285,7 @@ $('#btnCloseClient').click(function (e) {
 
   message = (data) => {
     if (data.success == true) { 
+      $('.cardCreateClient').hide(800);
       $('.cardImportClients').hide(800);
       $('#formImportClients').trigger('reset');
       $('#formCreateClient').trigger('reset');

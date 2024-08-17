@@ -133,7 +133,7 @@ $app->get('/programming', function (Request $request, Response $response, $args)
     // $programming1 = $generalProgrammingDao->findAllOrdersByCompany($id_company);
 
     // for ($i = 0; $i < ($programming1); $i++) {
-    //     $materials = $productsMaterialsDao->findAllProductsmaterials($programming1[$i]['id_product'], $id_company);
+    //     $materials = $productsMaterialsDao->findAllProductsMaterials($programming1[$i]['id_product'], $id_company);
 
     //     $status = true;
 
@@ -255,7 +255,7 @@ $app->post('/saveProgramming', function (Request $request, Response $response, $
         $result = $generalOrdersDao->changeStatus($programmings[$i]['id_order'], 4);
 
         if ($result != null) break;
-        $productsMaterials = $productsMaterialsDao->findAllProductsmaterials($programmings[$i]['id_product'], $id_company);
+        $productsMaterials = $productsMaterialsDao->findAllProductsMaterials($programmings[$i]['id_product'], $id_company);
         $planCicles = $generalPlanCiclesMachinesDao->findAllPlanCiclesMachineByProduct($programmings[$i]['id_product'], $id_company);
 
         if (sizeof($productsMaterials) == 0 || sizeof($planCicles) == 0) {
@@ -279,7 +279,7 @@ $app->post('/saveProgramming', function (Request $request, Response $response, $
         foreach ($orders as $arr) {
             if ($arr['status'] != 'EN PRODUCCION' && $arr['status'] != 'ENTREGADO' && $arr['status'] != 'PROGRAMADO' && $arr['id_product'] == $programmings[$i]['id_product']) {
                 // Ficha tecnica
-                $productsMaterials = $productsMaterialsDao->findAllProductsmaterials($arr['id_product'], $id_company);
+                $productsMaterials = $productsMaterialsDao->findAllProductsMaterials($arr['id_product'], $id_company);
                 $planCicles = $generalPlanCiclesMachinesDao->findAllPlanCiclesMachineByProduct($arr['id_product'], $id_company);
 
                 if (sizeof($productsMaterials) == 0 || sizeof($planCicles) == 0) {
@@ -370,7 +370,7 @@ $app->post('/saveProgramming', function (Request $request, Response $response, $
 //         $result = $generalProgrammingDao->addMinutesProgramming($dataProgramming['idProgramming'], $dataProgramming['minutes']);
 
 //     if ($result == null) {
-//         $productsMaterials = $productsMaterialsDao->findAllProductsmaterials($dataProgramming['idProduct'], $id_company);
+//         $productsMaterials = $productsMaterialsDao->findAllProductsMaterials($dataProgramming['idProduct'], $id_company);
 
 //         if (sizeof($productsMaterials) == 0) {
 //             $generalOrdersDao->changeStatus($dataProgramming['order'], 'Sin Ficha Tecnica');
@@ -393,7 +393,7 @@ $app->post('/saveProgramming', function (Request $request, Response $response, $
 //         foreach ($orders as $arr) {
 //             if ($arr['status'] != 'En Produccion' && $arr['status'] != 'Entregado' && $arr['status'] != 'Programado' && $arr['id_product'] == $dataProgramming['idProduct']) {
 //                 // Ficha tecnica
-//                 $productsMaterials = $productsMaterialsDao->findAllProductsmaterials($arr['id_product'], $id_company);
+//                 $productsMaterials = $productsMaterialsDao->findAllProductsMaterials($arr['id_product'], $id_company);
 
 //                 if (sizeof($productsMaterials) == 0) {
 //                     $generalOrdersDao->changeStatus($arr['id_order'], 'Sin Ficha Tecnica');
@@ -467,7 +467,7 @@ $app->post('/deleteProgramming', function (Request $request, Response $response,
                 // $result = $generalOrdersDao->changeStatus($arr['id_order'], 'Programar');
 
                 // Ficha tecnica
-                $productsMaterials = $productsMaterialsDao->findAllProductsmaterials($arr['id_product'], $id_company);
+                $productsMaterials = $productsMaterialsDao->findAllProductsMaterials($arr['id_product'], $id_company);
                 $planCicles = $generalPlanCiclesMachinesDao->findAllPlanCiclesMachineByProduct($arr['id_product'], $id_company);
 
                 if (sizeof($productsMaterials) == 0 || sizeof($planCicles) == 0) {

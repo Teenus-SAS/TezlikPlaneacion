@@ -7,7 +7,8 @@ if (!isset($_SESSION)) {
 if (sizeof($_SESSION) == 0)
     header('location: /');
 ?>
-<?php //require_once dirname(dirname(__DIR__)) . '/modals/createOrders.php'; ?>
+<?php //require_once dirname(dirname(__DIR__)) . '/modals/createOrders.php'; 
+?>
 <!DOCTYPE html>
 <html lang="es">
 
@@ -114,40 +115,36 @@ if (sizeof($_SESSION) == 0)
                                     <div class="card-body">
                                         <form id="formCreateOrder">
                                             <div class="form-row">
-
                                                 <div class="col-sm-2 floating-label enable-floating-label show-label mt-2">
                                                     <label for="dateOrder">Fecha</label>
                                                     <input class="form-control" type="date" name="dateOrder" id="dateOrder" min="<?php echo date('Y-m-d'); ?>">
                                                 </div>
-                                                
                                                 <div class="col-sm-2 floating-label enable-floating-label show-label mt-2">
                                                     <label for="order">No Pedido</label>
                                                     <input class="form-control text-center" name="order" id="order">
                                                 </div>
-
                                                 <div class="col-sm-2 floating-label enable-floating-label show-label mt-2">
                                                     <label for="minDate">Fecha Min Entrega</label>
                                                     <input class="form-control" type="date" name="minDate" id="minDate" min="<?php echo date('Y-m-d'); ?>">
                                                 </div>
-
                                                 <div class="col-sm-2 floating-label enable-floating-label show-label mt-2">
                                                     <label for="">Fecha Max Entrega</label>
                                                     <input class="form-control" type="date" name="maxDate" id="maxDate" min="<?php echo date('Y-m-d'); ?>">
                                                 </div>
-
                                                 <div class="w-100"></div>
-
                                                 <div class="col-sm-2 floating-label enable-floating-label show- mb-3 label cardSelect">
                                                     <label for="refProduct">Referencia</label>
                                                     <select class="form-control" name="idProduct" id="refProduct"></select>
                                                 </div>
-
                                                 <div class="col-sm-8 floating-label enable-floating-label show- mb-3 label cardSelect">
                                                     <label for="selectNameProduct">Producto</label>
                                                     <select class="form-control" name="selectNameProduct" id="selectNameProduct"></select>
                                                 </div>
-
-                                                <div class="col-sm-2 floating-label enable-floating-label show-label cardDescription" style="margin-bottom:20px">
+                                                <div class="col-sm-2 floating-label enable-floating-label show-label" style="margin-bottom:20px">
+                                                    <label for="inptQuantity">Existencias </label>
+                                                    <input type="text" class="form-control text-center" id="inptQuantity" name="inptQuantity" readonly>
+                                                </div>
+                                                <div class="col-sm-2 floating-label enable-floating-label show-label" style="margin-bottom:20px">
                                                     <label for="originalQuantity">Cantidad requerida</label>
                                                     <input type="text" class="form-control text-center" id="originalQuantity" name="originalQuantity">
                                                 </div>

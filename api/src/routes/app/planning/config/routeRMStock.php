@@ -166,7 +166,7 @@ $app->post('/addRMStock', function (Request $request, Response $response, $args)
 
                 //         // Calcular precio total materias
                 //         // Consultar todos los datos del producto
-                //         $productsMaterial = $productsMaterialsDao->findAllProductsmaterials($j['id_product'], $id_company);
+                //         $productsMaterial = $productsMaterialsDao->findAllProductsMaterials($j['id_product'], $id_company);
 
                 //         // foreach ($productsMaterial as $k) {
                 //         //     // Obtener materia prima
@@ -281,7 +281,7 @@ $app->post('/addRMStock', function (Request $request, Response $response, $args)
 
             // Calcular precio total materias
             // Consultar todos los datos del producto
-            // $productsMaterial = $productsMaterialsDao->findAllProductsmaterials($j['id_product'], $id_company);
+            // $productsMaterial = $productsMaterialsDao->findAllProductsMaterials($j['id_product'], $id_company);
 
             // foreach ($productsMaterial as $k) {
             //     // Obtener materia prima
@@ -364,7 +364,7 @@ $app->post('/updateRMStock', function (Request $request, Response $response, $ar
 
             //         // Calcular precio total materias
             //         // Consultar todos los datos del producto
-            //         $productsMaterial = $productsMaterialsDao->findAllProductsmaterials($j['id_product'], $id_company);
+            //         $productsMaterial = $productsMaterialsDao->findAllProductsMaterials($j['id_product'], $id_company);
 
             //         foreach ($productsMaterial as $k) {
             //             // Obtener materia prima

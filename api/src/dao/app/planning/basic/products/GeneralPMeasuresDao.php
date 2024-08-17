@@ -31,4 +31,23 @@ class GeneralPMeasuresDao
         $product = $stmt->fetch($connection::FETCH_ASSOC);
         return $product;
     }
+
+    public function deletePMeasure($id_product)
+    {
+        try {
+            $connection = Connection::getInstance()->getConnection();
+
+            $sql = "SELECT * FROM products_measures WHERE id_product = :id_product";
+            $stmt = $connection->prepare($sql);
+            $stmt->execute(['id_product' => $id_product]);
+            $rows = $stmt->rowCount();
+
+            if ($rows > 0) {
+                $stmt = $connection->prepare("DELETE FROM products_measures WHERE id_product = :id_product");
+                $stmt->execute(['id_product' => $id_product]);
+            }
+        } catch (\Exception $e) {
+            return ['info' => true, 'message' => $e->getMessage()];
+        }
+    }
 }

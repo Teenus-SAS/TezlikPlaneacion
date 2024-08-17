@@ -19,9 +19,9 @@ class ProductsDao
   public function findAllProductsByCompany($id_company)
   {
     $connection = Connection::getInstance()->getConnection();
-    $stmt = $connection->prepare("SELECT p.id_product, p.reference, p.product, p.product AS descript, p.img, pi.quantity, pi.reserved, pi.minimum_stock, pi.days, pi.classification, 'UND' AS abbreviation, IFNULL(pm.length, 0) AS length, IFNULL(pm.total_width, 0) AS total_width
+    $stmt = $connection->prepare("SELECT p.id_product, p.reference, p.product, p.product AS descript, p.img, IFNULL(pi.id_product_inventory, 0) AS id_product_inventory, pi.quantity, pi.reserved, pi.minimum_stock, pi.days, pi.classification, 'UND' AS abbreviation, IFNULL(pm.length, 0) AS length, IFNULL(pm.total_width, 0) AS total_width
                                   FROM products p
-                                    INNER JOIN products_inventory pi ON pi.id_product = p.id_product
+                                    LEFT JOIN products_inventory pi ON pi.id_product = p.id_product
                                     LEFT JOIN products_measures pm ON pm.id_product = p.id_product
                                   WHERE p.id_company = :id_company");
     $stmt->execute(['id_company' => $id_company]);
@@ -94,8 +94,8 @@ class ProductsDao
       }
     } catch (\Exception $e) {
       $message = $e->getMessage();
-      if ($e->getCode() == 23000)
-        $message = 'No es posible eliminar, el producto esta asociado a cotización';
+      // if ($e->getCode() == 23000)
+      //   $message = 'No es posible eliminar, el producto esta asociado a cotización';
       $error = array('info' => true, 'message' => $message);
       return $error;
     }
