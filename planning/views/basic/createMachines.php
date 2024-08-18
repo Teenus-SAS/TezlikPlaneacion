@@ -258,6 +258,11 @@ if (sizeof($_SESSION) == 0)
                             <div class="col-12">
                                 <ul class="nav nav-tabs" id="pills-tab" role="tablist">
                                     <li class="nav-item">
+                                        <a class="nav-link selectNavigation" id="link-areas" data-toggle="pill" href="javascript:;" role="tab" aria-controls="pills-projects" aria-selected="false">
+                                            <i class="bi bi-gear-wide mr-1"></i>Áreas
+                                        </a>
+                                    </li>
+                                    <li class="nav-item">
                                         <a class="nav-link active selectNavigation" id="link-process" data-toggle="pill" href="javascript:;" role="tab" aria-controls="pills-activity" aria-selected="true">
                                             <i class="bi bi-diagram-3 mr-1"></i>Procesos
                                         </a>
@@ -267,11 +272,7 @@ if (sizeof($_SESSION) == 0)
                                             <i class="bi bi-gear-wide mr-1"></i>Máquinas
                                         </a>
                                     </li>
-                                    <li class="nav-item">
-                                        <a class="nav-link selectNavigation" id="link-areas" data-toggle="pill" href="javascript:;" role="tab" aria-controls="pills-projects" aria-selected="false">
-                                            <i class="bi bi-gear-wide mr-1"></i>Areas
-                                        </a>
-                                    </li>
+
                                 </ul>
                             </div>
                         </div>
@@ -279,23 +280,18 @@ if (sizeof($_SESSION) == 0)
                             <div class="col-12">
                                 <div class="card">
                                     <div class="card-body">
+                                        <div class="tab-pane cardAreas" style="display: none;">
+                                            <table class="fixed-table-loading table table-hover" id="tblAreas"></table>
+                                        </div>
                                         <div class="tab-pane cardProcess">
                                             <div class="table-responsive">
-                                                <table class="fixed-table-loading table table-hover" id="tblProcess">
-
-                                                </table>
+                                                <table class="fixed-table-loading table table-hover" id="tblProcess"></table>
                                             </div>
                                         </div>
                                         <div class="tab-pane cardMachines" style="display: none;">
-                                            <table class="fixed-table-loading table table-hover" id="tblMachines">
-
-                                            </table>
+                                            <table class="fixed-table-loading table table-hover" id="tblMachines"></table>
                                         </div>
-                                        <div class="tab-pane cardAreas" style="display: none;">
-                                            <table class="fixed-table-loading table table-hover" id="tblAreas">
 
-                                            </table>
-                                        </div>
                                     </div>
                                 </div>
                             </div>
