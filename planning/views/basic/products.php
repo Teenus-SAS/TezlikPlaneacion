@@ -104,10 +104,7 @@ if (sizeof($_SESSION) == 0)
                                                     <label for="">Ventanilla</label>
                                                     <input type="number" class="form-control text-center" id="window" name="window">
                                                 </div>
-                                                <!-- <div class="col-sm-2 floating-label enable-floating-label show-label">
-                                                    <label for="">Peso</label>
-                                                    <input type="number" class="form-control text-center" id="weight" name="weight" readonly>
-                                                </div> -->
+
                                                 <div class="col-sm-2 ml-2">
                                                     <button class="btn btn-success" id="btnCreatePMeasure">Crear</button>
                                                 </div>
