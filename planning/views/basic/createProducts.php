@@ -198,19 +198,19 @@ if (sizeof($_SESSION) == 0)
                                             <div class="form-row">
                                                 <?php if ($_SESSION['flag_products_measure'] == '1') { ?>
                                                     <div class="col-md-2 floating-label enable-floating-label show-label">
-                                                        <select class="form-control" id="materialType" name="materialType"></select>
-                                                        <label for="">Tipo Material</label>
+                                                        <label for="materialType">Tipo Material</label>
+                                                        <select class="form-control text-center" id="materialType" name="materialType"></select>
                                                     </div>
                                                 <?php } ?>
 
                                                 <div class="col-md-2 floating-label enable-floating-label show-label">
                                                     <label for="refRawMaterial">Referencia</label>
-                                                    <input type="text" class="form-control" id="refRawMaterial" name="refRawMaterial">
+                                                    <input type="text" class="form-control text-center" id="refRawMaterial" name="refRawMaterial">
                                                 </div>
 
                                                 <div class="col-md-6 floating-label enable-floating-label show-label">
                                                     <label for="nameRawMaterial">Nombre Materia Prima</label>
-                                                    <input type="text" class="form-control" id="nameRawMaterial" name="nameRawMaterial">
+                                                    <input type="text" class="form-control text-center" id="nameRawMaterial" name="nameRawMaterial">
                                                 </div>
 
                                                 <?php if ($_SESSION['flag_products_measure'] == '1') { ?>
@@ -224,11 +224,11 @@ if (sizeof($_SESSION) == 0)
                                             </div>
                                             <div class="form-row">
                                                 <div class="col-sm-3 floating-label enable-floating-label show-label" style="margin-bottom:20px">
-                                                    <select class="form-control" id="magnitudes" name="magnitude"></select>
+                                                    <select class="form-control text-center" id="magnitudes" name="magnitude"></select>
                                                     <label for="">Magnitud</label>
                                                 </div>
                                                 <div class="col-sm-3 floating-label enable-floating-label show-label" style="margin-bottom:20px">
-                                                    <select class="form-control" id="units" name="unit">
+                                                    <select class="form-control text-center" id="units" name="unit">
                                                         <option disabled selected>Seleccionar</option>
                                                     </select>
                                                     <label for="">Unidad</label>
