@@ -259,17 +259,17 @@ if (sizeof($_SESSION) == 0)
                                 <ul class="nav nav-tabs" id="pills-tab" role="tablist">
                                     <li class="nav-item">
                                         <a class="nav-link selectNavigation" id="link-areas" data-toggle="pill" href="javascript:;" role="tab" aria-controls="pills-projects" aria-selected="false">
-                                            <i class="bi bi-gear-wide mr-1"></i>Áreas
+                                            <i class="bi bi-diagram-3 mr-1"></i>Áreas
                                         </a>
                                     </li>
                                     <li class="nav-item">
                                         <a class="nav-link active selectNavigation" id="link-process" data-toggle="pill" href="javascript:;" role="tab" aria-controls="pills-activity" aria-selected="true">
-                                            <i class="bi bi-diagram-3 mr-1"></i>Procesos
+                                            <i class="fas fa-cogs mr-1"></i>Procesos
                                         </a>
                                     </li>
                                     <li class="nav-item">
                                         <a class="nav-link selectNavigation" id="link-machines" data-toggle="pill" href="javascript:;" role="tab" aria-controls="pills-projects" aria-selected="false">
-                                            <i class="bi bi-gear-wide mr-1"></i>Máquinas
+                                            <i class="fas fa-tools mr-1"></i>Máquinas
                                         </a>
                                     </li>
 
