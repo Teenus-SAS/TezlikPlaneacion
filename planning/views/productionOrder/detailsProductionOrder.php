@@ -138,15 +138,15 @@ if (sizeof($_SESSION) == 0)
 													<input id="txtNameP" type="text" class="form-control text-center">
 												</div>
 											</div>
-											<div class="col-sm-1 floating-label enable-floating-label show-label">
+											<div class="col-sm-2 floating-label enable-floating-label show-label">
 												<label for="">Ancho</label>
 												<input type="number" class="form-control text-center" id="width" name="width"></input>
 											</div>
-											<div class="col-sm-1 floating-label enable-floating-label show-label">
+											<div class="col-sm-2 floating-label enable-floating-label show-label">
 												<label for="">Alto</label>
 												<input type="number" class="form-control text-center" id="high" name="high">
 											</div>
-											<div class="col-sm-1 floating-label enable-floating-label show-label">
+											<div class="col-sm-2 floating-label enable-floating-label show-label">
 												<label for="">Largo</label>
 												<input type="number" class="form-control text-center" id="length" name="length">
 											</div>
