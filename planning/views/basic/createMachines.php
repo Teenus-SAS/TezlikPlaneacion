@@ -41,9 +41,9 @@ if (sizeof($_SESSION) == 0)
                         <div class="row align-items-center cardProcess">
                             <div class="col-sm-5 col-xl-6">
                                 <div class="page-title">
-                                    <h3 class="mb-1 font-weight-bold text-dark"><i class="fas fa-cogs mr-1"></i>Procesos y Máquinas</h3>
+                                    <h3 class="mb-1 font-weight-bold text-dark"><i class="fas fa-cogs mr-1"></i>Áreas, Procesos y Máquinas</h3>
                                     <ol class="breadcrumb mb-3 mb-md-0">
-                                        <li class="breadcrumb-item active">Creación de Procesos y Máquinas</li>
+                                        <li class="breadcrumb-item active">Creación de Áreas, Procesos y Máquinas</li>
                                     </ol>
                                 </div>
                             </div>
@@ -74,6 +74,7 @@ if (sizeof($_SESSION) == 0)
                                 </div>
                             </div>
                         </div>
+
                         <div class="row align-items-center cardAreas" style="display: none;">
                             <div class="col-sm-5 col-xl-6">
                                 <div class="page-title">
@@ -114,6 +115,31 @@ if (sizeof($_SESSION) == 0)
                                             </div>
                                         </div>
                                     </form>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Areas -->
+                <div class="page-content-wrapper mt--45 mb-5 cardCreateArea">
+                    <div class="container-fluid">
+                        <div class="row">
+                            <div class="col-12">
+                                <div class="card">
+                                    <div class="card-body">
+                                        <form id="formCreateArea">
+                                            <div class="form-row">
+                                                <div class="col-sm-10 floating-label enable-floating-label show-label">
+                                                    <input type="text" class="form-control" name="area" id="area">
+                                                    <label for="">Nombre</label>
+                                                </div>
+                                                <div class="col-sm mt-1">
+                                                    <button class="btn btn-success" id="btnCreateArea">Crear</button>
+                                                </div>
+                                            </div>
+                                        </form>
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -191,31 +217,6 @@ if (sizeof($_SESSION) == 0)
                                     </div>
                                 </div>
                             </form>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Areas -->
-                <div class="page-content-wrapper mt--45 mb-5 cardCreateArea">
-                    <div class="container-fluid">
-                        <div class="row">
-                            <div class="col-12">
-                                <div class="card">
-                                    <div class="card-body">
-                                        <form id="formCreateArea">
-                                            <div class="form-row">
-                                                <div class="col-sm-10 floating-label enable-floating-label show-label">
-                                                    <input type="text" class="form-control" name="area" id="area">
-                                                    <label for="">Nombre</label>
-                                                </div>
-                                                <div class="col-sm mt-1">
-                                                    <button class="btn btn-success" id="btnCreateArea">Crear</button>
-                                                </div>
-                                            </div>
-                                        </form>
-                                    </div>
-                                </div>
-                            </div>
                         </div>
                     </div>
                 </div>

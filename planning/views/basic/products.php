@@ -44,13 +44,13 @@ if (sizeof($_SESSION) == 0)
                                 <div class="page-title">
                                     <h3 class="mb-1 font-weight-bold text-dark">Productos</h3>
                                     <ol class="breadcrumb mb-3 mb-md-0">
-                                        <li class="breadcrumb-item active">Creación Medidas de Productos</li>
+                                        <li class="breadcrumb-item active">Creación de Productos</li>
                                     </ol>
                                 </div>
                             </div>
                             <div class="col-sm-7 col-xl-6 form-inline justify-content-sm-end">
                                 <div class="col-xs-2 mr-2">
-                                    <button class="btn btn-warning" id="btnNewPMeasure" name="btnNewPMeasure"><i class="bi bi-person-plus-fill"></i> Adicionar Medidas</button>
+                                    <button class="btn btn-warning" id="btnNewPMeasure" name="btnNewPMeasure"><i class="bi bi-person-plus-fill"></i> Adicionar Producto</button>
                                 </div>
                                 <div class="col-xs-2 py-2 mr-2">
                                     <button class="btn btn-info" id="btnImportNewPMeasure"><i class="bi bi-cloud-arrow-up-fill"></i> Importar</button>

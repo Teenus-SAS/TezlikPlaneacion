@@ -223,15 +223,15 @@ if (sizeof($_SESSION) == 0)
 
                                             </div>
                                             <div class="form-row">
-                                                <div class="col-sm-3 floating-label enable-floating-label show-label" style="margin-bottom:20px">
-                                                    <select class="form-control text-center" id="magnitudes" name="magnitude"></select>
+                                                <div class="col-sm-2 floating-label enable-floating-label show-label" style="margin-bottom:20px">
                                                     <label for="">Magnitud</label>
+                                                    <select class="form-control text-center" id="magnitudes" name="magnitude"></select>
                                                 </div>
-                                                <div class="col-sm-3 floating-label enable-floating-label show-label" style="margin-bottom:20px">
+                                                <div class="col-sm-2 floating-label enable-floating-label show-label" style="margin-bottom:20px">
+                                                    <label for="">Unidad</label>
                                                     <select class="form-control text-center" id="units" name="unit">
                                                         <option disabled selected>Seleccionar</option>
                                                     </select>
-                                                    <label for="">Unidad</label>
                                                 </div>
                                                 <div class="col-sm-2 floating-label enable-floating-label show-label">
                                                     <label for="mQuantity">Existencias</label>
