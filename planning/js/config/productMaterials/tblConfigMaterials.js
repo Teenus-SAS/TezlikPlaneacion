@@ -78,7 +78,7 @@ $(document).ready(function () {
           data: "quantity",
           className: "uniqueClassName dt-head-center",
           render: function (data) { 
-            return parseFloat(data).toLocaleString('es-CO', { maximumFractionDigits: 2 });
+            return parseFloat(data).toLocaleString('es-CO', { maximumFractionDigits: 8 });
           },
         },
         {
