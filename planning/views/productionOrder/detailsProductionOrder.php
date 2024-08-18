@@ -118,6 +118,13 @@ if (sizeof($_SESSION) == 0)
 													<input id="txtQuantityP" type="text" class="form-control text-center">
 												</div>
 											</div>
+											
+											<div class="col-12">
+												<div class="form-group floating-label enable-floating-label show-label">
+													<label for="">Cliente<span class="text-danger">*</span></label>
+													<input id="" name="" type="text" class="form-control text-center">
+												</div>
+											</div>
 
 										</div>
 										<hr>
