@@ -41,9 +41,9 @@ if (sizeof($_SESSION) == 0)
                         <div class="row">
                             <div class="col-sm-5 col-xl-7">
                                 <div class="page-title">
-                                    <h3 class="mb-1 font-weight-bold text-dark"><i class="fas fa-file-upload mr-1"></i>Requisiciones</h3>
+                                    <h3 class="mb-1 font-weight-bold text-dark"><i class="fas fa-file-upload mr-1"></i>Compras</h3>
                                     <ol class="breadcrumb mb-3 mb-md-0">
-                                        <li class="breadcrumb-item active">Creación de Requisiciones</li>
+                                        <li class="breadcrumb-item active">Creación de Requisiciones para Materia Prima</li>
                                     </ol>
                                 </div>
                             </div>

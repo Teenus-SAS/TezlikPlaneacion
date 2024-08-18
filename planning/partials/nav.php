@@ -26,7 +26,7 @@
                             <li class="nav-link planRequisitions" style="display: none;">
                             <?php } ?>
                             <a class="nav-link" href="/planning/requisitions">
-                                <i class="fas fa-shopping-cart mr-1"></i>Requisiciones
+                                <i class="fas fa-shopping-cart mr-1"></i>Compras
                                 <i class="bx bx-chevron-down"></i>
                             </a>
                             </li>
