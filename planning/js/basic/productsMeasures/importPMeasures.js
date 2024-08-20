@@ -91,7 +91,7 @@ $(document).ready(function () {
         }
         bootbox.confirm({
           title: '¿Desea continuar con la importación?',
-          message: `Se encontraron los siguientes registros:<br><br>Datos a insertar: ${resp.insert}`,
+          message: `Se encontraron los siguientes registros:<br><br>Datos a insertar: ${resp.insert}<br>Datos a actualizar: ${resp.update}`,
           buttons: {
             confirm: {
               label: 'Si',

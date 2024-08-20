@@ -7,32 +7,33 @@ $(document).ready(function () {
         let data = dataPOP.find(item => item.id_programming == id_programming);
         let dataFT = dataFTMaterials.filter(item => item.id_product == data.id_product);
 
+        $('#imgClient').html(`<img src="${data.img}" width="100px">`);
         // Orden Produccion
+        $('#txtNumOP').html(data.op);
         $('#txtNumOrder').html(data.num_order);
 
         let date_order = moment(data.date_order).format("DD/MM/YYYY");
         let min_date = moment(data.min_date_order).format("DD/MM/YYYY");
         let max_date = moment(data.max_date_order).format("DD/MM/YYYY");
         
-                $('#txtEDate').html(
+        $('#txtEDate').html(
             `<p><b class="font-weight-bold text-dark">Fecha de Emisión:</b>  ${date_order}</p>`
         ); 
         
         $('#txtMinDate').val(min_date);
         $('#txtMaxDate').val(max_date);
-        $('#txtQuantityP').val(data.quantity_order);
-
-        /*$('#txtMinDate').html(
-            `<p><b class="font-weight-bold text-dark">Fecha de Inicio de Producción:</b>  ${min_date}</p>`
-        );
-        $('#txtMaxDate').html(
-            `<p><b class="font-weight-bold text-dark">Fecha Estimada de Finalización:</b> ${max_date}</p>`
-        ); */
+        $('#txtQuantityP').val(data.quantity_order); 
+        $('#nameClient').val(data.client);
 
         // Info Producto
         $('#txtReferenceP').val(data.reference);
-        $('#txtNameP').val(data.product);
-        /* $('#txtQuantityP').html(data.quantity_order); */
+        $('#txtNameP').val(data.product); 
+        $('#width').val(data.width);
+        $('#high').val(data.high);
+        $('#length').val(data.length);
+        $('#usefulLength').val(data.useful_length);
+        $('#totalWidth').val(data.total_width);
+        $('#window').val(data.window);
 
         // Datatable Materiales 
         let body = document.getElementById('tblPOMaterialsBody');

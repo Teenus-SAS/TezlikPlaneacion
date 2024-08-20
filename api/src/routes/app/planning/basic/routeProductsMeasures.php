@@ -41,7 +41,7 @@ $app->post('/productsMeasuresDataValidation', function (Request $request, Respon
         $dataImportProduct = [];
 
         for ($i = 0; $i < count($products); $i++) {
-             /* if (
+            /* if (
                 empty($products[$i]['referenceProduct']) || empty($products[$i]['product']) || empty($products[$i]['width']) ||
                 empty($products[$i]['high']) || empty($products[$i]['length']) || empty($products[$i]['usefulLength']) ||
                 empty($products[$i]['totalWidth']) || empty($products[$i]['window'])
@@ -60,7 +60,7 @@ $app->post('/productsMeasuresDataValidation', function (Request $request, Respon
                 break;
             } */
 
-            
+
             $item = $products[$i];
             $refProduct = trim($item['referenceProduct']);
             $nameProduct = trim($item['product']);
@@ -164,7 +164,6 @@ $app->post('/addProductMeasure', function (Request $request, Response $response,
         for ($i = 0; $i < sizeof($products); $i++) {
             $findProduct = $generalProductsDao->findProduct($products[$i], $id_company);
             $products[$i]['idProduct'] = $findProduct['id_product'];
-            $products[$i]['weight'] = (floatval($products[$i]['grammage']) * floatval($products[$i]['usefulLength']) * floatval($products[$i]['totalWidth'])) / 10000000;
 
             $findProduct = $generalProductsDao->findProduct($products[$i], $id_company);
             if (!$findProduct) {

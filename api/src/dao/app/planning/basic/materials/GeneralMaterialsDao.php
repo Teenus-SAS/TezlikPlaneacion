@@ -46,7 +46,7 @@ class GeneralMaterialsDao
                                       FROM programming pg 
                                         LEFT JOIN plan_orders o ON o.id_order = pg.id_order
                                         LEFT JOIN products_materials pm ON pm.id_product = pg.id_product 
-                                      WHERE pm.id_material = :id_material AND o.status = 4 AND pg.new_programming = 1");
+                                      WHERE pm.id_material = :id_material AND o.status IN(4,7) AND pg.new_programming = 1");
         $stmt->execute([
             'id_material' => $id_material,
         ]);
