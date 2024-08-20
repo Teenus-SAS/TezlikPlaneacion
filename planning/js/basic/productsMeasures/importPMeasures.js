@@ -38,7 +38,7 @@ $(document).ready(function () {
     importFile(selectedFile)
       .then((data) => {
 
-        const expectedHeaders = ['referencia_producto', 'producto', 'gramaje','ancho','alto','largo','largo_util','ancho_total','ventanilla'];
+        const expectedHeaders = ['referencia_producto', 'producto', 'ancho', 'alto', 'largo', 'largo_util', 'ancho_total', 'ventanilla'];
         const actualHeaders = Object.keys(data[0]);
 
         const missingHeaders = expectedHeaders.filter(header => !actualHeaders.includes(header));
@@ -134,43 +134,8 @@ $(document).ready(function () {
 
   /* Descargar formato */
   $('#btnDownloadImportsProducts').click(async function (e) {
-    e.preventDefault();
-
-    // $('.cardBottons').hide();
+    e.preventDefault(); 
     
-    // let form = document.getElementById('formProducts');
-    // form.insertAdjacentHTML(
-    //   'beforeend',
-    //   `<div class="col-sm-1 cardLoading" style="margin-top: 7px; margin-left: 15px">
-    //     <div class="spinner-grow text-dark" role="status">
-    //         <span class="sr-only">Loading...</span>
-    //     </div>
-    //   </div>`
-    // );
-
-    // let wb = XLSX.utils.book_new();
-
-    // let data = [];
-
-    // namexlsx = 'Productos.xlsx';
-    // // url = '/api/products';
-    
-    // // let products = await searchData(url);
-    // let dataProducts = JSON.parse(sessionStorage.getItem('dataProducts'));
-
-    // if (dataProducts.length > 0) {
-    //   for (i = 0; i < dataProducts.length; i++) {
-    //     data.push({
-    //       referencia_producto: dataProducts[i].reference,
-    //       producto: dataProducts[i].product,
-    //       existencias: dataProducts[i].quantity
-    //     });
-    //   }
-
-    //   let ws = XLSX.utils.json_to_sheet(data);
-    //   XLSX.utils.book_append_sheet(wb, ws, 'Productos');
-    //   XLSX.writeFile(wb, namexlsx);
-    // } else {
     let url = 'assets/formatsXlsx/Medidas_Productos.xlsx';
 
     link = document.createElement('a');
@@ -181,12 +146,7 @@ $(document).ready(function () {
     link.click();
 
     document.body.removeChild(link);
-    delete link;
-    // }
-
-    // $('.cardLoading').remove();
-    // $('.cardBottons').show(400);
-    // $('#fileProducts').val('');
+    delete link; 
   });
  
 });
