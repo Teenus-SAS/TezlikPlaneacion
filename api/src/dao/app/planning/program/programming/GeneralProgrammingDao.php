@@ -31,6 +31,7 @@ class GeneralProgrammingDao
         $programming = $stmt->fetch($connection::FETCH_ASSOC);
         return $programming;
     }
+
     public function findAllProgrammingByCompany($id_company)
     {
         $connection = Connection::getInstance()->getConnection();
@@ -149,6 +150,21 @@ class GeneralProgrammingDao
         $stmt = $connection->prepare("SELECT * FROM programming WHERE id_order = :id_order");
         $stmt->execute([
             'id_order' => $id_order
+        ]);
+        $this->logger->info(__FUNCTION__, array('query' => $stmt->queryString, 'errors' => $stmt->errorInfo()));
+
+        $programming = $stmt->fetchAll($connection::FETCH_ASSOC);
+        return $programming;
+    }
+
+    public function findProgrammingByOrderAndProduct($id_order, $id_product)
+    {
+        $connection = Connection::getInstance()->getConnection();
+
+        $stmt = $connection->prepare("SELECT * FROM programming WHERE id_order = :id_order AND id_product = :id_product");
+        $stmt->execute([
+            'id_order' => $id_order,
+            'id_product' => $id_product
         ]);
         $this->logger->info(__FUNCTION__, array('query' => $stmt->queryString, 'errors' => $stmt->errorInfo()));
 

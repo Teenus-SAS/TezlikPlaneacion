@@ -219,6 +219,11 @@ $app->post('/saveProgramming', function (Request $request, Response $response, $
     $programmings = $dataProgramming['data'];
 
     for ($i = 0; $i < sizeof($programmings); $i++) {
+        $findProgramming = $generalProgrammingDao->findProgrammingByOrderAndProduct($programmings[$i]['id_order'], $programmings[$i]['id_product']);
+
+        !$findProgramming ? $new = 1 : $new = 1;
+        $programmings[$i]['new_programming'] = $new;
+
         $find = $generalProgrammingDao->findProgramming($programmings[$i]['id_programming'], $id_company);
 
         if (!$find || $programmings[$i]['bd_status'] == 0)

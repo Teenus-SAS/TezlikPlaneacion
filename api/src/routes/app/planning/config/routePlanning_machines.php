@@ -111,7 +111,7 @@ $app->post('/addPlanningMachines', function (Request $request, Response $respons
             $dataPMachine = $timeConvertDao->timeConverter($dataPMachines);
             $planningMachines = $planningMachinesDao->insertPlanMachinesByCompany($dataPMachine, $id_company);
 
-            $machines = $generalPlanCiclesMachinesDao->findAllPlanCiclesMachine($dataPMachine['idMachine']);
+            $machines = $generalPlanCiclesMachinesDao->findAllPlanCiclesMachine($dataPMachine['idMachine'], $id_company);
 
             foreach ($machines as $k) {
                 if (isset($planningMachines['info'])) break;
@@ -157,7 +157,7 @@ $app->post('/addPlanningMachines', function (Request $request, Response $respons
                 $resolution = $planningMachinesDao->updatePlanMachines($planningMachines[$i]);
             }
 
-            $machines = $generalPlanCiclesMachinesDao->findAllPlanCiclesMachine($planningMachines[$i]['idMachine']);
+            $machines = $generalPlanCiclesMachinesDao->findAllPlanCiclesMachine($planningMachines[$i]['idMachine'], $id_company);
 
             foreach ($machines as $k) {
                 if (isset($resolution['info'])) break;
@@ -199,7 +199,7 @@ $app->post('/updatePlanningMachines', function (Request $request, Response $resp
         $dataPMachine = $timeConvertDao->timeConverter($dataPMachines);
         $planningMachines = $planningMachinesDao->updatePlanMachines($dataPMachine);
 
-        $machines = $generalPlanCiclesMachinesDao->findAllPlanCiclesMachine($dataPMachine['idMachine']);
+        $machines = $generalPlanCiclesMachinesDao->findAllPlanCiclesMachine($dataPMachine['idMachine'], $id_company);
 
         foreach ($machines as $k) {
             if (isset($planningMachines['info'])) break;
@@ -233,9 +233,11 @@ $app->get('/deletePlanningMachines/{id_program_machine}/{id}', function (Request
     $generalPlanCiclesMachinesDao,
     $ciclesMachinesDao
 ) {
+    session_start();
+    $id_company = $_SESSION['id_company'];
     $planningMachines = $planningMachinesDao->deletePlanMachines($args['id_program_machine']);
 
-    $machines = $generalPlanCiclesMachinesDao->findAllPlanCiclesMachine($args['id_machine']);
+    $machines = $generalPlanCiclesMachinesDao->findAllPlanCiclesMachine($args['id_machine'], $id_company);
 
     foreach ($machines as $k) {
         if (isset($resolution['info'])) break;
