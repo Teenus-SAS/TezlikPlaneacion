@@ -72,9 +72,16 @@ if (sizeof($_SESSION) == 0)
                                                     <label for="">Referencia</label>
                                                     <input type="text" class="form-control text-center" name="referenceProduct" id="referenceProduct">
                                                 </div>
-                                                <div class="col-sm-8 floating-label enable-floating-label show-label" style="margin-bottom:5px">
+                                                <div class="col-sm-6 floating-label enable-floating-label show-label" style="margin-bottom:5px">
                                                     <label for="">Producto</label>
                                                     <input type="text" class="form-control" name="product" id="product">
+                                                </div>
+                                                <div class="col-sm-2 floating-label enable-floating-label show- mb-3 label cardSelect">
+                                                    <label for="ProdOrigen">Tipo</label>
+                                                    <select class="form-control" name="ProdOrigen" id="ProdOrigen">
+                                                        <option value="1">Externo</option>
+                                                        <option value="2">Manufacturado</option>
+                                                    </select>
                                                 </div>
                                                 <!-- <div class="col-sm-2 floating-label enable-floating-label show-label">
                                                     <label for="">Gramaje</label>
