@@ -41,7 +41,7 @@ $app->post('/productsMeasuresDataValidation', function (Request $request, Respon
         $dataImportProduct = [];
 
         for ($i = 0; $i < count($products); $i++) {
-            /*  if (
+             if (
                 empty($products[$i]['referenceProduct']) || empty($products[$i]['product']) || empty($products[$i]['width']) ||
                 empty($products[$i]['high']) || empty($products[$i]['length']) || empty($products[$i]['usefulLength']) ||
                 empty($products[$i]['totalWidth']) || empty($products[$i]['window'])
@@ -58,21 +58,9 @@ $app->post('/productsMeasuresDataValidation', function (Request $request, Respon
                 $i = $i + 2;
                 $dataImportProduct = array('error' => true, 'message' => "Campos vacios, fila: $i");
                 break;
-            } */
-
-            $fieldsToCheck = ['referenceProduct', 'product', 'width', 'high', 'length', 'usefulLength', 'totalWidth', 'window'];
-
-            foreach ($fieldsToCheck as $field) {
-                if (empty(trim($products[$i][$field]))) {
-                    $i += 2;
-                    $dataImportProduct = [
-                        'error' => true,
-                        'message' => "Campos vacíos, fila: $i"
-                    ];
-                    break;
-                }
             }
 
+            
             $item = $products[$i];
             $refProduct = trim($item['referenceProduct']);
             $nameProduct = trim($item['product']);
