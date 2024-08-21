@@ -47,20 +47,24 @@
                                     <?php } else { ?>
                                     <li class="nav-item dropdown planPrograms" style="display: none;">
                                     <?php } ?>
-                                    <a class="nav-link dropdown-toggle" href="javascript:void(0)" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                        <i class="bx bxs-customize mr-1"></i>Programa Producción
+                                    <a class="nav-link" href="/planning/programming">
+                                        <i class="bx bxs-customize mr-1"></i>Programar Producción
                                         <i class="bx bx-chevron-down"></i>
                                     </a>
-                                    <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-                                        <!-- <a class="dropdown-item" href="/planning/consolidated">
+                                    <!-- <a class="nav-link dropdown-toggle" href="javascript:void(0)" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                        <i class="bx bxs-customize mr-1"></i>Programa Producción
+                                        <i class="bx bx-chevron-down"></i>
+                                    </a> -->
+                                    <!-- <div class="dropdown-menu" aria-labelledby="navbarDropdown"> -->
+                                    <!-- <a class="dropdown-item" href="/planning/consolidated">
                                         <i class="bx bxs-customize mr-1"></i>
                                         <span> Consolidado</span>
                                         <i class="bx bx-chevron-right"></i>
                                     </a> -->
-                                        <a class="dropdown-item" href="/planning/programming"><i class="bx bxs-customize mr-1"></i>
+                                    <!--  <a class="dropdown-item" href="/planning/programming"><i class="bx bxs-customize mr-1"></i>
                                             <span> Programación</span>
                                             <i class="bx bx-chevron-right"></i></a>
-                                    </div>
+                                    </div> -->
                                     </li>
 
                                     <?php if ($_SESSION['explosion_of_material'] == 1 && $_SESSION['plan_planning_explosion_of_material'] == 1) { ?>
