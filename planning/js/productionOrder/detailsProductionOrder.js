@@ -84,8 +84,8 @@ $(document).ready(function () {
             });
         else
             quantity = quantity.toLocaleString("es-CO", {
-                minimumFractionDigits: 2,
-                maximumFractionDigits: 2
+                minimumFractionDigits: 4,
+                maximumFractionDigits: 4
             });
         
         return quantity;
