@@ -212,7 +212,7 @@ if (sizeof($_SESSION) == 0)
 										<hr>
 
 										<div class="row py-4">
-											<div class="col-10">
+											<div class="col-12">
 												<h5 class="font-weight-bold text-dark">Acabados Especiales</h5>
 											</div>
 
@@ -245,6 +245,10 @@ if (sizeof($_SESSION) == 0)
 											</div>
 											<div class="col-sm-2 floating-label enable-floating-label show-label">
 												<label for="">Refuerzo Base</label>
+												<input type="number" class="form-control text-center inputsCalc" name="totalWidth" readonly>
+											</div>
+											<div class="col-sm-2 floating-label enable-floating-label show-label">
+												<label for="">No Troq Manija</label>
 												<input type="number" class="form-control text-center inputsCalc" name="totalWidth" readonly>
 											</div>
 											<div class="col-sm-2 floating-label enable-floating-label show-label">
