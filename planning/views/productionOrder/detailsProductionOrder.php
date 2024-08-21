@@ -111,27 +111,27 @@ if (sizeof($_SESSION) == 0)
 										</div>
 										<hr>
 										<div class="row">
-											<div class="col-4">
+											<div class="col-2">
 												<div class="form-group floating-label enable-floating-label show-label">
-													<label for="numberWorkers">Fecha de Inicio de Producción</label>
+													<label for="numberWorkers">Fecha Inicio</label>
 													<input id="txtMinDate" type="text" class="form-control text-center" readonly>
 												</div>
 											</div>
-											<div class="col-4">
+											<div class="col-2">
 												<div class="form-group floating-label enable-floating-label show-label">
-													<label for="numberWorkers">Fecha de Finalización</label>
+													<label for="numberWorkers">Fecha Finalización</label>
 													<input id="txtMaxDate" type="text" class="form-control text-center" readonly>
 												</div>
 											</div>
 
-											<div class="col-4">
+											<div class="col-2">
 												<div class="form-group floating-label enable-floating-label show-label">
-													<label for="numberWorkers">Cantidad a Producir</label>
+													<label for="numberWorkers">Cantidad</label>
 													<input id="txtQuantityP" type="text" class="form-control text-center" readonly>
 												</div>
 											</div>
 
-											<div class="col-12">
+											<div class="col-6">
 												<div class="form-group floating-label enable-floating-label show-label">
 													<label for="">Cliente</label>
 													<input id="nameClient" type="text" class="form-control text-center" readonly>
