@@ -77,6 +77,9 @@ $(document).ready(function () {
         
         if (Math.abs(quantity) < 0.01) 
             return quantity.toLocaleString('es-CO', { minimumFractionDigits: 2, maximumFractionDigits: 9 });
+        
+        if (Math.abs(quantity) > 1) 
+            return quantity.toLocaleString('es-CO', { minimumFractionDigits: 2, maximumFractionDigits: 9 });
             
         if (abbreviation === "UND")
             quantity = Math.floor(quantity).toLocaleString("es-CO", {
