@@ -33,6 +33,7 @@ $(document).ready(function () {
   $('#btnNewPMeasure').click(function (e) {
     e.preventDefault();
     $(".cardCreatePMeasure").toggle(800);
+    $('.inputsMeasures').show();
     $(".cardImportPMeasure").hide(800);
     $("#btnCreatePMeasure").html("Crear Medida");
 
@@ -47,14 +48,10 @@ $(document).ready(function () {
     let option = this.value;
 
     switch (option) {
-      case value:
-        
+      case '1': // Comercializado
+        $('.inputsMeasures').hide(800);
         break;
-    
-      default:
-        break;
-    }
-    
+    }    
   }); 
 
   /* Crear producto */
@@ -112,9 +109,12 @@ $(document).ready(function () {
     let usefulLength = parseFloat($("#usefulLength").val());
     let totalWidth = parseFloat($("#totalWidth").val());
     let window = parseFloat($("#window").val());
-    //let weight = parseFloat($("#weight").val());
+    let prodOrigin = parseFloat($("#prodOrigin").val());
 
-    let data = idProductType * width * high * length * usefulLength * totalWidth;
+    let data = 1 * idProductType;
+
+    if(prodOrigin == '1')
+      data = width * high * length * usefulLength * totalWidth;
 
     if (ref.trim() == "" || !ref.trim() || prod.trim() == "" || !prod.trim()|| isNaN(data) || data <= 0) {
       toastr.error("Ingrese todos los campos");

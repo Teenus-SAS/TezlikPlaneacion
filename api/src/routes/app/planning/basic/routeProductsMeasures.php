@@ -44,25 +44,50 @@ $app->post('/productsMeasuresDataValidation', function (Request $request, Respon
         $dataImportProduct = [];
 
         for ($i = 0; $i < count($products); $i++) {
-            if (
-                empty($products[$i]['referenceProduct']) || empty($products[$i]['product']) || empty($products[$i]['width']) ||
-                empty($products[$i]['high']) || empty($products[$i]['length']) || empty($products[$i]['usefulLength']) ||
-                empty($products[$i]['totalWidth']) || empty($products[$i]['window']) || empty($products[$i]['productType'])
-            ) {
-                $i = $i + 2;
-                $dataImportProduct = array('error' => true, 'message' => "Campos vacios, fila: $i");
-                break;
+            $origin = $products[$i]['origin'];
+
+            switch ($origin) {
+                case 'COMERCIALIZADO':
+                    if (
+                        empty($products[$i]['referenceProduct']) || empty($products[$i]['product']) || empty($products[$i]['productType'])
+                    ) {
+                        $i = $i + 2;
+                        $dataImportProduct = array('error' => true, 'message' => "Campos vacios, fila: $i");
+                        break;
+                    }
+
+                    if (
+                        empty(trim($products[$i]['referenceProduct'])) || empty(trim($products[$i]['product'])) || empty(trim($products[$i]['productType']))
+                    ) {
+                        $i = $i + 2;
+                        $dataImportProduct = array('error' => true, 'message' => "Campos vacios, fila: $i");
+                        break;
+                    }
+                    break;
+
+                default:
+                    if (
+                        empty($products[$i]['referenceProduct']) || empty($products[$i]['product']) || empty($products[$i]['width']) ||
+                        empty($products[$i]['high']) || empty($products[$i]['length']) || empty($products[$i]['usefulLength']) ||
+                        empty($products[$i]['totalWidth']) || empty($products[$i]['window']) || empty($products[$i]['productType'])
+                    ) {
+                        $i = $i + 2;
+                        $dataImportProduct = array('error' => true, 'message' => "Campos vacios, fila: $i");
+                        break;
+                    }
+
+                    if (
+                        empty(trim($products[$i]['referenceProduct'])) || empty(trim($products[$i]['product'])) || empty(trim($products[$i]['width'])) ||
+                        empty(trim($products[$i]['high'])) || empty(trim($products[$i]['length'])) || empty(trim($products[$i]['usefulLength'])) ||
+                        empty(trim($products[$i]['totalWidth'])) || empty(trim($products[$i]['window'])) || empty(trim($products[$i]['productType']))
+                    ) {
+                        $i = $i + 2;
+                        $dataImportProduct = array('error' => true, 'message' => "Campos vacios, fila: $i");
+                        break;
+                    }
+                    break;
             }
 
-            if (
-                empty(trim($products[$i]['referenceProduct'])) || empty(trim($products[$i]['product'])) || empty(trim($products[$i]['width'])) ||
-                empty(trim($products[$i]['high'])) || empty(trim($products[$i]['length'])) || empty(trim($products[$i]['usefulLength'])) ||
-                empty(trim($products[$i]['totalWidth'])) || empty(trim($products[$i]['window'])) || empty(trim($products[$i]['productType']))
-            ) {
-                $i = $i + 2;
-                $dataImportProduct = array('error' => true, 'message' => "Campos vacios, fila: $i");
-                break;
-            }
 
             $item = $products[$i];
             $refProduct = trim($item['referenceProduct']);

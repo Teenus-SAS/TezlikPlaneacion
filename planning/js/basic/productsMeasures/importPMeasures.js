@@ -38,7 +38,7 @@ $(document).ready(function () {
     importFile(selectedFile)
       .then((data) => {
 
-        const expectedHeaders = ['referencia_producto', 'producto', 'tipo_producto', 'ancho', 'alto', 'largo', 'largo_util', 'ancho_total', 'ventanilla'];
+        const expectedHeaders = ['referencia_producto', 'producto', 'tipo_producto', 'ancho', 'alto', 'largo', 'largo_util', 'ancho_total', 'ventanilla', 'origen'];
         const actualHeaders = Object.keys(data[0]);
 
         const missingHeaders = expectedHeaders.filter(header => !actualHeaders.includes(header));
@@ -56,13 +56,13 @@ $(document).ready(function () {
             referenceProduct: item.referencia_producto,
             product: item.producto,
             productType: item.tipo_producto,
-            grammage: item.gramaje,
             width: item.ancho,
             high: item.alto,
             length: item.largo,
             usefulLength: item.largo_util,
             totalWidth: item.ancho_total,
             window: item.ventanilla, 
+            origin: item.origen,
           };
         });
         checkProduct(productsToImport);

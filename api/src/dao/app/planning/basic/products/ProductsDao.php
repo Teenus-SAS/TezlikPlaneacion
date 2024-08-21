@@ -24,7 +24,7 @@ class ProductsDao
                                   FROM products p
                                     LEFT JOIN products_inventory pi ON pi.id_product = p.id_product
                                     LEFT JOIN products_measures pm ON pm.id_product = p.id_product
-                                    LEFT JOIN products_type pt ON pt.id_product = p.id_product
+                                    LEFT JOIN products_type pt ON pt.id_product_type = p.id_product_type
                                   WHERE p.id_company = :id_company");
     $stmt->execute(['id_company' => $id_company]);
 

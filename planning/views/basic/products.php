@@ -107,27 +107,27 @@ if (sizeof($_SESSION) == 0)
                                                     <select class="form-control" name="idProductType" id="idProductType">
                                                     </select>
                                                 </div>
-                                                <div class="col-sm-1 floating-label enable-floating-label show-label">
+                                                <div class="col-sm-1 floating-label enable-floating-label show-label inputsMeasures">
                                                     <label for="">Ancho</label>
                                                     <input type="number" class="form-control text-center" id="width" name="width"></input>
                                                 </div>
-                                                <div class="col-sm-1 floating-label enable-floating-label show-label">
+                                                <div class="col-sm-1 floating-label enable-floating-label show-label inputsMeasures">
                                                     <label for="">Alto</label>
                                                     <input type="number" class="form-control text-center" id="high" name="high">
                                                 </div>
-                                                <div class="col-sm-1 floating-label enable-floating-label show-label">
+                                                <div class="col-sm-1 floating-label enable-floating-label show-label inputsMeasures">
                                                     <label for="">Largo</label>
                                                     <input type="number" class="form-control text-center" id="length" name="length">
                                                 </div>
-                                                <div class="col-sm-2 floating-label enable-floating-label show-label">
+                                                <div class="col-sm-2 floating-label enable-floating-label show-label inputsMeasures">
                                                     <label for="">Largo Útil</label>
                                                     <input type="number" class="form-control text-center inputsCalc" id="usefulLength" name="usefulLength">
                                                 </div>
-                                                <div class="col-sm-2 floating-label enable-floating-label show-label">
+                                                <div class="col-sm-2 floating-label enable-floating-label show-label inputsMeasures">
                                                     <label for="">Ancho Total</label>
                                                     <input type="number" class="form-control text-center inputsCalc" id="totalWidth" name="totalWidth">
                                                 </div>
-                                                <div class="col-sm-2 floating-label enable-floating-label show-label">
+                                                <div class="col-sm-2 floating-label enable-floating-label show-label inputsMeasures">
                                                     <label for="">Ventanilla</label>
                                                     <input type="number" class="form-control text-center" id="window" name="window">
                                                 </div>
