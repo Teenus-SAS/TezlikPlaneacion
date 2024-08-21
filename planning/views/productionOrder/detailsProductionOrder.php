@@ -212,7 +212,7 @@ if (sizeof($_SESSION) == 0)
 										<hr>
 
 										<div class="row py-4">
-											<div class="col-12">
+											<div class="col-12 mb-3">
 												<h5 class="font-weight-bold text-dark">Acabados Especiales</h5>
 											</div>
 
@@ -240,7 +240,7 @@ if (sizeof($_SESSION) == 0)
 												<input type="number" class="form-control text-center" id="length" readonly>
 											</div>
 											<div class="col-sm-2 floating-label enable-floating-label show-label">
-												<label for="">Manija Troquelada Sencilla</label>
+												<label for="">Manija Troq Sencilla</label>
 												<input type="number" class="form-control text-center inputsCalc" name="usefulLength" readonly>
 											</div>
 											<div class="col-sm-2 floating-label enable-floating-label show-label">
@@ -256,15 +256,15 @@ if (sizeof($_SESSION) == 0)
 												<input type="number" class="form-control text-center" id="window" readonly>
 											</div>
 											<div class="col-sm-2 floating-label enable-floating-label show-label">
-												<label for="">Cantidad Refuerzo Base</label>
+												<label for="">Cant Refuerzo Base</label>
 												<input type="number" class="form-control text-center" id="window" readonly>
 											</div>
 											<div class="col-sm-2 floating-label enable-floating-label show-label">
-												<label for="">Cantidad Refuerzo Laterial MTQ</label>
+												<label for="">Cant Refuerzo Laterial MTQ</label>
 												<input type="number" class="form-control text-center" id="window" readonly>
 											</div>
 											<div class="col-sm-2 floating-label enable-floating-label show-label">
-												<label for="">Cantidad Manijas Trenzadas</label>
+												<label for="">Cant Manijas Trenzadas</label>
 												<input type="number" class="form-control text-center" id="window" readonly>
 											</div>
 										</div>
