@@ -84,7 +84,7 @@ if (sizeof($_SESSION) == 0)
 										</div> -->
 										<div class="row">
 											<div class="col-sm-3">
-												<div id="imgClient">
+												<div id="logo">
 												</div>
 											</div>
 											<div class="col-sm-9">
@@ -313,6 +313,8 @@ if (sizeof($_SESSION) == 0)
 
 	<?php include_once dirname(dirname(dirname(__DIR__))) . '/global/partials/scriptsJS.php'; ?>
 	<script src="/planning/js/productionOrder/detailsProductionOrder.js"></script>
+	<script src="/global/js/global/companyData.js"></script>
+
 </body>
 
 </html>

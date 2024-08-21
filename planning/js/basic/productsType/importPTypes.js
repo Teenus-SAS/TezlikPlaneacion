@@ -1,22 +1,23 @@
 $(document).ready(function () {
   let selectedFile;
 
-  $('.cardImportPMeasure').hide();
+  $('.cardImportPType').hide();
 
-  $('#btnImportNewPMeasure').click(function (e) {
+  $('#btnNewImportPType').click(function (e) {
     e.preventDefault();
-    $('.cardCreatePMeasure').hide(800);
-    $('.cardImportPMeasure').toggle(800);
+    $('.cardCreatePType').hide(800);
+    $('.cardImportPType').toggle(800);
   });
 
-  $('#fileProducts').change(function (e) {
+  $('#filePType').change(function (e) {
     e.preventDefault();
     selectedFile = e.target.files[0];
   });
 
-  $('#btnImportProducts').click(function (e) {
+  $('#btnImportPType').click(function (e) {
     e.preventDefault();
-    file = $('#fileProducts').val();
+
+    file = $('#filePType').val();
 
     if (!file) {
       toastr.error('Seleccione un archivo');
@@ -25,7 +26,7 @@ $(document).ready(function () {
 
     $('.cardBottons').hide();
 
-    let form = document.getElementById('formProducts');
+    let form = document.getElementById('formPType');
     form.insertAdjacentHTML(
       'beforeend',
       `<div class="col-sm-1 cardLoading" style="margin-top: 7px; margin-left: 15px">
@@ -37,8 +38,7 @@ $(document).ready(function () {
 
     importFile(selectedFile)
       .then((data) => {
-
-        const expectedHeaders = ['referencia_producto', 'producto', 'tipo_producto', 'ancho', 'alto', 'largo', 'largo_util', 'ancho_total', 'ventanilla'];
+        const expectedHeaders = ['tipo_producto'];
         const actualHeaders = Object.keys(data[0]);
 
         const missingHeaders = expectedHeaders.filter(header => !actualHeaders.includes(header));
@@ -46,53 +46,46 @@ $(document).ready(function () {
         if (missingHeaders.length > 0) {
           $('.cardLoading').remove();
           $('.cardBottons').show(400);
-          $('#fileProducts').val('');
+          $('#filePType').val('');
           toastr.error('Archivo no corresponde a el formato. Verifique nuevamente');
           return false;
         }
 
-        let productsToImport = data.map((item) => {
+        let productTypeToImport = data.map((item) => {
           return {
-            referenceProduct: item.referencia_producto,
-            product: item.producto,
             productType: item.tipo_producto,
-            grammage: item.gramaje,
-            width: item.ancho,
-            high: item.alto,
-            length: item.largo,
-            usefulLength: item.largo_util,
-            totalWidth: item.ancho_total,
-            window: item.ventanilla, 
           };
         });
-        checkProduct(productsToImport);
+        checkPType(productTypeToImport);
       })
       .catch(() => {
         $('.cardLoading').remove();
         $('.cardBottons').show(400);
-        $('#fileProducts').val('');
+        $('#filePType').val('');
+        
         toastr.error('Ocurrio un error. Intente Nuevamente');
       });
   });
 
   /* Mensaje de advertencia */
-  const checkProduct = (data) => {
+  const checkPType = (data) => {
     $.ajax({
       type: 'POST',
-      url: '/api/productsMeasuresDataValidation',
+      url: '/api/productsTypeDataValidation',
       data: { importProducts: data },
       success: function (resp) {
         if (resp.error == true) {
           $('.cardLoading').remove();
           $('.cardBottons').show(400);
-          $('#fileProducts').val('');
+          $('#filePType').val('');
+          $('#formImportPType').trigger('reset');
           toastr.error(resp.message);
-          $('#formImportProduct').trigger('reset');
           return false;
         }
+
         bootbox.confirm({
           title: '¿Desea continuar con la importación?',
-          message: `Se encontraron los siguientes registros:<br><br>Datos a insertar: ${resp.insert}<br>Datos a actualizar: ${resp.update}`,
+          message: `Se han encontrado los siguientes registros:<br><br>Datos a insertar: ${resp.insert} <br>Datos a actualizar: ${resp.update}`,
           buttons: {
             confirm: {
               label: 'Si',
@@ -105,11 +98,11 @@ $(document).ready(function () {
           },
           callback: function (result) {
             if (result) {
-              saveProductTable(data);
+              saveProductsType(data);
             } else {
               $('.cardLoading').remove();
               $('.cardBottons').show(400);
-              $('#fileProducts').val('');
+              $('#filePType').val('');
             }
           },
         });
@@ -117,29 +110,28 @@ $(document).ready(function () {
     });
   };
 
-  /* Guardar Importacion */
-  const saveProductTable = (data) => {
+  const saveProductsType = (data) => {
     $.ajax({
       type: 'POST',
-      url: '/api/addProductMeasure',
-      //data: data,
+      url: '/api/addProductsTypes',
       data: { importProducts: data },
       success: function (r) {
         $('.cardLoading').remove();
         $('.cardBottons').show(400);
-        $('#fileProducts').val('');
-        messageProducts(r);
+        $('#filePType').val('');
+        messagePType(r);
       },
     });
   };
 
   /* Descargar formato */
-  $('#btnDownloadImportsProducts').click(async function (e) {
-    e.preventDefault(); 
-    
-    let url = 'assets/formatsXlsx/Medidas_Productos.xlsx';
+  $('#btnDownloadImportsPType').click(function (e) {
+    e.preventDefault();
+
+    url = 'assets/formatsXlsx/Tipos_Productos.xlsx';
 
     link = document.createElement('a');
+
     link.target = '_blank';
 
     link.href = url;
@@ -147,7 +139,6 @@ $(document).ready(function () {
     link.click();
 
     document.body.removeChild(link);
-    delete link; 
+    delete link;
   });
- 
 });

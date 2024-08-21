@@ -50,12 +50,11 @@ $(document).ready(function () {
             ? `<img src="${data}" alt="" style="width:80px;border-radius:100px">`
             : "",
       },
-      /*  {
-        title: "Gramaje",
-        data: 'grammage',
-        className: "uniqueClassName dt-head-center",
-        render: (data) => parseFloat(data).toLocaleString('es-CO', { maximumFractionDigits: 2 }),
-      }, */
+       {
+        title: "Tipo",
+        data: 'product_type',
+        className: "uniqueClassName dt-head-center", 
+      }, 
       {
         title: "Ancho",
         data: "width",

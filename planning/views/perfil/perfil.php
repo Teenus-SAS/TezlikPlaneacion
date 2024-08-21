@@ -265,7 +265,7 @@ if (sizeof($_SESSION) == 0)
                                             </div>
                                             <div class="col-sm-4 floating-label enable-floating-label show-label">
                                                 <label class="form-label">NIT</label>
-                                                <input class="form-control text-center general" type="number" id="nit" name="companyNIT" readonly>
+                                                <input class="form-control text-center general" type="text" id="nit" name="companyNIT" readonly>
                                             </div>
                                             <div class="col-sm-4 floating-label enable-floating-label show-label">
                                                 <label class="form-label">Ciudad</label>
@@ -279,7 +279,7 @@ if (sizeof($_SESSION) == 0)
                                             </div>
                                             <div class="col-sm-6 floating-label enable-floating-label show-label">
                                                 <label class="form-label">Telefono</label>
-                                                <input class="form-control text-center general" type="number" id="phone" name="companyTel" readonly>
+                                                <input class="form-control text-center general" type="text" id="phone" name="companyTel" readonly>
                                             </div>
                                         </div>
                                         <div class="form-row">

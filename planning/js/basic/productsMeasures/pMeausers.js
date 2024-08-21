@@ -1,6 +1,32 @@
 $(document).ready(function () { 
-  /* Ocultar panel crear producto */
+   $('.selectNavigation').click(function (e) {
+    e.preventDefault();
 
+    let option = this.id;
+    $('.cardPMeasure').hide();
+    $('.cardCreatePMeasure').hide();
+    $('.cardImportPMeasure').hide();
+    $('.cardPTypes').hide();
+    $('.cardCreatePType').hide(); 
+
+    switch (option) {
+      case 'link-products':
+        $('.cardPMeasure').show();
+        break;
+      case 'link-productsType':
+        $('.cardPTypes').show();
+        break;
+    }
+
+    let tables = document.getElementsByClassName('dataTable');
+
+    for (let table of tables) {
+      table.style.width = '100%';
+      table.firstElementChild.style.width = '100%';
+    }
+   });
+  
+  /* Ocultar panel crear producto */
   $(".cardCreatePMeasure").hide();
 
   /* Abrir panel crear producto */
@@ -63,7 +89,7 @@ $(document).ready(function () {
     sessionStorage.setItem("id_product", data.id_product);
     $("#referenceProduct").val(data.reference);
     $("#product").val(data.product);
-    //$("#grammage").val(data.grammage);
+    $(`#idProductType option[value=${data.id_product_type}]`).prop('selected', true);
     $("#width").val(data.width);
     $("#high").val(data.high);
     $("#length").val(data.length);
@@ -79,7 +105,7 @@ $(document).ready(function () {
   const checkDataProduct = async (url, idProductMeasure) => {
     let ref = $("#referenceProduct").val();
     let prod = $("#product").val(); 
-    //let grammage = parseFloat($("#grammage").val());
+    let idProductType = parseFloat($('#idProductType').val());
     let width = parseFloat($("#width").val());
     let high = parseFloat($("#high").val());
     let length = parseFloat($("#length").val());
@@ -88,7 +114,7 @@ $(document).ready(function () {
     let window = parseFloat($("#window").val());
     //let weight = parseFloat($("#weight").val());
 
-    let data = width * high * length * usefulLength * totalWidth;
+    let data = idProductType * width * high * length * usefulLength * totalWidth;
 
     if (ref.trim() == "" || !ref.trim() || prod.trim() == "" || !prod.trim()|| isNaN(data) || data <= 0) {
       toastr.error("Ingrese todos los campos");

@@ -15,9 +15,11 @@ use TezlikPlaneacion\dao\LastDataDao;
 use TezlikPlaneacion\dao\ProductsDao;
 use TezlikPlaneacion\dao\ProductsInventoryDao;
 use TezlikPlaneacion\dao\ProductsMaterialsDao;
+use TezlikPlaneacion\dao\ProductsTypeDao;
 
 $productsDao = new ProductsDao();
 $generalPMeasureDao = new GeneralPMeasuresDao();
+$productsTypeDao = new ProductsTypeDao();
 $productsInventoryDao = new ProductsInventoryDao();
 $generalProductsDao = new GeneralProductsDao();
 $generalOrdersDao = new GeneralOrdersDao();
@@ -50,6 +52,7 @@ $app->get('/products', function (Request $request, Response $response, $args) us
 /* Consultar productos importados */
 $app->post('/productsDataValidation', function (Request $request, Response $response, $args) use (
     $generalProductsDao,
+    $productsTypeDao
 ) {
     $dataProduct = $request->getParsedBody();
 
@@ -79,6 +82,19 @@ $app->post('/productsDataValidation', function (Request $request, Response $resp
                 break;
             }
 
+            if ($_SESSION['flag_products_measure'] == '1') {
+                if (empty($products[$i]['productType'])) {
+                    $i = $i + 2;
+                    $dataImportProduct = array('error' => true, 'message' => "Campos vacios, fila: $i");
+                    break;
+                }
+                if (empty(trim($products[$i]['productType']))) {
+                    $i = $i + 2;
+                    $dataImportProduct = array('error' => true, 'message' => "Campos vacios, fila: $i");
+                    break;
+                }
+            }
+
             $item = $products[$i];
             $refProduct = trim($item['referenceProduct']);
             $nameProduct = trim($item['product']);
@@ -104,6 +120,17 @@ $app->post('/productsDataValidation', function (Request $request, Response $resp
                 if ($findProduct[0]['product'] != $nameProduct || $findProduct[0]['reference'] != $refProduct) {
                     $i = $i + 2;
                     $dataImportProduct =  array('error' => true, 'message' => "Referencia o nombre de producto ya existente, fila: $i.<br>- Referencia: $refProduct<br>- Producto: $nameProduct");
+                    break;
+                }
+            }
+
+            if ($_SESSION['flag_products_measure'] == '1') {
+                // Consultar tipo producto
+                $productsType = $productsTypeDao->findProductsType($products[$i], $id_company);
+
+                if (!$productsType) {
+                    $i = $i + 2;
+                    $dataImportProduct = array('error' => true, 'message' => "Tipo de producto no existe en la base de datos. Fila: $i");
                     break;
                 }
             }
@@ -143,6 +170,7 @@ $app->post('/addProduct', function (Request $request, Response $response, $args)
     $productsDao,
     $productsInventoryDao,
     $generalProductsDao,
+    $productsTypeDao,
     $generalMaterialsDao,
     $lastDataDao,
     $FilesDao,
@@ -208,6 +236,14 @@ $app->post('/addProduct', function (Request $request, Response $response, $args)
         for ($i = 0; $i < sizeof($products); $i++) {
             if (isset($resolution['info'])) break;
             $product = $generalProductsDao->findProduct($products[$i], $id_company);
+
+            if ($flag_products_measure == '1') {
+                // Obtener tipo producto
+                $productType = $productsTypeDao->findProductsType($products[$i], $id_company);
+
+                $products[$i]['idProductType'] = $productType['id_product_type'];
+            } else
+                $products[$i]['idProductType'] = 0;
 
             if ($flag_products_measure == '1') { // Bolsas
                 $products[$i]['idProduct'] = $product['id_product'];

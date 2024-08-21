@@ -5,9 +5,11 @@ use TezlikPlaneacion\dao\GeneralProductsDao;
 use TezlikPlaneacion\dao\LastDataDao;
 use TezlikPlaneacion\dao\ProductsDao;
 use TezlikPlaneacion\dao\ProductsMeasuresDao;
+use TezlikPlaneacion\dao\ProductsTypeDao;
 
 $productsMeasuresDao = new ProductsMeasuresDao();
 $generalPMeasuresDao = new GeneralPMeasuresDao();
+$productsTypeDao = new ProductsTypeDao();
 $productsDao = new ProductsDao();
 $generalProductsDao = new GeneralProductsDao();
 $lastDataDao = new LastDataDao();
@@ -29,6 +31,7 @@ $app->get('/productsMeasures', function (Request $request, Response $response, $
 $app->post('/productsMeasuresDataValidation', function (Request $request, Response $response, $args) use (
     $generalPMeasuresDao,
     $generalProductsDao,
+    $productsTypeDao
 ) {
     $dataProduct = $request->getParsedBody();
 
@@ -41,25 +44,25 @@ $app->post('/productsMeasuresDataValidation', function (Request $request, Respon
         $dataImportProduct = [];
 
         for ($i = 0; $i < count($products); $i++) {
-            /* if (
+            if (
                 empty($products[$i]['referenceProduct']) || empty($products[$i]['product']) || empty($products[$i]['width']) ||
                 empty($products[$i]['high']) || empty($products[$i]['length']) || empty($products[$i]['usefulLength']) ||
-                empty($products[$i]['totalWidth']) || empty($products[$i]['window'])
+                empty($products[$i]['totalWidth']) || empty($products[$i]['window']) || empty($products[$i]['productType'])
             ) {
                 $i = $i + 2;
                 $dataImportProduct = array('error' => true, 'message' => "Campos vacios, fila: $i");
                 break;
             }
+
             if (
                 empty(trim($products[$i]['referenceProduct'])) || empty(trim($products[$i]['product'])) || empty(trim($products[$i]['width'])) ||
                 empty(trim($products[$i]['high'])) || empty(trim($products[$i]['length'])) || empty(trim($products[$i]['usefulLength'])) ||
-                empty(trim($products[$i]['totalWidth'])) || empty(trim($products[$i]['window']))
+                empty(trim($products[$i]['totalWidth'])) || empty(trim($products[$i]['window'])) || empty(trim($products[$i]['productType']))
             ) {
                 $i = $i + 2;
                 $dataImportProduct = array('error' => true, 'message' => "Campos vacios, fila: $i");
                 break;
-            } */
-
+            }
 
             $item = $products[$i];
             $refProduct = trim($item['referenceProduct']);
@@ -89,6 +92,14 @@ $app->post('/productsMeasuresDataValidation', function (Request $request, Respon
                     break;
                 }
             }
+
+            $findPType = $productsTypeDao->findProductsType($products[$i], $id_company);
+
+            if (!$findPType) {
+                $i = $i + 2;
+                $dataImportProduct =  array('error' => true, 'message' => "Tipo de producto no existe en la base de datos. Fila: $i");
+                break;
+            }
         }
 
         $insert = 0;
@@ -96,15 +107,6 @@ $app->post('/productsMeasuresDataValidation', function (Request $request, Respon
 
         if (sizeof($dataImportProduct) == 0) {
             for ($i = 0; $i < count($products); $i++) {
-                // $findProduct = $generalProductsDao->findProduct($products[$i], $id_company);
-
-                // if (!$findProduct) {
-                //     $i = $i + 2;
-                //     $dataImportProduct =  array('error' => true, 'message' => "Producto no existe en la base de datos. Fila: $i");
-                //     break;
-                // }
-                // $products[$i]['idProduct'] = $findProduct['id_product'];
-
                 $findProduct = $generalProductsDao->findProduct($products[$i], $id_company);
 
                 if (!$findProduct)
