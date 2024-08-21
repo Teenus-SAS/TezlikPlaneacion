@@ -7,7 +7,10 @@ $(document).ready(function () {
         let data = dataPOP.find(item => item.id_programming == id_programming);
         let dataFT = dataFTMaterials.filter(item => item.id_product == data.id_product);
 
-        $('#imgClient').html(`<img src="${data.img}" width="100px">`);
+        $('#imgClient').empty();
+
+        if(data.img)
+            $('#imgClient').html(`<img src="${data.img}" width="150px">`);
         // Orden Produccion
         $('#txtNumOP').html(data.op);
         $('#txtNumOrder').html(data.num_order);
