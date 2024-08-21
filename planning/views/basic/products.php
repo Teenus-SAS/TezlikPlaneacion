@@ -96,8 +96,8 @@ if (sizeof($_SESSION) == 0)
                                                     <input type="text" class="form-control" name="product" id="product">
                                                 </div>
                                                 <div class="col-sm-2 floating-label enable-floating-label show- mb-3 label cardSelect">
-                                                    <label for="ProdOrigin">Origen</label>
-                                                    <select class="form-control" name="ProdOrigin" id="ProdOrigin">
+                                                    <label for="prodOrigin">Origen</label>
+                                                    <select class="form-control" name="prodOrigin" id="prodOrigin">
                                                         <option value="1">COMERCIALIZADO</option>
                                                         <option value="2">MANUFACTURADO</option>
                                                     </select>

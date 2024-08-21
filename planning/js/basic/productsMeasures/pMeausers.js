@@ -41,21 +41,21 @@ $(document).ready(function () {
     $("#formCreatePMeasure").trigger("reset"); 
   });
 
-  // Calcular Peso
-  /* $(document).on('keyup', '.inputsCalc', function () {
-    let grammage = parseFloat($('#grammage').val());
-    let usefulLength = parseFloat($('#usefulLength').val());
-    let totalWidth = parseFloat($('#totalWidth').val());
+  $('#prodOrigin').change(function (e) { 
+    e.preventDefault();
 
-    isNaN(grammage) ? (grammage = 0) : grammage;
-    isNaN(usefulLength) ? (usefulLength = 0) : usefulLength;
-    isNaN(totalWidth) ? (totalWidth = 0) : totalWidth;
+    let option = this.value;
 
-    let weight = (grammage * usefulLength * totalWidth) / 10000000;
-    !isFinite(weight) ? (weight = 0) : weight;
-
-    $('#weight').val(weight);
-  }); */
+    switch (option) {
+      case value:
+        
+        break;
+    
+      default:
+        break;
+    }
+    
+  }); 
 
   /* Crear producto */
   $('#btnCreatePMeasure').click(function (e) {
