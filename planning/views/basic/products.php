@@ -87,27 +87,28 @@ if (sizeof($_SESSION) == 0)
                                     <div class="card">
                                         <div class="card-body">
                                             <div class="form-row">
-                                                <div class="col-sm-4 floating-label enable-floating-label show-label" style="margin-bottom:20px">
+                                                <div class="col-sm-2 floating-label enable-floating-label show- mb-3 label cardSelect">
+                                                    <label for="idProductType">Tipo</label>
+                                                    <select class="form-control" name="idProductType" id="idProductType">
+                                                    </select>
+                                                </div>
+                                                <div class="col-sm-3 floating-label enable-floating-label show-label" style="margin-bottom:20px">
                                                     <label for="">Referencia</label>
                                                     <input type="text" class="form-control text-center" name="referenceProduct" id="referenceProduct">
                                                 </div>
-                                                <div class="col-sm-6 floating-label enable-floating-label show-label" style="margin-bottom:5px">
+                                                <div class="col-sm-7 floating-label enable-floating-label show-label" style="margin-bottom:5px">
                                                     <label for="">Producto</label>
                                                     <input type="text" class="form-control" name="product" id="product">
                                                 </div>
-                                                <div class="col-sm-2 floating-label enable-floating-label show- mb-3 label cardSelect">
+                                                <div class="col-sm-3 floating-label enable-floating-label show- mb-3 label cardSelect">
                                                     <label for="prodOrigin">Origen</label>
                                                     <select class="form-control" name="prodOrigin" id="prodOrigin">
                                                         <option value="1">COMERCIALIZADO</option>
                                                         <option value="2">MANUFACTURADO</option>
                                                     </select>
                                                 </div>
-                                                <div class="col-sm-2 floating-label enable-floating-label show- mb-3 label cardSelect">
-                                                    <label for="idProductType">Tipo</label>
-                                                    <select class="form-control" name="idProductType" id="idProductType">
-                                                    </select>
-                                                </div>
-                                                <div class="col-sm-1 floating-label enable-floating-label show-label inputsMeasures">
+
+                                                <div class="col-sm-1 floating-label enable-floating-label show-label">
                                                     <label for="">Ancho</label>
                                                     <input type="number" class="form-control text-center" id="width" name="width"></input>
                                                 </div>
@@ -119,15 +120,15 @@ if (sizeof($_SESSION) == 0)
                                                     <label for="">Largo</label>
                                                     <input type="number" class="form-control text-center" id="length" name="length">
                                                 </div>
-                                                <div class="col-sm-2 floating-label enable-floating-label show-label inputsMeasures">
+                                                <div class="col-sm-1 floating-label enable-floating-label show-label">
                                                     <label for="">Largo Útil</label>
                                                     <input type="number" class="form-control text-center inputsCalc" id="usefulLength" name="usefulLength">
                                                 </div>
-                                                <div class="col-sm-2 floating-label enable-floating-label show-label inputsMeasures">
+                                                <div class="col-sm-1 floating-label enable-floating-label show-label">
                                                     <label for="">Ancho Total</label>
                                                     <input type="number" class="form-control text-center inputsCalc" id="totalWidth" name="totalWidth">
                                                 </div>
-                                                <div class="col-sm-2 floating-label enable-floating-label show-label inputsMeasures">
+                                                <div class="col-sm-1 floating-label enable-floating-label show-label">
                                                     <label for="">Ventanilla</label>
                                                     <input type="number" class="form-control text-center" id="window" name="window">
                                                 </div>
