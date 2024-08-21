@@ -196,7 +196,7 @@ if (sizeof($_SESSION) == 0)
 															<tr>
 																<th>Código</th>
 																<th>Descripción</th>
-																<th>Cantidad por Unidad de Producto</th>
+																<th>Cantidad x Unidad</th>
 																<th>Cantidad Total</th>
 																<th>Unidad</th>
 																<th>Recibido</th>
@@ -209,6 +209,66 @@ if (sizeof($_SESSION) == 0)
 												</div>
 											</div>
 										</div>
+										<hr>
+
+										<div class="row py-4">
+											<div class="col-10">
+												<h5 class="font-weight-bold text-dark">Acabados Especiales</h5>
+											</div>
+
+											<div class="col-2 form-group floating-label enable-floating-label show-label">
+												<label for="numberWorkers">Manija Trenzada</label>
+												<input id="txtReferenceP" type="text" class="form-control text-center" readonly>
+											</div>
+
+
+											<div class="col-2 form-group floating-label enable-floating-label show-label">
+												<label for="numberWorkers">Refuerzo Boca</label>
+												<input id="txtNameP" type="text" class="form-control text-center" readonly>
+											</div>
+
+											<div class="col-sm-2 floating-label enable-floating-label show-label">
+												<label for="">Cordon</label>
+												<input type="number" class="form-control text-center" id="width" readonly></input>
+											</div>
+											<div class="col-sm-2 floating-label enable-floating-label show-label">
+												<label for="">Fondo Diamante</label>
+												<input type="number" class="form-control text-center" id="high" readonly>
+											</div>
+											<div class="col-sm-2 floating-label enable-floating-label show-label">
+												<label for="">Otro</label>
+												<input type="number" class="form-control text-center" id="length" readonly>
+											</div>
+											<div class="col-sm-2 floating-label enable-floating-label show-label">
+												<label for="">Manija Troquelada Sencilla</label>
+												<input type="number" class="form-control text-center inputsCalc" name="usefulLength" readonly>
+											</div>
+											<div class="col-sm-2 floating-label enable-floating-label show-label">
+												<label for="">Refuerzo Base</label>
+												<input type="number" class="form-control text-center inputsCalc" name="totalWidth" readonly>
+											</div>
+											<div class="col-sm-2 floating-label enable-floating-label show-label">
+												<label for="">Fondo Cosido</label>
+												<input type="number" class="form-control text-center" id="window" readonly>
+											</div>
+											<div class="col-sm-2 floating-label enable-floating-label show-label">
+												<label for="">Cantidad Refuerzo Base</label>
+												<input type="number" class="form-control text-center" id="window" readonly>
+											</div>
+											<div class="col-sm-2 floating-label enable-floating-label show-label">
+												<label for="">Cantidad Refuerzo Laterial MTQ</label>
+												<input type="number" class="form-control text-center" id="window" readonly>
+											</div>
+											<div class="col-sm-2 floating-label enable-floating-label show-label">
+												<label for="">Cantidad Manijas Trenzadas</label>
+												<input type="number" class="form-control text-center" id="window" readonly>
+											</div>
+										</div>
+
+
+
+
+
 										<hr>
 										<div class="row py-4">
 											<div class="col-10">
