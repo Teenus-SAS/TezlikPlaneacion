@@ -52,6 +52,20 @@ $(document).ready(function () {
         }
 
         let productsToImport = data.map((item) => {
+          let width = 0;
+          let high = 0;
+          let length = 0;
+          let usefulLength = 0;
+          let totalWidth = 0;
+          let window = 0;
+          
+          item.ancho ? width = item.ancho : width;
+          item.alto ? high = item.alto : high;
+          item.largo ? length = item.largo : length;
+          item.largo_util ? usefulLength = item.largo_util : usefulLength;
+          item.ancho_total ? totalWidth = item.ancho_total : totalWidth;
+          item.ventanilla ? window = item.ventanilla : window;
+          
           return {
             referenceProduct: item.referencia_producto,
             product: item.producto,
@@ -61,7 +75,7 @@ $(document).ready(function () {
             length: item.largo,
             usefulLength: item.largo_util,
             totalWidth: item.ancho_total,
-            window: item.ventanilla, 
+            window: item.ventanilla,
             origin: item.origen,
           };
         });
