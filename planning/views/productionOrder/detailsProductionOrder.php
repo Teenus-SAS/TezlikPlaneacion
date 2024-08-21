@@ -260,11 +260,11 @@ if (sizeof($_SESSION) == 0)
 												<input type="number" class="form-control text-center" id="window" readonly>
 											</div>
 											<div class="col-sm-2 floating-label enable-floating-label show-label">
-												<label for="">Cant Refuerzo Laterial MTQ</label>
+												<label for="">Cant Refuerzo Lateral MTQ</label>
 												<input type="number" class="form-control text-center" id="window" readonly>
 											</div>
 											<div class="col-sm-2 floating-label enable-floating-label show-label">
-												<label for="">Cant Manijas Trenzadas</label>
+												<label for="">Cant Manijas Trenz</label>
 												<input type="number" class="form-control text-center" id="window" readonly>
 											</div>
 										</div>
