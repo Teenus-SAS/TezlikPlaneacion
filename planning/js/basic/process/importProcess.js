@@ -67,7 +67,7 @@ $(document).ready(function () {
   });
 
   /* Mensaje de advertencia */
-  checkProcess = (data) => {
+  const checkProcess = (data) => {
     $.ajax({
       type: 'POST',
       url: '/api/processDataValidation',
@@ -109,10 +109,10 @@ $(document).ready(function () {
     });
   };
 
-  saveProcessTable = (data) => {
+  const saveProcessTable = (data) => {
     $.ajax({
       type: 'POST',
-      url: '../../api/addPlanProcess',
+      url: '/api/addPlanProcess',
       data: { importProcess: data },
       success: function (r) {
         $('.cardLoading').remove();
@@ -128,7 +128,7 @@ $(document).ready(function () {
   $('#btnDownloadImportsProcess').click(function (e) {
     e.preventDefault();
 
-    url = 'assets/formatsXlsx/Procesos.xlsx';
+    let url = 'assets/formatsXlsx/Procesos.xlsx';
 
     link = document.createElement('a');
 

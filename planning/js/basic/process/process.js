@@ -53,7 +53,7 @@ $(document).ready(function () {
   });
 
   /* Revision data procesos */
-  checkDataProcess = async (url, idProcess) => {
+  const checkDataProcess = async (url, idProcess) => {
     let process = $('#process').val();
 
     if (process.trim() == '' || !process.trim()) {

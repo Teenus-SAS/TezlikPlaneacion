@@ -45,7 +45,7 @@ $(document).ready(function () {
       $('#tblProgramming').append(`<tbody id="tblProgrammingBody"></tbody>`);
     }
     // Encabezados de la tabla
-    var headers = ['No.', 'Pedido', 'Referencia', 'Producto', 'Proceso', 'Maquina', 'Cantidades', 'Cliente', 'Fecha y Hora', 'Orden Produccion', 'Acciones'];
+    var headers = ['No.', 'Pedido', 'Referencia', 'Producto', 'Proceso', 'Maquina', 'Cantidades', 'Cliente', 'Fecha y Hora', 'Acciones'];
     
     // Obtén la tabla
     var table = document.getElementById('tblProgramming');

@@ -15,7 +15,7 @@ $(document).ready(function () {
   $('#btnImportPlanMachines').click(function (e) {
     e.preventDefault();
 
-    file = $('#filePlanMachines').val();
+    let file = $('#filePlanMachines').val();
 
     if (!file) {
       toastr.error('Seleccione un archivo');

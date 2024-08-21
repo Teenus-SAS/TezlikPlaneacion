@@ -155,30 +155,33 @@ if (sizeof($_SESSION) == 0)
 													<input id="txtNameP" type="text" class="form-control text-center" readonly>
 												</div>
 											</div>
-											<div class="col-sm-2 floating-label enable-floating-label show-label">
-												<label for="">Ancho</label>
-												<input type="number" class="form-control text-center" id="width" readonly></input>
-											</div>
-											<div class="col-sm-2 floating-label enable-floating-label show-label">
-												<label for="">Alto</label>
-												<input type="number" class="form-control text-center" id="high" readonly>
-											</div>
-											<div class="col-sm-2 floating-label enable-floating-label show-label">
-												<label for="">Largo</label>
-												<input type="number" class="form-control text-center" id="length" readonly>
-											</div>
-											<div class="col-sm-2 floating-label enable-floating-label show-label">
-												<label for="">Largo Útil</label>
-												<input type="number" class="form-control text-center" id="usefulLength" readonly>
-											</div>
-											<div class="col-sm-2 floating-label enable-floating-label show-label">
-												<label for="">Ancho Total</label>
-												<input type="number" class="form-control text-center" id="totalWidth" readonly>
-											</div>
-											<div class="col-sm-2 floating-label enable-floating-label show-label">
-												<label for="">Ventanilla</label>
-												<input type="number" class="form-control text-center" id="window" readonly>
-											</div>
+
+											<?php if ($_SESSION['flag_products_measure'] == 1) { ?>
+												<div class="col-sm-2 floating-label enable-floating-label show-label">
+													<label for="">Ancho</label>
+													<input type="number" class="form-control text-center" id="width" readonly></input>
+												</div>
+												<div class="col-sm-2 floating-label enable-floating-label show-label">
+													<label for="">Alto</label>
+													<input type="number" class="form-control text-center" id="high" readonly>
+												</div>
+												<div class="col-sm-2 floating-label enable-floating-label show-label">
+													<label for="">Largo</label>
+													<input type="number" class="form-control text-center" id="length" readonly>
+												</div>
+												<div class="col-sm-2 floating-label enable-floating-label show-label">
+													<label for="">Largo Útil</label>
+													<input type="number" class="form-control text-center" id="usefulLength" readonly>
+												</div>
+												<div class="col-sm-2 floating-label enable-floating-label show-label">
+													<label for="">Ancho Total</label>
+													<input type="number" class="form-control text-center" id="totalWidth" readonly>
+												</div>
+												<div class="col-sm-2 floating-label enable-floating-label show-label">
+													<label for="">Ventanilla</label>
+													<input type="number" class="form-control text-center" id="window" readonly>
+												</div>
+											<?php } ?>
 										</div>
 										<hr>
 										<div class="row py-4">
@@ -209,69 +212,67 @@ if (sizeof($_SESSION) == 0)
 										</div>
 										<hr>
 
-										<div class="row py-4">
-											<div class="col-12 mb-3">
-												<h5 class="font-weight-bold text-dark">3. Acabados Especiales</h5>
-											</div>
+										<?php if ($_SESSION['flag_products_measure'] == 1) { ?>
+											<div class="row py-4">
+												<div class="col-12 mb-3">
+													<h5 class="font-weight-bold text-dark">3. Acabados Especiales</h5>
+												</div>
 
-											<div class="col-2 form-group floating-label enable-floating-label show-label">
-												<label for="numberWorkers">Manija Trenzada</label>
-												<input id="txtReferenceP" type="text" class="form-control text-center" readonly>
-											</div>
-
-
-											<div class="col-2 form-group floating-label enable-floating-label show-label">
-												<label for="numberWorkers">Refuerzo Boca</label>
-												<input id="txtNameP" type="text" class="form-control text-center" readonly>
-											</div>
-
-											<div class="col-sm-2 floating-label enable-floating-label show-label">
-												<label for="">Cordon</label>
-												<input type="number" class="form-control text-center" id="width" readonly></input>
-											</div>
-											<div class="col-sm-2 floating-label enable-floating-label show-label">
-												<label for="">Fondo Diamante</label>
-												<input type="number" class="form-control text-center" id="high" readonly>
-											</div>
-											<div class="col-sm-2 floating-label enable-floating-label show-label">
-												<label for="">Otro</label>
-												<input type="number" class="form-control text-center" id="length" readonly>
-											</div>
-											<div class="col-sm-2 floating-label enable-floating-label show-label">
-												<label for="">Manija Troq Sencilla</label>
-												<input type="number" class="form-control text-center inputsCalc" name="usefulLength" readonly>
-											</div>
-											<div class="col-sm-2 floating-label enable-floating-label show-label">
-												<label for="">Refuerzo Base</label>
-												<input type="number" class="form-control text-center inputsCalc" name="totalWidth" readonly>
-											</div>
-											<div class="col-sm-2 floating-label enable-floating-label show-label">
-												<label for="">No Troq Manija</label>
-												<input type="number" class="form-control text-center inputsCalc" name="totalWidth" readonly>
-											</div>
-											<div class="col-sm-2 floating-label enable-floating-label show-label">
-												<label for="">Fondo Cosido</label>
-												<input type="number" class="form-control text-center" id="window" readonly>
-											</div>
-											<div class="col-sm-2 floating-label enable-floating-label show-label">
-												<label for="">Cant Refuerzo Base</label>
-												<input type="number" class="form-control text-center" id="window" readonly>
-											</div>
-											<div class="col-sm-2 floating-label enable-floating-label show-label">
-												<label for="">Cant Refuerzo Lateral MTQ</label>
-												<input type="number" class="form-control text-center" id="window" readonly>
-											</div>
-											<div class="col-sm-2 floating-label enable-floating-label show-label">
-												<label for="">Cant Manijas Trenz</label>
-												<input type="number" class="form-control text-center" id="window" readonly>
-											</div>
-										</div>
+												<div class="col-2 form-group floating-label enable-floating-label show-label">
+													<label for="numberWorkers">Manija Trenzada</label>
+													<input id="txtReferenceP" type="text" class="form-control text-center" readonly>
+												</div>
 
 
+												<div class="col-2 form-group floating-label enable-floating-label show-label">
+													<label for="numberWorkers">Refuerzo Boca</label>
+													<input id="txtNameP" type="text" class="form-control text-center" readonly>
+												</div>
 
+												<div class="col-sm-2 floating-label enable-floating-label show-label">
+													<label for="">Cordon</label>
+													<input type="number" class="form-control text-center" id="width" readonly></input>
+												</div>
+												<div class="col-sm-2 floating-label enable-floating-label show-label">
+													<label for="">Fondo Diamante</label>
+													<input type="number" class="form-control text-center" id="high" readonly>
+												</div>
+												<div class="col-sm-2 floating-label enable-floating-label show-label">
+													<label for="">Otro</label>
+													<input type="number" class="form-control text-center" id="length" readonly>
+												</div>
+												<div class="col-sm-2 floating-label enable-floating-label show-label">
+													<label for="">Manija Troq Sencilla</label>
+													<input type="number" class="form-control text-center inputsCalc" name="usefulLength" readonly>
+												</div>
+												<div class="col-sm-2 floating-label enable-floating-label show-label">
+													<label for="">Refuerzo Base</label>
+													<input type="number" class="form-control text-center inputsCalc" name="totalWidth" readonly>
+												</div>
+												<div class="col-sm-2 floating-label enable-floating-label show-label">
+													<label for="">No Troq Manija</label>
+													<input type="number" class="form-control text-center inputsCalc" name="totalWidth" readonly>
+												</div>
+												<div class="col-sm-2 floating-label enable-floating-label show-label">
+													<label for="">Fondo Cosido</label>
+													<input type="number" class="form-control text-center" id="window" readonly>
+												</div>
+												<div class="col-sm-2 floating-label enable-floating-label show-label">
+													<label for="">Cant Refuerzo Base</label>
+													<input type="number" class="form-control text-center" id="window" readonly>
+												</div>
+												<div class="col-sm-2 floating-label enable-floating-label show-label">
+													<label for="">Cant Refuerzo Lateral MTQ</label>
+													<input type="number" class="form-control text-center" id="window" readonly>
+												</div>
+												<div class="col-sm-2 floating-label enable-floating-label show-label">
+													<label for="">Cant Manijas Trenz</label>
+													<input type="number" class="form-control text-center" id="window" readonly>
+												</div>
+											</div>
+											<hr>
+										<?php } ?>
 
-
-										<hr>
 										<div class="row py-4">
 											<div class="col-10">
 												<h5 class="font-weight-bold text-dark">4. Instrucciones de Producción</h5>

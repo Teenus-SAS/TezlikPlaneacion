@@ -128,7 +128,7 @@ $(document).ready(function () {
   $('#btnDownloadImportsMachines').click(function (e) {
     e.preventDefault();
 
-    url = 'assets/formatsXlsx/Maquinas.xlsx';
+    let url = 'assets/formatsXlsx/Maquinas.xlsx';
 
     link = document.createElement('a');
 

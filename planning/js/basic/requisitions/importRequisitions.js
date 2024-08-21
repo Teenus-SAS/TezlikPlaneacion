@@ -136,7 +136,7 @@ $(document).ready(function () {
   $('#btnDownloadImportsRequisitions').click(function (e) {
     e.preventDefault();
 
-    url = 'assets/formatsXlsx/Requisiciones.xlsx';
+    let url = 'assets/formatsXlsx/Requisiciones.xlsx';
 
     link = document.createElement('a');
 

@@ -16,7 +16,7 @@ $(document).ready(function () {
   $('#btnImportPlanCiclesMachine').click(function (e) {
     e.preventDefault();
 
-    file = $('#filePlanCiclesMachine').val();
+    let file = $('#filePlanCiclesMachine').val();
 
     if (!file) {
       toastr.error('Seleccione un archivo');
@@ -133,9 +133,9 @@ $(document).ready(function () {
   $('#btnDownloadImportsPlanCiclesMachine').click(function (e) {
     e.preventDefault();
 
-    url = 'assets/formatsXlsx/Ciclos_Maquina.xlsx';
+    let url = 'assets/formatsXlsx/Ciclos_Maquina.xlsx';
 
-    link = document.createElement('a');
+    let link = document.createElement('a');
 
     link.target = '_blank';
 

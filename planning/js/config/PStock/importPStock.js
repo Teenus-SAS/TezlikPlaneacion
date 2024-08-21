@@ -17,7 +17,7 @@ $(document).ready(function () {
   $('#btnImportPStock').click(function (e) {
     e.preventDefault();
 
-    file = $('#filePStock').val();
+    let file = $('#filePStock').val();
 
     if (!file) {
       toastr.error('Seleccione un archivo');
@@ -51,7 +51,7 @@ $(document).ready(function () {
           return false;
         }
 
-        let StockToImport = data.map((item) => {
+        let stockToImport = data.map((item) => {
           return {
             referenceProduct: item.referencia_producto,
             product: item.producto,
@@ -59,7 +59,7 @@ $(document).ready(function () {
             max: item.plazo_maximo,
           };
         });
-        checkPStock(StockToImport);
+        checkPStock(stockToImport);
       })
       .catch(() => {
         $('.cardLoading').remove();

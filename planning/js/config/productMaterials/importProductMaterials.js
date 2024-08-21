@@ -131,7 +131,7 @@ $(document).ready(function () {
   /* Descargar formato */
   $('#btnDownloadImportsProductsMaterials').click(function (e) {
     e.preventDefault();
-    link = document.createElement('a');
+    let link = document.createElement('a');
     link.target = '_blank';
 
     link.href = 'assets/formatsXlsx/Productos_Materias.xlsx';
