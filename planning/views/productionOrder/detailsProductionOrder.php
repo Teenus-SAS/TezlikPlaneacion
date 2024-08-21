@@ -84,7 +84,7 @@ if (sizeof($_SESSION) == 0)
 										</div> -->
 										<div class="row">
 											<div class="col-sm-3">
-												<img src="" id="logo" alt="" style="width: 150px;">
+												<img src="" id="logo" alt="logo_company">
 											</div>
 											<div class="col-sm-9">
 												<div class="row">
