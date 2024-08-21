@@ -64,8 +64,7 @@ class ProductsMeasuresDao
             $connection = Connection::getInstance()->getConnection();
 
             $sql = "UPDATE products_measures 
-                    SET width = :width, high = :high, length = :length, useful_length = :useful_length, total_width = :total_width, 
-                        window = :window
+                    SET width = :width, high = :high, length = :length, useful_length = :useful_length, total_width = :total_width, window = :window
                     WHERE id_product_measure = :id_product_measure";
             $stmt = $connection->prepare($sql);
             $stmt->execute([
