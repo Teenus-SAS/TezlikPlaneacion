@@ -213,7 +213,7 @@ if (sizeof($_SESSION) == 0)
 
 										<div class="row py-4">
 											<div class="col-12 mb-3">
-												<h5 class="font-weight-bold text-dark">Acabados Especiales</h5>
+												<h5 class="font-weight-bold text-dark">3. Acabados Especiales</h5>
 											</div>
 
 											<div class="col-2 form-group floating-label enable-floating-label show-label">
@@ -276,7 +276,7 @@ if (sizeof($_SESSION) == 0)
 										<hr>
 										<div class="row py-4">
 											<div class="col-10">
-												<h5 class="font-weight-bold text-dark">3. Instrucciones de Producción</h5>
+												<h5 class="font-weight-bold text-dark">4. Instrucciones de Producción</h5>
 											</div>
 										</div>
 										<div class="row">
