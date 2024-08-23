@@ -166,7 +166,7 @@ $app->post('/changeOffices', function (Request $request, Response $response, $ar
         // Calcular Dias inventario 
         $inventory = $inventoryDaysDao->calcInventoryProductDays($dataOrder['idProduct']);
 
-        !$inventory['days'] ? $days = 0 : $days = $inventory['days'];
+        !isset($inventory['days']) ? $days = 0 : $days = $inventory['days'];
 
         $resolution = $inventoryDaysDao->updateInventoryProductDays($dataOrder['idProduct'], $days);
     }

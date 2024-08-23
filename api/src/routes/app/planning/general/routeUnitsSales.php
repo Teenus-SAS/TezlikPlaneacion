@@ -282,7 +282,7 @@ $app->post('/addUnitSales', function (Request $request, Response $response, $arg
         if ($resolution == null) {
             $inventory = $inventoryDaysDao->calcInventoryProductDays($dataSale['idProduct']);
 
-            !$inventory['days'] ? $days = 0 : $days = $inventory['days'];
+            !isset($inventory['days']) ? $days = 0 : $days = $inventory['days'];
 
             $resolution = $inventoryDaysDao->updateInventoryProductDays($dataSale['idProduct'], $days);
         }
@@ -498,7 +498,7 @@ $app->post('/updateUnitSale', function (Request $request, Response $response, $a
         if ($resolution == null) {
             $inventory = $inventoryDaysDao->calcInventoryProductDays($dataSale['idProduct']);
 
-            !$inventory['days'] ? $days = 0 : $days = $inventory['days'];
+            !isset($inventory['days']) ? $days = 0 : $days = $inventory['days'];
 
             $resolution = $inventoryDaysDao->updateInventoryProductDays($dataSale['idProduct'], $days);
         }
@@ -610,7 +610,7 @@ $app->post('/deleteUnitSale', function (Request $request, Response $response, $a
     if ($resolution == null) {
         $inventory = $inventoryDaysDao->calcInventoryProductDays($dataSale['idProduct']);
 
-        !$inventory['days'] ? $days = 0 : $days = $inventory['days'];
+        !isset($inventory['days']) ? $days = 0 : $days = $inventory['days'];
 
         $resolution = $inventoryDaysDao->updateInventoryProductDays($dataSale['idProduct'], $days);
     }
@@ -707,7 +707,7 @@ $app->post('/addSaleDays', function (Request $request, Response $response, $args
                 foreach ($products as $arr) {
                     $inventory = $inventoryDaysDao->calcInventoryProductDays($arr['id_product']);
 
-                    !$inventory['days'] ? $days = 0 : $days = $inventory['days'];
+                    !isset($inventory['days']) ? $days = 0 : $days = $inventory['days'];
 
                     $resolution = $inventoryDaysDao->updateInventoryProductDays($arr['id_product'], $days);
 
@@ -772,7 +772,7 @@ $app->post('/updateSaleDays', function (Request $request, Response $response, $a
                 foreach ($products as $arr) {
                     $inventory = $inventoryDaysDao->calcInventoryProductDays($arr['id_product']);
 
-                    !$inventory['days'] ? $days = 0 : $days = $inventory['days'];
+                    !isset($inventory['days']) ? $days = 0 : $days = $inventory['days'];
 
                     $resolution = $inventoryDaysDao->updateInventoryProductDays($arr['id_product'], $days);
 

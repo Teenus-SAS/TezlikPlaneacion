@@ -115,9 +115,9 @@ $(document).ready(function () {
 
     if (flag_products_measure == '1') { 
       dataProduct.append("idProduct", idProduct);
+    } else {
+      dataProduct.append("idProductType", 0);      
     }
-
-
 
     let resp = await sendDataPOST(url, dataProduct);
 
@@ -158,6 +158,37 @@ $(document).ready(function () {
       },
     });
   };
+
+  // $(document).on('click', '.composite', function () {
+  //   let row = $(this).parent().parent()[0];
+  //   let data = tblProducts.fnGetData(row);
+
+  //   bootbox.confirm({ 
+  //     title: 'Producto Compuesto',
+  //     message:
+  //       `Está seguro de que este producto ${data.composite == '0' ? 'se <b>convierta en un subproducto</b> para ser agregado a un producto compuesto' : 'se <b>Elimine</b> como subproducto'}?`,
+  //     buttons: {
+  //       confirm: {
+  //         label: 'Si',
+  //         className: 'btn-success',
+  //       },
+  //       cancel: {
+  //         label: 'No',
+  //         className: 'btn-danger',
+  //       },
+  //     },
+  //     callback: function (result) {
+  //       if (result == true) {
+  //         $.get(
+  //           `/api/changeComposite/${data.id_product}/${data.composite == '0' ? '1' : '0'}`,
+  //           function (data, textStatus, jqXHR) {
+  //             messageProducts(data);
+  //           }
+  //         );
+  //       }
+  //     },
+  //   });
+  // });
 
   /* Mensaje de exito */
 

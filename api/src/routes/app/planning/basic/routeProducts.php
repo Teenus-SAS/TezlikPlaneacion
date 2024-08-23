@@ -1,9 +1,11 @@
 <?php
 
+use TezlikPlaneacion\Dao\CompositeProductsDao;
 use TezlikPlaneacion\dao\GeneralProductsDao;
 use TezlikPlaneacion\dao\FilesDao;
 use TezlikPlaneacion\dao\FilterDataDao;
 use TezlikPlaneacion\dao\GeneralCategoriesDao;
+use TezlikPlaneacion\Dao\GeneralCompositeProductsDao;
 use TezlikPlaneacion\dao\GeneralMaterialsDao;
 use TezlikPlaneacion\dao\GeneralOrdersDao;
 use TezlikPlaneacion\dao\GeneralPlanCiclesMachinesDao;
@@ -33,6 +35,8 @@ $generalProgrammingDao = new GeneralProgrammingDao();
 $inventoryDaysDao = new InventoryDaysDao();
 $filterDataDao = new FilterDataDao();
 $generalPlanCiclesMachinesDao = new GeneralPlanCiclesMachinesDao();
+$compositeProductsDao = new CompositeProductsDao();
+$generalCompositeProductsDao = new GeneralCompositeProductsDao();
 
 use Psr\Http\Message\ResponseInterface as Response;
 use Psr\Http\Message\ServerRequestInterface as Request;
@@ -279,7 +283,7 @@ $app->post('/addProduct', function (Request $request, Response $response, $args)
             // Calculo dias inventario
             $inventory = $inventoryDaysDao->calcInventoryProductDays($products[$i]['idProduct']);
 
-            !$inventory['days'] ? $days = 0 : $days = $inventory['days'];
+            !isset($inventory['days']) ? $days = 0 : $days = $inventory['days'];
 
             $resolution = $inventoryDaysDao->updateInventoryProductDays($products[$i]['idProduct'], $days);
 
@@ -613,7 +617,7 @@ $app->post('/updatePlanProduct', function (Request $request, Response $response,
         if ($resolution == null) {
             $inventory = $inventoryDaysDao->calcInventoryProductDays($dataProduct['idProduct']);
 
-            !$inventory['days'] ? $days = 0 : $days = $inventory['days'];
+            !isset($inventory['days']) ? $days = 0 : $days = $inventory['days'];
 
             $products = $inventoryDaysDao->updateInventoryProductDays($dataProduct['idProduct'], $days);
         }
@@ -654,6 +658,38 @@ $app->get('/deletePlanProduct/{id_product}', function (Request $request, Respons
         $resp = array('info' => true, 'message' => $product['message']);
     else
         $resp = array('error' => true, 'message' => 'No es posible eliminar el producto, existe información asociada a él');
+
+    $response->getBody()->write(json_encode($resp));
+    return $response->withHeader('Content-Type', 'application/json');
+});
+
+/* Cambiar Producto Compuesto */
+$app->get('/changeComposite/{id_product}/{op}', function (Request $request, Response $response, $args) use (
+    $generalProductsDao,
+    $generalCompositeProductsDao
+) {
+    $status = true;
+
+    if ($args['op'] == 0) {
+        $product = $generalCompositeProductsDao->findCompositeProductByChild($args['id_product']);
+        if (sizeof($product) > 0)
+            $status = false;
+    }
+
+    if ($status == true) {
+        $product = $generalProductsDao->changeCompositeProducts($args['id_product'], $args['op']);
+
+        if ($product == null)
+            $resp = array('success' => true, 'message' => 'Producto modificado correctamente');
+        else if (isset($product['info']))
+            $resp = array('info' => true, 'message' => $product['message']);
+        else
+            $resp = array('error' => true, 'message' => 'No se pudo modificar la información. Intente de nuevo');
+    } else
+        $resp = array(
+            'error' => true,
+            'message' => 'No se pudo desactivar el producto. Tiene datos relacionados a él'
+        );
 
     $response->getBody()->write(json_encode($resp));
     return $response->withHeader('Content-Type', 'application/json');
