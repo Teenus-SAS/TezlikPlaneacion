@@ -25,7 +25,7 @@ $(document).ready(function () {
     let idClient = sessionStorage.getItem('id_client');
 
     if (idClient == '' || idClient == null) { 
-      checkDataClient('api/addClient', idClient);
+      checkDataClient('/api/addClient', idClient);
     } else {
       checkDataClient('/api/updateClient',idClient);
     }
