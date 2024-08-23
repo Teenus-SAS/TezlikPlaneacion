@@ -15,12 +15,14 @@ $(document).ready(function () {
       $('.cardProductsMaterials').hide();
       $('.cardRoutes').hide();
       $('.cardAddMaterials').hide();
+      $('.cardAddNewProduct').hide();
       $('.cardImport').hide();
     } else {
       $('.cardRoutes').show();
       $('.cardPlanCicles').hide();
       $('.cardProductsMaterials').hide();
       $('.cardAddMaterials').hide();
+      $('.cardAddNewProduct').hide();
       $('.cardImport').hide();
       
     }
@@ -100,6 +102,7 @@ $(document).ready(function () {
     $('.cardImportProductsMaterials').hide(800); 
     // $('.cardTableConfigMaterials').show(800);
     $('.cardAddMaterials').toggle(800);
+    $('.cardAddNewProduct').hide(800);
     $('#btnAddMaterials').html('Asignar');
 
     sessionStorage.removeItem('id_product_material');
@@ -202,20 +205,63 @@ $(document).ready(function () {
 
   /* Eliminar materia prima */
 
-  deleteMaterial = (id) => {
-    let allData = tblConfigMaterials.rows().data().toArray();
-    let data = allData.find(item => item.id_product_material == id);
+  deleteMaterial = (op) => {
+    // let allData = tblConfigMaterials.rows().data().toArray();
+    // let data = allData.find(item => item.id_product_material == id);
 
-    let dataMaterials = {};
+    // let dataMaterials = {};
 
-    dataMaterials['idProductMaterial'] = data.id_product_material;
-    dataMaterials['idMaterial'] = data.id_material;
-    dataMaterials['idProduct'] = data.id_product;
+    // dataMaterials['idProductMaterial'] = data.id_product_material;
+    // dataMaterials['idMaterial'] = data.id_material;
+    // dataMaterials['idProduct'] = data.id_product;
+
+    // bootbox.confirm({
+    //   title: 'Eliminar',
+    //   message:
+    //     'Está seguro de eliminar esta Materia prima? Esta acción no se puede reversar.',
+    //   buttons: {
+    //     confirm: {
+    //       label: 'Si',
+    //       className: 'btn-success',
+    //     },
+    //     cancel: {
+    //       label: 'No',
+    //       className: 'btn-danger',
+    //     },
+    //   },
+    //   callback: function (result) {
+    //     if (result) {
+    //       $.post('/api/deletePlanProductMaterial', dataMaterials,
+    //         function (data, textStatus, jqXHR) {
+    //           messageMaterial(data);
+    //         }, 
+    //       ); 
+    //     }
+    //   },
+    // });
+    let row = $(this.activeElement).parent().parent()[0];
+    let data = tblConfigMaterials.fnGetData(row);
+
+    let idProduct = $('#selectNameProduct').val();
+    let dataP = {};
+    dataP['idProduct'] = idProduct;
+
+    if (op == '1') {
+      let idProductMaterial = data.id_product_material;
+      dataP['idProductMaterial'] = idProductMaterial;  
+      dataP['idMaterial'] = data.id_material; 
+
+      url = '/api/deletePlanProductMaterial';
+    } else {
+      dataP['idCompositeProduct'] = data.id_composite_product;
+      url = '/api/deleteCompositeProduct';
+    }
 
     bootbox.confirm({
       title: 'Eliminar',
-      message:
-        'Está seguro de eliminar esta Materia prima? Esta acción no se puede reversar.',
+      message: `Está seguro de eliminar ${
+        op == '1' ? 'esta Materia prima' : 'este Producto Compuesto'
+      }? Esta acción no se puede reversar.`,
       buttons: {
         confirm: {
           label: 'Si',
@@ -227,12 +273,10 @@ $(document).ready(function () {
         },
       },
       callback: function (result) {
-        if (result) {
-          $.post('/api/deletePlanProductMaterial', dataMaterials,
-            function (data, textStatus, jqXHR) {
-              messageMaterial(data);
-            }, 
-          ); 
+        if (result == true) {
+          $.post(url, dataP, function (data, textStatus, jqXHR) {
+            messageMaterial(data);
+          });
         }
       },
     });
@@ -246,11 +290,12 @@ $(document).ready(function () {
       $('.cardAddMaterials').hide(800);
       $('#formImport').trigger('reset');
       $('#formAddMaterials').trigger('reset'); 
+      $('.cardAddNewProduct').hide(800);
 
       const idProduct = $('#selectNameProduct').val()
 
       if(idProduct)
-        loadtableMaterials(idProduct);
+        loadAllDataMaterials(idProduct);
 
       toastr.success(data.message);
       return false;

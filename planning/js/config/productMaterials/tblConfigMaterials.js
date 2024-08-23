@@ -3,36 +3,63 @@ $(document).ready(function () {
 
   $("#refProduct").change(function (e) {
     e.preventDefault();
-    id = this.value;
+    let id = this.value;
+    let composite = parseInt($(this).find('option:selected').attr('class'));
+
+    if (composite == 0) {
+      $('#btnAddNewProduct').show();
+    } else
+      $('#btnAddNewProduct').hide();
+    
     $("#selectNameProduct option").removeAttr("selected");
     $(`#selectNameProduct option[value=${id}]`).prop("selected", true);
     $('.cardAddMaterials').hide(800);
-    loadtableMaterials(id);
+    loadAllDataMaterials(id);
     loadTblPlanCiclesMachine(id);
     loadTblRoutes(id);
   });
 
   $("#selectNameProduct").change(function (e) {
     e.preventDefault();
-    id = this.value;
+    let id = this.value;
+    let composite = parseInt($(this).find('option:selected').attr('class'));
+
+    if (composite == 0) {
+      $('#btnAddNewProduct').show();
+    } else
+      $('#btnAddNewProduct').hide();
+    
     $("#refProduct option").removeAttr("selected");
     $(`#refProduct option[value=${id}]`).prop("selected", true);
     $('.cardAddMaterials').hide(800);
-    loadtableMaterials(id);
+    loadAllDataMaterials(id);
     loadTblPlanCiclesMachine(id);
     loadTblRoutes(id);
   });
 
   /* Cargue tabla de Productos Materiales */
+  loadAllDataMaterials = async (id) => {
+    try {
+      const [dataProductMaterials, dataCompositeProduct] = await Promise.all([
+        searchData(`/api/productsMaterials/${id}`),
+        searchData(`/api/compositeProducts/${id}`)
+      ]);
 
-  loadtableMaterials = (idProduct) => {
-    tblConfigMaterials = $("#tblConfigMaterials").DataTable({
+      sessionStorage.setItem('dataProductMaterials', JSON.stringify(dataProductMaterials));
+      sessionStorage.setItem('dataCompositeProduct', JSON.stringify(dataCompositeProduct));  
+      let data = [...dataProductMaterials, ...dataCompositeProduct];
+
+      loadTableMaterials(data);
+    } catch (error) {
+      console.error('Error loading data:', error);
+    }
+  };
+
+  const loadTableMaterials = (data) => {
+    tblConfigMaterials = $("#tblConfigMaterials").dataTable({
       destroy: true,
       pageLength: 50,
-      ajax: {
-        url: `/api/productsMaterials/${idProduct}`,
-        dataSrc: "",
-      },
+      data: data,
       dom: '<"datatable-error-console">frtip',
       language: {
         url: "/assets/plugins/i18n/Spanish.json",
@@ -83,12 +110,13 @@ $(document).ready(function () {
         },
         {
           title: "Acciones",
-          data: "id_product_material",
+          data: null,
           className: "uniqueClassName dt-head-center",
           render: function (data) {
-            return `
-                <a href="javascript:;" <i id="updt-${data}" class="bx bx-edit-alt updateMaterials" data-toggle='tooltip' title='Actualizar Materia Prima' style="font-size: 30px;"></i></a>
-                <a href="javascript:;" <i id="${data}" class="mdi mdi-delete-forever" data-toggle='tooltip' title='Eliminar Materia Prima' style="font-size: 30px;color:red" onclick="deleteMaterial(${data})"></i></a>`;
+            return `<a href="javascript:;" <i id="${data.id_product_material != 0 ? data.id_product_material : data.id_composite_product}" class="bx bx-edit-alt ${data.id_product_material != 0 ? 'updateMaterials' : 'updateComposite'}" data-toggle='tooltip' title='Actualizar Materia Prima' style="font-size: 30px;"></i></a>
+                        <a href="javascript:;" <i id="${data.id_product_material != 0 ? data.id_product_material : data.id_composite_product}" class="mdi mdi-delete-forever" data-toggle='tooltip' title='Eliminar Materia Prima' style="font-size: 30px;color:red" onclick="deleteMaterial(${data.id_product_material != 0 ? '1' : '2'})"></i></a>`;
+            // `<a href="javascript:;" <i id="updt-${data}" class="bx bx-edit-alt updateMaterials" data-toggle='tooltip' title='Actualizar Materia Prima' style="font-size: 30px;"></i></a>
+            //   <a href="javascript:;" <i id="${data}" class="mdi mdi-delete-forever" data-toggle='tooltip' title='Eliminar Materia Prima' style="font-size: 30px;color:red" onclick="deleteMaterial(${data})"></i></a>`;
           },
         },
       ],
@@ -108,50 +136,4 @@ $(document).ready(function () {
       },
     });
   };
-  /* Cargue tabla de Productos en proceso 
-
-  const loadTableProcess = (idProduct) => {
-    $('.cardTableProductsInProcess').show(800);
-
-    tblProductsInProcess = $('#tblProductsInProcess').dataTable({
-      destroy: true,
-      pageLength: 50,
-      ajax: {
-        url: `/api/productsInProcessByCompany/${idProduct}`,
-        dataSrc: '',
-      },
-      language: {
-        url: '/assets/plugins/i18n/Spanish.json',
-      },
-      columns: [
-        {
-          title: 'No.',
-          data: null,
-          className: 'uniqueClassName dt-head-center',
-          render: function (data, type, full, meta) {
-            return meta.row + 1;
-          },
-        },
-        {
-          title: 'Referencia',
-          data: 'reference',
-          className: 'uniqueClassName dt-head-center',
-        },
-        {
-          title: 'Producto',
-          data: 'product',
-          className: 'uniqueClassName dt-head-center',
-        },
-        {
-          title: 'Acciones',
-          data: 'id_product_category',
-          className: 'uniqueClassName dt-head-center',
-          render: function (data) {
-            return `
-              <a href="javascript:;" <i id="${data}" class="mdi mdi-delete-forever" data-toggle='tooltip' title='Eliminar Producto' style="font-size: 30px;color:red" onclick="deleteProduct()"></i></a>`;
-          },
-        },
-      ],
-    });
-  }; */
 });

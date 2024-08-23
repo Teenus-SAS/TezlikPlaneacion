@@ -53,6 +53,9 @@ if (sizeof($_SESSION) == 0)
                                     <div class="col-xs-2 mr-2">
                                         <button class="btn btn-warning" id="btnCreateProduct"><i class="bi bi-plus-circle mr-1"></i>Adicionar</button>
                                     </div>
+                                    <div class="col-xs-2 mr-2">
+                                        <button class="btn btn-secondary" id="btnAddNewProduct" style="display: none;">Asignar SubProducto</button>
+                                    </div>
                                     <!-- <div class="col-xs-2 py-2 mr-2">
                                         <button class="btn btn-secondary" id="btnCreateProductInProcess">Adicionar Producto En Proceso</button>
                                 </div> -->
@@ -198,6 +201,45 @@ if (sizeof($_SESSION) == 0)
                                     </div>
                                 </div>
                             </form>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Productos Compuestos -->
+                <div class="page-content-wrapper mt--45 mt-5 cardAddNewProduct">
+                    <div class="container-fluid">
+                        <div class="row">
+                            <div class="col-12">
+                                <div class="card">
+                                    <div class="card-body pb-0">
+                                        <form id="formAddNewProduct">
+                                            <div class="form-row">
+                                                <div class="col-sm-3 floating-label enable-floating-label show-label" style="margin-bottom:20px">
+                                                    <label>Referencia</label>
+                                                    <select class="form-control compositeProduct inputs" name="refCompositeProduct" id="refCompositeProduct"></select>
+                                                </div>
+                                                <div class="col-sm-5 floating-label enable-floating-label show-label" style="margin-bottom:20px">
+                                                    <label>Producto</label>
+                                                    <select class="form-control compositeProduct inputs" name="compositeProduct" id="compositeProduct"></select>
+                                                </div>
+                                                <div class="col-sm-3 floating-label enable-floating-label show-label" style="margin-bottom:5px">
+                                                    <select class="form-control inputs" id="unit2" name="unit">
+                                                    </select>
+                                                    <label>Unidad</label>
+                                                </div>
+                                                <div class="w-100"></div>
+                                                <div class="col-sm-2 floating-label enable-floating-label show-label" style="margin-bottom:20px">
+                                                    <label>Cantidad</label>
+                                                    <input class="form-control text-center quantityCP inputs" type="number" name="quantity" id="quantityCP">
+                                                </div>
+                                                <div class="col-xs-1 mt-1">
+                                                    <button class="btn btn-success" id="btnAddProduct">Adicionar</button>
+                                                </div>
+                                            </div>
+                                        </form>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -362,6 +404,7 @@ if (sizeof($_SESSION) == 0)
     <script src="/planning/js/basic/products/configProducts.js"></script>
     <script src="/planning/js/basic/rawMaterials/configRawMaterials.js"></script>
     <script src="/planning/js/config/productMaterials/productMaterials.js"></script>
+    <script src="/planning/js/config/productMaterials/compositeProducts.js"></script>
     <script src="/planning/js/basic/process/configProcess.js"></script>
     <script src="/planning/js/basic/machines/configMachines.js"></script>
     <script src="/planning/js/config/planCiclesMachine/importPlanCiclesMachine.js"></script>

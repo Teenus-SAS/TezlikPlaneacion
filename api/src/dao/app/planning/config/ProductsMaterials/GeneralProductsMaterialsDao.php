@@ -39,7 +39,7 @@ class GeneralProductsMaterialsDao
     {
         $connection = Connection::getInstance()->getConnection();
         $stmt = $connection->prepare("SELECT p.id_product, p.reference AS reference_product, p.product, m.id_material, m.reference AS reference_material, 
-                                             m.material, (mi.quantity / pm.quantity_converted) AS quantity, pm.quantity AS quantity_ftm,
+                                             m.material, (mi.quantity / pm.quantity_converted) AS quantity, pm.quantity AS quantity_ftm, 'MATERIAL' AS type,
                                              IFNULL(mg.id_magnitude, 0) AS id_magnitude, IFNULL(mg.magnitude, '') AS magnitude, IFNULL(u.id_unit, 0) AS id_unit, IFNULL(u.unit, '') AS unit, IFNULL(u.abbreviation, '') AS abbreviation
                                              -- ((m.quantity / pm.quantity) - IFNULL((SELECT SUM(quantity) FROM programming WHERE id_product = pm.id_product), 0)) AS quantity
                                       FROM products p

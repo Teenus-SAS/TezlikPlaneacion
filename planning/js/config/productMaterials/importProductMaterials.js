@@ -5,6 +5,7 @@ $(document).ready(function () {
   $('#btnImportProduct').on('click', function () {
     $('.cardAddMaterials').hide(800);
     $('.cardImport').toggle(800);
+    $('.cardAddNewProduct').hide();
   });
 
   $('#btnImportProductsMaterials').click(function (e) {
