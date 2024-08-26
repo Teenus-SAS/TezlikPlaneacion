@@ -16,7 +16,7 @@ if (sizeof($_SESSION) == 0)
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="description" content="LetStart Admin is a full featured, multipurpose, premium bootstrap admin template built with Bootstrap 4 Framework, HTML5, CSS and JQuery.">
     <meta name="keywords" content="admin, panels, dashboard, admin panel, multipurpose, bootstrap, bootstrap4, all type of dashboards">
-    <meta name="author" content="MatrrDigital">
+    <meta name="author" content="Teenus SAS">
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>TezlikPlanner | Productos</title>
     <link rel="shortcut icon" href="/assets/images/favicon/favicon_tezlik.jpg" type="image/x-icon" />
@@ -68,10 +68,10 @@ if (sizeof($_SESSION) == 0)
                             </div>
                             <div class="col-sm-7 col-xl-6 form-inline justify-content-sm-end">
                                 <div class="col-xs-2 mr-2">
-                                    <button class="btn btn-warning" id="btnNewPType" name="btnNewPType"><i class="bi bi-plus-circle mr-1"></i>Adicionar</button>
+                                    <button class="btn btn-warning" id="btnNewPType" name="btnNewPType"><i class="fas fa-box-open mr-1"></i>Adicionar</button>
                                 </div>
                                 <div class="col-xs-2 py-2 mr-2">
-                                    <button class="btn btn-info" id="btnNewImportPType" name="btnNewImportPType"><i class="bi bi-cloud-arrow-up-fill mr-1"></i>Importar</button>
+                                    <button class="btn btn-info" id="btnNewImportPType" name="btnNewImportPType"><i class="fas fa-cloud-upload-alt mr-1"></i></button>
                                 </div>
                             </div>
                         </div>
@@ -87,25 +87,27 @@ if (sizeof($_SESSION) == 0)
                                     <div class="card">
                                         <div class="card-body">
                                             <div class="form-row">
+
                                                 <div class="col-sm-2 floating-label enable-floating-label show- mb-3 label cardSelect">
-                                                    <label for="idProductType">Tipo</label>
-                                                    <select class="form-control" name="idProductType" id="idProductType">
-                                                    </select>
-                                                </div>
-                                                <div class="col-sm-3 floating-label enable-floating-label show-label" style="margin-bottom:20px">
-                                                    <label for="">Referencia</label>
-                                                    <input type="text" class="form-control text-center" name="referenceProduct" id="referenceProduct">
-                                                </div>
-                                                <div class="col-sm-7 floating-label enable-floating-label show-label" style="margin-bottom:5px">
-                                                    <label for="">Producto</label>
-                                                    <input type="text" class="form-control" name="product" id="product">
-                                                </div>
-                                                <div class="col-sm-3 floating-label enable-floating-label show- mb-3 label cardSelect">
                                                     <label for="prodOrigin">Origen</label>
                                                     <select class="form-control" name="prodOrigin" id="prodOrigin">
                                                         <option value="1">COMERCIALIZADO</option>
                                                         <option value="2">MANUFACTURADO</option>
                                                     </select>
+                                                </div>
+
+                                                <div class="col-sm-2 floating-label enable-floating-label show- mb-3 label cardSelect">
+                                                    <label for="idProductType">Tipo</label>
+                                                    <select class="form-control" name="idProductType" id="idProductType">
+                                                    </select>
+                                                </div>
+                                                <div class="col-sm-2 floating-label enable-floating-label show-label" style="margin-bottom:20px">
+                                                    <label for="">Referencia</label>
+                                                    <input type="text" class="form-control text-center" name="referenceProduct" id="referenceProduct">
+                                                </div>
+                                                <div class="col-sm-6 floating-label enable-floating-label show-label" style="margin-bottom:5px">
+                                                    <label for="">Descripción Producto</label>
+                                                    <input type="text" class="form-control" name="product" id="product">
                                                 </div>
 
                                                 <div class="col-sm-1 floating-label enable-floating-label show-label">
@@ -132,13 +134,13 @@ if (sizeof($_SESSION) == 0)
                                                     <label for="window">Ventanilla</label>
                                                     <input type="number" class="form-control text-center" id="window" name="window">
                                                 </div>
-                                                
+
                                                 <div class="col-sm-1 floating-label enable-floating-label show-label">
                                                     <label for="inks">Tintas</label>
                                                     <input type="number" class="form-control text-center" id="inks" name="inks">
                                                 </div>
 
-                                                <div class="col-sm-1 ml-2 mt-1">
+                                                <div class="col-sm-2 ml-2 mt-1">
                                                     <button class="btn btn-success" id="btnCreatePMeasure">Crear</button>
                                                 </div>
                                             </div>
