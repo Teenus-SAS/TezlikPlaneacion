@@ -133,7 +133,7 @@ if (sizeof($_SESSION) == 0)
                                                     <input type="number" class="form-control text-center" id="window" name="window">
                                                 </div>
                                                 
-                                                <div class="col-sm-2 floating-label enable-floating-label show-label">
+                                                <div class="col-sm-1 floating-label enable-floating-label show-label">
                                                     <label for="inks">Tintas</label>
                                                     <input type="number" class="form-control text-center" id="inks" name="inks">
                                                 </div>
