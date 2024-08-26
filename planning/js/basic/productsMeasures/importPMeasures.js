@@ -38,10 +38,10 @@ $(document).ready(function () {
     importFile(selectedFile)
       .then((data) => {
 
-        let expectedHeaders = ['referencia_producto', 'producto', 'tipo_producto', 'ancho', 'alto', 'largo', 'largo_util', 'ancho_total', 'ventanilla', 'origen'];
+        let expectedHeaders = ['referencia_producto', 'producto', 'tipo_producto', 'ancho', 'alto', 'largo', 'largo_util', 'ancho_total', 'ventanilla', 'tinta', 'origen'];
         
         if (flag_products_measure == '0') {
-          expectedHeaders = ['referencia_producto', 'producto', 'tipo_producto', 'origen'];
+          expectedHeaders = ['referencia_producto', 'producto', 'tipo_producto'];
           
         }
         const actualHeaders = Object.keys(data[0]);
@@ -64,6 +64,8 @@ $(document).ready(function () {
           let usefulLength = 0;
           let totalWidth = 0;
           let window = 0;
+          let inks = 0;
+          let origin = '';
           
           item.ancho ? width = item.ancho : width;
           item.alto ? high = item.alto : high;
@@ -71,6 +73,8 @@ $(document).ready(function () {
           item.largo_util ? usefulLength = item.largo_util : usefulLength;
           item.ancho_total ? totalWidth = item.ancho_total : totalWidth;
           item.ventanilla ? window = item.ventanilla : window;
+          item.tinta ? inks = item.tinta : inks;
+          item.origen ? origin = 'COMERCIALIZADO' : origin;
           
           return {
             referenceProduct: item.referencia_producto,
@@ -83,6 +87,7 @@ $(document).ready(function () {
             totalWidth: item.ancho_total,
             window: item.ventanilla,
             origin: item.origen,
+            inks: item.tinta,
           };
         });
         checkProduct(productsToImport);

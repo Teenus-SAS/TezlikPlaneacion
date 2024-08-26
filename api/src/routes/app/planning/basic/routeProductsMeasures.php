@@ -203,6 +203,8 @@ $app->post('/addProductMeasure', function (Request $request, Response $response,
             $findProduct = $generalProductsDao->findProduct($products[$i], $id_company);
             $products[$i]['idProduct'] = $findProduct['id_product'];
 
+            $products[$i]['origin'] == 'COMERCIALIZADO' ? $products[$i]['origin'] = 1 : $products[$i]['origin'] = 2;
+
             $findProduct = $generalProductsDao->findProduct($products[$i], $id_company);
             if (!$findProduct) {
                 $resolution = $productsDao->insertProductByCompany($products[$i], $id_company);

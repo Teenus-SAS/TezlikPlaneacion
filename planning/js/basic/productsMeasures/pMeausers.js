@@ -32,6 +32,7 @@ $(document).ready(function () {
   /* Abrir panel crear producto */
   $('#btnNewPMeasure').click(function (e) {
     e.preventDefault();
+
     $(".cardCreatePMeasure").toggle(800);
     $('.inputsMeasures').show();
     $('.inputs').show();
@@ -53,6 +54,9 @@ $(document).ready(function () {
       case '1': // Comercializado
         $('.inputsMeasures').hide(800);
         break;
+      case '2': // Manufacturado
+        $('.inputsMeasures').show(800);
+        break;
     }    
   }); 
 
@@ -64,8 +68,12 @@ $(document).ready(function () {
     
     switch (option) {
       case 'CAJA':
-        $('.inputs').hide();
+        $('.inputs').hide(800);
         $('#lblWindow').html('Und x Tamaño');
+        break;
+      default:
+        $('.inputs').show(800);
+        $('#lblWindow').html('Ventanilla');
         break;
     }
   });
@@ -87,14 +95,15 @@ $(document).ready(function () {
   $(document).on("click", ".updatePMeasure", function (e) {
     $(".cardImportPMeasure").hide(800);
     $(".cardCreatePMeasure").show(800);
-    $(".inputs").show();
+    // $(".inputs").show();
+    $(".inputsMeasures").show();
     $("#btnCreatePMeasure").html("Actualizar");
     $('#lblWindow').html('Ventanilla');
 
     // Obtener el ID del elemento
     let id = $(this).attr('id');
     // Obtener la parte después del guion '-'
-    let idProductMeasure = id.split('-')[1]; 
+    let idProductMeasure = id.split('-')[1];
 
     sessionStorage.setItem("id_product_measure", idProductMeasure);
     
@@ -102,6 +111,7 @@ $(document).ready(function () {
     let data = tblProducts.fnGetData(row);
     
     sessionStorage.setItem("id_product", data.id_product);
+    $(`#prodOrigin option[value=${data.origin}]`).prop('selected', true);
     $("#referenceProduct").val(data.reference);
     $("#product").val(data.product);
     $(`#idProductType option[value=${data.id_product_type}]`).prop('selected', true);
@@ -111,11 +121,16 @@ $(document).ready(function () {
     $("#usefulLength").val(data.useful_length);
     $("#totalWidth").val(data.total_width);
     $("#window").val(data.window);
+    $("#inks").val(data.inks);
 
-    if (data.prodduct_type == 'CAJA') {
+    if (data.origin == '1') { // Comercializado
+      $('.inputsMeasures').hide();      
+    }
+
+    if (data.product_type == 'CAJA') {
       $('.inputs').hide();
       $('#lblWindow').html('Und x Tamaño');
-    } 
+    }
 
     $("html, body").animate({ scrollTop: 0 }, 1000);
   });
@@ -132,12 +147,13 @@ $(document).ready(function () {
     let totalWidth = parseFloat($("#totalWidth").val());
     let window = parseFloat($("#window").val());
     let prodOrigin = parseFloat($("#prodOrigin").val());
+    let inks = parseFloat($("#inks").val());
     let productType = $('#idProductType option:selected').text().trim();
 
     let data = 1 * idProductType;
 
-    if(prodOrigin == '1' && productType != 'CAJA')
-      data *= width * high * length * usefulLength * totalWidth;
+    if (prodOrigin == '1' && productType != 'CAJA')
+      data *= width * high * length * usefulLength * totalWidth * inks;
 
     if (ref.trim() == "" || !ref.trim() || prod.trim() == "" || !prod.trim()|| isNaN(data) || data <= 0) {
       toastr.error("Ingrese todos los campos");

@@ -112,6 +112,15 @@ $(document).ready(function () {
             maximumFractionDigits: 2,
           }),
       },
+      {
+        title: "Tinta",
+        data: "inks",
+        className: "uniqueClassName dt-head-center",
+        render: (data) =>
+          parseFloat(data).toLocaleString("es-CO", {
+            maximumFractionDigits: 2,
+          }),
+      },
     ],
   });
 });

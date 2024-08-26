@@ -41,12 +41,13 @@ class ProductsDao
     $connection = Connection::getInstance()->getConnection();
 
     try {
-      $stmt = $connection->prepare("INSERT INTO products (id_company, id_product_type, reference, product) 
-                                      VALUES(:id_company, :id_product_type, :reference, :product)");
+      $stmt = $connection->prepare("INSERT INTO products (id_company, id_product_type, reference, product, origin) 
+                                      VALUES(:id_company, :id_product_type, :reference, :product, :origin)");
       $stmt->execute([
         'id_product_type' => $dataProduct['idProductType'],
         'reference' => trim($dataProduct['referenceProduct']),
         'product' => strtoupper(trim($dataProduct['product'])),
+        'origin' => $dataProduct['origin'],
         'id_company' => $id_company,
       ]);
       $this->logger->info(__FUNCTION__, array('query' => $stmt->queryString, 'errors' => $stmt->errorInfo()));
@@ -66,12 +67,13 @@ class ProductsDao
     $connection = Connection::getInstance()->getConnection();
 
     try {
-      $stmt = $connection->prepare("UPDATE products SET id_product_type = :id_product_type, reference = :reference, product = :product
+      $stmt = $connection->prepare("UPDATE products SET id_product_type = :id_product_type, reference = :reference, product = :product, origin = :origin
                                     WHERE id_product = :id_product AND id_company = :id_company");
       $stmt->execute([
         'id_product_type' => $dataProduct['idProductType'],
         'reference' => trim($dataProduct['referenceProduct']),
         'product' => strtoupper(trim($dataProduct['product'])),
+        'origin' => $dataProduct['origin'],
         'id_company' => $id_company,
         'id_product' => $dataProduct['idProduct'],
       ]);

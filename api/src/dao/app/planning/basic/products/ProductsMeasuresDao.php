@@ -19,7 +19,7 @@ class ProductsMeasuresDao
     public function findAllProductsMeasuresByCompany($id_company)
     {
         $connection = Connection::getInstance()->getConnection();
-        $sql = "SELECT pm.id_product_measure, pm.id_product, p.id_product_type, IFNULL(pt.product_type, '') AS product_type, p.reference, p.product, p.composite, p.img, pm.width, pm.high, pm.length, pm.useful_length, pm.total_width, pm.window
+        $sql = "SELECT pm.id_product_measure, pm.id_product, p.id_product_type, IFNULL(pt.product_type, '') AS product_type, p.reference, p.product, p.composite, p.origin, p.img, pm.width, pm.high, pm.length, pm.useful_length, pm.total_width, pm.window, pm.inks
                 FROM products_measures pm
                 INNER JOIN products p ON p.id_product = pm.id_product
                 LEFT JOIN products_type pt ON pt.id_product_type = p.id_product_type
@@ -39,9 +39,9 @@ class ProductsMeasuresDao
             $connection = Connection::getInstance()->getConnection();
 
             $sql = "INSERT INTO products_measures (id_product, id_company, width, high, length, useful_length, 
-                                                    total_width, window) 
+                                                    total_width, window, inks) 
                     VALUES (:id_product, :id_company, :width, :high, :length, :useful_length, 
-                            :total_width, :window)";
+                            :total_width, :window, :inks)";
             $stmt = $connection->prepare($sql);
             $stmt->execute([
                 'id_company' => $id_company,
@@ -52,6 +52,7 @@ class ProductsMeasuresDao
                 'useful_length' => $dataProduct['usefulLength'],
                 'total_width' => $dataProduct['totalWidth'],
                 'window' => $dataProduct['window'],
+                'inks' => $dataProduct['inks'],
             ]);
         } catch (\Exception $e) {
             return ['info' => true, 'message' => $e->getMessage()];
@@ -64,7 +65,7 @@ class ProductsMeasuresDao
             $connection = Connection::getInstance()->getConnection();
 
             $sql = "UPDATE products_measures 
-                    SET width = :width, high = :high, length = :length, useful_length = :useful_length, total_width = :total_width, window = :window
+                    SET width = :width, high = :high, length = :length, useful_length = :useful_length, total_width = :total_width, window = :window, inks = :inks
                     WHERE id_product_measure = :id_product_measure";
             $stmt = $connection->prepare($sql);
             $stmt->execute([
@@ -75,6 +76,7 @@ class ProductsMeasuresDao
                 'useful_length' => $dataProduct['usefulLength'],
                 'total_width' => $dataProduct['totalWidth'],
                 'window' => $dataProduct['window'],
+                'inks' => $dataProduct['inks'],
             ]);
         } catch (\Exception $e) {
             return ['info' => true, 'message' => $e->getMessage()];

@@ -89,7 +89,8 @@ if (sizeof($_SESSION) == 0)
                                             <div class="form-row">
                                                 <div class="col-sm-2 floating-label enable-floating-label show- mb-3 label cardSelect">
                                                     <label for="prodOrigin">Origen</label>
-                                                    <select class="form-control" name="prodOrigin" id="prodOrigin">
+                                                    <select class="form-control" name="origin" id="prodOrigin">
+                                                        <option selected disabled>Seleccionar</option>
                                                         <option value="1">COMERCIALIZADO</option>
                                                         <option value="2">MANUFACTURADO</option>
                                                     </select>
@@ -108,7 +109,7 @@ if (sizeof($_SESSION) == 0)
                                                     <input type="text" class="form-control" name="product" id="product">
                                                 </div>
 
-                                                <div class="col-sm-1 floating-label enable-floating-label show-label inputs">
+                                                <div class="col-sm-1 floating-label enable-floating-label show-label inputs inputsMeasures">
                                                     <label for="width">Ancho</label>
                                                     <input type="number" class="form-control text-center" id="width" name="width"></input>
                                                 </div>
@@ -120,19 +121,19 @@ if (sizeof($_SESSION) == 0)
                                                     <label for="length">Largo Total</label>
                                                     <input type="number" class="form-control text-center" id="length" name="length">
                                                 </div>
-                                                <div class="col-sm-1 floating-label enable-floating-label show-label inputs">
+                                                <div class="col-sm-1 floating-label enable-floating-label show-label inputs inputsMeasures">
                                                     <label for="usefulLength">Largo Útil</label>
                                                     <input type="number" class="form-control text-center" id="usefulLength" name="usefulLength">
                                                 </div>
-                                                <div class="col-sm-1 floating-label enable-floating-label show-label">
+                                                <div class="col-sm-1 floating-label enable-floating-label show-label inputsMeasures">
                                                     <label for="totalWidth">Ancho Total</label>
                                                     <input type="number" class="form-control text-center" id="totalWidth" name="totalWidth">
                                                 </div>
-                                                <div class="col-sm-1 floating-label enable-floating-label show-label">
+                                                <div class="col-sm-1 floating-label enable-floating-label show-label inputsMeasures">
                                                     <label for="window" id="lblWindow">Ventanilla</label>
                                                     <input type="number" class="form-control text-center" id="window" name="window">
                                                 </div>
-                                                <div class="col-sm-1 floating-label enable-floating-label show-label">
+                                                <div class="col-sm-1 floating-label enable-floating-label show-label inputsMeasures">
                                                     <label for="inks">Tintas</label>
                                                     <input type="number" class="form-control text-center" id="inks" name="inks">
                                                 </div>
