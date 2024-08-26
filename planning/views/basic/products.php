@@ -138,7 +138,7 @@ if (sizeof($_SESSION) == 0)
                                                     <input type="number" class="form-control text-center" id="inks" name="inks">
                                                 </div>
 
-                                                <div class="col-sm-2 ml-2">
+                                                <div class="col-sm-1 ml-2">
                                                     <button class="btn btn-success" id="btnCreatePMeasure">Crear</button>
                                                 </div>
                                             </div>
