@@ -4,12 +4,14 @@ use TezlikPlaneacion\dao\GeneralPMeasuresDao;
 use TezlikPlaneacion\dao\GeneralProductsDao;
 use TezlikPlaneacion\dao\LastDataDao;
 use TezlikPlaneacion\dao\ProductsDao;
+use TezlikPlaneacion\dao\ProductsInventoryDao;
 use TezlikPlaneacion\dao\ProductsMeasuresDao;
 use TezlikPlaneacion\dao\ProductsTypeDao;
 
 $productsMeasuresDao = new ProductsMeasuresDao();
 $generalPMeasuresDao = new GeneralPMeasuresDao();
 $productsTypeDao = new ProductsTypeDao();
+$productsInventoryDao = new ProductsInventoryDao();
 $productsDao = new ProductsDao();
 $generalProductsDao = new GeneralProductsDao();
 $lastDataDao = new LastDataDao();
@@ -85,9 +87,17 @@ $app->post('/productsMeasuresDataValidation', function (Request $request, Respon
                         $dataImportProduct = array('error' => true, 'message' => "Campos vacios, fila: $i");
                         break;
                     }
+
+                    $data = floatval($products[$i]['width']) * floatval($products[$i]['high']) * floatval($products[$i]['length']) * floatval($products[$i]['usefulLength']) *
+                        floatval($products[$i]['totalWidth']) * floatval($products[$i]['window']) * floatval($products[$i]['']);
+
+                    if (is_nan($data) || $data <= 0) {
+                        $i = $i + 2;
+                        $dataImportProduct = array('error' => true, 'message' => "Campos vacios, fila: $i");
+                        break;
+                    }
                     break;
             }
-
 
             $item = $products[$i];
             $refProduct = trim($item['referenceProduct']);
@@ -158,6 +168,7 @@ $app->post('/addProductMeasure', function (Request $request, Response $response,
 ) {
     session_start();
     $id_company = $_SESSION['id_company'];
+    $flag_products_measure = $_SESSION['flag_products_measure'];
     $dataProduct = $request->getParsedBody();
 
     /* Inserta datos */
@@ -169,7 +180,7 @@ $app->post('/addProductMeasure', function (Request $request, Response $response,
         if (!$findProduct) {
             $resolution = $productsDao->insertProductByCompany($dataProduct, $id_company);
 
-            if ($resolution == null) {
+            if ($resolution == null && $flag_products_measure == '1') {
                 $lastData = $lastDataDao->lastInsertedProductId($id_company);
                 $dataProduct['idProduct'] = $lastData['id_product'];
 
@@ -206,14 +217,16 @@ $app->post('/addProductMeasure', function (Request $request, Response $response,
             }
             if (isset($resolution['info'])) break;
 
-            $findPMeasure = $generalPMeasuresDao->findProductMeasure($products[$i], $id_company);
+            if ($flag_products_measure == '1') {
+                $findPMeasure = $generalPMeasuresDao->findProductMeasure($products[$i], $id_company);
 
-            if (!$findPMeasure)
-                $resolution = $productsMeasuresDao->insertPMeasureByCompany($products[$i], $id_company);
-            else {
-                $products[$i]['idProductMeasure'] = $findPMeasure['id_product_measure'];
+                if (!$findPMeasure)
+                    $resolution = $productsMeasuresDao->insertPMeasureByCompany($products[$i], $id_company);
+                else {
+                    $products[$i]['idProductMeasure'] = $findPMeasure['id_product_measure'];
 
-                $resolution = $productsMeasuresDao->updatePMeasure($products[$i]);
+                    $resolution = $productsMeasuresDao->updatePMeasure($products[$i]);
+                }
             }
             if (isset($resolution['info'])) break;
         }
@@ -238,6 +251,7 @@ $app->post('/updateProductMeasure', function (Request $request, Response $respon
 ) {
     session_start();
     $id_company = $_SESSION['id_company'];
+    $flag_products_measure = $_SESSION['flag_products_measure'];
     $status = true;
     $dataProduct = $request->getParsedBody();
 
@@ -253,7 +267,7 @@ $app->post('/updateProductMeasure', function (Request $request, Response $respon
     if ($status == true) {
         $resolution = $productsDao->updateProductByCompany($dataProduct, $id_company);
 
-        if ($resolution == null)
+        if ($resolution == null && $flag_products_measure == '1')
             $resolution = $productsMeasuresDao->updatePMeasure($dataProduct);
 
         if ($resolution == null)
@@ -269,8 +283,26 @@ $app->post('/updateProductMeasure', function (Request $request, Response $respon
     return $response->withStatus(200)->withHeader('Content-Type', 'application/json');
 });
 
-$app->get('/deleteProductMeasure/{id_product_measure}', function (Request $request, Response $response, $args) use ($productsMeasuresDao) {
-    $resolution = $productsMeasuresDao->deletePMeasure($args['id_product_measure']);
+$app->get('/deleteProductMeasure/{id_product_measure}', function (Request $request, Response $response, $args) use (
+    $productsDao,
+    $productsInventoryDao,
+    $productsMeasuresDao
+) {
+    session_start();
+    $flag_products_measure = $_SESSION['flag_products_measure'];
+    $resolution = null;
+
+    if ($flag_products_measure == '1') {
+        $resolution = $productsMeasuresDao->deletePMeasure($args['id_product_measure']);
+        if ($resolution == null)
+            $resolution = $productsDao->deleteProduct($args['id_product']);
+        if ($resolution == null)
+            $resolution = $productsInventoryDao->deleteProductInventory($args['id_product']);
+    } else {
+        $resolution = $productsDao->deleteProduct($args['id_product']);
+        if ($resolution == null)
+            $resolution = $productsInventoryDao->deleteProductInventory($args['id_product']);
+    }
 
     if ($resolution == null)
         $resp = array('success' => true, 'message' => 'Medidas de producto eliminada correctamente');

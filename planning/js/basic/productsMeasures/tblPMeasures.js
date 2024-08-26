@@ -12,14 +12,17 @@ $(document).ready(function () {
     columns: [
       {
         title: "Acciones",
-        data: "id_product_measure",
+        data: null,
         className: "uniqueClassName dt-head-center",
         render: (data) => `
           <a href="javascript:;">
-            <i id="upd-${data}" class="bx bx-edit-alt updatePMeasure" data-toggle='tooltip' title='Actualizar Medida' style="font-size: 30px;"></i>
+            <i id="${data.id_product}" class="${data.composite == 0 ? 'bi bi-plus-square-fill' : 'bi bi-dash-square-fill'} composite" data-toggle='tooltip' title='${data.composite == 0 ? 'Agregar' : 'Eliminar'} a producto compuesto' style="font-size:25px; color: #3e382c;"></i>
           </a>
           <a href="javascript:;">
-            <i id="${data}" class="mdi mdi-delete-forever" data-toggle='tooltip' title='Eliminar Medida' style="font-size: 30px;color:red" onclick="deletePMeasureFunction()"></i>
+            <i id="upd-${data.id_product_measure}" class="bx bx-edit-alt updatePMeasure" data-toggle='tooltip' title='Actualizar Medida' style="font-size: 30px;"></i>
+          </a>
+          <a href="javascript:;">
+            <i id="${data.id_product_measure}" class="mdi mdi-delete-forever" data-toggle='tooltip' title='Eliminar Medida' style="font-size: 30px;color:red" onclick="deletePMeasureFunction()"></i>
           </a>
         `,
       },

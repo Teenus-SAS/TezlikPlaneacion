@@ -87,7 +87,6 @@ if (sizeof($_SESSION) == 0)
                                     <div class="card">
                                         <div class="card-body">
                                             <div class="form-row">
-
                                                 <div class="col-sm-2 floating-label enable-floating-label show- mb-3 label cardSelect">
                                                     <label for="prodOrigin">Origen</label>
                                                     <select class="form-control" name="prodOrigin" id="prodOrigin">
@@ -95,7 +94,6 @@ if (sizeof($_SESSION) == 0)
                                                         <option value="2">MANUFACTURADO</option>
                                                     </select>
                                                 </div>
-
                                                 <div class="col-sm-2 floating-label enable-floating-label show- mb-3 label cardSelect">
                                                     <label for="idProductType">Tipo</label>
                                                     <select class="form-control" name="idProductType" id="idProductType">
@@ -110,11 +108,11 @@ if (sizeof($_SESSION) == 0)
                                                     <input type="text" class="form-control" name="product" id="product">
                                                 </div>
 
-                                                <div class="col-sm-1 floating-label enable-floating-label show-label">
+                                                <div class="col-sm-1 floating-label enable-floating-label show-label inputs">
                                                     <label for="width">Ancho</label>
                                                     <input type="number" class="form-control text-center" id="width" name="width"></input>
                                                 </div>
-                                                <div class="col-sm-1 floating-label enable-floating-label show-label inputsMeasures">
+                                                <div class="col-sm-1 floating-label enable-floating-label show-label inputsMeasures inputs">
                                                     <label for="high">Alto</label>
                                                     <input type="number" class="form-control text-center" id="high" name="high">
                                                 </div>
@@ -122,19 +120,18 @@ if (sizeof($_SESSION) == 0)
                                                     <label for="length">Largo Total</label>
                                                     <input type="number" class="form-control text-center" id="length" name="length">
                                                 </div>
-                                                <div class="col-sm-1 floating-label enable-floating-label show-label">
+                                                <div class="col-sm-1 floating-label enable-floating-label show-label inputs">
                                                     <label for="usefulLength">Largo Útil</label>
-                                                    <input type="number" class="form-control text-center inputsCalc" id="usefulLength" name="usefulLength">
+                                                    <input type="number" class="form-control text-center" id="usefulLength" name="usefulLength">
                                                 </div>
                                                 <div class="col-sm-1 floating-label enable-floating-label show-label">
                                                     <label for="totalWidth">Ancho Total</label>
-                                                    <input type="number" class="form-control text-center inputsCalc" id="totalWidth" name="totalWidth">
+                                                    <input type="number" class="form-control text-center" id="totalWidth" name="totalWidth">
                                                 </div>
                                                 <div class="col-sm-1 floating-label enable-floating-label show-label">
-                                                    <label for="window">Ventanilla</label>
+                                                    <label for="window" id="lblWindow">Ventanilla</label>
                                                     <input type="number" class="form-control text-center" id="window" name="window">
                                                 </div>
-
                                                 <div class="col-sm-1 floating-label enable-floating-label show-label">
                                                     <label for="inks">Tintas</label>
                                                     <input type="number" class="form-control text-center" id="inks" name="inks">
@@ -277,7 +274,9 @@ if (sizeof($_SESSION) == 0)
         <!-- footer -->
         <?php include_once  dirname(dirname(dirname(__DIR__))) . '/global/partials/footer.php'; ?>
     </div>
-
+    <script>
+        flag_products_measure = "<?= $_SESSION['flag_products_measure'] ?>";
+    </script>
     <?php include_once dirname(dirname(dirname(__DIR__))) . '/global/partials/scriptsJS.php'; ?>
     <!-- <script src="/planning/js/basic/products/configProducts.js"></script> -->
     <script src="/planning/js/basic/productsType/configProductType.js"></script>

@@ -34,8 +34,10 @@ $(document).ready(function () {
     e.preventDefault();
     $(".cardCreatePMeasure").toggle(800);
     $('.inputsMeasures').show();
+    $('.inputs').show();
     $(".cardImportPMeasure").hide(800);
     $("#btnCreatePMeasure").html("Crear");
+    $('#lblWindow').html('Ventanilla');
 
     sessionStorage.removeItem("id_product_measure");
 
@@ -54,6 +56,20 @@ $(document).ready(function () {
     }    
   }); 
 
+  // Tipo Producto
+  $('#idProductType').change(function (e) { 
+    e.preventDefault();
+  
+    let option = $('#idProductType option:selected').text().trim();
+    
+    switch (option) {
+      case 'CAJA':
+        $('.inputs').hide();
+        $('#lblWindow').html('Und x Tamaño');
+        break;
+    }
+  });
+
   /* Crear producto */
   $('#btnCreatePMeasure').click(function (e) {
     e.preventDefault();
@@ -71,7 +87,9 @@ $(document).ready(function () {
   $(document).on("click", ".updatePMeasure", function (e) {
     $(".cardImportPMeasure").hide(800);
     $(".cardCreatePMeasure").show(800);
+    $(".inputs").show();
     $("#btnCreatePMeasure").html("Actualizar");
+    $('#lblWindow').html('Ventanilla');
 
     // Obtener el ID del elemento
     let id = $(this).attr('id');
@@ -93,7 +111,11 @@ $(document).ready(function () {
     $("#usefulLength").val(data.useful_length);
     $("#totalWidth").val(data.total_width);
     $("#window").val(data.window);
-    //$("#weight").val(data.weight); 
+
+    if (data.prodduct_type == 'CAJA') {
+      $('.inputs').hide();
+      $('#lblWindow').html('Und x Tamaño');
+    } 
 
     $("html, body").animate({ scrollTop: 0 }, 1000);
   });
@@ -110,11 +132,12 @@ $(document).ready(function () {
     let totalWidth = parseFloat($("#totalWidth").val());
     let window = parseFloat($("#window").val());
     let prodOrigin = parseFloat($("#prodOrigin").val());
+    let productType = $('#idProductType option:selected').text().trim();
 
     let data = 1 * idProductType;
 
-    if(prodOrigin == '1')
-      data = width * high * length * usefulLength * totalWidth;
+    if(prodOrigin == '1' && productType != 'CAJA')
+      data *= width * high * length * usefulLength * totalWidth;
 
     if (ref.trim() == "" || !ref.trim() || prod.trim() == "" || !prod.trim()|| isNaN(data) || data <= 0) {
       toastr.error("Ingrese todos los campos");
@@ -169,8 +192,40 @@ $(document).ready(function () {
     });
   };
 
-  /* Mensaje de exito */
+  /* Productos Compuestos */
 
+  $(document).on('click', '.composite', function () {
+    let row = $(this).parent().parent()[0];
+    let data = tblProducts.fnGetData(row);
+
+    bootbox.confirm({
+      title: 'Producto Compuesto',
+      message:
+        `Está seguro de que este producto ${data.composite == '0' ? 'se <b>convierta en un subproducto</b> para ser agregado a un producto compuesto' : 'se <b>Elimine</b> como subproducto'}?`,
+      buttons: {
+        confirm: {
+          label: 'Si',
+          className: 'btn-success',
+        },
+        cancel: {
+          label: 'No',
+          className: 'btn-danger',
+        },
+      },
+      callback: function (result) {
+        if (result == true) {
+          $.get(
+            `/api/changeComposite/${data.id_product}/${data.composite == '0' ? '1' : '0'}`,
+            function (data, textStatus, jqXHR) {
+              messageProducts(data);
+            }
+          );
+        }
+      },
+    });
+  });
+
+  /* Mensaje de exito */
   messageProducts = (data) => {
     if (data.success == true) {
       $("#formImportProduct").trigger("reset");

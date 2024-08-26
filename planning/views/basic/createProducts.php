@@ -126,19 +126,19 @@ if (sizeof($_SESSION) == 0)
                                             <div class="form-row">
                                                 <div class="col-sm-2 floating-label enable-floating-label show-label">
                                                     <label for="referenceProduct">Referencia</label>
-                                                    <?php if ($_SESSION['flag_products_measure'] == 1) { ?>
-                                                        <select class="form-control refProduct" name="idProduct" id="refProduct"></select>
-                                                    <?php } else { ?>
+                                                    <!-- < ?php if ($_SESSION['flag_products_measure'] == 1) { ?> -->
+                                                    <select class="form-control refProduct" name="idProduct" id="refProduct"></select>
+                                                    <!-- < ?php } else { ?>
                                                         <input type="text" class="form-control text-center" name="referenceProduct" id="referenceProduct">
-                                                    <?php } ?>
+                                                    < ?php } ?> -->
                                                 </div>
                                                 <div class="col-sm-8 floating-label enable-floating-label show-label">
                                                     <label for="">Nombre Producto</label>
-                                                    <?php if ($_SESSION['flag_products_measure'] == 1) { ?>
-                                                        <select class="form-control selectNameProduct" name="idProduct" id="selectNameProduct"></select>
-                                                    <?php } else { ?>
+                                                    <!-- < ? php if ($_SESSION['flag_products_measure'] == 1) { ?> -->
+                                                    <select class="form-control selectNameProduct" name="idProduct" id="selectNameProduct"></select>
+                                                    <!-- < ? php } else { ?>
                                                         <input type="text" class="form-control" name="product" id="product">
-                                                    <?php } ?>
+                                                    < ? php } ?> -->
                                                 </div>
                                                 <div class="col-sm-2 floating-label enable-floating-label show-label">
                                                     <label for="">Existencias</label>

@@ -108,7 +108,7 @@ if (sizeof($_SESSION) == 0)
                     </div>
                 </div>
 
-                <div class="page-content-wrapper mt--45 mb-5 cardCreateRawMaterials">
+                <div class="page-content-wrapper mt--45 mb-5">
                     <div class="container-fluid">
                         <div class="row">
                             <div class="col-12">
@@ -206,12 +206,12 @@ if (sizeof($_SESSION) == 0)
                 </div>
 
                 <!-- Productos Compuestos -->
-                <div class="page-content-wrapper mt--45 mt-5 cardAddNewProduct">
+                <div class="page-content-wrapper mt--45 mb-5 cardAddNewProduct">
                     <div class="container-fluid">
                         <div class="row">
                             <div class="col-12">
                                 <div class="card">
-                                    <div class="card-body pb-0">
+                                    <div class="card-body">
                                         <form id="formAddNewProduct">
                                             <div class="form-row">
                                                 <div class="col-sm-3 floating-label enable-floating-label show-label" style="margin-bottom:20px">
@@ -227,12 +227,12 @@ if (sizeof($_SESSION) == 0)
                                                     </select>
                                                     <label>Unidad</label>
                                                 </div>
-                                                <div class="w-100"></div>
+                                                <!-- <div class="w-100"></div> -->
                                                 <div class="col-sm-2 floating-label enable-floating-label show-label" style="margin-bottom:20px">
                                                     <label>Cantidad</label>
                                                     <input class="form-control text-center quantityCP inputs" type="number" name="quantity" id="quantityCP">
                                                 </div>
-                                                <div class="col-xs-1 mt-1">
+                                                <div class="col-sm-1 mt-1">
                                                     <button class="btn btn-success" id="btnAddProduct">Adicionar</button>
                                                 </div>
                                             </div>

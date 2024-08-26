@@ -38,10 +38,16 @@ $(document).ready(function () {
     importFile(selectedFile)
       .then((data) => {
 
-        const expectedHeaders = ['referencia_producto', 'producto', 'tipo_producto', 'ancho', 'alto', 'largo', 'largo_util', 'ancho_total', 'ventanilla', 'origen'];
+        let expectedHeaders = ['referencia_producto', 'producto', 'tipo_producto', 'ancho', 'alto', 'largo', 'largo_util', 'ancho_total', 'ventanilla', 'origen'];
+        
+        if (flag_products_measure == '0') {
+          expectedHeaders = ['referencia_producto', 'producto', 'tipo_producto', 'origen'];
+          
+        }
         const actualHeaders = Object.keys(data[0]);
 
         const missingHeaders = expectedHeaders.filter(header => !actualHeaders.includes(header));
+
 
         if (missingHeaders.length > 0) {
           $('.cardLoading').remove();
@@ -150,8 +156,9 @@ $(document).ready(function () {
   /* Descargar formato */
   $('#btnDownloadImportsProducts').click(async function (e) {
     e.preventDefault(); 
-    
-    let url = 'assets/formatsXlsx/Medidas_Productos.xlsx';
+
+    flag_products_measure == '1' ? url = 'assets/formatsXlsx/Medidas_Productos.xlsx' :
+      url = 'assets/formatsXlsx/Productos.xlsx';
 
     link = document.createElement('a');
     link.target = '_blank';

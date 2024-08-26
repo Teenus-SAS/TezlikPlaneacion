@@ -67,7 +67,7 @@ $app->post('/productsDataValidation', function (Request $request, Response $resp
         $products = $dataProduct['importProducts'];
 
         // Verificar duplicados
-        $duplicateTracker = [];
+        // $duplicateTracker = [];
         $dataImportProduct = [];
 
         for ($i = 0; $i < count($products); $i++) {
@@ -86,58 +86,58 @@ $app->post('/productsDataValidation', function (Request $request, Response $resp
                 break;
             }
 
-            if ($_SESSION['flag_products_measure'] == '1') {
-                if (empty($products[$i]['productType'])) {
-                    $i = $i + 2;
-                    $dataImportProduct = array('error' => true, 'message' => "Campos vacios, fila: $i");
-                    break;
-                }
-                if (empty(trim($products[$i]['productType']))) {
-                    $i = $i + 2;
-                    $dataImportProduct = array('error' => true, 'message' => "Campos vacios, fila: $i");
-                    break;
-                }
-            }
+            // if ($_SESSION['flag_products_measure'] == '1') {
+            //     if (empty($products[$i]['productType'])) {
+            //         $i = $i + 2;
+            //         $dataImportProduct = array('error' => true, 'message' => "Campos vacios, fila: $i");
+            //         break;
+            //     }
+            //     if (empty(trim($products[$i]['productType']))) {
+            //         $i = $i + 2;
+            //         $dataImportProduct = array('error' => true, 'message' => "Campos vacios, fila: $i");
+            //         break;
+            //     }
+            // }
 
-            $item = $products[$i];
-            $refProduct = trim($item['referenceProduct']);
-            $nameProduct = trim($item['product']);
+            // $item = $products[$i];
+            // $refProduct = trim($item['referenceProduct']);
+            // $nameProduct = trim($item['product']);
 
-            if (isset($duplicateTracker[$refProduct]) || isset($duplicateTracker[$nameProduct])) {
-                $i = $i + 2;
-                $dataImportProduct =  array('error' => true, 'message' => "Duplicación encontrada en la fila: $i.<br>- Referencia: $refProduct<br>- Producto: $nameProduct");
-                break;
-            } else {
-                $duplicateTracker[$refProduct] = true;
-                $duplicateTracker[$nameProduct] = true;
-            }
+            // if (isset($duplicateTracker[$refProduct]) || isset($duplicateTracker[$nameProduct])) {
+            //     $i = $i + 2;
+            //     $dataImportProduct =  array('error' => true, 'message' => "Duplicación encontrada en la fila: $i.<br>- Referencia: $refProduct<br>- Producto: $nameProduct");
+            //     break;
+            // } else {
+            //     $duplicateTracker[$refProduct] = true;
+            //     $duplicateTracker[$nameProduct] = true;
+            // }
 
-            $findProduct = $generalProductsDao->findProductByReferenceOrName($products[$i], $id_company);
+            // $findProduct = $generalProductsDao->findProductByReferenceOrName($products[$i], $id_company);
 
-            if (sizeof($findProduct) > 1) {
-                $i = $i + 2;
-                $dataImportProduct =  array('error' => true, 'message' => "Referencia y nombre de producto ya existente, fila: $i.<br>- Referencia: $refProduct<br>- Producto: $nameProduct");
-                break;
-            }
+            // if (sizeof($findProduct) > 1) {
+            //     $i = $i + 2;
+            //     $dataImportProduct =  array('error' => true, 'message' => "Referencia y nombre de producto ya existente, fila: $i.<br>- Referencia: $refProduct<br>- Producto: $nameProduct");
+            //     break;
+            // }
 
-            if ($findProduct) {
-                if ($findProduct[0]['product'] != $nameProduct || $findProduct[0]['reference'] != $refProduct) {
-                    $i = $i + 2;
-                    $dataImportProduct =  array('error' => true, 'message' => "Referencia o nombre de producto ya existente, fila: $i.<br>- Referencia: $refProduct<br>- Producto: $nameProduct");
-                    break;
-                }
-            }
+            // if ($findProduct) {
+            //     if ($findProduct[0]['product'] != $nameProduct || $findProduct[0]['reference'] != $refProduct) {
+            //         $i = $i + 2;
+            //         $dataImportProduct =  array('error' => true, 'message' => "Referencia o nombre de producto ya existente, fila: $i.<br>- Referencia: $refProduct<br>- Producto: $nameProduct");
+            //         break;
+            //     }
+            // }
 
-            if ($_SESSION['flag_products_measure'] == '1') {
-                // Consultar tipo producto
-                $productsType = $productsTypeDao->findProductsType($products[$i], $id_company);
+            // if ($_SESSION['flag_products_measure'] == '1') {
+            //     // Consultar tipo producto
+            //     $productsType = $productsTypeDao->findProductsType($products[$i], $id_company);
 
-                if (!$productsType) {
-                    $i = $i + 2;
-                    $dataImportProduct = array('error' => true, 'message' => "Tipo de producto no existe en la base de datos. Fila: $i");
-                    break;
-                }
-            }
+            //     if (!$productsType) {
+            //         $i = $i + 2;
+            //         $dataImportProduct = array('error' => true, 'message' => "Tipo de producto no existe en la base de datos. Fila: $i");
+            //         break;
+            //     }
+            // }
         }
 
         $insert = 0;
@@ -147,16 +147,17 @@ $app->post('/productsDataValidation', function (Request $request, Response $resp
             for ($i = 0; $i < count($products); $i++) {
                 $findProduct = $generalProductsDao->findProduct($products[$i], $id_company);
 
-                if ($_SESSION['flag_products_measure'] == '1') {
-                    if (!$findProduct) {
-                        $i = $i + 2;
-                        $dataImportProduct =  array('error' => true, 'message' => "Producto no existe en la base de datos. Fila: $i");
-                        break;
-                    }
-                    $products[$i]['idProduct'] = $findProduct['id_product'];
-
-                    $findProduct = $generalProductsDao->findProductInventory($products[$i]['idProduct'], $id_company);
+                // if ($_SESSION['flag_products_measure'] == '1') {
+                if (!$findProduct) {
+                    $i = $i + 2;
+                    $dataImportProduct =  array('error' => true, 'message' => "Producto no existe en la base de datos. Fila: $i");
+                    break;
                 }
+                $products[$i]['idProduct'] = $findProduct['id_product'];
+
+                $findProduct = $generalProductsDao->findProductInventory($products[$i]['idProduct'], $id_company);
+                // }
+
                 if (!$findProduct) $insert = $insert + 1;
                 else $update = $update + 1;
                 $dataImportProduct['insert'] = $insert;
@@ -186,7 +187,7 @@ $app->post('/addProduct', function (Request $request, Response $response, $args)
 ) {
     session_start();
     $id_company = $_SESSION['id_company'];
-    $flag_products_measure = $_SESSION['flag_products_measure'];
+    // $flag_products_measure = $_SESSION['flag_products_measure'];
     $dataProduct = $request->getParsedBody();
 
     /* Inserta datos */
@@ -196,28 +197,28 @@ $app->post('/addProduct', function (Request $request, Response $response, $args)
     if ($dataProducts > 1) {
         $resolution = null;
 
-        if ($flag_products_measure == '1') {
-            $product = $generalProductsDao->findProductInventory($dataProduct['idProduct'], $id_company);
+        // if ($flag_products_measure == '1') {
+        $product = $generalProductsDao->findProductInventory($dataProduct['idProduct'], $id_company);
 
-            if (!$product) {
-                $resolution = $productsInventoryDao->insertProductsInventory($dataProduct, $id_company);
-            } else
-                $resp = array('info' => true, 'message' => 'El producto ya existe en la base de datos. Ingrese uno nuevo');
-        } else {
-            $product = $generalProductsDao->findProductByReferenceOrName($dataProduct, $id_company);
-            if (!$product) {
-                //INGRESA id_company, referencia, producto. BD
-                $resolution = $productsDao->insertProductByCompany($dataProduct, $id_company);
-                //ULTIMO REGISTRO DE ID, EL MÁS ALTO
-                $lastProductId = $lastDataDao->lastInsertedProductId($id_company);
+        if (!$product) {
+            $resolution = $productsInventoryDao->insertProductsInventory($dataProduct, $id_company);
+        } else
+            $resp = array('info' => true, 'message' => 'El producto ya existe en la base de datos. Ingrese uno nuevo');
+        // } else {
+        //     $product = $generalProductsDao->findProductByReferenceOrName($dataProduct, $id_company);
+        //     if (!$product) {
+        //         //INGRESA id_company, referencia, producto. BD
+        //         $resolution = $productsDao->insertProductByCompany($dataProduct, $id_company);
+        //         //ULTIMO REGISTRO DE ID, EL MÁS ALTO
+        //         $lastProductId = $lastDataDao->lastInsertedProductId($id_company);
 
-                $dataProduct['idProduct'] = $lastProductId['id_product'];
+        //         $dataProduct['idProduct'] = $lastProductId['id_product'];
 
-                if ($resolution == null)
-                    $resolution = $productsInventoryDao->insertProductsInventory($dataProduct, $id_company);
-            } else
-                $resp = array('info' => true, 'message' => 'El producto ya existe en la base de datos. Ingrese uno nuevo');
-        }
+        //         if ($resolution == null)
+        //             $resolution = $productsInventoryDao->insertProductsInventory($dataProduct, $id_company);
+        //     } else
+        //         $resp = array('info' => true, 'message' => 'El producto ya existe en la base de datos. Ingrese uno nuevo');
+        // }
 
         if (sizeof($resp) == 0) {
             if ($resolution == null) {
@@ -241,42 +242,42 @@ $app->post('/addProduct', function (Request $request, Response $response, $args)
             if (isset($resolution['info'])) break;
             $product = $generalProductsDao->findProduct($products[$i], $id_company);
 
-            if ($flag_products_measure == '1') {
-                // Obtener tipo producto
-                $productType = $productsTypeDao->findProductsType($products[$i], $id_company);
+            // if ($flag_products_measure == '1') {
+            //     // Obtener tipo producto
+            //     $productType = $productsTypeDao->findProductsType($products[$i], $id_company);
 
-                $products[$i]['idProductType'] = $productType['id_product_type'];
-            } else
-                $products[$i]['idProductType'] = 0;
+            //     $products[$i]['idProductType'] = $productType['id_product_type'];
+            // } else
+            //     $products[$i]['idProductType'] = 0;
 
-            if ($flag_products_measure == '1') { // Bolsas
-                $products[$i]['idProduct'] = $product['id_product'];
+            // if ($flag_products_measure == '1') { // Bolsas
+            $products[$i]['idProduct'] = $product['id_product'];
 
-                $productIn = $generalProductsDao->findProductInventory($products[$i]['idProduct'], $id_company);
+            $productIn = $generalProductsDao->findProductInventory($products[$i]['idProduct'], $id_company);
 
-                if (!$productIn) {
-                    $resolution = $productsInventoryDao->insertProductsInventory($products[$i], $id_company);
-                } else {
-                    $resolution = $productsInventoryDao->updateProductsInventory($products[$i]);
-                    if (isset($resolution['info'])) break;
-                }
+            if (!$productIn) {
+                $resolution = $productsInventoryDao->insertProductsInventory($products[$i], $id_company);
             } else {
-                if (!$product) {
-                    $resolution = $productsDao->insertProductByCompany($products[$i], $id_company);
-
-                    $lastProductId = $lastDataDao->lastInsertedProductId($id_company);
-                    $products[$i]['idProduct'] = $lastProductId['id_product'];
-
-                    if (isset($resolution['info'])) break;
-
-                    $resolution = $productsInventoryDao->insertProductsInventory($products[$i], $id_company);
-                } else {
-                    $products[$i]['idProduct'] = $product['id_product'];
-                    $resolution = $productsDao->updateProductByCompany($products[$i], $id_company);
-
-                    $resolution = $productsInventoryDao->updateProductsInventory($products[$i]);
-                }
+                $resolution = $productsInventoryDao->updateProductsInventory($products[$i]);
+                if (isset($resolution['info'])) break;
             }
+            // } else {
+            //     if (!$product) {
+            //         $resolution = $productsDao->insertProductByCompany($products[$i], $id_company);
+
+            //         $lastProductId = $lastDataDao->lastInsertedProductId($id_company);
+            //         $products[$i]['idProduct'] = $lastProductId['id_product'];
+
+            //         if (isset($resolution['info'])) break;
+
+            //         $resolution = $productsInventoryDao->insertProductsInventory($products[$i], $id_company);
+            //     } else {
+            //         $products[$i]['idProduct'] = $product['id_product'];
+            //         $resolution = $productsDao->updateProductByCompany($products[$i], $id_company);
+
+            //         $resolution = $productsInventoryDao->updateProductsInventory($products[$i]);
+            //     }
+            // }
 
             if (isset($resolution['info'])) break;
 
@@ -453,29 +454,29 @@ $app->post('/updatePlanProduct', function (Request $request, Response $response,
 ) {
     session_start();
     $id_company = $_SESSION['id_company'];
-    $flag_products_measure = $_SESSION['flag_products_measure'];
+    // $flag_products_measure = $_SESSION['flag_products_measure'];
 
     $dataProduct = $request->getParsedBody();
     $resolution = null;
 
     $status = true;
 
-    if ($flag_products_measure == '0') {
-        $products = $generalProductsDao->findProductByReferenceOrName($dataProduct, $id_company);
+    // if ($flag_products_measure == '0') {
+    //     $products = $generalProductsDao->findProductByReferenceOrName($dataProduct, $id_company);
 
-        foreach ($products as $arr) {
-            if ($arr['id_product'] != $dataProduct['idProduct']) {
-                $status = false;
-                break;
-            }
-        }
+    //     foreach ($products as $arr) {
+    //         if ($arr['id_product'] != $dataProduct['idProduct']) {
+    //             $status = false;
+    //             break;
+    //         }
+    //     }
 
-        if ($status == true) {
-            // Actualizar Datos, Imagen y Calcular Precio del producto
-            $resolution = $productsDao->updateProductByCompany($dataProduct, $id_company);
-        } else
-            $resp = array('info' => true, 'message' => 'El producto ya existe en la base de datos. Ingrese uno nuevo');
-    }
+    //     if ($status == true) {
+    //         // Actualizar Datos, Imagen y Calcular Precio del producto
+    //         $resolution = $productsDao->updateProductByCompany($dataProduct, $id_company);
+    //     } else
+    //         $resp = array('info' => true, 'message' => 'El producto ya existe en la base de datos. Ingrese uno nuevo');
+    // }
 
     if ($resolution == null && $status == true) {
         if (sizeof($_FILES) > 0)
@@ -641,11 +642,11 @@ $app->get('/deletePlanProduct/{id_product}', function (Request $request, Respons
     $generalPMeasureDao
 ) {
     session_start();
-    $flag_products_measure = $_SESSION['flag_products_measure'];
+    // $flag_products_measure = $_SESSION['flag_products_measure'];
 
-    if ($flag_products_measure == '0') {
-        $product = $productsDao->deleteProduct($args['id_product']);
-    }
+    // if ($flag_products_measure == '0') {
+    $product = $productsDao->deleteProduct($args['id_product']);
+    // }
 
     $product = $productsInventoryDao->deleteProductInventory($args['id_product']);
 

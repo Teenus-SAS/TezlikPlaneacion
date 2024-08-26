@@ -53,27 +53,27 @@ $(document).ready(function () {
     // Obtener el ID del elemento
     let id = $(this).attr('id');
     // Obtener la parte después del guion '-'
-    let idProduct = id.split('-')[1]; 
+    let idProduct = id.split('-')[1];
 
     sessionStorage.setItem("id_product", idProduct);
 
     let row = $(this).parent().parent().parent()[0];
     let data = tblProducts.fnGetData(row);
 
-    if (flag_products_measure == '1') { 
-      let $select = $(`#refProduct`);
-      $select.empty();
-      $select.append(`<option value='0' disabled>Seleccionar</option>`);
-      $select.append(`<option value='${data.id_product}' selected>${data.reference}</option>`);
+    // if (flag_products_measure == '1') { 
+    let $select = $(`#refProduct`);
+    $select.empty();
+    $select.append(`<option value='0' disabled>Seleccionar</option>`);
+    $select.append(`<option value='${data.id_product}' selected>${data.reference}</option>`);
 
-      let $select1 = $(`#selectNameProduct`);
-      $select1.empty();
-      $select1.append(`<option value='0' disabled>Seleccionar</option>`);
-      $select1.append(`<option value='${data.id_product}' selected>${data.product}</option>`);
-    } else {
-      $("#referenceProduct").val(data.reference);
-      $("#product").val(data.product);
-    }
+    let $select1 = $(`#selectNameProduct`);
+    $select1.empty();
+    $select1.append(`<option value='0' disabled>Seleccionar</option>`);
+    $select1.append(`<option value='${data.id_product}' selected>${data.product}</option>`);
+    // } else {
+    //   $("#referenceProduct").val(data.reference);
+    //   $("#product").val(data.product);
+    // }
 
     $("#pQuantity").val(data.quantity);
 
@@ -87,22 +87,22 @@ $(document).ready(function () {
 
   /* Revisar datos */
   const checkDataProducts = async (url, idProduct) => {
-    if (flag_products_measure == '1') {
+    // if (flag_products_measure == '1') {
       idProduct = parseFloat($("#refProduct").val());
 
       if (isNaN(idProduct) || idProduct <= 0) {
         toastr.error("Ingrese todos los campos");
         return false;
       }
-    } else {
-      let ref = $("#referenceProduct").val();
-      let prod = $("#product").val();
+    // } else {
+    //   let ref = $("#referenceProduct").val();
+    //   let prod = $("#product").val();
       
-      if (ref.trim() == "" || !ref.trim() || prod.trim() == "" || !prod.trim()) {
-        toastr.error("Ingrese todos los campos");
-        return false;
-      }
-    }
+    //   if (ref.trim() == "" || !ref.trim() || prod.trim() == "" || !prod.trim()) {
+    //     toastr.error("Ingrese todos los campos");
+    //     return false;
+    //   }
+    // }
 
     let imageProd = $("#formFile")[0].files[0];
 
@@ -113,11 +113,11 @@ $(document).ready(function () {
       dataProduct.append("idProduct", idProduct);
     }
 
-    if (flag_products_measure == '1') { 
-      dataProduct.append("idProduct", idProduct);
-    } else {
-      dataProduct.append("idProductType", 0);      
-    }
+    // if (flag_products_measure == '1') { 
+    dataProduct.append("idProduct", idProduct);
+    // } else {
+    //   dataProduct.append("idProductType", 0);      
+    // }
 
     let resp = await sendDataPOST(url, dataProduct);
 
@@ -158,37 +158,6 @@ $(document).ready(function () {
       },
     });
   };
-
-  $(document).on('click', '.composite', function () {
-    let row = $(this).parent().parent()[0];
-    let data = tblProducts.fnGetData(row);
-
-    bootbox.confirm({ 
-      title: 'Producto Compuesto',
-      message:
-        `Está seguro de que este producto ${data.composite == '0' ? 'se <b>convierta en un subproducto</b> para ser agregado a un producto compuesto' : 'se <b>Elimine</b> como subproducto'}?`,
-      buttons: {
-        confirm: {
-          label: 'Si',
-          className: 'btn-success',
-        },
-        cancel: {
-          label: 'No',
-          className: 'btn-danger',
-        },
-      },
-      callback: function (result) {
-        if (result == true) {
-          $.get(
-            `/api/changeComposite/${data.id_product}/${data.composite == '0' ? '1' : '0'}`,
-            function (data, textStatus, jqXHR) {
-              messageProducts(data);
-            }
-          );
-        }
-      },
-    });
-  });
 
   /* Mensaje de exito */
 

@@ -52,8 +52,7 @@
                                             <?php //} 
                                             ?>
                                             <?php if (
-                                                $_SESSION['planning_product'] == 1 &&
-                                                $_SESSION['flag_products_measure'] == 1
+                                                $_SESSION['planning_product'] == 1 // && $_SESSION['flag_products_measure'] == 1
                                             ) { ?>
                                                 <li class="planProductsM">
                                                 <?php } else { ?>
