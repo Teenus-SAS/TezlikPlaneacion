@@ -74,7 +74,7 @@ $(document).ready(function () {
           }),
       },
       {
-        title: "Largo",
+        title: "Largo Total",
         data: "length",
         className: "uniqueClassName dt-head-center",
         render: (data) =>

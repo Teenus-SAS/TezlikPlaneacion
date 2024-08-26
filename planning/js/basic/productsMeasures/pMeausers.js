@@ -35,7 +35,7 @@ $(document).ready(function () {
     $(".cardCreatePMeasure").toggle(800);
     $('.inputsMeasures').show();
     $(".cardImportPMeasure").hide(800);
-    $("#btnCreatePMeasure").html("Crear Medida");
+    $("#btnCreatePMeasure").html("Crear");
 
     sessionStorage.removeItem("id_product_measure");
 
@@ -71,7 +71,7 @@ $(document).ready(function () {
   $(document).on("click", ".updatePMeasure", function (e) {
     $(".cardImportPMeasure").hide(800);
     $(".cardCreatePMeasure").show(800);
-    $("#btnCreatePMeasure").html("Actualizar Medida");
+    $("#btnCreatePMeasure").html("Actualizar");
 
     // Obtener el ID del elemento
     let id = $(this).attr('id');
