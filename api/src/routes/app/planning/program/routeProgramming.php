@@ -226,9 +226,12 @@ $app->post('/saveProgramming', function (Request $request, Response $response, $
 
         $find = $generalProgrammingDao->findProgramming($programmings[$i]['id_programming'], $id_company);
 
-        if (!$find || $programmings[$i]['bd_status'] == 0)
+        if (!$find || $programmings[$i]['bd_status'] == 0) {
+            $last = $generalProgrammingDao->findLastNumOPByCompany($id_company);
+            $programmings[$i]['numOP'] = $last['op'];
+
             $result = $programmingDao->insertProgrammingByCompany($programmings[$i], $id_company);
-        else
+        } else
             $result = $programmingDao->updateProgramming($programmings[$i]);
 
         if ($result == null) {

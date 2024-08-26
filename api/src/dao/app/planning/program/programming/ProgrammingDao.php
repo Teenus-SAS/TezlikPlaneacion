@@ -95,16 +95,14 @@ class ProgrammingDao
         try {
             $connection = Connection::getInstance()->getConnection();
 
-            // $quantity = str_replace('.', '', $dataProgramming['quantity']);
-            // $quantity = str_replace(',', '.', $quantity);
-
-            $stmt = $connection->prepare("INSERT INTO programming (id_company, id_order, id_product, id_machine, quantity, min_date, max_date, min_programming, new_programming)
-                                          VALUES (:id_company, :id_order, :id_product, :id_machine, :quantity, :min_date, :max_date, :min_programming, :new_programming)");
+            $stmt = $connection->prepare("INSERT INTO programming (id_company, id_order, id_product, id_machine, num_production, quantity, min_date, max_date, min_programming, new_programming)
+                                          VALUES (:id_company, :id_order, :id_product, :id_machine, :num_production, :quantity, :min_date, :max_date, :min_programming, :new_programming)");
             $stmt->execute([
                 'id_company' => $id_company,
                 'id_order' => $dataProgramming['id_order'],
                 'id_product' => $dataProgramming['id_product'],
                 'id_machine' => $dataProgramming['id_machine'],
+                'num_production' => $dataProgramming['numOp'],
                 'quantity' => $dataProgramming['quantity_programming'],
                 'min_date' => $dataProgramming['min_date'],
                 'max_date' => $dataProgramming['max_date'],
@@ -122,9 +120,6 @@ class ProgrammingDao
     {
         try {
             $connection = Connection::getInstance()->getConnection();
-
-            // $quantity = str_replace('.', '', $dataProgramming['quantity']);
-            // $quantity = str_replace(',', '.', $quantity);
 
             $stmt = $connection->prepare("UPDATE programming SET id_order = :id_order, id_product = :id_product, id_machine = :id_machine, quantity = :quantity,
                                                  min_date = :min_date, max_date = :max_date, min_programming = :min_programming, new_programming = :new_programming

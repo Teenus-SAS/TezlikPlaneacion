@@ -60,7 +60,7 @@ $(document).ready(function () {
         },
         {
           title: "OP",
-          data: "op",
+          data: "num_production",
           className: "uniqueClassName dt-head-center",
         },
         {

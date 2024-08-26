@@ -12,7 +12,7 @@ $(document).ready(function () {
         if(data.img)
             $('#imgClient').html(`<img src="${data.img}" width="150px">`);
         // Orden Produccion
-        $('#txtNumOP').html(data.op);
+        $('#txtNumOP').html(data.num_production);
         $('#txtNumOrder').html(data.num_order);
 
         let date_order = moment(data.date_order).format("DD/MM/YYYY");

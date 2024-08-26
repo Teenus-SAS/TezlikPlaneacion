@@ -32,6 +32,19 @@ class GeneralProgrammingDao
         return $programming;
     }
 
+    public function findLastNumOPByCompany($id_company)
+    {
+        $connection = Connection::getInstance()->getConnection();
+
+        $stmt = $connection->prepare("SELECT CONCAT('OP', MAX(id_programming) + 1) AS op FROM programming WHERE id_company = :id_company");
+        $stmt->execute(['id_company' => $id_company]);
+
+        $this->logger->info(__FUNCTION__, array('query' => $stmt->queryString, 'errors' => $stmt->errorInfo()));
+
+        $programming = $stmt->fetch($connection::FETCH_ASSOC);
+        return $programming;
+    }
+
     public function findAllProgrammingByCompany($id_company)
     {
         $connection = Connection::getInstance()->getConnection();
@@ -86,10 +99,7 @@ class GeneralProgrammingDao
     {
         $connection = Connection::getInstance()->getConnection();
 
-        $stmt = $connection->prepare("SET @rownum := 0");
-        $stmt->execute();
-
-        $stmt = $connection->prepare("SELECT pg.id_programming, CONCAT('OP', @rownum := @rownum + 1) AS op, o.id_order, o.num_order, o.date_order, o.min_date AS min_date_order, o.max_date AS max_date_order, o.original_quantity AS quantity_order, o.accumulated_quantity, pg.quantity AS quantity_programming, p.id_product, pc.id_process, pc.process,
+        $stmt = $connection->prepare("SELECT pg.id_programming, pg.num_production, o.id_order, o.num_order, o.date_order, o.min_date AS min_date_order, o.max_date AS max_date_order, o.original_quantity AS quantity_order, o.accumulated_quantity, pg.quantity AS quantity_programming, p.id_product, pc.id_process, pc.process,
                                              p.reference, p.product, m.id_machine, m.machine, c.client, c.img, pg.min_date AS min_date_programming, HOUR(pg.min_date) AS min_hour, pm.hour_start, pg.max_date AS max_date_programming, HOUR(pg.max_date) AS max_hour, ps.status, IFNULL(pms.width, 0) AS width, IFNULL(pms.high, 0) AS high, IFNULL(pms.length, 0) AS length, IFNULL(pms.useful_length, 0) AS useful_length, IFNULL(pms.total_width, 0) AS total_width, IFNULL(pms.window, 0) AS window
                                       FROM programming pg
                                         INNER JOIN plan_orders o ON o.id_order = pg.id_order
