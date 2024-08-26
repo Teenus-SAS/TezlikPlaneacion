@@ -227,9 +227,6 @@ $app->post('/saveProgramming', function (Request $request, Response $response, $
         $find = $generalProgrammingDao->findProgramming($programmings[$i]['id_programming'], $id_company);
 
         if (!$find || $programmings[$i]['bd_status'] == 0) {
-            $last = $generalProgrammingDao->findLastNumOPByCompany($id_company);
-            $programmings[$i]['numOP'] = $last['op'];
-
             $result = $programmingDao->insertProgrammingByCompany($programmings[$i], $id_company);
         } else
             $result = $programmingDao->updateProgramming($programmings[$i]);
@@ -507,25 +504,22 @@ $app->post('/deleteProgramming', function (Request $request, Response $response,
 });
 
 $app->post('/changeStatusProgramming', function (Request $request, Response $response, $args) use ($generalProgrammingDao, $generalOrdersDao) {
+    session_start();
+    $id_company = $_SESSION['id_company'];
     $dataProgramming = $request->getParsedBody();
-    // if (isset($dataProgramming['idProgramming'])) {
-    //     $result = $generalProgrammingDao->changeStatusProgramming($dataProgramming['idProgramming'], 1);
 
-    //     $orders = $generalProgrammingDao->findProgrammingByOrder($dataProgramming['idOrder']);
-
-    //     if (sizeof($orders) == 1) {
-    //         $generalOrdersDao->changeStatus($dataProgramming['idOrder'], 7);
-    //     }
-    // } else {
     $programming = $dataProgramming['data'];
 
     for ($i = 0; $i < sizeof($programming); $i++) {
-        $result = $generalProgrammingDao->changeStatusProgramming($programming[$i]['id_programming'], 1);
+        $last = $generalProgrammingDao->findLastNumOPByCompany($id_company);
+        $programming[$i]['numOP'] = $last['op'];
+        $programming[$i]['status'] = 1;
+
+        $result = $generalProgrammingDao->changeStatusProgramming($programming[$i]);
 
         if (isset($result['info'])) break;
         $result = $generalOrdersDao->changeStatus($programming[$i]['id_order'], 7);
     }
-    // }
 
     if ($result == null)
         $resp = array('success' => true, 'message' => 'Programa de producción eliminado correctamente');

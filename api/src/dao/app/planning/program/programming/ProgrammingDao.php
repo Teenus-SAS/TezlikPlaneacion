@@ -95,8 +95,8 @@ class ProgrammingDao
         try {
             $connection = Connection::getInstance()->getConnection();
 
-            $stmt = $connection->prepare("INSERT INTO programming (id_company, id_order, id_product, id_machine, num_production, quantity, min_date, max_date, min_programming, new_programming)
-                                          VALUES (:id_company, :id_order, :id_product, :id_machine, :num_production, :quantity, :min_date, :max_date, :min_programming, :new_programming)");
+            $stmt = $connection->prepare("INSERT INTO programming (id_company, id_order, id_product, id_machine, quantity, min_date, max_date, min_programming, new_programming)
+                                          VALUES (:id_company, :id_order, :id_product, :id_machine, :quantity, :min_date, :max_date, :min_programming, :new_programming)");
             $stmt->execute([
                 'id_company' => $id_company,
                 'id_order' => $dataProgramming['id_order'],

@@ -25,7 +25,7 @@ $(document).ready(function () {
         
         $('#txtMinDate').val(min_date);
         $('#txtMaxDate').val(max_date);
-        $('#txtQuantityP').val(data.quantity_order); 
+        $('#txtQuantityP').val(data.quantity_programming); 
         $('#nameClient').val(data.client);
 
         // Info Producto

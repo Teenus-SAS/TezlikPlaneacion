@@ -236,15 +236,17 @@ class GeneralProgrammingDao
         }
     }
 
-    public function changeStatusProgramming($id_programming, $status)
+    public function changeStatusProgramming($dataProgramming)
     {
         $connection = Connection::getInstance()->getConnection();
 
         try {
-            $stmt = $connection->prepare("UPDATE programming SET status = :status WHERE id_programming = :id_programming");
+            $stmt = $connection->prepare("UPDATE programming SET status = :status, num_production = :num_production 
+                                          WHERE id_programming = :id_programming");
             $stmt->execute([
-                'id_programming' => $id_programming,
-                'status' => $status
+                'id_programming' => $dataProgramming['id_programming'],
+                'status' => $dataProgramming['status'],
+                'num_production' => $dataProgramming['numOP']
             ]);
             $this->logger->info(__FUNCTION__, array('query' => $stmt->queryString, 'errors' => $stmt->errorInfo()));
         } catch (\Exception $e) {
