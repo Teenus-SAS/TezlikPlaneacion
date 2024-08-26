@@ -48,7 +48,7 @@ class GeneralProductsMaterialsDao
                                         INNER JOIN materials_inventory mi ON mi.id_material = pm.id_material
                                         LEFT JOIN convert_units u ON u.id_unit = pm.id_unit
                                         LEFT JOIN convert_magnitudes mg ON mg.id_magnitude = u.id_magnitude
-                                      WHERE  pm.id_company = :id_company -- AND pm.id_material IN (SELECT id_material FROM materials INNER JOIN convert_units ON convert_units.id_unit = materials.unit WHERE id_material = pm.id_material )
+                                      WHERE pm.id_company = :id_company
                                       ORDER BY m.material ASC");
         $stmt->execute(['id_company' => $id_company]);
         $productsmaterials = $stmt->fetchAll($connection::FETCH_ASSOC);

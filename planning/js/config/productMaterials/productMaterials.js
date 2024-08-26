@@ -137,9 +137,8 @@ $(document).ready(function () {
     // Obtener la parte después del guion '-'
     let id_product_material = id.split('-')[1]; 
 
-    let allData = tblConfigMaterials.rows().data().toArray();
-
-    let data = allData.find(item => item.id_product_material == id_product_material);
+    let row = $(this).parent().parent()[0];
+    let data = tblConfigMaterials.fnGetData(row);
 
     sessionStorage.setItem('id_product_material', data.id_product_material);
 
