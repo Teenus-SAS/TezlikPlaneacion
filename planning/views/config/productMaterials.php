@@ -105,23 +105,25 @@ if (sizeof($_SESSION) == 0)
                                 </div> -->
                             </div>
                         </div>
-                        <div class="tab-pane cardPlans cardGeneral" style="display: none;">
-                            <div class="row align-items-center">
-                                <div class="col-sm-5 col-xl-6">
-                                    <div class="page-title">
-                                        <h3 class="mb-1 font-weight-bold text-dark"><i class="bi bi-diagram-2 mr-1"></i>Planos</h3>
-                                        <ol class="breadcrumb mb-3 mb-md-0">
-                                            <li class="breadcrumb-item active"></li>
-                                        </ol>
+                        <?php if ($_SESSION['flag_products_measure']) { ?>
+                            <div class="tab-pane cardPlans cardGeneral" style="display: none;">
+                                <div class="row align-items-center">
+                                    <div class="col-sm-5 col-xl-6">
+                                        <div class="page-title">
+                                            <h3 class="mb-1 font-weight-bold text-dark"><i class="bi bi-diagram-2 mr-1"></i>Planos</h3>
+                                            <ol class="breadcrumb mb-3 mb-md-0">
+                                                <li class="breadcrumb-item active"></li>
+                                            </ol>
+                                        </div>
                                     </div>
-                                </div>
-                                <div class="col-sm-7 col-xl-6 form-inline justify-content-sm-end">
-                                    <div class="col-xs-2 mr-2">
-                                        <button class="btn btn-warning" id="btnNewProductPlans" name="btnNewProductPlans"><i class="bi bi-plus-circle"></i> Nuevos Planos</button>
+                                    <div class="col-sm-7 col-xl-6 form-inline justify-content-sm-end">
+                                        <div class="col-xs-2 mr-2">
+                                            <button class="btn btn-warning" id="btnNewProductPlans" name="btnNewProductPlans"><i class="bi bi-plus-circle"></i> Nuevos Planos</button>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
-                        </div>
+                        <?php } ?>
                     </div>
                 </div>
 
@@ -395,11 +397,13 @@ if (sizeof($_SESSION) == 0)
                                             <i class="bi bi-diagram-3 mr-1"></i>Ruta
                                         </a>
                                     </li>
-                                    <li class="nav-item">
-                                        <a class="nav-link selectNavigation" id="nav-plans" data-toggle="pill" href="#pills-tasks" role="tab" aria-controls="pills-tasks" aria-selected="false">
-                                            <i class="bi bi-diagram-3 mr-1"></i>Planos
-                                        </a>
-                                    </li>
+                                    <?php if ($_SESSION['flag_products_measure']) { ?>
+                                        <li class="nav-item">
+                                            <a class="nav-link selectNavigation" id="nav-plans" data-toggle="pill" href="#pills-tasks" role="tab" aria-controls="pills-tasks" aria-selected="false">
+                                                <i class="bi bi-diagram-3 mr-1"></i>Planos
+                                            </a>
+                                        </li>
+                                    <?php } ?>
                                 </ul>
                             </div>
                         </div>
