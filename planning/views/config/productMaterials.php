@@ -164,7 +164,7 @@ if (sizeof($_SESSION) == 0)
                                                         <input class="form-control calcWeight text-center" type="number" name="quantityCalc" id="quantityCalc">
                                                     </div>
                                                 <?php } ?>
-                                                <div class="col-sm-1 floating-label enable-floating-label show-label" style="margin-bottom:20px">
+                                                <div class="col-sm-2 floating-label enable-floating-label show-label" style="margin-bottom:20px">
                                                     <label for="">Cantidad</label>
                                                     <input class="form-control text-center" type="number" name="quantity" id="quantity">
                                                 </div>

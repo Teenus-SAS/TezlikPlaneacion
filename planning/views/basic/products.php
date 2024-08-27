@@ -117,7 +117,7 @@ if (sizeof($_SESSION) == 0)
                                                     <label for="high">Alto</label>
                                                     <input type="number" class="form-control text-center" id="high" name="high">
                                                 </div>
-                                                <div class="col-sm-1 floating-label enable-floating-label show-label inputsMeasures">
+                                                <div class="col-sm-2 floating-label enable-floating-label show-label inputsMeasures">
                                                     <label for="length">Largo Total</label>
                                                     <input type="number" class="form-control text-center" id="length" name="length">
                                                 </div>
@@ -125,11 +125,11 @@ if (sizeof($_SESSION) == 0)
                                                     <label for="usefulLength">Largo Útil</label>
                                                     <input type="number" class="form-control text-center" id="usefulLength" name="usefulLength">
                                                 </div>
-                                                <div class="col-sm-1 floating-label enable-floating-label show-label inputsMeasures">
+                                                <div class="col-sm-2 floating-label enable-floating-label show-label inputsMeasures">
                                                     <label for="totalWidth">Ancho Total</label>
                                                     <input type="number" class="form-control text-center" id="totalWidth" name="totalWidth">
                                                 </div>
-                                                <div class="col-sm-1 floating-label enable-floating-label show-label inputsMeasures">
+                                                <div class="col-sm-2 floating-label enable-floating-label show-label inputsMeasures">
                                                     <label for="window" id="lblWindow">Ventanilla</label>
                                                     <input type="number" class="form-control text-center" id="window" name="window">
                                                 </div>
