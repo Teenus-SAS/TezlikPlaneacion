@@ -146,7 +146,7 @@ if (sizeof($_SESSION) == 0)
                                                         <select class="form-control calcWeight" name="idMaterialType" id="materialType"></select>
                                                     </div>
                                                 <?php } ?>
-                                                <div class="col-sm-3 floating-label enable-floating-label show-label" style="margin-bottom:20px">
+                                                <div class="col-sm-2 floating-label enable-floating-label show-label" style="margin-bottom:20px">
                                                     <label for="">Referencia</label>
                                                     <select class="form-control calcWeight" name="refMaterial" id="refMaterial"></select>
                                                 </div>
@@ -164,7 +164,7 @@ if (sizeof($_SESSION) == 0)
                                                         <input class="form-control calcWeight text-center" type="number" name="quantityCalc" id="quantityCalc">
                                                     </div>
                                                 <?php } ?>
-                                                <div class="col-sm-2 floating-label enable-floating-label show-label" style="margin-bottom:20px">
+                                                <div class="col-sm-1 floating-label enable-floating-label show-label" style="margin-bottom:20px">
                                                     <label for="">Cantidad</label>
                                                     <input class="form-control text-center" type="number" name="quantity" id="quantity">
                                                 </div>
@@ -214,7 +214,7 @@ if (sizeof($_SESSION) == 0)
                                     <div class="card-body">
                                         <form id="formAddNewProduct">
                                             <div class="form-row">
-                                                <div class="col-sm-3 floating-label enable-floating-label show-label" style="margin-bottom:20px">
+                                                <div class="col-sm-2 floating-label enable-floating-label show-label" style="margin-bottom:20px">
                                                     <label>Referencia</label>
                                                     <select class="form-control compositeProduct inputs" name="refCompositeProduct" id="refCompositeProduct"></select>
                                                 </div>
@@ -222,7 +222,7 @@ if (sizeof($_SESSION) == 0)
                                                     <label>Producto</label>
                                                     <select class="form-control compositeProduct inputs" name="compositeProduct" id="compositeProduct"></select>
                                                 </div>
-                                                <div class="col-sm-3 floating-label enable-floating-label show-label" style="margin-bottom:5px">
+                                                <div class="col-sm-2 floating-label enable-floating-label show-label" style="margin-bottom:5px">
                                                     <select class="form-control inputs" id="unit2" name="unit">
                                                     </select>
                                                     <label>Unidad</label>
