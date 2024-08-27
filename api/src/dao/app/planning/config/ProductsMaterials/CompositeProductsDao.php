@@ -20,7 +20,7 @@ class CompositeProductsDao
     {
         $connection = Connection::getInstance()->getConnection();
         $stmt = $connection->prepare("SELECT cp.id_composite_product, 0 AS id_product_material, cp.id_child_product, cp.id_product, p.reference, p.reference AS reference_material, p.product AS material, mg.id_magnitude, mg.magnitude, 
-                                             u.id_unit, u.unit, u.abbreviation, cp.quantity, 'PRODUCTO' AS type
+                                             u.id_unit, u.unit, u.abbreviation, cp.quantity, 'PRODUCTO' AS type, p.id_product_type
                                       FROM products p 
                                         INNER JOIN composite_products cp ON cp.id_child_product = p.id_product 
                                         INNER JOIN convert_units u ON u.id_unit = cp.id_unit

@@ -50,14 +50,14 @@ $(document).ready(function () {
     });
   };
 
-  function populateOptions(selector, data, property) {
+  populateOptions = (selector, data, property) => {
     let $select = $(selector);
     $select.empty();
   
     $select.append(`<option value='0' disabled selected>Seleccionar</option>`);
   
     $.each(data, function (i, value) {
-      $select.append(`<option value ="${value.id_product}"> ${value[property]} </option>`);
+      $select.append(`<option value ="${value.id_product}" class="${value.id_product_type}"> ${value[property]} </option>`);
     });
   };
 

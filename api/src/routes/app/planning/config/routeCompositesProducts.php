@@ -111,3 +111,40 @@ $app->post('/deleteCompositeProduct', function (Request $request, Response $resp
     $response->getBody()->write(json_encode($resp));
     return $response->withStatus(200)->withHeader('Content-Type', 'application/json');
 });
+
+$app->post('/calcQuantityFTCP', function (Request $request, Response $response, $args) use (
+    $generalProductsDao,
+    $generalCompositeProductsDao
+) {
+    session_start();
+    $id_company = $_SESSION['id_company'];
+    $arr = $request->getParsedBody();
+
+    $type = $arr['typeName'];
+    // $dataParentProduct = $generalProductsDao->findProductById($arr['idParentProduct']);
+    $dataChildProduct = $generalProductsDao->findProductById($arr['idCProduct']);
+    $weight = 0;
+
+    switch ($type) {
+        case 'CAJA':
+            $weight = (floatval($dataChildProduct['length']) * floatval($dataChildProduct['total_width']) * floatval($dataChildProduct['window'])) / 10000000;
+
+            break;
+
+        default:
+            $quantity = floatval($arr['quantityCalc']);
+            $quantityFTM = 0;
+
+            $dataFTM = $generalCompositeProductsDao->findCompositeProductByChild($arr['idCProduct'], $id_company);
+
+            if ($dataFTM) $quantityFTM = $dataFTM['quantity'];
+
+            $weight = $quantity * $quantityFTM;
+            break;
+    }
+
+    $resp = ['weight' => $weight];
+
+    $response->getBody()->write(json_encode($resp, JSON_NUMERIC_CHECK));
+    return $response->withHeader('Content-Type', 'application/json');
+});

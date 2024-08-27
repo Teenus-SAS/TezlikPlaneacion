@@ -9,6 +9,7 @@ $(document).ready(function () {
         $('.cardAddNewProduct').toggle(800);
         $('#btnAddProduct').html('Asignar');
         $('#units2').empty();
+        $('.inputQuantityPCalc').hide();
         
         sessionStorage.removeItem('id_composite_product');
         
@@ -19,6 +20,9 @@ $(document).ready(function () {
     $('.compositeProduct').change(function (e) {
         e.preventDefault();
 
+        let product_type = parseInt($(this).find('option:selected').attr('class'));
+        $(`#idProductType option[value=${product_type}]`).prop('selected', true);
+
         let data = JSON.parse(sessionStorage.getItem('dataUnits'));
 
         let filterData = data.filter(item => item.unit == 'UNIDAD');
@@ -28,6 +32,63 @@ $(document).ready(function () {
         $select.append(`<option disabled>Seleccionar</option>`);
         $select.append(`<option value ='${filterData[0].id_unit}' selected>UNIDAD</option>`);
     });
+
+    // Tipo Producto
+    $('#idProductType').change(async function (e) {
+        e.preventDefault();
+
+        $('.inputQuantityPCalc').hide();
+        $('#units2').empty();
+        $('#quantityCP').val('');
+        $('#quantityPCalc').val('');
+
+        let type = this.value;
+        let typeName = $('#idProductType option:selected').text().trim();
+
+        let dataProducts = JSON.parse(sessionStorage.getItem('dataProducts'));
+
+        let dataP = dataProducts.filter(item => item.id_product_type == type && item.composite == 1);
+        await populateOptions('#refCompositeProduct', dataP, 'reference');
+        await populateOptions('#compositeProduct', dataP, 'product');
+
+        if (typeName != 'CAJA')
+            $('.inputQuantityPCalc').show();
+    });
+
+    if (flag_products_measure == '1') {
+        $('#quantityCP').prop('readonly', true);
+
+        $(document).on('change keyup', '.calcPWeight', async function () {
+            let idPProduct = parseInt($('#selectNameProduct').val());
+            let idCProduct = parseInt($('#refCompositeProduct').val());
+            let type = parseInt($('#idProductType').val());
+            let typeName = $('#idProductType option:selected').text().trim();
+
+            let validate = idPProduct * idCProduct * type;
+
+            if (isNaN(validate) || validate <= 0) {
+                return false;
+            }
+
+            let quantity = parseFloat($('#quantityPCalc').val());
+
+            isNaN(quantity) ? quantity = 0 : quantity;
+
+            $.ajax({
+                type: 'POST',
+                url: '/api/calcQuantityFTCP',
+                data: {
+                    idPProduct: idPProduct,
+                    idCProduct: idCProduct,
+                    typeName: typeName,
+                    quantityCalc: quantity
+                },
+                success: function (resp) {
+                    $('#quantityCP').val(resp.weight);
+                }
+            });
+        });
+    }
 
     $('#btnAddProduct').click(function (e) {
         e.preventDefault();
@@ -61,6 +122,7 @@ $(document).ready(function () {
         sessionStorage.setItem('id_composite_product', data.id_composite_product);
         $(`#refCompositeProduct option[value=${data.id_child_product}]`).prop('selected', true);
         $(`#compositeProduct option[value=${data.id_child_product}]`).prop('selected', true);
+        $(`#idProductType option[value=${data.id_product_type}]`).prop('selected', true);
 
         $('#quantityCP').val(data.quantity);  
 

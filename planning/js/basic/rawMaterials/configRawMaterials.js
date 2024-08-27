@@ -17,7 +17,7 @@ $(document).ready(function () {
     $select.append(`<option disabled selected>Seleccionar</option>`);
     $.each(ref, function (i, value) {
       $select.append(
-        `<option value = ${value.id_material}> ${value.reference} </option>`
+        `<option value ="${value.id_material}" class="${value.id_material_type}"> ${value.reference} </option>`
       );
     });
       
@@ -27,7 +27,7 @@ $(document).ready(function () {
     $select.append(`<option disabled selected>Seleccionar</option>`);
     $.each(name, function (i, value) {
       $select.append(
-        `<option value = ${value.id_material}> ${value.material} </option>`
+        `<option value ="${value.id_material}" class="${value.id_material_type}"> ${value.material} </option>`
       );
     });
   };
@@ -44,6 +44,9 @@ $(document).ready(function () {
       $('#material option').prop('selected', function () {
         return $(this).val() == id;
       });
+
+      let material_type = parseInt($(this).find('option:selected').attr('class'));
+      $(`#materialType option[value=${material_type}]`).prop('selected', true);
 
       let data = JSON.parse(sessionStorage.getItem('dataMaterials')); 
 
@@ -68,6 +71,9 @@ $(document).ready(function () {
       $('#refMaterial option').prop('selected', function () {
         return $(this).val() == id;
       });
+
+      let material_type = parseInt($(this).find('option:selected').attr('class'));
+      $(`#materialType option[value=${material_type}]`).prop('selected', true);
 
       let data = JSON.parse(sessionStorage.getItem('dataMaterials'));
 

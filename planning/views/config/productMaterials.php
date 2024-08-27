@@ -143,16 +143,16 @@ if (sizeof($_SESSION) == 0)
                                                 <?php if ($_SESSION['flag_products_measure'] == '1') { ?>
                                                     <div class="col-sm-2 floating-label enable-floating-label show-label" style="margin-bottom:20px">
                                                         <label for="">Tipo Material</label>
-                                                        <select class="form-control calcWeight" name="idMaterialType" id="materialType"></select>
+                                                        <select class="form-control calcMWeight" name="idMaterialType" id="materialType"></select>
                                                     </div>
                                                 <?php } ?>
                                                 <div class="col-sm-2 floating-label enable-floating-label show-label" style="margin-bottom:20px">
                                                     <label for="">Referencia</label>
-                                                    <select class="form-control calcWeight" name="refMaterial" id="refMaterial"></select>
+                                                    <select class="form-control calcMWeight" name="refMaterial" id="refMaterial"></select>
                                                 </div>
                                                 <div class="col-sm-6 floating-label enable-floating-label show-label" style="margin-bottom:20px">
                                                     <label for="">Materia Prima</label>
-                                                    <select class="form-control calcWeight" name="material" id="material"></select>
+                                                    <select class="form-control calcMWeight" name="material" id="material"></select>
                                                 </div>
                                                 <div class="col-sm-2 floating-label enable-floating-label show-label" style="margin-bottom:5px">
                                                     <select class="form-control" id="units" name="unit"></select>
@@ -161,7 +161,7 @@ if (sizeof($_SESSION) == 0)
                                                 <?php if ($_SESSION['flag_products_measure'] == '1') { ?>
                                                     <div class="col-sm-2 floating-label enable-floating-label show-label inputQuantityCalc" style="margin-bottom:20px">
                                                         <label for="">Gramos/M2</label>
-                                                        <input class="form-control calcWeight text-center" type="number" name="quantityCalc" id="quantityCalc">
+                                                        <input class="form-control calcMWeight text-center" type="number" name="quantityCalc" id="quantityCalc">
                                                     </div>
                                                 <?php } ?>
                                                 <div class="col-sm-2 floating-label enable-floating-label show-label" style="margin-bottom:20px">
@@ -214,19 +214,31 @@ if (sizeof($_SESSION) == 0)
                                     <div class="card-body">
                                         <form id="formAddNewProduct">
                                             <div class="form-row">
+                                                <?php if ($_SESSION['flag_products_measure'] == '1') { ?>
+                                                    <div class="col-sm-2 floating-label enable-floating-label show-label" style="margin-bottom:20px">
+                                                        <label for="">Tipo Producto</label>
+                                                        <select class="form-control calcPWeight" name="idProductType" id="idProductType"></select>
+                                                    </div>
+                                                <?php } ?>
                                                 <div class="col-sm-2 floating-label enable-floating-label show-label" style="margin-bottom:20px">
                                                     <label>Referencia</label>
-                                                    <select class="form-control compositeProduct inputs" name="refCompositeProduct" id="refCompositeProduct"></select>
+                                                    <select class="form-control calcPWeight compositeProduct inputs" name="refCompositeProduct" id="refCompositeProduct"></select>
                                                 </div>
                                                 <div class="col-sm-5 floating-label enable-floating-label show-label" style="margin-bottom:20px">
                                                     <label>Producto</label>
-                                                    <select class="form-control compositeProduct inputs" name="compositeProduct" id="compositeProduct"></select>
+                                                    <select class="form-control calcPWeight compositeProduct inputs" name="compositeProduct" id="compositeProduct"></select>
                                                 </div>
                                                 <div class="col-sm-2 floating-label enable-floating-label show-label" style="margin-bottom:5px">
                                                     <select class="form-control inputs" id="unit2" name="unit">
                                                     </select>
                                                     <label>Unidad</label>
                                                 </div>
+                                                <?php if ($_SESSION['flag_products_measure'] == '1') { ?>
+                                                    <div class="col-sm-2 floating-label enable-floating-label show-label inputQuantityPCalc" style="margin-bottom:20px">
+                                                        <label for="">Gramos/M2</label>
+                                                        <input class="form-control calcPWeight text-center" type="number" name="quantityCalc" id="quantityPCalc">
+                                                    </div>
+                                                <?php } ?>
                                                 <!-- <div class="w-100"></div> -->
                                                 <div class="col-sm-2 floating-label enable-floating-label show-label" style="margin-bottom:20px">
                                                     <label>Cantidad</label>
@@ -401,6 +413,7 @@ if (sizeof($_SESSION) == 0)
     <script src="/global/js/global/configUnits.js"></script>
     <script src="/planning/js/basic/rawMaterials/configMaterialType.js"></script>
     <script src="/planning/js/config/productMaterials/tblConfigMaterials.js"></script>
+    <script src="/planning/js/basic/productsType/configProductType.js"></script>
     <script src="/planning/js/basic/products/configProducts.js"></script>
     <script src="/planning/js/basic/rawMaterials/configRawMaterials.js"></script>
     <script src="/planning/js/config/productMaterials/productMaterials.js"></script>

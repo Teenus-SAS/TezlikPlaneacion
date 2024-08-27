@@ -61,7 +61,7 @@ $(document).ready(function () {
   if (flag_products_measure == '1') {
     $('#quantity').prop('readonly', true);
 
-    $(document).on('change keyup', '.calcWeight',async function () {
+    $(document).on('change keyup', '.calcMWeight',async function () {
       let idProduct = parseInt($('#selectNameProduct').val());
       let idMaterial = parseInt($('#refMaterial').val()); 
       let type = parseInt($('#materialType').val()); 
@@ -104,6 +104,7 @@ $(document).ready(function () {
     $('.cardAddMaterials').toggle(800);
     $('.cardAddNewProduct').hide(800);
     $('#btnAddMaterials').html('Asignar');
+    $('.inputQuantityCalc').hide();
 
     sessionStorage.removeItem('id_product_material');
 

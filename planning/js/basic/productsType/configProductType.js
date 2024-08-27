@@ -1,11 +1,13 @@
 $(document).ready(function () {
-    // var loadTblProductType;
+    var loadTblProductType;
 
     loadAllDataPType = async () => {
         let data = await searchData('/api/productsType');
 
         loadSelectProductType(data);
-        loadTblProductType(data);
+
+        if (loadTblProductType)
+            loadTblProductType(data);
     };
 
     const loadSelectProductType = (data) => {
