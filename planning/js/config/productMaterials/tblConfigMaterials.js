@@ -17,6 +17,7 @@ $(document).ready(function () {
     loadAllDataMaterials(id);
     loadTblPlanCiclesMachine(id);
     loadTblRoutes(id);
+    loadTblProductPlans(id);
   });
 
   $("#selectNameProduct").change(function (e) {
@@ -35,6 +36,7 @@ $(document).ready(function () {
     loadAllDataMaterials(id);
     loadTblPlanCiclesMachine(id);
     loadTblRoutes(id);
+    loadTblProductPlans(id);
   });
 
   /* Cargue tabla de Productos Materiales */

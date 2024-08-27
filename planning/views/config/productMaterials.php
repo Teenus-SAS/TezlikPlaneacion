@@ -39,7 +39,7 @@ if (sizeof($_SESSION) == 0)
                 <!-- page header -->
                 <div class="page-title-box">
                     <div class="container-fluid">
-                        <div class="tab-pane cardProductsMaterials">
+                        <div class="tab-pane cardProductsMaterials cardGeneral">
                             <div class="row align-items-center">
                                 <div class="col-sm-5 col-xl-6">
                                     <div class="page-title">
@@ -65,7 +65,7 @@ if (sizeof($_SESSION) == 0)
                                 </div>
                             </div>
                         </div>
-                        <div class="tab-pane cardPlanCicles" style="display: none;">
+                        <div class="tab-pane cardPlanCicles cardGeneral" style="display: none;">
                             <div class="row align-items-center">
                                 <div class="col-sm-5 col-xl-6">
                                     <div class="page-title">
@@ -85,7 +85,7 @@ if (sizeof($_SESSION) == 0)
                                 </div>
                             </div>
                         </div>
-                        <div class="tab-pane cardRoutes" style="display: none;">
+                        <div class="tab-pane cardRoutes cardGeneral" style="display: none;">
                             <div class="row align-items-center">
                                 <div class="col-sm-5 col-xl-6">
                                     <div class="page-title">
@@ -103,6 +103,23 @@ if (sizeof($_SESSION) == 0)
                                         <button class="btn btn-info" id="btnImportNewPlanCiclesMachine" name="btnImportNewPlanCiclesMachine"> <i class="bi bi-cloud-arrow-up-fill"></i> Importar</button>
                                     </div>
                                 </div> -->
+                            </div>
+                        </div>
+                        <div class="tab-pane cardPlans cardGeneral" style="display: none;">
+                            <div class="row align-items-center">
+                                <div class="col-sm-5 col-xl-6">
+                                    <div class="page-title">
+                                        <h3 class="mb-1 font-weight-bold text-dark"><i class="bi bi-diagram-2 mr-1"></i>Planos</h3>
+                                        <ol class="breadcrumb mb-3 mb-md-0">
+                                            <li class="breadcrumb-item active"></li>
+                                        </ol>
+                                    </div>
+                                </div>
+                                <div class="col-sm-7 col-xl-6 form-inline justify-content-sm-end">
+                                    <div class="col-xs-2 mr-2">
+                                        <button class="btn btn-warning" id="btnNewProductPlans" name="btnNewProductPlans"><i class="bi bi-plus-circle"></i> Nuevos Planos</button>
+                                    </div>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -132,7 +149,7 @@ if (sizeof($_SESSION) == 0)
                 </div>
 
                 <!-- Materiales -->
-                <div class="page-content-wrapper mt--45 mb-5 cardAddMaterials">
+                <div class="page-content-wrapper mt--45 mb-5 cardAddMaterials cardGeneral">
                     <div class="container-fluid">
                         <div class="row">
                             <div class="col-12">
@@ -180,7 +197,7 @@ if (sizeof($_SESSION) == 0)
                     </div>
                 </div>
 
-                <div class="page-content-wrapper mt--45 mb-5 cardImport">
+                <div class="page-content-wrapper mt--45 mb-5 cardImport cardGeneral">
                     <div class="container-fluid">
                         <div class="row">
                             <form class="col-12" id="formImportProductMaterial" enctype="multipart/form-data">
@@ -206,7 +223,7 @@ if (sizeof($_SESSION) == 0)
                 </div>
 
                 <!-- Productos Compuestos -->
-                <div class="page-content-wrapper mt--45 mb-5 cardAddNewProduct">
+                <div class="page-content-wrapper mt--45 mb-5 cardAddNewProduct cardGeneral">
                     <div class="container-fluid">
                         <div class="row">
                             <div class="col-12">
@@ -257,7 +274,7 @@ if (sizeof($_SESSION) == 0)
                 </div>
 
                 <!-- Ciclos Maquina -->
-                <div class="page-content-wrapper mt--45 mb-5 cardCreatePlanCiclesMachine">
+                <div class="page-content-wrapper mt--45 mb-5 cardCreatePlanCiclesMachine cardGeneral">
                     <div class="container-fluid">
                         <div class="row">
                             <div class="col-12">
@@ -293,7 +310,7 @@ if (sizeof($_SESSION) == 0)
                     </div>
                 </div>
 
-                <div class="page-content-wrapper mt--45 mb-5 cardImportPlanCiclesMachine">
+                <div class="page-content-wrapper mt--45 mb-5 cardImportPlanCiclesMachine cardGeneral">
                     <div class="container-fluid">
                         <div class="row">
                             <div class="col-12">
@@ -320,6 +337,43 @@ if (sizeof($_SESSION) == 0)
                     </div>
                 </div>
 
+                <!-- Planos -->
+                <div class="page-content-wrapper mt--45 mb-5 cardAddProductPlans cardGeneral">
+                    <div class="container-fluid">
+                        <div class="row">
+                            <div class="col-12">
+                                <form id="formAddProductPlan" enctype="multipart/form-data">
+                                    <div class="card">
+                                        <div class="card-body pt-3">
+                                            <div class="form-row">
+                                                <!-- <div class="col-sm-2text-center">
+                                                    <div class="picture-container">
+                                                        <div class="picture" style="width: 100px; border-radius: 0%;">
+                                                            <img id="avatar" src="" class="img-fluid">
+                                                            <input class="form-control" type="file" id="formFile">
+                                                        </div>
+                                                    </div>
+                                                </div> -->
+                                                <div class="col-sm-5 floating-label enable-floating-label show-label drag-area" style="margin-bottom:10px!important">
+                                                    <input class="form-control" type="file" id="mechanicalPlaneFile">
+                                                    <label for="formFile" class="form-label"> Plano Mecanico</label>
+                                                </div>
+                                                <div class="col-sm-5 floating-label enable-floating-label show-label drag-area" style="margin-bottom:10px!important">
+                                                    <input class="form-control" type="file" id="assemblyPlaneFile">
+                                                    <label for="formFile" class="form-label"> Plano Montaje</label>
+                                                </div>
+                                                <div class="col-sm-2 cardBottons" style="margin-top:7px">
+                                                    <button type="text" class="btn btn-success" id="btnSaveProductsPlans">Guardar</button>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
                 <!-- page content -->
                 <div class="page-content-wrapper mt--45">
                     <div class="container-fluid">
@@ -327,18 +381,23 @@ if (sizeof($_SESSION) == 0)
                             <div class="col-12">
                                 <ul class="nav nav-tabs" id="pills-tab" role="tablist">
                                     <li class="nav-item">
-                                        <a class="nav-link active selectNavigation" id="materials" data-toggle="pill" href="javascript:;" role="tab" aria-controls="pills-activity" aria-selected="true">
+                                        <a class="nav-link active selectNavigation" id="nav-materials" data-toggle="pill" href="javascript:;" role="tab" aria-controls="pills-activity" aria-selected="true">
                                             <i class="fas fa-flask mr-1"></i>Materias Primas
                                         </a>
                                     </li>
                                     <li class="nav-item">
-                                        <a class="nav-link selectNavigation" id="planCicles" data-toggle="pill" href="#pills-projects" role="tab" aria-controls="pills-projects" aria-selected="false">
+                                        <a class="nav-link selectNavigation" id="nav-planCicles" data-toggle="pill" href="#pills-projects" role="tab" aria-controls="pills-projects" aria-selected="false">
                                             <i class="bi bi-arrow-repeat mr-1"></i>Ciclos y Procesos
                                         </a>
                                     </li>
                                     <li class="nav-item">
-                                        <a class="nav-link selectNavigation" id="route" data-toggle="pill" href="#pills-tasks" role="tab" aria-controls="pills-tasks" aria-selected="false">
+                                        <a class="nav-link selectNavigation" id="nav-route" data-toggle="pill" href="#pills-tasks" role="tab" aria-controls="pills-tasks" aria-selected="false">
                                             <i class="bi bi-diagram-3 mr-1"></i>Ruta
+                                        </a>
+                                    </li>
+                                    <li class="nav-item">
+                                        <a class="nav-link selectNavigation" id="nav-plans" data-toggle="pill" href="#pills-tasks" role="tab" aria-controls="pills-tasks" aria-selected="false">
+                                            <i class="bi bi-diagram-3 mr-1"></i>Planos
                                         </a>
                                     </li>
                                 </ul>
@@ -347,7 +406,7 @@ if (sizeof($_SESSION) == 0)
                         <div class="row">
                             <div class="col-12">
                                 <div class="card">
-                                    <div class="tab-pane cardProductsMaterials">
+                                    <div class="tab-pane cardProductsMaterials cardGeneral">
                                         <div class="card-body">
                                             <div class="table-responsive">
                                                 <table class="fixed-table-loading table table-hover text-center" id="tblConfigMaterials" name="tblConfigMaterials">
@@ -365,7 +424,7 @@ if (sizeof($_SESSION) == 0)
                                             </div>
                                         </div>
                                     </div>
-                                    <div class="tab-pane cardPlanCicles" style="display: none;">
+                                    <div class="tab-pane cardPlanCicles cardGeneral" style="display: none;">
                                         <div class="card-body">
                                             <div class="table-responsive">
                                                 <table class="fixed-table-loading table table-hover text-center" id="tblPlanCiclesMachine" name="tblPlanCiclesMachine">
@@ -384,10 +443,19 @@ if (sizeof($_SESSION) == 0)
                                             </div>
                                         </div>
                                     </div>
-                                    <div class="tab-pane cardRoutes" style="display: none;">
+                                    <div class="tab-pane cardRoutes cardGeneral" style="display: none;">
                                         <div class="card-body">
                                             <div class="table-responsive">
                                                 <table class="fixed-table-loading table table-hover text-center" id="tblRoutes" name="tblRoutes">
+
+                                                </table>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="tab-pane cardPlans cardGeneral" style="display: none;">
+                                        <div class="card-body">
+                                            <div class="table-responsive">
+                                                <table class="fixed-table-loading table table-hover text-center" id="tblPlans" name="tblPlans">
 
                                                 </table>
                                             </div>
@@ -428,6 +496,8 @@ if (sizeof($_SESSION) == 0)
     <script src="../global/js/import/import.js"></script>
     <script src="/planning/js/config/productMaterials/importProductMaterials.js"></script>
     <script src="../global/js/import/file.js"></script>
+    <script src="/planning/js/config/productsPlans/productsPlans.js"></script>
+    <script src="/planning/js/config/productsPlans/tblProductsPlans.js"></script>
 </body>
 
 </html>

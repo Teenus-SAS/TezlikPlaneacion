@@ -95,7 +95,6 @@ if (sizeof($_SESSION) == 0)
                                                             <input class="form-control" type="file" id="formFile">
                                                         </div>
                                                     </div>
-                                                    <!-- <h5 class="my-3" id="profileName"></h5> -->
                                                 </div>
                                                 <div class="col-sm mt-1">
                                                     <button class="btn btn-success" id="btnCreateClient">Crear</button>

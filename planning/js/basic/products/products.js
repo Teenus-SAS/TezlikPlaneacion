@@ -109,9 +109,9 @@ $(document).ready(function () {
     let dataProduct = new FormData(formCreateProduct);
     dataProduct.append("img", imageProd);
 
-    if (idProduct != "" || idProduct != null) {
-      dataProduct.append("idProduct", idProduct);
-    }
+    // if (idProduct != "" || idProduct != null) {
+    //   dataProduct.append("idProduct", idProduct);
+    // }
 
     // if (flag_products_measure == '1') { 
     dataProduct.append("idProduct", idProduct);

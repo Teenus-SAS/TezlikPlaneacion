@@ -57,24 +57,26 @@ if (sizeof($_SESSION) == 0)
                                 </div>
                             </div>
                         </div>
-                        <div class="row align-items-center cardPTypes" style="display: none;">
-                            <div class="col-sm-5 col-xl-6">
-                                <div class="page-title">
-                                    <h3 class="mb-1 font-weight-bold text-dark"><i class="fas fa-cogs mr-1"></i>Tipos Productos</h3>
-                                    <ol class="breadcrumb mb-3 mb-md-0">
-                                        <li class="breadcrumb-item active">Creación de tipo productos</li>
-                                    </ol>
+                        <?php if ($_SESSION['flag_products_measure'] == '1') { ?>
+                            <div class="row align-items-center cardPTypes" style="display: none;">
+                                <div class="col-sm-5 col-xl-6">
+                                    <div class="page-title">
+                                        <h3 class="mb-1 font-weight-bold text-dark"><i class="fas fa-cogs mr-1"></i>Tipos Productos</h3>
+                                        <ol class="breadcrumb mb-3 mb-md-0">
+                                            <li class="breadcrumb-item active">Creación de tipo productos</li>
+                                        </ol>
+                                    </div>
+                                </div>
+                                <div class="col-sm-7 col-xl-6 form-inline justify-content-sm-end">
+                                    <div class="col-xs-2 mr-2">
+                                        <button class="btn btn-warning" id="btnNewPType" name="btnNewPType"><i class="fas fa-box-open mr-1"></i>Adicionar</button>
+                                    </div>
+                                    <div class="col-xs-2 py-2 mr-2">
+                                        <button class="btn btn-info" id="btnNewImportPType" name="btnNewImportPType"><i class="fas fa-cloud-upload-alt mr-1"></i></button>
+                                    </div>
                                 </div>
                             </div>
-                            <div class="col-sm-7 col-xl-6 form-inline justify-content-sm-end">
-                                <div class="col-xs-2 mr-2">
-                                    <button class="btn btn-warning" id="btnNewPType" name="btnNewPType"><i class="fas fa-box-open mr-1"></i>Adicionar</button>
-                                </div>
-                                <div class="col-xs-2 py-2 mr-2">
-                                    <button class="btn btn-info" id="btnNewImportPType" name="btnNewImportPType"><i class="fas fa-cloud-upload-alt mr-1"></i></button>
-                                </div>
-                            </div>
-                        </div>
+                        <?php } ?>
                     </div>
                 </div>
 
@@ -95,11 +97,13 @@ if (sizeof($_SESSION) == 0)
                                                         <option value="2">MANUFACTURADO</option>
                                                     </select>
                                                 </div>
-                                                <div class="col-sm-2 floating-label enable-floating-label show- mb-3 label cardSelect">
-                                                    <label for="idProductType">Tipo</label>
-                                                    <select class="form-control" name="idProductType" id="idProductType">
-                                                    </select>
-                                                </div>
+                                                <?php if ($_SESSION['flag_products_measure'] == '1') { ?>
+                                                    <div class="col-sm-2 floating-label enable-floating-label show- mb-3 label cardSelect">
+                                                        <label for="idProductType">Tipo</label>
+                                                        <select class="form-control" name="idProductType" id="idProductType">
+                                                        </select>
+                                                    </div>
+                                                <?php } ?>
                                                 <div class="col-sm-2 floating-label enable-floating-label show-label" style="margin-bottom:20px">
                                                     <label for="">Referencia</label>
                                                     <input type="text" class="form-control text-center" name="referenceProduct" id="referenceProduct">
@@ -108,35 +112,36 @@ if (sizeof($_SESSION) == 0)
                                                     <label for="">Descripción Producto</label>
                                                     <input type="text" class="form-control" name="product" id="product">
                                                 </div>
-
-                                                <div class="col-sm-1 floating-label enable-floating-label show-label inputs inputsMeasures">
-                                                    <label for="width">Ancho</label>
-                                                    <input type="number" class="form-control text-center" id="width" name="width"></input>
-                                                </div>
-                                                <div class="col-sm-1 floating-label enable-floating-label show-label inputsMeasures inputs">
-                                                    <label for="high">Alto</label>
-                                                    <input type="number" class="form-control text-center" id="high" name="high">
-                                                </div>
-                                                <div class="col-sm-2 floating-label enable-floating-label show-label inputsMeasures">
-                                                    <label for="length">Largo Total</label>
-                                                    <input type="number" class="form-control text-center" id="length" name="length">
-                                                </div>
-                                                <div class="col-sm-1 floating-label enable-floating-label show-label inputs inputsMeasures">
-                                                    <label for="usefulLength">Largo Útil</label>
-                                                    <input type="number" class="form-control text-center" id="usefulLength" name="usefulLength">
-                                                </div>
-                                                <div class="col-sm-2 floating-label enable-floating-label show-label inputsMeasures">
-                                                    <label for="totalWidth">Ancho Total</label>
-                                                    <input type="number" class="form-control text-center" id="totalWidth" name="totalWidth">
-                                                </div>
-                                                <div class="col-sm-2 floating-label enable-floating-label show-label inputsMeasures">
-                                                    <label for="window" id="lblWindow">Ventanilla</label>
-                                                    <input type="number" class="form-control text-center" id="window" name="window">
-                                                </div>
-                                                <div class="col-sm-1 floating-label enable-floating-label show-label inputsMeasures">
-                                                    <label for="inks">Tintas</label>
-                                                    <input type="number" class="form-control text-center" id="inks" name="inks">
-                                                </div>
+                                                <?php if ($_SESSION['flag_products_measure'] == '1') { ?>
+                                                    <div class="col-sm-1 floating-label enable-floating-label show-label inputs inputsMeasures">
+                                                        <label for="width">Ancho</label>
+                                                        <input type="number" class="form-control text-center" id="width" name="width"></input>
+                                                    </div>
+                                                    <div class="col-sm-1 floating-label enable-floating-label show-label inputsMeasures inputs">
+                                                        <label for="high">Alto</label>
+                                                        <input type="number" class="form-control text-center" id="high" name="high">
+                                                    </div>
+                                                    <div class="col-sm-2 floating-label enable-floating-label show-label inputsMeasures">
+                                                        <label for="length">Largo Total</label>
+                                                        <input type="number" class="form-control text-center" id="length" name="length">
+                                                    </div>
+                                                    <div class="col-sm-1 floating-label enable-floating-label show-label inputs inputsMeasures">
+                                                        <label for="usefulLength">Largo Útil</label>
+                                                        <input type="number" class="form-control text-center" id="usefulLength" name="usefulLength">
+                                                    </div>
+                                                    <div class="col-sm-2 floating-label enable-floating-label show-label inputsMeasures">
+                                                        <label for="totalWidth">Ancho Total</label>
+                                                        <input type="number" class="form-control text-center" id="totalWidth" name="totalWidth">
+                                                    </div>
+                                                    <div class="col-sm-2 floating-label enable-floating-label show-label inputsMeasures">
+                                                        <label for="window" id="lblWindow">Ventanilla</label>
+                                                        <input type="number" class="form-control text-center" id="window" name="window">
+                                                    </div>
+                                                    <div class="col-sm-1 floating-label enable-floating-label show-label inputsMeasures">
+                                                        <label for="inks">Tintas</label>
+                                                        <input type="number" class="form-control text-center" id="inks" name="inks">
+                                                    </div>
+                                                <?php } ?>
 
                                                 <div class="col-sm-1 ml-2 mt-1">
                                                     <button class="btn btn-success" id="btnCreatePMeasure">Crear</button>
@@ -241,11 +246,13 @@ if (sizeof($_SESSION) == 0)
                                             <i class="bi bi-diagram-3 mr-1"></i>Productos
                                         </a>
                                     </li>
-                                    <li class="nav-item">
-                                        <a class="nav-link selectNavigation" id="link-productsType" data-toggle="pill" href="javascript:;" role="tab" aria-controls="pills-activity" aria-selected="true">
-                                            <i class="fas fa-cogs mr-1"></i>Tipos Producto
-                                        </a>
-                                    </li>
+                                    <?php if ($_SESSION['flag_products_measure'] == '1') { ?>
+                                        <li class="nav-item">
+                                            <a class="nav-link selectNavigation" id="link-productsType" data-toggle="pill" href="javascript:;" role="tab" aria-controls="pills-activity" aria-selected="true">
+                                                <i class="fas fa-cogs mr-1"></i>Tipos Producto
+                                            </a>
+                                        </li>
+                                    <?php } ?>
                                 </ul>
                             </div>
                         </div>

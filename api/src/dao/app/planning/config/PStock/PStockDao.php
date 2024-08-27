@@ -74,28 +74,4 @@ class PStockDao
             return $error;
         }
     }
-
-    // public function deletestock($id_stock)
-    // {
-    //     $connection = Connection::getInstance()->getConnection();
-    //     try {
-    //         $stmt = $connection->prepare("SELECT * FROM stock WHERE id_stock = :id_stock");
-    //         $stmt->execute(['id_stock' => $id_stock]);
-    //         $rows = $stmt->rowCount();
-
-    //         if ($rows > 0) {
-    //             $stmt = $connection->prepare("DELETE FROM stock WHERE id_stock = :id_stock");
-    //             $stmt->execute(['id_stock' => $id_stock]);
-    //             $this->logger->info(__FUNCTION__, array('query' => $stmt->queryString, 'errors' => $stmt->errorInfo()));
-    //         }
-    //     } catch (\Exception $e) {
-    //         $message = $e->getMessage();
-
-    //         if ($e->getCode() == 23000)
-    //             $message = 'Proceso asociado a un producto/nomina. Imposible Eliminar';
-
-    //         $error = array('info' => true, 'message' => $message);
-    //         return $error;
-    //     }
-    // }
 }

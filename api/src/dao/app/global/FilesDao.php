@@ -234,4 +234,40 @@ class FilesDao
             move_uploaded_file($tmp_name, $targetFilePath);
         }
     }
+
+    public function saveProductsPlansFile($arr, $id_company)
+    {
+        try {
+            $targetDir = dirname(dirname(dirname(dirname(dirname(__DIR__))))) . '/assets/images/productsPlans/' . $id_company;
+            $allowTypes = array('jpg', 'jpeg', 'png');
+
+            $mechanical_name = str_replace(' ', '', $arr['name']);
+            $tmp_name   = $arr['tmp_name'];
+            $size       = $arr['size'];
+            $type       = $arr['type'];
+            $error      = $arr['error'];
+
+            /* Verifica si directorio esta creado y lo crea */
+            if (!is_dir($targetDir))
+                mkdir($targetDir, 0777, true);
+
+            $targetDir = '/assets/images/productsPlans/' . $id_company;
+            $targetFilePath = $targetDir . '/' . $mechanical_name;
+
+            $fileType = pathinfo($targetFilePath, PATHINFO_EXTENSION);
+
+            if (in_array($fileType, $allowTypes)) {
+                $targetDir = dirname(dirname(dirname(dirname(dirname(__DIR__))))) . '/assets/images/productsPlans/' . $id_company;
+                $targetFilePath = $targetDir . '/' . $mechanical_name;
+
+                move_uploaded_file($tmp_name, $targetFilePath);
+
+                return $targetFilePath;
+            } else {
+                return ['info' => true, 'message' => 'Formato incorrecto'];
+            }
+        } catch (\Exception $e) {
+            return ['info' => true, 'message' => $e->getMessage()];
+        }
+    }
 }

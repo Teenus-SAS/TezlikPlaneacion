@@ -84,6 +84,7 @@ require_once('../api/src/routes/app/planning/config/routeProductsInProcess.php')
 require_once('../api/src/routes/app/planning/config/routeProductsProcess.php');
 require_once('../api/src/routes/app/planning/config/routePlanning_machines.php');
 require_once('../api/src/routes/app/planning/config/routePlanCiclesMachine.php');
+require_once('../api/src/routes/app/planning/config/routeProductsPlans.php');
 require_once('../api/src/routes/app/planning/config/routePStock.php');
 require_once('../api/src/routes/app/planning/config/routeRMStock.php');
 require_once('../api/src/routes/app/planning/config/routeCalender.php');

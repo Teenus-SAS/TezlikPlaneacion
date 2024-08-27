@@ -1,4 +1,6 @@
 $(document).ready(function () {
+  flag_products_measure == '1' ? visible = true : visible = false;
+  
   tblProducts = $("#tblProducts").dataTable({
     destroy: true,
     pageLength: 50,
@@ -53,15 +55,17 @@ $(document).ready(function () {
             ? `<img src="${data}" alt="" style="width:80px;border-radius:100px">`
             : "",
       },
-       {
+      {
         title: "Tipo",
         data: 'product_type',
-        className: "uniqueClassName dt-head-center", 
-      }, 
+        visible: visible,
+        className: "uniqueClassName dt-head-center",
+      },
       {
         title: "Ancho",
         data: "width",
         className: "uniqueClassName dt-head-center",
+        visible: visible,
         render: (data) =>
           parseFloat(data).toLocaleString("es-CO", {
             maximumFractionDigits: 2,
@@ -71,6 +75,7 @@ $(document).ready(function () {
         title: "Alto",
         data: "high",
         className: "uniqueClassName dt-head-center",
+        visible: visible,
         render: (data) =>
           parseFloat(data).toLocaleString("es-CO", {
             maximumFractionDigits: 2,
@@ -80,6 +85,7 @@ $(document).ready(function () {
         title: "Largo Total",
         data: "length",
         className: "uniqueClassName dt-head-center",
+        visible: visible,
         render: (data) =>
           parseFloat(data).toLocaleString("es-CO", {
             maximumFractionDigits: 2,
@@ -89,6 +95,7 @@ $(document).ready(function () {
         title: "Largo Útil",
         data: "useful_length",
         className: "uniqueClassName dt-head-center",
+        visible: visible,
         render: (data) =>
           parseFloat(data).toLocaleString("es-CO", {
             maximumFractionDigits: 2,
@@ -98,6 +105,7 @@ $(document).ready(function () {
         title: "Ancho Total",
         data: "total_width",
         className: "uniqueClassName dt-head-center",
+        visible: visible,
         render: (data) =>
           parseFloat(data).toLocaleString("es-CO", {
             maximumFractionDigits: 2,
@@ -107,6 +115,7 @@ $(document).ready(function () {
         title: "Ventanilla",
         data: "window",
         className: "uniqueClassName dt-head-center",
+        visible: visible,
         render: (data) =>
           parseFloat(data).toLocaleString("es-CO", {
             maximumFractionDigits: 2,
@@ -116,6 +125,7 @@ $(document).ready(function () {
         title: "Tinta",
         data: "inks",
         className: "uniqueClassName dt-head-center",
+        visible: visible,
         render: (data) =>
           parseFloat(data).toLocaleString("es-CO", {
             maximumFractionDigits: 2,

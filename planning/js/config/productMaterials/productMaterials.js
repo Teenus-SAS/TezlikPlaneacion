@@ -4,28 +4,25 @@ $(document).ready(function () {
   $('.selectNavigation').click(function (e) {
     e.preventDefault();
 
-    if (this.id == 'materials') {
-      $('.cardProductsMaterials').show();
-      $('.cardPlanCicles').hide();
-      $('.cardRoutes').hide();
-      $('.cardCreatePlanCiclesMachine').hide();
-      $('.cardImportPlanCiclesMachine').hide();
-    } else if (this.id == 'planCicles') {
-      $('.cardPlanCicles').show();
-      $('.cardProductsMaterials').hide();
-      $('.cardRoutes').hide();
-      $('.cardAddMaterials').hide();
-      $('.cardAddNewProduct').hide();
-      $('.cardImport').hide();
-    } else {
-      $('.cardRoutes').show();
-      $('.cardPlanCicles').hide();
-      $('.cardProductsMaterials').hide();
-      $('.cardAddMaterials').hide();
-      $('.cardAddNewProduct').hide();
-      $('.cardImport').hide();
-      
+    $('.cardGeneral').hide();
+
+    let card = this.id;
+
+    switch (card) {
+      case 'nav-materials':
+        $('.cardProductsMaterials').show();
+        break;
+      case 'nav-planCicles':
+        $('.cardPlanCicles').show();
+        break;
+      case 'nav-route':
+        $('.cardRoutes').show();
+        break;
+      case 'nav-plans':
+        $('.cardPlans').show();
+        break;
     }
+ 
     let tables = document.getElementsByClassName(
       'dataTable'
     );
