@@ -166,7 +166,7 @@ $(document).ready(function () {
     if (flag_products_measure == '1')
       url = 'assets/formatsXlsx/Medidas_Productos.xlsx';
     else
-      url = 'assets/formatsXlsx/Poductos_No_Medidas.xlsx';
+      url = 'assets/formatsXlsx/Productos_No_Medidas.xlsx';
 
     let newFileName = 'Productos.xlsx';
 

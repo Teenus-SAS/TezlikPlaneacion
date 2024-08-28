@@ -39,7 +39,7 @@ if (sizeof($_SESSION) == 0)
                 <!-- page header -->
                 <div class="page-title-box">
                     <div class="container-fluid">
-                        <div class="row align-items-center">
+                        <div class="row align-items-center cardProgramming">
                             <div class="col-sm-5 col-xl-4">
                                 <div class="page-title">
                                     <h3 class="mb-1 font-weight-bold text-dark">Programa de Producción</h3>
@@ -66,15 +66,19 @@ if (sizeof($_SESSION) == 0)
                                     <button class="btn btn-info" id="btnAddOP" name="btnAddOP">Crear OP</button>
                                 </div>
                             </div>
-                            <!-- <div class="col-sm-7 col-xl-2 form-inline justify-content-sm-end mt-3 cardBottons">
-                                <button class="btn btn-warning" id="btnNewProgramming" name="btnNewProgramming">Programar</button>
+                        </div>
+                        <div class="row align-items-center cardDashboardProgramming" style="display: none;">
+                            <div class="col-sm-5 col-xl-4">
+                                <div class="page-title">
+                                    <h3 class="mb-1 font-weight-bold text-dark">Indicadores</h3>
+                                    <ol class="breadcrumb mb-3 mb-md-0">
+                                        <li class="breadcrumb-item active"></li>
+                                    </ol>
+                                </div>
                             </div>
-                            <div class="col-sm-7 col-xl-2 form-inline justify-content-sm-end mt-3 cardSaveBottons">
-                                <button class="btn btn-primary" id="btnSavePrograming" name="btnSavePrograming">Guardar Planeación</button>
+                            <div class="col-sm-7 col-xl-8 form-inline justify-content-sm-end">
+
                             </div>
-                            <div class="col-sm-7 col-xl-2 form-inline justify-content-sm-end mt-3 ">
-                                <button class="btn btn-info" id="btnAddOP" name="btnAddOP">Crear Orden de Produccion</button>
-                            </div> -->
                         </div>
                     </div>
                 </div>
@@ -174,12 +178,27 @@ if (sizeof($_SESSION) == 0)
                 <!-- page content -->
                 <div class="page-content-wrapper mt--45">
                     <div class="container-fluid">
-                        <!-- Row 5 -->
                         <div class="row">
                             <div class="col-12">
+                                <ul class="nav nav-tabs" id="pills-tab" role="tablist">
+                                    <li class="nav-item">
+                                        <a class="nav-link active selectNavigation" id="link-table" data-toggle="pill" href="javascript:;" role="tab" aria-controls="pills-projects" aria-selected="false">
+                                            <i class="bi bi-diagram-3 mr-1"></i>Tabla
+                                        </a>
+                                    </li>
+                                    <li class="nav-item">
+                                        <a class="nav-link selectNavigation" id="link-dashboard" data-toggle="pill" href="javascript:;" role="tab" aria-controls="pills-activity" aria-selected="true">
+                                            <i class="fas fa-cogs mr-1"></i>Indicadores
+                                        </a>
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+                        <!-- Row 5 -->
+                        <div class="row">
+                            <div class="col-12 cardProgramming">
                                 <div class="card">
                                     <div class="card-header">
-                                        <!-- <h5 class="card-title">Programación</h5> -->
                                         <div class="col-sm-7 col-xl-12 mt-4 form-inline justify-content-sm-end">
                                             <div class="col-xs-4 mr-2">
                                                 <label for="simulationType">Escenario</label>
@@ -197,6 +216,17 @@ if (sizeof($_SESSION) == 0)
                                                 <tbody id="tblProgrammingBody"></tbody>
                                             </table>
                                         </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-12 cardDashboardProgramming" style="display: none;">
+                                <div class="card">
+                                    <div class="card-body">
+                                        <!-- <div class="table-responsive">
+                                            <table class="fixed-table-loading table table-hover" id="tblProgramming">
+                                                <tbody id="tblProgrammingBody"></tbody>
+                                            </table>
+                                        </div> -->
                                     </div>
                                 </div>
                             </div>
