@@ -24,7 +24,7 @@ class ProductsMeasuresDao
                 FROM products p
                     LEFT JOIN products_measures pm ON pm.id_product = p.id_product
                     LEFT JOIN products_type pt ON pt.id_product_type = p.id_product_type
-                WHERE pm.id_company = :id_company";
+                WHERE p.id_company = :id_company";
         $stmt = $connection->prepare($sql);
         $stmt->execute([
             'id_company' => $id_company
