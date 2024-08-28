@@ -534,6 +534,7 @@ $(document).ready(function () {
 
     if (selectProduct == true) { 
       let num_order = $('#order :selected').text().trim();
+      let id_order = $('#order').text().trim();
       productOrders = allOrders.filter(item => item.num_order == num_order &&
         (item.status == 'PROGRAMAR' || item.status == 'PROGRAMADO') &&
         ((item.accumulated_quantity_order == null || item.accumulated_quantity_order != 0) || item.flag_process == 0) &&
@@ -557,7 +558,7 @@ $(document).ready(function () {
 
       for (let i = 0; i < productOrders.length; i++) {
         if (this.value == productOrders[i].id_product) { 
-          let process = allProcess.filter(item => item.id_product == this.value);
+          let process = allProcess.filter(item => item.id_product == this.value && item.id_order == id_order);
           process = process.filter(item => item.route1 == process[0].route);
           id_product = this.value;
           
