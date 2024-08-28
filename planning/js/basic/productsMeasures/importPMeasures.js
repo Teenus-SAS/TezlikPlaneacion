@@ -38,10 +38,10 @@ $(document).ready(function () {
     importFile(selectedFile)
       .then((data) => {
 
-        let expectedHeaders = ['referencia_producto', 'producto', 'tipo_producto', 'ancho', 'alto', 'largo', 'largo_util', 'ancho_total', 'ventanilla', 'tinta', 'origen'];
+        let expectedHeaders = ['referencia_producto', 'producto', 'tipo_producto', 'ancho', 'alto', 'largo', 'largo_util', 'ancho_total', 'ventanilla', 'tinta', 'origen', 'compuesto'];
         
         if (flag_products_measure == '0') {
-          expectedHeaders = ['referencia_producto', 'producto', 'origen']; 
+          expectedHeaders = ['referencia_producto', 'producto', 'origen', 'compuesto']; 
         }
         
         const actualHeaders = Object.keys(data[0]);
@@ -86,8 +86,9 @@ $(document).ready(function () {
             usefulLength: item.largo_util,
             totalWidth: item.ancho_total,
             window: item.ventanilla,
-            origin: item.origen,
             inks: item.tinta,
+            origin: item.origen,
+            composite: item.compuesto,
           };
         });
         checkProduct(productsToImport);

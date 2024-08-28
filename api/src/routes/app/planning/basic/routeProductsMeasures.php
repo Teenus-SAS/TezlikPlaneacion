@@ -1,5 +1,6 @@
 <?php
 
+use TezlikPlaneacion\Dao\GeneralCompositeProductsDao;
 use TezlikPlaneacion\dao\GeneralPMeasuresDao;
 use TezlikPlaneacion\dao\GeneralProductsDao;
 use TezlikPlaneacion\dao\LastDataDao;
@@ -15,6 +16,7 @@ $productsInventoryDao = new ProductsInventoryDao();
 $productsDao = new ProductsDao();
 $generalProductsDao = new GeneralProductsDao();
 $lastDataDao = new LastDataDao();
+$generalCompositeProductsDao = new GeneralCompositeProductsDao();
 
 use Psr\Http\Message\ResponseInterface as Response;
 use Psr\Http\Message\ServerRequestInterface as Request;
@@ -47,14 +49,52 @@ $app->post('/productsMeasuresDataValidation', function (Request $request, Respon
         $dataImportProduct = [];
 
         for ($i = 0; $i < count($products); $i++) {
-            $origin = $products[$i]['origin'];
+            if (
+                empty($products[$i]['referenceProduct']) || empty($products[$i]['product']) ||
+                empty($products[$i]['origin']) || empty($products[$i]['composite'])
+            ) {
+                $i = $i + 2;
+                $dataImportProduct = array('error' => true, 'message' => "Campos vacios, fila: $i");
+                break;
+            }
 
-            switch ($origin) {
-                case 'COMERCIALIZADO':
+            if (
+                empty(trim($products[$i]['referenceProduct'])) || empty(trim($products[$i]['product'])) ||
+                empty(trim($products[$i]['origin'])) || empty(trim($products[$i]['composite']))
+            ) {
+                $i = $i + 2;
+                $dataImportProduct = array('error' => true, 'message' => "Campos vacios, fila: $i");
+                break;
+            }
 
-                    if ($flag_products_measure == '1') {
+            if ($flag_products_measure == '1') {
+                if (empty($products[$i]['productType'])) {
+                    $i = $i + 2;
+                    $dataImportProduct = array('error' => true, 'message' => "Campos vacios, fila: $i");
+                    break;
+                }
+
+                if (empty(trim($products[$i]['productType']))) {
+                    $i = $i + 2;
+                    $dataImportProduct = array('error' => true, 'message' => "Campos vacios, fila: $i");
+                    break;
+                }
+
+                $findPType = $productsTypeDao->findProductsType($products[$i], $id_company);
+
+                if (!$findPType) {
+                    $i = $i + 2;
+                    $dataImportProduct =  array('error' => true, 'message' => "Tipo de producto no existe en la base de datos. Fila: $i");
+                    break;
+                }
+
+                $origin = $products[$i]['origin'];
+
+                switch ($origin) {
+                    case 'MANUFACTURADO':
                         if (
-                            empty($products[$i]['referenceProduct']) || empty($products[$i]['product']) || empty($products[$i]['productType'])
+                            empty($products[$i]['width']) || empty($products[$i]['inks']) || empty($products[$i]['high']) || empty($products[$i]['length']) ||
+                            empty($products[$i]['usefulLength']) || empty($products[$i]['totalWidth']) || empty($products[$i]['window']) || empty($products[$i]['productType'])
                         ) {
                             $i = $i + 2;
                             $dataImportProduct = array('error' => true, 'message' => "Campos vacios, fila: $i");
@@ -62,48 +102,8 @@ $app->post('/productsMeasuresDataValidation', function (Request $request, Respon
                         }
 
                         if (
-                            empty(trim($products[$i]['referenceProduct'])) || empty(trim($products[$i]['product'])) || empty(trim($products[$i]['productType']))
-                        ) {
-                            $i = $i + 2;
-                            $dataImportProduct = array('error' => true, 'message' => "Campos vacios, fila: $i");
-                            break;
-                        }
-                        break;
-                    } else {
-                        if (
-                            empty($products[$i]['referenceProduct']) || empty($products[$i]['product'])
-                        ) {
-                            $i = $i + 2;
-                            $dataImportProduct = array('error' => true, 'message' => "Campos vacios, fila: $i");
-                            break;
-                        }
-
-                        if (
-                            empty(trim($products[$i]['referenceProduct'])) || empty(trim($products[$i]['product']))
-                        ) {
-                            $i = $i + 2;
-                            $dataImportProduct = array('error' => true, 'message' => "Campos vacios, fila: $i");
-                            break;
-                        }
-                        break;
-                    }
-
-                default:
-                    if ($flag_products_measure == '1') {
-                        if (
-                            empty($products[$i]['referenceProduct']) || empty($products[$i]['product']) || empty($products[$i]['width']) ||
-                            empty($products[$i]['high']) || empty($products[$i]['length']) || empty($products[$i]['usefulLength']) ||
-                            empty($products[$i]['totalWidth']) || empty($products[$i]['window']) || empty($products[$i]['productType'])
-                        ) {
-                            $i = $i + 2;
-                            $dataImportProduct = array('error' => true, 'message' => "Campos vacios, fila: $i");
-                            break;
-                        }
-
-                        if (
-                            empty(trim($products[$i]['referenceProduct'])) || empty(trim($products[$i]['product'])) || empty(trim($products[$i]['width'])) ||
-                            empty(trim($products[$i]['high'])) || empty(trim($products[$i]['length'])) || empty(trim($products[$i]['usefulLength'])) ||
-                            empty(trim($products[$i]['totalWidth'])) || empty(trim($products[$i]['window'])) || empty(trim($products[$i]['productType']))
+                            empty(trim($products[$i]['width'])) || empty(trim($products[$i]['inks'])) || empty(trim($products[$i]['high'])) || empty(trim($products[$i]['length'])) ||
+                            empty(trim($products[$i]['usefulLength'])) || empty(trim($products[$i]['totalWidth'])) || empty(trim($products[$i]['window'])) || empty(trim($products[$i]['productType']))
                         ) {
                             $i = $i + 2;
                             $dataImportProduct = array('error' => true, 'message' => "Campos vacios, fila: $i");
@@ -111,7 +111,7 @@ $app->post('/productsMeasuresDataValidation', function (Request $request, Respon
                         }
 
                         $data = floatval($products[$i]['width']) * floatval($products[$i]['high']) * floatval($products[$i]['length']) * floatval($products[$i]['usefulLength']) *
-                            floatval($products[$i]['totalWidth']) * floatval($products[$i]['window']) * floatval($products[$i]['']);
+                            floatval($products[$i]['totalWidth']) * floatval($products[$i]['window']) * floatval($products[$i]['inks']);
 
                         if (is_nan($data) || $data <= 0) {
                             $i = $i + 2;
@@ -119,7 +119,7 @@ $app->post('/productsMeasuresDataValidation', function (Request $request, Respon
                             break;
                         }
                         break;
-                    }
+                }
             }
 
             $item = $products[$i];
@@ -147,16 +147,6 @@ $app->post('/productsMeasuresDataValidation', function (Request $request, Respon
                 if ($findProduct[0]['product'] != $nameProduct || $findProduct[0]['reference'] != $refProduct) {
                     $i = $i + 2;
                     $dataImportProduct =  array('error' => true, 'message' => "Referencia o nombre de producto ya existente, fila: $i.<br>- Referencia: $refProduct<br>- Producto: $nameProduct");
-                    break;
-                }
-            }
-
-            if ($flag_products_measure == '1') {
-                $findPType = $productsTypeDao->findProductsType($products[$i], $id_company);
-
-                if (!$findPType) {
-                    $i = $i + 2;
-                    $dataImportProduct =  array('error' => true, 'message' => "Tipo de producto no existe en la base de datos. Fila: $i");
                     break;
                 }
             }
@@ -230,6 +220,8 @@ $app->post('/addProductMeasure', function (Request $request, Response $response,
             $products[$i]['idProduct'] = $findProduct['id_product'];
 
             $products[$i]['origin'] == 'COMERCIALIZADO' ? $products[$i]['origin'] = 1 : $products[$i]['origin'] = 2;
+            $products[$i]['composite'] == 'SI' ? $products[$i]['composite'] = 1 : $products[$i]['composite'] = 0;
+
             if ($flag_products_measure == '1') {
                 $findPType = $productsTypeDao->findProductsType($products[$i], $id_company);
                 $products[$i]['idProductType'] = $findPType['id_product_type'];
@@ -247,6 +239,10 @@ $app->post('/addProductMeasure', function (Request $request, Response $response,
 
                 $resolution = $productsDao->updateProductByCompany($products[$i], $id_company);
             }
+            if (isset($resolution['info'])) break;
+
+            $resolution = $generalProductsDao->changeCompositeProducts($products[$i]['idProduct'], $products[$i]['composite']);
+
             if (isset($resolution['info'])) break;
 
             if ($flag_products_measure == '1') {
@@ -345,4 +341,37 @@ $app->get('/deleteProductMeasure/{id_product_measure}', function (Request $reque
 
     $response->getBody()->write(json_encode($resp));
     return $response->withStatus(200)->withHeader('Content-Type', 'application/json');
+});
+
+
+/* Cambiar Producto Compuesto */
+$app->get('/changeComposite/{id_product}/{op}', function (Request $request, Response $response, $args) use (
+    $generalProductsDao,
+    $generalCompositeProductsDao
+) {
+    $status = true;
+
+    if ($args['op'] == 0) {
+        $product = $generalCompositeProductsDao->findCompositeProductByChild($args['id_product']);
+        if (sizeof($product) > 0)
+            $status = false;
+    }
+
+    if ($status == true) {
+        $product = $generalProductsDao->changeCompositeProducts($args['id_product'], $args['op']);
+
+        if ($product == null)
+            $resp = array('success' => true, 'message' => 'Producto modificado correctamente');
+        else if (isset($product['info']))
+            $resp = array('info' => true, 'message' => $product['message']);
+        else
+            $resp = array('error' => true, 'message' => 'No se pudo modificar la información. Intente de nuevo');
+    } else
+        $resp = array(
+            'error' => true,
+            'message' => 'No se pudo desactivar el producto. Tiene datos relacionados a él'
+        );
+
+    $response->getBody()->write(json_encode($resp));
+    return $response->withHeader('Content-Type', 'application/json');
 });
