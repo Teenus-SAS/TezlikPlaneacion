@@ -69,7 +69,7 @@ class ProgrammingDao
     {
         $connection = Connection::getInstance()->getConnection();
 
-        $stmt = $connection->prepare("SELECT pg.id_programming, o.id_order, o.num_order, o.date_order, o.original_quantity AS quantity_order, o.accumulated_quantity, pg.quantity AS quantity_programming, p.id_product, 
+        $stmt = $connection->prepare("SELECT pg.id_programming, o.id_order, o.num_order, o.date_order, o.original_quantity AS quantity_order, o.accumulated_quantity, pg.quantity AS quantity_programming, p.id_product, pg.sim,
                                              p.reference, p.product, m.id_machine, m.machine, c.client, pg.min_date, HOUR(pg.min_date) AS min_hour, pm.hour_start, pg.max_date, HOUR(pg.max_date) AS max_hour,
                                              (SELECT IFNULL((1*cm.quantity/cpm.quantity), 0) FROM products_materials cpm INNER JOIN materials_inventory cm ON cm.id_material = cpm.id_material WHERE cpm.id_product = pg.id_product ORDER BY `IFNULL((1*cm.quantity/cpm.quantity), 0)` ASC LIMIT 1) AS quantity_mp, pc.id_process, pc.process,
                                              pg.status, pg.min_programming, 1 AS bd_status
@@ -95,8 +95,8 @@ class ProgrammingDao
         try {
             $connection = Connection::getInstance()->getConnection();
 
-            $stmt = $connection->prepare("INSERT INTO programming (id_company, id_order, id_product, id_machine, quantity, min_date, max_date, min_programming, new_programming)
-                                          VALUES (:id_company, :id_order, :id_product, :id_machine, :quantity, :min_date, :max_date, :min_programming, :new_programming)");
+            $stmt = $connection->prepare("INSERT INTO programming (id_company, id_order, id_product, id_machine, quantity, min_date, max_date, min_programming, sim, new_programming)
+                                          VALUES (:id_company, :id_order, :id_product, :id_machine, :quantity, :min_date, :max_date, :min_programming, :sim, :new_programming)");
             $stmt->execute([
                 'id_company' => $id_company,
                 'id_order' => $dataProgramming['id_order'],
@@ -107,6 +107,7 @@ class ProgrammingDao
                 'min_date' => $dataProgramming['min_date'],
                 'max_date' => $dataProgramming['max_date'],
                 'min_programming' => $dataProgramming['min_programming'],
+                'sim' => $dataProgramming['sim'],
                 'new_programming' => $dataProgramming['new_programming']
             ]);
         } catch (\Exception $e) {
@@ -122,7 +123,7 @@ class ProgrammingDao
             $connection = Connection::getInstance()->getConnection();
 
             $stmt = $connection->prepare("UPDATE programming SET id_order = :id_order, id_product = :id_product, id_machine = :id_machine, quantity = :quantity,
-                                                 min_date = :min_date, max_date = :max_date, min_programming = :min_programming, new_programming = :new_programming
+                                                 min_date = :min_date, max_date = :max_date, min_programming = :min_programming, sim = :sim, new_programming = :new_programming
                                           WHERE id_programming = :id_programming");
             $stmt->execute([
                 'id_programming' => $dataProgramming['id_programming'],
@@ -133,6 +134,7 @@ class ProgrammingDao
                 'min_date' => $dataProgramming['min_date'],
                 'max_date' => $dataProgramming['max_date'],
                 'min_programming' => $dataProgramming['min_programming'],
+                'sim' => $dataProgramming['sim'],
                 'new_programming' => $dataProgramming['new_programming'],
             ]);
         } catch (\Exception $e) {

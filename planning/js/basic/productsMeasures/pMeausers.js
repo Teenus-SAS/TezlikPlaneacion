@@ -150,10 +150,14 @@ $(document).ready(function () {
     let inks = parseFloat($("#inks").val());
     let productType = $('#idProductType option:selected').text().trim();
 
-    let data = 1 * idProductType;
+    let data = 1 * prodOrigin;
 
-    if (prodOrigin == '1' && productType != 'CAJA')
-      data *= width * high * length * usefulLength * totalWidth * inks;
+    if (flag_products_measure == '1') {
+      data *= idProductType * width * high * length * usefulLength * totalWidth * inks;
+
+      if (prodOrigin == '2' && productType == 'CAJA')
+        data *= window;
+    }
 
     if (ref.trim() == "" || !ref.trim() || prod.trim() == "" || !prod.trim()|| isNaN(data) || data <= 0) {
       toastr.error("Ingrese todos los campos");
@@ -167,6 +171,10 @@ $(document).ready(function () {
       
       let idProduct = sessionStorage.getItem('id_product');
       dataProduct.append("idProduct", idProduct);
+    }
+    
+    if (flag_products_measure == '0') {
+      dataProduct.append("idProductType", 0);      
     }
 
     let resp = await sendDataPOST(url, dataProduct);

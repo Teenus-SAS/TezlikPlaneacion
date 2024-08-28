@@ -28,6 +28,13 @@ $(document).ready(function () {
     loadTblProgramming(data, op);
   });
 
+  $('#simulationType').change(function (e) { 
+    e.preventDefault();
+    
+    let dataSim = allTblData.filter(item => item.sim = this.value);
+    loadTblProgramming(dataSim, 1);
+  });
+
   loadTblProgramming = async (data, op) => { 
     sessionStorage.setItem('dataProgramming', JSON.stringify(allTblData));
      

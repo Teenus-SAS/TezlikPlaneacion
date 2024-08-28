@@ -41,9 +41,9 @@ $(document).ready(function () {
         let expectedHeaders = ['referencia_producto', 'producto', 'tipo_producto', 'ancho', 'alto', 'largo', 'largo_util', 'ancho_total', 'ventanilla', 'tinta', 'origen'];
         
         if (flag_products_measure == '0') {
-          expectedHeaders = ['referencia_producto', 'producto', 'tipo_producto'];
-          
+          expectedHeaders = ['referencia_producto', 'producto', 'origen']; 
         }
+        
         const actualHeaders = Object.keys(data[0]);
 
         const missingHeaders = expectedHeaders.filter(header => !actualHeaders.includes(header));
@@ -160,20 +160,28 @@ $(document).ready(function () {
 
   /* Descargar formato */
   $('#btnDownloadImportsProducts').click(async function (e) {
-    e.preventDefault(); 
+    e.preventDefault();
 
-    flag_products_measure == '1' ? url = 'assets/formatsXlsx/Medidas_Productos.xlsx' :
-      url = 'assets/formatsXlsx/Productos.xlsx';
+    if (flag_products_measure == '1')
+      url = 'assets/formatsXlsx/Medidas_Productos.xlsx';
+    else
+      url = 'assets/formatsXlsx/Poductos_No_Medidas.xlsx';
 
-    link = document.createElement('a');
-    link.target = '_blank';
+    let newFileName = 'Productos.xlsx';
 
-    link.href = url;
-    document.body.appendChild(link);
-    link.click();
+    fetch(url)
+      .then(response => response.blob())
+      .then(blob => {
+        let link = document.createElement('a');
+        link.href = URL.createObjectURL(blob);
+        link.download = newFileName;
 
-    document.body.removeChild(link);
-    delete link; 
+        document.body.appendChild(link);
+        link.click();
+
+        document.body.removeChild(link);
+        URL.revokeObjectURL(link.href); // liberar memoria
+      })
+      .catch(console.error);
   });
- 
 });

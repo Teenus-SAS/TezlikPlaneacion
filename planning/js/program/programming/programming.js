@@ -530,6 +530,10 @@ $(document).ready(function () {
       return false;
     }
 
+    let sim = $('#simulationType').val();
+
+    allTblData = allTblData.map(item => ({ ...item, sim: sim }));
+
     $.ajax({
       type: "POST",
       url: '/api/saveProgramming',
