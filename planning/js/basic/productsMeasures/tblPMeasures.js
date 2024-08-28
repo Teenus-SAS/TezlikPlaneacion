@@ -5,8 +5,8 @@ $(document).ready(function () {
     destroy: true,
     pageLength: 50,
     ajax: {
-      url: "/api/productsMeasures",
-      dataSrc: "",
+      url: '/api/productsMeasures',
+      dataSrc: '',
     },
     language: {
       url: "/assets/plugins/i18n/Spanish.json",

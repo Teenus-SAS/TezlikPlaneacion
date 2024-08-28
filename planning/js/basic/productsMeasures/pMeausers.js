@@ -83,10 +83,10 @@ $(document).ready(function () {
     e.preventDefault();
     let idProductMeasure = sessionStorage.getItem("id_product_measure");
 
-    if (idProductMeasure == "" || idProductMeasure == null) {
-      checkDataProduct("/api/addProductMeasure", idProductMeasure);
+    if (idProductMeasure == '' || idProductMeasure == null) {
+      checkDataProduct('/api/addProductMeasure', idProductMeasure);
     } else {
-      checkDataProduct("/api/updateProductMeasure", idProductMeasure);
+      checkDataProduct('/api/updateProductMeasure', idProductMeasure);
     }
   });
 
