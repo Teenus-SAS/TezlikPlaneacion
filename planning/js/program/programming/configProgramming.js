@@ -534,7 +534,7 @@ $(document).ready(function () {
 
     if (selectProduct == true) { 
       let num_order = $('#order :selected').text().trim();
-      let id_order = $('#order').text().trim();
+      let id_order = $('#order').val();
       productOrders = allOrders.filter(item => item.num_order == num_order &&
         (item.status == 'PROGRAMAR' || item.status == 'PROGRAMADO') &&
         ((item.accumulated_quantity_order == null || item.accumulated_quantity_order != 0) || item.flag_process == 0) &&
@@ -559,19 +559,17 @@ $(document).ready(function () {
       for (let i = 0; i < productOrders.length; i++) {
         if (this.value == productOrders[i].id_product) { 
           let process = allProcess.filter(item => item.id_product == this.value && item.id_order == id_order);
-          process = process.filter(item => item.route1 == process[0].route);
+          process = process.find(item => item.route1 == process[0].route);
           id_product = this.value;
           
           let $select = $(`#idProcess`);
           $select.empty();
-          $select.append(`<option value="0" disabled selected>Seleccionar</option>`);
-          
-          $.each(process, function (i, value) {
-            $select.append(
-              `<option class="${value.route1}" value ='${value.id_process}'> ${value.process} </option>`
-            );
-          });
-          
+          $select.append(`<option value="0" disabled >Seleccionar</option>`);
+           
+          $select.append(
+            `<option class="${process.route1}" value ='${process.id_process}'selected> ${process.process} </option>`
+          ); 
+
           $('#quantityOrder').val(parseFloat(productOrders[i].original_quantity).toLocaleString());
 
           if (productOrders[i].accumulated_quantity == 0 || productOrders[i].accumulated_quantity == null)
@@ -588,12 +586,14 @@ $(document).ready(function () {
 
           dataProgramming['id_order'] = productOrders[i].id_order;
           dataProgramming['num_order'] = num_order;
+
           break;
         }
       }
-
+      
       selectProcess = true;
       checkData(2, this.id);
+      $(`#idProcess`).change();
     }
   });
 
@@ -606,18 +606,17 @@ $(document).ready(function () {
       dataProgramming['route'] = route + 1;
       let id_product = parseInt($('#selectNameProduct').val());
 
-      let ciclesMachine = allCiclesMachines.filter(item => item.id_product == id_product && item.id_process == this.value && item.route == route);
+      let arr = allCiclesMachines.find(item => item.id_product == id_product && item.id_process == this.value && item.route == route);
             
       let $select = $(`#idMachine`);
       $select.empty();
-      $select.append(`<option disabled selected value=''>Seleccionar</option>`);
+      $select.append(`<option disabled value=''>Seleccionar</option>`);
       // $select.append(`<option value="0"> PROCESO MANUAL </option>`);
        
-      $.each(ciclesMachine, function (i, value) {
-        $select.append(
-          `<option value = ${value.id_machine}> ${value.machine} </option>`
-        );
-      });
+      // $.each(ciclesMachine, function (i, value) {
+      $select.append(`<option value ='${arr.id_machine}' selected> ${arr.machine} </option>`);
+      // });
+      $(`#idMachine`).change();
     }
   });
 

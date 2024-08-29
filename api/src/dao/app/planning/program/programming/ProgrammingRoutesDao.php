@@ -20,7 +20,7 @@ class ProgrammingRoutesDao
     {
         $connection = Connection::getInstance()->getConnection();
 
-        $stmt = $connection->prepare("SELECT pr.id_programming_routes, pr.id_product, pr.route, pcm.route AS route1, p.id_process, p.process
+        $stmt = $connection->prepare("SELECT pr.id_programming_routes, pr.id_order, pr.id_product, pr.route, pcm.route AS route1, p.id_process, p.process
                                         FROM programming_routes pr
                                         INNER JOIN plan_orders o ON o.id_order = pr.id_order
                                         INNER JOIN plan_cicles_machine pcm ON pcm.id_product = pr.id_product -- AND FIND_IN_SET(pcm.route, pr.route) > 0
