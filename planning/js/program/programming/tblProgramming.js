@@ -31,7 +31,7 @@ $(document).ready(function () {
   $('#simulationType').change(function (e) { 
     e.preventDefault();
     
-    let dataSim = allTblData.filter(item => item.sim = this.value);
+    let dataSim = allTblData.filter(item => item.sim == this.value);
     loadTblProgramming(dataSim, 1);
   });
 
