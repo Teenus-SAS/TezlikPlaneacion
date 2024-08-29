@@ -19,13 +19,22 @@ class GeneralCompositeProductsDao
     public function findAllCompositeProductsByCompany($id_company)
     {
         $connection = Connection::getInstance()->getConnection();
-        $stmt = $connection->prepare("SELECT cp.id_composite_product, 0 AS id_product_material, cp.id_child_product, cp.id_product, p.reference, p.reference AS reference_material, p.product AS material, mg.id_magnitude, mg.magnitude, 
-                                             u.id_unit, u.unit, u.abbreviation, cp.quantity, 'Producto' AS type
+        // $stmt = $connection->prepare("SELECT cp.id_composite_product, 0 AS id_product_material, cp.id_child_product, cp.id_product, p.reference, p.reference AS reference_material, p.product AS material, mg.id_magnitude, mg.magnitude, 
+        //                                      u.id_unit, u.unit, u.abbreviation, cp.quantity, 'Producto' AS type
+        //                               FROM products p 
+        //                                 INNER JOIN composite_products cp ON cp.id_child_product = p.id_product 
+        //                                 INNER JOIN convert_units u ON u.id_unit = cp.id_unit
+        //                                 INNER JOIN convert_magnitudes mg ON mg.id_magnitude = u.id_magnitude
+        //                               WHERE cp.id_company = :id_company AND p.active = 1 AND (SELECT active FROM products WHERE id_product = cp.id_product) = 1");
+        $stmt = $connection->prepare("SELECT cp.id_composite_product, 0 AS id_product_material, p.id_product, p.reference AS reference_product, p.product, cp.id_child_product, p.reference AS reference_material, 
+                                             p.product AS material, (pi.quantity / cp.quantity) AS quantity, cp.quantity AS quantity_ftm, 'PRODUCTO' AS type,
+                                             IFNULL(mg.id_magnitude, 0) AS id_magnitude, IFNULL(mg.magnitude, '') AS magnitude, IFNULL(u.id_unit, 0) AS id_unit, IFNULL(u.unit, '') AS unit, IFNULL(u.abbreviation, '') AS abbreviation 
                                       FROM products p 
                                         INNER JOIN composite_products cp ON cp.id_child_product = p.id_product 
-                                        INNER JOIN convert_units u ON u.id_unit = cp.id_unit
-                                        INNER JOIN convert_magnitudes mg ON mg.id_magnitude = u.id_magnitude
-                                      WHERE cp.id_company = :id_company AND p.active = 1 AND (SELECT active FROM products WHERE id_product = cp.id_product) = 1");
+                                        INNER JOIN products_inventory pi ON pi.id_product = cp.id_child_product
+                                        LEFT JOIN convert_units u ON u.id_unit = cp.id_unit
+                                        LEFT JOIN convert_magnitudes mg ON mg.id_magnitude = u.id_magnitude
+                                      WHERE p.id_company = :id_company");
         $stmt->execute(['id_company' => $id_company]);
         $compositeProducts = $stmt->fetchAll($connection::FETCH_ASSOC);
         $this->logger->notice("products", array('products' => $compositeProducts));

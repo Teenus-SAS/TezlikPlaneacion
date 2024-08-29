@@ -7,7 +7,7 @@ $(document).ready(function () {
   let allPlanningMachines = [];
   allOrders = [];
   allProgramming = [];
-  allProductsMaterials = [];
+  allProductsMaterials = []; 
   allTblData = [];
   let selectProduct = false;
   let selectProcess = false;
@@ -23,7 +23,8 @@ $(document).ready(function () {
         planningMachines,
         orders,
         programming,
-        productsMaterials
+        productsMaterials,
+        compositeProducts
       ] = await Promise.all([
         searchData('/api/ordersProgramming'),
         searchData('/api/processProgramming'),
@@ -32,7 +33,8 @@ $(document).ready(function () {
         searchData('/api/planningMachines'),
         searchData('/api/orders'),
         searchData('/api/programming'),
-        searchData('/api/allProductsMaterials')
+        searchData('/api/allProductsMaterials'),
+        searchData('/api/allCompositeProducts'),
       ]);
       let data = [];
   
@@ -45,7 +47,7 @@ $(document).ready(function () {
       allProducts = products;
       allProgramming = programming;
       copyAllProgramming = allProgramming;
-      allProductsMaterials = productsMaterials;
+      allProductsMaterials = [...productsMaterials, ...compositeProducts]; 
       data = programming;
       
       $('.cardBottons').show(800);
