@@ -2,9 +2,9 @@ $(document).ready(function () {
   $(".selectNavigation").click(function (e) {
     e.preventDefault();
 
-    $('.cardAddRequisitions').hide(800);
-    $('.cardSearchDate').hide(800);
-    $('.cardImportRequisitions').hide(800);
+    $(".cardAddRequisitions").hide(800);
+    $(".cardSearchDate").hide(800);
+    $(".cardImportRequisitions").hide(800);
 
     if (this.id == "pending") loadTblRequisitions(pending, false);
     else if (this.id == "done") loadTblRequisitions(done, true);
@@ -116,7 +116,7 @@ $(document).ready(function () {
   };
 
   /* Cargue tabla de Productos Materiales */
-  loadTblRequisitions = (data, visible) => { 
+  loadTblRequisitions = (data, visible) => {
     tblRequisitions = $("#tblRequisitions").dataTable({
       destroy: true,
       pageLength: 50,
@@ -133,12 +133,6 @@ $(document).ready(function () {
           render: function (data, type, full, meta) {
             return meta.row + 1;
           },
-        },
-        {
-          title: "Acciones",
-          data: null,
-          className: "uniqueClassName dt-head-center",
-          render: (data) => renderRequisitionActions(data, visible),
         },
         {
           title: "Referencia",
@@ -174,7 +168,7 @@ $(document).ready(function () {
             else
               quantity = quantity.toLocaleString("es-CO", {
                 minimumFractionDigits: 2,
-                maximumFractionDigits: 2
+                maximumFractionDigits: 2,
               });
 
             return `${quantity} ${data.abbreviation}`;
@@ -195,7 +189,7 @@ $(document).ready(function () {
             else
               quantity = quantity.toLocaleString("es-CO", {
                 minimumFractionDigits: 2,
-                maximumFractionDigits: 2
+                maximumFractionDigits: 2,
               });
 
             return `${quantity} ${data.abbreviation}`;
@@ -214,33 +208,39 @@ $(document).ready(function () {
           render: renderRequisitionStatus,
         },
         {
-          title: 'Fecha',
+          title: "Fecha",
           data: null,
           className: "uniqueClassName dt-head-center",
           visible: visible,
           render: function (data) {
             let delivery_date = data.delivery_date;
             let status = data.status;
-            let nameDate = 'Fecha Entrega';
+            let nameDate = "Fecha Entrega";
 
-            if (status == 'Recibido')
-              nameDate = 'Fecha Recibido';
+            if (status == "Recibido") nameDate = "Fecha Recibido";
 
             return `<a href="javascript:;"><i title="${nameDate}" style="color:black;">${delivery_date}</i></a>`;
-          }
+          },
         },
         {
           title: "Orden de Compra",
           data: "purchase_order",
           className: "uniqueClassName dt-head-center",
-          visible:visible,
+          visible: visible,
         },
         {
           title: "Ejecutado Por",
           data: null,
           className: "uniqueClassName dt-head-center",
-          render: (data) => `${data.firstname_requisition} ${data.lastname_requisition}`,
+          render: (data) =>
+            `${data.firstname_requisition} ${data.lastname_requisition}`,
           visible: visible,
+        },
+        {
+          title: "Acciones",
+          data: null,
+          className: "uniqueClassName dt-head-center",
+          render: (data) => renderRequisitionActions(data, visible),
         },
       ],
       footerCallback: function (row, data, start, end, display) {
@@ -283,8 +283,14 @@ $(document).ready(function () {
   function renderRequisitionActions(data, visible) {
     let action = "";
     if (data.status != "Recibido") {
-      action = `<a href="javascript:;" <i id="upd-${data.id_requisition}" class="bx bx-edit-alt updateRequisition" data-toggle='tooltip' title='Actualizar Requisicion' style="font-size: 30px;"></i></a>
-              <a href="javascript:;" <i id="${data.id_requisition}" class="mdi mdi-delete-forever" data-toggle='tooltip' title='Eliminar Requisicion' style="font-size: 30px;color:red" onclick="deleteFunction(${visible == true ? '2' : '1'})"></i></a>`;
+      action = `<a href="javascript:;" <i id="upd-${
+        data.id_requisition
+      }" class="bx bx-edit-alt updateRequisition" data-toggle='tooltip' title='Actualizar Requisicion' style="font-size: 30px;"></i></a>
+              <a href="javascript:;" <i id="${
+                data.id_requisition
+              }" class="mdi mdi-delete-forever" data-toggle='tooltip' title='Eliminar Requisicion' style="font-size: 30px;color:red" onclick="deleteFunction(${
+        visible == true ? "2" : "1"
+      })"></i></a>`;
     } else {
       action = data.admission_date;
     }

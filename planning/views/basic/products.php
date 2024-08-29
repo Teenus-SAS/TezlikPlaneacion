@@ -165,7 +165,7 @@ if (sizeof($_SESSION) == 0)
                                             <div class="form-row" id="formProducts">
                                                 <div class="col-sm-6 floating-label enable-floating-label show-label drag-area" style="margin-bottom:10px!important">
                                                     <input class="form-control" type="file" id="fileProducts" accept=".xls,.xlsx">
-                                                    <label for="fileProducts" class="form-label">Importar Medidas</label>
+                                                    <label for="fileProducts" class="form-label">Importar Productos</label>
                                                 </div>
                                                 <div class="col-xs-2 cardBottons" style="margin-top:7px">
                                                     <button type="text" class="btn btn-success" id="btnImportProducts">Importar</button>
