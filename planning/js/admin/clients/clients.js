@@ -215,22 +215,22 @@ $(document).ready(function () {
     }
 
     bootbox.confirm({
-      size: 'large',
+      size: 'small',
       title: 'Clonar Cliente',
       message: `<div class="row">
-                  <div class="col-6">
-                    <label for="">Cliente</label>
+                  <div class="col-12 floating-label enable-floating-label show-label">
+                    <label>Cliente</label>
                     <select class="form-control" id="SCClient">
                       <option disabled selected value="0">Seleccionar</option>
                       ${options}
                     </select>
                   </div>
-                  <div class="col-6">
-                    <label for="">Tipo</label>
+                  <div class="col-12 floating-label enable-floating-label show-label">
+                    <label>Tipo</label>
                     <select class="form-control" id="SType">
                       <option disabled selected value="0">Seleccionar</option>
-                      <option value="1">CLIENTE</option>
-                      <option value="2">PROVEEDOR</option>
+                      <option value="1">Cliente</option>
+                      <option value="2">Proveedor</option>
                     </select>
                   </div>
                 </div>`,
