@@ -236,11 +236,11 @@ $(document).ready(function () {
                 </div>`,
       buttons: {
         confirm: {
-          label: 'Ok',
+          label: 'Crear',
           className: 'btn-success',
         },
         cancel: {
-          label: 'Cancel',
+          label: 'Cancelar',
           className: 'btn-danger',
         },
       },
