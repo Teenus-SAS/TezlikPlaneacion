@@ -95,14 +95,13 @@ class ProgrammingDao
         try {
             $connection = Connection::getInstance()->getConnection();
 
-            $stmt = $connection->prepare("INSERT INTO programming (id_company, id_order, id_product, id_machine, quantity, min_date, max_date, min_programming, sim, new_programming)
-                                          VALUES (:id_company, :id_order, :id_product, :id_machine, :quantity, :min_date, :max_date, :min_programming, :sim, :new_programming)");
+            $stmt = $connection->prepare("INSERT INTO programming (id_company, id_order, id_product, id_machine, quantity, min_date, max_date, min_programming, new_programming)
+                                          VALUES (:id_company, :id_order, :id_product, :id_machine, :quantity, :min_date, :max_date, :min_programming, :new_programming)");
             $stmt->execute([
                 'id_company' => $id_company,
                 'id_order' => $dataProgramming['id_order'],
                 'id_product' => $dataProgramming['id_product'],
                 'id_machine' => $dataProgramming['id_machine'],
-                'num_production' => $dataProgramming['numOp'],
                 'quantity' => $dataProgramming['quantity_programming'],
                 'min_date' => $dataProgramming['min_date'],
                 'max_date' => $dataProgramming['max_date'],
@@ -123,7 +122,7 @@ class ProgrammingDao
             $connection = Connection::getInstance()->getConnection();
 
             $stmt = $connection->prepare("UPDATE programming SET id_order = :id_order, id_product = :id_product, id_machine = :id_machine, quantity = :quantity,
-                                                 min_date = :min_date, max_date = :max_date, min_programming = :min_programming, sim = :sim, new_programming = :new_programming
+                                                 min_date = :min_date, max_date = :max_date, min_programming = :min_programming, new_programming = :new_programming
                                           WHERE id_programming = :id_programming");
             $stmt->execute([
                 'id_programming' => $dataProgramming['id_programming'],
@@ -134,7 +133,6 @@ class ProgrammingDao
                 'min_date' => $dataProgramming['min_date'],
                 'max_date' => $dataProgramming['max_date'],
                 'min_programming' => $dataProgramming['min_programming'],
-                'sim' => $dataProgramming['sim'],
                 'new_programming' => $dataProgramming['new_programming'],
             ]);
         } catch (\Exception $e) {
