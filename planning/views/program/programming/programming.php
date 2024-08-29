@@ -203,8 +203,8 @@ if (sizeof($_SESSION) == 0)
                                             <div class="col-xs-4 mr-2">
                                                 <label for="simulationType">Escenario</label>
                                                 <select name="simulationType" id="simulationType" class="form-control text-center">
-                                                    <option selected disabled>Seleccionar</option>
-                                                    <option value="1">1</option>
+                                                    <option disabled>Seleccionar</option>
+                                                    <option value="1" selected>1</option>
                                                     <option value="2">2</option>
                                                 </select>
                                             </div>
