@@ -65,7 +65,7 @@ $(document).ready(function () {
 
     // Si el origen del producto es "MANUFACTURADO", ajustar la visualización de inputs
     if (optionOrigin === "2") {
-      $(".inputs").toggle(option !== "CAJA", 800);
+      $(".inputs").toggle(option !== "CAJA" && option !== "SACHET", 800);
       $("#lblWindow").html(option === "CAJA" ? "Und x Tamaño" : "Ventanilla");
     } else $(".inputsMeasures").hide(800);
   });
@@ -174,7 +174,7 @@ $(document).ready(function () {
 
     let dataProduct = new FormData(formCreatePMeasure);
 
-    if (idProductMeasure != null) {
+    if (idProductMeasure) {
       dataProduct.append("idProductMeasure", idProductMeasure);
 
       let idProduct = sessionStorage.getItem("id_product");
