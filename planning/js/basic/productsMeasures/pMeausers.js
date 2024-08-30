@@ -51,9 +51,9 @@ $(document).ready(function () {
     let option = this.value;
     $(".inputsMeasures").toggle(option === "2", 800);
 
-    if (option === "2") {
-      $(".inputs").toggle(option !== "CAJA", 800);
-      $("#lblWindow").html(option === "CAJA" ? "Und x Tamaño" : "Ventanilla");
+    let optionProductType = $("#idProductType option:selected").text().trim();
+    if (optionProductType) {
+      $("#idProductType").change();
     }
   });
 
