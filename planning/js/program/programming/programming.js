@@ -57,6 +57,7 @@ $(document).ready(function () {
     }
 
     let idProgramming = sessionStorage.getItem("id_programming");
+    let allTblData = flattenData(generalMultiArray);
     
     if (idProgramming == "" || idProgramming == null) {
       dataProgramming['id_programming'] = allTblData.length;
@@ -73,6 +74,7 @@ $(document).ready(function () {
   $(document).on("click", ".updateProgramming", async function (e) {
     $(".cardCreateProgramming").show(800);
     $("#btnCreateProgramming").html("Actualizar");
+    let allTblData = flattenData(generalMultiArray);
     
     let data = allTblData.find(item => item.id_programming == this.id);
     sessionStorage.removeItem("minDate");
@@ -259,6 +261,7 @@ $(document).ready(function () {
         allOrdersProgramming[i].flag_tbl = 0;
       }
     }
+    let allTblData = flattenData(generalMultiArray);
 
     quantityMissing < 0 ? quantityMissing = 0 : quantityMissing;
 
@@ -297,10 +300,22 @@ $(document).ready(function () {
 
       sim == 1 ? key = 0 : key = 1;
 
-      for (let i = 0; i < generalMultiArray[key][`sim_${sim}`].length; i++) {
-        if (generalMultiArray[key][`sim_${sim}`][i][`process-${id_process}`]) {
-          generalMultiArray[key][`sim_${sim}`][i][`process-${id_process}`].push(dataProgramming);
-          break;
+      // for (let i = 0; i < generalMultiArray[key][`sim_${sim}`].length; i++) {
+      //   if (generalMultiArray[key][`sim_${sim}`][i][`process-${id_process}`]) {
+      //     generalMultiArray[key][`sim_${sim}`][i][`process-${id_process}`].push(dataProgramming);
+      //     // console.log(generalMultiArray);
+      //     break;
+      //   }
+      // }
+      // Encontrar el objeto correspondiente en multiarray
+      let targetArray = generalMultiArray[key][`sim_${sim}`];
+
+      if (targetArray) {
+        for (let i = 0; i < targetArray.length; i++) {
+          if (targetArray[i][`process-${id_process}`]) {
+            targetArray[i][`process-${id_process}`].push(dataProgramming);
+            break; // Salir del bucle después de encontrar y actualizar el proceso
+          }
         }
       }
 
@@ -337,7 +352,7 @@ $(document).ready(function () {
             }            
           } 
         }
-      }
+      };
 
       toastr.success('Programa de producción modificado correctamente');
     }
@@ -580,4 +595,20 @@ $(document).ready(function () {
   };
 
   // loadDataMachines(3);
+  // Función para aplanar el array
+  flattenData = (data) => {
+    const flattened = [];
+
+    data.forEach(sim => {
+      Object.values(sim).forEach(processes => {
+        processes.forEach(process => {
+          Object.values(process).forEach(items => {
+            flattened.push(...items);
+          });
+        });
+      });
+    });
+
+    return flattened;
+  };
 });

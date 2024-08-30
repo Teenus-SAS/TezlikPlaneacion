@@ -8,12 +8,13 @@ $(document).ready(function () {
     let data = [];
     let op;
     copy = undefined;
+    let allTblData = flattenData(generalMultiArray);
 
     if (this.value == '0') {
       data = allTblData;
       op = 1;
     }
-    else { 
+    else {
       data = allTblData.filter(item => item.id_machine == this.value);
 
       if (data.length > 0) {
@@ -28,17 +29,17 @@ $(document).ready(function () {
     loadTblProgramming(data, op);
   });
 
-  $('#simulationType').change(function (e) { 
+  $('#simulationType').change(function (e) {
     e.preventDefault();
+    let allTblData = flattenData(generalMultiArray);
     
     let dataSim = allTblData.filter(item => item.sim == this.value);
     loadTblProgramming(dataSim, 1);
   });
 
-  loadTblProgramming = async (data, op) => { 
-    sessionStorage.setItem('dataProgramming', JSON.stringify(allTblData));
-     
-    if (allTblData.length > 0) {
+  loadTblProgramming = async (data, op) => {
+    // sessionStorage.setItem('dataProgramming', JSON.stringify(generalMultiArray));
+    if (data.length > 0) {
       $('.cardSaveBottons').show(800);
       $('#machines1').show(800);
     } else {
@@ -65,7 +66,7 @@ $(document).ready(function () {
       headerRow.appendChild(th);
     });
     
-    $('#tblProgrammingBody').empty(); 
+    $('#tblProgrammingBody').empty();
 
     var body = document.getElementById('tblProgrammingBody');
 
@@ -105,7 +106,7 @@ $(document).ready(function () {
           case 'Cliente':
             cell.textContent = arr.client;
             break;
-          case 'Fecha y Hora': 
+          case 'Fecha y Hora':
             if (op == 2) {
               if (i == 0) {
                 minProgramming = 0;
@@ -127,9 +128,9 @@ $(document).ready(function () {
               minDate.setMinutes(minDate.getMinutes() + Math.floor(min_date1));
             }
             cell.innerHTML = `Inicio: ${moment(minDate).format("DD/MM/YYYY hh:mm A")}<br>Fin: ${moment(final_date).format("DD/MM/YYYY hh:mm A")}`;
-            break; 
+            break;
           case 'Acciones':
-            cell.innerHTML = 
+            cell.innerHTML =
               `<a href="javascript:;" <i id="${arr.id_programming}" class="bx bx-edit-alt updateProgramming" data-toggle='tooltip' title='Actualizar Programa' style="font-size: 30px;"></i></a>
                 <a href="javascript:;" <i id="${arr.id_programming}" class="mdi mdi-delete-forever" data-toggle='tooltip' title='Eliminar Programa' style="font-size: 30px;color:red" onclick="deleteFunction(${arr.bd_status == 1 ? arr.id_programming : i}, ${arr.bd_status})"></i></a>`;
             break;
@@ -140,7 +141,7 @@ $(document).ready(function () {
       });
     });
 
-    $('#tblProgramming').DataTable(); 
+    $('#tblProgramming').DataTable();
     
     if (op == 2) {
       dragula([document.getElementById('tblProgrammingBody')]).on('drop', function (el, container, source, sibling) {
@@ -158,7 +159,7 @@ $(document).ready(function () {
 
           // Crear copia para organizar el array de acuerdo a la key
 
-          !copy ? copy = [...allTblData] : copy; 
+          !copy ? copy = [...data] : copy;
           
           copy[previousIndex]['key'] = currentIndex - 1;
           copy[currentIndex - 1]['key'] = previousIndex;
@@ -172,6 +173,6 @@ $(document).ready(function () {
           container.insertBefore(el, container.firstChild);
         }
       });
-    } 
-  };
+    }
+  }; 
 });
