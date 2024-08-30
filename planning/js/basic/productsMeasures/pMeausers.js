@@ -52,7 +52,7 @@ $(document).ready(function () {
     $(".inputsMeasures").toggle(option === "2", 800);
 
     let optionProductType = $("#idProductType option:selected").text().trim();
-    if (optionProductType) {
+    if (optionProductType != "seleccionar") {
       $("#idProductType").change();
     }
   });
