@@ -50,14 +50,16 @@ $(document).ready(function () {
 
     let option = this.value;
 
-    switch (option) {
+    $('.inputsMeasures').toggle(option === '2', 800);
+
+    /* switch (option) {
       case '1': // Comercializado
         $('.inputsMeasures').hide(800);
         break;
       case '2': // Manufacturado
         $('.inputsMeasures').show(800);
         break;
-    }    
+    }   */  
   }); 
 
   // Tipo Producto
