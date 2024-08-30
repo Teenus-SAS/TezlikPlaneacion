@@ -65,9 +65,13 @@ $(document).ready(function () {
   $("#idProductType").change(function (e) {
     e.preventDefault();
 
+    let optionOrigin = $("#prodOrigin option:selected").text().trim();
     let option = $("#idProductType option:selected").text().trim();
-    $(".inputs").toggle(option !== "CAJA", 800);
-    $("#lblWindow").html(option === "CAJA" ? "Und x Tamaño" : "Ventanilla");
+
+    if (optionOrigin === "MANUFACTURADO") {
+      $(".inputs").toggle(option !== "CAJA", 800);
+      $("#lblWindow").html(option === "CAJA" ? "Und x Tamaño" : "Ventanilla");
+    } else $(".inputsMeasures").hide(800);
 
     /* switch (option) {
       case 'CAJA':
