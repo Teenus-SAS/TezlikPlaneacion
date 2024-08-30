@@ -99,7 +99,10 @@ $(document).ready(function () {
     $(".inputsMeasures").show();
     $("#btnCreatePMeasure").html("Actualizar");
     $("#lblWindow").html("Ventanilla");
-
+    
+    //Hide inputs according Product
+    $("#prodOrigin").change();
+    
     // Obtener el ID del elemento
     let id = $(this).attr("id");
 
