@@ -143,12 +143,20 @@ $(document).ready(function () {
     let idProductType = parseFloat($("#idProductType").val());
     let ref = $("#referenceProduct").val();
     let prod = $("#product").val();
-    let width = parseFloat($("#width").val());
-    let high = parseFloat($("#high").val());
-    let length = parseFloat($("#length").val());
-    let usefulLength = parseFloat($("#usefulLength").val());
-    let totalWidth = parseFloat($("#totalWidth").val());
-    let window = parseFloat($("#window").val());
+    
+    if(idProductType === 2){
+      let width = parseFloat($("#width").val());
+      let high = parseFloat($("#high").val());
+      let length = parseFloat($("#length").val());
+      let usefulLength = parseFloat($("#usefulLength").val());
+      let totalWidth = parseFloat($("#totalWidth").val());
+      let window = parseFloat($("#window").val());
+    }else{
+      let length = parseFloat($("#length").val());
+      let totalWidth = parseFloat($("#totalWidth").val());
+      let window = parseFloat($("#window").val());
+
+    }
     let inks = parseFloat($("#inks").val());
 
     let data = 1 * prodOrigin;
