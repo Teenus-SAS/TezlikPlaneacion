@@ -51,14 +51,9 @@ $(document).ready(function () {
     let option = this.value;
     $(".inputsMeasures").toggle(option === "2", 800);
 
-    /* switch (option) {
-      case '1': // Comercializado
-        $('.inputsMeasures').hide(800);
-        break;
-      case '2': // Manufacturado
-        $('.inputsMeasures').show(800);
-        break;
-    }   */
+    let optionProduct = $("#idProductType option:selected").text().trim();
+    $(".inputs").toggle(option !== "CAJA", 800);
+    $("#lblWindow").html(option === "CAJA" ? "Und x Tamaño" : "Ventanilla");
   });
 
   // Select type Product
