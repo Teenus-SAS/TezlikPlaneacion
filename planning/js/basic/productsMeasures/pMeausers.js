@@ -64,7 +64,7 @@ $(document).ready(function () {
     let option = $("#idProductType option:selected").text().trim();
 
     // Si el origen del producto es "MANUFACTURADO", ajustar la visualización de inputs
-    if (optionOrigin === "MANUFACTURADO") {
+    if (optionOrigin === "2") {
       $(".inputs").toggle(option !== "CAJA", 800);
       $("#lblWindow").html(option === "CAJA" ? "Und x Tamaño" : "Ventanilla");
     } else $(".inputsMeasures").hide(800);
