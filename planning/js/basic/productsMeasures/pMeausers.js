@@ -51,9 +51,11 @@ $(document).ready(function () {
     let option = this.value;
     $(".inputsMeasures").toggle(option === "2", 800);
 
-    let optionProduct = $("#idProductType option:selected").text().trim();
-    $(".inputs").toggle(option !== "CAJA", 800);
-    $("#lblWindow").html(option === "CAJA" ? "Und x Tamaño" : "Ventanilla");
+    if (option === 2) {
+      let optionProduct = $("#idProductType option:selected").text().trim();
+      $(".inputs").toggle(option !== "CAJA", 800);
+      $("#lblWindow").html(option === "CAJA" ? "Und x Tamaño" : "Ventanilla");
+    }
   });
 
   // Select type Product
