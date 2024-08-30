@@ -547,7 +547,8 @@ $(document).ready(function () {
 
   $('#btnSavePrograming').click(function (e) { 
     e.preventDefault();
-    
+    let allTblData = flattenData(generalMultiArray);
+
     if (allTblData.length == 0) {
       toastr.error('Ingrese una programacion');
       return false;
@@ -573,6 +574,8 @@ $(document).ready(function () {
   const message = async (data) => {
     try { 
       if (data.success) {
+        let allTblData = flattenData(generalMultiArray);
+
         sessionStorage.setItem('dataProgramming', JSON.stringify(allTblData));
 
         hideCardAndResetForm();
