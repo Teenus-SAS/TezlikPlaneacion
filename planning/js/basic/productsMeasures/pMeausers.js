@@ -73,13 +73,17 @@ $(document).ready(function () {
   /* Crear producto */
   $("#btnCreatePMeasure").click(function (e) {
     e.preventDefault();
-    let idProductMeasure = sessionStorage.getItem("id_product_measure");
+    let idProductMeasure = sessionStorage.getItem("id_product_measure") || "";
+    
+    const apiUrl = idProductMeasure
+      ? "/api/updateProductMeasure"
+      : "/api/addProductMeasure";
+    
+      checkDataProduct(apiUrl, idProductMeasure);
 
-    if (idProductMeasure == "" || idProductMeasure == null) {
+    /* if (idProductMeasure == "" || idProductMeasure == null)
       checkDataProduct("/api/addProductMeasure", idProductMeasure);
-    } else {
-      checkDataProduct("/api/updateProductMeasure", idProductMeasure);
-    }
+    else checkDataProduct("/api/updateProductMeasure", idProductMeasure); */
   });
 
   /* Actualizar productos */
@@ -94,6 +98,7 @@ $(document).ready(function () {
 
     // Obtener el ID del elemento
     let id = $(this).attr("id");
+
     // Obtener la parte después del guion '-'
     let idProductMeasure = id.split("-")[1];
 
