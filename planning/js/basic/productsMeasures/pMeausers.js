@@ -143,28 +143,28 @@ $(document).ready(function () {
     let idProductType = parseFloat($("#idProductType").val());
     let ref = $("#referenceProduct").val();
     let prod = $("#product").val();
-    
-    if(idProductType === 1){
+
+    if (idProductType === 1) {
       let width = parseFloat($("#width").val());
       let high = parseFloat($("#high").val());
       let length = parseFloat($("#length").val());
       let usefulLength = parseFloat($("#usefulLength").val());
       let totalWidth = parseFloat($("#totalWidth").val());
       let window = parseFloat($("#window").val());
-    }else{
+    } else {
       let length = parseFloat($("#length").val());
       let totalWidth = parseFloat($("#totalWidth").val());
       let window = parseFloat($("#window").val());
-
     }
     let inks = parseFloat($("#inks").val());
 
     let data = 1 * prodOrigin;
 
-    if (flag_products_measure == "1") {
+    if (flag_products_measure == "1" && idProductType == "1") {
       data *= idProductType * width * high * length * usefulLength * totalWidth;
-
       if (prodOrigin == "2" && productType == "CAJA") data *= window;
+    } else if (flag_products_measure == "1" && idProductType == "2") {
+      data *= idProductType * length * totalWidth;
     }
 
     if (!ref.trim() || !prod.trim() || isNaN(data) || data <= 0) {
