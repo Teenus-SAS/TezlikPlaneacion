@@ -144,7 +144,7 @@ $(document).ready(function () {
     let ref = $("#referenceProduct").val();
     let prod = $("#product").val();
     
-    if(idProductType === 2){
+    if(idProductType === 1){
       let width = parseFloat($("#width").val());
       let high = parseFloat($("#high").val());
       let length = parseFloat($("#length").val());
