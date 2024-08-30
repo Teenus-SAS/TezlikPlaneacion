@@ -105,9 +105,7 @@ $(document).ready(function () {
           case 'Cliente':
             cell.textContent = arr.client;
             break;
-          case 'Fecha y Hora':
-            // const min_date = arr.min_date;
-            // if ($('#searchMachine').val() != '0' && $('#searchMachine').val()) {
+          case 'Fecha y Hora': 
             if (op == 2) {
               if (i == 0) {
                 minProgramming = 0;
@@ -124,25 +122,16 @@ $(document).ready(function () {
             let minDate = new Date(min_date);
             let final_date = new Date(min_date);
             final_date.setMinutes(minDate.getMinutes() + Math.floor(minProgramming));
-            
-            // if ($('#searchMachine').val() != '0' && $('#searchMachine').val() && i > 0) {
+             
             if (op == 2 && i > 0) {
               minDate.setMinutes(minDate.getMinutes() + Math.floor(min_date1));
             }
             cell.innerHTML = `Inicio: ${moment(minDate).format("DD/MM/YYYY hh:mm A")}<br>Fin: ${moment(final_date).format("DD/MM/YYYY hh:mm A")}`;
-            break;
-          // case 'Orden Produccion':
-          //   arr.bd_status == 1 ? cell.innerHTML = `<button class="btn btn-warning changeStatus" id="${arr.id_programming}" name="${arr.id_programming}">Crear OP</button>` :
-          //     '';
-          //   break;
+            break; 
           case 'Acciones':
             cell.innerHTML = 
               `<a href="javascript:;" <i id="${arr.id_programming}" class="bx bx-edit-alt updateProgramming" data-toggle='tooltip' title='Actualizar Programa' style="font-size: 30px;"></i></a>
                 <a href="javascript:;" <i id="${arr.id_programming}" class="mdi mdi-delete-forever" data-toggle='tooltip' title='Eliminar Programa' style="font-size: 30px;color:red" onclick="deleteFunction(${arr.bd_status == 1 ? arr.id_programming : i}, ${arr.bd_status})"></i></a>`;
-            // cell.innerHTML = $('#searchMachine').val() != '0' && $('#searchMachine').val() ?
-            //   `<a href="javascript:;" <i id="${arr.id_programming}" class="bx bx-edit-alt updateProgramming" data-toggle='tooltip' title='Actualizar Programa' style="font-size: 30px;"></i></a>
-            //     <a href="javascript:;" <i id="${arr.id_programming}" class="mdi mdi-delete-forever" data-toggle='tooltip' title='Eliminar Programa' style="font-size: 30px;color:red" onclick="deleteFunction(${arr.bd_status == 1 ? arr.id_programming : i}, ${arr.bd_status})"></i></a>`
-            //   : '';
             break;
           default:
             cell.textContent = '';

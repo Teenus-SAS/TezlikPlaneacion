@@ -150,7 +150,8 @@ $(document).ready(function () {
 
   /* Revision data programa de produccion */
   const checkdataProgramming = async (idProgramming) => {
-    let id_order = $('#order').val();
+    // let id_order = $('#order').val();
+    let num_order = $('#order :selected').text().trim();
     let id_product = parseInt($('#selectNameProduct').val());
     let quantityMissing = parseInt($('#quantityMissing').val().replace('.', ''));
     let quantityProgramming = parseInt($('#quantity').val());
@@ -161,7 +162,7 @@ $(document).ready(function () {
     let process = $('#idProcess :selected').text().trim();
 
     let ciclesMachine = allCiclesMachines.filter(item => item.id_product == id_product);
-    
+    let order = allOrders.find(item => item.id_product == id_product && item.num_order == num_order);
     let productsMaterials = allProductsMaterials.filter(item => item.id_product == id_product);
     productsMaterials = productsMaterials.sort((a, b) => a.quantity - b.quantity);
     let quantityFTM = Math.floor(productsMaterials[0].quantity) - quantityProgramming;
@@ -180,7 +181,7 @@ $(document).ready(function () {
     dataProgramming['status'] = 'PROGRAMADO';
     
     for (let i = 0; i < allOrders.length; i++) {
-      if (allOrders[i].id_order == id_order) {
+      if (allOrders[i].id_order == order.id_order) {
         allOrders[i].status = 'PROGRAMADO';
 
         let quantity = 0;
@@ -205,7 +206,7 @@ $(document).ready(function () {
     }
 
     for (let i = 0; i < allOrdersProgramming.length; i++) {
-      if (allOrdersProgramming[i].id_order == id_order) {
+      if (allOrdersProgramming[i].id_order == order.id_order) {
         allOrdersProgramming[i].status = 'PROGRAMADO';
 
         quantityMissing = 0;
@@ -291,7 +292,19 @@ $(document).ready(function () {
         quantity_programming: quantityProgramming,
       });
 
-      changeStatus(id_order, 4, 'Programa de producción creado correctamente');
+      let sim = $('#simulationType').val();
+      let key;
+
+      sim == 1 ? key = 0 : key = 1;
+
+      for (let i = 0; i < generalMultiArray[key][`sim_${sim}`].length; i++) {
+        if (generalMultiArray[key][`sim_${sim}`][i][`process-${id_process}`]) {
+          generalMultiArray[key][`sim_${sim}`][i][`process-${id_process}`].push(dataProgramming);
+          break;
+        }
+      }
+
+      changeStatus(order.id_order, 4, 'Programa de producción creado correctamente');
     } else {
       for (let i = 0; i < allTblData.length; i++) {
         if (allTblData[i].id_programming == idProgramming) {
@@ -301,6 +314,28 @@ $(document).ready(function () {
           allTblData[i].min_date = dataProgramming['min_date'];
           allTblData[i].max_date = dataProgramming['max_date'];
           allTblData[i].min_programming = dataProgramming['min_programming'];
+        }
+      }
+
+      let sim = $('#simulationType').val();
+      let key;
+
+      sim == 1 ? key = 0 : key = 1;
+
+      for (let i = 0; i < generalMultiArray[key][`sim_${sim}`].length; i++) {
+        if (generalMultiArray[key][`sim_${sim}`][i][`process-${id_process}`]) {
+
+          for (let j = 0; j < generalMultiArray[key][`sim_${sim}`][i][`process-${id_process}`].length; j++) {
+            if (generalMultiArray[key][`sim_${sim}`][i][`process-${id_process}`][j].id_programming == idProgramming) {
+              generalMultiArray[key][`sim_${sim}`][i][`process-${id_process}`][j].accumulated_quantity = quantityMissing;
+              generalMultiArray[key][`sim_${sim}`][i][`process-${id_process}`][j].accumulated_quantity_order = quantityMissing;
+              generalMultiArray[key][`sim_${sim}`][i][`process-${id_process}`][j].quantity_programming = quantityProgramming;
+              generalMultiArray[key][`sim_${sim}`][i][`process-${id_process}`][j].min_date = dataProgramming['min_date'];
+              generalMultiArray[key][`sim_${sim}`][i][`process-${id_process}`][j].max_date = dataProgramming['max_date'];
+              generalMultiArray[key][`sim_${sim}`][i][`process-${id_process}`][j].min_programming = dataProgramming['min_programming'];
+              break;
+            }            
+          } 
         }
       }
 
@@ -322,6 +357,7 @@ $(document).ready(function () {
     loadDataMachinesProgramming(uniqueArray);
     checkProcessMachines(allTblData);
     loadTblProgramming(allTblData, 1);
+
     dataProgramming = [];
   };
 
@@ -492,35 +528,7 @@ $(document).ready(function () {
     );
 
     setTblStatusProgramming();
-  });
-
-  // $("#btnSaveProgramming").click(function (e) {
-  //   e.preventDefault();
-
-  //   if (programming.length == 0) {
-  //     toastr.error("No hay ningún dato para guardar");
-  //     return false;
-  //   }
-
-  //   $.ajax({
-  //     type: "POST",
-  //     url: "/api/changeStatusProgramming",
-  //     data: { data: programming },
-  //     success: function (resp) {
-  //       programming = [];
-  //       $("#changeStatusProgramming").modal("hide");
-
-  //       message(resp);
-  //     },
-  //   });
-  // });
-
-  // $(".btnCloseStatusProgramming").click(function (e) {
-  //   e.preventDefault();
-  //   programming = [];
-  //   $("#changeStatusProgramming").modal("hide");
-  //   $("#tblStatusProgrammingBody").empty();
-  // });
+  }); 
 
   $('#btnSavePrograming').click(function (e) { 
     e.preventDefault();

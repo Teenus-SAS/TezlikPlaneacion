@@ -7,8 +7,10 @@ $(document).ready(function () {
   let allPlanningMachines = [];
   allOrders = [];
   allProgramming = [];
-  allProductsMaterials = []; 
+  allProductsMaterials = [];
   allTblData = [];
+  generalMultiArray = [];
+
   let selectProduct = false;
   let selectProcess = false;
   sessionStorage.removeItem('dataProgramming');
@@ -47,8 +49,21 @@ $(document).ready(function () {
       allProducts = products;
       allProgramming = programming;
       copyAllProgramming = allProgramming;
-      allProductsMaterials = [...productsMaterials, ...compositeProducts]; 
+      allProductsMaterials = [...productsMaterials, ...compositeProducts];
       data = programming;
+
+      // let uniquePCMap = new Map(ciclesMachines.map(item => [item.id_process, item.id_process]));
+      let uniquePCMap = new Map(ciclesMachines.map(item => [item.id_process, { [`process-${item.id_process}`]: [] }]));
+      let uniqueArrayPC = Array.from(uniquePCMap.values());
+ 
+      generalMultiArray.push(
+        {
+          sim_1: uniqueArrayPC,
+        },
+        {
+          sim_2: uniqueArrayPC,
+        }
+      );
       
       $('.cardBottons').show(800);
 
@@ -204,7 +219,7 @@ $(document).ready(function () {
     let machine = parseFloat($('#idMachine').val());
     let quantity = parseFloat($('#quantity').val());
 
-    if (!isNaN(quantity)) { 
+    if (!isNaN(quantity)) {
       let productsMaterials = allProductsMaterials.filter(item => item.id_product == product);
       productsMaterials = productsMaterials.sort((a, b) => a.quantity - b.quantity);
         
@@ -274,7 +289,7 @@ $(document).ready(function () {
       if (isNaN(data) || data <= 0) {
         toastr.error('Ingrese todos los campos');
         return false;
-      }; 
+      };
 
       if (machines.length > 0) {
         dataProgramming['min_date'] = machines[machines.length - 1].max_date;
@@ -372,17 +387,12 @@ $(document).ready(function () {
 
   const calcMaxDate = async (min_date, last_hour, op) => {
     try {
-      let id_order = parseFloat($('#order').val());
+      // let id_order = parseFloat($('#order').val());
+      let num_order = $('#order :selected').text().trim();
       let product = parseFloat($('#selectNameProduct').val());
       let machine = parseFloat($('#idMachine').val());
       let quantity = parseInt($('#quantity').val());
-
-      for (let i = 0; i < allOrders.length; i++) {
-        if (allOrders[i].id_order == id_order) {
-          order = allOrders[i];
-          break;
-        }
-      }
+      let order = allOrders.find(item => item.id_product == product && item.num_order == num_order);
 
       for (let i = 0; i < allCiclesMachines.length; i++) {
         if (allCiclesMachines[i].id_machine == machine && allCiclesMachines[i].id_product == product) {
@@ -534,7 +544,7 @@ $(document).ready(function () {
   $('.slctProduct').change(function (e) {
     e.preventDefault();
 
-    if (selectProduct == true) { 
+    if (selectProduct == true) {
       let num_order = $('#order :selected').text().trim();
       // let id_order = $('#order').val();
       productOrders = allOrders.filter(item => item.num_order == num_order &&
@@ -559,7 +569,7 @@ $(document).ready(function () {
       let id_product;
 
       for (let i = 0; i < productOrders.length; i++) {
-        if (this.value == productOrders[i].id_product) { 
+        if (this.value == productOrders[i].id_product) {
           let process = allProcess.filter(item => item.id_product == this.value && item.num_order == num_order);
           process = process.find(item => item.route1 == process[0].route);
           id_product = this.value;
@@ -570,7 +580,7 @@ $(document).ready(function () {
            
           $select.append(
             `<option class="${process.route1}" value ='${process.id_process}'selected> ${process.process} </option>`
-          ); 
+          );
 
           $('#quantityOrder').val(parseFloat(productOrders[i].original_quantity).toLocaleString());
 
@@ -646,7 +656,7 @@ $(document).ready(function () {
             planningMachine = allPlanningMachines.find(item => item.id_machine == machine);
             max_date = `${date} ${planningMachine.hour_start < 10 ? `0${planningMachine.hour_start}` : planningMachine.hour_start}:00:00`;
           } else {
-            dataProgramming['min_date'] = planningMachine
+            // dataProgramming['min_date'] = planningMachine
             let minProgramming = allTblData.reduce((total, arr) => total + arr.min_programming, 0);
 
             min_date = new Date(allTblData[0].min_date);
@@ -658,32 +668,36 @@ $(document).ready(function () {
               max_date.getFullYear() + "-" +
               ("00" + (max_date.getMonth() + 1)).slice(-2) + "-" +
               ("00" + max_date.getDate()).slice(-2) + " " + ("00" + max_date.getHours()).slice(-2) + ':' + ("00" + max_date.getMinutes()).slice(-2) + ':' + '00';
-            
           }
+          dataProgramming['update'] = 1;
+          document.getElementById('minDate').type = 'datetime-local';
+          let minDate = document.getElementById('minDate');
+
+          minDate.value = max_date;
         }
       } else {
         data = allTblData.filter(item => item.id_machine == machine);
         
         if (data.length > 0) {
-          dataProgramming['min_date'] = planningMachine
-            let minProgramming = allTblData.reduce((total, arr) => total + arr.min_programming, 0);
+          // dataProgramming['min_date'] = planningMachine;
+          let minProgramming = allTblData.reduce((total, arr) => total + arr.min_programming, 0);
 
-            min_date = new Date(allTblData[0].min_date);
+          min_date = new Date(allTblData[0].min_date);
 
-            max_date = new Date(allTblData[0].min_date);
-            max_date.setMinutes(min_date.getMinutes() + Math.floor(minProgramming));
+          max_date = new Date(allTblData[0].min_date);
+          max_date.setMinutes(min_date.getMinutes() + Math.floor(minProgramming));
 
-            max_date =
-              max_date.getFullYear() + "-" +
-              ("00" + (max_date.getMonth() + 1)).slice(-2) + "-" +
-              ("00" + max_date.getDate()).slice(-2) + " " + ("00" + max_date.getHours()).slice(-2) + ':' + ("00" + max_date.getMinutes()).slice(-2) + ':' + '00';
+          max_date =
+            max_date.getFullYear() + "-" +
+            ("00" + (max_date.getMonth() + 1)).slice(-2) + "-" +
+            ("00" + max_date.getDate()).slice(-2) + " " + ("00" + max_date.getHours()).slice(-2) + ':' + ("00" + max_date.getMinutes()).slice(-2) + ':' + '00';
+          dataProgramming['update'] = 1;
+          document.getElementById('minDate').type = 'datetime-local';
+          let minDate = document.getElementById('minDate');
+
+          minDate.value = max_date;
         }
       }
-      dataProgramming['update'] = 1;
-      document.getElementById('minDate').type = 'datetime-local';
-      let minDate = document.getElementById('minDate');
-
-      minDate.value = max_date;
     }
   });
 });
