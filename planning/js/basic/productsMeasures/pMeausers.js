@@ -145,16 +145,16 @@ $(document).ready(function () {
     let prod = $("#product").val();
 
     if (idProductType === 1) {
-      let width = parseFloat($("#width").val());
-      let high = parseFloat($("#high").val());
-      let length = parseFloat($("#length").val());
-      let usefulLength = parseFloat($("#usefulLength").val());
-      let totalWidth = parseFloat($("#totalWidth").val());
-      let window = parseFloat($("#window").val());
+      width = parseFloat($("#width").val());
+      high = parseFloat($("#high").val());
+      length = parseFloat($("#length").val());
+      usefulLength = parseFloat($("#usefulLength").val());
+      totalWidth = parseFloat($("#totalWidth").val());
+      window = parseFloat($("#window").val());
     } else {
-      let length = parseFloat($("#length").val());
-      let totalWidth = parseFloat($("#totalWidth").val());
-      let window = parseFloat($("#window").val());
+      length = parseFloat($("#length").val());
+      totalWidth = parseFloat($("#totalWidth").val());
+      window = parseFloat($("#window").val());
     }
     let inks = parseFloat($("#inks").val());
 
