@@ -74,12 +74,12 @@ $(document).ready(function () {
   $("#btnCreatePMeasure").click(function (e) {
     e.preventDefault();
     let idProductMeasure = sessionStorage.getItem("id_product_measure") || "";
-    
+
     const apiUrl = idProductMeasure
       ? "/api/updateProductMeasure"
       : "/api/addProductMeasure";
-    
-      checkDataProduct(apiUrl, idProductMeasure);
+
+    checkDataProduct(apiUrl, idProductMeasure);
 
     /* if (idProductMeasure == "" || idProductMeasure == null)
       checkDataProduct("/api/addProductMeasure", idProductMeasure);
@@ -138,42 +138,28 @@ $(document).ready(function () {
 
   /* Revisar datos */
   const checkDataProduct = async (url, idProductMeasure) => {
+    let prodOrigin = parseFloat($("#prodOrigin").val());
+    let productType = $("#idProductType option:selected").text().trim();
+    let idProductType = parseFloat($("#idProductType").val());
     let ref = $("#referenceProduct").val();
     let prod = $("#product").val();
-    let idProductType = parseFloat($("#idProductType").val());
     let width = parseFloat($("#width").val());
     let high = parseFloat($("#high").val());
     let length = parseFloat($("#length").val());
     let usefulLength = parseFloat($("#usefulLength").val());
     let totalWidth = parseFloat($("#totalWidth").val());
     let window = parseFloat($("#window").val());
-    let prodOrigin = parseFloat($("#prodOrigin").val());
     let inks = parseFloat($("#inks").val());
-    let productType = $("#idProductType option:selected").text().trim();
 
     let data = 1 * prodOrigin;
 
     if (flag_products_measure == "1") {
-      data *=
-        idProductType *
-        width *
-        high *
-        length *
-        usefulLength *
-        totalWidth *
-        inks;
+      data *= idProductType * width * high * length * usefulLength * totalWidth;
 
       if (prodOrigin == "2" && productType == "CAJA") data *= window;
     }
 
-    if (
-      ref.trim() == "" ||
-      !ref.trim() ||
-      prod.trim() == "" ||
-      !prod.trim() ||
-      isNaN(data) ||
-      data <= 0
-    ) {
+    if (!ref.trim() || !prod.trim() || isNaN(data) || data <= 0) {
       toastr.error("Ingrese todos los campos");
       return false;
     }
