@@ -65,11 +65,12 @@ $(document).ready(function () {
 
     // Si el origen del producto es "MANUFACTURADO", ajustar la visualización de inputs
     if (optionOrigin === "2") {
-      $(".inputs").toggle(
-        !["CAJA", "SACHET", , "LAMINA"].includes(option),
-        800
+      $(".inputs").toggle(!["CAJA", "SACHET", "LAMINA"].includes(option), 800);
+      $("#lblWindow").html(
+        ["CAJA", "SACHET", "LAMINA"].includes(option)
+          ? "Und x Tamaño"
+          : "Ventanilla"
       );
-      $("#lblWindow").html(option === "CAJA" ? "Und x Tamaño" : "Ventanilla");
     } else $(".inputsMeasures").hide(800);
   });
 
