@@ -51,8 +51,7 @@ $(document).ready(function () {
     let option = this.value;
     $(".inputsMeasures").toggle(option === "2", 800);
 
-    let optionProductType = $("#idProductType option:selected").text().trim();
-    if (optionProductType != "Seleccionar") {
+    if ($("#idProductType").val() !== "Seleccionar") {
       $("#idProductType").change();
     }
   });
@@ -61,24 +60,14 @@ $(document).ready(function () {
   $("#idProductType").change(function (e) {
     e.preventDefault();
 
-    let optionOrigin = $("#prodOrigin option:selected").text().trim();
-    let option = $("#idProductType option:selected").text().trim();
+    let optionOrigin = $("#prodOrigin").val();
+    let option = $("#idProductType").val();
 
-    if (optionOrigin === "MANUFACTURADO") {
+    // Si el origen del producto es "MANUFACTURADO", ajustar la visualización de inputs
+    if (optionOrigin === "2") {
       $(".inputs").toggle(option !== "CAJA", 800);
       $("#lblWindow").html(option === "CAJA" ? "Und x Tamaño" : "Ventanilla");
     } else $(".inputsMeasures").hide(800);
-
-    /* switch (option) {
-      case 'CAJA':
-        $('.inputs').hide(800);
-        $('#lblWindow').html('Und x Tamaño');
-        break;
-      default:
-        $('.inputs').show(800);
-        $('#lblWindow').html('Ventanilla');
-        break;
-    } */
   });
 
   /* Crear producto */
