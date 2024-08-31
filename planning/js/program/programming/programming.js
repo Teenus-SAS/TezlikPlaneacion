@@ -585,8 +585,8 @@ $(document).ready(function () {
           }
           let sim = $('#simulationType').val();
 
-          allTblData = data.map(item => ({ ...item, sim: sim }));
-          
+          allTblData = allTblData.map(item => ({ ...item, sim: sim }));
+
           $.ajax({
             type: "POST",
             url: '/api/saveProgramming',
