@@ -396,6 +396,8 @@ $(document).ready(function () {
       callback: function (result) {
         if (result) {
           if (bd_status == 0) {
+            let allTblData = flattenData(generalMultiArray);
+
             const idProduct = allTblData[id].id_product;
             const quantityProgramming = allTblData[id].quantity_programming;
             const quantityOrder = allTblData[id].quantity_order;
@@ -482,13 +484,7 @@ $(document).ready(function () {
   }
 
   /* Cambiar estado */
-  $(document).on("click", "#btnAddOP", function () {
-    // let data = allProgramming.find(item => item.id_programming == this.id);
-
-    // let dataProgramming = {};
-    // dataProgramming["idProgramming"] = data.id_programming;
-    // dataProgramming["idOrder"] = data.id_order; 
-
+  $(document).on("click", "#btnAddOP", function () {  
     bootbox.confirm({
       title: "Orden de Producción",
       message:
@@ -597,7 +593,6 @@ $(document).ready(function () {
     $("#formCreateProgramming").trigger("reset"); 
   };
 
-  // loadDataMachines(3);
   // Función para aplanar el array
   flattenData = (data) => {
     const flattened = [];

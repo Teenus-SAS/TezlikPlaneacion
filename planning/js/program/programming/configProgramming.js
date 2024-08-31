@@ -48,22 +48,10 @@ $(document).ready(function () {
       allOrders = orders.map(item => ({ ...item, flag_tbl: 1, flag_process: 0 }));
       allProducts = products;
       allProgramming = programming;
-      copyAllProgramming = allProgramming;
+      // copyAllProgramming = allProgramming;
       allProductsMaterials = [...productsMaterials, ...compositeProducts];
       data = programming;
 
-      // let uniquePCMap = new Map(ciclesMachines.map(item => [item.id_process, { [`process-${item.id_process}`]: [] }]));
-      // let uniqueArrayPC = Array.from(uniquePCMap.values());
-      // let uniqueArrayPC2 = [...uniqueArrayPC];
- 
-      // generalMultiArray.push(
-      //   {
-      //     sim_1: uniqueArrayPC,
-      //   },
-      //   {
-      //     sim_2: uniqueArrayPC2,
-      //   }
-      // );
       // Crear el mapa único
       let uniquePCMap = new Map(ciclesMachines.map(item => [item.id_process, { [`process-${item.id_process}`]: [] }]));
 

@@ -199,7 +199,7 @@ if (sizeof($_SESSION) == 0)
                             <div class="col-12 cardProgramming">
                                 <div class="card">
                                     <div class="card-header">
-                                        <div class="col-sm-7 col-xl-12 mt-4 form-inline justify-content-sm-end">
+                                        <div class="col-sm-7 col-xl-12 mt-4 form-inline justify-content-sm-end cardSimulation" style="display: none;">
                                             <div class="col-xs-4 mr-2">
                                                 <label for="simulationType">Escenario</label>
                                                 <select name="simulationType" id="simulationType" class="form-control text-center">
