@@ -80,7 +80,7 @@ $(document).ready(function () {
         allTblData = flattenData(allTblData);
 
         checkProcessMachines(allTblData);
-      }
+      };
  
       allTblData = allTblData.concat(data);
       data = data.concat(allTblData);
