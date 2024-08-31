@@ -688,11 +688,11 @@ $(document).ready(function () {
         data = allTblData.filter(item => item.id_machine == machine);
         
         if (data.length > 0) { 
-          let minProgramming = allTblData.reduce((total, arr) => total + arr.min_programming, 0);
+          let minProgramming = data.reduce((total, arr) => total + arr.min_programming, 0);
 
-          min_date = new Date(allTblData[0].min_date);
+          min_date = new Date(data[0].min_date);
 
-          max_date = new Date(allTblData[0].min_date);
+          max_date = new Date(data[0].min_date);
           max_date.setMinutes(min_date.getMinutes() + Math.floor(minProgramming));
 
           max_date =

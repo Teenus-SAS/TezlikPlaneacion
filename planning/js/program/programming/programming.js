@@ -559,28 +559,46 @@ $(document).ready(function () {
     setTblStatusProgramming();
   }); 
 
-  $('#btnSavePrograming').click(function (e) { 
+  $('#btnSavePrograming').click(function (e) {
     e.preventDefault();
-    let allTblData = flattenData(generalMultiArray);
 
-    if (allTblData.length == 0) {
-      toastr.error('Ingrese una programacion');
-      return false;
-    }
+    bootbox.confirm({
+      title: "Planeación",
+      message: "Desea guardar la planeación? Esta acción no se puede reversar.",
+      buttons: {
+        confirm: {
+          label: "Si",
+          className: "btn-success",
+        },
+        cancel: {
+          label: "No",
+          className: "btn-danger",
+        },
+      },
+      callback: function (result) {
+        if (result) {
+          let allTblData = flattenData(generalMultiArray);
 
-    let sim = $('#simulationType').val();
+          if (allTblData.length == 0) {
+            toastr.error('Ingrese una programacion');
+            return false;
+          }
+          let sim = $('#simulationType').val();
 
-    allTblData = allTblData.map(item => ({ ...item, sim: sim }));
-
-    $.ajax({
-      type: "POST",
-      url: '/api/saveProgramming',
-      data: { data: allTblData },
-      success: function (resp) {
-        allTblData = [];
-        $('.cardAddOP').show(800);
-        message(resp);
-      }
+          allTblData = data.map(item => ({ ...item, sim: sim }));
+          
+          $.ajax({
+            type: "POST",
+            url: '/api/saveProgramming',
+            data: { data: allTblData },
+            success: function (resp) {
+              allTblData = [];
+              $('.cardAddOP').show(800);
+              message(resp);
+            }
+          });
+        }
+      },
     });
   });
 
