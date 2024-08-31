@@ -648,6 +648,7 @@ $(document).ready(function () {
       let id_product = $('#selectNameProduct').val();
       let machine = parseFloat($('#idMachine').val());
       let id_order = $('#order').val();
+      // let num_order = $('#order :selected').text().trim();
 
       let data = allTblData.filter(item => item.id_product == id_product);
 
@@ -655,7 +656,7 @@ $(document).ready(function () {
         data.sort((a, b) => a.id_machine - b.id_machine);
 
         if (data[data.length - 1].id_machine != this.value) {
-          let arr = allTblData.filter(item => item.id_machine == machine);
+          let arr = data.filter(item => item.id_machine == machine);
           let arrOM = arr.filter(item => item.id_order == id_order);
           let min_date, max_date;
 
@@ -664,8 +665,7 @@ $(document).ready(function () {
             date = getFirstText(date);
             planningMachine = allPlanningMachines.find(item => item.id_machine == machine);
             max_date = `${date} ${planningMachine.hour_start < 10 ? `0${planningMachine.hour_start}` : planningMachine.hour_start}:00:00`;
-          } else {
-            // dataProgramming['min_date'] = planningMachine
+          } else { 
             let minProgramming = allTblData.reduce((total, arr) => total + arr.min_programming, 0);
 
             min_date = new Date(allTblData[0].min_date);
@@ -687,8 +687,7 @@ $(document).ready(function () {
       } else {
         data = allTblData.filter(item => item.id_machine == machine);
         
-        if (data.length > 0) {
-          // dataProgramming['min_date'] = planningMachine;
+        if (data.length > 0) { 
           let minProgramming = allTblData.reduce((total, arr) => total + arr.min_programming, 0);
 
           min_date = new Date(allTblData[0].min_date);

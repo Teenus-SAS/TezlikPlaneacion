@@ -75,7 +75,12 @@ class AreaDao
                 $stmt->execute(['id_plan_area' => $id_plan_area]);
             }
         } catch (\Exception $e) {
-            return ['info' => true, 'message' => $e->getMessage()];
+            $message = $e->getMessage();
+
+            if ($e->getCode() == 23000)
+                $message = 'Area asociada a un proceso';
+
+            return ['info' => true, 'message' => $message];
         }
     }
 }
