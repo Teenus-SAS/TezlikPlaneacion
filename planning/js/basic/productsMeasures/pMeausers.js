@@ -84,14 +84,9 @@ $(document).ready(function () {
       : "/api/addProductMeasure";
 
     checkDataProduct(apiUrl, idProductMeasure);
-
-    /* if (idProductMeasure == "" || idProductMeasure == null)
-      checkDataProduct("/api/addProductMeasure", idProductMeasure);
-    else checkDataProduct("/api/updateProductMeasure", idProductMeasure); */
   });
 
   /* Actualizar productos */
-
   $(document).on("click", ".updatePMeasure", function (e) {
     $(".cardImportPMeasure").hide(800);
     $(".cardCreatePMeasure").show(800);
@@ -99,10 +94,7 @@ $(document).ready(function () {
     $(".inputsMeasures").show();
     $("#btnCreatePMeasure").html("Actualizar");
     $("#lblWindow").html("Ventanilla");
-    
-    //Hide inputs according Product
-    $("#prodOrigin").change();
-    
+
     // Obtener el ID del elemento
     let id = $(this).attr("id");
 
@@ -139,6 +131,9 @@ $(document).ready(function () {
       $(".inputs").hide();
       $("#lblWindow").html("Und x Tamaño");
     }
+
+    //Hide inputs according Product
+    $("#prodOrigin").change();
 
     $("html, body").animate({ scrollTop: 0 }, 1000);
   });
