@@ -642,6 +642,7 @@ $(document).ready(function () {
 
   $('#idMachine').change(function (e) {
     e.preventDefault();
+
     let allTblData = flattenData(generalMultiArray);
 
     if (allTblData.length > 0) {
@@ -656,11 +657,11 @@ $(document).ready(function () {
         data.sort((a, b) => a.id_machine - b.id_machine);
 
         if (data[data.length - 1].id_machine != this.value) {
-          let arr = data.filter(item => item.id_machine == machine);
-          let arrOM = arr.filter(item => item.id_order == id_order);
+          // let arr = data.filter(item => item.id_machine == machine);
+          let arrOM = data.filter(item => item.id_order == id_order);
           let min_date, max_date;
 
-          if (arr.length > 0 && arrOM.length > 0) {
+          if (arrOM.length > 0) {
             let date = allTblData[0].max_date;
             date = getFirstText(date);
             planningMachine = allPlanningMachines.find(item => item.id_machine == machine);
