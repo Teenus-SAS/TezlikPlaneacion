@@ -118,7 +118,7 @@ if (sizeof($_SESSION) == 0)
                                                         <input type="number" class="form-control text-center" id="width" name="width"></input>
                                                     </div>
                                                     <div class="col-sm-1 floating-label enable-floating-label show-label inputsMeasures inputs">
-                                                        <label for="high">Alto</label>
+                                                        <label for="high">Fuelle</label>
                                                         <input type="number" class="form-control text-center" id="high" name="high">
                                                     </div>
                                                     <div class="col-sm-2 floating-label enable-floating-label show-label inputsMeasures">
