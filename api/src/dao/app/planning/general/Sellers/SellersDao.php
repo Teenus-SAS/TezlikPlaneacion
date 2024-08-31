@@ -34,14 +34,13 @@ class SellersDao
         try {
             $connection = Connection::getInstance()->getConnection();
 
-            $stmt = $connection->prepare("INSERT INTO sellers (id_company, firstname, lastname, email, status)
-                                          VALUES (:id_company, :firstname, :lastname, :email, :status)");
+            $stmt = $connection->prepare("INSERT INTO sellers (id_company, firstname, lastname, email)
+                                          VALUES (:id_company, :firstname, :lastname, :email)");
             $stmt->execute([
                 'id_company' => $id_company,
                 'firstname' => strtoupper(trim($dataSeller['firstname'])),
                 'lastname' => strtoupper(trim($dataSeller['lastname'])),
-                'email' => $dataSeller['email'],
-                'status' => 1
+                'email' => $dataSeller['email']
             ]);
         } catch (\Exception $e) {
             return ['info' => true, 'message' => $e->getMessage()];

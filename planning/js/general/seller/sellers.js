@@ -116,6 +116,45 @@ $(document).ready(function () {
       },
     });
   };
+
+  /* Camniar vendedor interno */
+  $(document).on('click', '.checkSeller', function () {
+    let id = this.id;
+
+    let id_seller = id.slice(6, id.length);
+    if ($(`#${id}`).is(':checked')) {
+      bootbox.confirm({
+        title: 'Vendedor Interno',
+        message:
+          'Está seguro de cambiar este vendedor interno? Esta acción no se puede reversar.',
+        buttons: {
+          confirm: {
+            label: 'Si',
+            className: 'btn-success',
+          },
+          cancel: {
+            label: 'No',
+            className: 'btn-danger',
+          },
+        },
+        callback: function (result) {
+          if (result) {
+            $.get(
+              `/api/changeStatusSeller/${id_seller}`,
+              function (data, textStatus, jqXHR) {
+                message(data);
+              }
+            );
+          } else {
+            $(`#${id}`).prop('checked', false);
+          }
+        },
+      });
+    } else {
+      toastr.error('Debe haber por lo menos un vendedor interno');
+      return false;
+    }
+  });
   
   /* Mensaje de exito */
 

@@ -240,7 +240,7 @@ $app->post('/copyClient', function (Request $request, Response $response, $args)
     return $response->withStatus(200)->withHeader('Content-Type', 'application/json');
 });
 
-$app->get('/changeStatus/{id_client}', function (Request $request, Response $response, $args) use ($generalClientsDao) {
+$app->get('/changeStatusClient/{id_client}', function (Request $request, Response $response, $args) use ($generalClientsDao) {
     session_start();
     $id_company = $_SESSION['id_company'];
 

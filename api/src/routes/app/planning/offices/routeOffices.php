@@ -4,6 +4,7 @@ use TezlikPlaneacion\dao\GeneralClientsDao;
 use TezlikPlaneacion\dao\GeneralOfficesDao;
 use TezlikPlaneacion\dao\GeneralOrdersDao;
 use TezlikPlaneacion\dao\GeneralProductsDao;
+use TezlikPlaneacion\dao\GeneralSellersDao;
 use TezlikPlaneacion\dao\InventoryDaysDao;
 use TezlikPlaneacion\dao\OfficesDao;
 use TezlikPlaneacion\dao\OrdersDao;
@@ -13,6 +14,7 @@ $officesDao = new OfficesDao();
 $ordersDao = new OrdersDao();
 $generalOrdersDao = new GeneralOrdersDao();
 $generalClientsDao = new GeneralClientsDao();
+$generalSellersDao = new GeneralSellersDao();
 $generalOfficesDao = new GeneralOfficesDao();
 $productsMaterialsDao = new ProductsMaterialsDao();
 $generalProductsDao = new GeneralProductsDao();
@@ -86,6 +88,7 @@ $app->post('/changeOffices', function (Request $request, Response $response, $ar
     $ordersDao,
     $generalOrdersDao,
     $generalClientsDao,
+    $generalSellersDao,
     $productsMaterialsDao,
     $inventoryDaysDao
 ) {
@@ -104,14 +107,18 @@ $app->post('/changeOffices', function (Request $request, Response $response, $ar
     if ($dataOrder['stock'] > ($dataOrder['quantity'] - $dataOrder['originalQuantity'])) {
         $data = [];
         $arr = $generalOrdersDao->findLastNumOrder($id_company);
+
         $client = $generalClientsDao->findInternalClient($id_company);
-        if ($client) {
+        $seller = $generalSellersDao->findInternalSeller($id_company);
+
+        if ($client && $seller) {
             $data['order'] = $arr['num_order'];
             $data['dateOrder'] = date('Y-m-d');
             $data['minDate'] = '';
             $data['maxDate'] = '';
             $data['idProduct'] = $dataOrder['idProduct'];
             $data['idClient'] = $client['id_client'];
+            $data['idSeller'] = $seller['id_seller'];
             $data['route'] = 1;
             // $data['originalQuantity'] = $dataOrder['quantity'] - $dataOrder['stock'];
             $data['originalQuantity'] =  $dataOrder['stock'] - ($dataOrder['quantity'] - $dataOrder['originalQuantity']);

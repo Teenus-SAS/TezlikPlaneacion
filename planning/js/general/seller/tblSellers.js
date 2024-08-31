@@ -50,6 +50,14 @@ $(document).ready(function () {
           },
         },
         {
+          title: '',
+          data: null,
+          className: 'uniqueClassName dt-head-center',
+          render: (data, type, row) => {
+            return `<input type="checkbox" class="form-control-updated checkSeller" id="check-${data.id_seller}" ${data.status == 1 ? 'checked' : ''}>`;
+          },
+        },
+        {
           title: 'Acciones',
           data: 'id_seller',
           className: 'uniqueClassName dt-head-center',

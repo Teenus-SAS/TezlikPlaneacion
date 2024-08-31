@@ -30,4 +30,44 @@ class GeneralSellersDao
         $seller = $stmt->fetch($connection::FETCH_ASSOC);
         return $seller;
     }
+
+    public function findInternalSeller($id_company)
+    {
+        $connection = Connection::getInstance()->getConnection();
+
+        $stmt = $connection->prepare("SELECT * FROM sellers WHERE status = 1 AND id_company = :id_company");
+        $stmt->execute(['id_company' => $id_company]);
+        $this->logger->info(__FUNCTION__, array('query' => $stmt->queryString, 'errors' => $stmt->errorInfo()));
+
+        $seller = $stmt->fetch($connection::FETCH_ASSOC);
+        return $seller;
+    }
+
+    public function changeStatusSellerByCompany($id_company)
+    {
+        try {
+            $connection = Connection::getInstance()->getConnection();
+            $stmt = $connection->prepare("UPDATE sellers SET status = :status WHERE id_company = :id_company");
+            $stmt->execute([
+                'id_company' => $id_company,
+                'status' => 0
+            ]);
+        } catch (\Exception $e) {
+            return array('info' => true, 'message' => $e->getMessage());
+        }
+    }
+
+    public function changeStatusSeller($id_seller, $status)
+    {
+        try {
+            $connection = Connection::getInstance()->getConnection();
+            $stmt = $connection->prepare("UPDATE sellers SET status = :status WHERE id_seller = :id_seller");
+            $stmt->execute([
+                'id_seller' => $id_seller,
+                'status' => $status
+            ]);
+        } catch (\Exception $e) {
+            return array('info' => true, 'message' => $e->getMessage());
+        }
+    }
 }

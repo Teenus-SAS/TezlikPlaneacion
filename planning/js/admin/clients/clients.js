@@ -151,7 +151,7 @@ $(document).ready(function () {
         callback: function (result) {
           if (result) {
             $.get(
-              `../../api/changeStatus/${id_client}`,
+              `/api/changeStatusClient/${id_client}`,
               function (data, textStatus, jqXHR) {
                 message(data);
               }

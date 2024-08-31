@@ -5,6 +5,7 @@ use TezlikPlaneacion\Dao\ConversionUnitsDao;
 use TezlikPlaneacion\dao\ConvertDataDao;
 use TezlikPlaneacion\dao\ExplosionMaterialsDao;
 use TezlikPlaneacion\dao\FilterDataDao;
+use TezlikPlaneacion\dao\GeneralClientsDao;
 use TezlikPlaneacion\Dao\GeneralCompositeProductsDao;
 use TezlikPlaneacion\dao\GeneralMaterialsDao;
 use TezlikPlaneacion\dao\GeneralOrdersDao;
@@ -12,12 +13,17 @@ use TezlikPlaneacion\dao\GeneralPlanCiclesMachinesDao;
 use TezlikPlaneacion\dao\GeneralProductsDao;
 use TezlikPlaneacion\dao\GeneralProductsMaterialsDao;
 use TezlikPlaneacion\dao\GeneralProgrammingDao;
+use TezlikPlaneacion\dao\GeneralProgrammingRoutesDao;
 use TezlikPlaneacion\dao\GeneralRequisitionsDao;
 use TezlikPlaneacion\dao\GeneralRMStockDao;
+use TezlikPlaneacion\dao\GeneralSellersDao;
 use TezlikPlaneacion\dao\InventoryDaysDao;
+use TezlikPlaneacion\dao\LastDataDao;
 use TezlikPlaneacion\Dao\MagnitudesDao;
 use TezlikPlaneacion\dao\MinimumStockDao;
+use TezlikPlaneacion\dao\OrdersDao;
 use TezlikPlaneacion\dao\ProductsMaterialsDao;
+use TezlikPlaneacion\dao\ProgrammingRoutesDao;
 use TezlikPlaneacion\dao\RequisitionsDao;
 use TezlikPlaneacion\dao\UnitsDao;
 
@@ -43,6 +49,12 @@ $explosionMaterialsDao = new ExplosionMaterialsDao();
 $generalRMStockDao = new GeneralRMStockDao();
 $generalRequisitionsDao = new GeneralRequisitionsDao();
 $requisitionsDao = new RequisitionsDao();
+$generalClientsDao = new GeneralClientsDao();
+$generalSellersDao = new GeneralSellersDao();
+$ordersDao = new OrdersDao();
+$lastDataDao = new LastDataDao();
+$programmingRoutesDao = new ProgrammingRoutesDao();
+$generalProgrammingRoutesDao = new GeneralProgrammingRoutesDao();
 
 use Psr\Http\Message\ResponseInterface as Response;
 use Psr\Http\Message\ServerRequestInterface as Request;
@@ -212,6 +224,12 @@ $app->post('/addProductsMaterials', function (Request $request, Response $respon
     $requisitionsDao,
     $productsDao,
     $materialsDao,
+    $generalClientsDao,
+    $generalSellersDao,
+    $ordersDao,
+    $lastDataDao,
+    $programmingRoutesDao,
+    $generalProgrammingRoutesDao,
     $magnitudesDao,
     $unitsDao,
     $generalOrdersDao,
@@ -529,6 +547,47 @@ $app->post('/addProductsMaterials', function (Request $request, Response $respon
                 }
             }
         }
+
+        $arr = $explosionMaterialsDao->findAllCompositeConsolidated($id_company);
+        $products = $explosionMaterialsDao->setDataEXComposite($arr);
+
+        for ($i = 0; $i < sizeof($products); $i++) {
+            if (intval($products[$i]['available']) < 0) {
+                $data = [];
+                $arr2 = $generalOrdersDao->findLastNumOrder($id_company);
+
+                $client = $generalClientsDao->findInternalClient($id_company);
+                $seller = $generalSellersDao->findInternalSeller($id_company);
+
+                if ($client && $seller) {
+                    $data['order'] = $arr2['num_order'];
+                    $data['dateOrder'] = date('Y-m-d');
+                    $data['minDate'] = '';
+                    $data['maxDate'] = '';
+                    $data['idProduct'] = $products[$i]['id_product'];
+                    $data['idClient'] = $client['id_client'];
+                    $data['idSeller'] = $seller['id_seller'];
+                    $data['route'] = 1;
+                    $data['originalQuantity'] = abs($products[$i]['available']);
+
+                    $resolution = $ordersDao->insertOrderByCompany($data, $id_company);
+                    $generalProductsDao->updateAccumulatedQuantity($products[$i]['id_product'], abs($products[$i]['available']), 2);
+
+                    if (isset($resolution['info'])) break;
+                    $lastOrder = $lastDataDao->findLastInsertedOrder($id_company);
+
+                    $programmingRoutes = $generalProgrammingRoutesDao->findProgrammingRoutes($products[$i]['id_product'], $lastOrder['id_order']);
+
+                    if (!$programmingRoutes) {
+                        $data['idOrder'] = $lastOrder['id_order'];
+                        $data['route'] = 1;
+
+                        $resolution = $programmingRoutesDao->insertProgrammingRoutes($data, $id_company);
+                    }
+                    if (isset($resolution['info'])) break;
+                }
+            }
+        }
     }
 
     $response->getBody()->write(json_encode($resp));
@@ -543,6 +602,14 @@ $app->post('/updatePlanProductsMaterials', function (Request $request, Response 
     $generalRMStockDao,
     $generalRequisitionsDao,
     $requisitionsDao,
+    $generalClientsDao,
+    $generalSellersDao,
+    $ordersDao,
+    $generalOrdersDao,
+    $generalProductsDao,
+    $lastDataDao,
+    $programmingRoutesDao,
+    $generalProgrammingRoutesDao,
     $generalProductsMaterialsDao,
     $generalMaterialsDao,
     $minimumStockDao
@@ -623,6 +690,47 @@ $app->post('/updatePlanProductsMaterials', function (Request $request, Response 
                     }
                 }
             }
+
+            $arr = $explosionMaterialsDao->findAllCompositeConsolidated($id_company);
+            $products = $explosionMaterialsDao->setDataEXComposite($arr);
+
+            for ($i = 0; $i < sizeof($products); $i++) {
+                if (intval($products[$i]['available']) < 0) {
+                    $data = [];
+                    $arr2 = $generalOrdersDao->findLastNumOrder($id_company);
+
+                    $client = $generalClientsDao->findInternalClient($id_company);
+                    $seller = $generalSellersDao->findInternalSeller($id_company);
+
+                    if ($client && $seller) {
+                        $data['order'] = $arr2['num_order'];
+                        $data['dateOrder'] = date('Y-m-d');
+                        $data['minDate'] = '';
+                        $data['maxDate'] = '';
+                        $data['idProduct'] = $products[$i]['id_product'];
+                        $data['idClient'] = $client['id_client'];
+                        $data['idSeller'] = $seller['id_seller'];
+                        $data['route'] = 1;
+                        $data['originalQuantity'] = abs($products[$i]['available']);
+
+                        $resolution = $ordersDao->insertOrderByCompany($data, $id_company);
+                        $generalProductsDao->updateAccumulatedQuantity($products[$i]['id_product'], abs($products[$i]['available']), 2);
+
+                        if (isset($resolution['info'])) break;
+                        $lastOrder = $lastDataDao->findLastInsertedOrder($id_company);
+
+                        $programmingRoutes = $generalProgrammingRoutesDao->findProgrammingRoutes($products[$i]['id_product'], $lastOrder['id_order']);
+
+                        if (!$programmingRoutes) {
+                            $data['idOrder'] = $lastOrder['id_order'];
+                            $data['route'] = 1;
+
+                            $resolution = $programmingRoutesDao->insertProgrammingRoutes($data, $id_company);
+                        }
+                        if (isset($resolution['info'])) break;
+                    }
+                }
+            }
         }
         // if ($resolution == null) {
         //     $products = $generalProductsMaterialsDao->findAllProductByMaterial($dataProductMaterial['material']);
@@ -658,7 +766,14 @@ $app->post('/deletePlanProductMaterial', function (Request $request, Response $r
     $generalRMStockDao,
     $generalRequisitionsDao,
     $requisitionsDao,
+    $generalClientsDao,
+    $generalSellersDao,
+    $ordersDao,
+    $generalOrdersDao,
     $generalProductsDao,
+    $lastDataDao,
+    $programmingRoutesDao,
+    $generalProgrammingRoutesDao,
     $generalMaterialsDao,
     $minimumStockDao
 ) {
@@ -715,6 +830,47 @@ $app->post('/deletePlanProductMaterial', function (Request $request, Response $r
                 $requisition = $generalRequisitionsDao->findRequisitionByApplicationDate($materials[$i]['id_material']);
                 if ($requisition) {
                     $requisitionsDao->deleteRequisition($requisition['id_requisition']);
+                }
+            }
+        }
+
+        $arr = $explosionMaterialsDao->findAllCompositeConsolidated($id_company);
+        $products = $explosionMaterialsDao->setDataEXComposite($arr);
+
+        for ($i = 0; $i < sizeof($products); $i++) {
+            if (intval($products[$i]['available']) < 0) {
+                $data = [];
+                $arr2 = $generalOrdersDao->findLastNumOrder($id_company);
+
+                $client = $generalClientsDao->findInternalClient($id_company);
+                $seller = $generalSellersDao->findInternalSeller($id_company);
+
+                if ($client && $seller) {
+                    $data['order'] = $arr2['num_order'];
+                    $data['dateOrder'] = date('Y-m-d');
+                    $data['minDate'] = '';
+                    $data['maxDate'] = '';
+                    $data['idProduct'] = $products[$i]['id_product'];
+                    $data['idClient'] = $client['id_client'];
+                    $data['idSeller'] = $seller['id_seller'];
+                    $data['route'] = 1;
+                    $data['originalQuantity'] = abs($products[$i]['available']);
+
+                    $resolution = $ordersDao->insertOrderByCompany($data, $id_company);
+                    $generalProductsDao->updateAccumulatedQuantity($products[$i]['id_product'], abs($products[$i]['available']), 2);
+
+                    if (isset($resolution['info'])) break;
+                    $lastOrder = $lastDataDao->findLastInsertedOrder($id_company);
+
+                    $programmingRoutes = $generalProgrammingRoutesDao->findProgrammingRoutes($products[$i]['id_product'], $lastOrder['id_order']);
+
+                    if (!$programmingRoutes) {
+                        $data['idOrder'] = $lastOrder['id_order'];
+                        $data['route'] = 1;
+
+                        $resolution = $programmingRoutesDao->insertProgrammingRoutes($data, $id_company);
+                    }
+                    if (isset($resolution['info'])) break;
                 }
             }
         }

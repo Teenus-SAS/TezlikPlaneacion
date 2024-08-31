@@ -26,7 +26,7 @@ class ExplosionMaterialsDao
                                         LEFT JOIN products_inventory cpi ON cpi.id_product = cp.id_child_product 
                                         INNER JOIN convert_units u ON u.id_unit = cp.id_unit
                                         INNER JOIN plan_orders o ON o.id_product = cp.id_product
-                                      WHERE cp.id_company = :id_composite AND o.status IN (1,4,5,6)
+                                      WHERE cp.id_company = :id_company AND o.status IN (1,4,5,6)
                                       GROUP BY cp.id_composite_product, o.id_order");
     $stmt->execute(['id_company' => $id_company]);
 

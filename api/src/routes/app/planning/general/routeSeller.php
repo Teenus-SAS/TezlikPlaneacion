@@ -172,6 +172,22 @@ $app->post('/updateSeller', function (Request $request, Response $response, $arg
     return $response->withStatus(200)->withHeader('Content-Type', 'application/json');
 });
 
+$app->get('/changeStatusSeller/{id_seller}', function (Request $request, Response $response, $args) use ($generalSellersDao) {
+    session_start();
+    $id_company = $_SESSION['id_company'];
+
+    $resolution = $generalSellersDao->changeStatusSellerByCompany($id_company);
+    if ($resolution == null)
+        $resolution = $generalSellersDao->changeStatusSeller($args['id_seller'], 1);
+
+    if ($resolution == null)
+        $resp = array('success' => true, 'message' => 'Vendedor interno modificado correctamente');
+    else
+        $resp = array('error' => true, 'message' => 'No es posible modificar el vendedor, existe información asociada a él');
+    $response->getBody()->write(json_encode($resp));
+    return $response->withStatus(200)->withHeader('Content-Type', 'application/json');
+});
+
 $app->get('/deleteSeller/{id_seller}', function (Request $request, Response $response, $args) use ($sellersDao) {
     $resolution = $sellersDao->deleteSeller($args['id_seller']);
 

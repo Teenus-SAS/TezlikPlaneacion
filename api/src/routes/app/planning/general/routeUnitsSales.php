@@ -12,6 +12,7 @@ use TezlikPlaneacion\dao\GeneralProductsDao;
 use TezlikPlaneacion\dao\GeneralProductsMaterialsDao;
 use TezlikPlaneacion\dao\GeneralRequisitionsDao;
 use TezlikPlaneacion\dao\GeneralRMStockDao;
+use TezlikPlaneacion\dao\GeneralSellersDao;
 use TezlikPlaneacion\dao\GeneralUnitSalesDao;
 use TezlikPlaneacion\dao\InventoryDaysDao;
 use TezlikPlaneacion\dao\MinimumStockDao;
@@ -33,6 +34,7 @@ $inventoryDaysDao = new InventoryDaysDao();
 $ordersDao = new OrdersDao();
 $generalOrdersDao = new GeneralOrdersDao();
 $generalClientsDao = new GeneralClientsDao();
+$generalSellersDao = new GeneralSellersDao();
 $companiesLicenseDao = new CompaniesLicenseStatusDao();
 $requisitionsDao = new RequisitionsDao();
 $generalRequisitionsDao = new GeneralRequisitionsDao();
@@ -173,6 +175,7 @@ $app->post('/addUnitSales', function (Request $request, Response $response, $arg
     $companiesLicenseDao,
     $generalOrdersDao,
     $generalClientsDao,
+    $generalSellersDao,
     $requisitionsDao,
     $generalRequisitionsDao,
     $conversionUnitsDao
@@ -218,15 +221,18 @@ $app->post('/addUnitSales', function (Request $request, Response $response, $arg
             ) {
                 $data = [];
                 $arr2 = $generalOrdersDao->findLastNumOrder($id_company);
-                $client = $generalClientsDao->findInternalClient($id_company);
-                if ($client) {
 
+                $client = $generalClientsDao->findInternalClient($id_company);
+                $seller = $generalSellersDao->findInternalSeller($id_company);
+
+                if ($client && $seller) {
                     $data['order'] = $arr2['num_order'];
                     $data['dateOrder'] = date('Y-m-d');
                     $data['minDate'] = '';
                     $data['maxDate'] = '';
                     $data['idProduct'] = $dataSale['idProduct'];
                     $data['idClient'] = $client['id_client'];
+                    $data['idSeller'] = $seller['id_seller'];
                     $data['route'] = 1;
                     // $data['originalQuantity'] = $dataOrder['quantity'] - $dataOrder['stock'];
                     $data['originalQuantity'] =  abs($product['stock']);
@@ -391,6 +397,7 @@ $app->post('/updateUnitSale', function (Request $request, Response $response, $a
     $classificationDao,
     $generalOrdersDao,
     $generalClientsDao,
+    $generalSellersDao,
     $ordersDao,
     $requisitionsDao,
     $generalRequisitionsDao
@@ -435,15 +442,18 @@ $app->post('/updateUnitSale', function (Request $request, Response $response, $a
             if ($product['quantity'] > 0 && $product['quantity'] < isset($product['stock'])) {
                 $data = [];
                 $arr2 = $generalOrdersDao->findLastNumOrder($id_company);
-                $client = $generalClientsDao->findInternalClient($id_company);
 
-                if ($client) {
+                $client = $generalClientsDao->findInternalClient($id_company);
+                $seller = $generalSellersDao->findInternalSeller($id_company);
+
+                if ($client && $seller) {
                     $data['order'] = $arr2['num_order'];
                     $data['dateOrder'] = date('Y-m-d');
                     $data['minDate'] = '';
                     $data['maxDate'] = '';
                     $data['idProduct'] = $dataSale['idProduct'];
                     $data['idClient'] = $client['id_client'];
+                    $data['idSeller'] = $seller['id_seller'];
                     $data['route'] = 1;
                     // $data['originalQuantity'] = $dataOrder['quantity'] - $dataOrder['stock'];
                     $data['originalQuantity'] =  abs($product['stock']);
@@ -550,6 +560,7 @@ $app->post('/deleteUnitSale', function (Request $request, Response $response, $a
     $ordersDao,
     $generalOrdersDao,
     $generalClientsDao,
+    $generalSellersDao,
     $requisitionsDao,
     $generalRequisitionsDao
 ) {
@@ -587,15 +598,18 @@ $app->post('/deleteUnitSale', function (Request $request, Response $response, $a
         if ($product['quantity'] > 0 && $product['quantity'] < isset($product['stock'])) {
             $data = [];
             $arr2 = $generalOrdersDao->findLastNumOrder($id_company);
-            $client = $generalClientsDao->findInternalClient($id_company);
-            if ($client) {
 
+            $client = $generalClientsDao->findInternalClient($id_company);
+            $seller = $generalSellersDao->findInternalSeller($id_company);
+
+            if ($client && $seller) {
                 $data['order'] = $arr2['num_order'];
                 $data['dateOrder'] = date('Y-m-d');
                 $data['minDate'] = '';
                 $data['maxDate'] = '';
                 $data['idProduct'] = $dataSale['idProduct'];
                 $data['idClient'] = $client['id_client'];
+                $data['idSeller'] = $seller['id_seller'];
                 $data['route'] = 1;
                 // $data['originalQuantity'] = $dataOrder['quantity'] - $dataOrder['stock'];
                 $data['originalQuantity'] =  abs($product['stock']);
