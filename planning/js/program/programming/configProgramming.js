@@ -648,8 +648,8 @@ $(document).ready(function () {
     if (allTblData.length > 0) {
       let id_product = $('#selectNameProduct').val();
       let machine = parseFloat($('#idMachine').val());
-      let id_order = $('#order').val();
-      // let num_order = $('#order :selected').text().trim();
+      // let id_order = $('#order').val();
+      let num_order = $('#order :selected').text().trim();
 
       let data = allTblData.filter(item => item.id_product == id_product);
 
@@ -658,7 +658,7 @@ $(document).ready(function () {
 
         if (data[data.length - 1].id_machine != this.value) {
           // let arr = data.filter(item => item.id_machine == machine);
-          let arrOM = data.filter(item => item.id_order == id_order);
+          let arrOM = data.filter(item => item.num_order == num_order);
           let min_date, max_date;
 
           if (arrOM.length > 0) {
