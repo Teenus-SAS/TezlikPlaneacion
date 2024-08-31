@@ -1,4 +1,22 @@
 $(document).ready(function () {
+  $('.selectNavigation').click(function (e) {
+    e.preventDefault();
+    $('.cardProgramming').hide();
+    $('.cardDashboardProgramming').hide();
+    $('.cardCreateProgramming').hide();
+
+    let option = this.id;
+
+    switch (option) {
+      case 'link-table':
+        $('.cardProgramming').show();
+        break; 
+      case 'link-dashboard':
+        $('.cardDashboardProgramming').show();
+        break;
+    }
+  });
+
   let processProgramming = [];
   /* Ocultar panel crear programa de producción */
   $(".cardCreateProgramming").hide();

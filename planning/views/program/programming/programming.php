@@ -222,11 +222,35 @@ if (sizeof($_SESSION) == 0)
                             <div class="col-12 cardDashboardProgramming" style="display: none;">
                                 <div class="card">
                                     <div class="card-body">
-                                        <!-- <div class="table-responsive">
-                                            <table class="fixed-table-loading table table-hover" id="tblProgramming">
-                                                <tbody id="tblProgrammingBody"></tbody>
-                                            </table>
+                                        <!-- <div class="col-md-6 col-xl-3">
+                                            <div class="card">
+                                                <div class="card-body">
+                                                    <div class="media align-items-center">
+                                                        <div class="media-body">
+                                                            <span class="text-muted text-uppercase font-size-12 font-weight-bold"></span>
+                                                            <h2 class="mb-0 mt-1" id="ordersInExecution"></h2>
+                                                        </div>
+                                                        <div class="text-center">
+                                                            <div id="t-user"></div>
+                                                            <span class="text-success font-weight-bold font-size-13">
+                                                                <i class='fas fa-truck-loading fs-lg'></i>
+                                                            </span>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
                                         </div> -->
+                                        <!-- Begin total orders vs clients chart -->
+                                        <div class="col-md-4 col-lg-9" style="height: fit-content;">
+                                            <div class="card">
+                                                <div class="card-header">
+                                                    <h5 class="card-title"> </h5>
+                                                </div>
+                                                <div class="card-body pt-2">
+                                                    <canvas id="chartProductsCost"></canvas>
+                                                </div>
+                                            </div>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
