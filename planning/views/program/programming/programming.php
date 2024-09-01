@@ -49,20 +49,30 @@ if (sizeof($_SESSION) == 0)
                                 </div>
                             </div>
                             <div class="col-sm-7 col-xl-8 form-inline justify-content-sm-end">
-                                <div class="col-sm-7 col-xl-2 floating-label enable-floating-label show-label form-inline justify-content-sm-end p-1 mb-0 cardBottons">
+                                <div class="col-sm-7 col-xl-2 floating-label enable-floating-label show-label form-inline justify-content-sm-end mb-0 cardBottons">
                                     <div id="machines1">
                                         <label class="font-weight-bold text-dark">Maquina</label>
                                         <select class="form-control idMachine" id="searchMachine">
                                         </select>
                                     </div>
                                 </div>
-                                <div class="col-sm-7 col-xl-2 form-inline justify-content-sm-end p-1 cardBottons">
+                                <div class="col-sm-7 col-xl-2 floating-label enable-floating-label show-label form-inline justify-content-sm-end mb-0 mr-4 cardSimulation" style="display: none;">
+                                    <div class="col-xs-4 mr-2">
+                                        <label for="simulationType">Escenario</label>
+                                        <select name="simulationType" id="simulationType" class="form-control text-center">
+                                            <option disabled>Seleccionar</option>
+                                            <option value="1" selected>1</option>
+                                            <option value="2">2</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="col-sm-7 col-xl-1 form-inline justify-content-sm-end mr-3 cardBottons">
                                     <button class="btn btn-warning" id="btnNewProgramming" name="btnNewProgramming">Programar</button>
                                 </div>
-                                <div class="col-sm-7 col-xl-2 form-inline justify-content-sm-end p-1 cardSaveBottons">
+                                <div class="col-sm-7 col-xl-1 form-inline justify-content-sm-end mr-3 cardSaveBottons">
                                     <button class="btn btn-primary" id="btnSavePrograming" name="btnSavePrograming">Guardar</button>
                                 </div>
-                                <div class="col-sm-7 col-xl-2 form-inline justify-content-sm-end p-1 cardAddOP" style="display: none;">
+                                <div class="col-sm-7 col-xl-1 form-inline justify-content-sm-end mr-3 cardAddOP" style="display: none;">
                                     <button class="btn btn-info" id="btnAddOP" name="btnAddOP">Crear OP</button>
                                 </div>
                             </div>
@@ -183,7 +193,7 @@ if (sizeof($_SESSION) == 0)
                                 <ul class="nav nav-tabs" id="pills-tab" role="tablist">
                                     <li class="nav-item">
                                         <a class="nav-link active selectNavigation" id="link-table" data-toggle="pill" href="javascript:;" role="tab" aria-controls="pills-projects" aria-selected="false">
-                                            <i class="bi bi-diagram-3 mr-1"></i>Tabla
+                                            <i class="bi bi-diagram-3 mr-1"></i>Programación
                                         </a>
                                     </li>
                                     <li class="nav-item">
@@ -198,18 +208,6 @@ if (sizeof($_SESSION) == 0)
                         <div class="row">
                             <div class="col-12 cardProgramming">
                                 <div class="card">
-                                    <div class="card-header">
-                                        <div class="col-sm-7 col-xl-12 mt-4 form-inline justify-content-sm-end cardSimulation" style="display: none;">
-                                            <div class="col-xs-4 mr-2">
-                                                <label for="simulationType">Escenario</label>
-                                                <select name="simulationType" id="simulationType" class="form-control text-center">
-                                                    <option disabled>Seleccionar</option>
-                                                    <option value="1" selected>1</option>
-                                                    <option value="2">2</option>
-                                                </select>
-                                            </div>
-                                        </div>
-                                    </div>
                                     <div class="card-body">
                                         <div class="table-responsive">
                                             <table class="fixed-table-loading table table-hover" id="tblProgramming">
