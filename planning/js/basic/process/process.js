@@ -1,50 +1,48 @@
 $(document).ready(function () {
   /* Ocultar panel crear producto */
 
-  $('.cardCreateProcess').hide();
+  $(".cardCreateProcess").hide();
 
   /* Abrir panel crear producto */
 
-  $('#btnNewProcess').click(function (e) {
+  $("#btnNewProcess").click(function (e) {
     e.preventDefault();
 
-    $('.cardImportProcess').hide(800);
-    $('.cardCreateProcess').toggle(800);
-    $('#btnCreateProcess').html('Crear');
+    $(".cardImportProcess").hide(800);
+    $(".cardCreateProcess").toggle(800);
+    $("#btnCreateProcess").html("Crear");
 
-    sessionStorage.removeItem('id_process');
+    sessionStorage.removeItem("id_process");
 
-    $('#process').val('');
+    $("#process").val("");
   });
 
   /* Crear nuevo proceso */
-
-  $('#btnCreateProcess').click(function (e) {
+  $("#btnCreateProcess").click(function (e) {
     e.preventDefault();
 
-    let idProcess = sessionStorage.getItem('id_process');
+    const idProcess = sessionStorage.getItem("id_process") || null;
+    const apiUrl = idProcess ? "/api/updatePlanProcess" : "/api/addPlanProcess";
 
-    if (idProcess == '' || idProcess == null) {
-      checkDataProcess('/api/addPlanProcess', idProcess);
-    } else {
-      checkDataProcess('/api/updatePlanProcess', idProcess);
-    }
+    checkDataArea(apiUrl, idProcess);
   });
 
   /* Actualizar procesos */
 
-  $(document).on('click', '.updateProcess', function (e) {
-    $('.cardImportProcess').hide(800);
-    $('.cardCreateProcess').show(800);
-    $('#btnCreateProcess').html('Actualizar');
+  $(document).on("click", ".updateProcess", function (e) {
+    $(".cardImportProcess").hide(800);
+    $(".cardCreateProcess").show(800);
+    $("#btnCreateProcess").html("Actualizar");
 
-    let row = $(this).parent().parent()[0];
+    sessionStorage.setItem("id_process", data.id_process);
+
+    // Obtener data
+    let row = $(this).closest("tr")[0];
     let data = tblProcess.fnGetData(row);
 
-    sessionStorage.setItem('id_process', data.id_process);
-    $('#process').val(data.process);
-
-    $('html, body').animate(
+    // Asignar valores a los campos del formulario y animar
+    $("#process").val(data.process);
+    $("html, body").animate(
       {
         scrollTop: 0,
       },
@@ -54,43 +52,40 @@ $(document).ready(function () {
 
   /* Revision data procesos */
   const checkDataProcess = async (url, idProcess) => {
-    let process = $('#process').val();
+    let process = $("#process").val();
 
-    if (process.trim() == '' || !process.trim()) {
-      toastr.error('Ingrese todos los campos');
+    if (!process.trim()) {
+      toastr.error("Ingrese todos los campos");
       return false;
     }
 
     let dataProcess = new FormData(formCreateProcess);
 
-    if (idProcess != '' || idProcess != null)
-      dataProcess.append('idProcess', idProcess);
-
+    if (idProcess) dataProcess.append("idProcess", idProcess);
     let resp = await sendDataPOST(url, dataProcess);
-
     messageProcess(resp);
   };
 
   /* Eliminar proceso */
 
   deleteProcessFunction = () => {
-    let row = $(this.activeElement).parent().parent()[0];
+    let row = $(this.activeElement).closest("tr")[0];
     let data = tblProcess.fnGetData(row);
 
-    let id_process = data.id_process;
+    const { id_process } = data;
 
     bootbox.confirm({
-      title: 'Eliminar',
+      title: "Eliminar",
       message:
-        'Está seguro de eliminar este proceso? Esta acción no se puede reversar.',
+        "Está seguro de eliminar este proceso? Esta acción no se puede reversar.",
       buttons: {
         confirm: {
-          label: 'Si',
-          className: 'btn-success',
+          label: "Si",
+          className: "btn-success",
         },
         cancel: {
-          label: 'No',
-          className: 'btn-danger',
+          label: "No",
+          className: "btn-danger",
         },
       },
       callback: function (result) {
@@ -109,22 +104,22 @@ $(document).ready(function () {
   /* Mensaje de exito */
 
   messageProcess = (data) => {
-    if (data.success == true) {
-      $('.cardImportProcess').hide(800);
-      $('#formImportProcess').trigger('reset');
-      $('.cardCreateProcess').hide(800);
-      $('#formCreateProcess').trigger('reset');
+    const { success, error, info, message } = data;
+    if (success == true) {
+      $(".cardImportProcess, .cardCreateProcess").hide(800);
+      $("#formImportProcess, #formCreateProcess").trigger("reset");
+
       updateTable();
-      toastr.success(data.message);
+      toastr.success(message);
       return false;
-    } else if (data.error == true) toastr.error(data.message);
-    else if (data.info == true) toastr.info(data.message);
+    } else if (error == true) toastr.error(message);
+    else if (info == true) toastr.info(message);
   };
 
   /* Actualizar tabla */
 
   function updateTable() {
-    $('#tblProcess').DataTable().clear();
-    $('#tblProcess').DataTable().ajax.reload();
+    $("#tblProcess").DataTable().clear();
+    $("#tblProcess").DataTable().ajax.reload();
   }
 });

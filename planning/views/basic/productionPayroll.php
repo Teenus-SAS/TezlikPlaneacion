@@ -68,11 +68,11 @@ if (sizeof($_SESSION) == 0)
                                     <div class="card">
                                         <div class="card-body">
                                             <div class="form-row">
-                                                <div class="col-sm-3 floating-label enable-floating-label show-label" style="margin-bottom:0px">
+                                                <div class="col-sm-2 floating-label enable-floating-label show-label" style="margin-bottom:0px">
                                                     <label for="">Nombres</label>
                                                     <input type="text" class="form-control text-center" id="firstname" name="firstname">
                                                 </div>
-                                                <div class="col-sm-3 floating-label enable-floating-label show-label" style="margin-bottom:0px">
+                                                <div class="col-sm-2 floating-label enable-floating-label show-label" style="margin-bottom:0px">
                                                     <label for="">Apellidos</label>
                                                     <input type="text" class="form-control text-center" id="lastname" name="lastname">
                                                 </div>
@@ -92,7 +92,7 @@ if (sizeof($_SESSION) == 0)
                                                     <input class="form-control" type="file" id="formFile">
                                                     <label for="formFile" class="form-label"> Cargar imagen</label>
                                                 </div> -->
-                                                <div class="col-sm mt-4">
+                                                <div class="col-sm mt-1">
                                                     <button class="btn btn-success" id="btnCreateEmployee">Crear</button>
                                                 </div>
                                             </div>

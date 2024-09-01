@@ -32,17 +32,16 @@ $(document).ready(function () {
     $("#btnCreateArea").html("Actualizar");
 
     // Obtener el ID del elemento
-    let id = $(this).attr("id");
-    // Obtener la parte después del guion '-'
-    let idArea = id.split("-")[1];
+    const idArea = $(this).attr("id").split("-")[1];
 
     sessionStorage.setItem("id_plan_area", idArea);
 
-    let row = $(this).parent().parent()[0];
-    let data = tblAreas.fnGetData(row);
+    // Obtener data
+    const row = $(this).closest("tr")[0];
+    const data = tblAreas.fnGetData(row);
 
+    // Asignar valores a los campos del formulario y animar
     $("#area").val(data.area);
-
     $("html, body").animate(
       {
         scrollTop: 0,
@@ -68,10 +67,10 @@ $(document).ready(function () {
 
   /* Eliminar areas */
   deleteAreaFunction = () => {
-    let row = $(this.activeElement).parent().parent()[0];
-    let data = tblAreas.fnGetData(row);
+    const row = $(this.activeElement).closest("tr")[0];
+    const data = tblAreas.fnGetData(row);
 
-    let id_plan_area = data.id_plan_area;
+    const { id_plan_area } = data;
 
     bootbox.confirm({
       title: "Eliminar",
@@ -103,16 +102,16 @@ $(document).ready(function () {
   /* Mensaje de exito */
 
   messageArea = (data) => {
-    if (data.success == true) {
-      $(".cardImportAreas").hide(800);
-      $("#formImportAreas").trigger("reset");
-      $(".cardCreateArea").hide(800);
-      $("#formCreateArea").trigger("reset");
-      toastr.success(data.message);
+    const { success, error, info, message } = data;
+    if (success) {
+      $(".cardImportAreas, .cardCreateArea").hide(800);
+      $("#formImportAreas, #formCreateArea").trigger("reset");
+
+      toastr.success(message);
       updateTable();
       return false;
-    } else if (data.error == true) toastr.error(data.message);
-    else if (data.info == true) toastr.info(data.message);
+    } else if (error) toastr.error(message);
+    else if (info) toastr.info(message);
   };
 
   /* Actualizar tabla */

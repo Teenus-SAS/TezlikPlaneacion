@@ -1,4 +1,4 @@
-$(document).ready(function () { 
+$(document).ready(function () {
   /* Ocultar panel crear producto */
 
   $(".cardCreateProduct").hide();
@@ -15,10 +15,10 @@ $(document).ready(function () {
   });
 
   /* Abrir panel crear producto */
-  $('#btnNewProduct').click(async function (e) {
+  $("#btnNewProduct").click(async function (e) {
     e.preventDefault();
 
-    let dataProducts = JSON.parse(sessionStorage.getItem('dataProducts'));
+    let dataProducts = JSON.parse(sessionStorage.getItem("dataProducts"));
 
     await setSelectsProducts(dataProducts);
     $(".cardCreateProduct").toggle(800);
@@ -32,15 +32,13 @@ $(document).ready(function () {
   });
 
   /* Crear producto */
-  $('#btnCreateProduct').click(function (e) {
+  $("#btnCreateProduct").click(function (e) {
     e.preventDefault();
-    let idProduct = sessionStorage.getItem("id_product");
 
-    if (idProduct == "" || idProduct == null) {
-      checkDataProducts("/api/addProduct", idProduct);
-    } else {
-      checkDataProducts("/api/updatePlanProduct", idProduct);
-    }
+    const idProduct = sessionStorage.getItem("id_product") || null;
+    const apiUrl = idProduct ? "/api/updatePlanProduct" : "/api/addProduct";
+
+    checkDataArea(apiUrl, idProduct);
   });
 
   /* Actualizar productos */
@@ -51,30 +49,30 @@ $(document).ready(function () {
     $("#btnCreateProduct").html("Actualizar Producto");
 
     // Obtener el ID del elemento
-    let id = $(this).attr('id');
-    // Obtener la parte después del guion '-'
-    let idProduct = id.split('-')[1];
+    let idProduct = $(this).attr("id").split("-")[1];
 
     sessionStorage.setItem("id_product", idProduct);
 
+    // Obtener data
     let row = $(this).parent().parent().parent()[0];
     let data = tblProducts.fnGetData(row);
 
-    // if (flag_products_measure == '1') { 
+    // if (flag_products_measure == '1') {
     let $select = $(`#refProduct`);
     $select.empty();
     $select.append(`<option value='0' disabled>Seleccionar</option>`);
-    $select.append(`<option value='${data.id_product}' selected>${data.reference}</option>`);
+    $select.append(
+      `<option value='${data.id_product}' selected>${data.reference}</option>`
+    );
 
     let $select1 = $(`#selectNameProduct`);
     $select1.empty();
     $select1.append(`<option value='0' disabled>Seleccionar</option>`);
-    $select1.append(`<option value='${data.id_product}' selected>${data.product}</option>`);
-    // } else {
-    //   $("#referenceProduct").val(data.reference);
-    //   $("#product").val(data.product);
-    // }
+    $select1.append(
+      `<option value='${data.id_product}' selected>${data.product}</option>`
+    );
 
+    // Asignar valores a los campos del formulario y animar
     $("#pQuantity").val(data.quantity);
 
     if (data.img)
@@ -88,16 +86,16 @@ $(document).ready(function () {
   /* Revisar datos */
   const checkDataProducts = async (url, idProduct) => {
     // if (flag_products_measure == '1') {
-      idProduct = parseFloat($("#refProduct").val());
+    idProduct = parseFloat($("#refProduct").val());
 
-      if (isNaN(idProduct) || idProduct <= 0) {
-        toastr.error("Ingrese todos los campos");
-        return false;
-      }
+    if (isNaN(idProduct) || idProduct <= 0) {
+      toastr.error("Ingrese todos los campos");
+      return false;
+    }
     // } else {
     //   let ref = $("#referenceProduct").val();
     //   let prod = $("#product").val();
-      
+
     //   if (ref.trim() == "" || !ref.trim() || prod.trim() == "" || !prod.trim()) {
     //     toastr.error("Ingrese todos los campos");
     //     return false;
@@ -113,10 +111,10 @@ $(document).ready(function () {
     //   dataProduct.append("idProduct", idProduct);
     // }
 
-    // if (flag_products_measure == '1') { 
+    // if (flag_products_measure == '1') {
     dataProduct.append("idProduct", idProduct);
     // } else {
-    //   dataProduct.append("idProductType", 0);      
+    //   dataProduct.append("idProductType", 0);
     // }
 
     let resp = await sendDataPOST(url, dataProduct);
@@ -172,5 +170,5 @@ $(document).ready(function () {
       return false;
     } else if (data.error == true) toastr.error(data.message);
     else if (data.info == true) toastr.info(data.message);
-  }; 
+  };
 });
