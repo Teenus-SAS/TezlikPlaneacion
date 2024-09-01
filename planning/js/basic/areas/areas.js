@@ -1,4 +1,4 @@
-$(document).ready(function () {  
+$(document).ready(function () {
   /* Ocultar panel para crear Areas */
   $(".cardCreateArea").hide();
 
@@ -6,7 +6,7 @@ $(document).ready(function () {
 
   $("#btnNewArea").click(function (e) {
     e.preventDefault();
-    $('.cardImportAreas').hide(800);
+    $(".cardImportAreas").hide(800);
     $(".cardCreateArea").toggle(800);
     $("#btnCreateArea").html("Crear");
 
@@ -16,28 +16,25 @@ $(document).ready(function () {
   });
 
   /* Crear area */
-
   $("#btnCreateArea").click(function (e) {
     e.preventDefault();
-    let idArea = sessionStorage.getItem("id_plan_area");
-    if (idArea == "" || idArea == null) {
-      checkDataArea("/api/addPlanArea", idArea);
-    } else {
-      checkDataArea("/api/updateArea", idArea);
-    }
+
+    const idArea = sessionStorage.getItem("id_plan_area") || null;
+    const apiUrl = idArea ? "/api/updateArea" : "/api/addPlanArea";
+
+    checkDataArea(apiUrl, idArea);
   });
 
   /* Actualizar area */
-
   $(document).on("click", ".updateArea", function (e) {
-    $('.cardImportAreas').hide(800);
+    $(".cardImportAreas").hide(800);
     $(".cardCreateArea").show(800);
     $("#btnCreateArea").html("Actualizar");
 
     // Obtener el ID del elemento
-    let id = $(this).attr('id');
+    let id = $(this).attr("id");
     // Obtener la parte después del guion '-'
-    let idArea = id.split('-')[1]; 
+    let idArea = id.split("-")[1];
 
     sessionStorage.setItem("id_plan_area", idArea);
 
@@ -58,18 +55,14 @@ $(document).ready(function () {
   const checkDataArea = async (url, idArea) => {
     let area = $("#area").val();
 
-    if (area.trim() == "" || area.trim() == null) {
+    if (!area.trim()) {
       toastr.error("Ingrese todos los campos");
       return false;
     }
 
     let dataArea = new FormData(formCreateArea);
-
-    if (idArea != "" || idArea != null)
-      dataArea.append("idArea", idArea);
-
+    if (idArea) dataArea.append("idArea", idArea);
     let resp = await sendDataPOST(url, dataArea);
-
     messageArea(resp);
   };
 

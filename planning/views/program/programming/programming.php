@@ -59,9 +59,9 @@ if (sizeof($_SESSION) == 0)
                                         </select>
                                     </div>
                                 </div>
-                                <div class="col-sm-7 col-xl-2 floating-label enable-floating-label show-label form-inline justify-content-sm-end mb-0 mr-4 cardSimulation" style="display: none;">
+                                <div class="col-sm-7 col-xl-2 floating-label enable-floating-label show-label form-inline justify-content-sm-end mb-0 mr-3 cardSimulation" style="display: none;">
                                     <div class="col-xs-4 mr-2">
-                                        <label for="simulationType">Escenario</label>
+                                        <label for="simulationType">Escenarios</label>
                                         <select name="simulationType" id="simulationType" class="form-control text-center">
                                             <option disabled>Seleccionar</option>
                                             <option value="1" selected>1</option>
