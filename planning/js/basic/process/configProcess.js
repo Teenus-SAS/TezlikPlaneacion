@@ -1,17 +1,16 @@
 $(document).ready(function () {
-  $.ajax({
-    type: 'GET',
-    url: '/api/process',
-    success: function (r) {
-      let $select = $(`#idProcess`);
-      $select.empty();
+  $.get("/api/process", function (response) {
+    const $select = $("#idProcess");
 
-      $select.append(`<option disabled selected>Seleccionar</option>`);
-      $.each(r, function (i, value) {
-        $select.append(
-          `<option value = ${value.id_process}> ${value.process} </option>`
-        );
-      });
-    },
+    // Vaciar el select y agregar la opción por defecto
+    $select.empty().append("<option disabled selected>Seleccionar</option>");
+
+    // Usar map para optimizar el ciclo de iteración
+    const options = response.map(
+      (value) => `<option value="${value.id_process}">${value.process}</option>`
+    );
+
+    // Insertar todas las opciones de una vez para mejorar el rendimiento
+    $select.append(options.join(""));
   });
 });

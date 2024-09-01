@@ -1,28 +1,28 @@
 $(document).ready(function () {
-    var loadTblProductType;
+  var loadTblProductType;
 
-    loadAllDataPType = async () => {
-        let data = await searchData('/api/productsType');
+  loadAllDataPType = async () => {
+    let data = await searchData("/api/productsType");
 
-        loadSelectProductType(data);
+    loadSelectProductType(data);
 
-        if (loadTblProductType)
-            loadTblProductType(data);
-    };
+    if (loadTblProductType) loadTblProductType(data);
+  };
 
-    const loadSelectProductType = (data) => {
-        let $select = $(`#idProductType`);
-        $select.empty();
+  const loadSelectProductType = (data) => {
+    let $select = $(`#idProductType`);
+    // Vaciar el select y agregar la opción por defecto
+    $select.empty().append(`<option disabled selected>Seleccionar</option>`);
 
-        $select.append(
-            `<option value='0' disabled selected>Seleccionar</option>`
-        );
-        $.each(data, function (i, value) {
-            $select.append(
-                `<option value ='${value.id_product_type}'> ${value.product_type} </option>`
-            );
-        });
-    };
+    // Usar map para optimizar el ciclo de iteración
+    const options = data.map(
+      (value) =>
+        `<option value="${value.id_product_type}">${value.product_type}</option>`
+    );
 
-    loadAllDataPType();
+    // Insertar todas las opciones de una vez para mejorar el rendimiento
+    $select.append(options.join(""));
+  };
+
+  loadAllDataPType();
 });

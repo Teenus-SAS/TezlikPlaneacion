@@ -204,7 +204,7 @@ $app->post('/addProductMeasure', function (Request $request, Response $response,
             }
 
             if ($resolution == null)
-                $resp = array('success' => true, 'message' => 'Medida de producto creada correctamente');
+                $resp = array('success' => true, 'message' => 'Producto creado correctamente');
             else if (isset($resolution['info']))
                 $resp = array('info' => true, 'message' => $resolution['message']);
             else
@@ -260,7 +260,7 @@ $app->post('/addProductMeasure', function (Request $request, Response $response,
         }
 
         if ($resolution == null)
-            $resp = array('success' => true, 'message' => 'Medidas de productos importadas correctamente');
+            $resp = array('success' => true, 'message' => 'Productos importadas correctamente');
         else if (isset($resolution['info']))
             $resp = array('info' => true, 'message' => $resolution['message']);
         else
@@ -299,7 +299,7 @@ $app->post('/updateProductMeasure', function (Request $request, Response $respon
             $resolution = $productsMeasuresDao->updatePMeasure($dataProduct);
 
         if ($resolution == null)
-            $resp = array('success' => true, 'message' => 'Medidas de producto modificada correctamente');
+            $resp = array('success' => true, 'message' => 'Producto actualizado correctamente');
         else if (isset($resolution['info']))
             $resp = array('info' => true, 'message' => $resolution['message']);
         else
@@ -333,7 +333,7 @@ $app->get('/deleteProductMeasure/{id_product_measure}', function (Request $reque
     }
 
     if ($resolution == null)
-        $resp = array('success' => true, 'message' => 'Medidas de producto eliminada correctamente');
+        $resp = array('success' => true, 'message' => 'Producto eliminado correctamente');
     else if (isset($resolution['info']))
         $resp = array('info' => true, 'message' => $resolution['message']);
     else
