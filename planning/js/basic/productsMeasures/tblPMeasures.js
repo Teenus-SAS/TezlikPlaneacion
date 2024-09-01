@@ -55,12 +55,12 @@ $(document).ready(function () {
             ? `<img src="${data}" alt="" style="width:80px;border-radius:100px">`
             : "",
       },
-      {
+      /* {
         title: "Tipo",
         data: 'product_type',
         visible: visible,
         className: "uniqueClassName dt-head-center",
-      },
+      }, */
       {
         title: "Ancho",
         data: "width",
