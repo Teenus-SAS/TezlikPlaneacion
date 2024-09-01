@@ -72,7 +72,7 @@ if (sizeof($_SESSION) == 0)
                                 <div class="col-sm-7 col-xl-1 form-inline justify-content-sm-end cardSaveBottons">
                                     <button class="btn btn-primary" id="btnSavePrograming" name="btnSavePrograming">Guardar</button>
                                 </div>
-                                <div class="col-sm-7 col-xl-2 form-inline cardAddOP" style="display: none;">
+                                <div class="col-sm-7 col-xl-2 form-inline p-0 cardAddOP" style="display: none;">
                                     <button class="btn btn-info" id="btnAddOP" name="btnAddOP">Crear OP</button>
                                 </div>
                             </div>
