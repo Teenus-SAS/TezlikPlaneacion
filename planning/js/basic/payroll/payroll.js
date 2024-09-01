@@ -1,4 +1,4 @@
-$(document).ready(function () {  
+$(document).ready(function () {
   /* Ocultar panel para crear Nomina */
   $(".cardCreateEmployee").hide();
 
@@ -6,7 +6,7 @@ $(document).ready(function () {
 
   $("#btnNewEmployee").click(function (e) {
     e.preventDefault();
-    $('.cardImportEmployees').hide(800);
+    $(".cardImportEmployees").hide(800);
     $(".cardCreateEmployee").toggle(800);
     $("#btnCreateEmployee").html("Crear");
 
@@ -16,83 +16,78 @@ $(document).ready(function () {
   });
 
   /* Crear nomina */
-
   $("#btnCreateEmployee").click(function (e) {
     e.preventDefault();
-    let idPayroll = sessionStorage.getItem("id_plan_payroll");
-    if (idPayroll == "" || idPayroll == null) {
-      checkDataPayroll("/api/addPayroll", idPayroll);
-    } else {
-      checkDataPayroll("/api/updatePayroll", idPayroll);
-    }
+
+    let idPayroll = sessionStorage.getItem("id_plan_payroll") || null;
+    const url = idPayroll ? "/api/updatePayroll" : "/api/addPayroll";
+    checkDataPayroll(url, idPayroll);
   });
 
   /* Actualizar nomina */
-
   $(document).on("click", ".updatePayroll", function (e) {
-    $('.cardImportEmployees').hide(800);
+    $(".cardImportEmployees").hide(800);
     $(".cardCreateEmployee").show(800);
     $("#btnCreateEmployee").html("Actualizar");
 
     // Obtener el ID del elemento
-    let id = $(this).attr('id');
-    // Obtener la parte después del guion '-'
-    let idPayroll = id.split('-')[1]; 
-
+    const idPayroll = $(this).attr("id").split("-")[1];
     sessionStorage.setItem("id_plan_payroll", idPayroll);
 
-    let row = $(this).parent().parent()[0];
-    let data = tblEmployees.fnGetData(row);
+    // Obtener data
+    const row = $(this).closest("tr")[0];
+    const data = tblEmployees.fnGetData(row);
 
+    // Asignar valores a los campos del form
     $("#firstname").val(data.firstname);
     $("#lastname").val(data.lastname);
-    $(`#idArea option[value=${data.id_plan_area}]`).prop('selected', true);
-    $(`#idProcess option[value=${data.id_process}]`).prop('selected', true);
+    $(`#idArea option[value=${data.id_plan_area}]`).prop("selected", true);
+    $(`#idProcess option[value=${data.id_process}]`).prop("selected", true);
     $("#position").val(data.position);
 
-    $("html, body").animate(
-      {
-        scrollTop: 0,
-      },
-      1000
-    );
+    // Animar el desplazamiento
+    $("html, body").animate({ scrollTop: 0 }, 1000);
   });
 
   /* Verificar datos */
   const checkDataPayroll = async (url, idPayroll) => {
-    let firstname = $("#firstname").val();
-    let lastname = $("#lastname").val();
-    let idArea = parseFloat($("#idArea").val());
-    let idProcess = parseFloat($("#idProcess").val());
-    let position = $("#position").val();
+    const fields = {
+      firstname: $("#firstname").val().trim(),
+      lastname: $("#lastname").val().trim(),
+      position: $("#position").val().trim(),
+      idArea: parseFloat($("#idArea").val()),
+      idProcess: parseFloat($("#idProcess").val()),
+    };
 
-    if (
-      firstname.trim() == "" || firstname.trim() == null ||
-      lastname.trim() == "" || lastname.trim() == null ||
-      position.trim() == "" || position.trim() == null ||
-      isNaN(idArea) || idArea <= 0 ||
-      isNaN(idProcess) || idProcess <= 0
-    ) {
+    // Verificación de campos vacíos o inválidos
+    const hasEmptyField = Object.values(fields).some(
+      (field) =>
+        field === "" ||
+        field === null ||
+        (typeof field === "number" && (isNaN(field) || field <= 0))
+    );
+
+    if (hasEmptyField) {
       toastr.error("Ingrese todos los campos");
       return false;
     }
 
+    // Preparación de datos
     let dataArea = new FormData(formCreateEmployee);
+    if (idPayroll) dataArea.append("idPayroll", idPayroll);
 
-    if (idPayroll != "" || idPayroll != null)
-      dataArea.append("idPayroll", idPayroll);
-
+    // Envío de datos y manejo de respuesta
     let resp = await sendDataPOST(url, dataArea);
-
     messagePayroll(resp);
   };
 
   /* Eliminar areas */
   deletePayrollFunction = () => {
-    let row = $(this.activeElement).parent().parent()[0];
+    let row = $(this.activeElement).closest("tr")[0];
     let data = tblEmployees.fnGetData(row);
 
-    let id_plan_payroll = data.id_plan_payroll;
+    const { id_plan_payroll } = data;
+    //let id_plan_payroll = data.id_plan_payroll;
 
     bootbox.confirm({
       title: "Eliminar",
@@ -124,16 +119,16 @@ $(document).ready(function () {
   /* Mensaje de exito */
 
   messagePayroll = (data) => {
-    if (data.success == true) {
-      $(".cardImportEmployees").hide(800);
-      $("#formImportEmployees").trigger("reset");
-      $(".cardCreateEmployee").hide(800);
-      $("#formCreateEmployee").trigger("reset");
-      toastr.success(data.message);
+    const { success, error, info, message } = data;
+    if (success) {
+      $(".cardImportEmployees, .cardCreateEmployee").hide(800);
+      $("#formImportEmployees, #formCreateEmployee").trigger("reset");
+
+      toastr.success(message);
       updateTable();
       return false;
-    } else if (data.error == true) toastr.error(data.message);
-    else if (data.info == true) toastr.info(data.message);
+    } else if (error == true) toastr.error(message);
+    else if (info == true) toastr.info(message);
   };
 
   /* Actualizar tabla */

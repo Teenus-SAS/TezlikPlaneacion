@@ -78,11 +78,11 @@ if (sizeof($_SESSION) == 0)
                                                 </div>
                                                 <div class="col-sm-2 floating-label enable-floating-label show-label" style="margin-bottom:0px">
                                                     <label for="">Área</label>
-                                                    <select type="text" class="form-control text-center" id="idArea" name="idArea"></select>
+                                                    <select type="text" class="form-control" id="idArea" name="idArea"></select>
                                                 </div>
                                                 <div class="col-sm-2 floating-label enable-floating-label show-label" style="margin-bottom:0px">
                                                     <label for="">Proceso</label>
-                                                    <select type="text" class="form-control text-center" id="idProcess" name="idProcess"></select>
+                                                    <select type="text" class="form-control" id="idProcess" name="idProcess"></select>
                                                 </div>
                                                 <div class="col-sm-2 floating-label enable-floating-label show-label" style="margin-bottom:0px">
                                                     <label for="">Posición</label>
