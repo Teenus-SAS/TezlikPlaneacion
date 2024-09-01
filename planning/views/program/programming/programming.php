@@ -51,7 +51,7 @@ if (sizeof($_SESSION) == 0)
                             <div class="col-sm-7 col-xl-8 form-inline justify-content-sm-end">
                                 <div class="col-sm-7 col-xl-2 floating-label enable-floating-label show-label form-inline justify-content-sm-end mb-0 cardBottons">
                                     <div id="machines1">
-                                        <label class="font-weight-bold text-dark">Maquina</label>
+                                        <label>Maquina</label>
                                         <select class="form-control idMachine" id="searchMachine">
                                         </select>
                                     </div>
