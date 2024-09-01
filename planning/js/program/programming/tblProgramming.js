@@ -42,6 +42,7 @@ $(document).ready(function () {
     if (data.length > 0) {
       $('.cardSaveBottons').show(800);
       $('.cardSimulation').show(800);
+      $('.cardAddOP').show(800);
       $('#machines1').show(800);
     } else {
       $('.cardAddOP').hide(800);
