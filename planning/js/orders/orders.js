@@ -47,6 +47,11 @@ $(document).ready(function () {
     );
     $(`#seller option[value=${data.id_seller}]`).prop('selected', true);
     $(`#client option[value=${data.id_client}]`).prop('selected', true);
+
+    const dataProducts = JSON.parse(sessionStorage.getItem("dataProducts"));
+    const arr = dataProducts.find((item) => item.id_product == data.id_product);
+    $('#inptQuantity').val(arr.quantity);
+
     $('#originalQuantity').val(data.original_quantity); 
 
     $('html, body').animate(

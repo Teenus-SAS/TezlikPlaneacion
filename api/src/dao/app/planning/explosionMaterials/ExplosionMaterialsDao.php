@@ -20,7 +20,7 @@ class ExplosionMaterialsDao
   {
     $connection = Connection::getInstance()->getConnection();
 
-    $stmt = $connection->prepare("SELECT cp.id_product, o.id_order, cp.id_composite_product, SUM(pi.quantity) AS quantity_product, cpi.quantity AS quantity_material, u.abbreviation, (o.original_quantity * cpi.quantity) AS need, pi.minimum_stock
+    $stmt = $connection->prepare("SELECT cp.id_product, o.id_order, cp.id_child_product, SUM(pi.quantity) AS quantity_product, cpi.quantity AS quantity_material, u.abbreviation, (o.original_quantity * cp.quantity) AS need, pi.minimum_stock
                                       FROM composite_products cp
                                         LEFT JOIN products_inventory pi ON pi.id_product = cp.id_product
                                         LEFT JOIN products_inventory cpi ON cpi.id_product = cp.id_child_product 
@@ -195,7 +195,7 @@ class ExplosionMaterialsDao
       foreach ($products as $arr) {
         $repeat = false;
         for ($i = 0; $i < sizeof($data); $i++) {
-          if ($data[$i]['id_product'] == $arr['id_product']) {
+          if ($data[$i]['id_child_product'] == $arr['id_child_product']) {
             $data[$i]['need'] += $arr['need'];
             $data[$i]['minimum_stock'] = $arr['minimum_stock'];
             $data[$i]['available'] = $arr['quantity_material'] - $data[$i]['minimum_stock'] - $data[$i]['need'];
@@ -207,7 +207,7 @@ class ExplosionMaterialsDao
         if ($repeat == false) {
           $data[] = array(
             'id_product' => $arr['id_product'],
-            'id_composite_product' => $arr['id_composite_product'],
+            'id_child_product' => $arr['id_child_product'],
             'quantity_product' => $arr['quantity_product'],
             'quantity_material' => $arr['quantity_material'],
             'need' => $arr['need'],

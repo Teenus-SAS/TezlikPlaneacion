@@ -311,25 +311,26 @@ $app->post('/updateProductMeasure', function (Request $request, Response $respon
     return $response->withStatus(200)->withHeader('Content-Type', 'application/json');
 });
 
-$app->get('/deleteProductMeasure/{id_product_measure}', function (Request $request, Response $response, $args) use (
+$app->post('/deleteProductMeasure', function (Request $request, Response $response, $args) use (
     $productsDao,
     $productsInventoryDao,
     $productsMeasuresDao
 ) {
     session_start();
+    $dataProduct = $request->getParsedBody();
     $flag_products_measure = $_SESSION['flag_products_measure'];
     $resolution = null;
 
     if ($flag_products_measure == '1') {
-        $resolution = $productsMeasuresDao->deletePMeasure($args['id_product_measure']);
+        $resolution = $productsMeasuresDao->deletePMeasure($dataProduct['idProductMeasure']);
         if ($resolution == null)
-            $resolution = $productsDao->deleteProduct($args['id_product']);
+            $resolution = $productsDao->deleteProduct($dataProduct['idProduct']);
         if ($resolution == null)
-            $resolution = $productsInventoryDao->deleteProductInventory($args['id_product']);
+            $resolution = $productsInventoryDao->deleteProductInventory($dataProduct['idProduct']);
     } else {
-        $resolution = $productsDao->deleteProduct($args['id_product']);
+        $resolution = $productsDao->deleteProduct($dataProduct['idProduct']);
         if ($resolution == null)
-            $resolution = $productsInventoryDao->deleteProductInventory($args['id_product']);
+            $resolution = $productsInventoryDao->deleteProductInventory($dataProduct['idProduct']);
     }
 
     if ($resolution == null)

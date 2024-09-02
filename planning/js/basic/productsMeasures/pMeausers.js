@@ -197,7 +197,9 @@ $(document).ready(function () {
     let row = $(this.activeElement).parent().parent()[0];
     let data = tblProducts.fnGetData(row);
 
-    let idProductMeasure = data.id_product_measure;
+    let dataProduct = [];
+    dataProduct['idProductMeasure'] = data.id_product_measure;
+    dataProduct['idProduct'] = data.id_product;
 
     bootbox.confirm({
       title: "Eliminar",
@@ -215,12 +217,11 @@ $(document).ready(function () {
       },
       callback: function (result) {
         if (result) {
-          $.get(
-            `/api/deleteProductMeasure/${idProductMeasure}`,
+          $.post("/api/deleteProductMeasure", dataProduct,
             function (data, textStatus, jqXHR) {
-              messageProducts(data);
-            }
-          );
+              messageProducts(data);              
+            }, 
+          ); 
         }
       },
     });

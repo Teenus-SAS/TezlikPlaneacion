@@ -564,19 +564,19 @@ $app->post('/addProductsMaterials', function (Request $request, Response $respon
                     $data['dateOrder'] = date('Y-m-d');
                     $data['minDate'] = '';
                     $data['maxDate'] = '';
-                    $data['idProduct'] = $products[$i]['id_product'];
+                    $data['idProduct'] = $products[$i]['id_child_product'];
                     $data['idClient'] = $client['id_client'];
                     $data['idSeller'] = $seller['id_seller'];
                     $data['route'] = 1;
                     $data['originalQuantity'] = abs($products[$i]['available']);
 
                     $resolution = $ordersDao->insertOrderByCompany($data, $id_company);
-                    $generalProductsDao->updateAccumulatedQuantity($products[$i]['id_product'], abs($products[$i]['available']), 2);
+                    $generalProductsDao->updateAccumulatedQuantity($products[$i]['id_child_product'], abs($products[$i]['available']), 2);
 
                     if (isset($resolution['info'])) break;
                     $lastOrder = $lastDataDao->findLastInsertedOrder($id_company);
 
-                    $programmingRoutes = $generalProgrammingRoutesDao->findProgrammingRoutes($products[$i]['id_product'], $lastOrder['id_order']);
+                    $programmingRoutes = $generalProgrammingRoutesDao->findProgrammingRoutes($products[$i]['id_child_product'], $lastOrder['id_order']);
 
                     if (!$programmingRoutes) {
                         $data['idOrder'] = $lastOrder['id_order'];
@@ -707,19 +707,19 @@ $app->post('/updatePlanProductsMaterials', function (Request $request, Response 
                         $data['dateOrder'] = date('Y-m-d');
                         $data['minDate'] = '';
                         $data['maxDate'] = '';
-                        $data['idProduct'] = $products[$i]['id_product'];
+                        $data['idProduct'] = $products[$i]['id_child_product'];
                         $data['idClient'] = $client['id_client'];
                         $data['idSeller'] = $seller['id_seller'];
                         $data['route'] = 1;
                         $data['originalQuantity'] = abs($products[$i]['available']);
 
                         $resolution = $ordersDao->insertOrderByCompany($data, $id_company);
-                        $generalProductsDao->updateAccumulatedQuantity($products[$i]['id_product'], abs($products[$i]['available']), 2);
+                        $generalProductsDao->updateAccumulatedQuantity($products[$i]['id_child_product'], abs($products[$i]['available']), 2);
 
                         if (isset($resolution['info'])) break;
                         $lastOrder = $lastDataDao->findLastInsertedOrder($id_company);
 
-                        $programmingRoutes = $generalProgrammingRoutesDao->findProgrammingRoutes($products[$i]['id_product'], $lastOrder['id_order']);
+                        $programmingRoutes = $generalProgrammingRoutesDao->findProgrammingRoutes($products[$i]['id_child_product'], $lastOrder['id_order']);
 
                         if (!$programmingRoutes) {
                             $data['idOrder'] = $lastOrder['id_order'];
@@ -850,19 +850,19 @@ $app->post('/deletePlanProductMaterial', function (Request $request, Response $r
                     $data['dateOrder'] = date('Y-m-d');
                     $data['minDate'] = '';
                     $data['maxDate'] = '';
-                    $data['idProduct'] = $products[$i]['id_product'];
+                    $data['idProduct'] = $products[$i]['id_child_product'];
                     $data['idClient'] = $client['id_client'];
                     $data['idSeller'] = $seller['id_seller'];
                     $data['route'] = 1;
                     $data['originalQuantity'] = abs($products[$i]['available']);
 
                     $resolution = $ordersDao->insertOrderByCompany($data, $id_company);
-                    $generalProductsDao->updateAccumulatedQuantity($products[$i]['id_product'], abs($products[$i]['available']), 2);
+                    $generalProductsDao->updateAccumulatedQuantity($products[$i]['id_child_product'], abs($products[$i]['available']), 2);
 
                     if (isset($resolution['info'])) break;
                     $lastOrder = $lastDataDao->findLastInsertedOrder($id_company);
 
-                    $programmingRoutes = $generalProgrammingRoutesDao->findProgrammingRoutes($products[$i]['id_product'], $lastOrder['id_order']);
+                    $programmingRoutes = $generalProgrammingRoutesDao->findProgrammingRoutes($products[$i]['id_child_product'], $lastOrder['id_order']);
 
                     if (!$programmingRoutes) {
                         $data['idOrder'] = $lastOrder['id_order'];

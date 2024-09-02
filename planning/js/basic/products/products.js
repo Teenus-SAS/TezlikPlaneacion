@@ -1,6 +1,5 @@
 $(document).ready(function () {
-  /* Ocultar panel crear producto */
-
+  /* Ocultar panel crear producto */ 
   $(".cardCreateProduct").hide();
 
   /* Cargar imagen de producto */
@@ -37,8 +36,7 @@ $(document).ready(function () {
 
     const idProduct = sessionStorage.getItem("id_product") || null;
     const apiUrl = idProduct ? "/api/updatePlanProduct" : "/api/addProduct";
-
-    checkDataArea(apiUrl, idProduct);
+    checkDataProducts(apiUrl, idProduct);
   });
 
   /* Actualizar productos */
