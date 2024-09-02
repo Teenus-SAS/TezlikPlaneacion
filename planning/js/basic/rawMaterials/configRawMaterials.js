@@ -27,7 +27,7 @@ $(document).ready(function () {
       .append(`<option disabled selected>Seleccionar</option>`);
 
     // Usar map para optimizar el ciclo de iteración
-    const optionsrefMaterials = refMaterials.map(
+    const optionsRefMaterials = refMaterials.map(
       (value) =>
         `<option value ="${value.id_material}" class="${value.id_material_type}"> ${value.reference} </option>`
     );
@@ -38,7 +38,7 @@ $(document).ready(function () {
     );
 
     // Insertar todas las opciones de una vez para mejorar el rendimiento
-    $selectRefMaterial.append(optionsrefMaterials.join(""));
+    $selectRefMaterial.append(optionsRefMaterials.join(""));
     $selectMaterial.append(optionsMaterials.join(""));
   };
 
