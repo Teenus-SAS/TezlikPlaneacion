@@ -1,54 +1,54 @@
 $(document).ready(function () {
   /* Ocultar panel Nuevo usuario */
-  $('.cardCreateUser').hide();
+  $(".cardCreateUser").hide();
 
   /* Abrir panel Nuevo usuario */
-  $('#btnNewUser').click(function (e) {
+  $("#btnNewUser").click(function (e) {
     e.preventDefault();
-    $('.cardCreateUser').toggle(800);
-    $('#btnCreateUser').html('Crear Usuario');
+    $(".cardCreateUser").toggle(800);
+    $("#btnCreateUser").html("Crear Usuario");
 
-    sessionStorage.removeItem('id_user');
-    $('#email').prop('disabled', false);
-    $('#company').prop('disabled', false);
+    sessionStorage.removeItem("id_user");
+    $("#email").prop("disabled", false);
+    $("#company").prop("disabled", false);
 
-    $('#formCreateUser').trigger('reset');
+    $("#formCreateUser").trigger("reset");
   });
 
   /* Agregar nuevo usuario */
-  $('#btnCreateUser').click(function (e) {
+  $("#btnCreateUser").click(function (e) {
     e.preventDefault();
-    let idUser = sessionStorage.getItem('id_user');
+    let idUser = sessionStorage.getItem("id_user");
 
-    if (idUser == '' || idUser == null) {
-      company = $('#company').val();
-      firstname = $('#firstname').val();
-      lastname = $('#lastname').val();
-      email = $('#email').val();
+    if (idUser == "" || idUser == null) {
+      company = $("#company").val();
+      firstname = $("#firstname").val();
+      lastname = $("#lastname").val();
+      email = $("#email").val();
 
       if (
-        firstname == '' ||
+        firstname == "" ||
         firstname == null ||
-        lastname == '' ||
+        lastname == "" ||
         lastname == null ||
-        email == '' ||
+        email == "" ||
         email == null ||
-        company == '' ||
+        company == "" ||
         company == null
       ) {
-        toastr.error('Ingrese nombre, apellido y/o email');
+        toastr.error("Ingrese nombre, apellido y/o email");
         return false;
       }
 
       dataUser = {};
-      dataUser['nameUser'] = firstname;
-      dataUser['lastnameUser'] = lastname;
-      dataUser['emailUser'] = email;
-      dataUser['company'] = company;
+      dataUser["nameUser"] = firstname;
+      dataUser["lastnameUser"] = lastname;
+      dataUser["emailUser"] = email;
+      dataUser["company"] = company;
 
       dataUser = setDataUserAccess(dataUser);
 
-      $.post('/api/addUser', dataUser, function (data, textStatus, jqXHR) {
+      $.post("/api/addUser", dataUser, function (data, textStatus, jqXHR) {
         message(data);
       });
     } else {
@@ -57,24 +57,24 @@ $(document).ready(function () {
   });
 
   /* Actualizar User */
-  $(document).on('click', '.updateUser', function (e) {
-    $('.cardCreateUser').show(800);
-    $('#btnCreateUser').html('Actualizar');
+  $(document).on("click", ".updateUser", function (e) {
+    $(".cardCreateUser").show(800);
+    $("#btnCreateUser").html("Actualizar");
 
     const row = $(this).closest("tr")[0];
     let data = tblUsers.fnGetData(row);
 
     let idUser = this.id;
-    sessionStorage.setItem('id_user', idUser);
+    sessionStorage.setItem("id_user", idUser);
 
-    $('#firstname').val(data.firstname);
-    $('#lastname').val(data.lastname);
-    $('#email').val(data.email);
-    $('#email').prop('disabled', true);
-    $(`#company option[value=${data.id_company}]`).prop('selected', true);
-    $('#company').prop('disabled', true);
+    $("#firstname").val(data.firstname);
+    $("#lastname").val(data.lastname);
+    $("#email").val(data.email);
+    $("#email").prop("disabled", true);
+    $(`#company option[value=${data.id_company}]`).prop("selected", true);
+    $("#company").prop("disabled", true);
 
-    $('html, body').animate(
+    $("html, body").animate(
       {
         scrollTop: 0,
       },
@@ -83,15 +83,15 @@ $(document).ready(function () {
   });
 
   updateUser = () => {
-    idUser = sessionStorage.getItem('id_user');
+    idUser = sessionStorage.getItem("id_user");
 
-    dataUser = $('#formCreateUser').serialize();
+    dataUser = $("#formCreateUser").serialize();
 
     dataUser = `${dataUser}&idUser=${idUser}`;
 
-    $.post('/api/updateUser', dataUser, function (data, textStatus, jqXHR) {
-      $('#email').prop('disabled', false);
-      $('#company').prop('disabled', false);
+    $.post("/api/updateUser", dataUser, function (data, textStatus, jqXHR) {
+      $("#email").prop("disabled", false);
+      $("#company").prop("disabled", false);
 
       message(data);
     });
@@ -103,29 +103,29 @@ $(document).ready(function () {
     let data = tblUsers.fnGetData(row);
 
     dataUser = {};
-    dataUser['idUser'] = data.id_user;
-    dataUser['email'] = data.email;
+    dataUser["idUser"] = data.id_user;
+    dataUser["email"] = data.email;
 
     dataUser = setDataUserAccess(dataUser);
 
     bootbox.confirm({
-      title: 'Eliminar',
+      title: "Eliminar",
       message:
-        'Está seguro de eliminar este Usuario? Esta acción no se puede reversar.',
+        "Está seguro de eliminar este Usuario? Esta acción no se puede reversar.",
       buttons: {
         confirm: {
-          label: 'Si',
-          className: 'btn-success',
+          label: "Si",
+          className: "btn-success",
         },
         cancel: {
-          label: 'No',
-          className: 'btn-danger',
+          label: "No",
+          className: "btn-danger",
         },
       },
       callback: function (result) {
         if (result) {
           $.post(
-            '/api/deleteUser',
+            "/api/deleteUser",
             dataUser,
             function (data, textStatus, jqXHR) {
               message(data);
@@ -137,35 +137,36 @@ $(document).ready(function () {
   };
 
   setDataUserAccess = (dataUser) => {
-    dataUser['createMold'] = 1;
-    dataUser['planningCreateProduct'] = 1;
-    dataUser['planningCreateMaterial'] = 1;
-    dataUser['planningCreateMachine'] = 1;
-    dataUser['planningCreateProcess'] = 1;
-    dataUser['planningProductsMaterial'] = 1;
-    dataUser['planningProductsProcess'] = 1;
-    dataUser['programsMachine'] = 1;
-    dataUser['ciclesMachine'] = 1;
-    dataUser['invCategory'] = 1;
-    dataUser['sale'] = 1;
-    dataUser['plannigUser'] = 1;
-    dataUser['client'] = 1;
-    dataUser['ordersType'] = 1;
-    dataUser['inventory'] = 1;
-    dataUser['order'] = 1;
-    dataUser['program'] = 1;
-    dataUser['load'] = 1;
-    dataUser['explosionOfMaterial'] = 1;
-    dataUser['office'] = 1;
+    dataUser["createMold"] = 1;
+    dataUser["planningCreateProduct"] = 1;
+    dataUser["planningCreateMaterial"] = 1;
+    dataUser["planningCreateMachine"] = 1;
+    dataUser["planningCreateProcess"] = 1;
+    dataUser["planningProductsMaterial"] = 1;
+    dataUser["planningProductsProcess"] = 1;
+    dataUser["programsMachine"] = 1;
+    dataUser["ciclesMachine"] = 1;
+    dataUser["invCategory"] = 1;
+    dataUser["sale"] = 1;
+    dataUser["plannigUser"] = 1;
+    dataUser["client"] = 1;
+    dataUser["ordersType"] = 1;
+    dataUser["inventory"] = 1;
+    dataUser["order"] = 1;
+    dataUser["program"] = 1;
+    dataUser["load"] = 1;
+    dataUser["explosionOfMaterial"] = 1;
+    dataUser["office"] = 1;
 
     return dataUser;
   };
 
   /* Mensaje de exito */
   message = (data) => {
+    const { success, error, info, message } = data;
     if (success) {
-      $('.cardCreateUser').hide(800);
-      $('#formCreateUser').trigger('reset');
+      $(".cardCreateUser").hide(800);
+      $("#formCreateUser").trigger("reset");
       updateTable();
       toastr.success(message);
       return false;
@@ -175,7 +176,7 @@ $(document).ready(function () {
 
   /* Actualizar tabla */
   function updateTable() {
-    $('#tblUsers').DataTable().clear();
-    $('#tblUsers').DataTable().ajax.reload();
+    $("#tblUsers").DataTable().clear();
+    $("#tblUsers").DataTable().ajax.reload();
   }
 });

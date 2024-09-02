@@ -1,26 +1,26 @@
 $(document).ready(function () {
   let selectedFile;
 
-  $('.cardImportOrderTypes').hide();
+  $(".cardImportOrderTypes").hide();
 
-  $('#btnImportNewOrderTypes').click(function (e) {
+  $("#btnImportNewOrderTypes").click(function (e) {
     e.preventDefault();
-    $('.cardCreateOrderType').hide(800);
-    $('.cardImportOrderTypes').toggle(800);
+    $(".cardCreateOrderType").hide(800);
+    $(".cardImportOrderTypes").toggle(800);
   });
 
-  $('#fileOrderTypes').change(function (e) {
+  $("#fileOrderTypes").change(function (e) {
     e.preventDefault();
     selectedFile = e.target.files[0];
   });
 
-  $('#btnImportOrderTypes').click(function (e) {
+  $("#btnImportOrderTypes").click(function (e) {
     e.preventDefault();
 
-    file = $('#fileOrderTypes').val();
+    file = $("#fileOrderTypes").val();
 
     if (!file) {
-      toastr.error('Seleccione un archivo');
+      toastr.error("Seleccione un archivo");
       return false;
     }
 
@@ -34,40 +34,40 @@ $(document).ready(function () {
         checkOrderTypes(orderTypesToImport);
       })
       .catch(() => {
-        toastr.error('Ocurrio un error. Intente Nuevamente');
+        toastr.error("Ocurrio un error. Intente Nuevamente");
       });
   });
 
   /* Mensaje de advertencia */
   checkOrderTypes = (data) => {
     $.ajax({
-      type: 'POST',
-      url: '/api/orderTypesDataValidation',
+      type: "POST",
+      url: "/api/orderTypesDataValidation",
       data: { importOrderTypes: data },
       success: function (resp) {
         if (resp.error == true) {
-          $('#formImportOrderTypes').trigger('reset');
+          $("#formImportOrderTypes").trigger("reset");
           toastr.error(resp.message);
           return false;
         }
 
         bootbox.confirm({
-          title: '¿Desea continuar con la importación?',
+          title: "¿Desea continuar con la importación?",
           message: `Se han encontrado los siguientes registros:<br><br>Datos a insertar: ${resp.insert} <br>Datos a actualizar: ${resp.update}`,
           buttons: {
             confirm: {
-              label: 'Si',
-              className: 'btn-success',
+              label: "Si",
+              className: "btn-success",
             },
             cancel: {
-              label: 'No',
-              className: 'btn-danger',
+              label: "No",
+              className: "btn-danger",
             },
           },
           callback: function (result) {
             if (result) {
               saveClientTable(data);
-            } else $('#fileOrderTypes').val('');
+            } else $("#fileOrderTypes").val("");
           },
         });
       },
@@ -76,38 +76,39 @@ $(document).ready(function () {
 
   saveClientTable = (data) => {
     $.ajax({
-      type: 'POST',
-      url: '../../api/addOrderTypes',
+      type: "POST",
+      url: "/api/addOrderTypes",
       data: { importOrderTypes: data },
-      success: function (r) {
+      success: function (data) {
         /* Mensaje de exito */
-        if (r.success == true) {
-          $('.cardImportOrderTypes').hide(800);
-          $('#formImportOrderTypes').trigger('reset');
+        const { success, error, info, message } = data;
+        if (success) {
+          $(".cardImportOrderTypes").hide(800);
+          $("#formImportOrderTypes").trigger("reset");
           updateTable();
           toastr.success(r.message);
           return false;
-        } else if (r.error == true) toastr.error(r.message);
-        else if (r.info == true) toastr.info(r.message);
+        } else if (error) toastr.error(message);
+        else if (info) toastr.info(message);
 
         /* Actualizar tabla */
         function updateTable() {
-          $('#tblOrderTypes').DataTable().clear();
-          $('#tblOrderTypes').DataTable().ajax.reload();
+          $("#tblOrderTypes").DataTable().clear();
+          $("#tblOrderTypes").DataTable().ajax.reload();
         }
       },
     });
   };
 
   /* Descargar formato */
-  $('#btnDownloadImportsOrderTypes').click(function (e) {
+  $("#btnDownloadImportsOrderTypes").click(function (e) {
     e.preventDefault();
 
-    url = 'assets/formatsXlsx/Tipo_Pedidos.xlsx';
+    url = "assets/formatsXlsx/Tipo_Pedidos.xlsx";
 
-    link = document.createElement('a');
+    link = document.createElement("a");
 
-    link.target = '_blank';
+    link.target = "_blank";
 
     link.href = url;
     document.body.appendChild(link);

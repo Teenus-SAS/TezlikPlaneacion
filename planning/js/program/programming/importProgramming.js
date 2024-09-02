@@ -1,26 +1,26 @@
 $(document).ready(function () {
   let selectedFile;
 
-  $('.cardImportProgramming').hide();
+  $(".cardImportProgramming").hide();
 
-  $('#btnImportNewProgramming').click(function (e) {
+  $("#btnImportNewProgramming").click(function (e) {
     e.preventDefault();
-    $('.cardCreateProgramming').hide(800);
-    $('.cardImportProgramming').toggle(800);
+    $(".cardCreateProgramming").hide(800);
+    $(".cardImportProgramming").toggle(800);
   });
 
-  $('#fileProgramming').change(function (e) {
+  $("#fileProgramming").change(function (e) {
     e.preventDefault();
     selectedFile = e.target.files[0];
   });
 
-  $('#btnImportProgramming').click(function (e) {
+  $("#btnImportProgramming").click(function (e) {
     e.preventDefault();
 
-    file = $('#fileProgramming').val();
+    file = $("#fileProgramming").val();
 
     if (!file) {
-      toastr.error('Seleccione un archivo');
+      toastr.error("Seleccione un archivo");
       return false;
     }
 
@@ -38,40 +38,40 @@ $(document).ready(function () {
         checkProgramming(programmingToImport);
       })
       .catch(() => {
-        toastr.error('Ocurrio un error. Intente Nuevamente');
+        toastr.error("Ocurrio un error. Intente Nuevamente");
       });
   });
 
   /* Mensaje de advertencia */
   checkProgramming = (data) => {
     $.ajax({
-      type: 'POST',
-      url: '/api/programmingDataValidation',
+      type: "POST",
+      url: "/api/programmingDataValidation",
       data: { importProgramming: data },
       success: function (resp) {
         if (resp.error == true) {
-          $('#formImportProgramming').trigger('reset');
+          $("#formImportProgramming").trigger("reset");
           toastr.error(resp.message);
           return false;
         }
 
         bootbox.confirm({
-          title: '¿Desea continuar con la importación?',
+          title: "¿Desea continuar con la importación?",
           message: `Se han encontrado los siguientes registros:<br><br>Datos a insertar: ${resp.insert} <br>Datos a actualizar: ${resp.update}`,
           buttons: {
             confirm: {
-              label: 'Si',
-              className: 'btn-success',
+              label: "Si",
+              className: "btn-success",
             },
             cancel: {
-              label: 'No',
-              className: 'btn-danger',
+              label: "No",
+              className: "btn-danger",
             },
           },
           callback: function (result) {
             if (result) {
               saveProgrammingTable(data);
-            } else $('#fileProgramming').val('');
+            } else $("#fileProgramming").val("");
           },
         });
       },
@@ -80,38 +80,39 @@ $(document).ready(function () {
 
   saveProgrammingTable = (data) => {
     $.ajax({
-      type: 'POST',
-      url: '../../api/addProgramming',
+      type: "POST",
+      url: "/api/addProgramming",
       data: { importProgramming: data },
-      success: function (r) {
+      success: function (data) {
         /* Mensaje de exito */
-        if (r.success == true) {
-          $('.cardImportProgramming').hide(800);
-          $('#formImportProgramming').trigger('reset');
+        const { success, error, info, message } = data;
+        if (success) {
+          $(".cardImportProgramming").hide(800);
+          $("#formImportProgramming").trigger("reset");
           updateTable();
           toastr.success(r.message);
           return false;
-        } else if (r.error == true) toastr.error(r.message);
-        else if (r.info == true) toastr.info(r.message);
+        } else if (error) toastr.error(message);
+        else if (info) toastr.info(message);
 
         /* Actualizar tabla */
         function updateTable() {
-          $('#tblProgramming').DataTable().clear();
-          $('#tblProgramming').DataTable().ajax.reload();
+          $("#tblProgramming").DataTable().clear();
+          $("#tblProgramming").DataTable().ajax.reload();
         }
       },
     });
   };
 
   /* Descargar formato */
-  $('#btnDownloadImportsProgramming').click(function (e) {
+  $("#btnDownloadImportsProgramming").click(function (e) {
     e.preventDefault();
 
-    url = 'assets/formatsXlsx/Programming.xlsx';
+    url = "assets/formatsXlsx/Programming.xlsx";
 
-    link = document.createElement('a');
+    link = document.createElement("a");
 
-    link.target = '_blank';
+    link.target = "_blank";
 
     link.href = url;
     document.body.appendChild(link);

@@ -158,6 +158,7 @@ $(document).ready(function () {
   /* Mensaje de exito */
 
   messageMaterials = (data) => {
+    const { success, error, info, message } = data;
     if (success) {
       $(".cardImportMaterials, .cardRawMaterials").hide(800);
       $("#formImportMaterials, #formCreateMaterial").trigger("reset");

@@ -1,15 +1,15 @@
 $(document).ready(function () {
   /* Cambiar estado de usuarios * empresa */
 
-  $(document).on('click', '.userStatus', function (e) {
+  $(document).on("click", ".userStatus", function (e) {
     e.preventDefault();
     // Obtener el ID del elemento
-    let id = $(this).attr('id');
+    let id = $(this).attr("id");
     // Obtener la parte después del guion '-'
-    let id_user = id.split('-')[1]; 
+    let id_user = id.split("-")[1];
 
     $.ajax({
-      type: 'POST',
+      type: "POST",
       url: `/api/updateCompanyUsersStatus/${id_user}`,
       success: function (resp) {
         message(resp);
@@ -20,6 +20,7 @@ $(document).ready(function () {
   /* Mensaje de exito */
 
   const message = (data) => {
+    const { success, error, info, message } = data;
     if (success) {
       updateTable();
       toastr.success(message);
@@ -31,7 +32,7 @@ $(document).ready(function () {
   /* Actualizar tabla */
 
   function updateTable() {
-    $('#tblCompanyUsers').DataTable().clear();
-    $('#tblCompanyUsers').DataTable().ajax.reload();
+    $("#tblCompanyUsers").DataTable().clear();
+    $("#tblCompanyUsers").DataTable().ajax.reload();
   }
 });

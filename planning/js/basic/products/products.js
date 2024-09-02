@@ -1,5 +1,5 @@
 $(document).ready(function () {
-  /* Ocultar panel crear producto */ 
+  /* Ocultar panel crear producto */
   $(".cardCreateProduct").hide();
 
   /* Cargar imagen de producto */
@@ -158,6 +158,7 @@ $(document).ready(function () {
   /* Mensaje de exito */
 
   messageProducts = (data) => {
+    const { success, error, info, message } = data;
     if (success) {
       $("#formImportProduct").trigger("reset");
       $(".cardCreateProduct").hide(800);
