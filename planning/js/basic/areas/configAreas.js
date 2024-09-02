@@ -1,9 +1,11 @@
 $(document).ready(function () {
   $.get("/api/planAreas", function (response) {
-    const $select = $("#idArea");
+    const $selectArea = $("#idArea");
 
     // Vaciar el select y agregar la opción por defecto
-    $select.empty().append("<option disabled selected>Seleccionar</option>");
+    $selectArea
+      .empty()
+      .append("<option disabled selected>Seleccionar</option>");
 
     // Usar map para optimizar el ciclo de iteración
     const options = response.map(
@@ -11,6 +13,6 @@ $(document).ready(function () {
     );
 
     // Insertar todas las opciones de una vez para mejorar el rendimiento
-    $select.append(options.join(""));
+    $selectArea.append(options.join(""));
   });
 });

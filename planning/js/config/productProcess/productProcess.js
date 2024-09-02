@@ -31,7 +31,6 @@ $(document).ready(function () {
     let tEnlistment = parseFloat($("#enlistmentTime").val());
 
     isNaN(tOperation) ? (tOperation = 0) : tOperation;
-
     isNaN(tEnlistment) ? (tEnlistment = 0) : tEnlistment;
 
     let val = tEnlistment + tOperation;
@@ -81,9 +80,10 @@ $(document).ready(function () {
   $(document).on("click", ".updateProcess", function (e) {
     $(".cardImportProductsProcess").hide(800);
     $(".cardAddProcess").show(800);
-    $("#btnAddProcess").html("Actualizar");
+    $("#btnAddProcess").text("Actualizar");
 
-    let row = $(this).parent().parent()[0];
+    //Obtener data
+    let row = $(this).closest("tr")[0];
     let data = tblConfigProcess.fnGetData(row);
 
     sessionStorage.setItem("id_product_process", data.id_product_process);
@@ -101,6 +101,7 @@ $(document).ready(function () {
 
     $("#enlistmentTime").click();
 
+    //animacion desplazamiento
     $("html, body").animate(
       {
         scrollTop: 0,
@@ -133,7 +134,8 @@ $(document).ready(function () {
   /* Eliminar proceso */
 
   deleteFunction = () => {
-    let row = $(this.activeElement).parent().parent()[0];
+    //obtener data
+    let row = $(this.activeElement).closest("tr")[0];
     let data = tblConfigProcess.fnGetData(row);
 
     let idProductProcess = data.id_product_process;
@@ -168,15 +170,16 @@ $(document).ready(function () {
   /* Mensaje de exito */
 
   message = (data) => {
-    if (data.success == true) {
+    const { success, error, info, message } = data;
+    if (success) {
       // $('.cardCreateRawProcesss').toggle(800);
       $(".cardAddProcess").hide(800);
       $("#formAddProcess").trigger("reset");
       updateTable();
-      toastr.success(data.message);
+      toastr.success(message);
       //return false
-    } else if (data.error == true) toastr.error(data.message);
-    else if (data.info == true) toastr.info(data.message);
+    } else if (error) toastr.error(message);
+    else if (info) toastr.info(message);
   };
 
   /* Actualizar tabla */

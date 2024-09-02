@@ -1,10 +1,10 @@
 $(document).ready(function () {
-  $('#btnCalcConsolidated').click(function (e) {
+  $("#btnCalcConsolidated").click(function (e) {
     e.preventDefault();
-    week = $('#numWeek').val();
+    week = $("#numWeek").val();
 
-    if (!week || week == '') {
-      toastr.error('Ingrese numero de semana');
+    if (!week || week == "") {
+      toastr.error("Ingrese numero de semana");
       return false;
     }
 
@@ -20,10 +20,11 @@ $(document).ready(function () {
   /* Mensaje de exito */
 
   message = (data) => {
-    if (data.success == true) {
-      toastr.success(data.message);
+    const { success, error, info, message } = data;
+    if (success) {
+      toastr.success(message);
       return false;
-    } else if (data.error == true) toastr.error(data.message);
-    else if (data.info == true) toastr.info(data.message);
+    } else if (error) toastr.error(message);
+    else if (info) toastr.info(message);
   };
 });

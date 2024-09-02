@@ -1,66 +1,70 @@
 $(document).ready(function () {
   /* Ocultar panel crear molde */
 
-  $('.cardCreateInvMold').hide();
+  $(".cardCreateInvMold").hide();
 
   /* Abrir panel crear molde */
 
-  $('#btnNewInvMold').click(function (e) {
+  $("#btnNewInvMold").click(function (e) {
     e.preventDefault();
 
-    $('.cardImportInvMold').hide(800);
-    $('.cardCreateInvMold').toggle(800);
-    $('#btnCreateInvMold').html('Crear');
+    $(".cardImportInvMold").hide(800);
+    $(".cardCreateInvMold").toggle(800);
+    $("#btnCreateInvMold").text("Crear");
 
-    sessionStorage.removeItem('id_mold');
+    sessionStorage.removeItem("id_mold");
 
-    $('.form-control').css('border-color', '');
-    $('#formCreateInvMold').trigger('reset');
+    $(".form-control").css("border-color", "");
+    $("#formCreateInvMold").trigger("reset");
   });
 
   /* Crear nuevo molde */
 
-  $('#btnCreateInvMold').click(function (e) {
+  $("#btnCreateInvMold").click(function (e) {
     e.preventDefault();
-    let idMold = sessionStorage.getItem('id_mold');
 
-    if (idMold == '' || idMold == null) {
-      reference = $('#referenceMold').val();
-      mold = $('#mold').val();
-      assemblyTime = $('#assemblyTime').val();
-      assemblyProduction = $('#assemblyProduction').val();
-      cavity = $('#cavity').val();
-      cavityAvailable = $('#cavityAvailable').val();
+    // Obtener el id
+    const idMold = sessionStorage.getItem("id_mold");
+
+    if (!idMold) {
+      const reference = $("#referenceMold").val().trim();
+      const mold = $("#mold").val().trim();
+      const assemblyTime = parseFloat($("#assemblyTime").val());
+      const assemblyProduction = parseFloat($("#assemblyProduction").val());
+      const cavity = parseFloat($("#cavity").val());
+      const cavityAvailable = parseFloat($("#cavityAvailable").val());
 
       // data = assemblyTime * assemblyProduction * cavity * cavityAvailable;
 
+      // Validación de campos vacíos o inválidos
       if (
-        reference == '' ||
-        reference == 0 ||
-        mold == '' ||
-        mold == 0 ||
-        assemblyTime == '' ||
-        assemblyTime == 0 ||
-        assemblyProduction == '' ||
-        assemblyProduction == 0 ||
-        cavity == '' ||
-        cavity == 0 ||
-        cavityAvailable == '' ||
-        cavityAvailable == 0
+        !reference ||
+        !mold ||
+        isNaN(assemblyTime) ||
+        assemblyTime <= 0 ||
+        isNaN(assemblyProduction) ||
+        assemblyProduction <= 0 ||
+        isNaN(cavity) ||
+        cavity <= 0 ||
+        isNaN(cavityAvailable) ||
+        cavityAvailable <= 0
       ) {
-        toastr.error('Ingrese todos los campos');
+        toastr.error("Ingrese todos los campos");
         return false;
       }
 
+      // Validar que las cavidades disponibles no excedan el total de cavidades
       if (cavityAvailable > cavity) {
-        toastr.error('N° de cavidades disponibles mayor a N° de cavidades');
-        $('#cavityAvailable').css('border-color', 'red');
+        toastr.error(
+          "Número de cavidades disponibles mayor a Número de cavidades"
+        );
+        $("#cavityAvailable").css("border-color", "red");
         return false;
       }
 
-      invMold = $('#formCreateInvMold').serialize();
-
-      $.post('../../api/addMold', invMold, function (data, textStatus, jqXHR) {
+      // Enviar datos
+      invMold = $("#formCreateInvMold").serialize();
+      $.post("/api/addMold", invMold, function (data, textStatus, jqXHR) {
         message(data);
       });
     } else {
@@ -70,25 +74,28 @@ $(document).ready(function () {
 
   /* Actualizar moldes */
 
-  $(document).on('click', '.updateMold', function (e) {
-    $('.cardImportInvMold').hide(800);
-    $('.cardCreateInvMold').show(800);
-    $('#btnCreateInvMold').html('Actualizar');
+  $(document).on("click", ".updateMold", function (e) {
+    $(".cardImportInvMold").hide(800);
+    $(".cardCreateInvMold").show(800);
+    $("#btnCreateInvMold").text("Actualizar");
 
-    let row = $(this).parent().parent()[0];
+    //obtener data
+    let row = $(this).closest("tr")[0];
     let data = tblInvMold.fnGetData(row);
 
-    sessionStorage.setItem('id_mold', data.id_mold);
-    $('#referenceMold').val(data.reference);
-    $('#mold').val(data.mold);
-    $('#assemblyTime').val(data.assembly_time.toLocaleString('es-CO'));
-    $('#assemblyProduction').val(
-      data.assembly_production.toLocaleString('es-CO')
+    //cargar formulario
+    sessionStorage.setItem("id_mold", data.id_mold);
+    $("#referenceMold").val(data.reference);
+    $("#mold").val(data.mold);
+    $("#assemblyTime").val(data.assembly_time.toLocaleString("es-CO"));
+    $("#assemblyProduction").val(
+      data.assembly_production.toLocaleString("es-CO")
     );
-    $('#cavity').val(data.cavity.toLocaleString('es-CO'));
-    $('#cavityAvailable').val(data.cavity_available.toLocaleString('es-CO'));
+    $("#cavity").val(data.cavity.toLocaleString("es-CO"));
+    $("#cavityAvailable").val(data.cavity_available.toLocaleString("es-CO"));
 
-    $('html, body').animate(
+    //animar desplazamiento
+    $("html, body").animate(
       {
         scrollTop: 0,
       },
@@ -97,43 +104,46 @@ $(document).ready(function () {
   });
 
   updateMold = () => {
-    cavity = $('#cavity').val();
-    cavityAvailable = $('#cavityAvailable').val();
+    cavity = $("#cavity").val();
+    cavityAvailable = $("#cavityAvailable").val();
 
     if (cavityAvailable > cavity) {
-      toastr.error('N° de cavidades disponibles mayor a N° de cavidades');
-      $('#cavityAvailable').css('border-color', 'red');
+      toastr.error(
+        "Número de cavidades disponibles mayor a Número de cavidades"
+      );
+      $("#cavityAvailable").css("border-color", "red");
       return false;
     }
 
-    let data = $('#formCreateInvMold').serialize();
-    idMold = sessionStorage.getItem('id_mold');
-    data = data + '&idMold=' + idMold;
+    let data = $("#formCreateInvMold").serialize();
+    idMold = sessionStorage.getItem("id_mold");
+    data = data + "&idMold=" + idMold;
 
-    $.post('../../api/updateMold', data, function (data, textStatus, jqXHR) {
+    $.post("/api/updateMold", data, function (data, textStatus, jqXHR) {
       message(data);
     });
   };
 
   /* Eliminar molde */
   deleteFunction = () => {
-    let row = $(this.activeElement).parent().parent()[0];
+    //obtener data
+    let row = $(this.activeElement).closest("tr")[0];
     let data = tblInvMold.fnGetData(row);
 
     let id_mold = data.id_mold;
 
     bootbox.confirm({
-      title: 'Eliminar',
+      title: "Eliminar",
       message:
-        'Está seguro de eliminar este molde? Esta acción no se puede reversar.',
+        "Está seguro de eliminar este molde? Esta acción no se puede reversar.",
       buttons: {
         confirm: {
-          label: 'Si',
-          className: 'btn-success',
+          label: "Si",
+          className: "btn-success",
         },
         cancel: {
-          label: 'No',
-          className: 'btn-danger',
+          label: "No",
+          className: "btn-danger",
         },
       },
       callback: function (result) {
@@ -152,45 +162,45 @@ $(document).ready(function () {
   /* Activar o Desactivar Molde */
   activeMold = (id_mold) => {
     dataMold = {};
-    dataMold['idMold'] = id_mold;
+    dataMold["idMold"] = id_mold;
 
-    if ($(`#check-${id_mold}`).is(':checked')) {
+    if ($(`#check-${id_mold}`).is(":checked")) {
       bootbox.confirm({
-        title: 'Activación',
-        message: 'Está seguro de activar este molde?',
+        title: "Activación",
+        message: "Está seguro de activar este molde?",
         buttons: {
           confirm: {
-            label: 'Si',
-            className: 'btn-success',
+            label: "Si",
+            className: "btn-success",
           },
           cancel: {
-            label: 'No',
-            className: 'btn-danger',
+            label: "No",
+            className: "btn-danger",
           },
         },
         callback: function (result) {
           if (result) {
             saveMold(dataMold);
           } else {
-            $(`#check-${id_mold}`).prop('checked', false);
+            $(`#check-${id_mold}`).prop("checked", false);
           }
         },
       });
     } else {
       bootbox.prompt({
-        title: 'Desactivación',
-        message: '<p>Ingrese motivo de desactivación:</p>',
-        inputType: 'textarea',
+        title: "Desactivación",
+        message: "<p>Ingrese motivo de desactivación:</p>",
+        inputType: "textarea",
         callback: function (result) {
           if (result) {
-            if (!result || result == '') {
-              toastr.error('Ingrese observación');
+            if (!result || result == "") {
+              toastr.error("Ingrese observación");
               return false;
             }
-            dataMold['observationMold'] = result;
+            dataMold["observationMold"] = result;
             saveMold(dataMold);
           } else {
-            $(`#check-${id_mold}`).prop('checked', true);
+            $(`#check-${id_mold}`).prop("checked", true);
           }
         },
       });
@@ -199,7 +209,7 @@ $(document).ready(function () {
 
   saveMold = (data) => {
     $.post(
-      '../../api/activeOrInactiveMold',
+      "/api/activeOrInactiveMold",
       data,
       function (data, textStatus, jqXHR) {
         message(data);
@@ -210,20 +220,21 @@ $(document).ready(function () {
   /* Mensaje de exito */
 
   message = (data) => {
-    if (data.success == true) {
-      $('.cardCreateInvMold').hide(800);
-      $('#formCreateInvMold').trigger('reset');
+    const { success, error, info, message } = data;
+    if (success) {
+      $(".cardCreateInvMold").hide(800);
+      $("#formCreateInvMold").trigger("reset");
       updateTable();
-      toastr.success(data.message);
+      toastr.success(message);
       return false;
-    } else if (data.error == true) toastr.error(data.message);
-    else if (data.info == true) toastr.info(data.message);
+    } else if (error) toastr.error(message);
+    else if (info) toastr.info(message);
   };
 
   /* Actualizar tabla */
 
   function updateTable() {
-    $('#tblInvMold').DataTable().clear();
-    $('#tblInvMold').DataTable().ajax.reload();
+    $("#tblInvMold").DataTable().clear();
+    $("#tblInvMold").DataTable().ajax.reload();
   }
 });

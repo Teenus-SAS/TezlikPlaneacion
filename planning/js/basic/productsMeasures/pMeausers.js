@@ -2,28 +2,41 @@ $(document).ready(function () {
   $(".selectNavigation").click(function (e) {
     e.preventDefault();
 
-    let option = this.id;
-    $(".cardPMeasure").hide();
-    $(".cardCreatePMeasure").hide();
-    $(".cardImportPMeasure").hide();
-    $(".cardPTypes").hide();
-    $(".cardCreatePType").hide();
+    const option = this.id;
+    const sections = {
+      "link-products": ".cardPMeasure",
+      "link-productsType": ".cardPTypes",
+    };
 
-    switch (option) {
+    // Ocultar todas las secciones
+    $(
+      ".cardPMeasure, .cardCreatePMeasure, .cardImportPMeasure, .cardPTypes, .cardCreatePType"
+    ).hide();
+
+    // Mostrar la sección correspondiente según la opción seleccionada
+    $(sections[option] || "").show();
+
+    /*  switch (option) {
       case "link-products":
         $(".cardPMeasure").show();
         break;
       case "link-productsType":
         $(".cardPTypes").show();
         break;
-    }
+    } */
 
-    let tables = document.getElementsByClassName("dataTable");
+    // Ajustar el tamaño de todas las tablas con clase 'dataTable'
+    $(".dataTable")
+      .css({ width: "100%" })
+      .children("thead")
+      .css({ width: "100%" });
+
+    /*   let tables = document.getElementsByClassName("dataTable");
 
     for (let table of tables) {
       table.style.width = "100%";
       table.firstElementChild.style.width = "100%";
-    }
+    } */
   });
 
   /* Ocultar panel crear producto */
@@ -34,11 +47,10 @@ $(document).ready(function () {
     e.preventDefault();
 
     $(".cardCreatePMeasure").toggle(800);
-    $(".inputsMeasures").show();
-    $(".inputs").show();
+    $(".inputsMeasures, .inputs").show();
     $(".cardImportPMeasure").hide(800);
-    $("#btnCreatePMeasure").html("Crear");
-    $("#lblWindow").html("Ventanilla");
+    $("#btnCreatePMeasure").text("Crear");
+    $("#lblWindow").text("Ventanilla");
 
     sessionStorage.removeItem("id_product_measure");
 
@@ -48,7 +60,7 @@ $(document).ready(function () {
   //Select origin product
   $("#prodOrigin").change(function (e) {
     e.preventDefault();
-    let option = this.value;
+    const option = this.value;
     $(".inputsMeasures").toggle(option === "2", 800);
 
     if ($("#idProductType").val() !== "Seleccionar") {
@@ -65,9 +77,12 @@ $(document).ready(function () {
 
     // Si el origen del producto es "MANUFACTURADO", ajustar la visualización de inputs
     if (optionOrigin === "2") {
-      $(".inputs").toggle(!["CAJA", "SACHET", "LAMINA"].includes(option), 800);
+      $(".inputs").toggle(
+        !["CAJA", "SACHET", "LAMINA", "DOYPACK"].includes(option),
+        800
+      );
       $("#lblWindow").html(
-        ["CAJA", "SACHET", "LAMINA"].includes(option)
+        ["CAJA", "SACHET", "LAMINA", "DOYPACK"].includes(option)
           ? "Und x Tamaño"
           : "Ventanilla"
       );
@@ -89,20 +104,16 @@ $(document).ready(function () {
   /* Actualizar productos */
   $(document).on("click", ".updatePMeasure", function (e) {
     $(".cardImportPMeasure").hide(800);
-    $(".cardCreatePMeasure").show(800);
-    // $(".inputs").show();
-    $(".inputsMeasures").show();
-    $("#btnCreatePMeasure").html("Actualizar");
-    $("#lblWindow").html("Ventanilla");
+    $(".cardCreatePMeasure, .inputsMeasures").show(800);
+    $("#btnCreatePMeasure").text("Actualizar");
+    $("#lblWindow").text("Ventanilla");
 
-    // Obtener el ID del elemento
-    let id = $(this).attr("id");
-
-    // Obtener la parte después del guion '-'
-    let idProductMeasure = id.split("-")[1];
+    // Obtener ID
+    let idProductMeasure = $(this).attr("id").split("-")[1];
 
     sessionStorage.setItem("id_product_measure", idProductMeasure);
 
+    //obtener data
     let row = $(this).parent().parent().parent()[0];
     let data = tblProducts.fnGetData(row);
 
@@ -135,16 +146,17 @@ $(document).ready(function () {
     //Hide inputs according Product
     $("#prodOrigin").change();
 
+    //animacion desplazamiento
     $("html, body").animate({ scrollTop: 0 }, 1000);
   });
 
   /* Revisar datos */
   const checkDataProduct = async (url, idProductMeasure) => {
-    let prodOrigin = parseFloat($("#prodOrigin").val());
-    let productType = $("#idProductType option:selected").text().trim();
-    let idProductType = parseFloat($("#idProductType").val());
-    let ref = $("#referenceProduct").val();
-    let prod = $("#product").val();
+    const prodOrigin = parseFloat($("#prodOrigin").val());
+    const productType = $("#idProductType option:selected").text().trim();
+    const idProductType = parseFloat($("#idProductType").val());
+    const ref = $("#referenceProduct").val().trim();
+    const prod = $("#product").val().trim();
 
     if (idProductType === 1) {
       width = parseFloat($("#width").val());
@@ -158,8 +170,8 @@ $(document).ready(function () {
       totalWidth = parseFloat($("#totalWidth").val());
       window = parseFloat($("#window").val());
     }
-    let inks = parseFloat($("#inks").val());
 
+    let inks = parseFloat($("#inks").val());
     let data = 1 * prodOrigin;
 
     if (flag_products_measure == "1" && idProductType == "1") {
@@ -174,32 +186,31 @@ $(document).ready(function () {
       return false;
     }
 
-    let dataProduct = new FormData(formCreatePMeasure);
+    // Preparar datos
+    const dataProduct = new FormData(formCreatePMeasure);
 
     if (idProductMeasure) {
       dataProduct.append("idProductMeasure", idProductMeasure);
-
-      let idProduct = sessionStorage.getItem("id_product");
       dataProduct.append("idProduct", idProduct);
+      let idProduct = sessionStorage.getItem("id_product");
     }
 
-    if (flag_products_measure == "0") {
-      dataProduct.append("idProductType", 0);
-    }
+    if (flag_products_measure == "0") dataProduct.append("idProductType", 0);
 
+    // Envío de datos
     let resp = await sendDataPOST(url, dataProduct);
-
     messageProducts(resp);
   };
 
   /* Eliminar productos */
   deletePMeasureFunction = () => {
-    let row = $(this.activeElement).parent().parent()[0];
+    //obtener data
+    let row = $(this.activeElement).closest("tr")[0];
     let data = tblProducts.fnGetData(row);
 
     let dataProduct = [];
-    dataProduct['idProductMeasure'] = data.id_product_measure;
-    dataProduct['idProduct'] = data.id_product;
+    dataProduct["idProductMeasure"] = data.id_product_measure;
+    dataProduct["idProduct"] = data.id_product;
 
     bootbox.confirm({
       title: "Eliminar",
@@ -217,11 +228,13 @@ $(document).ready(function () {
       },
       callback: function (result) {
         if (result) {
-          $.post("/api/deleteProductMeasure", dataProduct,
+          $.post(
+            "/api/deleteProductMeasure",
+            dataProduct,
             function (data, textStatus, jqXHR) {
-              messageProducts(data);              
-            }, 
-          ); 
+              messageProducts(data);
+            }
+          );
         }
       },
     });
@@ -230,7 +243,8 @@ $(document).ready(function () {
   /* Productos Compuestos */
 
   $(document).on("click", ".composite", function () {
-    let row = $(this).parent().parent()[0];
+    //obtener data
+    let row = $(this).closest("tr")[0];
     let data = tblProducts.fnGetData(row);
 
     bootbox.confirm({
@@ -267,16 +281,17 @@ $(document).ready(function () {
 
   /* Mensaje de exito */
   messageProducts = (data) => {
-    if (data.success == true) {
+    const { success, error, info, message } = data;
+    if (success) {
       $("#formImportProduct").trigger("reset");
       $(".cardCreatePMeasure").hide(800);
       $(".cardImportPMeasure").hide(800);
       $("#formCreatePMeasure").trigger("reset");
       updateTable();
-      toastr.success(data.message);
+      toastr.success(message);
       return false;
-    } else if (data.error == true) toastr.error(data.message);
-    else if (data.info == true) toastr.info(data.message);
+    } else if (error) toastr.error(message);
+    else if (info) toastr.info(message);
   };
 
   /* Actualizar tabla */

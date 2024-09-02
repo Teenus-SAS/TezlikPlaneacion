@@ -38,7 +38,7 @@ $(document).ready(function () {
     $('.cardCreateClient').show(800); 
     $('#btnCreateClient').html('Actualizar');
 
-    let row = $(this).parent().parent()[0];
+    const row = $(this).closest("tr")[0];
     let data = tblClients.fnGetData(row);
 
     sessionStorage.setItem('id_client', data.id_client);
@@ -96,7 +96,7 @@ $(document).ready(function () {
 
   /* Eliminar cliente */
   deleteFunction = () => {
-    let row = $(this.activeElement).parent().parent()[0];
+    const row = $(this.activeElement).closest("tr")[0];
     let data = tblClients.fnGetData(row);
 
     let id_client = data.id_client;
@@ -168,7 +168,7 @@ $(document).ready(function () {
   });
 
   $(document).on('click', '.changeType', function () {
-    let row = $(this).parent().parent()[0];
+    const row = $(this).closest("tr")[0];
     let data = tblClients.fnGetData(row);
 
     let id_client = data.id_client;
@@ -284,15 +284,15 @@ $(document).ready(function () {
   /* Mensaje de exito */
 
   message = (data) => {
-    if (data.success == true) { 
+    if (success) { 
       $('.cardCreateClient').hide(800);
       $('.cardImportClients').hide(800);
       $('#formImportClients').trigger('reset');
       $('#formCreateClient').trigger('reset');
       loadAllDataClients();
-      toastr.success(data.message);
+      toastr.success(message);
       return false;
-    } else if (data.error == true) toastr.error(data.message);
-    else if (data.info == true) toastr.info(data.message);
+    } else if (error) toastr.error(message);
+    else if (info) toastr.info(message);
   };
 });

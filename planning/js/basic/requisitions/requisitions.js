@@ -131,6 +131,7 @@ $(document).ready(function () {
     $("#btnAddRequisition").text("Actualizar");
     $(".cardSelect").hide();
 
+    //Obtener data
     const row = $(this).closest("tr")[0];
     const data = tblRequisitions.fnGetData(row);
 
@@ -349,10 +350,9 @@ $(document).ready(function () {
   message = (data) => {
     const { success, error, info, message } = data;
     if (success) {
-      $(".cardImportRequisitions").hide(800);
-      $("#formImportRequisitions").trigger("reset");
-      $(".cardAddRequisitions").hide(800);
-      $("#formAddRequisition").trigger("reset");
+      $(".cardImportRequisitions, .cardAddRequisitions").hide(800);
+      $("#formImportRequisitions, #formAddRequisition").trigger("reset");
+
       loadAllData(null, null, null);
       toastr.success(message);
       return false;

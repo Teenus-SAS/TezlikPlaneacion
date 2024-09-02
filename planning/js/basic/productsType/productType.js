@@ -1,4 +1,4 @@
-$(document).ready(function () {  
+$(document).ready(function () {
   /* Ocultar panel para crear Areas */
   $(".cardCreatePType").hide();
 
@@ -6,9 +6,9 @@ $(document).ready(function () {
 
   $("#btnNewPType").click(function (e) {
     e.preventDefault();
-    $('.cardImportPType').hide(800);
+    $(".cardImportPType").hide(800);
     $(".cardCreatePType").toggle(800);
-    $("#btnCreatePType").html("Crear");
+    $("#btnCreatePType").text("Crear");
 
     sessionStorage.removeItem("id_product_type");
 
@@ -19,33 +19,34 @@ $(document).ready(function () {
 
   $("#btnCreatePType").click(function (e) {
     e.preventDefault();
-    let idProductType = sessionStorage.getItem("id_product_type");
-    if (idProductType == "" || idProductType == null) {
-      checkDataPType("/api/addProductsTypes", idProductType);
-    } else {
-      checkDataPType("/api/updateProductsTypes", idProductType);
-    }
+    let idProductType = sessionStorage.getItem("id_product_type") || null;
+
+    const apiUrl = idProductType
+      ? "/api/updateProductsTypes"
+      : "/api/addProductsTypes";
+
+    checkDataArea(apiUrl, idProductType);
   });
 
   /* Actualizar area */
 
   $(document).on("click", ".updateProductType", function (e) {
-    $('.cardImportPType').hide(800);
+    $(".cardImportPType").hide(800);
     $(".cardCreatePType").show(800);
-    $("#btnCreatePType").html("Actualizar");
+    $("#btnCreatePType").text("Actualizar");
 
     // Obtener el ID del elemento
-    let id = $(this).attr('id');
-    // Obtener la parte después del guion '-'
-    let idProductType = id.split('-')[1]; 
+    let idProductType = $(this).attr("id").split("-")[1];
 
     sessionStorage.setItem("id_product_type", idProductType);
 
-    let row = $(this).parent().parent()[0];
+    //obtener data
+    let row = $(this).closest("tr")[0];
     let data = tblProductsType.fnGetData(row);
 
     $("#productType").val(data.product_type);
 
+    //animacion desplazamienot
     $("html, body").animate(
       {
         scrollTop: 0,
@@ -63,19 +64,19 @@ $(document).ready(function () {
       return false;
     }
 
+    //preparar data
     let dataProduct = new FormData(formCreatePType);
+    if (idProductType) dataProduct.append("idProductType", idProductType);
 
-    if (idProductType != "" || idProductType != null)
-      dataProduct.append("idProductType", idProductType);
-
+    //enviar data
     let resp = await sendDataPOST(url, dataProduct);
-
     messagePType(resp);
   };
 
   /* Eliminar areas */
   deletePTFunction = () => {
-    let row = $(this.activeElement).parent().parent()[0];
+    //obtener data
+    let row = $(this.activeElement).closest("tr")[0];
     let data = tblProductsType.fnGetData(row);
 
     let id_product_type = data.id_product_type;
@@ -110,15 +111,16 @@ $(document).ready(function () {
   /* Mensaje de exito */
 
   messagePType = (data) => {
-    if (data.success == true) {
+    const { success, error, info, message } = data;
+    if (success) {
       $(".cardImportPType").hide(800);
       $("#formImportPType").trigger("reset");
       $(".cardCreatePType").hide(800);
       $("#formCreatePType").trigger("reset");
-      toastr.success(data.message);
+      toastr.success(message);
       loadAllDataPType();
       return false;
-    } else if (data.error == true) toastr.error(data.message);
-    else if (data.info == true) toastr.info(data.message);
-  }; 
+    } else if (error) toastr.error(message);
+    else if (info) toastr.info(message);
+  };
 });

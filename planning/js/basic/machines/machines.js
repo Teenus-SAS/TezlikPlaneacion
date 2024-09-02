@@ -144,7 +144,7 @@ $(document).ready(function () {
       $(".cardImportMachines, .cardCreateMachines").hide(800);
       $("#formImportMachines, #formCreateMachine").trigger("reset");
 
-      toastr.success(data.message);
+      toastr.success(message);
       updateTable();
       return false;
     } else if (error) toastr.error(message);

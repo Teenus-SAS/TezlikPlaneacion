@@ -60,7 +60,7 @@ $(document).ready(function () {
 
   /* Cargar notificación */
   message = (data) => {
-    if (data.success == true) {
+    if (success) {
       firstname = sessionStorage.getItem('name');
       lastname = sessionStorage.getItem('lastname');
 
@@ -71,9 +71,9 @@ $(document).ready(function () {
       $('.userName').html(`${firstname} ${lastname}`);
       $('#email').prop('disabled', true);
 
-      toastr.success(data.message);
+      toastr.success(message);
       return false;
-    } else if (data.error == true) toastr.error(data.message);
-    else if (data.info == true) toastr.info(data.message);
+    } else if (error) toastr.error(message);
+    else if (info) toastr.info(message);
   };
 });

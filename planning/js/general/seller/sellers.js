@@ -1,53 +1,53 @@
 $(document).ready(function () {
   /* Ocultar panel crear vendedor */
-  $('.cardCreateSeller').hide();
+  $(".cardCreateSeller").hide();
 
   /* Abrir panel crear vendedor */
 
-  $('#btnNewSeller').click(function (e) {
+  $("#btnNewSeller").click(function (e) {
     e.preventDefault();
 
-    $('.cardImportSeller').hide(800);
-    $('.cardCreateSeller').show(800);
+    $(".cardImportSeller").hide(800);
+    $(".cardCreateSeller").show(800);
 
-    $('#btnCreateSeller').html('Crear');
+    $("#btnCreateSeller").html("Crear");
 
-    sessionStorage.removeItem('id_seller');
+    sessionStorage.removeItem("id_seller");
 
-    $('#formCreateSeller').trigger('reset');
+    $("#formCreateSeller").trigger("reset");
   });
 
   /* Crear nuevo vendedor */
-  $('#btnCreateSeller').click(function (e) {
+  $("#btnCreateSeller").click(function (e) {
     e.preventDefault();
 
-    let idSeller = sessionStorage.getItem('id_seller');
+    let idSeller = sessionStorage.getItem("id_seller");
 
-    if (idSeller == '' || idSeller == null) { 
-      checkDataSellers('/api/addSeller', idSeller);  
+    if (idSeller == "" || idSeller == null) {
+      checkDataSellers("/api/addSeller", idSeller);
     } else {
-      checkDataSellers('/api/updateSeller', idSeller);  
+      checkDataSellers("/api/updateSeller", idSeller);
     }
   });
 
   /* Actualizar vendedores */
-  $(document).on('click', '.updateSeller', function (e) {
-    $('.cardImportSeller').hide(800); 
-    $('#btnCreateSeller').html('Actualizar');
+  $(document).on("click", ".updateSeller", function (e) {
+    $(".cardImportSeller").hide(800);
+    $("#btnCreateSeller").html("Actualizar");
 
-    let row = $(this).parent().parent()[0];
+    const row = $(this).closest("tr")[0];
     let data = tblSellers.fnGetData(row);
 
-    sessionStorage.setItem('id_seller', data.id_seller);
+    sessionStorage.setItem("id_seller", data.id_seller);
 
-    $('#firstname').val(data.firstname);
-    $('#lastname').val(data.lastname);
-    $('#email').val(data.email); 
+    $("#firstname").val(data.firstname);
+    $("#lastname").val(data.lastname);
+    $("#email").val(data.email);
 
-    $('.cardCreateSeller').show(800);
-    $('#btnCreateSeller').html('Actualizar');
+    $(".cardCreateSeller").show(800);
+    $("#btnCreateSeller").html("Actualizar");
 
-    $('html, body').animate(
+    $("html, body").animate(
       {
         scrollTop: 0,
       },
@@ -55,53 +55,49 @@ $(document).ready(function () {
     );
   });
 
-  const checkDataSellers = async(url, idSeller) => {
-    let firstname = $('#firstname').val();
-    let lastname = $('#lastname').val();
-    let email = $('#email').val();
+  const checkDataSellers = async (url, idSeller) => {
+    let firstname = $("#firstname").val();
+    let lastname = $("#lastname").val();
+    let email = $("#email").val();
 
-    if (
-      firstname == '' ||
-      lastname == '' ||
-      email == ''
-    ) {
-      toastr.error('Ingrese todos los campos');
+    if (firstname == "" || lastname == "" || email == "") {
+      toastr.error("Ingrese todos los campos");
       return false;
     }
 
-    let avatarSeller = $('#formFile')[0].files[0];
+    let avatarSeller = $("#formFile")[0].files[0];
 
     let seller = new FormData(formCreateSeller);
-    seller.append('avatar', avatarSeller);
-    
+    seller.append("avatar", avatarSeller);
+
     if (idSeller) {
-      seller.append('idSeller', idSeller); 
+      seller.append("idSeller", idSeller);
     }
 
     let resp = await sendDataPOST(url, seller);
 
     message(resp);
-  }; 
+  };
 
   /* Eliminar vendedor */
   deleteFunction = () => {
-    let row = $(this.activeElement).parent().parent()[0];
+    const row = $(this.activeElement).closest("tr")[0];
     let data = tblSellers.fnGetData(row);
 
     let id_seller = data.id_seller;
 
     bootbox.confirm({
-      title: 'Eliminar',
+      title: "Eliminar",
       message:
-        'Está seguro de eliminar este vendedor? Esta acción no se puede reversar.',
+        "Está seguro de eliminar este vendedor? Esta acción no se puede reversar.",
       buttons: {
         confirm: {
-          label: 'Si',
-          className: 'btn-success',
+          label: "Si",
+          className: "btn-success",
         },
         cancel: {
-          label: 'No',
-          className: 'btn-danger',
+          label: "No",
+          className: "btn-danger",
         },
       },
       callback: function (result) {
@@ -118,23 +114,23 @@ $(document).ready(function () {
   };
 
   /* Camniar vendedor interno */
-  $(document).on('click', '.checkSeller', function () {
+  $(document).on("click", ".checkSeller", function () {
     let id = this.id;
 
     let id_seller = id.slice(6, id.length);
-    if ($(`#${id}`).is(':checked')) {
+    if ($(`#${id}`).is(":checked")) {
       bootbox.confirm({
-        title: 'Vendedor Interno',
+        title: "Vendedor Interno",
         message:
-          'Está seguro de cambiar este vendedor interno? Esta acción no se puede reversar.',
+          "Está seguro de cambiar este vendedor interno? Esta acción no se puede reversar.",
         buttons: {
           confirm: {
-            label: 'Si',
-            className: 'btn-success',
+            label: "Si",
+            className: "btn-success",
           },
           cancel: {
-            label: 'No',
-            className: 'btn-danger',
+            label: "No",
+            className: "btn-danger",
           },
         },
         callback: function (result) {
@@ -146,28 +142,28 @@ $(document).ready(function () {
               }
             );
           } else {
-            $(`#${id}`).prop('checked', false);
+            $(`#${id}`).prop("checked", false);
           }
         },
       });
     } else {
-      toastr.error('Debe haber por lo menos un vendedor interno');
+      toastr.error("Debe haber por lo menos un vendedor interno");
       return false;
     }
   });
-  
+
   /* Mensaje de exito */
 
   message = (data) => {
-    if (data.success == true) { 
-      $('.cardCreateSeller').hide(800);
-      $('.cardImportSellers').hide(800);
-      $('#formImportSellers').trigger('reset');
-      $('#formCreateSeller').trigger('reset');
+    const { success, error, info, message } = data;
+    if (success) {
+      $(".cardCreateSeller, .cardImportSellers").hide(800);
+      $("#formImportSellers, #formCreateSeller").trigger("reset");
+
       loadAllDataSellers();
-      toastr.success(data.message);
+      toastr.success(message);
       return false;
-    } else if (data.error == true) toastr.error(data.message);
-    else if (data.info == true) toastr.info(data.message);
+    } else if (error) toastr.error(message);
+    else if (info) toastr.info(message);
   };
 });

@@ -1,90 +1,94 @@
 $(document).ready(function () {
-    // loadClients(2);
-    /* Ocultar panel crear stock */
+  // loadClients(2);
+  /* Ocultar panel crear stock */
 
-    $('.cardCreatePStock').hide();
+  $(".cardCreatePStock").hide();
 
-    /* Abrir panel crear stock */
+  /* Abrir panel crear stock */
 
-    $('#btnNewPStock').click(function (e) {
-        e.preventDefault();
+  $("#btnNewPStock").click(function (e) {
+    e.preventDefault();
 
-        $('.cardImportPStock').hide(800);
-        $('.cardCreatePStock').toggle(800);
-        $('#formCreatePStock').trigger('reset');
-        $('#btnCreatePStock').html('Crear');
+    $(".cardImportPStock").hide(800);
+    $(".cardCreatePStock").toggle(800);
+    $("#formCreatePStock").trigger("reset");
+    $("#btnCreatePStock").text("Crear");
 
-        sessionStorage.removeItem('idStock');
-    });
+    sessionStorage.removeItem("idStock");
+  });
 
-    /* Crear nuevo proceso */
+  /* Crear nuevo proceso */
 
-    $('#btnCreatePStock').click(function (e) {
-        e.preventDefault();
+  $("#btnCreatePStock").click(function (e) {
+    e.preventDefault();
 
-        let idStock = sessionStorage.getItem('idStock');
-        if (!idStock)
-            checkDataPStock('/api/addPStock', idStock);
-        else
-            checkDataPStock('/api/updatePStock', idStock);
-    });
+    const idStock = sessionStorage.getItem("idStock") || null;
+    const apiUrl = idStock ? "/api/updatePStock" : "/api/addPStock";
 
-    /* Actualizar procesos */
+    checkDataArea(apiUrl, idStock);
+  });
 
-    $(document).on('click', '.updatePStock', function (e) {
-        $('.cardImportPStock').hide(800);
-        $('.cardCreatePStock').show(800);
-        $('#btnCreatePStock').html('Actualizar');
+  /* Actualizar procesos */
 
-        let row = $(this).parent().parent()[0];
-        let data = tblPStock.fnGetData(row);
+  $(document).on("click", ".updatePStock", function (e) {
+    $(".cardImportPStock").hide(800);
+    $(".cardCreatePStock").show(800);
+    $("#btnCreatePStock").text("Actualizar");
 
-        sessionStorage.setItem('idStock', data.id_stock_product);
-        $(`#refProduct option[value=${data.id_product}]`).prop('selected', true);
-        $(`#selectNameProduct option[value=${data.id_product}]`).prop('selected', true);
-        $('#pMin').val(data.min_term);
-        $('#pMax').val(data.max_term);
+    const row = $(this).closest("tr")[0];
+    const data = tblPStock.fnGetData(row);
 
-        $('html, body').animate(
-            {
-                scrollTop: 0,
-            },
-            1000
-        );
-    });
+    sessionStorage.setItem("idStock", data.id_stock_product);
+    $(`#refProduct option[value=${data.id_product}]`).prop("selected", true);
+    $(`#selectNameProduct option[value=${data.id_product}]`).prop(
+      "selected",
+      true
+    );
+    $("#pMin").val(data.min_term);
+    $("#pMax").val(data.max_term);
 
-    const checkDataPStock = async (url, idStock) => {
-        let id_product = parseFloat($('#refProduct').val()); 
-        let min = parseFloat($('#pMin').val());
-        let max = parseFloat($('#pMax').val());
+    //animacion desplazamiento
+    $("html, body").animate(
+      {
+        scrollTop: 0,
+      },
+      1000
+    );
+  });
 
-        let data = id_product * max * min;
+  const checkDataPStock = async (url, idStock) => {
+    let id_product = parseFloat($("#refProduct").val());
+    let min = parseFloat($("#pMin").val());
+    let max = parseFloat($("#pMax").val());
 
-        if (isNaN(data) || data <= 0) {
-            toastr.error('Ingrese todos los campos');
-            return false;
-        }
-        
-        if (min > max) {
-            toastr.error('Tiempo minimo de producción mayor a el tiempo maximo');
-            return false;            
-        }
+    let data = id_product * max * min;
 
-        let dataStock = new FormData(formCreatePStock);
-        dataStock.append('idProduct', id_product);
-
-        if (idStock != '' || idStock != null)
-            dataStock.append('idStock', idStock);
-
-        let resp = await sendDataPOST(url, dataStock);
-
-        messagePS(resp);
+    if (!data) {
+      toastr.error("Ingrese todos los campos");
+      return false;
     }
 
-    /* Eliminar proceso 
+    if (min > max) {
+      toastr.error(
+        "El tiempo mínimo de producción debe ser menor al tiempo máximo"
+      );
+      return false;
+    }
+
+    let dataStock = new FormData(formCreatePStock);
+    dataStock.append("idProduct", id_product);
+
+    if (idStock) dataStock.append("idStock", idStock);
+
+    let resp = await sendDataPOST(url, dataStock);
+
+    messagePS(resp);
+  };
+
+  /* Eliminar proceso 
 
     deleteFunction = () => {
-        let row = $(this.activeElement).parent().parent()[0];
+        const row = $(this.activeElement).closest("tr")[0];
         let data = tblPStock.fnGetData(row);
 
         // // let id_Stock = data.id_Stock;
@@ -116,24 +120,25 @@ $(document).ready(function () {
         });
     }; */
 
-    /* Mensaje de exito */
+  /* Mensaje de exito */
 
-    messagePS = (data) => {
-        if (data.success == true) {
-            $('.cardImportPStock').hide(800);
-            $('.cardCreatePStock').hide(800);
-            $('#formCreatePStock').trigger('reset');
-            updateTable();
-            toastr.success(data.message);
-            return false;
-        } else if (data.error == true) toastr.error(data.message);
-        else if (data.info == true) toastr.info(data.message);
-    };
+  messagePS = (data) => {
+    const { success, error, info, message } = data;
+    if (success) {
+      $(".cardImportPStock").hide(800);
+      $(".cardCreatePStock").hide(800);
+      $("#formCreatePStock").trigger("reset");
+      updateTable();
+      toastr.success(message);
+      return false;
+    } else if (error) toastr.error(message);
+    else if (info) toastr.info(message);
+  };
 
-    /* Actualizar tabla */
+  /* Actualizar tabla */
 
-    function updateTable() {
-        $('#tblPStock').DataTable().clear();
-        $('#tblPStock').DataTable().ajax.reload();
-    }
+  function updateTable() {
+    $("#tblPStock").DataTable().clear();
+    $("#tblPStock").DataTable().ajax.reload();
+  }
 });

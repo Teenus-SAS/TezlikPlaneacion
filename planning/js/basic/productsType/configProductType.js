@@ -2,7 +2,7 @@ $(document).ready(function () {
   var loadTblProductType;
 
   loadAllDataPType = async () => {
-    let data = await searchData("/api/productsType");
+    const data = await searchData("/api/productsType");
 
     loadSelectProductType(data);
 
@@ -10,9 +10,12 @@ $(document).ready(function () {
   };
 
   const loadSelectProductType = (data) => {
-    let $select = $(`#idProductType`);
+    const $selectProductType = $(`#idProductType`);
+
     // Vaciar el select y agregar la opción por defecto
-    $select.empty().append(`<option disabled selected>Seleccionar</option>`);
+    $selectProductType
+      .empty()
+      .append(`<option disabled selected>Seleccionar</option>`);
 
     // Usar map para optimizar el ciclo de iteración
     const options = data.map(
@@ -21,7 +24,7 @@ $(document).ready(function () {
     );
 
     // Insertar todas las opciones de una vez para mejorar el rendimiento
-    $select.append(options.join(""));
+    $selectProductType.append(options.join(""));
   };
 
   loadAllDataPType();

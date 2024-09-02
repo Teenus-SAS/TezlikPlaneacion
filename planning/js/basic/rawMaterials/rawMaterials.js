@@ -1,57 +1,55 @@
 $(document).ready(function () {
   /* Ocultar panel para crear materiales */
 
-  $('.cardRawMaterials').hide();
+  $(".cardRawMaterials").hide();
 
   /* Abrir panel para crear materiales */
-  $('#btnNewMaterial').click(function (e) {
+  $("#btnNewMaterial").click(function (e) {
     e.preventDefault();
-    $('.cardImportMaterials').hide(800);
-    $('.cardRawMaterials').toggle(800);
-    $('#btnCreateMaterial').html('Crear');
-    $('#units').empty();
+    $(".cardImportMaterials").hide(800);
+    $(".cardRawMaterials").toggle(800);
+    $("#btnCreateMaterial").text("Crear");
+    $("#units").empty();
 
-    sessionStorage.removeItem('id_material');
+    sessionStorage.removeItem("id_material");
 
-    $('#formCreateMaterial').trigger('reset');
+    $("#formCreateMaterial").trigger("reset");
   });
 
   /* Crear producto */
-  $('#btnCreateMaterial').click(function (e) {
+  $("#btnCreateMaterial").click(function (e) {
     e.preventDefault();
-    let idMaterial = sessionStorage.getItem('id_material');
-
-    if (idMaterial == '' || idMaterial == null) {
-      checkDataMaterial('/api/addMaterials', idMaterial);
-    } else {
-      checkDataMaterial('/api/updateMaterials', idMaterial);
-    }
+    let idMaterial = sessionStorage.getItem("id_material") || null;
+    const apiUrl = idMaterial ? "/api/updateMaterials" : "/api/addMaterials";
+    checkDataArea(apiUrl, idMaterial);
   });
 
   /* Actualizar productos */
 
-  $(document).on('click', '.updateRawMaterials', function (e) {
-    $('.cardImportMaterials').hide(800);
-    $('#units').empty();
-    $('.cardRawMaterials').show(800);
-    $('#btnCreateMaterial').html('Actualizar');
+  $(document).on("click", ".updateRawMaterials", function (e) {
+    $(".cardImportMaterials").hide(800);
+    $("#units").empty();
+    $(".cardRawMaterials").show(800);
+    $("#btnCreateMaterial").text("Actualizar");
 
     // Obtener el ID del elemento
-    let id = $(this).attr('id');
-    // Obtener la parte después del guion '-'
-    let idMaterial = id.split('-')[1]; 
+    let idMaterial = $(this).attr("id").split("-")[1];
 
-    sessionStorage.setItem('id_material', idMaterial);
+    sessionStorage.setItem("id_material", idMaterial);
 
-    let row = $(this).parent().parent()[0];
+    //obtener data
+    const row = $(this).closest("tr")[0];
     let data = tblRawMaterials.fnGetData(row);
 
-    $('#refRawMaterial').val(data.reference);
-    $('#nameRawMaterial').val(data.material);
-    $(`#materialType option[value=${data.id_material_type}]`).prop('selected', true);
-    $(`#magnitudes option[value=${data.id_magnitude}]`).prop('selected', true);
+    $("#refRawMaterial").val(data.reference);
+    $("#nameRawMaterial").val(data.material);
+    $(`#materialType option[value=${data.id_material_type}]`).prop(
+      "selected",
+      true
+    );
+    $(`#magnitudes option[value=${data.id_magnitude}]`).prop("selected", true);
     loadUnitsByMagnitude(data.id_magnitude, 1);
-    $(`#units option[value=${data.id_unit}]`).prop('selected', true);
+    $(`#units option[value=${data.id_unit}]`).prop("selected", true);
 
     quantity = data.quantity;
 
@@ -61,10 +59,11 @@ $(document).ready(function () {
     //     minimumFractionDigits: 2,
     //     maximumFractionDigits: 2,
     //   });
-    $('#mQuantity').val(quantity);
-    $('#grammage').val(data.grammage);
+    $("#mQuantity").val(quantity);
+    $("#grammage").val(data.grammage);
 
-    $('html, body').animate(
+    //animacion desplazamiento
+    $("html, body").animate(
       {
         scrollTop: 0,
       },
@@ -74,15 +73,15 @@ $(document).ready(function () {
 
   /* Revision data materia prima */
   const checkDataMaterial = async (url, idMaterial) => {
-    let ref = $('#refRawMaterial').val();
-    let material = $('#nameRawMaterial').val();
-    let materialType = parseFloat($('#materialType').val());
-    let unity = $('#unit').val();
-    let quantity = parseFloat($('#mQuantity').val());
-    let grammage = parseFloat($('#grammage').val());
+    let ref = $("#refRawMaterial").val();
+    let material = $("#nameRawMaterial").val();
+    let materialType = parseFloat($("#materialType").val());
+    let unity = $("#unit").val();
+    let quantity = parseFloat($("#mQuantity").val());
+    let grammage = parseFloat($("#grammage").val());
 
-    if (ref == '' || material == '' || unity == '') {
-      toastr.error('Ingrese todos los campos');
+    if (ref == "" || material == "" || unity == "") {
+      toastr.error("Ingrese todos los campos");
       return false;
     }
 
@@ -91,16 +90,18 @@ $(document).ready(function () {
     quantity = 1 * quantity;
 
     if (quantity <= 0 || isNaN(quantity)) {
-      toastr.error('La cantidad debe ser mayor a cero (0)');
+      toastr.error("La cantidad debe ser mayor a cero (0)");
       return false;
     }
-    
-    if (flag_products_measure == '1') {
+
+    if (flag_products_measure == "1") {
       if (
-        isNaN(grammage) || grammage <= 0 ||
-        isNaN(materialType) || materialType <= 0
+        isNaN(grammage) ||
+        grammage <= 0 ||
+        isNaN(materialType) ||
+        materialType <= 0
       ) {
-        toastr.error('Ingrese todos los campos');
+        toastr.error("Ingrese todos los campos");
         return false;
       }
     } else {
@@ -108,10 +109,10 @@ $(document).ready(function () {
     }
 
     let dataMaterial = new FormData(formCreateMaterial);
-    dataMaterial.append('idMaterialType', materialType);
+    dataMaterial.append("idMaterialType", materialType);
 
-    if (idMaterial != '' || idMaterial != null)
-      dataMaterial.append('idMaterial', idMaterial);
+    if (idMaterial != "" || idMaterial != null)
+      dataMaterial.append("idMaterial", idMaterial);
 
     let resp = await sendDataPOST(url, dataMaterial);
 
@@ -121,23 +122,24 @@ $(document).ready(function () {
   /* Eliminar productos */
 
   deleteMaterialsFunction = () => {
-    let row = $(this.activeElement).parent().parent()[0];
+    //obtener data
+    const row = $(this.activeElement).closest("tr")[0];
     let data = tblRawMaterials.fnGetData(row);
 
     let idMaterial = data.id_material;
 
     bootbox.confirm({
-      title: 'Eliminar',
+      title: "Eliminar",
       message:
-        'Está seguro de eliminar esta materia prima? Esta acción no se puede reversar.',
+        "Está seguro de eliminar esta materia prima? Esta acción no se puede reversar.",
       buttons: {
         confirm: {
-          label: 'Si',
-          className: 'btn-success',
+          label: "Si",
+          className: "btn-success",
         },
         cancel: {
-          label: 'No',
-          className: 'btn-danger',
+          label: "No",
+          className: "btn-danger",
         },
       },
       callback: function (result) {
@@ -156,15 +158,13 @@ $(document).ready(function () {
   /* Mensaje de exito */
 
   messageMaterials = (data) => {
-    if (data.success == true) {
-      $('.cardImportMaterials').hide(800);
-      $('#formImportMaterials').trigger('reset');
-      $('.cardRawMaterials').hide(800);
-      $('#formCreateMaterial').trigger('reset');
-      toastr.success(data.message);
+    if (success) {
+      $(".cardImportMaterials, .cardRawMaterials").hide(800);
+      $("#formImportMaterials, #formCreateMaterial").trigger("reset");
+      toastr.success(message);
       loadAllData();
       return false;
-    } else if (data.error == true) toastr.error(data.message);
-    else if (data.info == true) toastr.info(data.message);
-  }; 
+    } else if (error) toastr.error(message);
+    else if (info) toastr.info(message);
+  };
 });

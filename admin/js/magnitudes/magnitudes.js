@@ -45,7 +45,7 @@ $(document).ready(function () {
 
     sessionStorage.setItem('idMagnitude', idMagnitude);
 
-    let row = $(this).parent().parent()[0];
+    const row = $(this).closest("tr")[0];
     let data = tblMagnitudes.fnGetData(row);
 
     $('#magnitude').val(data.magnitude);
@@ -82,7 +82,7 @@ $(document).ready(function () {
   /* Eliminar Magnitud */
 
   deleteFunction = () => {
-    let row = $(this.activeElement).parent().parent()[0];
+    const row = $(this.activeElement).closest("tr")[0];
     let data = tblMagnitudes.fnGetData(row);
 
     let idMagnitude = data.id_magnitude;
@@ -116,14 +116,14 @@ $(document).ready(function () {
   };
 
   message = (data) => {
-    if (data.success == true) {
+    if (success) {
       $('.cardCreateMagnitude').hide(800);
       $('#formCreateMagnitude').trigger('reset');
       updateTable();
-      toastr.success(data.message);
+      toastr.success(message);
       return false;
-    } else if (data.error == true) toastr.error(data.message);
-    else if (data.info == true) toastr.info(data.message);
+    } else if (error) toastr.error(message);
+    else if (info) toastr.info(message);
   };
 
   function updateTable() {

@@ -611,12 +611,12 @@ $(document).ready(function () {
         sessionStorage.setItem('dataProgramming', JSON.stringify(allTblData));
 
         hideCardAndResetForm();
-        toastr.success(data.message);
+        toastr.success(message);
         await loadAllDataProgramming();
       } else if (data.error) {
-        toastr.error(data.message);
+        toastr.error(message);
       } else if (data.info) {
-        toastr.info(data.message);
+        toastr.info(message);
       }
     } catch (error) {
       console.error("Error in message function:", error);

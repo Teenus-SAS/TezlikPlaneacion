@@ -43,7 +43,7 @@ $(document).ready(function () {
     $('.cardCreateNotification').show(800);
     $('#btnCreateNotification').html('Actualizar');
 
-    let row = $(this).parent().parent()[0];
+    const row = $(this).closest("tr")[0];
     let data = tblNotifications.fnGetData(row);
 
     // Obtener el ID del elemento
@@ -82,7 +82,7 @@ $(document).ready(function () {
 
   /* Eliminar notificacion */
   deleteFunction = () => {
-    let row = $(this.activeElement).parent().parent()[0];
+    const row = $(this.activeElement).closest("tr")[0];
 
     let data = tblNotifications.fnGetData(row);
 
@@ -120,11 +120,11 @@ $(document).ready(function () {
     if (data.success) {
       $('.cardCreateNotification').hide(800);
       $('#formCreateNotification').trigger('reset');
-      toastr.success(data.message);
+      toastr.success(message);
       updateTable();
       return false;
-    } else if (data.error == true) toastr.error(data.message);
-    else if (data.info == true) toastr.info(data.message);
+    } else if (error) toastr.error(message);
+    else if (info) toastr.info(message);
   };
 
   /* Actualizar tabla */

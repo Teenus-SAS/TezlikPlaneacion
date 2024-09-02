@@ -1,131 +1,127 @@
 $(document).ready(function () {
-    loadClients(2);
+  loadClients(2);
 
-    $('.selectNavigation').click(function (e) {
-        e.preventDefault();
+  $(".selectNavigation").click(function (e) {
+    e.preventDefault();
 
-        $('.cardGeneralSN').hide();
+    $(".cardGeneralSN").hide();
 
-        if (this.id == 'nProducts') {
-            $('.cardProducts').show();
-            $('.cardMaterials').hide();
-        } else if (this.id == 'nMaterials') {
-            $('.cardMaterials').show();
-            $('.cardProducts').hide();
-        }
-
-        let tables = document.getElementsByClassName(
-            'dataTable'
-        );
-
-        for (let i = 0; i < tables.length; i++) {
-            let attr = tables[i];
-            attr.style.width = '100%';
-            attr = tables[i].firstElementChild;
-            attr.style.width = '100%';
-        }
-    });
-    
-    /* Ocultar panel crear stock */
-
-    $('.cardCreateRMStock').hide();
-
-    /* Abrir panel crear stock */
-
-    $('#btnNewRMStock').click(function (e) {
-        e.preventDefault();
-
-        $('.cardImportRMStock').hide(800);
-        $('.cardCreateRMStock').toggle(800);
-        $('#formCreateRMStock').trigger('reset');
-        $('#btnCreateRMStock').html('Crear');
-        $('.cardSelect').show();
-        $('.cardDescription').hide();
-        // $('#client').empty();
-        
-        sessionStorage.removeItem('idStock');
-    });
-
-    /* Crear nuevo proceso */
-
-    $('#btnCreateRMStock').click(function (e) {
-        e.preventDefault();
-
-        let idStock = sessionStorage.getItem('idStock');
-        if (!idStock)
-            checkDataRMStock('/api/addRMStock', idStock);
-        else
-            checkDataRMStock('/api/updateRMStock', idStock);
-    });
-
-    /* Actualizar procesos */
-
-    $(document).on('click', '.updateRMStock', function (e) {
-        $('.cardImportRMStock').hide(800);
-        $('.cardSelect').hide();
-        $('.cardCreateRMStock').show(800);
-        $('#btnCreateRMStock').html('Actualizar');
-        $('.cardDescription').show();
-
-        let row = $(this).parent().parent()[0];
-        let data = tblRMStock.fnGetData(row);
-
-        sessionStorage.setItem('idStock', data.id_stock_material);
-        $(`#refMaterial option[value=${data.id_material}]`).prop('selected', true);
-        $(`#material option[value=${data.id_material}]`).prop('selected', true);
-        $('#referenceMName').val(data.reference);
-        $('#materialName').val(data.material);
-
-        $('#providerName').val(data.client);
-
-        $(`#client option[value=${data.id_provider}]`).prop('selected', true);
-        $('#rMMin').val(data.min_term);
-        $('#rMMax').val(data.max_term);
-        $('#rMQuantity').val(data.min_quantity);
-        $('#abbreviation').val(data.abbreviation);
-
-        $('html, body').animate(
-            {
-                scrollTop: 0,
-            },
-            1000
-        );
-    });
-
-    const checkDataRMStock = async (url, idStock) => {
-        let material = parseFloat($('#material').val());
-        let provider = parseFloat($('#client').val());
-        let min = parseFloat($('#rMMin').val());
-        let max = parseFloat($('#rMMax').val());
-        let quantity = parseFloat($('#rMQuantity').val());
-         
-        let data = material * provider * min * max * quantity;
-
-        if (isNaN(data) || data <= 0) {
-            toastr.error('Ingrese todos los campos');
-            return false;
-        }
-
-        if (min > max) {
-            toastr.error('Tiempo minimo de producción mayor a el tiempo maximo');
-            return false;            
-        }
-
-        let dataStock = new FormData(formCreateRMStock);
-        dataStock.append('idMaterial', material);
-
-        if (idStock != '' || idStock != null)
-            dataStock.append('idStock', idStock);
-
-        let resp = await sendDataPOST(url, dataStock);
-
-        messageRMS(resp);
+    if (this.id == "nProducts") {
+      $(".cardProducts").show();
+      $(".cardMaterials").hide();
+    } else if (this.id == "nMaterials") {
+      $(".cardMaterials").show();
+      $(".cardProducts").hide();
     }
 
-    /* Eliminar proceso 
+    let tables = document.getElementsByClassName("dataTable");
+
+    for (let i = 0; i < tables.length; i++) {
+      let attr = tables[i];
+      attr.style.width = "100%";
+      attr = tables[i].firstElementChild;
+      attr.style.width = "100%";
+    }
+  });
+
+  /* Ocultar panel crear stock */
+
+  $(".cardCreateRMStock").hide();
+
+  /* Abrir panel crear stock */
+
+  $("#btnNewRMStock").click(function (e) {
+    e.preventDefault();
+
+    $(".cardImportRMStock, .cardDescription").hide(800);
+    $(".cardCreateRMStock").toggle(800);
+    $("#formCreateRMStock").trigger("reset");
+    $("#btnCreateRMStock").text("Crear");
+    $(".cardSelect").show();
+    // $('#client').empty();
+
+    sessionStorage.removeItem("idStock");
+  });
+
+  /* Crear nuevo proceso */
+
+  $("#btnCreateRMStock").click(function (e) {
+    e.preventDefault();
+    const idStock = sessionStorage.getItem("idStock") || null;
+    const apiUrl = idStock ? "/api/updateRMStock" : "/api/addRMStock";
+    checkDataArea(apiUrl, idStock);
+  });
+
+  /* Actualizar procesos */
+
+  $(document).on("click", ".updateRMStock", function (e) {
+    $(".cardImportRMStock, .cardSelect").hide(800);
+    $(".cardCreateRMStock, .cardDescription").show(800);
+    $("#btnCreateRMStock").text("Actualizar");
+
+    //obtener data
+    const row = $(this).closest("tr")[0];
+    const data = tblRMStock.fnGetData(row);
+
+    sessionStorage.setItem("idStock", data.id_stock_material);
+
+    //cargar formulario
+    $(`#refMaterial option[value=${data.id_material}]`).prop("selected", true);
+    $(`#material option[value=${data.id_material}]`).prop("selected", true);
+    $("#referenceMName").val(data.reference);
+    $("#materialName").val(data.material);
+
+    $("#providerName").val(data.client);
+
+    $(`#client option[value=${data.id_provider}]`).prop("selected", true);
+    $("#rMMin").val(data.min_term);
+    $("#rMMax").val(data.max_term);
+    $("#rMQuantity").val(data.min_quantity);
+    $("#abbreviation").val(data.abbreviation);
+
+    //animacion desplazamiento
+    $("html, body").animate(
+      {
+        scrollTop: 0,
+      },
+      1000
+    );
+  });
+
+  const checkDataRMStock = async (url, idStock) => {
+    const material = parseFloat($("#material").val());
+    const provider = parseFloat($("#client").val());
+    const min = parseFloat($("#rMMin").val());
+    const max = parseFloat($("#rMMax").val());
+    const quantity = parseFloat($("#rMQuantity").val());
+
+    let data = material * provider * min * max * quantity;
+
+    if (!data) {
+      toastr.error("Ingrese todos los campos");
+      return false;
+    }
+
+    if (min > max) {
+      toastr.error(
+        "El tiempo mínimo de producción debe ser menor al tiempo máximo"
+      );
+      return false;
+    }
+
+    const dataStock = new FormData(formCreateRMStock);
+    dataStock.append("idMaterial", material);
+
+    if (idStock) dataStock.append("idStock", idStock);
+
+    const resp = await sendDataPOST(url, dataStock);
+    messageRMS(resp);
+  };
+
+  /* Eliminar proceso 
 
     deleteFunction = () => {
-        let row = $(this.activeElement).parent().parent()[0];
+        const row = $(this.activeElement).closest("tr")[0];
         let data = tblRMStock.fnGetData(row);
 
         // // let id_Stock = data.id_Stock;
@@ -157,24 +153,25 @@ $(document).ready(function () {
         });
     }; */
 
-    /* Mensaje de exito */
+  /* Mensaje de exito */
 
-    messageRMS = (data) => {
-        if (data.success == true) {
-            $('.cardImportRMStock').hide(800);
-            $('.cardCreateRMStock').hide(800);
-            $('#formCreateRMStock').trigger('reset');
-            updateTable();
-            toastr.success(data.message);
-            return false;
-        } else if (data.error == true) toastr.error(data.message);
-        else if (data.info == true) toastr.info(data.message);
-    };
+  messageRMS = (data) => {
+    const { success, error, info, message } = data;
+    if (success) {
+      $(".cardImportRMStock").hide(800);
+      $(".cardCreateRMStock").hide(800);
+      $("#formCreateRMStock").trigger("reset");
+      updateTable();
+      toastr.success(message);
+      return false;
+    } else if (error) toastr.error(message);
+    else if (info) toastr.info(message);
+  };
 
-    /* Actualizar tabla */
+  /* Actualizar tabla */
 
-    function updateTable() {
-        $('#tblRMStock').DataTable().clear();
-        $('#tblRMStock').DataTable().ajax.reload();
-    }
+  function updateTable() {
+    $("#tblRMStock").DataTable().clear();
+    $("#tblRMStock").DataTable().ajax.reload();
+  }
 });

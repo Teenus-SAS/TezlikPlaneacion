@@ -2,10 +2,12 @@ $(document).ready(function () {
   $.ajax({
     url: "/api/materialsType",
     success: function (data) {
-      const $select = $(`#materialType`);
+      const $selectMaterialType = $(`#materialType`);
 
       // Vaciar el select y agregar la opción por defecto
-      $select.empty().append(`<option disabled selected>Seleccionar</option>`);
+      $selectMaterialType
+        .empty()
+        .append(`<option disabled selected>Seleccionar</option>`);
 
       // Usar map para optimizar el ciclo de iteración
       const options = data.map(
@@ -14,7 +16,7 @@ $(document).ready(function () {
       );
 
       // Insertar todas las opciones de una vez para mejorar el rendimiento
-      $select.append(options.join(""));
+      $selectMaterialType.append(options.join(""));
     },
   });
 });
