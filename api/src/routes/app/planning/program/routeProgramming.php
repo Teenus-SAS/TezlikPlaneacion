@@ -1,5 +1,6 @@
 <?php
 
+use TezlikPlaneacion\Dao\CompositeProductsDao;
 use TezlikPlaneacion\dao\OrdersDao;
 use TezlikPlaneacion\dao\ProgrammingDao;
 use TezlikPlaneacion\dao\DatesMachinesDao;
@@ -27,6 +28,7 @@ $programmingRoutesDao = new ProgrammingRoutesDao();
 $generalProgrammingRoutesDao = new GeneralProgrammingRoutesDao();
 $generalMaterialsDao = new GeneralMaterialsDao();
 $productsMaterialsDao = new ProductsMaterialsDao();
+$compositeProductsDao = new CompositeProductsDao();
 $lastDataDao = new LastDataDao();
 $machinesDao = new MachinesDao();
 $ordersDao = new OrdersDao();
@@ -204,6 +206,7 @@ $app->post('/saveProgramming', function (Request $request, Response $response, $
     $generalOrdersDao,
     $generalPlanCiclesMachinesDao,
     $productsMaterialsDao,
+    $compositeProductsDao,
     $generalMaterialsDao,
     $ordersDao,
     $lastDataDao,
@@ -261,12 +264,15 @@ $app->post('/saveProgramming', function (Request $request, Response $response, $
 
         if ($result != null) break;
         $productsMaterials = $productsMaterialsDao->findAllProductsMaterials($programmings[$i]['id_product'], $id_company);
+        $compositeProducts = $compositeProductsDao->findAllCompositeProductsByIdProduct($programmings[$i]['id_product'], $id_company);
+        $productsFTM = array_merge($productsMaterials, $compositeProducts);
+
         $planCicles = $generalPlanCiclesMachinesDao->findAllPlanCiclesMachineByProduct($programmings[$i]['id_product'], $id_company);
 
-        if (sizeof($productsMaterials) == 0 || sizeof($planCicles) == 0) {
+        if (sizeof($productsFTM) == 0 || sizeof($planCicles) == 0) {
             $generalOrdersDao->changeStatus($programmings[$i]['id_order'], 5);
         } else {
-            foreach ($productsMaterials as $k) {
+            foreach ($productsFTM as $k) {
                 if (isset($result['info'])) break;
 
                 $j = $generalMaterialsDao->findReservedMaterial($k['id_material']);
@@ -285,12 +291,15 @@ $app->post('/saveProgramming', function (Request $request, Response $response, $
             if ($arr['status'] != 'EN PRODUCCION' && $arr['status'] != 'ENTREGADO' && $arr['status'] != 'PROGRAMADO' && $arr['id_product'] == $programmings[$i]['id_product']) {
                 // Ficha tecnica
                 $productsMaterials = $productsMaterialsDao->findAllProductsMaterials($arr['id_product'], $id_company);
+                $compositeProducts = $compositeProductsDao->findAllCompositeProductsByIdProduct($arr['id_product'], $id_company);
+                $productsFTM = array_merge($productsMaterials, $compositeProducts);
+
                 $planCicles = $generalPlanCiclesMachinesDao->findAllPlanCiclesMachineByProduct($arr['id_product'], $id_company);
 
-                if (sizeof($productsMaterials) == 0 || sizeof($planCicles) == 0) {
+                if (sizeof($productsFTM) == 0 || sizeof($planCicles) == 0) {
                     $generalOrdersDao->changeStatus($arr['id_order'], 5);
                 } else {
-                    foreach ($productsMaterials as $k) {
+                    foreach ($productsFTM as $k) {
                         if (($k['quantity_material'] - $k['reserved']) <= 0) {
                             $result = $generalOrdersDao->changeStatus($arr['id_order'], 6);
                             break;
@@ -430,6 +439,7 @@ $app->post('/deleteProgramming', function (Request $request, Response $response,
     $generalOrdersDao,
     $generalProgrammingDao,
     $productsMaterialsDao,
+    $compositeProductsDao,
     $generalPlanCiclesMachinesDao,
     $generalMaterialsDao,
     $ordersDao
@@ -473,12 +483,15 @@ $app->post('/deleteProgramming', function (Request $request, Response $response,
 
                 // Ficha tecnica
                 $productsMaterials = $productsMaterialsDao->findAllProductsMaterials($arr['id_product'], $id_company);
+                $compositeProducts = $compositeProductsDao->findAllCompositeProductsByIdProduct($arr['id_product'], $id_company);
+                $productsFTM = array_merge($productsMaterials, $compositeProducts);
+
                 $planCicles = $generalPlanCiclesMachinesDao->findAllPlanCiclesMachineByProduct($arr['id_product'], $id_company);
 
-                if (sizeof($productsMaterials) == 0 || sizeof($planCicles) == 0) {
+                if (sizeof($productsFTM) == 0 || sizeof($planCicles) == 0) {
                     $generalOrdersDao->changeStatus($arr['id_order'], 5);
                 } else {
-                    foreach ($productsMaterials as $k) {
+                    foreach ($productsFTM as $k) {
                         if (isset($result['info'])) break;
 
                         $j = $generalMaterialsDao->findReservedMaterial($k['id_material']);

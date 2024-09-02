@@ -30,6 +30,7 @@ $FilesDao = new FilesDao();
 $invMoldsDao = new InvMoldsDao();
 $invCategoriesDao = new GeneralCategoriesDao();
 $productsMaterialsDao = new ProductsMaterialsDao();
+$compositeProductsDao = new CompositeProductsDao();
 $generalProgrammingDao = new GeneralProgrammingDao();
 $inventoryDaysDao = new InventoryDaysDao();
 $filterDataDao = new FilterDataDao();
@@ -180,6 +181,7 @@ $app->post('/addProduct', function (Request $request, Response $response, $args)
     $generalPlanCiclesMachinesDao,
     $generalOrdersDao,
     $productsMaterialsDao,
+    $compositeProductsDao,
     $generalProgrammingDao,
     $inventoryDaysDao
 ) {
@@ -375,16 +377,19 @@ $app->post('/addProduct', function (Request $request, Response $response, $args)
 
                 // Ficha tecnica
                 $productsMaterials = $productsMaterialsDao->findAllProductsMaterials($orders[$i]['id_product'], $id_company);
+                $compositeProducts = $compositeProductsDao->findAllCompositeProductsByIdProduct($orders[$i]['id_product'], $id_company);
+                $productsFTM = array_merge($productsMaterials, $compositeProducts);
+
                 $planCicles = $generalPlanCiclesMachinesDao->findAllPlanCiclesMachineByProduct($orders[$i]['id_product'], $id_company);
 
                 if ($orders[$i]['status'] != 'EN PRODUCCION' && $orders[$i]['status'] != 'FABRICADO' && $orders[$i]['status'] != 'PROGRAMADO') {
                     if ($orders[$i]['original_quantity'] > $orders[$i]['accumulated_quantity']) {
 
-                        if (sizeof($productsMaterials) == 0 || sizeof($planCicles) == 0) {
+                        if (sizeof($productsFTM) == 0 || sizeof($planCicles) == 0) {
                             $resolution = $generalOrdersDao->changeStatus($orders[$i]['id_order'], 5);
                             $status = false;
                         } else {
-                            foreach ($productsMaterials as $arr) {
+                            foreach ($productsFTM as $arr) {
                                 if ($arr['quantity_material'] <= 0) {
                                     $resolution = $generalOrdersDao->changeStatus($orders[$i]['id_order'], 6);
                                     $status = false;
@@ -446,6 +451,7 @@ $app->post('/updatePlanProduct', function (Request $request, Response $response,
     $productsInventoryDao,
     $FilesDao,
     $productsMaterialsDao,
+    $compositeProductsDao,
     $generalProgrammingDao,
     $inventoryDaysDao,
     $filterDataDao
@@ -556,15 +562,18 @@ $app->post('/updatePlanProduct', function (Request $request, Response $response,
                 // $order = $generalOrdersDao->checkAccumulatedQuantityOrder($orders[$i]['id_order']);
                 // Ficha tecnica
                 $productsMaterials = $productsMaterialsDao->findAllProductsMaterials($orders[$i]['id_product'], $id_company);
+                $compositeProducts = $compositeProductsDao->findAllCompositeProductsByIdProduct($orders[$i]['id_product'], $id_company);
+                $productsFTM = array_merge($productsMaterials, $compositeProducts);
+
                 $planCicles = $generalPlanCiclesMachinesDao->findAllPlanCiclesMachineByProduct($orders[$i]['id_product'], $id_company);
 
                 if ($orders[$i]['status'] != 'EN PRODUCCION' && $orders[$i]['status'] != 'FABRICADO' && $orders[$i]['status'] != 'PROGRAMADO') {
                     if ($orders[$i]['original_quantity'] > $orders[$i]['accumulated_quantity']) {
-                        if (sizeof($productsMaterials) == 0 || sizeof($planCicles) == 0) {
+                        if (sizeof($productsFTM) == 0 || sizeof($planCicles) == 0) {
                             $generalOrdersDao->changeStatus($orders[$i]['id_order'], 5);
                             $status = false;
                         } else {
-                            foreach ($productsMaterials as $arr) {
+                            foreach ($productsFTM as $arr) {
                                 if ($arr['quantity_material'] <= 0) {
                                     $generalOrdersDao->changeStatus($orders[$i]['id_order'], 6);
                                     $status = false;

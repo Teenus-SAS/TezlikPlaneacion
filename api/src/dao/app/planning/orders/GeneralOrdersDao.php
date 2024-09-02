@@ -134,6 +134,24 @@ class GeneralOrdersDao
         return $orders;
     }
 
+    public function findLastSameOrder($dataOrder)
+    {
+        $connection = Connection::getInstance()->getConnection();
+
+        $stmt = $connection->prepare("SELECT * FROM plan_orders 
+                                      WHERE min_date = '0000-00-00' AND max_date = '0000-00-00' 
+                                      AND id_product = :id_product 
+                                      AND id_client = :id_client");
+        $stmt->execute([
+            'id_product' => $dataOrder['idProduct'],
+            'id_client' => $dataOrder['idClient']
+        ]);
+        $this->logger->info(__FUNCTION__, array('query' => $stmt->queryString, 'errors' => $stmt->errorInfo()));
+        $orders = $stmt->fetch($connection::FETCH_ASSOC);
+        $this->logger->notice("pedidos", array('pedidos' => $orders));
+        return $orders;
+    }
+
     public function findLastNumOrder($id_company)
     {
         $connection = Connection::getInstance()->getConnection();

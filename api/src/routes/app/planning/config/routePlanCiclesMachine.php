@@ -1,6 +1,7 @@
 <?php
 
 use TezlikPlaneacion\dao\CiclesMachineDao;
+use TezlikPlaneacion\Dao\CompositeProductsDao;
 use TezlikPlaneacion\dao\GeneralMachinesDao;
 use TezlikPlaneacion\dao\GeneralMaterialsDao;
 use TezlikPlaneacion\dao\GeneralOrdersDao;
@@ -29,6 +30,7 @@ $generalOrdersDao = new GeneralOrdersDao();
 $generalProgrammingDao = new GeneralProgrammingDao();
 $generalMaterialsDao = new GeneralMaterialsDao();
 $productsMaterialsDao = new ProductsMaterialsDao();
+$compositeProductsDao = new CompositeProductsDao();
 
 use Psr\Http\Message\ResponseInterface as Response;
 use Psr\Http\Message\ServerRequestInterface as Request;
@@ -170,6 +172,7 @@ $app->post('/addPlanCiclesMachine', function (Request $request, Response $respon
     $machinesDao,
     $generalOrdersDao,
     $productsMaterialsDao,
+    $compositeProductsDao,
     $programmingRoutesDao,
     $generalProgrammingRoutesDao
 ) {
@@ -320,16 +323,19 @@ $app->post('/addPlanCiclesMachine', function (Request $request, Response $respon
         $status = true;
         // Ficha tecnica
         $productsMaterials = $productsMaterialsDao->findAllProductsMaterials($orders[$i]['id_product'], $id_company);
+        $compositeProducts = $compositeProductsDao->findAllCompositeProductsByIdProduct($orders[$i]['id_product'], $id_company);
+        $productsFTM = array_merge($productsMaterials, $compositeProducts);
+
         $planCicles = $generalPlanCiclesMachinesDao->findAllPlanCiclesMachineByProduct($orders[$i]['id_product'], $id_company);
 
         if ($orders[$i]['status'] != 'EN PRODUCCION' && $orders[$i]['status'] != 'FABRICADO') {
             if ($orders[$i]['original_quantity'] > $orders[$i]['accumulated_quantity']) {
 
-                if (sizeof($productsMaterials) == 0 || sizeof($planCicles) == 0) {
+                if (sizeof($productsFTM) == 0 || sizeof($planCicles) == 0) {
                     $generalOrdersDao->changeStatus($orders[$i]['id_order'], 5);
                     $status = false;
                 } else {
-                    foreach ($productsMaterials as $arr) {
+                    foreach ($productsFTM as $arr) {
                         if ($arr['quantity_material'] <= 0) {
                             $generalOrdersDao->changeStatus($orders[$i]['id_order'], 6);
                             $status = false;
@@ -418,6 +424,7 @@ $app->get('/deletePlanCiclesMachine/{id_cicles_machine}', function (Request $req
     $generalPlanCiclesMachinesDao,
     $generalOrdersDao,
     $productsMaterialsDao,
+    $compositeProductsDao,
     $productsDao,
     $generalMaterialsDao,
     $generalProgrammingDao
@@ -435,16 +442,19 @@ $app->get('/deletePlanCiclesMachine/{id_cicles_machine}', function (Request $req
             $status = true;
             // Ficha tecnica
             $productsMaterials = $productsMaterialsDao->findAllProductsMaterials($orders[$i]['id_product'], $id_company);
+            $compositeProducts = $compositeProductsDao->findAllCompositeProductsByIdProduct($orders[$i]['id_product'], $id_company);
+            $productsFTM = array_merge($productsMaterials, $compositeProducts);
+
             $planCicles = $generalPlanCiclesMachinesDao->findAllPlanCiclesMachineByProduct($orders[$i]['id_product'], $id_company);
 
             if ($orders[$i]['status'] != 'EN PRODUCCION' && $orders[$i]['status'] != 'FABRICADO') {
                 if ($orders[$i]['original_quantity'] > $orders[$i]['accumulated_quantity']) {
 
-                    if (sizeof($productsMaterials) == 0 || sizeof($planCicles) == 0) {
+                    if (sizeof($productsFTM) == 0 || sizeof($planCicles) == 0) {
                         $generalOrdersDao->changeStatus($orders[$i]['id_order'], 5);
                         $status = false;
                     } else {
-                        foreach ($productsMaterials as $arr) {
+                        foreach ($productsFTM as $arr) {
                             if ($arr['quantity_material'] <= 0) {
                                 $generalOrdersDao->changeStatus($orders[$i]['id_order'], 6);
                                 $status = false;

@@ -101,21 +101,24 @@ $app->get('/explosionMaterials', function (Request $request, Response $response,
                 $data['route'] = 1;
                 $data['originalQuantity'] = abs($products[$i]['available']);
 
-                $resolution = $ordersDao->insertOrderByCompany($data, $id_company);
-                $generalProductsDao->updateAccumulatedQuantity($products[$i]['id_child_product'], abs($products[$i]['available']), 2);
+                $findOrder = $generalOrdersDao->findLastSameOrder($data);
+                if (!$findOrder) {
+                    $resolution = $ordersDao->insertOrderByCompany($data, $id_company);
+                    $generalProductsDao->updateAccumulatedQuantity($products[$i]['id_child_product'], abs($products[$i]['available']), 2);
 
-                if (isset($resolution['info'])) break;
-                $lastOrder = $lastDataDao->findLastInsertedOrder($id_company);
+                    if (isset($resolution['info'])) break;
+                    $lastOrder = $lastDataDao->findLastInsertedOrder($id_company);
 
-                $programmingRoutes = $generalProgrammingRoutesDao->findProgrammingRoutes($products[$i]['id_child_product'], $lastOrder['id_order']);
+                    $programmingRoutes = $generalProgrammingRoutesDao->findProgrammingRoutes($products[$i]['id_child_product'], $lastOrder['id_order']);
 
-                if (!$programmingRoutes) {
-                    $data['idOrder'] = $lastOrder['id_order'];
-                    $data['route'] = 1;
+                    if (!$programmingRoutes) {
+                        $data['idOrder'] = $lastOrder['id_order'];
+                        $data['route'] = 1;
 
-                    $resolution = $programmingRoutesDao->insertProgrammingRoutes($data, $id_company);
+                        $resolution = $programmingRoutesDao->insertProgrammingRoutes($data, $id_company);
+                    }
+                    if (isset($resolution['info'])) break;
                 }
-                if (isset($resolution['info'])) break;
             }
         }
     }
