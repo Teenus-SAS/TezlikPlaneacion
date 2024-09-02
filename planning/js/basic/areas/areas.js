@@ -8,7 +8,7 @@ $(document).ready(function () {
     e.preventDefault();
     $(".cardImportAreas").hide(800);
     $(".cardCreateArea").toggle(800);
-    $("#btnCreateArea").html("Crear");
+    $("#btnCreateArea").text("Crear");
 
     sessionStorage.removeItem("id_plan_area");
 
@@ -29,7 +29,7 @@ $(document).ready(function () {
   $(document).on("click", ".updateArea", function (e) {
     $(".cardImportAreas").hide(800);
     $(".cardCreateArea").show(800);
-    $("#btnCreateArea").html("Actualizar");
+    $("#btnCreateArea").text("Actualizar");
 
     // Obtener el ID del elemento
     const idArea = $(this).attr("id").split("-")[1];
