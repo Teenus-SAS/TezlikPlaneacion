@@ -2,7 +2,7 @@ $(document).ready(function () {
   $.ajax({
     url: "/api/products",
     success: function (data) {
-      sessionStorage.setItem("dataProducts", JSON.stringify(r));
+      sessionStorage.setItem("dataProducts", JSON.stringify(data));
 
       let viewCreateProduct = document.getElementById("pQuantity");
 
