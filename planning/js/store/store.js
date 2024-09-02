@@ -54,10 +54,14 @@ $(document).ready(function () {
   });
 
   // Entregar MP
-  sessionStorage.removeItem("idMaterial");
+
+  const itemsToRemove = ["idMaterial", "stored", "pending", "delivered"];
+  itemsToRemove.forEach((item) => sessionStorage.removeItem(item));
+
+  /*   sessionStorage.removeItem("idMaterial");
   sessionStorage.removeItem("stored");
   sessionStorage.removeItem("pending");
-  sessionStorage.removeItem("delivered");
+  sessionStorage.removeItem("delivered"); */
 
   $(".cardAddDelivery").hide();
 
