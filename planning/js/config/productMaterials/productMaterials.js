@@ -1,174 +1,172 @@
-$(document).ready(function () { 
+$(document).ready(function () {
   /* Ocultar panel crear producto */
 
-  $('.selectNavigation').click(function (e) {
+  $(".selectNavigation").click(function (e) {
     e.preventDefault();
 
-    $('.cardGeneral').hide();
+    $(".cardGeneral").hide();
 
     let card = this.id;
 
     switch (card) {
-      case 'nav-materials':
-        $('.cardProductsMaterials').show();
+      case "nav-materials":
+        $(".cardProductsMaterials").show();
         break;
-      case 'nav-planCicles':
-        $('.cardPlanCicles').show();
+      case "nav-planCicles":
+        $(".cardPlanCicles").show();
         break;
-      case 'nav-route':
-        $('.cardRoutes').show();
+      case "nav-route":
+        $(".cardRoutes").show();
         break;
-      case 'nav-plans':
-        $('.cardPlans').show();
+      case "nav-plans":
+        $(".cardPlans").show();
         break;
     }
- 
-    let tables = document.getElementsByClassName(
-      'dataTable'
-    );
+
+    let tables = document.getElementsByClassName("dataTable");
 
     for (let i = 0; i < tables.length; i++) {
       let attr = tables[i];
-      attr.style.width = '100%';
+      attr.style.width = "100%";
       attr = tables[i].firstElementChild;
-      attr.style.width = '100%';
+      attr.style.width = "100%";
     }
   });
 
   // Tipo Material
-  $('#materialType').change(async function (e) {
-    e.preventDefault(); 
+  $("#materialType").change(async function (e) {
+    e.preventDefault();
 
-    $('.inputQuantityCalc').hide();
-    $('#units').empty();
-    $('#quantity').val('');
-    $('#quantityCalc').val('');
+    $(".inputQuantityCalc").hide();
+    $("#units").empty();
+    $("#quantity, #quantityCalc").val("");
 
-    let type = this.value;
+    const type = this.value;
 
-    let dataMaterials = JSON.parse(sessionStorage.getItem('dataMaterials'));
+    const dataMaterials = JSON.parse(sessionStorage.getItem("dataMaterials"));
 
-    let dataM = dataMaterials.filter(item => item.id_material_type == type);
-    await setSelectsMaterials(dataM); 
+    const dataM = dataMaterials.filter((item) => item.id_material_type == type);
+    await setSelectsMaterials(dataM);
 
-    if (type != '1')
-      $('.inputQuantityCalc').show();
+    if (type != "1") $(".inputQuantityCalc").show();
   });
 
-  if (flag_products_measure == '1') {
-    $('#quantity').prop('readonly', true);
+  if (flag_products_measure == "1") {
+    $("#quantity").prop("readonly", true);
 
-    $(document).on('change keyup', '.calcMWeight',async function () {
-      let idProduct = parseInt($('#selectNameProduct').val());
-      let idMaterial = parseInt($('#refMaterial').val()); 
-      let type = parseInt($('#materialType').val()); 
+    $(document).on("change keyup", ".calcMWeight", async function () {
+      const idProduct = parseInt($("#selectNameProduct").val());
+      const idMaterial = parseInt($("#refMaterial").val());
+      const type = parseInt($("#materialType").val());
 
-      let validate = idProduct * idMaterial * type;
+      const validate = idProduct * idMaterial * type;
 
-      if (isNaN(validate) || validate <= 0) {
-        return false;
-      }
+      if (!validate) return false;
 
-      let quantity = parseFloat($('#quantityCalc').val());
+      let quantity = parseFloat($("#quantityCalc").val());
 
-      isNaN(quantity) ? quantity = 0 : quantity;
+      isNaN(quantity) ? (quantity = 0) : quantity;
 
       $.ajax({
-        type: 'POST',
-        url: '/api/calcQuantityFTM',
+        type: "POST",
+        url: "/api/calcQuantityFTM",
         data: {
           idProduct: idProduct,
           idMaterial: idMaterial,
           type: type,
-          quantityCalc: quantity
+          quantityCalc: quantity,
         },
         success: function (resp) {
-          $('#quantity').val(resp.weight);
-        }
-      }); 
+          $("#quantity").val(resp.weight);
+        },
+      });
     });
   }
 
-  $('.cardAddMaterials').hide();
+  $(".cardAddMaterials").hide();
 
   /* Abrir panel crear producto */
 
-  $('#btnCreateProduct').click(function (e) {
+  $("#btnCreateProduct").click(function (e) {
     e.preventDefault();
 
-    $('.cardImportProductsMaterials').hide(800); 
+    $(".cardImportProductsMaterials").hide(800);
     // $('.cardTableConfigMaterials').show(800);
-    $('.cardAddMaterials').toggle(800);
-    $('.cardAddNewProduct').hide(800);
-    $('#btnAddMaterials').html('Asignar');
-    $('.inputQuantityCalc').hide();
+    $(".cardAddMaterials").toggle(800);
+    $(".cardAddNewProduct, .inputQuantityCalc").hide(800);
+    $("#btnAddMaterials").text("Asignar");
 
-    sessionStorage.removeItem('id_product_material');
+    sessionStorage.removeItem("id_product_material");
 
-    $('#formAddMaterials').trigger('reset');
+    $("#formAddMaterials").trigger("reset");
   });
- 
+
   /* Adicionar nueva materia prima */
 
-  $('#btnAddMaterials').click(function (e) {
+  $("#btnAddMaterials").click(function (e) {
     e.preventDefault();
 
-    let idProductMaterial = sessionStorage.getItem('id_product_material');
+    let idProductMaterial =
+      sessionStorage.getItem("id_product_material") || null;
 
-    if (idProductMaterial == '' || idProductMaterial == null) { 
-      checkDataPMaterial('/api/addProductsMaterials', idProductMaterial);
-    } else {
-      checkDataPMaterial('/api/updatePlanProductsMaterials', idProductMaterial);
-    }
+    const apiUrl = idProductMaterial
+      ? "/api/updatePlanProductsMaterials"
+      : "/api/addProductsMaterials";
+
+    checkDataRequisition(apiUrl, idProductMaterial);
   });
 
   /* Actualizar productos materials */
 
-  $(document).on('click', '.updateMaterials', function (e) {
-    $('.cardImportProductsMaterials').hide(800);
-    $('.cardAddMaterials').show(800);
-    $('#btnAddMaterials').html('Actualizar');
-    $('#units').empty();
+  $(document).on("click", ".updateMaterials", function (e) {
+    $(".cardImportProductsMaterials").hide(800);
+    $(".cardAddMaterials").show(800);
+    $("#btnAddMaterials").text("Actualizar");
+    $("#units").empty();
 
     // Obtener el ID del elemento
-    let id = $(this).attr('id');
-    // Obtener la parte después del guion '-'
-    let id_product_material = id.split('-')[1]; 
+    let id_product_material = $(this).attr("id").split("-")[1];
 
-    let row = $(this).parent().parent()[0];
+    //obtener data
+    let row = $(this).closest("tr")[0];
     let data = tblConfigMaterials.fnGetData(row);
 
-    sessionStorage.setItem('id_product_material', data.id_product_material);
+    sessionStorage.setItem("id_product_material", data.id_product_material);
 
-    $(`#refMaterial option[value=${data.id_material}]`).prop('selected', true);
-    $(`#material option[value=${data.id_material}]`).prop('selected', true);
-    
-    $('#quantity').val(data.quantity);
-    
+    $(`#refMaterial option[value=${data.id_material}]`).prop("selected", true);
+    $(`#material option[value=${data.id_material}]`).prop("selected", true);
+
+    $("#quantity").val(data.quantity);
+
     if (data.id_magnitude == 0 || data.id_unit == 0) {
-      let dataMaterials = JSON.parse(sessionStorage.getItem('dataMaterials'));
+      let dataMaterials = JSON.parse(sessionStorage.getItem("dataMaterials"));
 
-      let arr = dataMaterials.find(item => item.id_material == data.id_material);
+      let arr = dataMaterials.find(
+        (item) => item.id_material == data.id_material
+      );
 
       data.id_magnitude = arr.id_magnitude;
       data.id_unit = arr.id_unit;
     }
 
     loadUnitsByMagnitude(data, 2);
-    $(`#units option[value=${data.id_unit}]`).prop('selected', true);
-    
-    if (flag_products_measure == '1') {
-      $(`#materialType option[value=${data.id_material_type}]`).prop('selected', true);
- 
-      $('#quantity').prop('readonly', true);
+    $(`#units option[value=${data.id_unit}]`).prop("selected", true);
 
-      if (data.id_material_type == '1') {
-        $('.inputQuantityCalc').hide();
-      } else
-        $('.inputQuantityCalc').show();
+    if (flag_products_measure == "1") {
+      $(`#materialType option[value=${data.id_material_type}]`).prop(
+        "selected",
+        true
+      );
+
+      $("#quantity").prop("readonly", true);
+
+      if (data.id_material_type == "1") {
+        $(".inputQuantityCalc").hide();
+      } else $(".inputQuantityCalc").show();
     }
 
-    $('html, body').animate(
+    // Animación de desplazamiento
+    $("html, body").animate(
       {
         scrollTop: 0,
       },
@@ -177,28 +175,28 @@ $(document).ready(function () {
   });
 
   const checkDataPMaterial = async (url, idProductMaterial) => {
-    let ref = $('#material').val();
-    let quan = $('#quantity').val();
-    let idProduct = $('#selectNameProduct').val();
-    let unit = $('#units').val();
- 
-    let data = ref * idProduct * unit;
+    const ref = $("#material").val();
+    const quan = $("#quantity").val();
+    const idProduct = $("#selectNameProduct").val();
+    const unit = $("#units").val();
 
-    if (!data || quan == '') {
-      toastr.error('Ingrese todos los campos');
+    const data = ref * idProduct * unit;
+
+    if (!data) {
+      toastr.error("Ingrese todos los campos");
       return false;
     }
 
     let dataMaterials = new FormData(formAddMaterials);
-    dataMaterials.append('idProduct', idProduct);
+    dataMaterials.append("idProduct", idProduct);
 
-    if (idProductMaterial != '' || idProductMaterial != null)
-      dataMaterials.append('idProductMaterial', idProductMaterial);
+    if (idProductMaterial != "" || idProductMaterial != null)
+      dataMaterials.append("idProductMaterial", idProductMaterial);
 
     let resp = await sendDataPOST(url, dataMaterials);
 
     messageMaterial(resp);
-  } 
+  };
 
   /* Eliminar materia prima */
 
@@ -231,42 +229,44 @@ $(document).ready(function () {
     //       $.post('/api/deletePlanProductMaterial', dataMaterials,
     //         function (data, textStatus, jqXHR) {
     //           messageMaterial(data);
-    //         }, 
-    //       ); 
+    //         },
+    //       );
     //     }
     //   },
     // });
-    let row = $(this.activeElement).parent().parent()[0];
+
+    //obtener data
+    let row = $(this.activeElement).closest("tr")[0];
     let data = tblConfigMaterials.fnGetData(row);
 
-    let idProduct = $('#selectNameProduct').val();
+    let idProduct = $("#selectNameProduct").val();
     let dataP = {};
-    dataP['idProduct'] = idProduct;
+    dataP["idProduct"] = idProduct;
 
-    if (op == '1') {
+    if (op == "1") {
       let idProductMaterial = data.id_product_material;
-      dataP['idProductMaterial'] = idProductMaterial;  
-      dataP['idMaterial'] = data.id_material; 
+      dataP["idProductMaterial"] = idProductMaterial;
+      dataP["idMaterial"] = data.id_material;
 
-      url = '/api/deletePlanProductMaterial';
+      url = "/api/deletePlanProductMaterial";
     } else {
-      dataP['idCompositeProduct'] = data.id_composite_product;
-      url = '/api/deleteCompositeProduct';
+      dataP["idCompositeProduct"] = data.id_composite_product;
+      url = "/api/deleteCompositeProduct";
     }
 
     bootbox.confirm({
-      title: 'Eliminar',
+      title: "Eliminar",
       message: `Está seguro de eliminar ${
-        op == '1' ? 'esta Materia prima' : 'este Producto Compuesto'
+        op == "1" ? "esta Materia prima" : "este Producto Compuesto"
       }? Esta acción no se puede reversar.`,
       buttons: {
         confirm: {
-          label: 'Si',
-          className: 'btn-success',
+          label: "Si",
+          className: "btn-success",
         },
         cancel: {
-          label: 'No',
-          className: 'btn-danger',
+          label: "No",
+          className: "btn-danger",
         },
       },
       callback: function (result) {
@@ -282,21 +282,17 @@ $(document).ready(function () {
   /* Mensaje de exito */
 
   messageMaterial = (data) => {
-    if (data.success == true) {
-      $('.cardImport').hide(800);
-      $('.cardAddMaterials').hide(800);
-      $('#formImport').trigger('reset');
-      $('#formAddMaterials').trigger('reset'); 
-      $('.cardAddNewProduct').hide(800);
+    const { success, error, info, message } = data;
+    if (success) {
+      $(".cardImport, .cardAddMaterials, .cardAddNewProduct").hide(800);
+      $("#formImport, #formAddMaterials").trigger("reset");
 
-      const idProduct = $('#selectNameProduct').val()
+      const idProduct = $("#selectNameProduct").val();
+      if (idProduct) loadAllDataMaterials(idProduct);
 
-      if(idProduct)
-        loadAllDataMaterials(idProduct);
-
-      toastr.success(data.message);
+      toastr.success(message);
       return false;
-    } else if (data.error == true) toastr.error(data.message);
-    else if (data.info == true) toastr.info(data.message);
-  }; 
+    } else if (error) toastr.error(message);
+    else if (info) toastr.info(message);
+  };
 });

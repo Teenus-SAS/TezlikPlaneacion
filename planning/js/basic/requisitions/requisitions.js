@@ -131,6 +131,7 @@ $(document).ready(function () {
     $("#btnAddRequisition").text("Actualizar");
     $(".cardSelect").hide();
 
+    //Obtener data
     const row = $(this).closest("tr")[0];
     const data = tblRequisitions.fnGetData(row);
 
