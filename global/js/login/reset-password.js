@@ -15,12 +15,12 @@ $(document).ready(function () {
       url: '/api/changePassword',
       data: data,
       success: function (data, textStatus, xhr) {
-        if (data.success == true) {
-          toastr.success(data.message);
+        if (success) {
+          toastr.success(message);
           setTimeout(() => {
             location.href = '../../../';
           }, 2000);
-        } else if (data.error == true) toastr.error(data.message);
+        } else if (error) toastr.error(message);
       },
     });
   });

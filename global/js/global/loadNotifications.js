@@ -107,11 +107,11 @@ $(document).ready(function () {
   };
 
   msgNotification = (data) => {
-    if (data.success == true) {
+    if (success) {
       loadNotification();
-      toastr.success(data.message);
+      toastr.success(message);
       return false;
-    } else if (data.error == true) toastr.error(data.message);
-    else if (data.info == true) toastr.info(data.message);
+    } else if (error) toastr.error(message);
+    else if (info) toastr.info(message);
   };
 });

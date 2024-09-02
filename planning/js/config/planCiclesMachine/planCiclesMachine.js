@@ -79,7 +79,7 @@ $(document).ready(function () {
   // Eliminar plan ciclo maquina
 
   deleteMachine = () => {
-    let row = $(this.activeElement).parent().parent()[0];
+    const row = $(this.activeElement).closest("tr")[0];
     let data = tblPlanCiclesMachine.fnGetData(row);
 
     let id_cicles_machine = data.id_cicles_machine;

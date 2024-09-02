@@ -1,64 +1,64 @@
 $(document).ready(function () {
   // Ocultar Modal Nuevo usuario
-  $('#btnCloseUser').click(function (e) {
+  $("#btnCloseUser").click(function (e) {
     e.preventDefault();
-    $('#createUserAccess').modal('hide');
+    $("#createUserAccess").modal("hide");
   });
 
   /* Abrir panel Nuevo usuario */
 
-  $('#btnNewUser').click(function (e) {
+  $("#btnNewUser").click(function (e) {
     e.preventDefault();
-    $('#createUserAccess').modal('show');
-    $('#btnCreateUserAndAccess').html('Crear Usuario y Accesos');
+    $("#createUserAccess").modal("show");
+    $("#btnCreateUserAndAccess").html("Crear Usuario y Accesos");
 
-    sessionStorage.removeItem('id_user');
+    sessionStorage.removeItem("id_user");
 
-    $('#nameUser').prop('disabled', false);
-    $('#lastnameUser').prop('disabled', false);
-    $('#emailUser').prop('disabled', false);
+    $("#nameUser").prop("disabled", false);
+    $("#lastnameUser").prop("disabled", false);
+    $("#emailUser").prop("disabled", false);
 
-    $('#formCreateUser').trigger('reset');
+    $("#formCreateUser").trigger("reset");
   });
 
   /* Agregar nuevo usuario */
 
-  $('#btnCreateUserAndAccess').click(function (e) {
+  $("#btnCreateUserAndAccess").click(function (e) {
     e.preventDefault();
-    let id_user = sessionStorage.getItem('id_user');
+    let id_user = sessionStorage.getItem("id_user");
 
-    if (id_user == '' || id_user == null) {
-      nameUser = $('#nameUser').val();
-      lastnameUser = $('#lastnameUser').val();
-      emailUser = $('#emailUser').val();
+    if (id_user == "" || id_user == null) {
+      nameUser = $("#nameUser").val();
+      lastnameUser = $("#lastnameUser").val();
+      emailUser = $("#emailUser").val();
 
       if (
-        nameUser == '' ||
+        nameUser == "" ||
         nameUser == null ||
-        lastnameUser == '' ||
+        lastnameUser == "" ||
         lastnameUser == null ||
-        emailUser == '' ||
+        emailUser == "" ||
         emailUser == null
       ) {
-        toastr.error('Ingrese nombre, apellido y/o email');
+        toastr.error("Ingrese nombre, apellido y/o email");
         return false;
       }
 
       /* Validar que al menos un acceso sea otorgado */
-      if ($('input[type=checkbox]:checked').length === 0) {
-        toastr.error('Debe seleccionar al menos un acceso');
+      if ($("input[type=checkbox]:checked").length === 0) {
+        toastr.error("Debe seleccionar al menos un acceso");
       }
 
       /* Obtener los checkbox seleccionados */
 
       dataUser = {};
-      dataUser['nameUser'] = nameUser;
-      dataUser['lastnameUser'] = lastnameUser;
-      dataUser['emailUser'] = emailUser;
+      dataUser["nameUser"] = nameUser;
+      dataUser["lastnameUser"] = lastnameUser;
+      dataUser["emailUser"] = emailUser;
 
       dataUser = setCheckBoxes(dataUser);
 
-      $.post('/api/addUser', dataUser, function (data, textStatus, jqXHR) {
+      $.post("/api/addUser", dataUser, function (data, textStatus, jqXHR) {
         message(data, null);
       });
     } else {
@@ -68,23 +68,23 @@ $(document).ready(function () {
 
   /* Actualizar User */
 
-  $(document).on('click', '.updateUser', function (e) {
-    $('#createUserAccess').modal('show');
-    $('#btnCreateUserAndAccess').html('Actualizar Accesos');
+  $(document).on("click", ".updateUser", function (e) {
+    $("#createUserAccess").modal("show");
+    $("#btnCreateUserAndAccess").html("Actualizar Accesos");
 
-    $('#nameUser').prop('disabled', true);
-    $('#lastnameUser').prop('disabled', true);
-    $('#emailUser').prop('disabled', true);
+    $("#nameUser").prop("disabled", true);
+    $("#lastnameUser").prop("disabled", true);
+    $("#emailUser").prop("disabled", true);
 
-    let row = $(this).parent().parent()[0];
+    const row = $(this).closest("tr")[0];
     let data = tblUsers.fnGetData(row);
 
     let id_user = this.id;
-    sessionStorage.setItem('id_user', id_user);
+    sessionStorage.setItem("id_user", id_user);
 
-    $('#nameUser').val(data.firstname);
-    $('#lastnameUser').val(data.lastname);
-    $('#emailUser').val(data.email);
+    $("#nameUser").val(data.firstname);
+    $("#lastnameUser").val(data.lastname);
+    $("#emailUser").val(data.email);
 
     let i = 1;
 
@@ -93,31 +93,31 @@ $(document).ready(function () {
       planningCreateMaterial: data.create_material,
       planningCreateMachine: data.create_machine,
       requisition: data.requisition,
-      planningProductsMaterial: data.products_material, 
+      planningProductsMaterial: data.products_material,
       programsMachine: data.programs_machine,
-      ciclesMachine: data.cicles_machine, 
+      ciclesMachine: data.cicles_machine,
       stock: data.stock,
       client: data.client,
       sale: data.sale,
-      plannigUser: data.user, 
+      plannigUser: data.user,
       inventory: data.inventory,
       inventoryABC: data.inventory_abc,
       order: data.plan_order,
-      program: data.program, 
+      program: data.program,
       explosionOfMaterial: data.explosion_of_material,
       productionOrder: data.production_order,
       office: data.office,
-      store: data.store
+      store: data.store,
     };
 
     $.each(access, (index, value) => {
       if (value == 1) {
-        $(`#checkbox-${i}`).prop('checked', true);
-      } else $(`#checkbox-${i}`).prop('checked', false);
+        $(`#checkbox-${i}`).prop("checked", true);
+      } else $(`#checkbox-${i}`).prop("checked", false);
       i++;
     });
 
-    $('html, body').animate(
+    $("html, body").animate(
       {
         scrollTop: 0,
       },
@@ -126,18 +126,18 @@ $(document).ready(function () {
   });
 
   updateUserAccess = () => {
-    id_user = sessionStorage.getItem('id_user');
+    id_user = sessionStorage.getItem("id_user");
 
     dataUser = {};
-    dataUser['id_user'] = id_user;
-    dataUser['nameUser'] = $('#nameUser').val();
-    dataUser['lastnameUser'] = $('#lastnameUser').val();
-    dataUser['emailUser'] = $('#emailUser').val();
+    dataUser["id_user"] = id_user;
+    dataUser["nameUser"] = $("#nameUser").val();
+    dataUser["lastnameUser"] = $("#lastnameUser").val();
+    dataUser["emailUser"] = $("#emailUser").val();
 
     dataUser = setCheckBoxes(dataUser);
 
     $.post(
-      '/api/updatePlanningUserAccess',
+      "/api/updatePlanningUserAccess",
       dataUser,
       function (data, textStatus, jqXHR) {
         message(data, id_user);
@@ -161,19 +161,19 @@ $(document).ready(function () {
       stock: 0,
       client: 0,
       sale: 0,
-      plannigUser: 0, 
+      plannigUser: 0,
       inventory: 0,
       inventoryABC: 0,
       order: 0,
-      program: 0, 
+      program: 0,
       explosionOfMaterial: 0,
       productionOrder: 0,
       office: 0,
-      store: 0
+      store: 0,
     };
 
     $.each(access, (index, value) => {
-      if ($(`#checkbox-${i}`).is(':checked')) dataUser[`${index}`] = 1;
+      if ($(`#checkbox-${i}`).is(":checked")) dataUser[`${index}`] = 1;
       else dataUser[`${index}`] = 0;
       i++;
     });
@@ -184,33 +184,33 @@ $(document).ready(function () {
   /* Eliminar usuario */
 
   deleteFunction = () => {
-    let row = $(this.activeElement).parent().parent()[0];
+    const row = $(this.activeElement).closest("tr")[0];
     let data = tblUsers.fnGetData(row);
 
     let id_user = data.id_user;
     let programsMachine = data.programs_machine;
     dataUser = {};
-    dataUser['id_user'] = id_user;
-    dataUser['programsMachine'] = programsMachine;
+    dataUser["id_user"] = id_user;
+    dataUser["programsMachine"] = programsMachine;
 
     bootbox.confirm({
-      title: 'Eliminar',
+      title: "Eliminar",
       message:
-        'Está seguro de eliminar este Usuario? Esta acción no se puede reversar.',
+        "Está seguro de eliminar este Usuario? Esta acción no se puede reversar.",
       buttons: {
         confirm: {
-          label: 'Si',
-          className: 'btn-success',
+          label: "Si",
+          className: "btn-success",
         },
         cancel: {
-          label: 'No',
-          className: 'btn-danger',
+          label: "No",
+          className: "btn-danger",
         },
       },
       callback: function (result) {
         if (result) {
           $.post(
-            '/api/deleteUser',
+            "/api/deleteUser",
             dataUser,
             function (data, textStatus, jqXHR) {
               message(data, id_user);
@@ -223,23 +223,23 @@ $(document).ready(function () {
 
   /* Mensaje de exito */
 
-  message = async(data, id_user) => {
-    if (data.success == true) {
-      $('#createUserAccess').modal('hide');
-      $('#formCreateUser').trigger('reset');
+  message = async (data, id_user) => {
+    const { success, error, info, message } = data;
+    if (success) {
+      $("#createUserAccess").modal("hide");
+      $("#formCreateUser").trigger("reset");
       updateTable();
-      if (id_user == idUser)
-        await loadUserAccess();
-      toastr.success(data.message);
+      if (id_user == idUser) await loadUserAccess();
+      toastr.success(message);
       return false;
-    } else if (data.error == true) toastr.error(data.message);
-    else if (data.info == true) toastr.info(data.message);
+    } else if (error) toastr.error(message);
+    else if (info) toastr.info(message);
   };
 
   /* Actualizar tabla */
 
   function updateTable() {
-    $('#tblUsers').DataTable().clear();
-    $('#tblUsers').DataTable().ajax.reload();
+    $("#tblUsers").DataTable().clear();
+    $("#tblUsers").DataTable().ajax.reload();
   }
 });

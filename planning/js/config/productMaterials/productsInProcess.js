@@ -88,7 +88,7 @@ $(document).ready(function () {
     $('.cardAddProductInProccess').show(800);
     $('#btnAddProductInProccess').html('Actualizar');
 
-    let row = $(this).parent().parent()[0];
+    const row = $(this).closest("tr")[0];
     let data = tblProductsInProcess.fnGetData(row);
 
     sessionStorage.setItem('id_product_category', data.id_product_category);

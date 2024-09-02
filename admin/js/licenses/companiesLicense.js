@@ -49,7 +49,7 @@
 //     e.preventDefault();
 //     $('.cardCreateLicense').show(800);
 //     $('#formAddLicense').trigger('reset');
-//     let row = $(this).parent().parent()[0];
+//     const row = $(this).closest("tr")[0];
 //     $('#btnAddLicense').html('Actualizar');
 //     let data = tblCompaniesLic.fnGetData(row);
 
@@ -103,14 +103,14 @@
 //   /* Mensaje de exito */
 
 //   message = (data) => {
-//     if (data.success == true) {
+//     if (success) {
 //       $('.cardCreateLicense').hide(800);
 //       $('#formAddLicense').trigger('reset');
 //       updateTable();
-//       toastr.success(data.message);
+//       toastr.success(message);
 //       return false;
-//     } else if (data.error == true) toastr.error(data.message);
-//     else if (data.info == true) toastr.info(data.message);
+//     } else if (error) toastr.error(message);
+//     else if (info) toastr.info(message);
 //   };
 
 //   /* Actualizar tabla */
@@ -152,7 +152,7 @@ $(document).ready(function () {
     e.preventDefault();
     $('.cardCreateLicense').show(800);
     $('#formAddLicense').trigger('reset');
-    let row = $(this).parent().parent()[0];
+    const row = $(this).closest("tr")[0];
     $('#btnAddLicense').html('Actualizar');
     let data = tblCompaniesLic.fnGetData(row);
 
@@ -224,14 +224,14 @@ $(document).ready(function () {
 
   /* Mensaje de exito */
   const message = (data) => {
-    if (data.success == true) {
+    if (success) {
       $('.cardCreateLicense').hide(800);
       $('#formAddLicense').trigger('reset');
       updateTable();
-      toastr.success(data.message);
+      toastr.success(message);
       return false;
-    } else if (data.error == true) toastr.error(data.message);
-    else if (data.info == true) toastr.info(data.message);
+    } else if (error) toastr.error(message);
+    else if (info) toastr.info(message);
   };
 
   /* Actualizar tabla */

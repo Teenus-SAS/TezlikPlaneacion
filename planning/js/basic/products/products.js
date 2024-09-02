@@ -123,7 +123,7 @@ $(document).ready(function () {
   /* Eliminar productos */
 
   deleteProductsFunction = () => {
-    let row = $(this.activeElement).parent().parent()[0];
+    const row = $(this.activeElement).closest("tr")[0];
     let data = tblProducts.fnGetData(row);
 
     let idProduct = data.id_product;
@@ -158,15 +158,15 @@ $(document).ready(function () {
   /* Mensaje de exito */
 
   messageProducts = (data) => {
-    if (data.success == true) {
+    if (success) {
       $("#formImportProduct").trigger("reset");
       $(".cardCreateProduct").hide(800);
       $(".cardImportProducts").hide(800);
       $("#formCreateProduct").trigger("reset");
       loadAllData();
-      toastr.success(data.message);
+      toastr.success(message);
       return false;
-    } else if (data.error == true) toastr.error(data.message);
-    else if (data.info == true) toastr.info(data.message);
+    } else if (error) toastr.error(message);
+    else if (info) toastr.info(message);
   };
 });

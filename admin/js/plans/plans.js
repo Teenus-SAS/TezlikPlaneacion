@@ -40,7 +40,7 @@ $(document).ready(function () {
     let idPlan = this.id;
     sessionStorage.setItem('id_plan', idPlan);
 
-    let row = $(this).parent().parent()[0];
+    const row = $(this).closest("tr")[0];
     let data = tblPlans.fnGetData(row);
 
     $(`#plan option[value=${data.id_plan}]`).prop('selected', true);
@@ -99,14 +99,14 @@ $(document).ready(function () {
   /* Mensaje de exito */
 
   message = (data) => {
-    if (data.success == true) {
+    if (success) {
       $('#createPlansAccess').modal('hide');
       $('#formCreatePlan').trigger('reset');
       updateTable();
-      toastr.success(data.message);
+      toastr.success(message);
       return false;
-    } else if (data.error == true) toastr.error(data.message);
-    else if (data.info == true) toastr.info(data.message);
+    } else if (error) toastr.error(message);
+    else if (info) toastr.info(message);
   };
 
   /* Actualizar tabla */

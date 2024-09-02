@@ -88,7 +88,7 @@ $(document).ready(function () {
   /* Eliminar proceso 
 
     deleteFunction = () => {
-        let row = $(this.activeElement).parent().parent()[0];
+        const row = $(this.activeElement).closest("tr")[0];
         let data = tblPStock.fnGetData(row);
 
         // // let id_Stock = data.id_Stock;
