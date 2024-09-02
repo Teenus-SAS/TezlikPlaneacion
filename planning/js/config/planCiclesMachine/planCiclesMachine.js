@@ -1,51 +1,50 @@
 $(document).ready(function () {
-  $('.cardCreatePlanCiclesMachine').hide();
+  $(".cardCreatePlanCiclesMachine").hide();
 
   //Abrir Card crear plan de ciclos maquina
-  $('#btnNewPlanCiclesMachine').click(function (e) {
+  $("#btnNewPlanCiclesMachine").click(function (e) {
     e.preventDefault();
 
-    $('.cardImportPlanCiclesMachine').hide(800);
-    $('.cardCreatePlanCiclesMachine').toggle(800);
-    $('#btnCreatePlanCiclesMachine').html('Crear');
+    $(".cardImportPlanCiclesMachine").hide(800);
+    $(".cardCreatePlanCiclesMachine").toggle(800);
+    $("#btnCreatePlanCiclesMachine").html("Crear");
 
-    sessionStorage.removeItem('id_cicles_machine');
+    sessionStorage.removeItem("id_cicles_machine");
 
-    $('#formCreatePlanCiclesMachine').trigger('reset');
+    $("#formCreatePlanCiclesMachine").trigger("reset");
   });
 
   //Crear plan ciclos maquina
-  $('#btnCreatePlanCiclesMachine').click(function (e) {
+  $("#btnCreatePlanCiclesMachine").click(function (e) {
     e.preventDefault();
-    let id_cicles_machine = sessionStorage.getItem('id_cicles_machine');
 
-    if (id_cicles_machine == '' || id_cicles_machine == null) {
-      checkPlanCiclesMachine('/api/addPlanCiclesMachine', id_cicles_machine);
-    } else {
-      checkPlanCiclesMachine('/api/updatePlanCiclesMachine', id_cicles_machine);
-    }
+    const id_cicles_machine =
+      sessionStorage.getItem("id_cicles_machine") || null;
+    const apiUrl = id_cicles_machine
+      ? "/api/updatePlanCiclesMachine"
+      : "/api/addPlanCiclesMachine";
+
+    checkPlanCiclesMachine(apiUrl, id_cicles_machine);
   });
 
   //Actualizar plan ciclo maquina
-  $(document).on('click', '.updatePCMachine', function (e) {
-    $('.cardCreatePlanCiclesMachine').show(800);
-    $('#btnCreatePlanCiclesMachine').html('Actualizar');
+  $(document).on("click", ".updatePCMachine", function (e) {
+    $(".cardCreatePlanCiclesMachine").show(800);
+    $("#btnCreatePlanCiclesMachine").html("Actualizar");
 
     // Obtener el ID del elemento
-    let id = $(this).attr('id');
-    // Obtener la parte después del guion '-'
-    let id_cicles_machine = id.split('-')[1]; 
+    const id_cicles_machine = $(this).attr("id").split("-")[1];
 
-    sessionStorage.setItem('id_cicles_machine', id_cicles_machine);
+    sessionStorage.setItem("id_cicles_machine", id_cicles_machine);
 
-    let row = $(this).parent().parent()[0];
-    let data = tblPlanCiclesMachine.fnGetData(row);
+    const row = $(this).parent().parent()[0];
+    const data = tblPlanCiclesMachine.fnGetData(row);
 
-    $(`#idProcess option[value=${data.id_process}]`).prop('selected', true);
-    $(`#idMachine option[value=${data.id_machine}]`).prop('selected', true);
-    $('#ciclesHour').val(data.cicles_hour.toLocaleString('es-CO'));
+    $(`#idProcess option[value=${data.id_process}]`).prop("selected", true);
+    $(`#idMachine option[value=${data.id_machine}]`).prop("selected", true);
+    $("#ciclesHour").val(data.cicles_hour.toLocaleString("es-CO"));
 
-    $('html, body').animate(
+    $("html, body").animate(
       {
         scrollTop: 0,
       },
@@ -54,28 +53,28 @@ $(document).ready(function () {
   });
 
   const checkPlanCiclesMachine = async (url, idCiclesMachine) => {
-    let idProcess = parseInt($('#idProcess').val());
-    let idMachine = parseInt($('#idMachine').val());
-    let idProduct = parseInt($('#selectNameProduct').val());
-    let ciclesHour = $('#ciclesHour').val();
+    const idProcess = parseInt($("#idProcess").val());
+    const idMachine = parseInt($("#idMachine").val());
+    const idProduct = parseInt($("#selectNameProduct").val());
+    const ciclesHour = $("#ciclesHour").val();
 
     let data = idProcess * idProduct * ciclesHour;
 
-    if (!data || data == '' || data == null || data == 0 || isNaN(idMachine)) {
-      toastr.error('Ingrese todos los campos');
+    if (!data || isNaN(idMachine)) {
+      toastr.error("Ingrese todos los campos");
       return false;
     }
 
     let dataPlanCiclesMachine = new FormData(formCreatePlanCiclesMachine);
-    dataPlanCiclesMachine.append('idProduct', idProduct);
+    dataPlanCiclesMachine.append("idProduct", idProduct);
 
-    if (idCiclesMachine != '' || idCiclesMachine != null)
-      dataPlanCiclesMachine.append('idCiclesMachine', idCiclesMachine);
+    if (idCiclesMachine)
+      dataPlanCiclesMachine.append("idCiclesMachine", idCiclesMachine);
 
     let resp = await sendDataPOST(url, dataPlanCiclesMachine);
 
     messageMachine(resp);
-  } 
+  };
 
   // Eliminar plan ciclo maquina
 
@@ -86,17 +85,17 @@ $(document).ready(function () {
     let id_cicles_machine = data.id_cicles_machine;
 
     bootbox.confirm({
-      title: 'Eliminar',
+      title: "Eliminar",
       message:
-        'Está seguro de eliminar esta maquina? Esta acción no se puede reversar.',
+        "Está seguro de eliminar esta maquina? Esta acción no se puede reversar.",
       buttons: {
         confirm: {
-          label: 'Si',
-          className: 'btn-success',
+          label: "Si",
+          className: "btn-success",
         },
         cancel: {
-          label: 'No',
-          className: 'btn-danger',
+          label: "No",
+          className: "btn-danger",
         },
       },
       callback: function (result) {
@@ -114,26 +113,26 @@ $(document).ready(function () {
 
   /* Mensaje de exito */
   messageMachine = (data) => {
-    if (data.success == true) {
-      $('.cardCreatePlanCiclesMachine').hide(800);
-      $('#formCreatePlanCiclesMachine').trigger('reset');
-      $('.cardImportPlanCiclesMachine').hide(800);
-      $('#formImportPlanCiclesMachine').trigger('reset');
+    const { success, error, info, message } = data;
+    if (success) {
+      $(".cardCreatePlanCiclesMachine").hide(800);
+      $("#formCreatePlanCiclesMachine").trigger("reset");
+      $(".cardImportPlanCiclesMachine").hide(800);
+      $("#formImportPlanCiclesMachine").trigger("reset");
 
-      if($('#selectNameProduct').val())
-        updateTable();
-      toastr.success(data.message);
+      if ($("#selectNameProduct").val()) updateTable();
+      toastr.success(message);
       return false;
-    } else if (data.error == true) toastr.error(data.message);
-    else if (data.info == true) toastr.info(data.message);
+    } else if (error) toastr.error(message);
+    else if (info) toastr.info(message);
   };
 
   /* Actualizar tabla */
   function updateTable() {
-    $('#tblPlanCiclesMachine').DataTable().clear();
-    $('#tblPlanCiclesMachine').DataTable().ajax.reload();
-    $('#tblRoutes').DataTable().clear();
-    $('#tblRoutes').DataTable().ajax.reload();
+    $("#tblPlanCiclesMachine").DataTable().clear();
+    $("#tblPlanCiclesMachine").DataTable().ajax.reload();
+    $("#tblRoutes").DataTable().clear();
+    $("#tblRoutes").DataTable().ajax.reload();
   }
 
   loadDataMachines(1);
