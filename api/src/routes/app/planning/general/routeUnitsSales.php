@@ -238,7 +238,7 @@ $app->post('/addUnitSales', function (Request $request, Response $response, $arg
                     $data['originalQuantity'] =  abs($product['stock']);
 
                     $resolution = $ordersDao->insertOrderByCompany($data, $id_company);
-                    $generalProductsDao->updateAccumulatedQuantity($dataSale['idProduct'], $product['stock'], 2);
+                    // $generalProductsDao->updateAccumulatedQuantity($dataSale['idProduct'], $product['stock'], 2);
                 }
             }
         }
@@ -459,7 +459,7 @@ $app->post('/updateUnitSale', function (Request $request, Response $response, $a
                     $data['originalQuantity'] =  abs($product['stock']);
 
                     $resolution = $ordersDao->insertOrderByCompany($data, $id_company);
-                    $generalProductsDao->updateAccumulatedQuantity($dataSale['idProduct'], $product['stock'], 2);
+                    // $generalProductsDao->updateAccumulatedQuantity($dataSale['idProduct'], $product['stock'], 2);
                 }
             }
         }
@@ -615,7 +615,7 @@ $app->post('/deleteUnitSale', function (Request $request, Response $response, $a
                 $data['originalQuantity'] =  abs($product['stock']);
 
                 $resolution = $ordersDao->insertOrderByCompany($data, $id_company);
-                $generalProductsDao->updateAccumulatedQuantity($dataSale['idProduct'], $product['stock'], 2);
+                // $generalProductsDao->updateAccumulatedQuantity($dataSale['idProduct'], $product['stock'], 2);
             }
         }
     }

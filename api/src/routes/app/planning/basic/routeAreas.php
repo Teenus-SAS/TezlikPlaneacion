@@ -78,10 +78,7 @@ $app->post('/addPlanArea', function (Request $request, Response $response, $args
     $id_company = $_SESSION['id_company'];
     $dataArea = $request->getParsedBody();
 
-    /* Inserta datos */
-    $dataAreas = sizeof($dataArea);
-
-    if ($dataAreas > 1) {
+    if (isset($dataArea['area'])) {
         $findArea = $generalAreaDao->findArea($dataArea, $id_company);
 
         if (!$findArea) {

@@ -20,10 +20,11 @@ class ExplosionMaterialsDao
   {
     $connection = Connection::getInstance()->getConnection();
 
-    $stmt = $connection->prepare("SELECT cp.id_product, o.id_order, cp.id_child_product, SUM(pi.quantity) AS quantity_product, cpi.quantity AS quantity_material, u.abbreviation, (o.original_quantity * cp.quantity) AS need, pi.minimum_stock
+    $stmt = $connection->prepare("SELECT cp.id_product, o.id_order, cp.id_child_product, SUM(pi.quantity) AS quantity_product, cpi.quantity AS quantity_material, u.abbreviation, (o.original_quantity * cp.quantity) AS need, cpi.minimum_stock, p.reference AS reference_material, p.product AS material
                                       FROM composite_products cp
                                         LEFT JOIN products_inventory pi ON pi.id_product = cp.id_product
-                                        LEFT JOIN products_inventory cpi ON cpi.id_product = cp.id_child_product 
+                                        LEFT JOIN products_inventory cpi ON cpi.id_product = cp.id_child_product
+                                        LEFT JOIN products p ON p.id_product = cp.id_child_product
                                         INNER JOIN convert_units u ON u.id_unit = cp.id_unit
                                         INNER JOIN plan_orders o ON o.id_product = cp.id_product
                                       WHERE cp.id_company = :id_company AND o.status IN (1,4,5,6)
@@ -209,10 +210,13 @@ class ExplosionMaterialsDao
             'id_product' => $arr['id_product'],
             'id_child_product' => $arr['id_child_product'],
             'quantity_product' => $arr['quantity_product'],
+            'reference_material' => $arr['reference_material'],
+            'material' => $arr['material'],
             'quantity_material' => $arr['quantity_material'],
             'need' => $arr['need'],
             'abbreviation' => $arr['abbreviation'],
             'minimum_stock' => $arr['minimum_stock'],
+            'transit' => 0,
             'available' => $arr['quantity_material'] - $arr['minimum_stock'] - $arr['need'],
           );
         }

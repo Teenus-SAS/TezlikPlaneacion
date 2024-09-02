@@ -576,7 +576,7 @@ $app->post('/addProductsMaterials', function (Request $request, Response $respon
                     $findOrder = $generalOrdersDao->findLastSameOrder($data);
                     if (!$findOrder) {
                         $resolution = $ordersDao->insertOrderByCompany($data, $id_company);
-                        $generalProductsDao->updateAccumulatedQuantity($products[$i]['id_child_product'], abs($products[$i]['available']), 2);
+                        // $generalProductsDao->updateAccumulatedQuantity($products[$i]['id_child_product'], abs($products[$i]['available']), 2);
 
                         if (isset($resolution['info'])) break;
                         $lastOrder = $lastDataDao->findLastInsertedOrder($id_company);
@@ -722,7 +722,7 @@ $app->post('/updatePlanProductsMaterials', function (Request $request, Response 
                         $findOrder = $generalOrdersDao->findLastSameOrder($data);
                         if (!$findOrder) {
                             $resolution = $ordersDao->insertOrderByCompany($data, $id_company);
-                            $generalProductsDao->updateAccumulatedQuantity($products[$i]['id_child_product'], abs($products[$i]['available']), 2);
+                            // $generalProductsDao->updateAccumulatedQuantity($products[$i]['id_child_product'], abs($products[$i]['available']), 2);
 
                             if (isset($resolution['info'])) break;
                             $lastOrder = $lastDataDao->findLastInsertedOrder($id_company);
@@ -868,7 +868,7 @@ $app->post('/deletePlanProductMaterial', function (Request $request, Response $r
                     $findOrder = $generalOrdersDao->findLastSameOrder($data);
                     if (!$findOrder) {
                         $resolution = $ordersDao->insertOrderByCompany($data, $id_company);
-                        $generalProductsDao->updateAccumulatedQuantity($products[$i]['id_child_product'], abs($products[$i]['available']), 2);
+                        // $generalProductsDao->updateAccumulatedQuantity($products[$i]['id_child_product'], abs($products[$i]['available']), 2);
 
                         if (isset($resolution['info'])) break;
                         $lastOrder = $lastDataDao->findLastInsertedOrder($id_company);

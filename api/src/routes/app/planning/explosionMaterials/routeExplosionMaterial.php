@@ -104,7 +104,7 @@ $app->get('/explosionMaterials', function (Request $request, Response $response,
                 $findOrder = $generalOrdersDao->findLastSameOrder($data);
                 if (!$findOrder) {
                     $resolution = $ordersDao->insertOrderByCompany($data, $id_company);
-                    $generalProductsDao->updateAccumulatedQuantity($products[$i]['id_child_product'], abs($products[$i]['available']), 2);
+                    // $generalProductsDao->updateAccumulatedQuantity($products[$i]['id_child_product'], abs($products[$i]['available']), 2);
 
                     if (isset($resolution['info'])) break;
                     $lastOrder = $lastDataDao->findLastInsertedOrder($id_company);
@@ -123,6 +123,8 @@ $app->get('/explosionMaterials', function (Request $request, Response $response,
         }
     }
 
-    $response->getBody()->write(json_encode($materials, JSON_NUMERIC_CHECK));
+    $explosion = array_merge($materials, $products);
+
+    $response->getBody()->write(json_encode($explosion, JSON_NUMERIC_CHECK));
     return $response->withHeader('Content-Type', 'application/json');
 });
