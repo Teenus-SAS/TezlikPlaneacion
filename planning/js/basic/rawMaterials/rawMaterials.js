@@ -21,7 +21,7 @@ $(document).ready(function () {
     e.preventDefault();
     let idMaterial = sessionStorage.getItem("id_material") || null;
     const apiUrl = idMaterial ? "/api/updateMaterials" : "/api/addMaterials";
-    checkDataArea(apiUrl, idMaterial);
+    checkDataMaterial(apiUrl, idMaterial);
   });
 
   /* Actualizar productos */
@@ -158,6 +158,7 @@ $(document).ready(function () {
   /* Mensaje de exito */
 
   messageMaterials = (data) => {
+    const { success, error, info, message } = data;
     if (success) {
       $(".cardImportMaterials, .cardRawMaterials").hide(800);
       $("#formImportMaterials, #formCreateMaterial").trigger("reset");

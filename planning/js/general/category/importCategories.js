@@ -1,26 +1,26 @@
 $(document).ready(function () {
   let selectedFile;
 
-  $('.cardImportCategories').hide();
+  $(".cardImportCategories").hide();
 
-  $('#btnImportNewCategories').click(function (e) {
+  $("#btnImportNewCategories").click(function (e) {
     e.preventDefault();
-    $('.cardCreateCategory').hide(800);
-    $('.cardImportCategories').toggle(800);
+    $(".cardCreateCategory").hide(800);
+    $(".cardImportCategories").toggle(800);
   });
 
-  $('#fileCategory').change(function (e) {
+  $("#fileCategory").change(function (e) {
     e.preventDefault();
     selectedFile = e.target.files[0];
   });
 
-  $('#btnImportCategories').click(function (e) {
+  $("#btnImportCategories").click(function (e) {
     e.preventDefault();
 
-    file = $('#fileCategory').val();
+    file = $("#fileCategory").val();
 
     if (!file) {
-      toastr.error('Seleccione un archivo');
+      toastr.error("Seleccione un archivo");
       return false;
     }
 
@@ -35,40 +35,40 @@ $(document).ready(function () {
         checkCategory(CategoriesToImport);
       })
       .catch(() => {
-        toastr.error('Ocurrio un error. Intente Nuevamente');
+        toastr.error("Ocurrio un error. Intente Nuevamente");
       });
   });
 
   /* Mensaje de advertencia */
   checkCategory = (data) => {
     $.ajax({
-      type: 'POST',
-      url: '/api/categoriesDataValidation',
+      type: "POST",
+      url: "/api/categoriesDataValidation",
       data: { importCategories: data },
       success: function (resp) {
         if (resp.error == true) {
-          $('#formImportCategory').trigger('reset');
+          $("#formImportCategory").trigger("reset");
           toastr.error(resp.message);
           return false;
         }
 
         bootbox.confirm({
-          title: '¿Desea continuar con la importación?',
+          title: "¿Desea continuar con la importación?",
           message: `Se han encontrado los siguientes registros:<br><br>Datos a insertar: ${resp.insert} <br>Datos a actualizar: ${resp.update}`,
           buttons: {
             confirm: {
-              label: 'Si',
-              className: 'btn-success',
+              label: "Si",
+              className: "btn-success",
             },
             cancel: {
-              label: 'No',
-              className: 'btn-danger',
+              label: "No",
+              className: "btn-danger",
             },
           },
           callback: function (result) {
             if (result) {
               saveCategoryTable(data);
-            } else $('#fileCategory').val('');
+            } else $("#fileCategory").val("");
           },
         });
       },
@@ -77,38 +77,39 @@ $(document).ready(function () {
 
   saveCategoryTable = (data) => {
     $.ajax({
-      type: 'POST',
-      url: '../../api/addCategory',
+      type: "POST",
+      url: "../../api/addCategory",
       data: { importCategories: data },
-      success: function (r) {
+      success: function (data) {
         /* Mensaje de exito */
-        if (r.success == true) {
-          $('.cardImportCategories').hide(800);
-          $('#formImportCategories').trigger('reset');
+        const { success, error, info, message } = data;
+        if (success) {
+          $(".cardImportCategories").hide(800);
+          $("#formImportCategories").trigger("reset");
           updateTable();
           toastr.success(r.message);
           return false;
-        } else if (r.error == true) toastr.error(r.message);
-        else if (r.info == true) toastr.info(r.message);
+        } else if (error) toastr.error(message);
+        else if (info) toastr.info(message);
 
         /* Actualizar tabla */
         function updateTable() {
-          $('#tblCategories').DataTable().clear();
-          $('#tblCategories').DataTable().ajax.reload();
+          $("#tblCategories").DataTable().clear();
+          $("#tblCategories").DataTable().ajax.reload();
         }
       },
     });
   };
 
   /* Descargar formato */
-  $('#btnDownloadImportsCategories').click(function (e) {
+  $("#btnDownloadImportsCategories").click(function (e) {
     e.preventDefault();
 
-    url = 'assets/formatsXlsx/Categorias.xlsx';
+    url = "assets/formatsXlsx/Categorias.xlsx";
 
-    link = document.createElement('a');
+    link = document.createElement("a");
 
-    link.target = '_blank';
+    link.target = "_blank";
 
     link.href = url;
     document.body.appendChild(link);

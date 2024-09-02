@@ -1,31 +1,31 @@
 $(document).ready(function () {
-  $('#NewPlanAccess').click(function (e) {
+  $("#NewPlanAccess").click(function (e) {
     e.preventDefault();
 
-    $('#formCreatePlan').trigger('reset');
-    $('#createPlansAccess').modal('show');
+    $("#formCreatePlan").trigger("reset");
+    $("#createPlansAccess").modal("show");
   });
 
   // Ocultar Modal Nuevo usuario
-  $('#btnClosePlan').click(function (e) {
+  $("#btnClosePlan").click(function (e) {
     e.preventDefault();
 
-    $('#formCreatePlan').trigger('reset');
-    $('#createPlansAccess').modal('hide');
+    $("#formCreatePlan").trigger("reset");
+    $("#createPlansAccess").modal("hide");
   });
 
-  $('#btnCreatePlanAccess').click(function (e) {
+  $("#btnCreatePlanAccess").click(function (e) {
     e.preventDefault();
-    idPlan = sessionStorage.getItem('id_plan');
+    idPlan = sessionStorage.getItem("id_plan");
 
     dataPlan = {};
-    dataPlan['idPlan'] = idPlan;
-    dataPlan['cantProducts'] = $('#cantProducts').val();
+    dataPlan["idPlan"] = idPlan;
+    dataPlan["cantProducts"] = $("#cantProducts").val();
 
     dataPlan = setCheckBoxes(dataPlan);
 
     $.post(
-      '/api/updatePlansAccess',
+      "/api/updatePlansAccess",
       dataPlan,
       function (data, textStatus, jqXHR) {
         message(data);
@@ -36,15 +36,15 @@ $(document).ready(function () {
 
   /* Actualizar plan */
 
-  $(document).on('click', '.updatePlanAccess', function (e) {
+  $(document).on("click", ".updatePlanAccess", function (e) {
     let idPlan = this.id;
-    sessionStorage.setItem('id_plan', idPlan);
+    sessionStorage.setItem("id_plan", idPlan);
 
     const row = $(this).closest("tr")[0];
     let data = tblPlans.fnGetData(row);
 
-    $(`#plan option[value=${data.id_plan}]`).prop('selected', true);
-    $('#cantProducts').val(data.cant_products);
+    $(`#plan option[value=${data.id_plan}]`).prop("selected", true);
+    $("#cantProducts").val(data.cant_products);
 
     // Datos usuario
 
@@ -56,20 +56,20 @@ $(document).ready(function () {
       explosionMaterials: data.plan_explosion_of_material,
       productionOrder: data.plan_production_order,
       offices: data.plan_office,
-      store: data.plan_store
+      store: data.plan_store,
     };
 
     let i = 1;
 
     $.each(acces, (index, value) => {
       if (value === 1) {
-        $(`#checkbox-${i}`).prop('checked', true);
-      } else $(`#checkbox-${i}`).prop('checked', false);
+        $(`#checkbox-${i}`).prop("checked", true);
+      } else $(`#checkbox-${i}`).prop("checked", false);
       i++;
     });
 
-    $('#createPlansAccess').modal('show');
-    $('#btnCreatePlanAccess').html('Actualizar Accesos');
+    $("#createPlansAccess").modal("show");
+    $("#btnCreatePlanAccess").html("Actualizar Accesos");
   });
 
   /* Metodo para definir checkboxes */
@@ -88,7 +88,7 @@ $(document).ready(function () {
     };
 
     $.each(access, (index, value) => {
-      if ($(`#checkbox-${i}`).is(':checked')) dataPlan[`${index}`] = 1;
+      if ($(`#checkbox-${i}`).is(":checked")) dataPlan[`${index}`] = 1;
       else dataPlan[`${index}`] = 0;
       i++;
     });
@@ -99,9 +99,10 @@ $(document).ready(function () {
   /* Mensaje de exito */
 
   message = (data) => {
+    const { success, error, info, message } = data;
     if (success) {
-      $('#createPlansAccess').modal('hide');
-      $('#formCreatePlan').trigger('reset');
+      $("#createPlansAccess").modal("hide");
+      $("#formCreatePlan").trigger("reset");
       updateTable();
       toastr.success(message);
       return false;
@@ -112,7 +113,7 @@ $(document).ready(function () {
   /* Actualizar tabla */
 
   function updateTable() {
-    $('#tblPlans').DataTable().clear();
-    $('#tblPlans').DataTable().ajax.reload();
+    $("#tblPlans").DataTable().clear();
+    $("#tblPlans").DataTable().ajax.reload();
   }
 });

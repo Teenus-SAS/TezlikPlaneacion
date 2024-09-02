@@ -1,43 +1,43 @@
 $(document).ready(function () {
   /* Ocultar panel Nuevo usuario */
-  $('.cardCreateUser').hide();
+  $(".cardCreateUser").hide();
 
   /* Abrir panel Nuevo usuario */
-  $('#btnNewUser').click(function (e) {
+  $("#btnNewUser").click(function (e) {
     e.preventDefault();
-    $('.cardCreateUser').toggle(800);
-    $('#btnCreateUser').html('Crear Usuario');
+    $(".cardCreateUser").toggle(800);
+    $("#btnCreateUser").html("Crear Usuario");
 
-    sessionStorage.removeItem('id_admin');
+    sessionStorage.removeItem("id_admin");
 
-    $('#formCreateUser').trigger('reset');
+    $("#formCreateUser").trigger("reset");
   });
 
   /* Agregar nuevo usuario */
-  $('#btnCreateUser').click(function (e) {
+  $("#btnCreateUser").click(function (e) {
     e.preventDefault();
-    let idAdmin = sessionStorage.getItem('id_admin');
+    let idAdmin = sessionStorage.getItem("id_admin");
 
-    if (idAdmin == '' || idAdmin == null) {
-      firstname = $('#firstname').val();
-      lastname = $('#lastname').val();
-      email = $('#email').val();
+    if (idAdmin == "" || idAdmin == null) {
+      firstname = $("#firstname").val();
+      lastname = $("#lastname").val();
+      email = $("#email").val();
 
       if (
-        firstname == '' ||
+        firstname == "" ||
         firstname == null ||
-        lastname == '' ||
+        lastname == "" ||
         lastname == null ||
-        email == '' ||
+        email == "" ||
         email == null
       ) {
-        toastr.error('Ingrese nombre, apellido y/o email');
+        toastr.error("Ingrese nombre, apellido y/o email");
         return false;
       }
 
-      dataUser = $('#formCreateUser').serialize();
+      dataUser = $("#formCreateUser").serialize();
 
-      $.post('/api/addUserAdmin', dataUser, function (data, textStatus, jqXHR) {
+      $.post("/api/addUserAdmin", dataUser, function (data, textStatus, jqXHR) {
         message(data);
       });
     } else {
@@ -46,22 +46,22 @@ $(document).ready(function () {
   });
 
   /* Actualizar User */
-  $(document).on('click', '.updateUser', function (e) {
-    $('.cardCreateUser').show(800);
-    $('#btnCreateUser').html('Actualizar');
+  $(document).on("click", ".updateUser", function (e) {
+    $(".cardCreateUser").show(800);
+    $("#btnCreateUser").html("Actualizar");
 
     const row = $(this).closest("tr")[0];
     let data = tblUsers.fnGetData(row);
 
     let idAdmin = this.id;
-    sessionStorage.setItem('id_admin', idAdmin);
+    sessionStorage.setItem("id_admin", idAdmin);
 
-    $('#firstname').val(data.firstname);
-    $('#lastname').val(data.lastname);
-    $('#email').val(data.email);
-    $(`#company option[value=${data.id_company}]`).prop('selected', true);
+    $("#firstname").val(data.firstname);
+    $("#lastname").val(data.lastname);
+    $("#email").val(data.email);
+    $(`#company option[value=${data.id_company}]`).prop("selected", true);
 
-    $('html, body').animate(
+    $("html, body").animate(
       {
         scrollTop: 0,
       },
@@ -70,14 +70,14 @@ $(document).ready(function () {
   });
 
   updateUser = () => {
-    idAdmin = sessionStorage.getItem('id_admin');
+    idAdmin = sessionStorage.getItem("id_admin");
 
-    dataUser = $('#formCreateUser').serialize();
+    dataUser = $("#formCreateUser").serialize();
 
     dataUser = `${dataUser}&idAdmin=${idAdmin}`;
 
     $.post(
-      '/api/updateUserAdmin',
+      "/api/updateUserAdmin",
       dataUser,
       function (data, textStatus, jqXHR) {
         message(data);
@@ -91,27 +91,27 @@ $(document).ready(function () {
     let data = tblUsers.fnGetData(row);
 
     dataAdmin = {};
-    dataAdmin['idAdmin'] = data.id_admin;
-    dataAdmin['email'] = data.email;
+    dataAdmin["idAdmin"] = data.id_admin;
+    dataAdmin["email"] = data.email;
 
     bootbox.confirm({
-      title: 'Eliminar',
+      title: "Eliminar",
       message:
-        'Está seguro de eliminar este Usuario? Esta acción no se puede reversar.',
+        "Está seguro de eliminar este Usuario? Esta acción no se puede reversar.",
       buttons: {
         confirm: {
-          label: 'Si',
-          className: 'btn-success',
+          label: "Si",
+          className: "btn-success",
         },
         cancel: {
-          label: 'No',
-          className: 'btn-danger',
+          label: "No",
+          className: "btn-danger",
         },
       },
       callback: function (result) {
         if (result) {
           $.post(
-            '/api/deleteUserAdmin',
+            "/api/deleteUserAdmin",
             dataAdmin,
             function (data, textStatus, jqXHR) {
               message(data);
@@ -124,9 +124,10 @@ $(document).ready(function () {
 
   /* Mensaje de exito */
   message = (data) => {
+    const { success, error, info, message } = data;
     if (success) {
-      $('.cardCreateUser').hide(800);
-      $('#formCreateUser').trigger('reset');
+      $(".cardCreateUser").hide(800);
+      $("#formCreateUser").trigger("reset");
       updateTable();
       toastr.success(message);
       return false;
@@ -136,7 +137,7 @@ $(document).ready(function () {
 
   /* Actualizar tabla */
   function updateTable() {
-    $('#tblUsers').DataTable().clear();
-    $('#tblUsers').DataTable().ajax.reload();
+    $("#tblUsers").DataTable().clear();
+    $("#tblUsers").DataTable().ajax.reload();
   }
 });

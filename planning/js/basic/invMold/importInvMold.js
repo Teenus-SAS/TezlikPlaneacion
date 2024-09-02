@@ -1,26 +1,26 @@
 $(document).ready(function () {
   let selectedFile;
 
-  $('.cardImportInvMold').hide();
+  $(".cardImportInvMold").hide();
 
-  $('#btnImportNewInvMold').click(function (e) {
+  $("#btnImportNewInvMold").click(function (e) {
     e.preventDefault();
-    $('.cardCreateInvMold').hide(800);
-    $('.cardImportInvMold').toggle(800);
+    $(".cardCreateInvMold").hide(800);
+    $(".cardImportInvMold").toggle(800);
   });
 
-  $('#fileInvMold').change(function (e) {
+  $("#fileInvMold").change(function (e) {
     e.preventDefault();
     selectedFile = e.target.files[0];
   });
 
-  $('#btnImportInvMold').click(function (e) {
+  $("#btnImportInvMold").click(function (e) {
     e.preventDefault();
 
-    file = $('#fileInvMold').val();
+    file = $("#fileInvMold").val();
 
     if (!file) {
-      toastr.error('Seleccione un archivo');
+      toastr.error("Seleccione un archivo");
       return false;
     }
 
@@ -39,40 +39,40 @@ $(document).ready(function () {
         checkMolds(MoldsToImport);
       })
       .catch(() => {
-        toastr.error('Ocurrio un error. Intente Nuevamente');
+        toastr.error("Ocurrio un error. Intente Nuevamente");
       });
   });
 
   /* Mensaje de advertencia */
   checkMolds = (data) => {
     $.ajax({
-      type: 'POST',
-      url: '/api/invMoldDataValidation',
+      type: "POST",
+      url: "/api/invMoldDataValidation",
       data: { importInvMold: data },
       success: function (resp) {
         if (resp.error == true) {
-          $('#formImportInvMold').trigger('reset');
+          $("#formImportInvMold").trigger("reset");
           toastr.error(resp.message);
           return false;
         }
 
         bootbox.confirm({
-          title: '¿Desea continuar con la importación?',
+          title: "¿Desea continuar con la importación?",
           message: `Se han encontrado los siguientes registros:<br><br>Datos a insertar: ${resp.insert} <br>Datos a actualizar: ${resp.update}`,
           buttons: {
             confirm: {
-              label: 'Si',
-              className: 'btn-success',
+              label: "Si",
+              className: "btn-success",
             },
             cancel: {
-              label: 'No',
-              className: 'btn-danger',
+              label: "No",
+              className: "btn-danger",
             },
           },
           callback: function (result) {
             if (result) {
               saveMoldTable(data);
-            } else $('#fileInvMold').val('');
+            } else $("#fileInvMold").val("");
           },
         });
       },
@@ -81,38 +81,39 @@ $(document).ready(function () {
 
   saveMoldTable = (data) => {
     $.ajax({
-      type: 'POST',
-      url: '../../api/addMold',
+      type: "POST",
+      url: "/api/addMold",
       data: { importInvMold: data },
-      success: function (r) {
+      success: function (data) {
         /* Mensaje de exito */
-        if (r.success == true) {
-          $('.cardImportInvMold').hide(800);
-          $('#formImportInvMold').trigger('reset');
+        const { success, error, info, message } = data;
+        if (success) {
+          $(".cardImportInvMold").hide(800);
+          $("#formImportInvMold").trigger("reset");
           updateTable();
-          toastr.success(r.message);
+          toastr.success(message);
           return false;
-        } else if (r.error == true) toastr.error(r.message);
-        else if (r.info == true) toastr.info(r.message);
+        } else if (error) toastr.error(message);
+        else if (info) toastr.info(message);
 
         /* Actualizar tabla */
         function updateTable() {
-          $('#tblInvMold').DataTable().clear();
-          $('#tblInvMold').DataTable().ajax.reload();
+          $("#tblInvMold").DataTable().clear();
+          $("#tblInvMold").DataTable().ajax.reload();
         }
       },
     });
   };
 
   /* Descargar formato */
-  $('#btnDownloadImportsInvMold').click(function (e) {
+  $("#btnDownloadImportsInvMold").click(function (e) {
     e.preventDefault();
 
-    url = 'assets/formatsXlsx/Moldes.xlsx';
+    url = "assets/formatsXlsx/Moldes.xlsx";
 
-    link = document.createElement('a');
+    link = document.createElement("a");
 
-    link.target = '_blank';
+    link.target = "_blank";
 
     link.href = url;
     document.body.appendChild(link);

@@ -190,9 +190,9 @@ $(document).ready(function () {
     const dataProduct = new FormData(formCreatePMeasure);
 
     if (idProductMeasure) {
+      const idProduct = sessionStorage.getItem("id_product");
       dataProduct.append("idProductMeasure", idProductMeasure);
       dataProduct.append("idProduct", idProduct);
-      let idProduct = sessionStorage.getItem("id_product");
     }
 
     if (flag_products_measure == "0") dataProduct.append("idProductType", 0);

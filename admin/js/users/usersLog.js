@@ -22,6 +22,7 @@ $(document).ready(function () {
   /* Mensaje de exito */
 
   const message = (data) => {
+    const { success, error, info, message } = data;
     if (success) {
       updateTable();
       toastr.success(message);

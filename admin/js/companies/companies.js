@@ -1,63 +1,63 @@
 $(document).ready(function () {
   /* Abrir modal crear empresa */
 
-  $('#btnNewCompany').click(function (e) {
+  $("#btnNewCompany").click(function (e) {
     e.preventDefault();
-    $('#createCompany').modal('show');
-    $('#license').show();
-    logo.src = '';
-    sessionStorage.removeItem('id_company');
-    $('#btnCreateCompany').html('Crear');
-    $('#formCreateCompany').trigger('reset');
+    $("#createCompany").modal("show");
+    $("#license").show();
+    logo.src = "";
+    sessionStorage.removeItem("id_company");
+    $("#btnCreateCompany").html("Crear");
+    $("#formCreateCompany").trigger("reset");
   });
 
   /* Cargar foto de perfil */
-  $('#formFile').change(function (e) {
+  $("#formFile").change(function (e) {
     e.preventDefault();
     logo.src = URL.createObjectURL(event.target.files[0]);
   });
 
   /* Cerrar Modal*/
-  $('#btnCloseCompany').click(function (e) {
+  $("#btnCloseCompany").click(function (e) {
     e.preventDefault();
-    $('#createCompany').modal('hide');
+    $("#createCompany").modal("hide");
   });
 
   /* Crear Empresa */
-  $('#btnCreateCompany').click(function (e) {
+  $("#btnCreateCompany").click(function (e) {
     e.preventDefault();
 
-    idCompany = sessionStorage.getItem('id_company');
-    if (!idCompany || idCompany == '') {
-      company = $('#company').val();
-      companyNIT = $('#companyNIT').val();
-      companyCity = $('#companyCity').val();
-      companyState = $('#companyState').val();
-      companyCountry = $('#companyCountry').val();
-      companyAddress = $('#companyAddress').val();
-      companyTel = $('#companyTel').val();
+    idCompany = sessionStorage.getItem("id_company");
+    if (!idCompany || idCompany == "") {
+      company = $("#company").val();
+      companyNIT = $("#companyNIT").val();
+      companyCity = $("#companyCity").val();
+      companyState = $("#companyState").val();
+      companyCountry = $("#companyCountry").val();
+      companyAddress = $("#companyAddress").val();
+      companyTel = $("#companyTel").val();
 
       if (
-        company === '' ||
-        companyNIT === '' ||
-        companyCity === '' ||
-        companyState === '' ||
-        companyCountry === '' ||
-        companyAddress === '' ||
-        companyTel === ''
+        company === "" ||
+        companyNIT === "" ||
+        companyCity === "" ||
+        companyState === "" ||
+        companyCountry === "" ||
+        companyAddress === "" ||
+        companyTel === ""
       ) {
-        toastr.error('Ingrese todos los campos');
+        toastr.error("Ingrese todos los campos");
         return false;
       }
 
-      dataCompany = new FormData(document.getElementById('formCreateCompany'));
+      dataCompany = new FormData(document.getElementById("formCreateCompany"));
       // dataCompany.append('companyStatus', companyStatus);
-      let logo = $('#formFile')[0].files[0];
-      dataCompany.append('logo', logo);
+      let logo = $("#formFile")[0].files[0];
+      dataCompany.append("logo", logo);
 
       $.ajax({
-        type: 'POST',
-        url: '/api/addNewCompany',
+        type: "POST",
+        url: "/api/addNewCompany",
         data: dataCompany,
         contentType: false,
         cache: false,
@@ -71,45 +71,45 @@ $(document).ready(function () {
   });
 
   /* Cargar datos en el modal Empresa */
-  $(document).on('click', '.updateCompany', function (e) {
+  $(document).on("click", ".updateCompany", function (e) {
     e.preventDefault();
-    $('#createCompany').modal('show');
-    $('#license').hide();
-    $('#btnCreateCompany').html('Actualizar');
+    $("#createCompany").modal("show");
+    $("#license").hide();
+    $("#btnCreateCompany").html("Actualizar");
 
     // Obtener el ID del elemento
-    let id = $(this).attr('id');
+    let id = $(this).attr("id");
     // Obtener la parte después del guion '-'
-    let idCompany = id.split('-')[1]; 
+    let idCompany = id.split("-")[1];
 
-    sessionStorage.setItem('id_company', idCompany);
+    sessionStorage.setItem("id_company", idCompany);
 
     const row = $(this).closest("tr")[0];
     let data = tblCompanies.fnGetData(row);
 
-    $('#company').val(data.company);
-    $('#companyNIT').val(data.nit);
+    $("#company").val(data.company);
+    $("#companyNIT").val(data.nit);
     if (data.logo) logo.src = data.logo;
 
-    $('#companyCity').val(data.city);
-    $('#companyState').val(data.state);
-    $('#companyCountry').val(data.country);
-    $('#companyAddress').val(data.address);
-    $('#companyTel').val(data.telephone);
-    $('html, body').animate({ scrollTop: 0 }, 1000);
+    $("#companyCity").val(data.city);
+    $("#companyState").val(data.state);
+    $("#companyCountry").val(data.country);
+    $("#companyAddress").val(data.address);
+    $("#companyTel").val(data.telephone);
+    $("html, body").animate({ scrollTop: 0 }, 1000);
   });
 
   updateCompany = () => {
-    idCompany = sessionStorage.getItem('id_company');
-    logo = $('#formFile')[0].files[0];
+    idCompany = sessionStorage.getItem("id_company");
+    logo = $("#formFile")[0].files[0];
 
     dataCompany = new FormData(formCreateCompany);
-    dataCompany.append('idCompany', idCompany);
-    dataCompany.append('logo', logo);
+    dataCompany.append("idCompany", idCompany);
+    dataCompany.append("logo", logo);
 
     $.ajax({
-      type: 'POST',
-      url: '/api/updateDataCompany',
+      type: "POST",
+      url: "/api/updateDataCompany",
       data: dataCompany,
       contentType: false,
       cache: false,
@@ -124,9 +124,10 @@ $(document).ready(function () {
   /* Mensaje de exito */
 
   const message = (data) => {
+    const { success, error, info, message } = data;
     if (success) {
-      $('#createCompany').modal('hide');
-      $('#formCreateCompany').trigger('reset');
+      $("#createCompany").modal("hide");
+      $("#formCreateCompany").trigger("reset");
       updateTable();
       toastr.success(message);
       return false;
@@ -137,7 +138,7 @@ $(document).ready(function () {
   /* Actualizar tabla */
 
   function updateTable() {
-    $('#tblCompanies').DataTable().clear();
-    $('#tblCompanies').DataTable().ajax.reload();
+    $("#tblCompanies").DataTable().clear();
+    $("#tblCompanies").DataTable().ajax.reload();
   }
 });
