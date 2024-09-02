@@ -40,8 +40,8 @@ $(document).ready(function () {
     );
 
     // Insertar todas las opciones de una vez para mejorar el rendimiento
-    $select.append(optionsRef.join(""));
-    $select.append(optionsProd.join(""));
+    $selectRef.append(optionsRef.join(""));
+    $selectProd.append(optionsProd.join(""));
   };
 
   populateOptions = (selector, data, property) => {
