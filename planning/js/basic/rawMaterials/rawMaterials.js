@@ -21,7 +21,7 @@ $(document).ready(function () {
     e.preventDefault();
     let idMaterial = sessionStorage.getItem("id_material") || null;
     const apiUrl = idMaterial ? "/api/updateMaterials" : "/api/addMaterials";
-    checkDataArea(apiUrl, idMaterial);
+    checkDataMaterial(apiUrl, idMaterial);
   });
 
   /* Actualizar productos */
