@@ -151,4 +151,61 @@ class MinimumStockDao
             return $error;
         }
     }
+
+    public function calcStockByComposite($id_product)
+    {
+        try {
+            $connection = Connection::getInstance()->getConnection();
+            $stmt = $connection->prepare("SELECT 
+                                                (
+                                                    (
+                                                        IFNULL(max_term, 0) - IFNULL(min_term, 0)
+                                                    ) * 
+                                                    (
+                                                        (
+                                                            (
+                                                                    IFNULL(u.jan, 0) + 
+                                                                    IFNULL(u.feb, 0) + 
+                                                                    IFNULL(u.mar, 0) + 
+                                                                    IFNULL(u.apr, 0) + 
+                                                                    IFNULL(u.may, 0) + 
+                                                                    IFNULL(u.jun, 0) + 
+                                                                    IFNULL(u.jul, 0) + 
+                                                                    IFNULL(u.aug, 0) + 
+                                                                    IFNULL(u.sept, 0) + 
+                                                                    IFNULL(u.oct, 0) + 
+                                                                    IFNULL(u.nov, 0) + 
+                                                                    IFNULL(u.dece, 0)
+                                                            ) / 
+                                                            NULLIF (
+                                                                    (u.jan > 0) + 
+                                                                    (u.feb > 0) + 
+                                                                    (u.mar > 0) + 
+                                                                    (u.apr > 0) + 
+                                                                    (u.may > 0) + 
+                                                                    (u.jun > 0) + 
+                                                                    (u.jul > 0) + 
+                                                                    (u.aug > 0) + 
+                                                                    (u.sept > 0) + 
+                                                                    (u.oct > 0) +
+                                                                    (u.nov > 0) + 
+                                                                    (u.dece > 0)
+                                                            , 0)
+                                                        )
+                                                    ) * cp.quantity
+                                                ) AS stock  
+                                            FROM composite_products cp 
+                                            LEFT JOIN plan_unit_sales u ON u.id_product = cp.id_product
+                                            LEFT JOIN stock_products sp ON sp.id_product = cp.id_child_product
+                                            WHERE cp.id_child_product = :id_product");
+            $stmt->execute([
+                'id_product' => $id_product,
+            ]);
+            $product = $stmt->fetch($connection::FETCH_ASSOC);
+            return $product;
+        } catch (\Exception $e) {
+            $error = array('info' => true, 'message' => $e->getMessage());
+            return $error;
+        }
+    }
 }

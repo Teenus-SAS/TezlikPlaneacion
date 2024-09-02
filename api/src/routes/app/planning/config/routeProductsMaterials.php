@@ -280,6 +280,17 @@ $app->post('/addProductsMaterials', function (Request $request, Response $respon
                     if (isset($arr['stock']))
                         $resolution = $generalMaterialsDao->updateStockMaterial($dataProductMaterial['material'], $arr['stock']);
                 }
+
+                if ($resolution == null) {
+                    $compositeProducts = $compositeProductsDao->findAllCompositeProductsByIdProduct($dataProductMaterial['idProduct'], $id_company);
+
+                    foreach ($compositeProducts as $k) {
+                        $arr = $minimumStockDao->calcStockByComposite($k['id_child_product']);
+
+                        if (isset($arr['stock']))
+                            $resolution = $generalProductsDao->updateStockByProduct($k['id_child_product'], $arr['stock']);
+                    }
+                }
             }
 
             if ($resolution == null)
@@ -371,6 +382,16 @@ $app->post('/addProductsMaterials', function (Request $request, Response $respon
 
                 if (isset($arr['stock']))
                     $resolution = $generalMaterialsDao->updateStockMaterial($productMaterials[$i]['material'], $arr['stock']);
+            }
+            if (isset($resolution['info'])) break;
+
+            $compositeProducts = $compositeProductsDao->findAllCompositeProductsByIdProduct($productMaterials[$i]['idProduct'], $id_company);
+
+            foreach ($compositeProducts as $k) {
+                $arr = $minimumStockDao->calcStockByComposite($k['id_child_product']);
+
+                if (isset($arr['stock']))
+                    $resolution = $generalProductsDao->updateStockByProduct($k['id_child_product'], $arr['stock']);
             }
         }
 
@@ -606,6 +627,7 @@ $app->post('/updatePlanProductsMaterials', function (Request $request, Response 
     $explosionMaterialsDao,
     $inventoryDaysDao,
     $generalRMStockDao,
+    $compositeProductsDao,
     $generalRequisitionsDao,
     $requisitionsDao,
     $generalClientsDao,
@@ -655,6 +677,17 @@ $app->post('/updatePlanProductsMaterials', function (Request $request, Response 
 
                 if (isset($arr['stock']))
                     $resolution = $generalMaterialsDao->updateStockMaterial($dataProductMaterial['material'], $arr['stock']);
+            }
+
+            if ($resolution == null) {
+                $compositeProducts = $compositeProductsDao->findAllCompositeProductsByIdProduct($dataProductMaterial['idProduct'], $id_company);
+
+                foreach ($compositeProducts as $k) {
+                    $arr = $minimumStockDao->calcStockByComposite($k['id_child_product']);
+
+                    if (isset($arr['stock']))
+                        $resolution = $generalProductsDao->updateStockByProduct($k['id_child_product'], $arr['stock']);
+                }
             }
         }
 
@@ -798,7 +831,7 @@ $app->post('/deletePlanProductMaterial', function (Request $request, Response $r
     }
 
     if ($resolution == null) {
-        $arr = $minimumStockDao->calcStockByMaterial($dataProductMaterial['idMaterial'], 0);
+        $arr = $minimumStockDao->calcStockByMaterial($dataProductMaterial['idMaterial']);
 
         if (isset($arr['stock']))
             $resolution = $generalMaterialsDao->updateStockMaterial($dataProductMaterial['idMaterial'], $arr['stock']);

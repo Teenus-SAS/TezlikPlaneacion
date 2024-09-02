@@ -319,6 +319,17 @@ $app->post('/addMaterials', function (Request $request, Response $response, $arg
                                 if (isset($arr['stock']))
                                     $resolution = $generalMaterialsDao->updateStockMaterial($materials[$i]['idMaterial'], $arr['stock']);
                             }
+
+                            if (isset($resolution['info'])) break;
+
+                            $compositeProducts = $compositeProductsDao->findAllCompositeProductsByIdProduct($j['id_product'], $id_company);
+
+                            foreach ($compositeProducts as $k) {
+                                $arr = $minimumStockDao->calcStockByComposite($k['id_child_product']);
+
+                                if (isset($arr['stock']))
+                                    $resolution = $generalProductsDao->updateStockByProduct($k['id_child_product'], $arr['stock']);
+                            }
                         }
                     }
                 }
@@ -514,6 +525,17 @@ $app->post('/updateMaterials', function (Request $request, Response $response, $
 
                         if (isset($arr['stock']))
                             $resolution = $generalMaterialsDao->updateStockMaterial($dataMaterial['idMaterial'], $arr['stock']);
+                    }
+
+                    if (isset($resolution['info'])) break;
+
+                    $compositeProducts = $compositeProductsDao->findAllCompositeProductsByIdProduct($j['id_product'], $id_company);
+
+                    foreach ($compositeProducts as $k) {
+                        $arr = $minimumStockDao->calcStockByComposite($k['id_child_product']);
+
+                        if (isset($arr['stock']))
+                            $resolution = $generalProductsDao->updateStockByProduct($k['id_child_product'], $arr['stock']);
                     }
                 }
             }
