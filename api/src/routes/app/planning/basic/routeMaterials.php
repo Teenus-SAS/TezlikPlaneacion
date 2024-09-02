@@ -1,5 +1,6 @@
 <?php
 
+use TezlikPlaneacion\Dao\CompositeProductsDao;
 use TezlikPlaneacion\Dao\ConversionUnitsDao;
 use TezlikPlaneacion\dao\ExplosionMaterialsDao;
 use TezlikPlaneacion\dao\FilterDataDao;
@@ -31,6 +32,7 @@ $unitsDao = new UnitsDao();
 $generalOrdersDao = new GeneralOrdersDao();
 $inventoryDaysDao = new InventoryDaysDao();
 $productsMaterialsDao = new ProductsMaterialsDao();
+$compositeProductsDao = new CompositeProductsDao();
 $generalProductsMaterialsDao = new GeneralProductsMaterialsDao();
 $generalPlanCiclesMachinesDao = new GeneralPlanCiclesMachinesDao();
 $productsDao = new GeneralProductsDao();
@@ -205,6 +207,7 @@ $app->post('/addMaterials', function (Request $request, Response $response, $arg
     $materialsTypeDao,
     $generalOrdersDao,
     $productsMaterialsDao,
+    $compositeProductsDao,
     $inventoryDaysDao,
     $generalProductsMaterialsDao,
     $productsDao,
@@ -355,17 +358,20 @@ $app->post('/addMaterials', function (Request $request, Response $response, $arg
             // $order = $generalOrdersDao->checkAccumulatedQuantityOrder($orders[$i]['id_order']);
 
             $productsMaterials = $productsMaterialsDao->findAllProductsMaterials($orders[$i]['id_product'], $id_company);
+            $compositeProducts = $compositeProductsDao->findAllCompositeProductsByIdProduct($orders[$i]['id_product'], $id_company);
+            $productsFTM = array_merge($productsMaterials, $compositeProducts);
+
             $planCicles = $generalPlanCiclesMachinesDao->findAllPlanCiclesMachineByProduct($orders[$i]['id_product'], $id_company);
 
             if ($orders[$i]['status'] != 'EN PRODUCCION' && $orders[$i]['status'] != 'FABRICADO') {
                 if ($orders[$i]['original_quantity'] > $orders[$i]['accumulated_quantity']) {
                     // Ficha tecnica
 
-                    if (sizeof($productsMaterials) == 0 || sizeof($planCicles) == 0) {
+                    if (sizeof($productsFTM) == 0 || sizeof($planCicles) == 0) {
                         $generalOrdersDao->changeStatus($orders[$i]['id_order'], 5);
                         $status = false;
                     } else {
-                        foreach ($productsMaterials as $arr) {
+                        foreach ($productsFTM as $arr) {
                             if ($arr['quantity_material'] <= 0) {
                                 $resolution = $generalOrdersDao->changeStatus($orders[$i]['id_order'], 6);
                                 $status = false;
@@ -434,6 +440,7 @@ $app->post('/updateMaterials', function (Request $request, Response $response, $
     $generalPlanCiclesMachinesDao,
     $productsDao,
     $productsMaterialsDao,
+    $compositeProductsDao,
     $generalProductsMaterialsDao,
     $generalProgrammingDao,
     $conversionUnitsDao,
@@ -621,16 +628,19 @@ $app->post('/updateMaterials', function (Request $request, Response $response, $
             // $order = $generalOrdersDao->checkAccumulatedQuantityOrder($orders[$i]['id_order']);
             // Ficha tecnica
             $productsMaterials = $productsMaterialsDao->findAllProductsMaterials($orders[$i]['id_product'], $id_company);
+            $compositeProducts = $compositeProductsDao->findAllCompositeProductsByIdProduct($orders[$i]['id_product'], $id_company);
+            $productsFTM = array_merge($productsMaterials, $compositeProducts);
+
             $planCicles = $generalPlanCiclesMachinesDao->findAllPlanCiclesMachineByProduct($orders[$i]['id_product'], $id_company);
 
             if ($orders[$i]['status'] != 'EN PRODUCCION' && $orders[$i]['status'] != 'FABRICADO') {
                 if ($orders[$i]['original_quantity'] > $orders[$i]['accumulated_quantity']) {
 
-                    if (sizeof($productsMaterials) == 0 || sizeof($planCicles) == 0) {
+                    if (sizeof($productsFTM) == 0 || sizeof($planCicles) == 0) {
                         $generalOrdersDao->changeStatus($orders[$i]['id_order'], 5);
                         $status = false;
                     } else {
-                        foreach ($productsMaterials as $arr) {
+                        foreach ($productsFTM as $arr) {
                             if ($arr['quantity_material'] <= 0) {
                                 $generalOrdersDao->changeStatus($orders[$i]['id_order'], 6);
                                 $status = false;
