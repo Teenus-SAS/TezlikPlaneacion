@@ -35,7 +35,7 @@ class DashboardGeneralDao
     {
         $connection = Connection::getInstance()->getConnection();
         $sql = "SELECT (COUNT(CASE WHEN pi.quantity = 0 THEN 1 END) / COUNT(*)) * 100 AS percentage_zero_quantity 
-                FROM products_inventory pi;
+                FROM products_inventory pi
                 WHERE id_company = :id_company";
         $stmt = $connection->prepare($sql);
         $stmt->execute(['id_company' => $id_company]);
