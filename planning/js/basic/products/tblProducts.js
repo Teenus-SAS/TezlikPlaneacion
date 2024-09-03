@@ -162,12 +162,12 @@ $(document).ready(function () {
           <a href="javascript:;">
             <i id="upd-${data}" class="bx bx-edit-alt updateProducts" data-toggle='tooltip' title='Actualizar Producto' style="font-size: 30px;"></i>
           </a>
-          <a href="javascript:;">
-            <i id="${data}" class="mdi mdi-delete-forever" data-toggle='tooltip' title='Eliminar Producto' style="font-size: 30px;color:red" onclick="deleteProductsFunction()"></i>
-          </a>
         `,
         },
       ],
+      /* <a href="javascript:;">
+            <i id="${data}" class="mdi mdi-delete-forever" data-toggle='tooltip' title='Eliminar Producto' style="font-size: 30px;color:red" onclick="deleteProductsFunction()"></i>
+          </a> */
       footerCallback: function (row, data, start, end, display) {
         let quantity = 0; 
         let minimum_stock = 0; 
