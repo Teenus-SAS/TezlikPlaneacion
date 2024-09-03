@@ -1,10 +1,8 @@
-indicatorsGlobal = (id) => {
+indicatorsGlobal = () => {
   $.ajax({
-    url: `/api/indicators/${id}`,
+    url: `/api/dashboardIndicators/`,
     success: function (response) {
-      if (response[0].newContacts != null)
-        $("#productStockout").html(response[0].newContacts);
-      else $("#productStockout").html("0");
+      $("#productStockout").html(response[0].newContacts);
     },
   });
 };
