@@ -20,9 +20,9 @@ $(document).ready(function () {
   //   let dataProducts = JSON.parse(sessionStorage.getItem("dataProducts"));
 
   //await setSelectsProducts(dataProducts);
-  $(".cardCreateProduct").toggle(800);
-  $(".cardImportProducts").hide(800);
-  $("#btnCreateProduct").html("Crear Producto");
+  //$(".cardCreateProduct").toggle(800);
+  //$(".cardImportProducts").hide(800);
+  //$("#btnCreateProduct").html("Crear Producto");
 
   //   sessionStorage.removeItem("id_product");
 
