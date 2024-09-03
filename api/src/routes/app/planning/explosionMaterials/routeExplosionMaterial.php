@@ -117,8 +117,11 @@ $app->get('/explosionMaterials', function (Request $request, Response $response,
 
                         $resolution = $programmingRoutesDao->insertProgrammingRoutes($data, $id_company);
                     }
-                    if (isset($resolution['info'])) break;
+                } else {
+                    $data['idOrder'] = $findOrder['id_order'];
+                    $resolution = $ordersDao->updateOrder($data);
                 }
+                if (isset($resolution['info'])) break;
             }
         }
     }

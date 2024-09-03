@@ -610,8 +610,11 @@ $app->post('/addProductsMaterials', function (Request $request, Response $respon
 
                             $resolution = $programmingRoutesDao->insertProgrammingRoutes($data, $id_company);
                         }
-                        if (isset($resolution['info'])) break;
+                    } else {
+                        $data['idOrder'] = $findOrder['id_order'];
+                        $resolution = $ordersDao->updateOrder($data);
                     }
+                    if (isset($resolution['info'])) break;
                 }
             }
         }
@@ -768,8 +771,11 @@ $app->post('/updatePlanProductsMaterials', function (Request $request, Response 
 
                                 $resolution = $programmingRoutesDao->insertProgrammingRoutes($data, $id_company);
                             }
-                            if (isset($resolution['info'])) break;
+                        } else {
+                            $data['idOrder'] = $findOrder['id_order'];
+                            $resolution = $ordersDao->updateOrder($data);
                         }
+                        if (isset($resolution['info'])) break;
                     }
                 }
             }
@@ -914,8 +920,11 @@ $app->post('/deletePlanProductMaterial', function (Request $request, Response $r
 
                             $resolution = $programmingRoutesDao->insertProgrammingRoutes($data, $id_company);
                         }
-                        if (isset($resolution['info'])) break;
+                    } else {
+                        $data['idOrder'] = $findOrder['id_order'];
+                        $resolution = $ordersDao->updateOrder($data);
                     }
+                    if (isset($resolution['info'])) break;
                 }
             }
         }

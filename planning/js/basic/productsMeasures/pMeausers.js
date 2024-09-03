@@ -208,7 +208,7 @@ $(document).ready(function () {
     let row = $(this.activeElement).closest("tr")[0];
     let data = tblProducts.fnGetData(row);
 
-    let dataProduct = [];
+    let dataProduct = {};
     dataProduct["idProductMeasure"] = data.id_product_measure;
     dataProduct["idProduct"] = data.id_product;
 
