@@ -23,9 +23,7 @@ $(document).ready(function () {
 
     sessionStorage.removeItem("id_product_plan");
 
-    $("#formAddProductPlan").trigger("reset");
-    $("#mechanicalPlaneFile").remove();
-    $("#assemblyPlaneFile").remove();
+    $("#formAddProductPlan").trigger("reset"); 
   });
 
   /* Crear planos */
@@ -37,7 +35,7 @@ $(document).ready(function () {
       ? "/api/updateProductPlan"
       : "/api/addProductPlan";
 
-    checkDataArea(apiUrl, idProductPlan);
+    checkDataProductsPlan(apiUrl, idProductPlan);
   });
 
   /* Actualizar Planos */
@@ -49,10 +47,7 @@ $(document).ready(function () {
     // Obtener el ID del elemento
     let idProductPlan = $(this).attr("id").split("-")[1];
 
-    sessionStorage.setItem("id_product_plan", idProductPlan);
-
-    // let row = $(this).parent().parent().parent()[0];
-    // let data = tblPlans.fnGetData(row);
+    sessionStorage.setItem("id_product_plan", idProductPlan); 
 
     // if (data.img)
     //     $("#preview").html(
@@ -65,15 +60,17 @@ $(document).ready(function () {
 
   /* Revisar datos */
   const checkDataProductsPlan = async (url, idProductPlan) => {
+    let idProduct = $('#selectNameProduct').val();
     let mechanicalPlaneFile = $("#mechanicalPlaneFile")[0].files[0];
     let assemblyPlaneFile = $("#assemblyPlaneFile")[0].files[0];
 
-    if (!mechanicalPlaneFile || !assemblyPlaneFile) {
+    if (!idProduct || !mechanicalPlaneFile || !assemblyPlaneFile) {
       toastr.error("Seleccione un archivo correspondiente");
       return false;
     }
 
     let dataProduct = new FormData(formAddProductPlan);
+    dataProduct.append("idProduct", idProduct);
     dataProduct.append("mechanicalPlaneFile", mechanicalPlaneFile);
     dataProduct.append("assemblyPlaneFile", assemblyPlaneFile);
 
@@ -118,6 +115,22 @@ $(document).ready(function () {
       },
     });
   };
+
+  // Descargar PDF
+  $(document).on('click', '.downloadPlaneProduct', function () {
+    let key = this.id;
+
+    let row = $(this).parent().parent().parent()[0];
+    let data = tblPlans.fnGetData(row);
+    let pdfUrl = data[key];
+
+    const link = document.createElement('a');
+    link.href = pdfUrl;
+    link.download = 'prueba.pdf'; // Nombre del archivo para descargar
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+  });
 
   /* Mensaje de exito */
 

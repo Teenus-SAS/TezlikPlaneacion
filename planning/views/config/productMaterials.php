@@ -349,11 +349,11 @@ if (sizeof($_SESSION) == 0)
                                                     </div>
                                                 </div> -->
                                                 <div class="col-sm-5 floating-label enable-floating-label show-label drag-area" style="margin-bottom:10px!important">
-                                                    <input class="form-control" type="file" id="mechanicalPlaneFile">
+                                                    <input class="form-control" type="file" id="mechanicalPlaneFile" accept=".pdf">
                                                     <label for="formFile" class="form-label"> Plano Mecanico</label>
                                                 </div>
                                                 <div class="col-sm-5 floating-label enable-floating-label show-label drag-area" style="margin-bottom:10px!important">
-                                                    <input class="form-control" type="file" id="assemblyPlaneFile">
+                                                    <input class="form-control" type="file" id="assemblyPlaneFile" accept=".pdf">
                                                     <label for="formFile" class="form-label"> Plano Montaje</label>
                                                 </div>
                                                 <div class="col-sm-2 cardBottons" style="margin-top:7px">

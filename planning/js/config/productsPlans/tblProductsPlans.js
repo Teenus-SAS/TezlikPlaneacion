@@ -16,13 +16,13 @@ $(document).ready(function () {
                     data: null,
                     className: "uniqueClassName dt-head-center",
                     render: (data) => ` 
-          <a href="javascript:;">
-            <i id="upd-${data.id_product_measure}" class="bx bx-edit-alt updatePMeasure" data-toggle='tooltip' title='Actualizar Medida' style="font-size: 30px;"></i>
-          </a>
-          <a href="javascript:;">
-            <i id="${data.id_product_measure}" class="mdi mdi-delete-forever" data-toggle='tooltip' title='Eliminar Medida' style="font-size: 30px;color:red" onclick="deletePMeasureFunction()"></i>
-          </a>
-        `,
+                        <a href="javascript:;">
+                            <i id="upd-${data.id_product_plan}" class="bx bx-edit-alt updateProductPlan" data-toggle='tooltip' title='Actualizar Planos' style="font-size: 30px;"></i>
+                        </a>
+                        <a href="javascript:;">
+                            <i id="${data.id_product_plan}" class="mdi mdi-delete-forever" data-toggle='tooltip' title='Eliminar Planos' style="font-size: 30px;color:red" onclick="deleteProductsPlanFunction()"></i>
+                        </a>
+                    `,
                 },
                 {
                     title: "No.",
@@ -31,24 +31,16 @@ $(document).ready(function () {
                     render: function (data, type, full, meta) {
                         return meta.row + 1;
                     },
-                },
-                //   {
-                //     title: "Referencia",
-                //     data: "reference",
-                //     className: "uniqueClassName dt-head-center",
-                //   },
-                //   {
-                //     title: "Producto",
-                //     data: "product",
-                //     className: "uniqueClassName dt-head-center",
-                //   },
+                }, 
                 {
                     title: "Plano Mecanico",
                     data: "mechanical_plan",
                     className: "uniqueClassName dt-head-center",
                     render: (data) =>
                         data
-                            ? `<img src="${data}" alt="" style="width:80px;border-radius:100px">`
+                            ? `<a href="javascript:;">
+                                    <i id="mechanical_plan" class="bi bi-file-earmark-pdf-fill downloadPlaneProduct" data-toggle='tooltip' title='Descargar Plano Mecanico' style="font-size: 30px;color:red"></i>
+                                </a>`
                             : "",
                 },
                 {
@@ -57,7 +49,9 @@ $(document).ready(function () {
                     className: "uniqueClassName dt-head-center",
                     render: (data) =>
                         data
-                            ? `<img src="${data}" alt="" style="width:80px;border-radius:100px">`
+                            ? `<a href="javascript:;">
+                                    <i id="assembly_plan" class="bi bi-file-earmark-pdf-fill downloadPlaneProduct" data-toggle='tooltip' title='Descargar Plano Montaje' style="font-size: 30px;color:red"></i>
+                                </a>`
                             : "",
                 },
             ],
