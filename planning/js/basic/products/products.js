@@ -19,10 +19,10 @@ $(document).ready(function () {
 
   //   let dataProducts = JSON.parse(sessionStorage.getItem("dataProducts"));
 
-    await setSelectsProducts(dataProducts);
-    $(".cardCreateProduct").toggle(800);
-    $(".cardImportProducts").hide(800);
-    $("#btnCreateProduct").html("Crear Producto");
+  //await setSelectsProducts(dataProducts);
+  $(".cardCreateProduct").toggle(800);
+  $(".cardImportProducts").hide(800);
+  $("#btnCreateProduct").html("Crear Producto");
 
   //   sessionStorage.removeItem("id_product");
 
@@ -34,8 +34,12 @@ $(document).ready(function () {
   $("#btnCreateProduct").click(function (e) {
     e.preventDefault();
 
-    const idProductInventory = sessionStorage.getItem("id_product_inventory") || null;
-    const apiUrl = idProductInventory && idProductInventory != 0 ? "/api/updatePlanProduct" : "/api/addProduct";
+    const idProductInventory =
+      sessionStorage.getItem("id_product_inventory") || null;
+    const apiUrl =
+      idProductInventory && idProductInventory != 0
+        ? "/api/updatePlanProduct"
+        : "/api/addProduct";
     checkDataProducts(apiUrl, idProductInventory);
   });
 
@@ -54,7 +58,7 @@ $(document).ready(function () {
     // Obtener data
     let row = $(this).parent().parent().parent()[0];
     let data = tblProducts.fnGetData(row);
- 
+
     let $select = $(`#refProduct`);
     $select.empty();
     $select.append(`<option value='0' disabled>Seleccionar</option>`);
@@ -81,13 +85,13 @@ $(document).ready(function () {
   });
 
   /* Revisar datos */
-  const checkDataProducts = async (url, idProductInventory) => { 
+  const checkDataProducts = async (url, idProductInventory) => {
     idProduct = parseFloat($("#refProduct").val());
 
     if (isNaN(idProduct) || idProduct <= 0) {
       toastr.error("Ingrese todos los campos");
       return false;
-    } 
+    }
 
     let imageProd = $("#formFile")[0].files[0];
 
@@ -96,8 +100,8 @@ $(document).ready(function () {
 
     if (idProductInventory != "" || idProductInventory != null) {
       dataProduct.append("idProductInventory", idProductInventory);
-    } 
-    dataProduct.append("idProduct", idProduct); 
+    }
+    dataProduct.append("idProduct", idProduct);
 
     let resp = await sendDataPOST(url, dataProduct);
 
