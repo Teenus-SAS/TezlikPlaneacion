@@ -7,8 +7,7 @@ $(document).ready(function () {
 
   $("#btnInvetoryABC").click(function (e) {
     e.preventDefault();
-    $(".cardImportInventory").hide(800);
-    $(".cardInventoryABC").hide(800);
+    $(".cardImportInventory, .cardInventoryABC").hide(800);
     $(".cardAddMonths").toggle(800);
 
     let display = $(".cardAddMonths").css("display");
@@ -44,9 +43,8 @@ $(document).ready(function () {
   messageInventory = async (data) => {
     const { success, error, info, message } = data;
     if (success) {
-      $(".cardImportInventory").hide(800);
-      $(".cardAddMonths").hide(800);
-
+      $(".cardImportInventory, .cardAddMonths").hide(800);
+      
       await loadInventory();
 
       toastr.success(message);

@@ -2,9 +2,9 @@ $(document).ready(function () {
   $(".selectNavigation").click(function (e) {
     e.preventDefault();
 
-    $(".cardAddRequisitions").hide(800);
-    $(".cardSearchDate").hide(800);
-    $(".cardImportRequisitions").hide(800);
+    $(".cardAddRequisitions, .cardSearchDate, .cardImportRequisitions").hide(
+      800
+    );
 
     if (this.id == "pending") loadTblRequisitions(pending, false);
     else if (this.id == "done") loadTblRequisitions(done, true);

@@ -123,10 +123,9 @@ $(document).ready(function () {
   /* Actualizar productos materials */
 
   $(document).on("click", ".updateRequisition", async function (e) {
-    $(".cardImportRequisitions").hide(800);
+    $(".cardImportRequisitions, .cardSelect").hide(800);
     $(".cardAddRequisitions, .cardRequired, .cardDescription").show(800);
     $("#btnAddRequisition").text("Actualizar");
-    $(".cardSelect").hide();
 
     //Obtener data
     const row = $(this).closest("tr")[0];

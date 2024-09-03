@@ -113,10 +113,9 @@ $(document).ready(function () {
   messagePType = (data) => {
     const { success, error, info, message } = data;
     if (success) {
-      $(".cardImportPType").hide(800);
-      $("#formImportPType").trigger("reset");
-      $(".cardCreatePType").hide(800);
-      $("#formCreatePType").trigger("reset");
+      $(".cardImportPType, .cardCreatePType").hide(800);
+      $("#formImportPType, #formCreatePType").trigger("reset");
+
       toastr.success(message);
       loadAllDataPType();
       return false;

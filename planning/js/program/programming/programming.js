@@ -1,28 +1,35 @@
 $(document).ready(function () {
   $(".selectNavigation").click(function (e) {
     e.preventDefault();
-    $(".cardProgramming").hide();
-    $(".cardDashboardProgramming").hide();
-    $(".cardCreateProgramming").hide();
+    $(
+      ".cardProgramming, .cardDashboardProgramming, .cardCreateProgramming"
+    ).hide();
 
-    let option = this.id;
+    const option = this.id;
 
-    switch (option) {
+    const sections = {
+      "link-table": ".cardProgramming",
+      "link-dashboard": ".cardDashboardProgramming",
+    };
+
+    // Mostrar la sección correspondiente según la opción seleccionada
+    $(sections[option] || "").show();
+
+    /* switch (option) {
       case "link-table":
         $(".cardProgramming").show();
         break;
       case "link-dashboard":
         $(".cardDashboardProgramming").show();
         break;
-    }
+    } */
   });
 
   let processProgramming = [];
   /* Ocultar panel crear programa de producción */
-  $(".cardCreateProgramming").hide();
-  $(".cardFormProgramming2").hide();
-  $(".cardBottons").hide();
-  $(".cardSaveBottons").hide();
+  $(
+    ".cardCreateProgramming, .cardFormProgramming2, .cardBottons, .cardSaveBottons"
+  ).hide();
 
   /* Abrir panel crear programa de producción */
 

@@ -158,8 +158,7 @@ $(document).ready(function () {
   messageRMS = (data) => {
     const { success, error, info, message } = data;
     if (success) {
-      $(".cardImportRMStock").hide(800);
-      $(".cardCreateRMStock").hide(800);
+      $(".cardImportRMStock, .cardCreateRMStock").hide(800);
       $("#formCreateRMStock").trigger("reset");
       updateTable();
       toastr.success(message);

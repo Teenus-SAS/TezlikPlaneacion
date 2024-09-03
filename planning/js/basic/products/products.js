@@ -148,10 +148,8 @@ $(document).ready(function () {
   messageProducts = (data) => {
     const { success, error, info, message } = data;
     if (success) {
-      $("#formImportProduct").trigger("reset");
-      $(".cardCreateProduct").hide(800);
-      $(".cardImportProducts").hide(800);
-      $("#formCreateProduct").trigger("reset");
+      $(".cardCreateProduct, .cardImportProducts").hide(800);
+      $("#formImportProduct, #formCreateProduct").trigger("reset");
       loadAllData();
       toastr.success(message);
       return false;

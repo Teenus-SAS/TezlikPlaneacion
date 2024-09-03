@@ -193,9 +193,8 @@ $(document).ready(function () {
   $(document).on("click", ".updateDays", function (e) {
     e.preventDefault();
 
-    $(".cardImportSales").hide(800);
+    $(".cardImportSales, .cardSales").hide(800);
     $(".cardAddDays").show(800);
-    $(".cardSales").hide(800);
 
     $("#btnCreateSale").text("Actualizar");
 
