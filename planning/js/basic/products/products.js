@@ -82,9 +82,12 @@ $(document).ready(function () {
 
   /* Revisar datos */
   const checkDataProducts = async (url, idProductInventory) => { 
-    idProduct = parseFloat($("#refProduct").val());
+    let idProduct = parseFloat($("#refProduct").val());
+    let quantity = parseFloat($('#pQuantity').val());
 
-    if (isNaN(idProduct) || idProduct <= 0) {
+    let data = idProduct * quantity;
+
+    if (isNaN(data) || data <= 0) {
       toastr.error("Ingrese todos los campos");
       return false;
     } 

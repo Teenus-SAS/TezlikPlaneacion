@@ -128,7 +128,7 @@ $(document).ready(function () {
   $('#btnDownloadImportsAreas').click(function (e) {
     e.preventDefault();
 
-    url = 'assets/formatsXlsx/Areas.xlsx';
+    let url = 'assets/formatsXlsx/Areas.xlsx';
 
     link = document.createElement('a');
 
