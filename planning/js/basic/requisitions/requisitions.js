@@ -8,13 +8,10 @@ $(document).ready(function () {
   $("#btnNewRequisition").click(function (e) {
     e.preventDefault();
 
-    $(".cardImportRequisitions").hide(800);
-    $(".cardTableConfigMaterials").show(800);
-    $(".cardRequired").hide();
+    $(".cardImportRequisitions, .cardDescription, .cardRequired").hide(800);
+    $(".cardTableConfigMaterials, .cardSelect").show(800);
     $(".cardAddRequisitions").toggle(800);
-    $("#btnAddRequisition").html("Asignar");
-    $(".cardSelect").show();
-    $(".cardDescription").hide();
+    $("#btnAddRequisition").text("Asignar");
     document.getElementById("requestedQuantity").readOnly = false;
 
     sessionStorage.removeItem("id_requisition");
@@ -126,10 +123,9 @@ $(document).ready(function () {
   /* Actualizar productos materials */
 
   $(document).on("click", ".updateRequisition", async function (e) {
-    $(".cardImportRequisitions").hide(800);
+    $(".cardImportRequisitions, .cardSelect").hide(800);
     $(".cardAddRequisitions, .cardRequired, .cardDescription").show(800);
     $("#btnAddRequisition").text("Actualizar");
-    $(".cardSelect").hide();
 
     //Obtener data
     const row = $(this).closest("tr")[0];
@@ -256,6 +252,7 @@ $(document).ready(function () {
   /* Eliminar materia prima */
 
   deleteFunction = (op) => {
+    //obtener data
     const row = $(this.activeElement).closest("tr")[0];
     const data = tblRequisitions.fnGetData(row);
 
@@ -296,7 +293,9 @@ $(document).ready(function () {
     e.preventDefault();
 
     const date = new Date().toISOString().split("T")[0];
-    const row = $(this).parent().parent()[0];
+
+    //obtener data
+    const row = $(this).closest("tr")[0];
     const data = tblRequisitions.fnGetData(row);
 
     bootbox.confirm({

@@ -140,7 +140,7 @@ $(document).ready(function () {
 
     if (data.product_type == "CAJA") {
       $(".inputs").hide();
-      $("#lblWindow").html("Und x Tamaño");
+      $("#lblWindow").text("Und x Tamaño");
     }
 
     //Hide inputs according Product
@@ -283,10 +283,9 @@ $(document).ready(function () {
   messageProducts = (data) => {
     const { success, error, info, message } = data;
     if (success) {
-      $("#formImportProduct").trigger("reset");
-      $(".cardCreatePMeasure").hide(800);
-      $(".cardImportPMeasure").hide(800);
-      $("#formCreatePMeasure").trigger("reset");
+      $(".cardCreatePMeasure, .cardImportPMeasure").hide(800);
+      $("#formImportProduct, #formCreatePMeasure").trigger("reset");
+
       updateTable();
       toastr.success(message);
       return false;

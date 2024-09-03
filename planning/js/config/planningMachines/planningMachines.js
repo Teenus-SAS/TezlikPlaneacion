@@ -9,7 +9,7 @@ $(document).ready(function () {
     e.preventDefault();
 
     $("#createPlanMachine").modal("show");
-    $("#btnCreatePlanMachine").html("Crear");
+    $("#btnCreatePlanMachine").TEXT("Crear");
 
     sessionStorage.removeItem("id_planning_machine");
 

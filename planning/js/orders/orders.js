@@ -7,12 +7,12 @@ $(document).ready(function () {
 
     $(".cardImportOrder").hide(800);
     $(".cardAddOrders").toggle(800);
-    $("#btnCreatePlanMachine").html("Crear");
+    $("#btnCreatePlanMachine").text("Crear");
 
     sessionStorage.removeItem("id_order");
 
     $("#formCreateOrder").trigger("reset");
-    $("#btnCreateOrder").html("Crear");
+    $("#btnCreateOrder").text("Crear");
   });
 
   $("#btnCreateOrder").click(function (e) {
@@ -28,7 +28,7 @@ $(document).ready(function () {
   $(document).on("click", ".updateOrder", function () {
     $(".cardImportOrder").hide(800);
     $(".cardAddOrders").show(800);
-    $("#btnCreateOrder").html("Actualizar");
+    $("#btnCreateOrder").text("Actualizar");
 
     const row = $(this).closest("tr")[0];
     let data = tblOrder.fnGetData(row);

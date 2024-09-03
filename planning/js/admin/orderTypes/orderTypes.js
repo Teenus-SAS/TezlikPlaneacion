@@ -9,7 +9,7 @@ $(document).ready(function () {
     e.preventDefault();
     $(".cardImportOrderTypes").hide(800);
     $(".cardCreateOrderType").toggle(800);
-    $("#btnCreateOrderType").html("Crear");
+    $("#btnCreateOrderType").text("Crear");
 
     sessionStorage.removeItem("id_order_type");
 
@@ -33,7 +33,7 @@ $(document).ready(function () {
       orderType = $("#formCreateOrderType").serialize();
 
       $.post(
-        "../../api/addOrderTypes",
+        "/api/addOrderTypes",
         orderType,
         function (data, textStatus, jqXHR) {
           message(data);
@@ -49,7 +49,7 @@ $(document).ready(function () {
   $(document).on("click", ".updateOrderType", function (e) {
     $(".cardImportOrderType").hide(800);
     $(".cardCreateOrderType").show(800);
-    $("#btnCreateOrderType").html("Actualizar");
+    $("#btnCreateOrderType").text("Actualizar");
 
     const row = $(this).closest("tr")[0];
     let data = tblOrderTypes.fnGetData(row);
@@ -70,13 +70,9 @@ $(document).ready(function () {
     idOrderType = sessionStorage.getItem("id_order_type");
     data = data + "&idOrderType=" + idOrderType;
 
-    $.post(
-      "../../api/updateOrderType",
-      data,
-      function (data, textStatus, jqXHR) {
-        message(data);
-      }
-    );
+    $.post("/api/updateOrderType", data, function (data, textStatus, jqXHR) {
+      message(data);
+    });
   };
 
   /* Eliminar Tipo Pedido */

@@ -8,7 +8,7 @@ $(document).ready(function () {
     e.preventDefault();
     $(".cardImportEmployees").hide(800);
     $(".cardCreateEmployee").toggle(800);
-    $("#btnCreateEmployee").html("Crear");
+    $("#btnCreateEmployee").text("Crear");
 
     sessionStorage.removeItem("id_plan_payroll");
 
@@ -28,7 +28,7 @@ $(document).ready(function () {
   $(document).on("click", ".updatePayroll", function (e) {
     $(".cardImportEmployees").hide(800);
     $(".cardCreateEmployee").show(800);
-    $("#btnCreateEmployee").html("Actualizar");
+    $("#btnCreateEmployee").text("Actualizar");
 
     // Obtener el ID del elemento
     const idPayroll = $(this).attr("id").split("-")[1];

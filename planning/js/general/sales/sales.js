@@ -13,12 +13,10 @@ $(document).ready(function () {
   $("#btnNewSale").click(function (e) {
     e.preventDefault();
 
-    $(".cardImportSales").hide(800);
-    $(".cardSaleDays").hide(800);
+    $(".cardImportSales, .cardSaleDays, .cardAddDays").hide(800);
     $(".cardSales").show(800);
     $("#createSale").modal("show");
-    $("#btnCreateSale").html("Crear");
-    $(".cardAddDays").hide();
+    $("#btnCreateSale").text("Crear");
 
     sessionStorage.removeItem("id_unit_sales");
 
@@ -43,7 +41,7 @@ $(document).ready(function () {
   $(document).on("click", ".updateSale", function (e) {
     $(".cardImportSales").hide(800);
     $("#createSale").modal("show");
-    $("#btnCreateSale").html("Actualizar");
+    $("#btnCreateSale").text("Actualizar");
 
     const row = $(this).closest("tr")[0];
     let data = tblSales.fnGetData(row);
@@ -195,11 +193,10 @@ $(document).ready(function () {
   $(document).on("click", ".updateDays", function (e) {
     e.preventDefault();
 
-    $(".cardImportSales").hide(800);
+    $(".cardImportSales, .cardSales").hide(800);
     $(".cardAddDays").show(800);
-    $(".cardSales").hide(800);
 
-    $("#btnCreateSale").html("Actualizar");
+    $("#btnCreateSale").text("Actualizar");
 
     const row = $(this).closest("tr")[0];
     let data = tblSalesDays.fnGetData(row);

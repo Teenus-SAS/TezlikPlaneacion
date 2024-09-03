@@ -149,7 +149,7 @@ $(document).ready(function () {
       callback: function (result) {
         if (result) {
           $.get(
-            `../../api/deleteMold/${id_mold}`,
+            `/api/deleteMold/${id_mold}`,
             function (data, textStatus, jqXHR) {
               message(data);
             }

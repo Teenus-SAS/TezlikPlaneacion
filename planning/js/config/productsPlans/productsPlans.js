@@ -42,7 +42,7 @@ $(document).ready(function () {
 
   $(document).on("click", ".updateProductPlan", function (e) {
     $(".cardAddProductPlans").show(800);
-    $("#btnSaveProductsPlans").html("Actualizar");
+    $("#btnSaveProductsPlans").text("Actualizar");
 
     // Obtener el ID del elemento
     let idProductPlan = $(this).attr("id").split("-")[1];

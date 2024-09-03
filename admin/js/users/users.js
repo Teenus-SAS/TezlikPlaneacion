@@ -6,7 +6,7 @@ $(document).ready(function () {
   $("#btnNewUser").click(function (e) {
     e.preventDefault();
     $(".cardCreateUser").toggle(800);
-    $("#btnCreateUser").html("Crear Usuario");
+    $("#btnCreateUser").text("Crear Usuario");
 
     sessionStorage.removeItem("id_user");
     $("#email").prop("disabled", false);
@@ -26,16 +26,14 @@ $(document).ready(function () {
       lastname = $("#lastname").val();
       email = $("#email").val();
 
-      if (
-        firstname == "" ||
-        firstname == null ||
-        lastname == "" ||
-        lastname == null ||
-        email == "" ||
-        email == null ||
-        company == "" ||
-        company == null
-      ) {
+      //validacion data
+      const fields = { firstname, lastname, email, company };
+
+      const emptyField = Object.values(fields).some(
+        (field) => !field || field.trim() === ""
+      );
+
+      if (emptyField) {
         toastr.error("Ingrese nombre, apellido y/o email");
         return false;
       }
@@ -59,7 +57,7 @@ $(document).ready(function () {
   /* Actualizar User */
   $(document).on("click", ".updateUser", function (e) {
     $(".cardCreateUser").show(800);
-    $("#btnCreateUser").html("Actualizar");
+    $("#btnCreateUser").text("Actualizar");
 
     const row = $(this).closest("tr")[0];
     let data = tblUsers.fnGetData(row);

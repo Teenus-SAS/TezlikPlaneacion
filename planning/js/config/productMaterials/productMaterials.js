@@ -8,7 +8,17 @@ $(document).ready(function () {
 
     let card = this.id;
 
-    switch (card) {
+    const sections = {
+      "nav-materials": ".cardProductsMaterials",
+      "nav-planCicles": ".cardPlanCicles",
+      "nav-route": ".cardRoutes",
+      "nav-plans": ".cardPlans",
+    };
+
+    // Mostrar la sección correspondiente según la opción seleccionada
+    $(sections[card] || "").show();
+
+    /* switch (card) {
       case "nav-materials":
         $(".cardProductsMaterials").show();
         break;
@@ -21,7 +31,7 @@ $(document).ready(function () {
       case "nav-plans":
         $(".cardPlans").show();
         break;
-    }
+    } */
 
     let tables = document.getElementsByClassName("dataTable");
 
@@ -90,10 +100,11 @@ $(document).ready(function () {
   $("#btnCreateProduct").click(function (e) {
     e.preventDefault();
 
-    $(".cardImportProductsMaterials").hide(800);
+    $(
+      ".cardAddNewProduct, .inputQuantityCalc, .cardImportProductsMaterials"
+    ).hide(800);
     // $('.cardTableConfigMaterials').show(800);
     $(".cardAddMaterials").toggle(800);
-    $(".cardAddNewProduct, .inputQuantityCalc").hide(800);
     $("#btnAddMaterials").text("Asignar");
 
     sessionStorage.removeItem("id_product_material");
@@ -160,9 +171,8 @@ $(document).ready(function () {
 
       $("#quantity").prop("readonly", true);
 
-      if (data.id_material_type == "1") {
-        $(".inputQuantityCalc").hide();
-      } else $(".inputQuantityCalc").show();
+      if (data.id_material_type == "1") $(".inputQuantityCalc").hide();
+      else $(".inputQuantityCalc").show();
     }
 
     // Animación de desplazamiento

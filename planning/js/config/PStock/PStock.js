@@ -110,7 +110,7 @@ $(document).ready(function () {
             callback: function (result) {
                 if (result) {
                     $.get(
-                        // `../../api/deletePlanProcess/${id_Stock}`,
+                        // `/api/deletePlanProcess/${id_Stock}`,
                         function (data, textStatus, jqXHR) {
                             message(data);
                         }
@@ -125,8 +125,7 @@ $(document).ready(function () {
   messagePS = (data) => {
     const { success, error, info, message } = data;
     if (success) {
-      $(".cardImportPStock").hide(800);
-      $(".cardCreatePStock").hide(800);
+      $(".cardImportPStock, .cardCreatePStock").hide(800);
       $("#formCreatePStock").trigger("reset");
       updateTable();
       toastr.success(message);

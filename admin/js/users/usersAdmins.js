@@ -6,7 +6,7 @@ $(document).ready(function () {
   $("#btnNewUser").click(function (e) {
     e.preventDefault();
     $(".cardCreateUser").toggle(800);
-    $("#btnCreateUser").html("Crear Usuario");
+    $("#btnCreateUser").text("Crear Usuario");
 
     sessionStorage.removeItem("id_admin");
 
@@ -48,7 +48,7 @@ $(document).ready(function () {
   /* Actualizar User */
   $(document).on("click", ".updateUser", function (e) {
     $(".cardCreateUser").show(800);
-    $("#btnCreateUser").html("Actualizar");
+    $("#btnCreateUser").text("Actualizar");
 
     const row = $(this).closest("tr")[0];
     let data = tblUsers.fnGetData(row);

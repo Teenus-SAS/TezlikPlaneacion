@@ -69,7 +69,7 @@ $(document).ready(function () {
     });
 
     $("#createPlansAccess").modal("show");
-    $("#btnCreatePlanAccess").html("Actualizar Accesos");
+    $("#btnCreatePlanAccess").text("Actualizar Accesos");
   });
 
   /* Metodo para definir checkboxes */

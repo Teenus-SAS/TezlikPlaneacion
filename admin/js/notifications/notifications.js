@@ -41,15 +41,13 @@ $(document).ready(function () {
   /* Modificar notificacion */
   $(document).on("click", ".updateNotification", function (e) {
     $(".cardCreateNotification").show(800);
-    $("#btnCreateNotification").html("Actualizar");
+    $("#btnCreateNotification").text("Actualizar");
 
     const row = $(this).closest("tr")[0];
     let data = tblNotifications.fnGetData(row);
 
     // Obtener el ID del elemento
-    let id = $(this).attr("id");
-    // Obtener la parte después del guion '-'
-    let id_notification = id.split("-")[1];
+    let id_notification = $(this).attr("id").split("-")[1];
 
     sessionStorage.setItem("id_notification", id_notification);
 

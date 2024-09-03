@@ -3,17 +3,22 @@ $(document).ready(function () {
     e.preventDefault();
 
     let option = this.id;
-    $(".cardMachines").hide();
-    $(".cardCreateMachines").hide();
-    $(".cardImportMachines").hide();
-    $(".cardProcess").hide();
-    $(".cardCreateProcess").hide();
-    $(".cardImportProcess").hide();
-    $(".cardAreas").hide();
-    $(".cardCreateArea").hide();
-    $(".cardImportAreas").hide();
 
-    switch (option) {
+    const sections = {
+      "link-process": ".cardProcess",
+      "link-machines": ".cardMachines",
+      "link-areas": ".cardAreas",
+    };
+
+    // Ocultar todas las secciones
+    $(
+      ".cardMachines, .cardCreateMachines, .cardImportMachines, .cardProcess, .cardCreateProcess, .cardImportProcess, .cardAreas, .cardCreateArea, .cardImportAreas"
+    ).hide();
+
+    // Mostrar la sección correspondiente según la opción seleccionada
+    $(sections[option] || "").show();
+
+    /* switch (option) {
       case "link-process":
         $(".cardProcess").show();
         break;
@@ -23,7 +28,7 @@ $(document).ready(function () {
       case "link-areas":
         $(".cardAreas").show();
         break;
-    }
+    } */
 
     let tables = document.getElementsByClassName("dataTable");
 
@@ -41,7 +46,7 @@ $(document).ready(function () {
     e.preventDefault();
     $(".cardImportMachines").hide(800);
     $(".cardCreateMachines").toggle(800);
-    $("#btnCreateMachine").html("Crear");
+    $("#btnCreateMachine").text("Crear");
 
     sessionStorage.removeItem("id_machine");
 
@@ -65,7 +70,7 @@ $(document).ready(function () {
   $(document).on("click", ".updateMachines", function (e) {
     $(".cardImportMachines").hide(800);
     $(".cardCreateMachines").show(800);
-    $("#btnCreateMachine").html("Actualizar");
+    $("#btnCreateMachine").text("Actualizar");
 
     // Obtener el ID del elemento
     const idMachine = $(this).attr("id").split("-")[1];
