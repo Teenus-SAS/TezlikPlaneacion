@@ -5,7 +5,7 @@ $(document).ready(function () {
   tblInvMold = $('#tblInvMold').dataTable({
     pageLength: 50,
     ajax: {
-      url: '../../api/invMolds',
+      url: '/api/invMolds',
       dataSrc: '',
     },
     language: {

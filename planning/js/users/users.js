@@ -10,7 +10,7 @@ $(document).ready(function () {
   $("#btnNewUser").click(function (e) {
     e.preventDefault();
     $("#createUserAccess").modal("show");
-    $("#btnCreateUserAndAccess").html("Crear Usuario y Accesos");
+    $("#btnCreateUserAndAccess").text("Crear Usuario y Accesos");
 
     sessionStorage.removeItem("id_user");
 
@@ -70,12 +70,13 @@ $(document).ready(function () {
 
   $(document).on("click", ".updateUser", function (e) {
     $("#createUserAccess").modal("show");
-    $("#btnCreateUserAndAccess").html("Actualizar Accesos");
+    $("#btnCreateUserAndAccess").text("Actualizar Accesos");
 
     $("#nameUser").prop("disabled", true);
     $("#lastnameUser").prop("disabled", true);
     $("#emailUser").prop("disabled", true);
 
+    //obtener data
     const row = $(this).closest("tr")[0];
     let data = tblUsers.fnGetData(row);
 

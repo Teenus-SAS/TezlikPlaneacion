@@ -22,7 +22,7 @@ $(document).ready(function () {
     await setSelectsProducts(dataProducts);
     $(".cardCreateProduct").toggle(800);
     $(".cardImportProducts").hide(800);
-    $("#btnCreateProduct").html("Crear Producto");
+    $("#btnCreateProduct").text("Crear Producto");
 
     sessionStorage.removeItem("id_product");
 
@@ -44,7 +44,7 @@ $(document).ready(function () {
   $(document).on("click", ".updateProducts", function (e) {
     $(".cardImportProducts").hide(800);
     $(".cardCreateProduct").show(800);
-    $("#btnCreateProduct").html("Actualizar Producto");
+    $("#btnCreateProduct").text("Actualizar Producto");
 
     // Obtener el ID del elemento
     let idProduct = $(this).attr("id").split("-")[1];

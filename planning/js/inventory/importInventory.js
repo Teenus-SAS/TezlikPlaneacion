@@ -47,7 +47,7 @@ $(document).ready(function () {
           $('.cardLoading').remove();
           $('.cardBottons').show(400);
           $('#fileInventory').val('');
-          toastr.error('Archivo no corresponde a el formato. Verifique nuevamente');
+          toastr.error('Archivo no corresponde con el formato. Verifique nuevamente');
           return false;
         }
 
@@ -144,7 +144,7 @@ $(document).ready(function () {
   saveInventoryTable = () => {
     $.ajax({
       type: 'POST',
-      url: '../../api/addInventory',
+      url: '/api/addInventory',
       success: function (r) {
         $('.cardLoading').remove();
         $('.cardBottons').show(400);

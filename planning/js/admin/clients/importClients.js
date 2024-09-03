@@ -46,7 +46,7 @@ $(document).ready(function () {
           $('.cardLoading').remove();
           $('.cardBottons').show(400);
           $('#fileClients').val('');
-          toastr.error('Archivo no corresponde a el formato. Verifique nuevamente');
+          toastr.error('Archivo no corresponde con el formato. Verifique nuevamente');
           return false;
         }
 
@@ -118,7 +118,7 @@ $(document).ready(function () {
   saveClientTable = (data) => {
     $.ajax({
       type: 'POST',
-      url: '../../api/addClient',
+      url: '/api/addClient',
       data: { importClients: data },
       success: function (r) {
         $('.cardLoading').remove();

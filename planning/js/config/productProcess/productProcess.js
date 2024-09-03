@@ -11,7 +11,7 @@ $(document).ready(function () {
 
     $(".cardImportProductsProcess").hide(800);
     $(".cardAddProcess").toggle(800);
-    $("#btnAddProcess").html("Asignar");
+    $("#btnAddProcess").text("Asignar");
 
     sessionStorage.removeItem("id_product_process");
     $("#formAddProcess").trigger("reset");
@@ -123,7 +123,7 @@ $(document).ready(function () {
       idProduct;
 
     $.post(
-      "../../api/updatePlanProductsProcess",
+      "/api/updatePlanProductsProcess",
       data,
       function (data, textStatus, jqXHR) {
         message(data);

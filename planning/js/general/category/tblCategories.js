@@ -4,7 +4,7 @@ $(document).ready(function () {
   tblCategories = $('#tblCategories').dataTable({
     pageLength: 50,
     ajax: {
-      url: '../../api/categories',
+      url: '/api/categories',
       dataSrc: '',
     },
     language: {

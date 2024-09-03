@@ -140,7 +140,7 @@ $(document).ready(function () {
 
     if (data.product_type == "CAJA") {
       $(".inputs").hide();
-      $("#lblWindow").html("Und x Tamaño");
+      $("#lblWindow").text("Und x Tamaño");
     }
 
     //Hide inputs according Product

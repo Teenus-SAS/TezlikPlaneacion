@@ -42,7 +42,7 @@ $(document).ready(function () {
           $('.cardBottons').show(400);
           $('#fileSales').val('');
 
-          toastr.error('Archivo no corresponde a el formato. Verifique nuevamente');
+          toastr.error('Archivo no corresponde con el formato. Verifique nuevamente');
           return false;
         }
 

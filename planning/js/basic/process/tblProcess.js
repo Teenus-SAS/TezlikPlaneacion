@@ -4,7 +4,7 @@ $(document).ready(function () {
   tblProcess = $('#tblProcess').dataTable({
     pageLength: 50,
     ajax: {
-      url: '../../api/process',
+      url: '/api/process',
       dataSrc: '',
     },
     language: {

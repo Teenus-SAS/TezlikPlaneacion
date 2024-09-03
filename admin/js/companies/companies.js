@@ -7,7 +7,7 @@ $(document).ready(function () {
     $("#license").show();
     logo.src = "";
     sessionStorage.removeItem("id_company");
-    $("#btnCreateCompany").html("Crear");
+    $("#btnCreateCompany").text("Crear");
     $("#formCreateCompany").trigger("reset");
   });
 
@@ -75,15 +75,14 @@ $(document).ready(function () {
     e.preventDefault();
     $("#createCompany").modal("show");
     $("#license").hide();
-    $("#btnCreateCompany").html("Actualizar");
+    $("#btnCreateCompany").text("Actualizar");
 
     // Obtener el ID del elemento
-    let id = $(this).attr("id");
-    // Obtener la parte después del guion '-'
-    let idCompany = id.split("-")[1];
+    let idCompany = $(this).attr("id").split("-")[1];
 
     sessionStorage.setItem("id_company", idCompany);
 
+    //obtener data
     const row = $(this).closest("tr")[0];
     let data = tblCompanies.fnGetData(row);
 

@@ -7,7 +7,7 @@ $(document).ready(function () {
 
     $(".cardImportPlanCiclesMachine").hide(800);
     $(".cardCreatePlanCiclesMachine").toggle(800);
-    $("#btnCreatePlanCiclesMachine").html("Crear");
+    $("#btnCreatePlanCiclesMachine").text("Crear");
 
     sessionStorage.removeItem("id_cicles_machine");
 
@@ -30,20 +30,22 @@ $(document).ready(function () {
   //Actualizar plan ciclo maquina
   $(document).on("click", ".updatePCMachine", function (e) {
     $(".cardCreatePlanCiclesMachine").show(800);
-    $("#btnCreatePlanCiclesMachine").html("Actualizar");
+    $("#btnCreatePlanCiclesMachine").text("Actualizar");
 
     // Obtener el ID del elemento
     const id_cicles_machine = $(this).attr("id").split("-")[1];
 
     sessionStorage.setItem("id_cicles_machine", id_cicles_machine);
 
-    const row = $(this).parent().parent()[0];
+    //obtener data
+    const row = $(this).closest("tr")[0];
     const data = tblPlanCiclesMachine.fnGetData(row);
 
     $(`#idProcess option[value=${data.id_process}]`).prop("selected", true);
     $(`#idMachine option[value=${data.id_machine}]`).prop("selected", true);
     $("#ciclesHour").val(data.cicles_hour.toLocaleString("es-CO"));
 
+    //animacion desplazamiento
     $("html, body").animate(
       {
         scrollTop: 0,
@@ -115,11 +117,10 @@ $(document).ready(function () {
   messageMachine = (data) => {
     const { success, error, info, message } = data;
     if (success) {
-      $(".cardCreatePlanCiclesMachine").hide(800);
-      $("#formCreatePlanCiclesMachine").trigger("reset");
-      $(".cardImportPlanCiclesMachine").hide(800);
-      $("#formImportPlanCiclesMachine").trigger("reset");
-
+      $(".cardCreatePlanCiclesMachine, .cardImportPlanCiclesMachine").hide(800);
+      $("#formCreatePlanCiclesMachine, #formImportPlanCiclesMachine").trigger(
+        "reset"
+      );
       if ($("#selectNameProduct").val()) updateTable();
       toastr.success(message);
       return false;

@@ -36,7 +36,7 @@ $(document).ready(function () {
       category = $("#formCreateCategory").serialize();
 
       $.post(
-        "../../api/addCategory",
+        "/api/addCategory",
         category,
         function (data, textStatus, jqXHR) {
           message(data);
@@ -80,7 +80,7 @@ $(document).ready(function () {
     data = data + "&idCategory=" + idCategory;
 
     $.post(
-      "../../api/updateCategory",
+      "/api/updateCategory",
       data,
       function (data, textStatus, jqXHR) {
         message(data);
@@ -114,7 +114,7 @@ $(document).ready(function () {
       callback: function (result) {
         if (result) {
           $.get(
-            `../../api/deleteCategory/${id_category}`,
+            `/api/deleteCategory/${id_category}`,
             function (data, textStatus, jqXHR) {
               message(data);
             }

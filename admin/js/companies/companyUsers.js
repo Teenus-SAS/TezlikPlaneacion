@@ -4,9 +4,7 @@ $(document).ready(function () {
   $(document).on("click", ".userStatus", function (e) {
     e.preventDefault();
     // Obtener el ID del elemento
-    let id = $(this).attr("id");
-    // Obtener la parte después del guion '-'
-    let id_user = id.split("-")[1];
+    let id_user = $(this).attr("id").split("-")[1];
 
     $.ajax({
       type: "POST",

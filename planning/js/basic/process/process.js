@@ -10,7 +10,7 @@ $(document).ready(function () {
 
     $(".cardImportProcess").hide(800);
     $(".cardCreateProcess").toggle(800);
-    $("#btnCreateProcess").html("Crear");
+    $("#btnCreateProcess").text("Crear");
 
     sessionStorage.removeItem("id_process");
 
@@ -32,7 +32,7 @@ $(document).ready(function () {
   $(document).on("click", ".updateProcess", function (e) {
     $(".cardImportProcess").hide(800);
     $(".cardCreateProcess").show(800);
-    $("#btnCreateProcess").html("Actualizar");
+    $("#btnCreateProcess").text("Actualizar");
 
     sessionStorage.setItem("id_process", data.id_process);
 
@@ -91,7 +91,7 @@ $(document).ready(function () {
       callback: function (result) {
         if (result) {
           $.get(
-            `../../api/deletePlanProcess/${id_process}`,
+            `/api/deletePlanProcess/${id_process}`,
             function (data, textStatus, jqXHR) {
               messageProcess(data);
             }

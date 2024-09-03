@@ -10,7 +10,7 @@ $(document).ready(function () {
     $(".cardImportClient").hide(800);
     $(".cardCreateClient").toggle(800);
 
-    $("#btnCreateClient").html("Crear");
+    $("#btnCreateClient").text("Crear");
 
     sessionStorage.removeItem("id_client");
 
@@ -36,7 +36,7 @@ $(document).ready(function () {
   $(document).on("click", ".updateClient", function (e) {
     $(".cardImportClient").hide(800);
     $(".cardCreateClient").show(800);
-    $("#btnCreateClient").html("Actualizar");
+    $("#btnCreateClient").text("Actualizar");
 
     const row = $(this).closest("tr")[0];
     let data = tblClients.fnGetData(row);
@@ -50,8 +50,9 @@ $(document).ready(function () {
     $("#phone").val(data.phone);
     $("#city").val(data.city);
 
-    $("#btnCreateClient").html("Actualizar");
+    $("#btnCreateClient").text("Actualizar");
 
+    //animacion desplazamiento
     $("html, body").animate(
       {
         scrollTop: 0,
@@ -194,7 +195,7 @@ $(document).ready(function () {
           type_client == 1 ? (op = 2) : (op = 1);
 
           $.get(
-            `../../api/changeTypeClient/${id_client}/${op}`,
+            `/api/changeTypeClient/${id_client}/${op}`,
             function (data, textStatus, jqXHR) {
               message(data);
             }
@@ -209,9 +210,8 @@ $(document).ready(function () {
     let data = JSON.parse(sessionStorage.getItem("dataClients"));
     let options = "";
 
-    for (let i = 0; i < data.length; i++) {
+    for (let i = 0; i < data.length; i++)
       options += `<option value="${data[i].id_client}">${data[i].client}</option>`;
-    }
 
     bootbox.confirm({
       size: "small",

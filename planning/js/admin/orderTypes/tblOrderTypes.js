@@ -2,7 +2,7 @@ $(document).ready(function () {
   tblOrderTypes = $('#tblOrderTypes').dataTable({
     pageLength: 50,
     ajax: {
-      url: '../../api/orderTypes',
+      url: '/api/orderTypes',
       dataSrc: '',
     },
     language: {

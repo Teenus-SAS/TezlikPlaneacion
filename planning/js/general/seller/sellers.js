@@ -10,7 +10,7 @@ $(document).ready(function () {
     $(".cardImportSeller").hide(800);
     $(".cardCreateSeller").show(800);
 
-    $("#btnCreateSeller").html("Crear");
+    $("#btnCreateSeller").text("Crear");
 
     sessionStorage.removeItem("id_seller");
 
@@ -33,7 +33,7 @@ $(document).ready(function () {
   /* Actualizar vendedores */
   $(document).on("click", ".updateSeller", function (e) {
     $(".cardImportSeller").hide(800);
-    $("#btnCreateSeller").html("Actualizar");
+    $("#btnCreateSeller").text("Actualizar");
 
     const row = $(this).closest("tr")[0];
     let data = tblSellers.fnGetData(row);
@@ -45,7 +45,7 @@ $(document).ready(function () {
     $("#email").val(data.email);
 
     $(".cardCreateSeller").show(800);
-    $("#btnCreateSeller").html("Actualizar");
+    $("#btnCreateSeller").text("Actualizar");
 
     $("html, body").animate(
       {

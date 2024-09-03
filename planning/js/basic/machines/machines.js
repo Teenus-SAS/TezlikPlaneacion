@@ -41,7 +41,7 @@ $(document).ready(function () {
     e.preventDefault();
     $(".cardImportMachines").hide(800);
     $(".cardCreateMachines").toggle(800);
-    $("#btnCreateMachine").html("Crear");
+    $("#btnCreateMachine").text("Crear");
 
     sessionStorage.removeItem("id_machine");
 
@@ -65,7 +65,7 @@ $(document).ready(function () {
   $(document).on("click", ".updateMachines", function (e) {
     $(".cardImportMachines").hide(800);
     $(".cardCreateMachines").show(800);
-    $("#btnCreateMachine").html("Actualizar");
+    $("#btnCreateMachine").text("Actualizar");
 
     // Obtener el ID del elemento
     const idMachine = $(this).attr("id").split("-")[1];

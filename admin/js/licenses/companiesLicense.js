@@ -131,7 +131,7 @@ $(document).ready(function () {
     sessionStorage.removeItem("id_company");
     $("#formAddLicense").trigger("reset");
     $(".cardCreateLicense").toggle(800);
-    $("#btnAddLicense").html("Crear");
+    $("#btnAddLicense").text("Crear");
   });
 
   /* Agregar licencia */
@@ -153,7 +153,7 @@ $(document).ready(function () {
     $(".cardCreateLicense").show(800);
     $("#formAddLicense").trigger("reset");
     const row = $(this).closest("tr")[0];
-    $("#btnAddLicense").html("Actualizar");
+    $("#btnAddLicense").Text("Actualizar");
     let data = tblCompaniesLic.fnGetData(row);
 
     sessionStorage.setItem("id_company", data.id_company);
@@ -214,9 +214,7 @@ $(document).ready(function () {
   $(document).on("click", ".licenseStatus", function (e) {
     e.preventDefault();
     // Obtener el ID del elemento
-    let id = $(this).attr("id");
-    // Obtener la parte después del guion '-'
-    let id_company = id.split("-")[1];
+    let id_company = $(this).attr("id").split("-")[1];
 
     $.ajax({
       type: "POST",

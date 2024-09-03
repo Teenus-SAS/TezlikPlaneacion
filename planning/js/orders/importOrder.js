@@ -47,7 +47,7 @@ $(document).ready(function () {
           $('.cardLoading').remove();
           $('.cardBottons').show(400);
           $('#fileOrder').val('');
-          toastr.error('Archivo no corresponde a el formato. Verifique nuevamente');
+          toastr.error('Archivo no corresponde con el formato. Verifique nuevamente');
           return false;
         }
 
@@ -120,7 +120,7 @@ $(document).ready(function () {
   const saveOrderTable = (data) => {
     $.ajax({
       type: 'POST',
-      url: '../../api/addOrder',
+      url: '/api/addOrder',
       data: { importOrder: data },
       success: function (r) {
         $('.cardLoading').remove();
