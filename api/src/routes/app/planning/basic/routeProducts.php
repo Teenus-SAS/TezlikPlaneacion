@@ -643,7 +643,7 @@ $app->post('/updatePlanProduct', function (Request $request, Response $response,
     return $response->withStatus(200)->withHeader('Content-Type', 'application/json');
 });
 
-$app->get('/deletePlanProduct/{id_product}', function (Request $request, Response $response, $args) use (
+$app->get('/deletePlanProduct/{id_product_inventory}', function (Request $request, Response $response, $args) use (
     $productsDao,
     $productsInventoryDao,
     $generalPMeasureDao
@@ -652,10 +652,10 @@ $app->get('/deletePlanProduct/{id_product}', function (Request $request, Respons
     // $flag_products_measure = $_SESSION['flag_products_measure'];
 
     // if ($flag_products_measure == '0') {
-    $product = $productsDao->deleteProduct($args['id_product']);
+    // $product = $productsDao->deleteProduct($args['id_product']);
     // }
 
-    $product = $productsInventoryDao->deleteProductInventory($args['id_product']);
+    $product = $productsInventoryDao->deleteProductInventory($args['id_product_inventory']);
 
     // if ($flag_products_measure == '1')
     //     $product = $generalPMeasureDao->deletePMeasure($args['id_product']);

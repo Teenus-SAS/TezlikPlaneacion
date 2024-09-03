@@ -286,7 +286,6 @@ if (sizeof($_SESSION) == 0)
         flag_products_measure = "<?= $_SESSION['flag_products_measure'] ?>";
     </script>
     <?php include_once dirname(dirname(dirname(__DIR__))) . '/global/partials/scriptsJS.php'; ?>
-    <!-- <script src="/planning/js/basic/products/configProducts.js"></script> -->
     <script src="/planning/js/basic/productsType/configProductType.js"></script>
     <script src="/planning/js/basic/productsType/productType.js"></script>
     <script src="/planning/js/basic/productsType/tblProductsType.js"></script>
