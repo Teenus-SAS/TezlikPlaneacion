@@ -313,8 +313,8 @@ $app->post('/updateProductMeasure', function (Request $request, Response $respon
 
 $app->post('/deleteProductMeasure', function (Request $request, Response $response, $args) use (
     $productsDao,
-    $productsInventoryDao,
-    $productsMeasuresDao
+    $productsMeasuresDao,
+    $generalProductsDao
 ) {
     session_start();
     $dataProduct = $request->getParsedBody();
@@ -326,11 +326,11 @@ $app->post('/deleteProductMeasure', function (Request $request, Response $respon
         if ($resolution == null)
             $resolution = $productsDao->deleteProduct($dataProduct['idProduct']);
         if ($resolution == null)
-            $resolution = $productsInventoryDao->deleteProductInventory($dataProduct['idProduct']);
+            $resolution = $generalProductsDao->deleteProductInventoryByProduct($dataProduct['idProduct']);
     } else {
         $resolution = $productsDao->deleteProduct($dataProduct['idProduct']);
         if ($resolution == null)
-            $resolution = $productsInventoryDao->deleteProductInventory($dataProduct['idProduct']);
+            $resolution = $generalProductsDao->deleteProductInventoryByProduct($dataProduct['idProduct']);
     }
 
     if ($resolution == null)

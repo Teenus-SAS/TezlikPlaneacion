@@ -94,9 +94,9 @@ if (sizeof($_SESSION) == 0)
                     <div class="container-fluid">
                         <div class="row cardProducts">
                             <div class="col-sm-7 col-xl-12 mt-4 form-inline justify-content-sm-end">
-                                <div class="col-xs-2 mr-2">
+                                <!-- <div class="col-xs-2 mr-2">
                                     <button class="btn btn-warning" id="btnNewProduct"><i class="bi bi-plus-circle mr-1"></i>Adicionar</button>
-                                </div>
+                                </div> -->
                                 <div class="col-xs-2 py-2 mr-2">
                                     <button class="btn btn-info" id="btnImportNewProducts"><i class="bi bi-cloud-arrow-up-fill"></i></button>
                                 </div>
@@ -126,19 +126,11 @@ if (sizeof($_SESSION) == 0)
                                             <div class="form-row">
                                                 <div class="col-sm-2 floating-label enable-floating-label show-label">
                                                     <label for="referenceProduct">Referencia</label>
-                                                    <!-- < ?php if ($_SESSION['flag_products_measure'] == 1) { ?> -->
                                                     <select class="form-control refProduct" name="idProduct" id="refProduct"></select>
-                                                    <!-- < ?php } else { ?>
-                                                        <input type="text" class="form-control text-center" name="referenceProduct" id="referenceProduct">
-                                                    < ?php } ?> -->
                                                 </div>
                                                 <div class="col-sm-8 floating-label enable-floating-label show-label">
                                                     <label for="">Nombre Producto</label>
-                                                    <!-- < ? php if ($_SESSION['flag_products_measure'] == 1) { ?> -->
                                                     <select class="form-control selectNameProduct" name="idProduct" id="selectNameProduct"></select>
-                                                    <!-- < ? php } else { ?>
-                                                        <input type="text" class="form-control" name="product" id="product">
-                                                    < ? php } ?> -->
                                                 </div>
                                                 <div class="col-sm-2 floating-label enable-floating-label show-label">
                                                     <label for="">Existencias</label>
@@ -151,9 +143,7 @@ if (sizeof($_SESSION) == 0)
                                                 <div class="col-sm-2 mt-1">
                                                     <button type="text" class="btn btn-success" id="btnCreateProduct">Crear</button>
                                                 </div>
-                                                <!-- <div class="col-sm-4 mt-5" id="preview"></div> -->
                                             </div>
-
                                         </form>
                                     </div>
                                 </div>

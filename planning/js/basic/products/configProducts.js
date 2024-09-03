@@ -5,6 +5,7 @@ $(document).ready(function () {
       sessionStorage.setItem("dataProducts", JSON.stringify(data));
 
       let viewCreateProduct = document.getElementById("pQuantity");
+      let viewFTProduct = document.getElementById("quantityCalc");
 
       if (viewCreateProduct && flag_products_measure === "1")
         data = data.filter((item) => item.id_product_inventory == 0);
@@ -12,7 +13,11 @@ $(document).ready(function () {
       const compositeProduct = data.filter((item) => item.composite === 1);
       populateOptions("#refCompositeProduct", compositeProduct, "reference");
       populateOptions("#compositeProduct", compositeProduct, "product");
-      setSelectsProducts(data);
+      
+      if (viewFTProduct) {
+        data = data.filter((item) => item.origin == 2);
+      } 
+        setSelectsProducts(data); 
     },
   });
 

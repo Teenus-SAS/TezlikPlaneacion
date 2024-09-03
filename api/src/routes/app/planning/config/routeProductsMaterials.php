@@ -970,7 +970,7 @@ $app->post('/calcQuantityFTM', function (Request $request, Response $response, $
 
     switch ($type) {
         case '1': // Papel
-            $weight = (floatval($dataMaterial['grammage']) * floatval($dataProduct['length']) * floatval($dataProduct['total_width'])) / 10000000;
+            $weight = ((floatval($dataMaterial['grammage']) * floatval($dataProduct['length']) * floatval($dataProduct['total_width'])) / 10000000) / floatval($dataProduct['window']);
 
             break;
 

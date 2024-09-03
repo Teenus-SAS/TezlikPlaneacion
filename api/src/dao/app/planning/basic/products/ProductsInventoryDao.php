@@ -54,18 +54,18 @@ class ProductsInventoryDao
         }
     }
 
-    public function deleteProductInventory($id_product)
+    public function deleteProductInventory($id_product_inventory)
     {
         $connection = Connection::getInstance()->getConnection();
 
         try {
-            $stmt = $connection->prepare("SELECT * FROM products_inventory WHERE id_product = :id_product");
-            $stmt->execute(['id_product' => $id_product]);
+            $stmt = $connection->prepare("SELECT * FROM products_inventory WHERE id_product_inventory = :id_product_inventory");
+            $stmt->execute(['id_product_inventory' => $id_product_inventory]);
             $rows = $stmt->rowCount();
 
             if ($rows > 0) {
-                $stmt = $connection->prepare("DELETE FROM products_inventory WHERE id_product = :id_product");
-                $stmt->execute(['id_product' => $id_product]);
+                $stmt = $connection->prepare("DELETE FROM products_inventory WHERE id_product_inventory = :id_product_inventory");
+                $stmt->execute(['id_product_inventory' => $id_product_inventory]);
                 $this->logger->info(__FUNCTION__, array('query' => $stmt->queryString, 'errors' => $stmt->errorInfo()));
             }
         } catch (\Exception $e) {

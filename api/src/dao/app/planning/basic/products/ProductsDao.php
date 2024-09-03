@@ -21,7 +21,7 @@ class ProductsDao
     $connection = Connection::getInstance()->getConnection();
     $stmt = $connection->prepare("SELECT p.id_product, p.reference, p.product, p.product AS descript, p.img, IFNULL(pi.id_product_inventory, 0) AS id_product_inventory, IFNULL(pi.quantity, 0) AS quantity, IFNULL(pi.reserved, 0) AS reserved, IFNULL(pi.minimum_stock, 0) AS minimum_stock, 
                                          IFNULL(pi.days, 0) AS days, IFNULL(pi.classification, 0) AS classification, 'UND' AS abbreviation, IFNULL(pm.length, 0) AS length, IFNULL(pm.total_width, 0) AS total_width, p.id_product_type, IFNULL(pt.product_type, '') AS product_type, 
-                                         p.composite, IFNULL((SELECT id_composite_product FROM composite_products WHERE id_product = p.id_product LIMIT 1), 0) AS composite_product
+                                         p.composite, IFNULL((SELECT id_composite_product FROM composite_products WHERE id_product = p.id_product LIMIT 1), 0) AS composite_product, p.origin
                                   FROM products p
                                     LEFT JOIN products_inventory pi ON pi.id_product = p.id_product
                                     LEFT JOIN products_measures pm ON pm.id_product = p.id_product

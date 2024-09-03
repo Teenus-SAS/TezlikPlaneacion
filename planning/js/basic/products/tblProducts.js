@@ -156,7 +156,7 @@ $(document).ready(function () {
         },
         {
           title: 'Acciones',
-          data: 'id_product',
+          data: 'id_product_inventory',
           className: 'uniqueClassName dt-head-center',
           render: (data) => `
           <a href="javascript:;">

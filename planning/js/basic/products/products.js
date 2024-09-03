@@ -14,29 +14,29 @@ $(document).ready(function () {
   });
 
   /* Abrir panel crear producto */
-  $("#btnNewProduct").click(async function (e) {
-    e.preventDefault();
+  // $("#btnNewProduct").click(async function (e) {
+  //   e.preventDefault();
 
-    let dataProducts = JSON.parse(sessionStorage.getItem("dataProducts"));
+  //   let dataProducts = JSON.parse(sessionStorage.getItem("dataProducts"));
 
-    await setSelectsProducts(dataProducts);
-    $(".cardCreateProduct").toggle(800);
-    $(".cardImportProducts").hide(800);
-    $("#btnCreateProduct").html("Crear Producto");
+  //   await setSelectsProducts(dataProducts);
+  //   $(".cardCreateProduct").toggle(800);
+  //   $(".cardImportProducts").hide(800);
+  //   $("#btnCreateProduct").html("Crear Producto");
 
-    sessionStorage.removeItem("id_product");
+  //   sessionStorage.removeItem("id_product");
 
-    $("#formCreateProduct").trigger("reset");
-    $("#img").remove();
-  });
+  //   $("#formCreateProduct").trigger("reset");
+  //   $("#img").remove();
+  // });
 
   /* Crear producto */
   $("#btnCreateProduct").click(function (e) {
     e.preventDefault();
 
-    const idProduct = sessionStorage.getItem("id_product") || null;
-    const apiUrl = idProduct ? "/api/updatePlanProduct" : "/api/addProduct";
-    checkDataProducts(apiUrl, idProduct);
+    const idProductInventory = sessionStorage.getItem("id_product_inventory") || null;
+    const apiUrl = idProductInventory && idProductInventory != 0 ? "/api/updatePlanProduct" : "/api/addProduct";
+    checkDataProducts(apiUrl, idProductInventory);
   });
 
   /* Actualizar productos */
@@ -44,18 +44,17 @@ $(document).ready(function () {
   $(document).on("click", ".updateProducts", function (e) {
     $(".cardImportProducts").hide(800);
     $(".cardCreateProduct").show(800);
-    $("#btnCreateProduct").html("Actualizar Producto");
+    $("#btnCreateProduct").html("Guardar");
 
     // Obtener el ID del elemento
-    let idProduct = $(this).attr("id").split("-")[1];
+    let idProductInventory = $(this).attr("id").split("-")[1];
 
-    sessionStorage.setItem("id_product", idProduct);
+    sessionStorage.setItem("id_product_inventory", idProductInventory);
 
     // Obtener data
     let row = $(this).parent().parent().parent()[0];
     let data = tblProducts.fnGetData(row);
-
-    // if (flag_products_measure == '1') {
+ 
     let $select = $(`#refProduct`);
     $select.empty();
     $select.append(`<option value='0' disabled>Seleccionar</option>`);
@@ -82,38 +81,23 @@ $(document).ready(function () {
   });
 
   /* Revisar datos */
-  const checkDataProducts = async (url, idProduct) => {
-    // if (flag_products_measure == '1') {
+  const checkDataProducts = async (url, idProductInventory) => { 
     idProduct = parseFloat($("#refProduct").val());
 
     if (isNaN(idProduct) || idProduct <= 0) {
       toastr.error("Ingrese todos los campos");
       return false;
-    }
-    // } else {
-    //   let ref = $("#referenceProduct").val();
-    //   let prod = $("#product").val();
-
-    //   if (ref.trim() == "" || !ref.trim() || prod.trim() == "" || !prod.trim()) {
-    //     toastr.error("Ingrese todos los campos");
-    //     return false;
-    //   }
-    // }
+    } 
 
     let imageProd = $("#formFile")[0].files[0];
 
     let dataProduct = new FormData(formCreateProduct);
     dataProduct.append("img", imageProd);
 
-    // if (idProduct != "" || idProduct != null) {
-    //   dataProduct.append("idProduct", idProduct);
-    // }
-
-    // if (flag_products_measure == '1') {
-    dataProduct.append("idProduct", idProduct);
-    // } else {
-    //   dataProduct.append("idProductType", 0);
-    // }
+    if (idProductInventory != "" || idProductInventory != null) {
+      dataProduct.append("idProductInventory", idProductInventory);
+    } 
+    dataProduct.append("idProduct", idProduct); 
 
     let resp = await sendDataPOST(url, dataProduct);
 
@@ -126,7 +110,7 @@ $(document).ready(function () {
     const row = $(this.activeElement).closest("tr")[0];
     let data = tblProducts.fnGetData(row);
 
-    let idProduct = data.id_product;
+    let idProductInventory = data.id_product_inventory;
 
     bootbox.confirm({
       title: "Eliminar",
@@ -145,7 +129,7 @@ $(document).ready(function () {
       callback: function (result) {
         if (result) {
           $.get(
-            `/api/deletePlanProduct/${idProduct}`,
+            `/api/deletePlanProduct/${idProductInventory}`,
             function (data, textStatus, jqXHR) {
               messageProducts(data);
             }
