@@ -26,22 +26,21 @@ $app->get('/dashboardIndicators', function (Request $request, Response $response
     $id_company = $_SESSION['id_company'];
 
     //Obtener porcentaje productos sin stock
-    $percentProdOutStock = $dashboardGeneralDao->findProductsOutOfStock($id_company);
+    $prodOutStock = $dashboardGeneralDao->findProductsOutOfStock($id_company);
 
-    //Entregar respuesta
-    $response->getBody()->write(json_encode($percentProdOutStock, JSON_NUMERIC_CHECK));
-    return $response->withHeader('Content-Type', 'application/json');
-});
+    //Obtener porcentaje pedidos sin programar
+    $ordersNoProgram = $dashboardGeneralDao->findOrdersNoProgramm($id_company);
 
-$app->get('/dashboardOrdersNoProgram', function (Request $request, Response $response, $args) use ($dashboardGeneralDao) {
-    session_start();
-    //obtener Id Company
-    $id_company = $_SESSION['id_company'];
+    //Obtener porcentaje pedidos sin MP
+    $OrdersNoMP = $dashboardGeneralDao->findOrdersNoMP($id_company);
 
-    //Obtener porcentaje productos sin stock
-    $percentProdOutStock = $dashboardGeneralDao->findProductsOutOfStock($id_company);
+    //Obtener porcentaje pedidos en Despacho
+    $ordersDelivered = $dashboardGeneralDao->findOrdersDelivered($id_company);
 
-    //Entregar respuesta
-    $response->getBody()->write(json_encode($percentProdOutStock, JSON_NUMERIC_CHECK));
+    //Consolidar
+    $indicators = array_merge($prodOutStock, $ordersNoProgram, $OrdersNoMP, $ordersDelivered);
+
+    //Enviar respuesta
+    $response->getBody()->write(json_encode($indicators, JSON_NUMERIC_CHECK));
     return $response->withHeader('Content-Type', 'application/json');
 });

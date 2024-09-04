@@ -80,7 +80,7 @@ if (sizeof($_SESSION) == 0)
                                         <div class="media align-items-center">
                                             <div class="media-body">
                                                 <span class="text-muted text-uppercase font-size-12 font-weight-bold">Pedidos No Programados</span>
-                                                <h2 class="mb-0 mt-1" id="ActiveOrders"></h2>
+                                                <h2 class="mb-0 mt-1 text-danger" id="ordersNoProgramed"></h2>
                                             </div>
                                             <div class="text-center">
                                                 <div id="t-rev"></div>
@@ -97,8 +97,8 @@ if (sizeof($_SESSION) == 0)
                                     <div class="card-body">
                                         <div class="media align-items-center">
                                             <div class="media-body">
-                                                <span class="text-muted text-uppercase font-size-12 font-weight-bold">Pedidos Programados</span>
-                                                <h2 class="mb-0 mt-1" id="scheduledOrders"></h2>
+                                                <span class="text-muted text-uppercase font-size-12 font-weight-bold">Pedidos Sin Materia Prima</span>
+                                                <h2 class="mb-0 mt-1 text-info" id="ordersNoMP"></h2>
                                             </div>
                                             <div class="text-center">
                                                 <div id="t-order"></div>
@@ -115,8 +115,8 @@ if (sizeof($_SESSION) == 0)
                                     <div class="card-body">
                                         <div class="media align-items-center">
                                             <div class="media-body">
-                                                <span class="text-muted text-uppercase font-size-12 font-weight-bold">Pedidos en Producción</span>
-                                                <h2 class="mb-0 mt-1" id="ordersInExecution"></h2>
+                                                <span class="text-muted text-uppercase font-size-12 font-weight-bold">Pedidos en Despacho</span>
+                                                <h2 class="mb-0 mt-1 text-warning" id="ordersDelivered"></h2>
                                             </div>
                                             <div class="text-center">
                                                 <div id="t-user"></div>

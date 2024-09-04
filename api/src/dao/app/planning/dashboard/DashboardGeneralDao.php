@@ -34,7 +34,7 @@ class DashboardGeneralDao
     public function findProductsOutOfStock($id_company)
     {
         $connection = Connection::getInstance()->getConnection();
-        $sql = "SELECT (COUNT(CASE WHEN pi.quantity = 0 THEN 1 END) / COUNT(*)) AS percentage_zero_quantity 
+        $sql = "SELECT (COUNT(CASE WHEN pi.quantity = 0 THEN 1 END) * 100.0 / COUNT(*)) AS productsOutStock 
                 FROM products_inventory pi
                 WHERE id_company = :id_company";
         $stmt = $connection->prepare($sql);
@@ -42,12 +42,36 @@ class DashboardGeneralDao
         $percent = $stmt->fetch($connection::FETCH_ASSOC);
         return $percent;
     }
-    
+
     public function findOrdersNoProgramm($id_company)
     {
         $connection = Connection::getInstance()->getConnection();
-        $sql = "SELECT (COUNT(CASE WHEN pi.quantity = 0 THEN 1 END) / COUNT(*)) AS percentage_zero_quantity 
-                FROM products_inventory pi
+        $sql = "SELECT (COUNT(CASE WHEN po.status IN (1, 5, 6, 9) THEN 1 END) * 100.0 / COUNT(*)) AS ordersNoProgramed 
+                FROM plan_orders po
+                WHERE id_company = :id_company";
+        $stmt = $connection->prepare($sql);
+        $stmt->execute(['id_company' => $id_company]);
+        $percent = $stmt->fetch($connection::FETCH_ASSOC);
+        return $percent;
+    }
+
+    public function findOrdersNoMP($id_company)
+    {
+        $connection = Connection::getInstance()->getConnection();
+        $sql = "SELECT (COUNT(CASE WHEN po.status IN (6) THEN 1 END) * 100.0 / COUNT(*)) AS OrdersNoMP 
+                FROM plan_orders po
+                WHERE id_company = :id_company";
+        $stmt = $connection->prepare($sql);
+        $stmt->execute(['id_company' => $id_company]);
+        $percent = $stmt->fetch($connection::FETCH_ASSOC);
+        return $percent;
+    }
+
+    public function findOrdersDelivered($id_company)
+    {
+        $connection = Connection::getInstance()->getConnection();
+        $sql = "SELECT (COUNT(CASE WHEN po.status IN (2) THEN 1 END) * 100.0 / COUNT(*)) AS OrdersDelivered 
+                FROM plan_orders po
                 WHERE id_company = :id_company";
         $stmt = $connection->prepare($sql);
         $stmt->execute(['id_company' => $id_company]);
