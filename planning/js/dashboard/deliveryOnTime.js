@@ -77,6 +77,9 @@ const GraphDeliverOnTime = (percentageOnTime) => {
             size: "12",
             weight: "normal",
           },
+          formatter: function (value) {
+            return value + "%"; // Agregar el símbolo de porcentaje a las etiquetas
+          },
         },
         tooltip: {
           callbacks: {
