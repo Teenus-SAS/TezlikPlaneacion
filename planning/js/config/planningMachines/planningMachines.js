@@ -9,7 +9,7 @@ $(document).ready(function () {
     e.preventDefault();
 
     $("#createPlanMachine").modal("show");
-    $("#btnCreatePlanMachine").TEXT("Crear");
+    $("#btnCreatePlanMachine").text("Crear");
 
     sessionStorage.removeItem("id_planning_machine");
 
@@ -46,7 +46,7 @@ $(document).ready(function () {
       ? "/api/updatePlanningMachines"
       : "/api/addPlanningMachines";
 
-    checkDataRequisition(apiUrl, id_planning_machine);
+    checkDataPlanningMachines(apiUrl, id_planning_machine);
   });
 
   //Actualizar Plan maquina

@@ -49,7 +49,7 @@ $(document).ready(function () {
     e.preventDefault();
     const idStock = sessionStorage.getItem("idStock") || null;
     const apiUrl = idStock ? "/api/updateRMStock" : "/api/addRMStock";
-    checkDataArea(apiUrl, idStock);
+    checkDataRMStock(apiUrl, idStock);
   });
 
   /* Actualizar procesos */
