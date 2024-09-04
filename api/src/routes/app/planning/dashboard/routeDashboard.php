@@ -32,3 +32,16 @@ $app->get('/dashboardIndicators', function (Request $request, Response $response
     $response->getBody()->write(json_encode($percentProdOutStock, JSON_NUMERIC_CHECK));
     return $response->withHeader('Content-Type', 'application/json');
 });
+
+$app->get('/dashboardIndicators', function (Request $request, Response $response, $args) use ($dashboardGeneralDao) {
+    session_start();
+    //obtener Id Company
+    $id_company = $_SESSION['id_company'];
+
+    //Obtener porcentaje productos sin stock
+    $percentProdOutStock = $dashboardGeneralDao->findProductsOutOfStock($id_company);
+
+    //Entregar respuesta
+    $response->getBody()->write(json_encode($percentProdOutStock, JSON_NUMERIC_CHECK));
+    return $response->withHeader('Content-Type', 'application/json');
+});
