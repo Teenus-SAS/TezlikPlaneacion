@@ -68,10 +68,17 @@ $(document).ready(function () {
       const validate = idPProduct * idCProduct * type;
 
       if (isNaN(validate) || validate <= 0) {
+        toastr.error('Ingrese todos los campos');
+        return false;
+      } 
+
+      if (idPProduct == idCProduct) {
+        $(".compositeProduct").css("border-color", "red");
+        toastr.error("Seleccione un producto compuesto diferente");
         return false;
       }
 
-      const quantity = parseFloat($("#quantityPCalc").val());
+      let quantity = parseFloat($("#quantityPCalc").val());
 
       isNaN(quantity) ? (quantity = 0) : quantity;
 
@@ -108,6 +115,7 @@ $(document).ready(function () {
 
   $(document).on("click", ".updateComposite", function (e) {
     $(".cardImport").hide(800);
+    $(".cardAddMaterials").hide(800);
     $(".cardAddNewProduct").show(800);
     $(".inputs").css("border-color", "");
     $("#btnAddProduct").text("Actualizar");
@@ -183,7 +191,7 @@ $(document).ready(function () {
     const idProduct = parseInt($("#selectNameProduct").val());
 
     if (ref == idProduct) {
-      $("#compositeProduct").css("border-color", "red");
+      $(".compositeProduct").css("border-color", "red");
       toastr.error("Seleccione un producto compuesto diferente");
       return false;
     }

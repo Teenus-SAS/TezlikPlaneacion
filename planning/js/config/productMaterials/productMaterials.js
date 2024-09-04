@@ -101,7 +101,7 @@ $(document).ready(function () {
     e.preventDefault();
 
     $(
-      ".cardAddNewProduct, .inputQuantityCalc, .cardImportProductsMaterials"
+      ".cardAddNewProduct, .inputQuantityCalc, .cardImportProductsMaterials, .cardAddNewProduct"
     ).hide(800);
     // $('.cardTableConfigMaterials').show(800);
     $(".cardAddMaterials").toggle(800);
@@ -131,6 +131,7 @@ $(document).ready(function () {
 
   $(document).on("click", ".updateMaterials", function (e) {
     $(".cardImportProductsMaterials").hide(800);
+    $(".cardAddNewProduct").hide(800);
     $(".cardAddMaterials").show(800);
     $("#btnAddMaterials").text("Actualizar");
     $("#units").empty();

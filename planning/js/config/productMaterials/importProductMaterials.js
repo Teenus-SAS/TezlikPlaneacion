@@ -1,8 +1,8 @@
 $(document).ready(function () {
-
   $('.cardImport').hide();
 
   $('#btnImportProduct').on('click', function () {
+    $('.cardAddNewProduct').hide(800);
     $('.cardAddMaterials').hide(800);
     $('.cardImport').toggle(800);
     $('.cardAddNewProduct').hide();
