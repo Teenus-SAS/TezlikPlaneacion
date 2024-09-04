@@ -24,7 +24,7 @@ $(document).ready(function () {
     const idProcess = sessionStorage.getItem("id_process") || null;
     const apiUrl = idProcess ? "/api/updatePlanProcess" : "/api/addPlanProcess";
 
-    checkDataArea(apiUrl, idProcess);
+    checkDataProcess(apiUrl, idProcess);
   });
 
   /* Actualizar procesos */

@@ -25,7 +25,7 @@ $(document).ready(function () {
     const idStock = sessionStorage.getItem("idStock") || null;
     const apiUrl = idStock ? "/api/updatePStock" : "/api/addPStock";
 
-    checkDataArea(apiUrl, idStock);
+    checkDataPStock(apiUrl, idStock);
   });
 
   /* Actualizar procesos */

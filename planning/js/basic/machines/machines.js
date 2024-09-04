@@ -18,18 +18,6 @@ $(document).ready(function () {
     // Mostrar la sección correspondiente según la opción seleccionada
     $(sections[option] || "").show();
 
-    /* switch (option) {
-      case "link-process":
-        $(".cardProcess").show();
-        break;
-      case "link-machines":
-        $(".cardMachines").show();
-        break;
-      case "link-areas":
-        $(".cardAreas").show();
-        break;
-    } */
-
     let tables = document.getElementsByClassName("dataTable");
 
     for (let table of tables) {
@@ -62,7 +50,7 @@ $(document).ready(function () {
       ? "/api/updatePlanMachines"
       : "/api/addPlanMachines";
 
-    checkDataArea(apiUrl, idMachine);
+    checkDataMachines(apiUrl, idMachine);
   });
 
   /* Actualizar maquinas */

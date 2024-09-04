@@ -25,7 +25,7 @@ $(document).ready(function () {
       ? "/api/updateProductsTypes"
       : "/api/addProductsTypes";
 
-    checkDataArea(apiUrl, idProductType);
+    checkDataPType(apiUrl, idProductType);
   });
 
   /* Actualizar area */
