@@ -101,7 +101,7 @@ $(document).ready(function () {
       ? "/api/updateCompositeProduct"
       : "/api/addCompositeProduct";
 
-    checkDataRequisition(apiUrl, idCompositeProduct);
+    checkDataProducts(apiUrl, idCompositeProduct);
   });
 
   /* Actualizar productos materials */
