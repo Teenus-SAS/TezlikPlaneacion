@@ -33,7 +33,7 @@ $app->get('/dashboardIndicators', function (Request $request, Response $response
     return $response->withHeader('Content-Type', 'application/json');
 });
 
-$app->get('/dashboardIndicators', function (Request $request, Response $response, $args) use ($dashboardGeneralDao) {
+$app->get('/dashboardOrdersNoProgram', function (Request $request, Response $response, $args) use ($dashboardGeneralDao) {
     session_start();
     //obtener Id Company
     $id_company = $_SESSION['id_company'];
