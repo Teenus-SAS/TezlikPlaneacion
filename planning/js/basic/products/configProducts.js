@@ -10,7 +10,7 @@ $(document).ready(function () {
       if (viewCreateProduct && flag_products_measure === "1")
         data = data.filter((item) => item.id_product_inventory == 0);
 
-      const compositeProduct = data.filter((item) => item.composite === 1);
+      const compositeProduct = data.filter((item) => item.composite == 1);
       populateOptions("#refCompositeProduct", compositeProduct, "reference");
       populateOptions("#compositeProduct", compositeProduct, "product");
       

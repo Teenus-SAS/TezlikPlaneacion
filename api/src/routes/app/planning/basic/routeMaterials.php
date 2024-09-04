@@ -325,10 +325,15 @@ $app->post('/addMaterials', function (Request $request, Response $response, $arg
                             $compositeProducts = $compositeProductsDao->findAllCompositeProductsByIdProduct($j['id_product'], $id_company);
 
                             foreach ($compositeProducts as $k) {
+                                $product = $minimumStockDao->calcStockByProduct($k['id_child_product']);
+
                                 $arr = $minimumStockDao->calcStockByComposite($k['id_child_product']);
 
-                                if (isset($arr['stock']))
-                                    $resolution = $generalProductsDao->updateStockByProduct($k['id_child_product'], $arr['stock']);
+                                if (isset($arr['stock']) && isset($product['stock'])) {
+                                    $stock = $product['stock'] + $arr['stock'];
+
+                                    $resolution = $generalProductsDao->updateStockByProduct($k['id_child_product'], $stock);
+                                }
                             }
                         }
                     }
@@ -532,10 +537,15 @@ $app->post('/updateMaterials', function (Request $request, Response $response, $
                     $compositeProducts = $compositeProductsDao->findAllCompositeProductsByIdProduct($j['id_product'], $id_company);
 
                     foreach ($compositeProducts as $k) {
+                        $product = $minimumStockDao->calcStockByProduct($k['id_child_product']);
+
                         $arr = $minimumStockDao->calcStockByComposite($k['id_child_product']);
 
-                        if (isset($arr['stock']))
-                            $resolution = $generalProductsDao->updateStockByProduct($k['id_child_product'], $arr['stock']);
+                        if (isset($arr['stock']) && isset($product['stock'])) {
+                            $stock = $product['stock'] + $arr['stock'];
+
+                            $resolution = $generalProductsDao->updateStockByProduct($k['id_child_product'], $stock);
+                        }
                     }
                 }
             }

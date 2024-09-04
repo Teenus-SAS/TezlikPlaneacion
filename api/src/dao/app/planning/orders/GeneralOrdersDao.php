@@ -152,20 +152,6 @@ class GeneralOrdersDao
         return $orders;
     }
 
-    public function findLastNumOrder($id_company)
-    {
-        $connection = Connection::getInstance()->getConnection();
-
-        $stmt = $connection->prepare("SELECT (IFNULL(MAX(num_order), 0) + 1) AS num_order 
-                                      FROM plan_orders 
-                                      WHERE id_company = :id_company");
-        $stmt->execute(['id_company' => $id_company]);
-        $this->logger->info(__FUNCTION__, array('query' => $stmt->queryString, 'errors' => $stmt->errorInfo()));
-
-        $orders = $stmt->fetch($connection::FETCH_ASSOC);
-        return $orders;
-    }
-
     public function checkAccumulatedQuantityOrder($id_order)
     {
         $connection = Connection::getInstance()->getConnection();
@@ -189,7 +175,7 @@ class GeneralOrdersDao
     {
         $connection = Connection::getInstance()->getConnection();
 
-        $stmt = $connection->prepare("SELECT CONCAT('PED', MAX(id_order) + 1) AS num_order FROM plan_orders WHERE id_company = :id_company");
+        $stmt = $connection->prepare("SELECT CONCAT('PED', COUNT(id_order) + 1) AS num_order FROM plan_orders WHERE id_company = :id_company");
         $stmt->execute(['id_company' => $id_company]);
 
         $this->logger->info(__FUNCTION__, array('query' => $stmt->queryString, 'errors' => $stmt->errorInfo()));
