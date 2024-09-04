@@ -30,17 +30,17 @@ const GraphDeliverOnTime = (percentageOnTime) => {
   const onTimeDeliveryChart = new Chart(ctx, {
     type: "bar",
     data: {
-      labels: ["Pedidos"],
+      labels: ["Pedidos"], // Aún necesitas las etiquetas internamente, pero no se mostrarán
       datasets: [
         {
-          label: "Entregados a Tiempo",
+          label: "", // Eliminar el label "Entregados a Tiempo"
           data: [percentageOnTime],
           backgroundColor: "rgba(75, 192, 192, 0.2)", // Color para "Entregado a tiempo"
           borderColor: "rgba(75, 192, 192, 1)", // Borde para "Entregado a tiempo"
           borderWidth: 1,
         },
         {
-          label: "No Entregados a Tiempo",
+          label: "", // Eliminar el label "No Entregados a Tiempo"
           data: [100 - percentageOnTime],
           backgroundColor: "rgba(255, 99, 132, 0.2)", // Color para "No entregado a tiempo"
           borderColor: "rgba(255, 99, 132, 1)", // Borde para "No entregado a tiempo"
@@ -51,19 +51,26 @@ const GraphDeliverOnTime = (percentageOnTime) => {
     options: {
       scales: {
         x: {
-          stacked: true, // Activar apilamiento en el eje X
+          stacked: true, // Apilamiento en el eje X
+          display: false, // Desactivar la etiqueta del eje X
         },
         y: {
-          stacked: true, // Activar apilamiento en el eje Y
+          stacked: true, // Apilamiento en el eje Y
           beginAtZero: true,
           max: 100,
+          ticks: {
+            display: false, // Desactivar las etiquetas del eje Y
+          },
         },
       },
       plugins: {
+        legend: {
+          display: false, // Eliminar la leyenda (labels de los datasets)
+        },
         tooltip: {
           callbacks: {
             label: function (tooltipItem) {
-              return tooltipItem.dataset.label + ": " + tooltipItem.raw + "%";
+              return tooltipItem.raw + "%"; // Mostrar solo el valor en el tooltip
             },
           },
         },
