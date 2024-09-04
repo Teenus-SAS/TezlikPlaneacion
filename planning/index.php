@@ -398,6 +398,7 @@ if (sizeof($_SESSION) == 0)
     <script src="/planning/js/dashboard/indicatiorsGeneral.js"></script>
     <script src="/planning/js/dashboard/graphicsGeneral.js"></script>
     <script src="/planning/js/dashboard/indicators.js"></script>
+    <script src="/planning/js/dashboard/deliveryOnTime.js"></script>
     <!-- <script src="/planning/js/users/usersAccess.js"></script> -->
 
     <!-- <script src="/global/js/global/loadContent.js"></script> -->
