@@ -207,6 +207,18 @@ if (sizeof($_SESSION) == 0)
                                 </div>
                             </div>
 
+                            <!-- Begin OC chart -->
+                            <div class="col-md-4 col-lg-3" style="height: fit-content;">
+                                <div class="card">
+                                    <div class="card-header">
+                                        <h5 class="card-title">Ordenes de Compra</h5>
+                                    </div>
+                                    <div class="card-body pt-2">
+                                        <!-- <canvas id="chartTimeProcessProducts"></canvas> -->
+                                        <canvas id="pendingOC"></canvas>
+                                    </div>
+                                </div>
+                            </div>
                             <!-- Begin Inventory classification chart -->
                             <div class="col-md-4 col-lg-3" style="height: fit-content;">
                                 <div class="card">
