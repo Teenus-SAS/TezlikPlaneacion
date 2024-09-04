@@ -216,10 +216,15 @@ $app->post('/addUnitSales', function (Request $request, Response $response, $arg
                 $compositeProducts = $compositeProductsDao->findAllCompositeProductsByIdProduct($dataSale['idProduct'], $id_company);
 
                 foreach ($compositeProducts as $k) {
+                    $product = $minimumStockDao->calcStockByProduct($k['id_child_product']);
+
                     $arr = $minimumStockDao->calcStockByComposite($k['id_child_product']);
 
-                    if (isset($arr['stock']))
-                        $resolution = $generalProductsDao->updateStockByProduct($k['id_child_product'], $arr['stock']);
+                    if (isset($arr['stock']) && isset($product['stock'])) {
+                        $stock = $product['stock'] + $arr['stock'];
+
+                        $resolution = $generalProductsDao->updateStockByProduct($k['id_child_product'], $stock);
+                    }
                 }
             }
 
@@ -354,10 +359,15 @@ $app->post('/addUnitSales', function (Request $request, Response $response, $arg
             $compositeProducts = $compositeProductsDao->findAllCompositeProductsByIdProduct($unitSales[$i]['idProduct'], $id_company);
 
             foreach ($compositeProducts as $k) {
+                $product = $minimumStockDao->calcStockByProduct($k['id_child_product']);
+
                 $arr = $minimumStockDao->calcStockByComposite($k['id_child_product']);
 
-                if (isset($arr['stock']))
-                    $resolution = $generalProductsDao->updateStockByProduct($k['id_child_product'], $arr['stock']);
+                if (isset($arr['stock']) && isset($product['stock'])) {
+                    $stock = $product['stock'] + $arr['stock'];
+
+                    $resolution = $generalProductsDao->updateStockByProduct($k['id_child_product'], $stock);
+                }
             }
 
             // Calcular stock producto
@@ -462,10 +472,15 @@ $app->post('/updateUnitSale', function (Request $request, Response $response, $a
                 $compositeProducts = $compositeProductsDao->findAllCompositeProductsByIdProduct($dataSale['idProduct'], $id_company);
 
                 foreach ($compositeProducts as $k) {
+                    $product = $minimumStockDao->calcStockByProduct($k['id_child_product']);
+
                     $arr = $minimumStockDao->calcStockByComposite($k['id_child_product']);
 
-                    if (isset($arr['stock']))
-                        $resolution = $generalProductsDao->updateStockByProduct($k['id_child_product'], $arr['stock']);
+                    if (isset($arr['stock']) && isset($product['stock'])) {
+                        $stock = $product['stock'] + $arr['stock'];
+
+                        $resolution = $generalProductsDao->updateStockByProduct($k['id_child_product'], $stock);
+                    }
                 }
             }
 
@@ -631,10 +646,15 @@ $app->post('/deleteUnitSale', function (Request $request, Response $response, $a
             $compositeProducts = $compositeProductsDao->findAllCompositeProductsByIdProduct($dataSale['idProduct'], $id_company);
 
             foreach ($compositeProducts as $k) {
+                $product = $minimumStockDao->calcStockByProduct($k['id_child_product']);
+
                 $arr = $minimumStockDao->calcStockByComposite($k['id_child_product']);
 
-                if (isset($arr['stock']))
-                    $resolution = $generalProductsDao->updateStockByProduct($k['id_child_product'], $arr['stock']);
+                if (isset($arr['stock']) && isset($product['stock'])) {
+                    $stock = $product['stock'] + $arr['stock'];
+
+                    $resolution = $generalProductsDao->updateStockByProduct($k['id_child_product'], $stock);
+                }
             }
         }
         // Calcular stock producto
