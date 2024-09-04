@@ -44,3 +44,15 @@ $app->get('/dashboardIndicators', function (Request $request, Response $response
     $response->getBody()->write(json_encode($indicators, JSON_NUMERIC_CHECK));
     return $response->withHeader('Content-Type', 'application/json');
 });
+
+$app->get('/dashboardDeliveredOnTime', function (Request $request, Response $response, $args) use ($dashboardGeneralDao) {
+    session_start();
+    $id_company = $_SESSION['id_company'];
+
+    //obtener % de ordenes entregadas a tiempo
+    $percent = $dashboardGeneralDao->findOrdersDeliveredOnTime($id_company);
+
+    //Enviar respuesta
+    $response->getBody()->write(json_encode($percent, JSON_NUMERIC_CHECK));
+    return $response->withHeader('Content-Type', 'application/json');
+});

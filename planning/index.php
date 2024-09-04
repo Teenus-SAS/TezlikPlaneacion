@@ -215,7 +215,7 @@ if (sizeof($_SESSION) == 0)
                                     </div>
                                     <div class="card-body pt-2">
                                         <!-- <canvas id="chartTimeProcessProducts"></canvas> -->
-                                        <canvas id="chartProductsCost"></canvas>
+                                        <canvas id="onTimeDeliveryChart"></canvas>
                                     </div>
                                 </div>
                             </div>

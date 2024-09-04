@@ -78,4 +78,16 @@ class DashboardGeneralDao
         $percent = $stmt->fetch($connection::FETCH_ASSOC);
         return $percent;
     }
+
+    public function findOrdersDeliveredOnTime($id_company)
+    {
+        $connection = Connection::getInstance()->getConnection();
+        $sql = "SELECT ROUND( SUM( CASE WHEN delivery_date IS NOT NULL AND delivery_date <= max_date THEN 1 WHEN delivery_date IS NULL AND CURDATE() <= max_date THEN 1 ELSE 0 END ) / COUNT(*) * 100, 2 ) AS deliveredOnTime 
+                FROM plan_orders 
+                WHERE max_date <> '0000-00-00' AND id_company = :id_company";
+        $stmt = $connection->prepare($sql);
+        $stmt->execute(['id_company' => $id_company]);
+        $percent = $stmt->fetch($connection::FETCH_ASSOC);
+        return $percent;
+    }
 }
