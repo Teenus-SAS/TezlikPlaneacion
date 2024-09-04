@@ -124,7 +124,7 @@ $(document).ready(function () {
       ? "/api/updatePlanProductsMaterials"
       : "/api/addProductsMaterials";
 
-    checkDataRequisition(apiUrl, idProductMaterial);
+    checkDataPMaterial(apiUrl, idProductMaterial);
   });
 
   /* Actualizar productos materials */
