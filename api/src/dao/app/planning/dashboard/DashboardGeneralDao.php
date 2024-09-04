@@ -90,4 +90,20 @@ class DashboardGeneralDao
         $percent = $stmt->fetch($connection::FETCH_ASSOC);
         return $percent;
     }
+
+    public function findPendignOC($id_company)
+    {
+        $connection = Connection::getInstance()->getConnection();
+        $sql = "SELECT 
+                    COUNT(CASE WHEN application_date IS NOT NULL THEN 1 END) AS executed_requisitions,
+                    COUNT(*) AS total_requisitions
+                FROM requisitions
+                WHERE MONTH(creation_date) = MONTH(CURDATE()) 
+                AND YEAR(creation_date) = YEAR(CURDATE())
+                AND id_company = :id_company";
+        $stmt = $connection->prepare($sql);
+        $stmt->execute(['id_company' => $id_company]);
+        $quantityOC = $stmt->fetch($connection::FETCH_ASSOC);
+        return $quantityOC;
+    }
 }

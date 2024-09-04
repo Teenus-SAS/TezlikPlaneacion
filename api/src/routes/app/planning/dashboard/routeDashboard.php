@@ -56,3 +56,15 @@ $app->get('/dashboardDeliveredOnTime', function (Request $request, Response $res
     $response->getBody()->write(json_encode($percent, JSON_NUMERIC_CHECK));
     return $response->withHeader('Content-Type', 'application/json');
 });
+
+$app->get('/dashboardPendingOC', function (Request $request, Response $response, $args) use ($dashboardGeneralDao) {
+    session_start();
+    $id_company = $_SESSION['id_company'];
+
+    //obtener cantidad de OC sin procesar
+    $quantityOC = $dashboardGeneralDao->findPendignOC($id_company);
+
+    //Enviar respuesta
+    $response->getBody()->write(json_encode($quantityOC, JSON_NUMERIC_CHECK));
+    return $response->withHeader('Content-Type', 'application/json');
+});

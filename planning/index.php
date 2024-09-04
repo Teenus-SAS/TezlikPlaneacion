@@ -195,7 +195,7 @@ if (sizeof($_SESSION) == 0)
                             </div> -->
 
                             <!-- Begin total orders vs clients chart -->
-                            <div class="col-md-4 col-lg-9" style="height: fit-content;">
+                            <div class="col-md-4 col-lg-6" style="height: fit-content;">
                                 <div class="card">
                                     <div class="card-header">
                                         <h5 class="card-title">Clientes con mayor número de pedidos</h5>
@@ -215,7 +215,7 @@ if (sizeof($_SESSION) == 0)
                                     </div>
                                     <div class="card-body pt-2">
                                         <!-- <canvas id="chartTimeProcessProducts"></canvas> -->
-                                        <canvas id="pendingOC"></canvas>
+                                        <canvas id="pendingOCChart"></canvas>
                                     </div>
                                 </div>
                             </div>
@@ -411,6 +411,7 @@ if (sizeof($_SESSION) == 0)
     <script src="/planning/js/dashboard/graphicsGeneral.js"></script>
     <script src="/planning/js/dashboard/indicators.js"></script>
     <script src="/planning/js/dashboard/deliveryOnTime.js"></script>
+    <script src="/planning/js/dashboard/pendingOC.js"></script>
     <!-- <script src="/planning/js/users/usersAccess.js"></script> -->
 
     <!-- <script src="/global/js/global/loadContent.js"></script> -->

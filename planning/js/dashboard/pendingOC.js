@@ -4,7 +4,7 @@ $(document).ready(function () {
       .then((response) => response.text())
       .then((data) => {
         data = JSON.parse(data);
-        GraphPendingOC(data.pendingOC);
+        GraphPendingOC(data.executed_requisitions);
       });
   }, 1000);
 
@@ -25,8 +25,8 @@ $(document).ready(function () {
   };
 });
 
-const GraphPendingOC = (pendingOC) => {
-  const ctx = document.getElementById("onTimeDeliveryChart").getContext("2d");
+const GraphPendingOC = (executed_requisitions) => {
+  const ctx = document.getElementById("pendingOCChart").getContext("2d");
   const onTimeDeliveryChart = new Chart(ctx, {
     type: "bar",
     data: {
@@ -34,18 +34,18 @@ const GraphPendingOC = (pendingOC) => {
       datasets: [
         {
           label: "",
-          data: [percentageOnTime],
+          data: [pendingOC],
           backgroundColor: "rgba(75, 192, 192, 0.2)", // Color para "Entregado a tiempo"
           borderColor: "rgba(75, 192, 192, 1)", // Borde para "Entregado a tiempo"
           borderWidth: 1,
         },
-        {
+        /* {
           label: "",
-          data: [100 - percentageOnTime],
+          data: [100 - pendingOC],
           backgroundColor: "rgba(255, 99, 132, 0.2)", // Color para "No entregado a tiempo"
           borderColor: "rgba(255, 99, 132, 1)", // Borde para "No entregado a tiempo"
           borderWidth: 1,
-        },
+        }, */
       ],
     },
     options: {
