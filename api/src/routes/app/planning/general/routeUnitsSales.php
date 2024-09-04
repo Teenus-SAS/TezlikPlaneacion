@@ -234,7 +234,7 @@ $app->post('/addUnitSales', function (Request $request, Response $response, $arg
                 $product['quantity'] > 0 && $product['quantity'] < isset($product['stock'])
             ) {
                 $data = [];
-                $arr2 = $generalOrdersDao->findLastNumOrder($id_company);
+                $arr2 = $generalOrdersDao->findLastNumOrderByCompany($id_company);
 
                 $client = $generalClientsDao->findInternalClient($id_company);
                 $seller = $generalSellersDao->findInternalSeller($id_company);
@@ -478,7 +478,7 @@ $app->post('/updateUnitSale', function (Request $request, Response $response, $a
 
             if ($product['quantity'] > 0 && $product['quantity'] < isset($product['stock'])) {
                 $data = [];
-                $arr2 = $generalOrdersDao->findLastNumOrder($id_company);
+                $arr2 = $generalOrdersDao->findLastNumOrderByCompany($id_company);
 
                 $client = $generalClientsDao->findInternalClient($id_company);
                 $seller = $generalSellersDao->findInternalSeller($id_company);
@@ -645,7 +645,7 @@ $app->post('/deleteUnitSale', function (Request $request, Response $response, $a
         }
         if ($product['quantity'] > 0 && $product['quantity'] < isset($product['stock'])) {
             $data = [];
-            $arr2 = $generalOrdersDao->findLastNumOrder($id_company);
+            $arr2 = $generalOrdersDao->findLastNumOrderByCompany($id_company);
 
             $client = $generalClientsDao->findInternalClient($id_company);
             $seller = $generalSellersDao->findInternalSeller($id_company);

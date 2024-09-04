@@ -185,6 +185,19 @@ class GeneralOrdersDao
         return $order;
     }
 
+    public function findLastNumOrderByCompany($id_company)
+    {
+        $connection = Connection::getInstance()->getConnection();
+
+        $stmt = $connection->prepare("SELECT CONCAT('PED', MAX(id_order) + 1) AS num_order FROM plan_orders WHERE id_company = :id_company");
+        $stmt->execute(['id_company' => $id_company]);
+
+        $this->logger->info(__FUNCTION__, array('query' => $stmt->queryString, 'errors' => $stmt->errorInfo()));
+
+        $order = $stmt->fetch($connection::FETCH_ASSOC);
+        return $order;
+    }
+
     public function changeStatusOrder($num_order, $id_product)
     {
         $connection = Connection::getInstance()->getConnection();

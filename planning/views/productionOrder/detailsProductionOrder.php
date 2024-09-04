@@ -62,20 +62,23 @@ if (sizeof($_SESSION) == 0)
 		<!-- Begin main content -->
 		<div class="main-content">
 			<!-- Content -->
-			<div class="page-content">
+			<div class="page-content" id="invoice">
 				<div class="page-content-wrapper">
 					<div class="container-fluid">
 						<!-- Row 5 -->
 						<div class="row justify-content-center">
 							<div class="col-12 col-md-10 mt-3">
 								<div class="card">
-									<div class="card-body" style="padding-right: 35px; padding-left: 35px">
-										<div class="toolbar hidden-print noImprimir">
-											<div class="d-flex justify-content-end">
+									<div class="card-body cardHeader" style="padding-right: 35px; padding-left: 35px">
+										<!-- <div class="d-flex justify-content-end">
 												<button class="btn btn-warning mr-2" id="btnImprimirQuote"><i class="fa fa-print"></i> Imprimir</button>
 												<button class="btn btn-danger mr-2" id="btnNewSend"><i class="fa fa-mail-bulk"></i> Enviar</button>
 											</div>
-											<hr>
+											<hr> -->
+										<div class="col-sm-5 col-xl-6 d-flex justify-content-end btnPrintPDF">
+											<div class="col-xs-2 mt-2 mr-2" id="btnPdf">
+												<a href="javascript:;" <i class="bi bi-filetype-pdf" data-toggle='tooltip' onclick="printPDF()" style="font-size: 30px; color:red;"></i></a>
+											</div>
 										</div>
 
 										<!-- <div class="row">
@@ -314,7 +317,7 @@ if (sizeof($_SESSION) == 0)
 	<?php include_once dirname(dirname(dirname(__DIR__))) . '/global/partials/scriptsJS.php'; ?>
 	<script src="/planning/js/productionOrder/detailsProductionOrder.js"></script>
 	<script src="/global/js/global/companyData.js"></script>
-
+	<script src="/global/js/global/printPdf.js"></script>
 </body>
 
 </html>

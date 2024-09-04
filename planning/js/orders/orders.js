@@ -35,7 +35,7 @@ $(document).ready(function () {
 
     sessionStorage.setItem("id_order", data.id_order);
 
-    $("#order").val(data.num_order);
+    // $("#order").val(data.num_order);
     $("#dateOrder").val(data.date_order);
     $("#minDate").val(data.min_date);
     $("#maxDate").val(data.max_date);
@@ -61,8 +61,7 @@ $(document).ready(function () {
     );
   });
 
-  const checkDataOrder = async (url, idOrder) => {
-    let order = $("#order").val();
+  const checkDataOrder = async (url, idOrder) => { 
     let dateOrder = $("#dateOrder").val();
     let minDate = $("#minDate").val();
     let maxDate = $("#maxDate").val();

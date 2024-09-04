@@ -106,7 +106,7 @@ $app->post('/changeOffices', function (Request $request, Response $response, $ar
 
     if ($dataOrder['stock'] > ($dataOrder['quantity'] - $dataOrder['originalQuantity'])) {
         $data = [];
-        $arr = $generalOrdersDao->findLastNumOrder($id_company);
+        $arr2 = $generalOrdersDao->findLastNumOrderByCompany($id_company);
 
         $client = $generalClientsDao->findInternalClient($id_company);
         $seller = $generalSellersDao->findInternalSeller($id_company);

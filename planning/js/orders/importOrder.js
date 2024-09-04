@@ -38,7 +38,7 @@ $(document).ready(function () {
 
     importFile(selectedFile)
       .then((data) => {
-        const expectedHeaders = ['pedido','fecha_pedido','fecha_minima','fecha_maxima','referencia_producto','producto', 'email_vendedor', 'cliente','cantidad_original'];
+        const expectedHeaders = ['fecha_pedido','fecha_minima','fecha_maxima','referencia_producto','producto', 'email_vendedor', 'cliente','cantidad_original'];
         const actualHeaders = Object.keys(data[0]);
 
         const missingHeaders = expectedHeaders.filter(header => !actualHeaders.includes(header));
@@ -52,8 +52,7 @@ $(document).ready(function () {
         }
 
         let OrderToImport = data.map((item) => {
-          return {
-            order: item.pedido,
+          return { 
             dateOrder: item.fecha_pedido,
             minDate: item.fecha_minima,
             maxDate: item.fecha_maxima,
