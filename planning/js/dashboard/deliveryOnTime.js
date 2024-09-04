@@ -28,19 +28,20 @@ $(document).ready(function () {
 const GraphDeliverOnTime = (percentageOnTime) => {
   const ctx = document.getElementById("onTimeDeliveryChart").getContext("2d");
   const onTimeDeliveryChart = new Chart(ctx, {
+    plugins: [ChartDataLabels],
     type: "bar",
     data: {
-      labels: ["Pedidos"], 
+      labels: ["Pedidos"],
       datasets: [
         {
-          label: "", 
+          label: "",
           data: [percentageOnTime],
           backgroundColor: "rgba(75, 192, 192, 0.2)", // Color para "Entregado a tiempo"
           borderColor: "rgba(75, 192, 192, 1)", // Borde para "Entregado a tiempo"
           borderWidth: 1,
         },
         {
-          label: "", 
+          label: "",
           data: [100 - percentageOnTime],
           backgroundColor: "rgba(255, 99, 132, 0.2)", // Color para "No entregado a tiempo"
           borderColor: "rgba(255, 99, 132, 1)", // Borde para "No entregado a tiempo"
@@ -52,20 +53,30 @@ const GraphDeliverOnTime = (percentageOnTime) => {
       scales: {
         x: {
           stacked: true, // Apilamiento en el eje X
-          display: false, 
+          display: false,
         },
         y: {
           stacked: true, // Apilamiento en el eje Y
           beginAtZero: true,
           max: 100,
           ticks: {
-            display: false, 
+            display: false,
           },
         },
       },
       plugins: {
         legend: {
-          display: false, 
+          display: false,
+        },
+        datalabels: {
+          anchor: "center",
+          align: "center",
+          offset: 2,
+          color: "black",
+          font: {
+            size: "12",
+            weight: "normal",
+          },
         },
         tooltip: {
           callbacks: {
