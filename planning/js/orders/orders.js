@@ -34,8 +34,7 @@ $(document).ready(function () {
     let data = tblOrder.fnGetData(row);
 
     sessionStorage.setItem("id_order", data.id_order);
-
-    // $("#order").val(data.num_order);
+ 
     $("#dateOrder").val(data.date_order);
     $("#minDate").val(data.min_date);
     $("#maxDate").val(data.max_date);
@@ -74,9 +73,7 @@ $(document).ready(function () {
 
     if (
       isNaN(data) ||
-      data <= 0 ||
-      !order ||
-      order == "" ||
+      data <= 0 || 
       !dateOrder ||
       dateOrder == "" ||
       !minDate ||
