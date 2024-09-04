@@ -54,7 +54,7 @@ if (sizeof($_SESSION) == 0)
                                         <button class="btn btn-warning" id="btnCreateProduct"><i class="bi bi-plus-circle mr-1"></i>Adicionar</button>
                                     </div>
                                     <div class="col-xs-2 mr-2">
-                                        <button class="btn btn-secondary" id="btnAddNewProduct" style="display: none;">Asignar SubProducto</button>
+                                        <button class="btn btn-secondary" id="btnAddNewProduct">Asignar SubProducto</button>
                                     </div>
                                     <!-- <div class="col-xs-2 py-2 mr-2">
                                         <button class="btn btn-secondary" id="btnCreateProductInProcess">Adicionar Producto En Proceso</button>
