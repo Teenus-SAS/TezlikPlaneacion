@@ -48,7 +48,7 @@ class DashboardGeneralDao
         $connection = Connection::getInstance()->getConnection();
         $sql = "SELECT (COUNT(CASE WHEN po.status IN (1, 5, 6, 9) THEN 1 END) * 100.0 / COUNT(*)) AS ordersNoProgramed 
                 FROM plan_orders po
-                WHERE id_company = :id_company";
+                WHERE max_date <> '0000-00-00' AND id_company = :id_company";
         $stmt = $connection->prepare($sql);
         $stmt->execute(['id_company' => $id_company]);
         $percent = $stmt->fetch($connection::FETCH_ASSOC);
