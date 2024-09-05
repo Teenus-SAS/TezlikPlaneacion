@@ -3,8 +3,14 @@ $(document).ready(function () {
     fetch(`/api/dashboardOrdersPerDay`)
       .then((response) => response.text())
       .then((data) => {
+        //Parsea los datos
         data = JSON.parse(data);
-        GraphOrdersPerDay(data.total_orders);
+
+        // Extraer los días y las órdenes en dos arreglos
+        const days = ordersData.map((order) => order.day);
+        const totalOrders = ordersData.map((order) => order.total_orders);
+
+        GraphOrdersPerDay(days, totalOrders);
       });
   }, 1000);
 
@@ -25,53 +31,37 @@ $(document).ready(function () {
   };
 });
 
-const GraphOrdersPerDay = (total_orders) => {
-  const ctx = document.getElementById("pendingOCChart").getContext("2d");
-  const onTimeDeliveryChart = new Chart(ctx, {
-    type: "bar",
+const GraphOrdersPerDay = (days, totalOrders) => {
+  // Crear el gráfico de líneas
+  const ctx = document.getElementById("ordersChart").getContext("2d");
+  const ordersChart = new Chart(ctx, {
+    type: "line",
     data: {
-      labels: ["Pedidos"],
+      labels: days, // Eje X: días
       datasets: [
         {
-          label: "",
-          data: [total_orders],
-          backgroundColor: "rgba(75, 192, 192, 0.2)", // Color para "Entregado a tiempo"
-          borderColor: "rgba(75, 192, 192, 1)", // Borde para "Entregado a tiempo"
-          borderWidth: 1,
+          label: "Órdenes por día",
+          data: totalOrders, // Eje Y: total de órdenes
+          borderColor: "rgba(75, 192, 192, 1)",
+          backgroundColor: "rgba(75, 192, 192, 0.2)",
+          fill: true, // Para llenar el área bajo la línea
+          tension: 0.1, // Suaviza la curva de la línea
         },
-        /* {
-          label: "",
-          data: [100 - pendingOC],
-          backgroundColor: "rgba(255, 99, 132, 0.2)", // Color para "No entregado a tiempo"
-          borderColor: "rgba(255, 99, 132, 1)", // Borde para "No entregado a tiempo"
-          borderWidth: 1,
-        }, */
       ],
     },
     options: {
       scales: {
         x: {
-          stacked: true, // Apilamiento en el eje X
-          display: false,
-        },
-        y: {
-          stacked: true, // Apilamiento en el eje Y
-          beginAtZero: true,
-          max: 100,
-          ticks: {
-            display: false,
+          title: {
+            display: true,
+            text: "Día",
           },
         },
-      },
-      plugins: {
-        legend: {
-          display: false,
-        },
-        tooltip: {
-          callbacks: {
-            label: function (tooltipItem) {
-              return tooltipItem.raw + "%"; // Mostrar solo el valor en el tooltip
-            },
+        y: {
+          beginAtZero: true,
+          title: {
+            display: true,
+            text: "Órdenes",
           },
         },
       },
