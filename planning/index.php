@@ -196,38 +196,44 @@ if (sizeof($_SESSION) == 0)
 
                             <!-- Begin total orders vs clients chart -->
                             <div class="col-md-4 col-lg-6" style="height: fit-content;">
-                                <div class="card">
-                                    <div class="card-header">
-                                        <h5 class="card-title">Pedidos x día</h5>
-                                    </div>
-                                    <div class="card-body pt-2">
-                                        <!-- <canvas id="chartTimeProcessProducts"></canvas> -->
-                                        <canvas id="chartOrdersxDay"></canvas>
+                                <div class="card orders-graph">
+                                    <div class="chart-container">
+                                        <div class="card-header">
+                                            <h5 class="card-title">Pedidos x día</h5>
+                                        </div>
+                                        <div class="card-body pt-2">
+                                            <!-- <canvas id="chartTimeProcessProducts"></canvas> -->
+                                            <canvas id="chartOrdersxDay"></canvas>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
 
                             <!-- Begin OC chart -->
                             <div class="col-md-4 col-lg-3" style="height: fit-content;">
-                                <div class="card">
-                                    <div class="card-header">
-                                        <h5 class="card-title">Ordenes de Compra</h5>
-                                    </div>
-                                    <div class="card-body pt-2">
-                                        <!-- <canvas id="chartTimeProcessProducts"></canvas> -->
-                                        <canvas id="pendingOCChart"></canvas>
+                                <div class="card orders-graph">
+                                    <div class="chart-container">
+                                        <div class="card-header">
+                                            <h5 class="card-title">Ordenes de Compra</h5>
+                                        </div>
+                                        <div class="card-body pt-2">
+                                            <!-- <canvas id="chartTimeProcessProducts"></canvas> -->
+                                            <canvas id="pendingOCChart"></canvas>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
                             <!-- Begin Inventory classification chart -->
                             <div class="col-md-4 col-lg-3" style="height: fit-content;">
-                                <div class="card">
-                                    <div class="card-header">
-                                        <h5 class="card-title">Entregas a tiempo</h5>
-                                    </div>
-                                    <div class="card-body pt-2">
-                                        <!-- <canvas id="chartTimeProcessProducts"></canvas> -->
-                                        <canvas id="onTimeDeliveryChart"></canvas>
+                                <div class="card orders-graph">
+                                    <div class="chart-container">
+                                        <div class="card-header">
+                                            <h5 class="card-title">Entregas a tiempo</h5>
+                                        </div>
+                                        <div class="card-body pt-2">
+                                            <!-- <canvas id="chartTimeProcessProducts"></canvas> -->
+                                            <canvas id="onTimeDeliveryChart"></canvas>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
