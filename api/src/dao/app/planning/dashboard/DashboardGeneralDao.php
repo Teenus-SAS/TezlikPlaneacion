@@ -124,7 +124,7 @@ class DashboardGeneralDao
                 ORDER BY DATE(date_order) ASC";
         $stmt = $connection->prepare($sql);
         $stmt->execute(['id_company' => $id_company]);
-        $orderxDay = $stmt->fetch($connection::FETCH_ASSOC);
+        $orderxDay = $stmt->fetchAll($connection::FETCH_ASSOC);
         return $orderxDay;
     }
 }
