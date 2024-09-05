@@ -110,7 +110,7 @@ class DashboardGeneralDao
                 AND id_company = :id_company GROUP BY status;";
         $stmt = $connection->prepare($sql);
         $stmt->execute(['id_company' => $id_company]);
-        $quantityOC = $stmt->fetch($connection::FETCH_ASSOC);
+        $quantityOC = $stmt->fetchAll($connection::FETCH_ASSOC);
         return $quantityOC;
     }
 
