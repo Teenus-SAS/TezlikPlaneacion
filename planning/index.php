@@ -285,13 +285,15 @@ if (sizeof($_SESSION) == 0)
                         </div>
                         <div class="row">
                             <div class="col-md-4 col-lg-4" style="height: fit-content;">
-                                <div class="card">
+                                <div class="card orders-graph">
                                     <div class="card-header">
                                         <h5 class="card-title">Clasificacion Inventario ABC</h5>
                                     </div>
                                     <div class="card-body pt-2">
-                                        <!-- <canvas id="chartTimeProcessProducts"></canvas> -->
-                                        <canvas id="chartClasificationABC"></canvas>
+                                        <div class="chart-container">
+                                            <!-- <canvas id="chartTimeProcessProducts"></canvas> -->
+                                            <canvas id="chartClasificationABC"></canvas>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
@@ -413,12 +415,11 @@ if (sizeof($_SESSION) == 0)
     </div>
     <!-- Page End -->
     <?php include_once dirname(__DIR__) . '/global/partials/scriptsJS.php'; ?>
-    <script src="/planning/js/dashboard/indicatiorsGeneral.js"></script>
-    <script src="/planning/js/dashboard/graphicsGeneral.js"></script>
     <script src="/planning/js/dashboard/indicators.js"></script>
-    <script src="/planning/js/dashboard/deliveryOnTime.js"></script>
-    <script src="/planning/js/dashboard/pendingOC.js"></script>
     <script src="/planning/js/dashboard/ordersPerDay.js"></script>
+    <script src="/planning/js/dashboard/pendingOC.js"></script>
+    <script src="/planning/js/dashboard/deliveryOnTime.js"></script>
+    <script src="/planning/js/dashboard/inventoryProductsABC.js"></script>
     <!-- <script src="/planning/js/users/usersAccess.js"></script> -->
 
     <!-- <script src="/global/js/global/loadContent.js"></script> -->
