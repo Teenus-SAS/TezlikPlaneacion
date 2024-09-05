@@ -4,7 +4,7 @@ $(document).ready(function () {
       .then((response) => response.text())
       .then((data) => {
         data = JSON.parse(data);
-        GraphPendingOC(data.executed_requisitions);
+        GraphPendingOC(data);
       });
   }, 1000);
 
@@ -26,53 +26,29 @@ $(document).ready(function () {
 });
 
 const GraphPendingOC = (executed_requisitions) => {
+  // Separamos los datos por estado para crear los datasets
+  const datasets = [];
+  data.forEach((item) => {
+    datasets.push({
+      label: `Estado ${item.status}`,
+      data: [item.porcentaje_participacion],
+      backgroundColor: item.status === 2 ? "red" : "blue",
+    });
+  });
+
   const ctx = document.getElementById("pendingOCChart").getContext("2d");
-  const onTimeDeliveryChart = new Chart(ctx, {
+
+  const myChart = new Chart(ctx, {
     type: "bar",
     data: {
-      labels: ["Pedidos"],
-      datasets: [
-        {
-          label: "",
-          data: [pendingOC],
-          backgroundColor: "rgba(75, 192, 192, 0.2)", // Color para "Entregado a tiempo"
-          borderColor: "rgba(75, 192, 192, 1)", // Borde para "Entregado a tiempo"
-          borderWidth: 1,
-        },
-        /* {
-          label: "",
-          data: [100 - pendingOC],
-          backgroundColor: "rgba(255, 99, 132, 0.2)", // Color para "No entregado a tiempo"
-          borderColor: "rgba(255, 99, 132, 1)", // Borde para "No entregado a tiempo"
-          borderWidth: 1,
-        }, */
-      ],
+      labels: ["Porcentaje de Participación"],
+      datasets: datasets,
     },
     options: {
       scales: {
-        x: {
-          stacked: true, // Apilamiento en el eje X
-          display: false,
-        },
         y: {
-          stacked: true, // Apilamiento en el eje Y
           beginAtZero: true,
           max: 100,
-          ticks: {
-            display: false,
-          },
-        },
-      },
-      plugins: {
-        legend: {
-          display: false,
-        },
-        tooltip: {
-          callbacks: {
-            label: function (tooltipItem) {
-              return tooltipItem.raw + "%"; // Mostrar solo el valor en el tooltip
-            },
-          },
         },
       },
     },
