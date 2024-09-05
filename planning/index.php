@@ -195,13 +195,13 @@ if (sizeof($_SESSION) == 0)
                             </div> -->
 
                             <!-- Begin total orders vs clients chart -->
-                            <div class="col-md-4 col-lg-6" style="height: fit-content;">
-                                <div class="chart-container">
-                                    <div class="card-header">
-                                        <h5 class="card-title">Pedidos x día</h5>
-                                    </div>
-                                    <div class="card-body pt-2">
-                                        <div class="card orders-graph">
+                            <div class="col-md-4 col-lg-6">
+                                <div class="card orders-graph">
+                                    <div class="chart-container">
+                                        <div class="card-header">
+                                            <h5 class="card-title">Pedidos x día</h5>
+                                        </div>
+                                        <div class="card-body pt-2">
                                             <!-- <canvas id="chartTimeProcessProducts"></canvas> -->
                                             <canvas id="chartOrdersxDay"></canvas>
                                         </div>
@@ -225,12 +225,12 @@ if (sizeof($_SESSION) == 0)
                             </div>
                             <!-- Begin Inventory classification chart -->
                             <div class="col-md-4 col-lg-3" style="height: fit-content;">
-                                <div class="chart-container">
+                                <div class="card orders-graph">
                                     <div class="card-header">
                                         <h5 class="card-title">Entregas a tiempo</h5>
                                     </div>
                                     <div class="card-body pt-2">
-                                        <div class="card orders-graph">
+                                        <div class="chart-container">
                                             <!-- <canvas id="chartTimeProcessProducts"></canvas> -->
                                             <canvas id="onTimeDeliveryChart"></canvas>
                                         </div>
