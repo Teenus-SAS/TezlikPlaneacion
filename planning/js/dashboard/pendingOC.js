@@ -32,7 +32,12 @@ const GraphPendingOC = (data) => {
     datasets.push({
       label: `Estado ${item.status}`,
       data: [item.porcentaje_participacion],
-      backgroundColor: item.status === 2 ? "red" : "blue",
+      backgroundColor:
+        item.status === 2
+          ? "rgba(255, 99, 132, 0.2)"
+          : "rgba(75, 192, 192, 0.2)",
+      borderColor:
+        item.status === 2 ? "rgba(255, 99, 132, 1)" : "rgba(75, 192, 192, 1)",
     });
   });
 
@@ -41,10 +46,11 @@ const GraphPendingOC = (data) => {
   const myChart = new Chart(ctx, {
     type: "bar",
     data: {
-      labels: ["Porcentaje de Participación"],
+      labels: ["Ejecución Ordenes de Compra"],
       datasets: datasets,
     },
     options: {
+      maintainAspectRatio: false, // Para usar el tamaño del contenedor y no mantener el ratio
       scales: {
         y: {
           beginAtZero: true,
