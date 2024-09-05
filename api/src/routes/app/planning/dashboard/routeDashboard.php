@@ -68,3 +68,15 @@ $app->get('/dashboardPendingOC', function (Request $request, Response $response,
     $response->getBody()->write(json_encode($quantityOC, JSON_NUMERIC_CHECK));
     return $response->withHeader('Content-Type', 'application/json');
 });
+
+$app->get('/dashboardOrdersPerDay', function (Request $request, Response $response, $args) use ($dashboardGeneralDao) {
+    session_start();
+    $id_company = $_SESSION['id_company'];
+
+    //obtener cantidad de OC sin procesar
+    $OrdersPerDay = $dashboardGeneralDao->findOrderxDay($id_company);
+
+    //Enviar respuesta
+    $response->getBody()->write(json_encode($OrdersPerDay, JSON_NUMERIC_CHECK));
+    return $response->withHeader('Content-Type', 'application/json');
+});

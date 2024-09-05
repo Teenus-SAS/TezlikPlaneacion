@@ -106,4 +106,25 @@ class DashboardGeneralDao
         $quantityOC = $stmt->fetch($connection::FETCH_ASSOC);
         return $quantityOC;
     }
+
+    public function findOrderxDay($id_company)
+    {
+        $connection = Connection::getInstance()->getConnection();
+
+        $mes = date('m'); // Mes actual
+        $anio = date('Y'); // Año actual        
+
+        $sql = "SELECT DATE(date_order) AS day, COUNT(*) AS total_orders
+                FROM plan_orders
+                WHERE 
+                    MONTH(date_order) = $mes  -- Reemplaza <mes> por el número del mes que deseas filtrar (Ej: 8 para agosto)
+                    AND YEAR(date_order) = $anio  -- Reemplaza <año> por el año que deseas filtrar
+                    AND id_company = :id_company
+                GROUP BY DATE(date_order)
+                ORDER BY DATE(date_order) ASC";
+        $stmt = $connection->prepare($sql);
+        $stmt->execute(['id_company' => $id_company]);
+        $orderxDay = $stmt->fetch($connection::FETCH_ASSOC);
+        return $orderxDay;
+    }
 }
