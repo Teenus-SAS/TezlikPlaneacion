@@ -1,4 +1,5 @@
 $(document).ready(function () {
+  loadDataMachines(2);
   /* Ocultar panel para crear Nomina */
   $(".cardCreateEmployee").hide();
 
@@ -43,6 +44,7 @@ $(document).ready(function () {
     $("#lastname").val(data.lastname);
     $(`#idArea option[value=${data.id_plan_area}]`).prop("selected", true);
     $(`#idProcess option[value=${data.id_process}]`).prop("selected", true);
+    $(`#idMachine option[value=${data.id_machine}]`).prop("selected", true);
     $("#position").val(data.position);
 
     // Animar el desplazamiento
@@ -57,6 +59,7 @@ $(document).ready(function () {
       position: $("#position").val().trim(),
       idArea: parseFloat($("#idArea").val()),
       idProcess: parseFloat($("#idProcess").val()),
+      idMachine: parseFloat($("#idMachine").val()),
     };
 
     // Verificación de campos vacíos o inválidos
@@ -86,8 +89,7 @@ $(document).ready(function () {
     let row = $(this.activeElement).closest("tr")[0];
     let data = tblEmployees.fnGetData(row);
 
-    const { id_plan_payroll } = data;
-    //let id_plan_payroll = data.id_plan_payroll;
+    const { id_plan_payroll } = data; 
 
     bootbox.confirm({
       title: "Eliminar",

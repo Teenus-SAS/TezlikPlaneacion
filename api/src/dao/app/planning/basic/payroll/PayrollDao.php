@@ -19,9 +19,10 @@ class PayrollDao
     public function findAllPayrollByCompany($id_company)
     {
         $connection = Connection::getInstance()->getConnection();
-        $stmt = $connection->prepare("SELECT py.id_plan_payroll, py.firstname, py.lastname, py.position, py.status, pc.id_process, pc.process, a.id_plan_area, a.area
+        $stmt = $connection->prepare("SELECT py.id_plan_payroll, py.firstname, py.lastname, py.position, py.status, pc.id_process, pc.process, m.id_machine, m.machine, a.id_plan_area, a.area
                                       FROM plan_payroll py
                                         INNER JOIN process pc ON pc.id_process = py.id_process
+                                        INNER JOIN machines m ON m.id_machine = py.id_machine
                                         INNER JOIN plan_areas a ON a.id_plan_area = py.id_area
                                       WHERE py.id_company = :id_company");
         $stmt->execute([
@@ -37,14 +38,15 @@ class PayrollDao
         try {
             $connection = Connection::getInstance()->getConnection();
 
-            $stmt = $connection->prepare("INSERT INTO plan_payroll (id_company, firstname, lastname, position, id_process, id_area, status)
-                                          VALUES (:id_company, :firstname, :lastname, :position, :id_process, :id_area, :status)");
+            $stmt = $connection->prepare("INSERT INTO plan_payroll (id_company, firstname, lastname, position, id_process, id_machine, id_area, status)
+                                          VALUES (:id_company, :firstname, :lastname, :position, :id_process, :id_machine, :id_area, :status)");
             $stmt->execute([
                 'id_company' => $id_company,
                 'firstname' => strtoupper(trim($dataPayroll['firstname'])),
                 'lastname' => strtoupper(trim($dataPayroll['lastname'])),
                 'position' => strtoupper(trim($dataPayroll['position'])),
                 'id_process' => $dataPayroll['idProcess'],
+                'id_machine' => $dataPayroll['idMachine'],
                 'id_area' => $dataPayroll['idArea'],
                 'status' => 1
             ]);
@@ -58,7 +60,7 @@ class PayrollDao
         try {
             $connection = Connection::getInstance()->getConnection();
 
-            $stmt = $connection->prepare("UPDATE plan_payroll SET firstname = :firstname, lastname = :lastname, position = :position, id_process = :id_process, id_area = :id_area
+            $stmt = $connection->prepare("UPDATE plan_payroll SET firstname = :firstname, lastname = :lastname, position = :position, id_process = :id_process, id_machine = :id_machine, id_area = :id_area
                                           WHERE id_plan_payroll = :id_plan_payroll");
             $stmt->execute([
                 'id_plan_payroll' => $dataPayroll['idPayroll'],
@@ -66,6 +68,7 @@ class PayrollDao
                 'lastname' => strtoupper(trim($dataPayroll['lastname'])),
                 'position' => strtoupper(trim($dataPayroll['position'])),
                 'id_process' => $dataPayroll['idProcess'],
+                'id_machine' => $dataPayroll['idMachine'],
                 'id_area' => $dataPayroll['idArea']
             ]);
         } catch (\Exception $e) {

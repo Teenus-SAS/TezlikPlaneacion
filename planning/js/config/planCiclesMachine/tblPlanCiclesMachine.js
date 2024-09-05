@@ -31,6 +31,11 @@ $(document).ready(function () {
           className: 'uniqueClassName dt-head-center',
         },
         {
+          title: 'Operadores',
+          data: 'employees',
+          className: 'uniqueClassName dt-head-center',
+        }, 
+        {
           title: 'Und/Hora',
           data: 'cicles_hour',
           className: 'text-center',
@@ -70,21 +75,21 @@ $(document).ready(function () {
           units_month += parseFloat(data[display[i]].units_month); 
         }
 
-        $(this.api().column(3).footer()).html(
+        $('#lblTotalCicles').html(
           cicles_hour.toLocaleString('es-CO', {
             minimumFractionDigits: 0,
             maximumFractionDigits: 0,
           })
         ); 
         
-        $(this.api().column(4).footer()).html(
+        $('#lblTotalUnitsTurn').html(
           units_turn.toLocaleString('es-CO', {
             minimumFractionDigits: 0,
             maximumFractionDigits: 0,
           })
         ); 
 
-        $(this.api().column(5).footer()).html(
+        $('#lblTotalUnitsMonth').html(
           units_month.toLocaleString('es-CO', {
             minimumFractionDigits: 0,
             maximumFractionDigits: 0,

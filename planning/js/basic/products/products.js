@@ -106,7 +106,7 @@ $(document).ready(function () {
 
       let arr = dataProducts.find(item => item.id_product == idProduct);
 
-      if (quantity < arr.reserved) {
+      if (quantity < parseFloat(arr.reserved)) {
         toastr.error("Existencias con menor cantidad de las reservadas");
         return false;
       }

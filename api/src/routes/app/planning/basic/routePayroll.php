@@ -1,6 +1,7 @@
 <?php
 
 use TezlikPlaneacion\dao\GeneralAreaDao;
+use TezlikPlaneacion\dao\GeneralMachinesDao;
 use TezlikPlaneacion\dao\GeneralPayrollDao;
 use TezlikPlaneacion\dao\GeneralProcessDao;
 use TezlikPlaneacion\dao\PayrollDao;
@@ -8,6 +9,7 @@ use TezlikPlaneacion\dao\PayrollDao;
 $payrollDao = new PayrollDao();
 $generalPayrollDao = new GeneralPayrollDao();
 $generalProcessDao = new GeneralProcessDao();
+$generalMachinesDao = new GeneralMachinesDao();
 $generalAreaDao = new GeneralAreaDao();
 
 use Psr\Http\Message\ResponseInterface as Response;
@@ -27,6 +29,7 @@ $app->get('/planPayroll', function (Request $request, Response $response, $args)
 $app->post('/payrollDataValidation', function (Request $request, Response $response, $args) use (
     $generalPayrollDao,
     $generalProcessDao,
+    $generalMachinesDao,
     $generalAreaDao
 ) {
     $dataPayroll = $request->getParsedBody();
@@ -43,7 +46,7 @@ $app->post('/payrollDataValidation', function (Request $request, Response $respo
             if (
                 empty($payroll[$i]['firstname']) || empty($payroll[$i]['lastname']) ||
                 empty($payroll[$i]['position']) || empty($payroll[$i]['process']) ||
-                empty($payroll[$i]['area'])
+                empty($payroll[$i]['machine']) || empty($payroll[$i]['area'])
             ) {
                 $i = $i + 2;
                 $dataImportPayroll = array('error' => true, 'message' => "Campos vacios, fila: $i");
@@ -52,7 +55,7 @@ $app->post('/payrollDataValidation', function (Request $request, Response $respo
             if (
                 empty(trim($payroll[$i]['firstname'])) || empty(trim($payroll[$i]['lastname'])) ||
                 empty(trim($payroll[$i]['position'])) || empty(trim($payroll[$i]['process'])) ||
-                empty(trim($payroll[$i]['area']))
+                empty(trim($payroll[$i]['machine'])) || empty(trim($payroll[$i]['area']))
             ) {
                 $i = $i + 2;
                 $dataImportPayroll = array('error' => true, 'message' => "Campos vacios, fila: $i");
@@ -74,6 +77,17 @@ $app->post('/payrollDataValidation', function (Request $request, Response $respo
                     break;
                 }
                 $payroll[$i]['idProcess'] = $findProcess['id_process'];
+
+                // Obtener Maquina
+                $findMachine = $generalMachinesDao->findMachine($payroll[$i], $id_company);
+
+                if (!$findMachine) {
+                    $i = $i + 2;
+                    $dataImportPayroll =  array('error' => true, 'message' => "Maquina no existe en la base de datos. Fila: $i");
+                    break;
+                }
+                $payroll[$i]['idMachine'] = $findMachine['id_machine'];
+
                 // Obtener area
                 $findArea = $generalAreaDao->findArea($payroll[$i], $id_company);
 
@@ -104,6 +118,7 @@ $app->post('/addPayroll', function (Request $request, Response $response, $args)
     $payrollDao,
     $generalPayrollDao,
     $generalProcessDao,
+    $generalMachinesDao,
     $generalAreaDao
 ) {
     session_start();
@@ -135,6 +150,10 @@ $app->post('/addPayroll', function (Request $request, Response $response, $args)
             // Obtener proceso
             $findProcess = $generalProcessDao->findProcess($payroll[$i], $id_company);
             $payroll[$i]['idProcess'] = $findProcess['id_process'];
+
+            // Obtener maquina
+            $findMachine = $generalMachinesDao->findMachine($payroll[$i], $id_company);
+            $payroll[$i]['idMachine'] = $findMachine['id_machine'];
 
             // Obtener area
             $findArea = $generalAreaDao->findArea($payroll[$i], $id_company);

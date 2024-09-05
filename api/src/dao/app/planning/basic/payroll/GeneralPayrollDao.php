@@ -20,12 +20,13 @@ class GeneralPayrollDao
     {
         $connection = Connection::getInstance()->getConnection();
 
-        $stmt = $connection->prepare("SELECT * FROM plan_payroll WHERE firstname = :firstname AND
-                                      lastname = :lastname AND id_process = :id_process AND id_area = :id_area");
+        $stmt = $connection->prepare("SELECT * FROM plan_payroll WHERE firstname = :firstname AND lastname = :lastname AND 
+                                      id_process = :id_process AND id_machine = :id_machine AND id_area = :id_area");
         $stmt->execute([
             'firstname' => strtoupper(trim($dataPayroll['firstname'])),
             'lastname' => strtoupper(trim($dataPayroll['lastname'])),
             'id_process' => $dataPayroll['idProcess'],
+            'id_machine' => $dataPayroll['idMachine'],
             'id_area' => $dataPayroll['idArea']
         ]);
         $this->logger->info(__FUNCTION__, array('query' => $stmt->queryString, 'errors' => $stmt->errorInfo()));

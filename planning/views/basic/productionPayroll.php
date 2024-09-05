@@ -85,6 +85,10 @@ if (sizeof($_SESSION) == 0)
                                                     <select type="text" class="form-control" id="idProcess" name="idProcess"></select>
                                                 </div>
                                                 <div class="col-sm-2 floating-label enable-floating-label show-label" style="margin-bottom:0px">
+                                                    <label for="">Maquina</label>
+                                                    <select type="text" class="form-control idMachine" id="idMachine" name="idMachine"></select>
+                                                </div>
+                                                <div class="col-sm-2 floating-label enable-floating-label show-label" style="margin-bottom:0px">
                                                     <label for="">Posición</label>
                                                     <input type="text" class="form-control text-center" id="position" name="position">
                                                 </div>
@@ -164,9 +168,10 @@ if (sizeof($_SESSION) == 0)
 
     <script src="/planning/js/basic/areas/configAreas.js"></script>
     <script src="/planning/js/basic/process/configProcess.js"></script>
+    <script src="/planning/js/basic/machines/configMachines.js"></script>
     <script src="/planning/js/basic/payroll/tblPayroll.js"></script>
     <script src="/planning/js/basic/payroll/payroll.js"></script>
-    <script src="../global/js/import/import.js"></script>
+    <script src="/global/js/import/import.js"></script>
     <script src="/planning/js/basic/payroll/importPayroll.js"></script>
     <script src="/global/js/import/file.js"></script>
     <script src="/global/js/global/validateImgExt.js"></script>

@@ -40,6 +40,11 @@ $(document).ready(function () {
         className: "uniqueClassName dt-head-center ",
       },
       {
+        title: "Maquina",
+        data: "machine",
+        className: "uniqueClassName dt-head-center ",
+      },
+      {
         title: "Posición",
         data: "position",
         className: "uniqueClassName dt-head-center ",

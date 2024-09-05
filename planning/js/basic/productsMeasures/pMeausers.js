@@ -157,6 +157,12 @@ $(document).ready(function () {
     const idProductType = parseFloat($("#idProductType").val());
     const ref = $("#referenceProduct").val().trim();
     const prod = $("#product").val().trim();
+    let width, high, length, usefulLength, totalWidth, window;
+
+    if (isNaN(idProductType) || idProductMeasure <= 0) {
+      toastr.error("Ingrese todos los campos");
+      return false;
+    }
 
     if (idProductType === 1) {
       width = parseFloat($("#width").val());

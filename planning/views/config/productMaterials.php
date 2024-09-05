@@ -428,10 +428,11 @@ if (sizeof($_SESSION) == 0)
                                                         <tr>
                                                             <td></td>
                                                             <td></td>
+                                                            <td></td>
                                                             <td>Total: </td>
-                                                            <td></td>
-                                                            <td></td>
-                                                            <td></td>
+                                                            <td id="lblTotalCicles"></td>
+                                                            <td id="lblTotalUnitsTurn"></td>
+                                                            <td id="lblTotalUnitsMonth"></td>
                                                             <td></td>
                                                         </tr>
                                                     </tfoot>

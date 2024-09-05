@@ -60,11 +60,12 @@ class GeneralPlanCiclesMachinesDao
         $connection = Connection::getInstance()->getConnection();
 
         $stmt = $connection->prepare("SELECT pcm.id_cicles_machine, pcm.cicles_hour, pcm.units_turn, pcm.units_month, p.id_product, p.reference, p.product, IFNULL(pc.id_process, 0) AS id_process, IFNULL(pc.process, '') AS process, IFNULL(pcm.id_machine, 0) AS id_machine, 
-                                             IFNULL(m.machine, 'PROCESO MANUAL') AS machine
+                                             IFNULL(m.machine, 'PROCESO MANUAL') AS machine, COUNT(DISTINCT py.id_plan_payroll) AS employees
                                       FROM plan_cicles_machine pcm
                                         INNER JOIN products p ON p.id_product = pcm.id_product
                                         LEFT JOIN machines m ON m.id_machine = pcm.id_machine
                                         LEFT JOIN process pc ON pc.id_process = pcm.id_process
+                                        LEFT JOIN plan_payroll py ON py.id_process = pcm.id_process AND py.id_machine = pcm.id_machine
                                       WHERE pcm.id_product = :id_product AND pcm.id_company = :id_company");
         $stmt->execute([
             'id_product' => $id_product,

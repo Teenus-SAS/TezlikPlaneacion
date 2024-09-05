@@ -116,7 +116,7 @@ $(document).ready(function () {
 
       let arr = dataMaterials.find(item => item.id_material == idMaterial);
 
-      if (quantity < arr.reserved) {
+      if (quantity < parseFloat(arr.reserved)) {
         toastr.error("Existencias con menor cantidad de las reservadas");
         return false;
       }

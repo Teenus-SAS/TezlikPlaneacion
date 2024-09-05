@@ -38,7 +38,7 @@ $(document).ready(function () {
 
     importFile(selectedFile)
       .then((data) => {
-        const expectedHeaders = ['nombre', 'apellido', 'area', 'proceso', 'posicion'];
+        const expectedHeaders = ['nombre', 'apellido', 'area', 'proceso', 'maquina', 'posicion'];
         const actualHeaders = Object.keys(data[0]);
 
         const missingHeaders = expectedHeaders.filter(header => !actualHeaders.includes(header));
@@ -56,6 +56,7 @@ $(document).ready(function () {
             firstname: item.nombre,
             lastname: item.apellido,
             area: item.area,
+            machine: item.maquina,
             process: item.proceso,
             position: item.posicion,
           };
