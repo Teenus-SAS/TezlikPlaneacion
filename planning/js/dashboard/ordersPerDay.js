@@ -7,8 +7,8 @@ $(document).ready(function () {
         data = JSON.parse(data);
 
         // Extraer los días y las órdenes en dos arreglos
-        const days = ordersData.map((order) => order.day);
-        const totalOrders = ordersData.map((order) => order.total_orders);
+        const days = data.map((order) => order.day);
+        const totalOrders = data.map((order) => order.total_orders);
 
         GraphOrdersPerDay(days, totalOrders);
       });
