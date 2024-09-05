@@ -615,7 +615,7 @@ $app->post('/updateOrder', function (Request $request, Response $response, $args
     $dataOrder = $convertDataDao->changeDateOrder($dataOrder);
 
     $resolution = $ordersDao->updateOrder($dataOrder);
-    // $resolution = $generalProductsDao->updateAccumulatedQuantityGeneral($id_company);
+    $resolution = $generalProductsDao->updateAccumulatedQuantityGeneral($id_company);
 
     $status = true;
 

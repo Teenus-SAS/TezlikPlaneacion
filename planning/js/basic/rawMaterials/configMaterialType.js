@@ -19,4 +19,6 @@ $(document).ready(function () {
       $selectMaterialType.append(options.join(""));
     },
   });
+
+  
 });
