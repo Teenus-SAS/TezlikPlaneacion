@@ -15,7 +15,7 @@ const indicatorsGlobal = async () => {
       productsOutStock: formatPercentage(productsOutStock),
       ordersNoProgramed: formatPercentage(ordersNoProgramed),
       OrdersNoMP: formatPercentage(OrdersNoMP),
-      OrdersDelivered: formatPercentage(OrdersDelivered),
+      OrdersDelivered: formatPercentage(percentage_dispatch),
     };
 
     // Actualizar el DOM

@@ -71,12 +71,12 @@ class DashboardGeneralDao
     {
         $connection = Connection::getInstance()->getConnection();
         $sql = "SELECT
-                    COUNT(*) AS total_pedidos,
-                    SUM(CASE WHEN status IN (2, 3) THEN 1 ELSE 0 END) AS pedidos_despachados,
+                    COUNT(*) AS total_orders,
+                    SUM(CASE WHEN status IN (2, 3) THEN 1 ELSE 0 END) AS orders_dispatch,
                     ROUND(
                         (SUM(CASE WHEN status IN (2, 3) THEN 1 ELSE 0 END) / COUNT(*)) * 100,
                         2
-                    ) AS porcentaje_despacho
+                    ) AS percentage_dispatch
                 FROM plan_orders
                 WHERE max_date <> '0000-00-00' AND id_company = :id_company";
         $stmt = $connection->prepare($sql);
