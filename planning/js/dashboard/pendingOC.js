@@ -44,14 +44,14 @@ const GraphPendingOC = (data) => {
       datasets: [
         {
           label: "",
-          data: [data],
+          data: [data[0].porcentaje_participacion],
           backgroundColor: "rgba(75, 192, 192, 0.2)", // Color para "Entregado a tiempo"
           borderColor: "rgba(75, 192, 192, 1)", // Borde para "Entregado a tiempo"
           borderWidth: 1,
         },
         {
           label: "",
-          data: [100 - data],
+          data: [100 - data[0].porcentaje_participacion],
           backgroundColor: "rgba(255, 99, 132, 0.2)", // Color para "No entregado a tiempo"
           borderColor: "rgba(255, 99, 132, 1)", // Borde para "No entregado a tiempo"
           borderWidth: 1,
