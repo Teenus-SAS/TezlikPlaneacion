@@ -7,7 +7,8 @@ const indicatorsGlobal = async () => {
     const { productsOutStock, ordersNoProgramed, OrdersNoMP, OrdersDelivered } =
       response;
 
-    const formatPercentage = (value) => value.toFixed(2).replace(".", ",");
+    const formatPercentage = (value) =>
+      value !== undefined ? value.toFixed(2).replace(".", ",") : "0";
 
     // Formatear los valores
     const formattedValues = {
