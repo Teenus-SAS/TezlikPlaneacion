@@ -1,13 +1,14 @@
-
 const indicatorsGlobal = async () => {
   try {
     const response = await $.ajax({
       url: `/api/dashboardIndicators`,
     });
-    
+
     const { productsOutStock, ordersNoProgramed, OrdersNoMP, OrdersDelivered } =
-    response;
-    
+      response;
+
+    const formatPercentage = (value) => value.toFixed(2).replace(".", ",");
+
     // Formatear los valores
     const formattedValues = {
       productsOutStock: formatPercentage(productsOutStock),
@@ -15,9 +16,7 @@ const indicatorsGlobal = async () => {
       OrdersNoMP: formatPercentage(OrdersNoMP),
       OrdersDelivered: formatPercentage(OrdersDelivered),
     };
-    
-    const formatPercentage = (value) => value.toFixed(2).replace(".", ",");
-    
+
     // Actualizar el DOM
     $("#productStockout").text(`${formattedValues.productsOutStock}%`);
     $("#ordersNoProgramed").text(`${formattedValues.ordersNoProgramed}%`);
