@@ -27,14 +27,7 @@ $(document).ready(function () {
 
 const GraphPendingOC = (data) => {
   // Separamos los datos por estado para crear los datasets
-  const datasets = [];
-  data.forEach((item) => {
-    datasets.push({
-      label: `Estado ${item.status}`,
-      data: [item.porcentaje_participacion],
-    });
-  });
-
+  
   const ctx = document.getElementById("pendingOCChart").getContext("2d");
   const pendingOCChart = new Chart(ctx, {
     plugins: [ChartDataLabels],
@@ -44,14 +37,14 @@ const GraphPendingOC = (data) => {
       datasets: [
         {
           label: "",
-          data: [data[1].porcentaje_participacion],
+          data: [data.participacion],
           backgroundColor: "rgba(75, 192, 192, 0.2)", // Color para "Entregado a tiempo"
           borderColor: "rgba(75, 192, 192, 1)", // Borde para "Entregado a tiempo"
           borderWidth: 1,
         },
         {
           label: "",
-          data: [100 - data[1].porcentaje_participacion],
+          data: [100 - data.participacion],
           backgroundColor: "rgba(255, 99, 132, 0.2)", // Color para "No entregado a tiempo"
           borderColor: "rgba(255, 99, 132, 1)", // Borde para "No entregado a tiempo"
           borderWidth: 1,
