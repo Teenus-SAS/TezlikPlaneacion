@@ -70,17 +70,15 @@ class DashboardGeneralDao
     public function findOrdersDelivered($id_company)
     {
         $connection = Connection::getInstance()->getConnection();
-        $sql = "SELECT status, COUNT(*) AS total_pedidos
+        $sql = "SELECT
+                    COUNT(*) AS total_pedidos,
+                    SUM(CASE WHEN status IN (2, 3) THEN 1 ELSE 0 END) AS pedidos_despachados,
+                    ROUND(
+                        (SUM(CASE WHEN status IN (2, 3) THEN 1 ELSE 0 END) / COUNT(*)) * 100,
+                        2
+                    ) AS porcentaje_despacho
                 FROM plan_orders
-                WHERE
-                    (status = 2 OR status = 3)
-                    AND max_date <> 0
-                    AND (
-                        (status = 2 AND YEAR(date_order) = YEAR(CURDATE()) AND MONTH(date_order) <= MONTH(CURDATE()))
-                        OR (status = 3 AND YEAR(date_order) = YEAR(CURDATE()) AND MONTH(date_order) = MONTH(CURDATE()))
-                    )
-                AND id_company = :id_company
-                GROUP BY status";
+                WHERE max_date <> '0000-00-00' AND id_company = :id_company";
         $stmt = $connection->prepare($sql);
         $stmt->execute(['id_company' => $id_company]);
         $percent = $stmt->fetch($connection::FETCH_ASSOC);
