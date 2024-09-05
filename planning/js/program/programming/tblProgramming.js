@@ -38,7 +38,7 @@ $(document).ready(function () {
   });
 
   loadTblProgramming = async (data, op) => {
-    // sessionStorage.setItem('dataProgramming', JSON.stringify(generalMultiArray));
+    sessionStorage.setItem('dataProgramming', JSON.stringify(data));
     if (data.length > 0) {
       $('.cardSaveBottons').show(800);
       $('.cardSimulation').show(800);

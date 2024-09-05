@@ -87,14 +87,14 @@ $(document).ready(function () {
   /* Revisar datos */
   const checkDataProducts = async (url, idProductInventory) => { 
     let idProduct = parseFloat($("#refProduct").val());
-    let quantity = parseFloat($('#pQuantity').val());
+    let quantity = parseFloat($('#pQuantity').val()); 
 
     let data = idProduct * quantity;
 
     if (isNaN(data) || data <= 0) {
       toastr.error("Ingrese todos los campos");
       return false;
-    }
+    } 
 
     let imageProd = $("#formFile")[0].files[0];
 
@@ -102,6 +102,15 @@ $(document).ready(function () {
     dataProduct.append("img", imageProd);
 
     if (idProductInventory != "" || idProductInventory != null) {
+      let dataProducts = JSON.parse(sessionStorage.getItem('dataProducts'));
+
+      let arr = dataProducts.find(item => item.id_product == idProduct);
+
+      if (quantity < arr.reserved) {
+        toastr.error("Existencias con menor cantidad de las reservadas");
+        return false;
+      }
+      
       dataProduct.append("idProductInventory", idProductInventory);
     }
     dataProduct.append("idProduct", idProduct);

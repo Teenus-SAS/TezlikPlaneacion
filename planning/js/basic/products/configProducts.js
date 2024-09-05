@@ -16,38 +16,51 @@ $(document).ready(function () {
       
       if (viewFTProduct) {
         data = data.filter((item) => item.origin == 2);
-      } 
-        setSelectsProducts(data); 
+      }
+      populateSelect('#refProduct', data, 'reference');
+      populateSelect('#selectNameProduct', data, 'product');
     },
   });
 
-  setSelectsProducts = (data) => {
-    let $selectRef = $(`#refProduct`);
-    let $selectProd = $(`#selectNameProduct`);
-
-    // Vaciar el select y agregar la opción por defecto
-    $selectRef.empty().append("<option disabled selected>Seleccionar</option>");
-    $selectProd
-      .empty()
-      .append("<option disabled selected>Seleccionar</option>");
-
-    let sortRef = sortFunction(data, "reference");
-    let sortProd = sortFunction(data, "product");
-
-    // Usar map para optimizar el ciclo de iteración
-    const optionsRef = sortRef.map(
-      (value) =>
-        `<option value ='${value.id_product}' class='${value.composite}'> ${value.reference} </option>`
-    );
-    const optionsProd = sortProd.map(
-      (value) =>
-        `<option value ='${value.id_product}' class='${value.composite}'> ${value.product} </option>`
-    );
-
-    // Insertar todas las opciones de una vez para mejorar el rendimiento
-    $selectRef.append(optionsRef.join(""));
-    $selectProd.append(optionsProd.join(""));
+  const populateSelect = (selector, data, property) => {
+    let $select = $(selector);
+    $select.empty();
+  
+    let sortedData = sortFunction(data, property);
+    $select.append(`<option value='0' disabled selected>Seleccionar</option>`);
+  
+    $.each(sortedData, function (i, value) {
+      $select.append(`<option value ='${value.id_product}' class='${value.composite}'> ${value[property]} </option>`);
+    });
   };
+
+  // setSelectsProducts = (data) => {
+  //   let $selectRef = $(`#refProduct`);
+  //   let $selectProd = $(`#selectNameProduct`);
+
+  //   // Vaciar el select y agregar la opción por defecto
+  //   $selectRef.empty().append("<option disabled selected>Seleccionar</option>");
+  //   $selectProd
+  //     .empty()
+  //     .append("<option disabled selected>Seleccionar</option>");
+
+  //   let sortRef = sortFunction(data, "reference");
+  //   let sortProd = sortFunction(data, "product");
+
+  //   // Usar map para optimizar el ciclo de iteración
+  //   const optionsRef = sortRef.map(
+  //     (value) =>
+  //       `<option value ='${value.id_product}' class='${value.composite}'> ${value.reference} </option>`
+  //   );
+  //   const optionsProd = sortProd.map(
+  //     (value) =>
+  //       `<option value ='${value.id_product}' class='${value.composite}'> ${value.product} </option>`
+  //   );
+
+  //   // Insertar todas las opciones de una vez para mejorar el rendimiento
+  //   $selectRef.append(optionsRef.join(""));
+  //   $selectProd.append(optionsProd.join(""));
+  // };
 
   populateOptions = (selector, data, property) => {
     let $select = $(selector);
