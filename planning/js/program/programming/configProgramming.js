@@ -77,7 +77,7 @@ $(document).ready(function () {
         allTblData = [];
       else {
         allTblData = JSON.parse(sessionStorage.getItem('dataProgramming'));
-        allTblData = flattenData(allTblData);
+        // allTblData = flattenData(allTblData);
 
         checkProcessMachines(allTblData);
       };

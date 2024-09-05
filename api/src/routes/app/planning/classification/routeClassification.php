@@ -2,6 +2,7 @@
 
 use TezlikPlaneacion\dao\ClassificationDao;
 use TezlikPlaneacion\dao\CompaniesLicenseStatusDao;
+use TezlikPlaneacion\Dao\GeneralCompositeProductsDao;
 use TezlikPlaneacion\dao\GeneralProductsDao;
 use TezlikPlaneacion\dao\ProductsDao;
 
@@ -9,6 +10,7 @@ $classificationDao = new ClassificationDao();
 $productsDao = new ProductsDao();
 $generalProductsDao = new GeneralProductsDao();
 $companiesLicenseDao = new CompaniesLicenseStatusDao();
+$generalCompositeProductsDao = new GeneralCompositeProductsDao();
 
 use Psr\Http\Message\ResponseInterface as Response;
 use Psr\Http\Message\ServerRequestInterface as Request;
@@ -17,7 +19,8 @@ $app->get('/classification/{months}', function (Request $request, Response $resp
     $classificationDao,
     $productsDao,
     $generalProductsDao,
-    $companiesLicenseDao
+    $companiesLicenseDao,
+    $generalCompositeProductsDao
 ) {
     session_start();
     $id_company = $_SESSION['id_company'];
@@ -28,9 +31,14 @@ $app->get('/classification/{months}', function (Request $request, Response $resp
 
     for ($i = 0; $i < sizeof($products); $i++) {
         if (isset($resolution)) break;
-        $inventory = $classificationDao->calcInventoryABCBYProduct($products[$i]['id_product'], $args['months']);
+        // $composite = $generalCompositeProductsDao->findCompositeProductByChild($products[$i]['id_product']);
 
+        // if ($composite) {
+        //     $inventory = $generalProductsDao->findProductById($composite['id_product']);
+        // } else {
+        $inventory = $classificationDao->calcInventoryABCBYProduct($products[$i]['id_product'], $args['months']);
         $inventory = $classificationDao->calcClassificationByProduct($inventory['year_sales'], $id_company);
+        // }
 
         $resolution = $classificationDao->updateProductClassification($products[$i]['id_product'], $inventory['classification']);
     }

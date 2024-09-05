@@ -147,7 +147,7 @@ $app->post('/addPStock', function (Request $request, Response $response, $args) 
             }
 
             if ($resolution == null) {
-                $compositeProducts = $compositeProductsDao->findAllCompositeProductsByIdProduct($dataStock['id_product'], $id_company);
+                $compositeProducts = $compositeProductsDao->findAllCompositeProductsByIdProduct($dataStock['idProduct'], $id_company);
 
                 foreach ($compositeProducts as $k) {
                     $product = $minimumStockDao->calcStockByProduct($k['id_child_product']);
@@ -251,7 +251,7 @@ $app->post('/updatePStock', function (Request $request, Response $response, $arg
         }
 
         if ($resolution == null) {
-            $compositeProducts = $compositeProductsDao->findAllCompositeProductsByIdProduct($dataStock['id_product'], $id_company);
+            $compositeProducts = $compositeProductsDao->findAllCompositeProductsByIdProduct($dataStock['idProduct'], $id_company);
 
             foreach ($compositeProducts as $k) {
                 $product = $minimumStockDao->calcStockByProduct($k['id_child_product']);

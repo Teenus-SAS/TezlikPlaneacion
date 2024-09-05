@@ -42,7 +42,7 @@ $app->get('/inventory', function (Request $request, Response $response, $args) u
     $inventory['products'] = $products;
     $inventory['rawMaterials'] = $rawMaterials;
 
-    $response->getBody()->write(json_encode($inventory, JSON_NUMERIC_CHECK));
+    $response->getBody()->write(json_encode($inventory));
     return $response->withHeader('Content-Type', 'application/json');
 });
 
