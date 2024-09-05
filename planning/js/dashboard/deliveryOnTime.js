@@ -53,14 +53,23 @@ const GraphDeliverOnTime = (percentageOnTime) => {
       scales: {
         x: {
           stacked: true, // Apilamiento en el eje X
-          display: false,
+          title: {
+            display: true,
+            text: "Pedidos", // Etiqueta para el eje X
+          },
         },
         y: {
           stacked: true, // Apilamiento en el eje Y
           beginAtZero: true,
           max: 100,
+          title: {
+            display: true,
+            text: "Porcentaje (%)", // Etiqueta para el eje Y
+          },
           ticks: {
-            display: false,
+            callback: function (value) {
+              return value + "%"; // Agregar el símbolo de porcentaje en el eje Y
+            },
           },
         },
       },
