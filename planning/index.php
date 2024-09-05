@@ -298,13 +298,15 @@ if (sizeof($_SESSION) == 0)
                                 </div>
                             </div>
                             <div class="col-md-4 col-lg-8" style="height: fit-content;">
-                                <div class="card">
+                                <div class="card orders-graph">
                                     <div class="card-header">
                                         <h5 class="card-title">Clientes con mayor número de pedidos</h5>
                                     </div>
                                     <div class="card-body pt-2">
-                                        <!-- <canvas id="chartTimeProcessProducts"></canvas> -->
-                                        <canvas id="chartProductsCost"></canvas>
+                                        <div class="chart-container">
+                                            <!-- <canvas id="chartTimeProcessProducts"></canvas> -->
+                                            <canvas id="chartOrdersClients"></canvas>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
@@ -420,6 +422,7 @@ if (sizeof($_SESSION) == 0)
     <script src="/planning/js/dashboard/pendingOC.js"></script>
     <script src="/planning/js/dashboard/deliveryOnTime.js"></script>
     <script src="/planning/js/dashboard/inventoryProductsABC.js"></script>
+    <script src="/planning/js/dashboard/quantityOrdersClients.js"></script>
     <!-- <script src="/planning/js/users/usersAccess.js"></script> -->
 
     <!-- <script src="/global/js/global/loadContent.js"></script> -->

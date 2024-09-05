@@ -127,4 +127,21 @@ class DashboardGeneralDao
         $orderxDay = $stmt->fetchAll($connection::FETCH_ASSOC);
         return $orderxDay;
     }
+
+    public function findQuantityOrdersByClients($id_company)
+    {
+        $connection = Connection::getInstance()->getConnection();
+
+        $sql = "SELECT pc.client, COUNT(po.id_client) AS total_pedidos
+                FROM plan_orders po
+                INNER JOIN plan_clients pc ON po.id_client = pc.id_client
+                WHERE po.id_company = :id_company
+                GROUP BY pc.client
+                ORDER BY total_pedidos DESC
+                LIMIT 10";
+        $stmt = $connection->prepare($sql);
+        $stmt->execute(['id_company' => $id_company]);
+        $quantityOrdersByClients = $stmt->fetchAll($connection::FETCH_ASSOC);
+        return $quantityOrdersByClients;
+    }
 }

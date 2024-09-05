@@ -80,3 +80,15 @@ $app->get('/dashboardOrdersPerDay', function (Request $request, Response $respon
     $response->getBody()->write(json_encode($OrdersPerDay, JSON_NUMERIC_CHECK));
     return $response->withHeader('Content-Type', 'application/json');
 });
+
+$app->get('/dashboardQuantityOrdersByClients', function (Request $request, Response $response, $args) use ($dashboardGeneralDao) {
+    session_start();
+    $id_company = $_SESSION['id_company'];
+
+    //obtener cantidad de Ordenes por Cliente
+    $QuantityOrdersByClients = $dashboardGeneralDao->findQuantityOrdersByClients($id_company);
+
+    //Enviar respuesta
+    $response->getBody()->write(json_encode($QuantityOrdersByClients, JSON_NUMERIC_CHECK));
+    return $response->withHeader('Content-Type', 'application/json');
+});
