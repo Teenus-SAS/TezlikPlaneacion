@@ -143,12 +143,7 @@ $(document).ready(function () {
           title: "Descripción",
           data: "material",
           className: "uniqueClassName dt-head-center",
-        },
-        // {
-        //   title: "Medida",
-        //   data: "abbreviation",
-        //   className: "uniqueClassName dt-head-center",
-        // },
+        }, 
         {
           title: "Proveedor Sugerido",
           data: "provider",
@@ -194,6 +189,11 @@ $(document).ready(function () {
 
             return `${quantity} ${data.abbreviation}`;
           },
+        },
+        {
+          title: "Fecha Creacion",
+          data: "creation_date",
+          className: "uniqueClassName dt-head-center", 
         },
         {
           title: "Fecha Solicitud",
@@ -252,13 +252,13 @@ $(document).ready(function () {
           quantity_requested += parseFloat(data[display[i]].quantity_requested);
         }
 
-        $(this.api().column(5).footer()).html(
+        $('#lblTotalQRequired').html(
           quantity_required.toLocaleString("es-CO", {
             minimumFractionDigits: 0,
             maximumFractionDigits: 0,
           })
         );
-        $(this.api().column(6).footer()).html(
+        $('#lblTotalQRequested').html(
           quantity_requested.toLocaleString("es-CO", {
             minimumFractionDigits: 0,
             maximumFractionDigits: 0,
