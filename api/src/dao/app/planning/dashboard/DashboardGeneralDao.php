@@ -16,7 +16,7 @@ class DashboardGeneralDao
         $this->logger->pushHandler(new RotatingFileHandler(Constants::LOGS_PATH . 'querys.log', 20, Logger::DEBUG));
     }
 
-    public function findClassificationByCompany($id_company)
+    public function findClassificationInvByCompany($id_company)
     {
         $connection = Connection::getInstance()->getConnection();
 
@@ -70,8 +70,16 @@ class DashboardGeneralDao
     public function findOrdersDelivered($id_company)
     {
         $connection = Connection::getInstance()->getConnection();
-        $sql = "SELECT (COUNT(CASE WHEN po.status IN (2) THEN 1 END) * 100.0 / COUNT(*)) AS OrdersDelivered 
-                FROM plan_orders po
+        $sql = "SELECT status, COUNT(*) AS total_pedidos
+                FROM plan_orders
+                WHERE
+                    (status = 2 OR status = 3)
+                    AND max_date <> 0
+                    AND (
+                        (status = 2 AND YEAR(date_order) = YEAR(CURDATE()) AND MONTH(date_order) <= MONTH(CURDATE()))
+                        OR (status = 3 AND YEAR(date_order) = YEAR(CURDATE()) AND MONTH(date_order) = MONTH(CURDATE()))
+                    )
+                GROUP BY status
                 WHERE id_company = :id_company";
         $stmt = $connection->prepare($sql);
         $stmt->execute(['id_company' => $id_company]);
@@ -94,13 +102,12 @@ class DashboardGeneralDao
     public function findPendignOC($id_company)
     {
         $connection = Connection::getInstance()->getConnection();
-        $sql = "SELECT 
-                    COUNT(CASE WHEN application_date IS NOT NULL THEN 1 END) AS executed_requisitions,
-                    COUNT(*) AS total_requisitions
-                FROM requisitions
-                WHERE MONTH(creation_date) = MONTH(CURDATE()) 
-                AND YEAR(creation_date) = YEAR(CURDATE())
-                AND id_company = :id_company";
+        $sql = "WITH TotalPedidos AS ( SELECT COUNT(*) AS total_general FROM plan_orders 
+                WHERE (status = 2 OR status = 3) AND max_date <> 0 ) 
+                    SELECT status, COUNT(*) AS total_pedidos, (COUNT(*) / (SELECT total_general FROM TotalPedidos)) * 100 AS porcentaje_participacion 
+                FROM plan_orders 
+                WHERE (status = 2 OR status = 3) AND max_date <> 0 AND ( (status = 2 AND YEAR(date_order) = YEAR(CURDATE()) AND MONTH(date_order) <= MONTH(CURDATE())) OR (status = 3 AND YEAR(date_order) = YEAR(CURDATE()) AND MONTH(date_order) = MONTH(CURDATE())) ) 
+                AND id_company = :id_company GROUP BY status;";
         $stmt = $connection->prepare($sql);
         $stmt->execute(['id_company' => $id_company]);
         $quantityOC = $stmt->fetch($connection::FETCH_ASSOC);
