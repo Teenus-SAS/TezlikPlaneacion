@@ -33,7 +33,7 @@ $(document).ready(function () {
 
 const GraphOrdersPerDay = (days, totalOrders) => {
   // Crear el gráfico de líneas
-  const ctx = document.getElementById("ordersChart").getContext("2d");
+  const ctx = document.getElementById("chartOrdersxDay").getContext("2d");
   const ordersChart = new Chart(ctx, {
     type: "line",
     data: {
