@@ -79,7 +79,7 @@ class DashboardGeneralDao
                         (status = 2 AND YEAR(date_order) = YEAR(CURDATE()) AND MONTH(date_order) <= MONTH(CURDATE()))
                         OR (status = 3 AND YEAR(date_order) = YEAR(CURDATE()) AND MONTH(date_order) = MONTH(CURDATE()))
                     )
-                WHERE id_company = :id_company
+                AND id_company = :id_company
                 GROUP BY status";
         $stmt = $connection->prepare($sql);
         $stmt->execute(['id_company' => $id_company]);
