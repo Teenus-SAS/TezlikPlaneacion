@@ -54,7 +54,7 @@ const GraphDeliverOnTime = (percentageOnTime) => {
         x: {
           stacked: true, // Apilamiento en el eje X
           title: {
-            display: true,
+            display: false,
             text: "Pedidos", // Etiqueta para el eje X
           },
         },
