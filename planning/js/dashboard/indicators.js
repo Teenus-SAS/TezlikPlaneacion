@@ -4,7 +4,7 @@ const indicatorsGlobal = async () => {
       url: `/api/dashboardIndicators`,
     });
 
-    const { productsOutStock, ordersNoProgramed, OrdersNoMP, OrdersDelivered } =
+    const { productsOutStock, ordersNoProgramed, OrdersNoMP, percentage_dispatch } =
       response;
 
     const formatPercentage = (value) =>
