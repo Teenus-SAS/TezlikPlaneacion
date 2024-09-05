@@ -50,6 +50,7 @@ const GraphDeliverOnTime = (percentageOnTime) => {
       ],
     },
     options: {
+      maintainAspectRatio: false, // Para usar el tamaño del contenedor y no mantener el ratio
       scales: {
         x: {
           stacked: true, // Apilamiento en el eje X

@@ -50,6 +50,7 @@ const GraphOrdersPerDay = (days, totalOrders) => {
       ],
     },
     options: {
+      maintainAspectRatio: false, // Para usar el tamaño del contenedor y no mantener el ratio
       scales: {
         x: {
           title: {
