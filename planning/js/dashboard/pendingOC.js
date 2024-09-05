@@ -4,7 +4,7 @@ $(document).ready(function () {
       .then((response) => response.text())
       .then((data) => {
         data = JSON.parse(data);
-        GraphPendingOC(data.executed_requisitions);
+        GraphPendingOC(data);
       });
   }, 1000);
 
@@ -25,47 +25,73 @@ $(document).ready(function () {
   };
 });
 
-const GraphPendingOC = (executed_requisitions) => {
+const GraphPendingOC = (data) => {
+  // Separamos los datos por estado para crear los datasets
+  
   const ctx = document.getElementById("pendingOCChart").getContext("2d");
-  const onTimeDeliveryChart = new Chart(ctx, {
+  const pendingOCChart = new Chart(ctx, {
+    plugins: [ChartDataLabels],
     type: "bar",
     data: {
-      labels: ["Pedidos"],
+      labels: ["Ejecucion Ordenes de Compra"],
       datasets: [
         {
           label: "",
-          data: [pendingOC],
+          data: [data.participacion],
           backgroundColor: "rgba(75, 192, 192, 0.2)", // Color para "Entregado a tiempo"
           borderColor: "rgba(75, 192, 192, 1)", // Borde para "Entregado a tiempo"
           borderWidth: 1,
         },
-        /* {
+        {
           label: "",
-          data: [100 - pendingOC],
+          data: [100 - data.participacion],
           backgroundColor: "rgba(255, 99, 132, 0.2)", // Color para "No entregado a tiempo"
           borderColor: "rgba(255, 99, 132, 1)", // Borde para "No entregado a tiempo"
           borderWidth: 1,
-        }, */
+        },
       ],
     },
     options: {
+      maintainAspectRatio: false, // Para usar el tamaño del contenedor y no mantener el ratio
       scales: {
         x: {
           stacked: true, // Apilamiento en el eje X
-          display: false,
+          title: {
+            display: false,
+            text: "Ordenes de Compra", // Etiqueta para el eje X
+          },
         },
         y: {
           stacked: true, // Apilamiento en el eje Y
           beginAtZero: true,
           max: 100,
+          title: {
+            display: true,
+            text: "Porcentaje (%)", // Etiqueta para el eje Y
+          },
           ticks: {
-            display: false,
+            callback: function (value) {
+              return value + "%"; // Agregar el símbolo de porcentaje en el eje Y
+            },
           },
         },
       },
       plugins: {
         legend: {
           display: false,
+        },
+        datalabels: {
+          anchor: "center",
+          align: "center",
+          offset: 2,
+          color: "black",
+          font: {
+            size: "12",
+            weight: "normal",
+          },
+          formatter: function (value) {
+            return value + "%"; // Agregar el símbolo de porcentaje a las etiquetas
+          },
         },
         tooltip: {
           callbacks: {

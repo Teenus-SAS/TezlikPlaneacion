@@ -11,7 +11,7 @@ $app->get('/dashboardGeneral', function (Request $request, Response $response, $
     session_start();
     $id_company = $_SESSION['id_company'];
 
-    $classification = $dashboardGeneralDao->findClassificationByCompany($id_company);
+    $classification = $dashboardGeneralDao->findClassificationInvByCompany($id_company);
 
     $data = array();
     $data['classification'] = $classification;
