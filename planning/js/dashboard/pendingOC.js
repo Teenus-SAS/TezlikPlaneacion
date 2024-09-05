@@ -25,7 +25,7 @@ $(document).ready(function () {
   };
 });
 
-const GraphPendingOC = (executed_requisitions) => {
+const GraphPendingOC = (datauda) => {
   // Separamos los datos por estado para crear los datasets
   const datasets = [];
   data.forEach((item) => {
