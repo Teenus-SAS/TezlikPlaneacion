@@ -111,8 +111,18 @@ $(document).ready(function () {
     let dataMaterial = new FormData(formCreateMaterial);
     dataMaterial.append("idMaterialType", materialType);
 
-    if (idMaterial != "" || idMaterial != null)
+    if (idMaterial != "" || idMaterial != null) {
+      let dataMaterials = JSON.parse(sessionStorage.getItem('dataMaterials'));
+
+      let arr = dataMaterials.find(item => item.id_material == idMaterial);
+
+      if (quantity < arr.reserved) {
+        toastr.error("Existencias con menor cantidad de las reservadas");
+        return false;
+      }
+
       dataMaterial.append("idMaterial", idMaterial);
+    }
 
     let resp = await sendDataPOST(url, dataMaterial);
 

@@ -1,45 +1,57 @@
 $(document).ready(function () {
   /* Cargar data materia prima */
-  loadDataMaterial = async () => {
+  const loadDataMaterial = async () => {
     sessionStorage.removeItem("dataMaterials");
     let data = await searchData("/api/materials");
 
     let dataMaterials = JSON.stringify(data);
     sessionStorage.setItem("dataMaterials", dataMaterials);
 
-    setSelectsMaterials(data);
+    setSelectsMaterials('#refMaterial', data, 'reference');
+    setSelectsMaterials('#material', data, 'material');
   };
 
-  setSelectsMaterials = (data) => {
-    const refMaterials = sortFunction(data, "reference");
-    const materials = sortFunction(data, "material");
+  // setSelectsMaterials = (data) => {
+    // const refMaterials = sortFunction(data, "reference");
+    // const materials = sortFunction(data, "material");
 
-    const $selectRefMaterial = $(`#refMaterial`);
-    const $selectMaterial = $(`#material`);
+    // const $selectRefMaterial = $(`#refMaterial`);
+    // const $selectMaterial = $(`#material`);
 
-    // Vaciar el select y agregar la opción por defecto
-    $selectRefMaterial
-      .empty()
-      .append(`<option disabled selected>Seleccionar</option>`);
+    // // Vaciar el select y agregar la opción por defecto
+    // $selectRefMaterial
+    //   .empty()
+    //   .append(`<option disabled selected>Seleccionar</option>`);
 
-    $selectMaterial
-      .empty()
-      .append(`<option disabled selected>Seleccionar</option>`);
+    // $selectMaterial
+    //   .empty()
+    //   .append(`<option disabled selected>Seleccionar</option>`);
 
-    // Usar map para optimizar el ciclo de iteración
-    const optionsRefMaterials = refMaterials.map(
-      (value) =>
-        `<option value ="${value.id_material}" class="${value.id_material_type}"> ${value.reference} </option>`
-    );
+    // // Usar map para optimizar el ciclo de iteración
+    // const optionsRefMaterials = refMaterials.map(
+    //   (value) =>
+    //     `<option value ="${value.id_material}" class="${value.id_material_type}"> ${value.reference} </option>`
+    // );
 
-    const optionsMaterials = materials.map(
-      (value) =>
-        `<option value ="${value.id_material}" class="${value.id_material_type}"> ${value.material} </option>`
-    );
+    // const optionsMaterials = materials.map(
+    //   (value) =>
+    //     `<option value ="${value.id_material}" class="${value.id_material_type}"> ${value.material} </option>`
+    // );
 
-    // Insertar todas las opciones de una vez para mejorar el rendimiento
-    $selectRefMaterial.append(optionsRefMaterials.join(""));
-    $selectMaterial.append(optionsMaterials.join(""));
+    // // Insertar todas las opciones de una vez para mejorar el rendimiento
+    // $selectRefMaterial.append(optionsRefMaterials.join("")); 
+  // };
+
+  setSelectsMaterials = (selector, data, property) => {
+    let $select = $(selector);
+    $select.empty();
+  
+    let sortedData = sortFunction(data, property);
+    $select.append(`<option value='0' disabled selected>Seleccionar</option>`);
+  
+    $.each(sortedData, function (i, value) {
+      $select.append(`<option value ='${value.id_material}' class='${value.id_material_type}'> ${value[property]} </option>`);
+    });
   };
 
   loadDataMaterial();

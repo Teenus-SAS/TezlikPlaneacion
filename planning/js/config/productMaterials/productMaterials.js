@@ -56,7 +56,9 @@ $(document).ready(function () {
     const dataMaterials = JSON.parse(sessionStorage.getItem("dataMaterials"));
 
     const dataM = dataMaterials.filter((item) => item.id_material_type == type);
-    await setSelectsMaterials(dataM);
+
+    setSelectsMaterials('#refMaterial', dataM, 'reference');
+    setSelectsMaterials('#material', dataM, 'material'); 
 
     if (type != "1") $(".inputQuantityCalc").show();
   });

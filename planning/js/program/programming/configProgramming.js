@@ -13,7 +13,7 @@ $(document).ready(function () {
 
   let selectProduct = false;
   let selectProcess = false;
-  sessionStorage.removeItem('dataProgramming');
+  // sessionStorage.removeItem('dataProgramming');
 
   loadAllDataProgramming = async () => {
     try {
@@ -74,7 +74,7 @@ $(document).ready(function () {
       $('.cardBottons').show(800);
 
       if (!sessionStorage.getItem('dataProgramming') || sessionStorage.getItem('dataProgramming').includes('[object Object]'))
-        allTblData = []
+        allTblData = [];
       else {
         allTblData = JSON.parse(sessionStorage.getItem('dataProgramming'));
         allTblData = flattenData(allTblData);
