@@ -93,7 +93,7 @@ $(document).ready(function () {
     let coverage = 0;
     let available = 0;
     
-    totalQuantity = data.reduce((acc, obj) => acc + obj.quantity, 0);
+    totalQuantity = data.reduce((acc, obj) => acc + parseFloat(obj.quantity), 0);
     average = totalQuantity / data.length;
 
     unitsSales.forEach(item => {
@@ -106,7 +106,7 @@ $(document).ready(function () {
 
     rotation =  totalSales / average;
     coverage =  totalQuantity / (average / 365);
-    available = data.reduce((acc, obj) => acc + (obj.quantity - obj.reserved), 0);
+    available = data.reduce((acc, obj) => acc + (parseFloat(obj.quantity) - parseFloat(obj.reserved)), 0);
 
     $('#lblTotal').html(` Inv Total: ${totalQuantity.toLocaleString('es-CO', { maximumFractionDigits: 0 })}`);
     $('#lblRotation').html(` Rotacion: ${rotation.toLocaleString('es-CO', { maximumFractionDigits: 0 })}`);
