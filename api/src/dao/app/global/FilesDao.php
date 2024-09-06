@@ -262,6 +262,9 @@ class FilesDao
 
                 move_uploaded_file($tmp_name, $targetFilePath);
 
+                $targetDir = '/assets/pdf/productsPlans/' . $id_company;
+                $targetFilePath = $targetDir . '/' . $mechanical_name;
+
                 return $targetFilePath;
             } else {
                 return ['info' => true, 'message' => 'Formato incorrecto'];
