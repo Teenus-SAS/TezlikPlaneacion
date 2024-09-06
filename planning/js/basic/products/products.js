@@ -89,17 +89,10 @@ $(document).ready(function () {
     const idProduct = parseFloat($("#refProduct").val());
     const quantity = parseFloat($("#pQuantity").val());
 
-    if (quantity < 0) {
-      toastr.error(
-        "La cantidad en el inventario debe ser mayor o igual a cero"
-      );
+    if (quantity < 0 || !idProduct) {
+      toastr.error("Ingrese una cantidad válida y seleccionar un producto.");
       return false;
-    }
-
-    if (!idProduct) {
-      toastr.error("Ingrese todos los campos");
-      return false;
-    }
+  }
 
     /* let data = idProduct * quantity;
 
