@@ -76,7 +76,7 @@ $(document).ready(function () {
       if (!sessionStorage.getItem('dataProgramming') || sessionStorage.getItem('dataProgramming').includes('[object Object]'))
         allTblData = [];
       else {
-        allTblData = JSON.parse(sessionStorage.getItem('dataProgramming'));
+        // generalMultiArray = JSON.parse(sessionStorage.getItem('dataProgramming'));
         // allTblData = flattenData(allTblData);
 
         checkProcessMachines(allTblData);
