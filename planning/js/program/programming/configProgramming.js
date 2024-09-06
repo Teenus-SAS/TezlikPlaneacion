@@ -8,7 +8,7 @@ $(document).ready(function () {
   allOrders = [];
   allProgramming = [];
   allProductsMaterials = [];
-  allTblData = [];
+  let allTblData = [];
   generalMultiArray = [];
 
   let selectProduct = false;

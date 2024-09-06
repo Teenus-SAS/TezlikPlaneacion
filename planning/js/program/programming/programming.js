@@ -368,6 +368,7 @@ $(document).ready(function () {
         allOrdersProgramming[i].flag_tbl = 0;
       }
     }
+    
     let allTblData = flattenData(generalMultiArray);
 
     quantityMissing < 0 ? (quantityMissing = 0) : quantityMissing;
