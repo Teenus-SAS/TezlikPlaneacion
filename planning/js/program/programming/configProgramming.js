@@ -52,35 +52,34 @@ $(document).ready(function () {
       allProductsMaterials = [...productsMaterials, ...compositeProducts];
       data = programming;
 
-      // Crear el mapa único
-      let uniquePCMap = new Map(ciclesMachines.map(item => [item.id_process, { [`process-${item.id_process}`]: [] }]));
-
-      // Convertir el mapa en un array
-      let uniqueArrayPC = Array.from(uniquePCMap.values());
-
-      // Crear una copia profunda del array para 'sim_2'
-      let uniqueArrayPC2 = uniqueArrayPC.map(item => JSON.parse(JSON.stringify(item)));
-
-      // Agregar los arrays al multiarray
-      generalMultiArray.push(
-        {
-          sim_1: uniqueArrayPC,
-        },
-        {
-          sim_2: uniqueArrayPC2,
-        }
-      );       
-      
-      $('.cardBottons').show(800);
-
       if (!sessionStorage.getItem('dataProgramming') || sessionStorage.getItem('dataProgramming').includes('[object Object]'))
-        allTblData = [];
-      else {
-        // generalMultiArray = JSON.parse(sessionStorage.getItem('dataProgramming'));
-        // allTblData = flattenData(allTblData);
+      {// Crear el mapa único
+        let uniquePCMap = new Map(ciclesMachines.map(item => [item.id_process, { [`process-${item.id_process}`]: [] }]));
 
-        checkProcessMachines(allTblData);
+        // Convertir el mapa en un array
+        let uniqueArrayPC = Array.from(uniquePCMap.values());
+
+        // Crear una copia profunda del array para 'sim_2'
+        let uniqueArrayPC2 = uniqueArrayPC.map(item => JSON.parse(JSON.stringify(item)));
+
+        // Agregar los arrays al multiarray
+        generalMultiArray.push(
+          {
+            sim_1: uniqueArrayPC,
+          },
+          {
+            sim_2: uniqueArrayPC2,
+          }
+        );
+      }
+      else {
+        generalMultiArray = JSON.parse(sessionStorage.getItem('dataProgramming'));
       };
+
+      allTblData = flattenData(generalMultiArray);
+      
+      $('.cardBottons').show(800); 
+      checkProcessMachines(allTblData);
  
       allTblData = allTblData.concat(data);
       data = data.concat(allTblData);

@@ -348,7 +348,7 @@ $(document).ready(function () {
     for (let i = allOrders.length - 1; i >= 0; i--) {
       if (
         allOrders[i].id_product == id_product &&
-        quantityMissing === 0 &&
+        quantityMissing == 0 &&
         process.length === 1
       ) {
         allOrders[i].flag_tbl = 0;
@@ -362,7 +362,7 @@ $(document).ready(function () {
     for (let i = allOrdersProgramming.length - 1; i >= 0; i--) {
       if (
         allOrdersProgramming[i].id_product == id_product &&
-        quantityMissing === 0 &&
+        quantityMissing == 0 &&
         process.length === 1
       ) {
         allOrdersProgramming[i].flag_tbl = 0;
@@ -406,15 +406,7 @@ $(document).ready(function () {
       let sim = $("#simulationType").val();
       let key;
 
-      sim == 1 ? (key = 0) : (key = 1);
-
-      // for (let i = 0; i < generalMultiArray[key][`sim_${sim}`].length; i++) {
-      //   if (generalMultiArray[key][`sim_${sim}`][i][`process-${id_process}`]) {
-      //     generalMultiArray[key][`sim_${sim}`][i][`process-${id_process}`].push(dataProgramming);
-      //     // console.log(generalMultiArray);
-      //     break;
-      //   }
-      // }
+      sim == 1 ? (key = 0) : (key = 1); 
       // Encontrar el objeto correspondiente en multiarray
       let targetArray = generalMultiArray[key][`sim_${sim}`];
 

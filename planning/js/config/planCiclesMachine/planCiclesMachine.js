@@ -84,7 +84,9 @@ $(document).ready(function () {
     const row = $(this.activeElement).closest("tr")[0];
     let data = tblPlanCiclesMachine.fnGetData(row);
 
-    let id_cicles_machine = data.id_cicles_machine;
+    let dataPlanCiclesMachine = {};
+    dataPlanCiclesMachine['idCiclesMachine']= data.id_cicles_machine;
+    dataPlanCiclesMachine['idProduct']= data.id_product;
 
     bootbox.confirm({
       title: "Eliminar",
@@ -102,11 +104,10 @@ $(document).ready(function () {
       },
       callback: function (result) {
         if (result) {
-          $.get(
-            `/api/deletePlanCiclesMachine/${id_cicles_machine}`,
+          $.post('/api/deletePlanCiclesMachine', dataPlanCiclesMachine,
             function (data, textStatus, jqXHR) {
               messageMachine(data);
-            }
+            },
           );
         }
       },

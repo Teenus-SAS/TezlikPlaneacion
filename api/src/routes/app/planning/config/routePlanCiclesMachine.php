@@ -419,7 +419,7 @@ $app->post('/updatePlanCiclesMachine', function (Request $request, Response $res
     return $response->withHeader('Content-Type', 'application/json');
 });
 
-$app->get('/deletePlanCiclesMachine/{id_cicles_machine}', function (Request $request, Response $response, $args) use (
+$app->post('/deletePlanCiclesMachine', function (Request $request, Response $response, $args) use (
     $planCiclesMachineDao,
     $generalPlanCiclesMachinesDao,
     $generalOrdersDao,
@@ -431,9 +431,24 @@ $app->get('/deletePlanCiclesMachine/{id_cicles_machine}', function (Request $req
 ) {
     session_start();
     $id_company = $_SESSION['id_company'];
+    $dataPlanCiclesMachine = $request->getParsedBody();
     // $planCiclesMachine = $generalPlanCiclesMachinesDao->findPlanCiclesMachine($args['id_cicles_machine']);
 
-    $resolution = $planCiclesMachineDao->deletePlanCiclesMachine($args['id_cicles_machine']);
+    $resolution = $planCiclesMachineDao->deletePlanCiclesMachine($dataPlanCiclesMachine['idCiclesMachine']);
+
+    if ($resolution == null) {
+        $planCicles = $generalPlanCiclesMachinesDao->findAllPlanCiclesMachineByProduct($dataPlanCiclesMachine['idProduct'], $id_company);
+
+        foreach ($planCicles as $arr) {
+            $data = [];
+            $data['idCiclesMachine'] = $arr['id_cicles_machine'];
+            $data['route'] = $arr['route'];
+
+            $resolution = $generalPlanCiclesMachinesDao->changeRouteById($data);
+
+            if (isset($resolution['info'])) break;
+        }
+    }
 
     if ($resolution == null) {
         $orders = $generalOrdersDao->findAllOrdersByCompany($id_company);
@@ -444,7 +459,6 @@ $app->get('/deletePlanCiclesMachine/{id_cicles_machine}', function (Request $req
             $productsMaterials = $productsMaterialsDao->findAllProductsMaterials($orders[$i]['id_product'], $id_company);
             $compositeProducts = $compositeProductsDao->findAllCompositeProductsByIdProduct($orders[$i]['id_product'], $id_company);
             $productsFTM = array_merge($productsMaterials, $compositeProducts);
-
             $planCicles = $generalPlanCiclesMachinesDao->findAllPlanCiclesMachineByProduct($orders[$i]['id_product'], $id_company);
 
             if ($orders[$i]['status'] != 'EN PRODUCCION' && $orders[$i]['status'] != 'PROGRAMADO' && $orders[$i]['status'] != 'FABRICADO' && $orders[$i]['status'] != 'DESPACHO') {

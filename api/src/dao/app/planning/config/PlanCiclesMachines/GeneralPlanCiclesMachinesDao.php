@@ -21,7 +21,7 @@ class GeneralPlanCiclesMachinesDao
     {
         $connection = Connection::getInstance()->getConnection();
 
-        $stmt = $connection->prepare("SELECT *  FROM plan_cicles_machine WHERE id_cicles_machine = :id_cicles_machine");
+        $stmt = $connection->prepare("SELECT * FROM plan_cicles_machine WHERE id_cicles_machine = :id_cicles_machine");
         $stmt->execute(['id_cicles_machine' => $id_cicles_machine]);
         $planCiclesMachine = $stmt->fetch($connection::FETCH_ASSOC);
         return $planCiclesMachine;
@@ -60,12 +60,15 @@ class GeneralPlanCiclesMachinesDao
         $connection = Connection::getInstance()->getConnection();
 
         $stmt = $connection->prepare("SELECT pcm.id_cicles_machine, pcm.cicles_hour, pcm.units_turn, pcm.units_month, p.id_product, p.reference, p.product, IFNULL(pc.id_process, 0) AS id_process, IFNULL(pc.process, '') AS process, IFNULL(pcm.id_machine, 0) AS id_machine, 
-                                             IFNULL(m.machine, 'PROCESO MANUAL') AS machine, (SELECT COUNT(id_plan_payroll) FROM plan_payroll WHERE id_process = pcm.id_process AND id_machine = pcm.id_machine) AS employees
+                                             IFNULL(m.machine, 'PROCESO MANUAL') AS machine, COUNT(DISTINCT py.id_plan_payroll) AS employees, ROW_NUMBER() OVER () AS route
                                       FROM plan_cicles_machine pcm
                                         INNER JOIN products p ON p.id_product = pcm.id_product
                                         LEFT JOIN machines m ON m.id_machine = pcm.id_machine
                                         LEFT JOIN process pc ON pc.id_process = pcm.id_process 
-                                      WHERE pcm.id_product = :id_product AND pcm.id_company = :id_company");
+                                        LEFT JOIN plan_payroll py ON py.id_process = pcm.id_process AND py.id_machine = pcm.id_machine
+                                      WHERE pcm.id_product = :id_product AND pcm.id_company = :id_company
+                                      GROUP BY pcm.id_cicles_machine
+                                      ORDER BY `pcm`.`route` ASC;");
         $stmt->execute([
             'id_product' => $id_product,
             'id_company' => $id_company
