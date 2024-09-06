@@ -257,10 +257,13 @@ class FilesDao
             $fileType = pathinfo($targetFilePath, PATHINFO_EXTENSION);
 
             if (in_array($fileType, $allowTypes)) {
-                $targetDir = '/assets/pdf/productsPlans/' . $id_company;
+                $targetDir = dirname(dirname(dirname(dirname(dirname(__DIR__))))) . '/assets/pdf/productsPlans/' . $id_company;
                 $targetFilePath = $targetDir . '/' . $mechanical_name;
 
                 move_uploaded_file($tmp_name, $targetFilePath);
+
+                $targetDir = '/assets/pdf/productsPlans/' . $id_company;
+                $targetFilePath = $targetDir . '/' . $mechanical_name;
 
                 return $targetFilePath;
             } else {
