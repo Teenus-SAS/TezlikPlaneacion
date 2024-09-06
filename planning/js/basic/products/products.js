@@ -96,12 +96,17 @@ $(document).ready(function () {
       return false;
     }
 
-    let data = idProduct * quantity;
+    if (!idProduct) {
+      toastr.error("Ingrese todos los campos");
+      return false;
+    }
+
+    /* let data = idProduct * quantity;
 
     if (!data) {
       toastr.error("Ingrese todos los campos");
       return false;
-    }
+    } */
 
     let imageProd = $("#formFile")[0].files[0];
 
