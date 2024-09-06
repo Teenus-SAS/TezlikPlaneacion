@@ -30,13 +30,13 @@ $(document).ready(function () {
         className: "uniqueClassName dt-head-center",
       },
       {
-        title: "Tiempo Máximo de Producción",
-        data: "max_term",
+        title: "Tiempo Mínimo de Producción",
+        data: "min_term",
         className: "uniqueClassName dt-head-center",
       },
       {
-        title: "Tiempo Mínimo de Producción",
-        data: "min_term",
+        title: "Tiempo Máximo de Producción",
+        data: "max_term",
         className: "uniqueClassName dt-head-center",
       },
       {
