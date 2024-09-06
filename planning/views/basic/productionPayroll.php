@@ -68,15 +68,15 @@ if (sizeof($_SESSION) == 0)
                                     <div class="card">
                                         <div class="card-body">
                                             <div class="form-row">
-                                                <div class="col-sm-4 floating-label enable-floating-label show-label">
+                                                <div class="col-sm-4 floating-label enable-floating-label show-label mb-0">
                                                     <label for="firstname">Nombres</label>
                                                     <input type="text" class="form-control text-center" id="firstname" name="firstname">
                                                 </div>
-                                                <div class="col-sm-4 floating-label enable-floating-label show-label">
+                                                <div class="col-sm-4 floating-label enable-floating-label show-label mb-0">
                                                     <label for="lastname">Apellidos</label>
                                                     <input type="text" class="form-control text-center" id="lastname" name="lastname">
                                                 </div>
-                                                <div class="col-sm-4 floating-label enable-floating-label show-label">
+                                                <div class="col-sm-4 floating-label enable-floating-label show-label mb-0">
                                                     <label for="position">Posición</label>
                                                     <input type="text" class="form-control text-center" id="position" name="position">
                                                 </div>
