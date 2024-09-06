@@ -85,16 +85,23 @@ $(document).ready(function () {
   });
 
   /* Revisar datos */
-  const checkDataProducts = async (url, idProductInventory) => { 
-    let idProduct = parseFloat($("#refProduct").val());
-    let quantity = parseFloat($('#pQuantity').val()); 
+  const checkDataProducts = async (url, idProductInventory) => {
+    const idProduct = parseFloat($("#refProduct").val());
+    const quantity = parseFloat($("#pQuantity").val());
+
+    if (quantity < 0) {
+      toastr.error(
+        "La cantidad en el inventario debe ser mayor o igual a cero"
+      );
+      return false;
+    }
 
     let data = idProduct * quantity;
 
-    if (isNaN(data) || data <= 0) {
+    if (!data) {
       toastr.error("Ingrese todos los campos");
       return false;
-    } 
+    }
 
     let imageProd = $("#formFile")[0].files[0];
 
@@ -102,15 +109,15 @@ $(document).ready(function () {
     dataProduct.append("img", imageProd);
 
     if (idProductInventory != "" || idProductInventory != null) {
-      let dataProducts = JSON.parse(sessionStorage.getItem('dataProducts'));
+      let dataProducts = JSON.parse(sessionStorage.getItem("dataProducts"));
 
-      let arr = dataProducts.find(item => item.id_product == idProduct);
+      let arr = dataProducts.find((item) => item.id_product == idProduct);
 
       if (quantity < parseFloat(arr.reserved)) {
         toastr.error("Existencias con menor cantidad de las reservadas");
         return false;
       }
-      
+
       dataProduct.append("idProductInventory", idProductInventory);
     }
     dataProduct.append("idProduct", idProduct);
