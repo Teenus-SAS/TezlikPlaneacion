@@ -68,35 +68,36 @@ if (sizeof($_SESSION) == 0)
                                     <div class="card">
                                         <div class="card-body">
                                             <div class="form-row">
-                                                <div class="col-sm-2 floating-label enable-floating-label show-label" style="margin-bottom:0px">
-                                                    <label for="">Nombres</label>
+                                                <div class="col-sm-4 floating-label enable-floating-label show-label">
+                                                    <label for="firstname">Nombres</label>
                                                     <input type="text" class="form-control text-center" id="firstname" name="firstname">
                                                 </div>
-                                                <div class="col-sm-2 floating-label enable-floating-label show-label" style="margin-bottom:0px">
-                                                    <label for="">Apellidos</label>
+                                                <div class="col-sm-4 floating-label enable-floating-label show-label">
+                                                    <label for="lastname">Apellidos</label>
                                                     <input type="text" class="form-control text-center" id="lastname" name="lastname">
                                                 </div>
-                                                <div class="col-sm-2 floating-label enable-floating-label show-label" style="margin-bottom:0px">
-                                                    <label for="">Área</label>
-                                                    <select type="text" class="form-control" id="idArea" name="idArea"></select>
-                                                </div>
-                                                <div class="col-sm-2 floating-label enable-floating-label show-label" style="margin-bottom:0px">
-                                                    <label for="">Proceso</label>
-                                                    <select type="text" class="form-control" id="idProcess" name="idProcess"></select>
-                                                </div>
-                                                <div class="col-sm-2 floating-label enable-floating-label show-label" style="margin-bottom:0px">
-                                                    <label for="">Maquina</label>
-                                                    <select type="text" class="form-control idMachine" id="idMachine" name="idMachine"></select>
-                                                </div>
-                                                <div class="col-sm-2 floating-label enable-floating-label show-label" style="margin-bottom:0px">
-                                                    <label for="">Posición</label>
+                                                <div class="col-sm-4 floating-label enable-floating-label show-label">
+                                                    <label for="position">Posición</label>
                                                     <input type="text" class="form-control text-center" id="position" name="position">
                                                 </div>
+                                                <div class="col-sm-3 floating-label enable-floating-label show-label mt-3">
+                                                    <label for="idArea">Área</label>
+                                                    <select type="text" class="form-control" id="idArea" name="idArea"></select>
+                                                </div>
+                                                <div class="col-sm-3 floating-label enable-floating-label show-label mt-3">
+                                                    <label for="idProcess">Proceso</label>
+                                                    <select type="text" class="form-control" id="idProcess" name="idProcess"></select>
+                                                </div>
+                                                <div class="col-sm-3 floating-label enable-floating-label show-label mt-3">
+                                                    <label for="idMachine">Maquina</label>
+                                                    <select type="text" class="form-control idMachine" id="idMachine" name="idMachine"></select>
+                                                </div>
+
                                                 <!-- <div class="col-sm-6 floating-label enable-floating-label show-label drag-area mt-4">
                                                     <input class="form-control" type="file" id="formFile">
                                                     <label for="formFile" class="form-label"> Cargar imagen</label>
                                                 </div> -->
-                                                <div class="col-sm mt-1">
+                                                <div class="col-sm mt-3">
                                                     <button class="btn btn-success" id="btnCreateEmployee">Crear</button>
                                                 </div>
                                             </div>
