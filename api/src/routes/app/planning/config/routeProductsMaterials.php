@@ -353,7 +353,7 @@ $app->post('/addProductsMaterials', function (Request $request, Response $respon
 
                     $findComposite = $generalCompositeProductsDao->findCompositeProduct($productMaterials[$i]);
 
-                    if ($findComposite) {
+                    if (!$findComposite) {
                         $resolution = $compositeProductsDao->insertCompositeProductByCompany($productMaterials[$i], $id_company);
                     } else {
                         $productMaterials[$i]['idCompositeProduct'] = $findComposite['id_composite_product'];
@@ -383,10 +383,10 @@ $app->post('/addProductsMaterials', function (Request $request, Response $respon
                 // Guardar Unidad convertida
                 $generalProductsMaterialsDao->saveQuantityConverted($arr['id_product_material'], $quantity);
 
-                $arr = $minimumStockDao->calcStockByMaterial($productMaterials[$i]['material']);
+                $arr = $minimumStockDao->calcStockByMaterial($arr['id_material']);
 
                 if (isset($arr['stock']))
-                    $resolution = $generalMaterialsDao->updateStockMaterial($productMaterials[$i]['material'], $arr['stock']);
+                    $resolution = $generalMaterialsDao->updateStockMaterial($arr['id_material'], $arr['stock']);
             }
             if (isset($resolution['info'])) break;
 
