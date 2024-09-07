@@ -32,4 +32,19 @@ class DashboardProgrammingDao
         $staffAvailable = $stmt->fetchAll($connection::FETCH_ASSOC);
         return $staffAvailable;
     }
+
+    public function findMachinesAvailableByCompany($id_company)
+    {
+        $connection = Connection::getInstance()->getConnection();
+
+        $sql = "SELECT m.machine, pm.number_workers AS status
+                FROM plan_program_machines pm
+                INNER JOIN machines m ON pm.id_machine = m.id_machine
+                WHERE pm.id_company = :id_company;";
+        $stmt = $connection->prepare($sql);
+        $stmt->execute(['id_company' => $id_company]);
+        $this->logger->info(__FUNCTION__, array('query' => $stmt->queryString, 'errors' => $stmt->errorInfo()));
+        $machinesAvailable = $stmt->fetchAll($connection::FETCH_ASSOC);
+        return $machinesAvailable;
+    }
 }
