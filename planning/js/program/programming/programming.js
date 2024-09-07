@@ -301,26 +301,26 @@ $(document).ready(function () {
             allOrdersProgramming[i].accumulated_quantity_order =
               allOrdersProgramming[i].accumulated_quantity -
                 quantityProgramming <
-              0
+                0
                 ? 0
                 : allOrdersProgramming[i].accumulated_quantity -
-                  quantityProgramming;
+                quantityProgramming;
             allOrdersProgramming[i].accumulated_quantity =
               ciclesMachine.length == 1
                 ? allOrdersProgramming[i].accumulated_quantity -
-                    quantityProgramming <
+                  quantityProgramming <
                   0
                   ? 0
                   : allOrdersProgramming[i].accumulated_quantity -
-                    quantityProgramming
+                  quantityProgramming
                 : allOrdersProgramming[i].original_quantity;
             allOrdersProgramming[i].quantity_programming =
               allOrdersProgramming[i].accumulated_quantity -
                 quantityProgramming <
-              0
+                0
                 ? 0
                 : allOrdersProgramming[i].accumulated_quantity -
-                  quantityProgramming;
+                quantityProgramming;
             quantityMissing =
               allOrdersProgramming[i].accumulated_quantity_order;
           }
@@ -407,15 +407,28 @@ $(document).ready(function () {
       let sim = $("#simulationType").val();
       let key;
 
-      sim == 1 ? (key = 0) : (key = 1); 
+      sim == 1 ? (key = 0) : (key = 1);
       // Encontrar el objeto correspondiente en multiarray
       let targetArray = generalMultiArray[key][`sim_${sim}`];
 
+      // if (targetArray) {
+      //   for (let i = 0; i < targetArray.length; i++) {
+      //     if (targetArray[i][`process-${id_process}`]) {
+      //       targetArray[i][`process-${id_process}`].push(dataProgramming);
+      //       break; // Salir del bucle después de encontrar y actualizar el proceso
+      //     }
+      //   }
+      // };
       if (targetArray) {
         for (let i = 0; i < targetArray.length; i++) {
+          // Verificar si existe el process con el id_process
           if (targetArray[i][`process-${id_process}`]) {
-            targetArray[i][`process-${id_process}`].push(dataProgramming);
-            break; // Salir del bucle después de encontrar y actualizar el proceso
+            // Verificar si dentro del process existe la machine con el id_machine
+            if (targetArray[i][`process-${id_process}`][`machine-${id_machine}`]) {
+              // Agregar dataProgramming a la máquina correspondiente
+              targetArray[i][`process-${id_process}`][`machine-${id_machine}`].push(dataProgramming);
+              break; // Salir del bucle después de encontrar y actualizar el proceso
+            }
           }
         }
       }
@@ -442,39 +455,61 @@ $(document).ready(function () {
 
       sim == 1 ? (key = 0) : (key = 1);
 
+      // for (let i = 0; i < generalMultiArray[key][`sim_${sim}`].length; i++) {
+      //   if (generalMultiArray[key][`sim_${sim}`][i][`process-${id_process}`]) {
+      //     for (
+      //       let j = 0;
+      //       j <
+      //       generalMultiArray[key][`sim_${sim}`][i][`process-${id_process}`]
+      //         .length;
+      //       j++
+      //     ) {
+      //       if (
+      //         generalMultiArray[key][`sim_${sim}`][i][`process-${id_process}`][
+      //           j
+      //         ].id_programming == idProgramming
+      //       ) {
+      //         generalMultiArray[key][`sim_${sim}`][i][`process-${id_process}`][
+      //           j
+      //         ].accumulated_quantity = quantityMissing;
+      //         generalMultiArray[key][`sim_${sim}`][i][`process-${id_process}`][
+      //           j
+      //         ].accumulated_quantity_order = quantityMissing;
+      //         generalMultiArray[key][`sim_${sim}`][i][`process-${id_process}`][
+      //           j
+      //         ].quantity_programming = quantityProgramming;
+      //         generalMultiArray[key][`sim_${sim}`][i][`process-${id_process}`][
+      //           j
+      //         ].min_date = dataProgramming["min_date"];
+      //         generalMultiArray[key][`sim_${sim}`][i][`process-${id_process}`][
+      //           j
+      //         ].max_date = dataProgramming["max_date"];
+      //         generalMultiArray[key][`sim_${sim}`][i][`process-${id_process}`][
+      //           j
+      //         ].min_programming = dataProgramming["min_programming"];
+      //         break;
+      //       }
+      //     }
+      //   }
+      // }
       for (let i = 0; i < generalMultiArray[key][`sim_${sim}`].length; i++) {
         if (generalMultiArray[key][`sim_${sim}`][i][`process-${id_process}`]) {
-          for (
-            let j = 0;
-            j <
-            generalMultiArray[key][`sim_${sim}`][i][`process-${id_process}`]
-              .length;
-            j++
-          ) {
-            if (
-              generalMultiArray[key][`sim_${sim}`][i][`process-${id_process}`][
-                j
-              ].id_programming == idProgramming
-            ) {
-              generalMultiArray[key][`sim_${sim}`][i][`process-${id_process}`][
-                j
-              ].accumulated_quantity = quantityMissing;
-              generalMultiArray[key][`sim_${sim}`][i][`process-${id_process}`][
-                j
-              ].accumulated_quantity_order = quantityMissing;
-              generalMultiArray[key][`sim_${sim}`][i][`process-${id_process}`][
-                j
-              ].quantity_programming = quantityProgramming;
-              generalMultiArray[key][`sim_${sim}`][i][`process-${id_process}`][
-                j
-              ].min_date = dataProgramming["min_date"];
-              generalMultiArray[key][`sim_${sim}`][i][`process-${id_process}`][
-                j
-              ].max_date = dataProgramming["max_date"];
-              generalMultiArray[key][`sim_${sim}`][i][`process-${id_process}`][
-                j
-              ].min_programming = dataProgramming["min_programming"];
-              break;
+          // Agregar verificación para la máquina
+          let processMachines = generalMultiArray[key][`sim_${sim}`][i][`process-${id_process}`];
+    
+          if (processMachines[`machine-${id_machine}`]) {
+            let machineArray = processMachines[`machine-${id_machine}`];
+      
+            for (let j = 0; j < machineArray.length; j++) {
+              if (machineArray[j].id_programming == idProgramming) {
+                machineArray[j].accumulated_quantity = quantityMissing;
+                machineArray[j].accumulated_quantity_order = quantityMissing;
+                machineArray[j].quantity_programming = quantityProgramming;
+                machineArray[j].min_date = dataProgramming["min_date"];
+                machineArray[j].max_date = dataProgramming["max_date"];
+                machineArray[j].min_programming = dataProgramming["min_programming"];
+                break;
+              }
             }
           }
         }
@@ -737,10 +772,8 @@ $(document).ready(function () {
   const message = async (data) => {
     try {
       if (data.success) {
-        let allTblData = flattenData(generalMultiArray);
-
-        sessionStorage.setItem("dataProgramming", JSON.stringify(allTblData));
-
+        // let allTblData = flattenData(generalMultiArray);
+        // sessionStorage.setItem("dataProgramming", JSON.stringify(allTblData));
         hideCardAndResetForm();
         toastr.success(message);
         await loadAllDataProgramming();
@@ -761,14 +794,33 @@ $(document).ready(function () {
   };
 
   // Función para aplanar el array
+  // flattenData = (data) => {
+  //   const flattened = [];
+
+  //   data.forEach((sim) => {
+  //     Object.values(sim).forEach((processes) => {
+  //       processes.forEach((process) => {
+  //         Object.values(process).forEach((items) => {
+  //           flattened.push(...items);
+  //         });
+  //       });
+  //     });
+  //   });
+
+  //   return flattened;
+  // };
+  // Función para aplanar el array considerando id_machine
   flattenData = (data) => {
     const flattened = [];
 
     data.forEach((sim) => {
       Object.values(sim).forEach((processes) => {
         processes.forEach((process) => {
-          Object.values(process).forEach((items) => {
-            flattened.push(...items);
+          // Iterar sobre cada máquina dentro del proceso
+          Object.values(process).forEach((machines) => {
+            Object.values(machines).forEach((items) => {
+              flattened.push(...items); // Agregar los objetos aplanados al array
+            });
           });
         });
       });

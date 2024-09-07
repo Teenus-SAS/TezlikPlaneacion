@@ -57,44 +57,44 @@ $(document).ready(function () {
         ciclesMachines.sort((a, b) => a.id_process - b.id_process);
 
         // // Crear el mapa único procesos
-        let uniquePCMap = new Map(ciclesMachines.map(item => [item.id_process, { [`process-${item.id_process}`]: [] }]));
-        
-        // Convertir el mapa en un array
-        let uniqueArrayPC = Array.from(uniquePCMap.values()); 
-
-        // Crear una copia profunda del array para 'sim_2'
-        let uniqueArrayPC2 = uniqueArrayPCM.map(item => JSON.parse(JSON.stringify(item)));
-        // Crear el mapa único procesos y maquinas
-        // let uniquePCMMap = new Map
-        //   (
-        //     ciclesMachines.map
-        //       (
-        //         item =>
-        //           [
-        //             item.id_process,
-        //             {
-        //               [`process-${item.id_process}`]:
-        //               {
-        //                 [`machine-${item.id_machine}`]: []
-        //               }
-        //             }
-        //           ]
-        //       )
-        //   );
+        // let uniquePCMap = new Map(ciclesMachines.map(item => [item.id_process, { [`process-${item.id_process}`]: [] }]));
         
         // // Convertir el mapa en un array
-        // let uniqueArrayPCM = Array.from(uniquePCMMap.values());
+        // let uniqueArrayPC = Array.from(uniquePCMap.values()); 
 
-        // // Crear una copia profunda del array para 'sim_2'
-        // let uniqueArrayPCM2 = uniqueArrayPCM.map(item => JSON.parse(JSON.stringify(item)));
+        // Crear una copia profunda del array para 'sim_2'
+        // let uniqueArrayPC2 = uniqueArrayPC.map(item => JSON.parse(JSON.stringify(item)));
+        // Crear el mapa único procesos y maquinas
+        let uniquePCMMap = new Map
+          (
+            ciclesMachines.map
+              (
+                item =>
+                  [
+                    item.id_process,
+                    {
+                      [`process-${item.id_process}`]:
+                      {
+                        [`machine-${item.id_machine}`]: []
+                      }
+                    }
+                  ]
+              )
+          );
+        
+        // Convertir el mapa en un array
+        let uniqueArrayPCM = Array.from(uniquePCMMap.values());
+
+        // Crear una copia profunda del array para 'sim_2'
+        let uniqueArrayPCM2 = uniqueArrayPCM.map(item => JSON.parse(JSON.stringify(item)));
 
         // Agregar los arrays al multiarray
         generalMultiArray.push(
           {
-            sim_1: uniqueArrayPC,
+            sim_1: uniqueArrayPCM,
           },
           {
-            sim_2: uniqueArrayPC2,
+            sim_2: uniqueArrayPCM2,
           }
         );
 

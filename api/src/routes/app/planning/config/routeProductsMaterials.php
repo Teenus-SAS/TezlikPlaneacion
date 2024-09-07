@@ -989,7 +989,6 @@ $app->post('/calcQuantityFTM', function (Request $request, Response $response, $
             $weight = ((floatval($dataMaterial['grammage']) * floatval($dataProduct['length']) * floatval($dataProduct['total_width'])) / 10000000) / floatval($dataProduct['window']);
 
             break;
-
         default:
             $quantity = floatval($arr['quantityCalc']);
             $quantityFTM = 0;

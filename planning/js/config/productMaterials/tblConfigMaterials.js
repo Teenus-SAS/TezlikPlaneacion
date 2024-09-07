@@ -3,16 +3,17 @@ $(document).ready(function () {
 
   $("#refProduct").change(function (e) {
     e.preventDefault();
-    let id = this.value;
-    // let composite = parseInt($(this).find('option:selected').attr('class'));
-
-    // if (composite == 0) {
-    //   $('#btnAddNewProduct').show();
-    // } else
-    //   $('#btnAddNewProduct').hide();
+    let id = this.value; 
     
     $("#selectNameProduct option").removeAttr("selected");
     $(`#selectNameProduct option[value=${id}]`).prop("selected", true);
+
+    let dataProducts = JSON.parse(sessionStorage.getItem('dataProducts'));
+    let compositeProduct = dataProducts.filter(item => item.composite == 1 && item.id_product != this.value); 
+
+    populateOptions("#refCompositeProduct", compositeProduct, "reference");
+    populateOptions("#compositeProduct", compositeProduct, "product");
+
     $('.cardAddMaterials').hide(800);
     loadAllDataMaterials(id);
     loadTblPlanCiclesMachine(id);
@@ -22,16 +23,17 @@ $(document).ready(function () {
 
   $("#selectNameProduct").change(function (e) {
     e.preventDefault();
-    let id = this.value;
-    // let composite = parseInt($(this).find('option:selected').attr('class'));
-
-    // if (composite == 0) {
-    //   $('#btnAddNewProduct').show();
-    // } else
-    //   $('#btnAddNewProduct').hide();
+    let id = this.value; 
     
     $("#refProduct option").removeAttr("selected");
     $(`#refProduct option[value=${id}]`).prop("selected", true);
+
+    let dataProducts = JSON.parse(sessionStorage.getItem('dataProducts'));
+    let compositeProduct = dataProducts.filter(item => item.composite == 1 && item.id_product != this.value); 
+
+    populateOptions("#refCompositeProduct", compositeProduct, "reference");
+    populateOptions("#compositeProduct", compositeProduct, "product");
+
     $('.cardAddMaterials').hide(800);
     loadAllDataMaterials(id);
     loadTblPlanCiclesMachine(id);
