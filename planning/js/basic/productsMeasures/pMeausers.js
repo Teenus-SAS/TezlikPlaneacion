@@ -159,9 +159,11 @@ $(document).ready(function () {
     const prod = $("#product").val().trim();
     let width, high, length, usefulLength, totalWidth, window;
 
-    if (isNaN(idProductType) || idProductMeasure <= 0) {
-      toastr.error("Ingrese todos los campos");
-      return false;
+    if (flag_products_measure == '1') {
+      if (isNaN(idProductType) || idProductMeasure <= 0) {
+        toastr.error("Ingrese todos los campos");
+        return false;
+      }
     }
 
     if (idProductType === 1) {
