@@ -57,8 +57,7 @@ class GeneralProductsDao
         $connection = Connection::getInstance()->getConnection();
 
         $stmt = $connection->prepare("SELECT * FROM products
-                                  WHERE reference = :reference
-                                  AND product = :product 
+                                  WHERE (reference = :reference AND product = :product)
                                   AND id_company = :id_company");
         $stmt->execute([
             'reference' => trim($dataProduct['referenceProduct']),

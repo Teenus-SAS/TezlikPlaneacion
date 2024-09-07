@@ -158,45 +158,42 @@ $app->post('/productsMaterialsDataValidation', function (Request $request, Respo
 
             $type = $productMaterials[$i]['type'];
 
-            switch ($type) {
-                case 'MATERIAL':
-                    // Obtener id materia prima
-                    $findMaterial = $materialsDao->findMaterial($productMaterials[$i], $id_company);
-                    if (!$findMaterial) {
-                        $i = $i + 2;
-                        $dataImportProductsMaterials = array('error' => true, 'message' => "Materia prima no existe en la base de datos<br>Fila: {$i}");
-                        break;
-                    } else $productMaterials[$i]['material'] = $findMaterial['id_material'];
-
-                    $findProductsMaterials = $generalProductsMaterialsDao->findProductMaterial($productMaterials[$i], $id_company);
-                    if (!$findProductsMaterials) $insert = $insert + 1;
-                    else $update = $update + 1;
+            if ($type == 'MATERIAL') {
+                // Obtener id materia prima
+                $findMaterial = $materialsDao->findMaterial($productMaterials[$i], $id_company);
+                if (!$findMaterial) {
+                    $i = $i + 2;
+                    $dataImportProductsMaterials = array('error' => true, 'message' => "Materia prima no existe en la base de datos<br>Fila: {$i}");
                     break;
-                case 'PRODUCTO':
-                    // Obtener id productos compuestos
-                    $arr = [];
-                    $arr['referenceProduct'] = $productMaterials[$i]['refRawMaterial'];
-                    $arr['product'] = $productMaterials[$i]['nameRawMaterial'];
+                } else $productMaterials[$i]['material'] = $findMaterial['id_material'];
 
-                    $findProduct = $productsDao->findProduct($arr, $id_company);
-                    if (!$findProduct) {
-                        $i = $i + 2;
-                        $dataImportProductsMaterials = array('error' => true, 'message' => "Producto no existe en la base de datos.<br>Fila: {$i}");
-                        break;
-                    }
+                $findProductsMaterials = $generalProductsMaterialsDao->findProductMaterial($productMaterials[$i], $id_company);
+                if (!$findProductsMaterials) $insert = $insert + 1;
+                else $update = $update + 1;
+            } else if ($type == 'PRODUCTO') {
+                // Obtener id productos compuestos
+                $arr = [];
+                $arr['referenceProduct'] = $productMaterials[$i]['refRawMaterial'];
+                $arr['product'] = $productMaterials[$i]['nameRawMaterial'];
 
-                    if ($findProduct['composite'] == 0) {
-                        $i = $i + 2;
-                        $dataImportProductsMaterials = array('error' => true, 'message' => "Producto no está definido como compuesto.<br>Fila: {$i}");
-                        break;
-                    }
-
-                    $productMaterials[$i]['compositeProduct'] = $findProduct['id_product'];
-
-                    $findComposite = $generalCompositeProductsDao->findCompositeProduct($productMaterials[$i]);
-                    if (!$findComposite) $insert += 1;
-                    else $update += 1;
+                $findProduct = $productsDao->findProduct($arr, $id_company);
+                if (!$findProduct) {
+                    $i = $i + 2;
+                    $dataImportProductsMaterials = array('error' => true, 'message' => "Producto no existe en la base de datos.<br>Fila: {$i}");
                     break;
+                }
+
+                if ($findProduct['composite'] == 0) {
+                    $i = $i + 2;
+                    $dataImportProductsMaterials = array('error' => true, 'message' => "Producto no está definido como compuesto.<br>Fila: {$i}");
+                    break;
+                }
+
+                $productMaterials[$i]['compositeProduct'] = $findProduct['id_product'];
+
+                $findComposite = $generalCompositeProductsDao->findCompositeProduct($productMaterials[$i]);
+                if (!$findComposite) $insert += 1;
+                else $update += 1;
             }
 
             $dataImportProductsMaterials['insert'] = $insert;
@@ -360,7 +357,7 @@ $app->post('/addProductsMaterials', function (Request $request, Response $respon
                         $resolution = $compositeProductsDao->updateCompositeProduct($productMaterials[$i]);
                     }
                     break;
-            }
+            };
 
             if (isset($resolution['info'])) break;
 
@@ -388,6 +385,7 @@ $app->post('/addProductsMaterials', function (Request $request, Response $respon
                 if (isset($arr['stock']))
                     $resolution = $generalMaterialsDao->updateStockMaterial($arr['id_material'], $arr['stock']);
             }
+
             if (isset($resolution['info'])) break;
 
             $compositeProducts = $compositeProductsDao->findAllCompositeProductsByIdProduct($productMaterials[$i]['idProduct'], $id_company);
