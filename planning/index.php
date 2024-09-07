@@ -56,7 +56,7 @@ if (sizeof($_SESSION) == 0)
                     <div class="container-fluid">
                         <!-- Widget  -->
                         <div class="row">
-                            <div class="col-md-6 col-xl-3">
+                            <div class="col-auto">
                                 <div class="card">
                                     <div class="card-body">
                                         <div class="media align-items-center">
@@ -74,7 +74,26 @@ if (sizeof($_SESSION) == 0)
                                     </div>
                                 </div>
                             </div>
-                            <div class="col-md-6 col-xl-3">
+                            
+                            <div class="col-auto">
+                                <div class="card">
+                                    <div class="card-body">
+                                        <div class="media align-items-center">
+                                            <div class="media-body">
+                                                <span class="text-muted text-uppercase font-size-12 font-weight-bold">Materia Prima Agotada</span>
+                                                <h2 class="mb-0 mt-1 text-danger" id="MPStockout"></h2>
+                                            </div>
+                                            <div class="text-center">
+                                                <div id="t-rev"></div>
+                                                <span class="text-danger font-weight-bold font-size-23">
+                                                    <i class='fas fa-times-circle fs-lg'></i>
+                                                </span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-auto">
                                 <div class="card">
                                     <div class="card-body">
                                         <div class="media align-items-center">
@@ -92,7 +111,7 @@ if (sizeof($_SESSION) == 0)
                                     </div>
                                 </div>
                             </div>
-                            <div class="col-md-6 col-xl-3">
+                            <div class="col-auto">
                                 <div class="card">
                                     <div class="card-body">
                                         <div class="media align-items-center">
@@ -110,7 +129,7 @@ if (sizeof($_SESSION) == 0)
                                     </div>
                                 </div>
                             </div>
-                            <div class="col-md-6 col-xl-3">
+                            <div class="col-auto">
                                 <div class="card">
                                     <div class="card-body">
                                         <div class="media align-items-center">

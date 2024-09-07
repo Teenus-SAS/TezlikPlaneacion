@@ -19,7 +19,7 @@ const indicatorsGlobal = async () => {
     };
 
     // Actualizar el DOM
-    $("#productStockout").text(`${formattedValues.productsOutStock}%`);
+    $("#productStockout").text(`${formattedValues.productsOutStock}% | ${response.totalProducts}`);
     $("#ordersNoProgramed").text(`${formattedValues.ordersNoProgramed}%`);
     $("#ordersNoMP").text(`${formattedValues.OrdersNoMP}%`);
     $("#ordersDelivered").text(`${formattedValues.OrdersDelivered}%`);
