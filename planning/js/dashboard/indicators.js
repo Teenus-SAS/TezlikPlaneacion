@@ -6,7 +6,7 @@ const indicatorsGlobal = async () => {
 
     const {
       productsOutStock,
-      mpOutStock,
+      percentageMPLowStock,
       ordersNoProgramed,
       OrdersNoMP,
       percentage_dispatch,
@@ -18,7 +18,7 @@ const indicatorsGlobal = async () => {
     // Formatear los valores
     const formattedValues = {
       productsOutStock: formatPercentage(productsOutStock),
-      mpOutStock: formatPercentage(mpOutStock),
+      mpOutStock: formatPercentage(percentageMPLowStock),
       ordersNoProgramed: formatPercentage(ordersNoProgramed),
       OrdersNoMP: formatPercentage(OrdersNoMP),
       OrdersDelivered: formatPercentage(percentage_dispatch),
