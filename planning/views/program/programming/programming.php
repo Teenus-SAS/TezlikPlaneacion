@@ -227,7 +227,7 @@ if (sizeof($_SESSION) == 0)
                                         <div class="page-content-wrapper mt-3">
                                             <div class="container-fluid">
                                                 <!-- Widget  -->
-                                                <div class="row">
+                                                <!-- <div class="row">
                                                     <div class="col-md-6 col-xl-3">
                                                         <div class="card">
                                                             <div class="card-body">
@@ -300,7 +300,7 @@ if (sizeof($_SESSION) == 0)
                                                             </div>
                                                         </div>
                                                     </div>
-                                                </div>
+                                                </div> -->
                                                 <!-- Row 2-->
                                                 <div class="row align-items-stretch">
                                                     <!-- <div class="col-md-4 col-lg-3">
@@ -349,7 +349,7 @@ if (sizeof($_SESSION) == 0)
                             </div> -->
 
                                                     <!-- Begin total orders vs clients chart -->
-                                                    <div class="col-md-4 col-lg-6">
+                                                    <div class="col-md-4 col-lg-8">
                                                         <div class="card orders-graph">
                                                             <div class="card-header">
                                                                 <h5 class="card-title">Personal Disponible y Requerido</h5>
@@ -364,7 +364,7 @@ if (sizeof($_SESSION) == 0)
                                                     </div>
 
                                                     <!-- Begin OC chart -->
-                                                    <div class="col-md-4 col-lg-3" style="height: fit-content;">
+                                                    <div class="col-md-4 col-lg-4" style="height: fit-content;">
                                                         <div class="card orders-graph">
                                                             <div class="card-header">
                                                                 <h5 class="card-title">Disponibilidad de Máquinas</h5>
