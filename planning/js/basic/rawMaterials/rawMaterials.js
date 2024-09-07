@@ -111,7 +111,7 @@ $(document).ready(function () {
     let dataMaterial = new FormData(formCreateMaterial);
     dataMaterial.append("idMaterialType", materialType);
 
-    if (idMaterial != "" || idMaterial != null) {
+    if (idMaterial) {
       let dataMaterials = JSON.parse(sessionStorage.getItem('dataMaterials'));
 
       let arr = dataMaterials.find(item => item.id_material == idMaterial);
