@@ -26,10 +26,10 @@ const indicatorsGlobal = async () => {
 
     // Actualizar el DOM
     $("#productStockout").text(
-      `${response.totalProducts} | ${formattedValues.productsOutStock}%`
+      `${response.totalProducts} (${formattedValues.productsOutStock}%)`
     );
     $("#mpOutStock").text(
-      `${response.totalMPLowStock} | ${formattedValues.mpOutStock}%`
+      `${response.totalMPLowStock} (${formattedValues.mpOutStock}%)`
     );
     $("#ordersNoProgramed").text(`${formattedValues.ordersNoProgramed}%`);
     $("#ordersNoMP").text(`${formattedValues.OrdersNoMP}%`);
