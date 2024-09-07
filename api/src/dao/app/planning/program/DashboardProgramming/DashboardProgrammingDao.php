@@ -22,9 +22,9 @@ class DashboardProgrammingDao
 
         $sql = "SELECT p.process, m.machine, COUNT(pp.id_operator) AS total_operadores
                 FROM plan_payroll pp
-                INNER JOIN processes p ON pp.id_process = p.id
-                INNER JOIN machines m ON pp.id_machine = m.id
-                WHERE pp.estado = 1 AND pp.id_company = :id_company
+                INNER JOIN process p ON pp.id_process = p.id_process
+                INNER JOIN machines m ON pp.id_machine = m.id_machine
+                WHERE pp.status = 1 AND pp.id_company = :id_company
                 GROUP BY p.process, m.machine;";
         $stmt = $connection->prepare($sql);
         $stmt->execute(['id_company' => $id_company]);
