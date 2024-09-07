@@ -219,12 +219,15 @@ if (sizeof($_SESSION) == 0)
                                 </div>
                             </div>
                             <div class="col-12 cardDashboardProgramming" style="display: none;">
-                                <!-- Begin indicators and Graph Programation -->
+                                <div class="card">
+                                    <div class="card-body">
 
-                                <div class="page-content-wrapper mt-3">
-                                    <div class="container-fluid">
-                                        <!-- Widget  -->
-                                        <!-- <div class="row">
+                                        <!-- Begin indicators and Graph Programation -->
+
+                                        <div class="page-content-wrapper mt-3">
+                                            <div class="container-fluid">
+                                                <!-- Widget  -->
+                                                <!-- <div class="row">
                                                     <div class="col-md-6 col-xl-3">
                                                         <div class="card">
                                                             <div class="card-body">
@@ -298,95 +301,97 @@ if (sizeof($_SESSION) == 0)
                                                         </div>
                                                     </div>
                                                 </div> -->
-                                        <!-- Row 2-->
-                                        <div class="row align-items-stretch">
+                                                <!-- Row 2-->
+                                                <div class="row align-items-stretch">
 
-                                            <!-- Begin total orders vs clients chart -->
-                                            <div class="col-md-4 col-lg-4">
-                                                <div class="card orders-graph">
-                                                    <div class="card-header">
-                                                        <h5 class="card-title">Personal Disponible y Requerido</h5>
-                                                    </div>
-                                                    <div class="card-body pt-2">
-                                                        <div class="chart-container">
-                                                            <!-- <canvas id="chartTimeProcessProducts"></canvas> -->
-                                                            <canvas id="staffAvailableChart"></canvas>
+                                                    <!-- Begin total orders vs clients chart -->
+                                                    <div class="col-md-4 col-lg-4">
+                                                        <div class="card orders-graph">
+                                                            <div class="card-header">
+                                                                <h5 class="card-title">Personal Disponible y Requerido</h5>
+                                                            </div>
+                                                            <div class="card-body pt-2">
+                                                                <div class="chart-container">
+                                                                    <!-- <canvas id="chartTimeProcessProducts"></canvas> -->
+                                                                    <canvas id="staffAvailableChart"></canvas>
+                                                                </div>
+                                                            </div>
                                                         </div>
                                                     </div>
-                                                </div>
-                                            </div>
 
-                                            <!-- Begin OC chart -->
-                                            <div class="col-md-4 col-lg-4" style="height: fit-content;">
-                                                <div class="card orders-graph">
-                                                    <div class="card-header">
-                                                        <h5 class="card-title">Disponibilidad de Máquinas</h5>
-                                                    </div>
-                                                    <div class="card-body pt-2">
-                                                        <div class="chart-container">
-                                                            <!-- <canvas id="chartTimeProcessProducts"></canvas> -->
-                                                            <canvas id="chartMachinesAvailable"></canvas>
+                                                    <!-- Begin OC chart -->
+                                                    <div class="col-md-4 col-lg-4" style="height: fit-content;">
+                                                        <div class="card orders-graph">
+                                                            <div class="card-header">
+                                                                <h5 class="card-title">Disponibilidad de Máquinas</h5>
+                                                            </div>
+                                                            <div class="card-body pt-2">
+                                                                <div class="chart-container">
+                                                                    <!-- <canvas id="chartTimeProcessProducts"></canvas> -->
+                                                                    <canvas id="chartMachinesAvailable"></canvas>
+                                                                </div>
+                                                            </div>
                                                         </div>
                                                     </div>
-                                                </div>
-                                            </div>
-                                            <!-- Begin Inventory classification chart -->
-                                            <div class="col-md-4 col-lg-4" style="height: fit-content;">
-                                                <div class="card orders-graph">
-                                                    <div class="card-header">
-                                                        <h5 class="card-title">Moldes No Disponibles</h5>
-                                                    </div>
-                                                    <div class="card-body pt-2">
-                                                        <div class="chart-container">
-                                                            <!-- <canvas id="chartTimeProcessProducts"></canvas> -->
-                                                            <canvas id="moldUnavailable"></canvas>
+                                                    <!-- Begin Inventory classification chart -->
+                                                    <div class="col-md-4 col-lg-4" style="height: fit-content;">
+                                                        <div class="card orders-graph">
+                                                            <div class="card-header">
+                                                                <h5 class="card-title">Moldes No Disponibles</h5>
+                                                            </div>
+                                                            <div class="card-body pt-2">
+                                                                <div class="chart-container">
+                                                                    <!-- <canvas id="chartTimeProcessProducts"></canvas> -->
+                                                                    <canvas id="moldUnavailable"></canvas>
+                                                                </div>
+                                                            </div>
                                                         </div>
                                                     </div>
+
+                                                    <!-- End total revenue chart -->
+                                                </div>
+                                                <div class="row">
+                                                    <div class="col-md-4 col-lg-4" style="height: fit-content;">
+                                                        <div class="card orders-graph">
+                                                            <div class="card-header">
+                                                                <h5 class="card-title">Rotación Inventario ABC</h5>
+                                                            </div>
+                                                            <div class="card-body pt-2">
+                                                                <div class="chart-container">
+                                                                    <!-- <canvas id="chartTimeProcessProducts"></canvas> -->
+                                                                    <canvas id="chartClasificationABC"></canvas>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-md-4 col-lg-8" style="height: fit-content;">
+                                                        <div class="card orders-graph">
+                                                            <div class="card-header">
+                                                                <h5 class="card-title">Clientes con mayor número de pedidos</h5>
+                                                            </div>
+                                                            <div class="card-body pt-2">
+                                                                <div class="chart-container">
+                                                                    <!-- <canvas id="chartTimeProcessProducts"></canvas> -->
+                                                                    <canvas id="chartOrdersClients"></canvas>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+
                                                 </div>
                                             </div>
-
-                                            <!-- End total revenue chart -->
                                         </div>
-                                        <div class="row">
-                                            <div class="col-md-4 col-lg-4" style="height: fit-content;">
-                                                <div class="card orders-graph">
-                                                    <div class="card-header">
-                                                        <h5 class="card-title">Rotación Inventario ABC</h5>
-                                                    </div>
-                                                    <div class="card-body pt-2">
-                                                        <div class="chart-container">
-                                                            <!-- <canvas id="chartTimeProcessProducts"></canvas> -->
-                                                            <canvas id="chartClasificationABC"></canvas>
-                                                        </div>
-                                                    </div>
+
+                                        <!-- Begin total orders vs clients chart -->
+                                        <div class="col-md-4 col-lg-9" style="height: fit-content;">
+                                            <div class="card">
+                                                <div class="card-header">
+                                                    <h5 class="card-title"> </h5>
+                                                </div>
+                                                <div class="card-body pt-2">
+                                                    <canvas id="chartProductsCost"></canvas>
                                                 </div>
                                             </div>
-                                            <div class="col-md-4 col-lg-8" style="height: fit-content;">
-                                                <div class="card orders-graph">
-                                                    <div class="card-header">
-                                                        <h5 class="card-title">Clientes con mayor número de pedidos</h5>
-                                                    </div>
-                                                    <div class="card-body pt-2">
-                                                        <div class="chart-container">
-                                                            <!-- <canvas id="chartTimeProcessProducts"></canvas> -->
-                                                            <canvas id="chartOrdersClients"></canvas>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </div>
-
-                                        </div>
-                                    </div>
-                                </div>
-
-                                <!-- Begin total orders vs clients chart -->
-                                <div class="col-md-4 col-lg-9" style="height: fit-content;">
-                                    <div class="card">
-                                        <div class="card-header">
-                                            <h5 class="card-title"> </h5>
-                                        </div>
-                                        <div class="card-body pt-2">
-                                            <canvas id="chartProductsCost"></canvas>
                                         </div>
                                     </div>
                                 </div>
