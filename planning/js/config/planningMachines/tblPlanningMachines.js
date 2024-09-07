@@ -38,7 +38,7 @@ $(document).ready(function () {
         },
       },
       {
-        title: "Máquina",
+        title: "Máquina/Proceso Manual",
         data: "machine",
         className: "uniqueClassName dt-head-center",
       },
