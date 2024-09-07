@@ -20,7 +20,7 @@ class DashboardProgrammingDao
     {
         $connection = Connection::getInstance()->getConnection();
 
-        $sql = "SELECT p.process, m.machine, COUNT(pp.id_operator) AS total_operadores
+        $sql = "SELECT p.process, m.machine, COUNT(pp.id_plan_payroll) AS total_operadores
                 FROM plan_payroll pp
                 INNER JOIN process p ON pp.id_process = p.id_process
                 INNER JOIN machines m ON pp.id_machine = m.id_machine
