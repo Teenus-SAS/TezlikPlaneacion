@@ -219,15 +219,12 @@ if (sizeof($_SESSION) == 0)
                                 </div>
                             </div>
                             <div class="col-12 cardDashboardProgramming" style="display: none;">
-                                <div class="card">
-                                    <div class="card-body">
+                                <!-- Begin indicators and Graph Programation -->
 
-                                        <!-- Begin indicators and Graph Programation -->
-
-                                        <div class="page-content-wrapper mt-3">
-                                            <div class="container-fluid">
-                                                <!-- Widget  -->
-                                                <!-- <div class="row">
+                                <div class="page-content-wrapper mt-3">
+                                    <div class="container-fluid">
+                                        <!-- Widget  -->
+                                        <!-- <div class="row">
                                                     <div class="col-md-6 col-xl-3">
                                                         <div class="card">
                                                             <div class="card-body">
@@ -301,247 +298,95 @@ if (sizeof($_SESSION) == 0)
                                                         </div>
                                                     </div>
                                                 </div> -->
-                                                <!-- Row 2-->
-                                                <div class="row align-items-stretch">
-                                                    <!-- <div class="col-md-4 col-lg-3">
-                                <div class="card">
-                                    <div class="card-header">
-                                        <h5 class="card-title">Clasificación Inventarios</h5>
-                                    </div>
-                                    <div class="card-body p-0">
-                                        <ul class="list-group list-group-flush">
-                                            <li class="list-group-item py-4">
-                                                <div class="media">
-                                                    <div class="media-body">
-                                                        <p class="text-muted mb-2">Tipo A</p>
-                                                        <h4 class="mb-0" id="productsSold"></h4>
-                                                    </div>
-                                                    <div class="avatar avatar-md bg-info mr-0 align-self-center">
-                                                        <i class="bx bx-layer fs-lg"></i>
-                                                    </div>
-                                                </div>
-                                            </li>
-                                            <li class="list-group-item py-4">
-                                                <div class="media">
-                                                    <div class="media-body">
-                                                        <p class="text-muted mb-2">Tipo B</p>
-                                                        <h4 class="mb-0" id="salesRevenue"></h4>
-                                                    </div>
-                                                    <div class="avatar avatar-md bg-primary mr-0 align-self-center">
-                                                        <i class="bx bx-bar-chart-alt fs-lg"></i>
-                                                    </div>
-                                                </div>
-                                            </li>
-                                            <li class="list-group-item py-4">
-                                                <div class="media">
-                                                    <div class="media-body">
-                                                        <p class="text-muted mb-2">Tipo C</p>
-                                                        <h4 class="mb-0" id="profitabilityAverage"></h4>
-                                                    </div>
-                                                    <div class="avatar avatar-md bg-success mr-0 align-self-center">
-                                                        <i class="bx bx-chart fs-lg"></i>
-                                                    </div>
-                                                </div>
-                                            </li>
-                                        </ul>
-                                    </div>
-                                </div>
-                            </div> -->
+                                        <!-- Row 2-->
+                                        <div class="row align-items-stretch">
 
-                                                    <!-- Begin total orders vs clients chart -->
-                                                    <div class="col-md-4 col-lg-8">
-                                                        <div class="card orders-graph">
-                                                            <div class="card-header">
-                                                                <h5 class="card-title">Personal Disponible y Requerido</h5>
-                                                            </div>
-                                                            <div class="card-body pt-2">
-                                                                <div class="chart-container">
-                                                                    <!-- <canvas id="chartTimeProcessProducts"></canvas> -->
-                                                                    <canvas id="staffAvailableChart"></canvas>
-                                                                </div>
-                                                            </div>
+                                            <!-- Begin total orders vs clients chart -->
+                                            <div class="col-md-4 col-lg-4">
+                                                <div class="card orders-graph">
+                                                    <div class="card-header">
+                                                        <h5 class="card-title">Personal Disponible y Requerido</h5>
+                                                    </div>
+                                                    <div class="card-body pt-2">
+                                                        <div class="chart-container">
+                                                            <!-- <canvas id="chartTimeProcessProducts"></canvas> -->
+                                                            <canvas id="staffAvailableChart"></canvas>
                                                         </div>
                                                     </div>
+                                                </div>
+                                            </div>
 
-                                                    <!-- Begin OC chart -->
-                                                    <div class="col-md-4 col-lg-4" style="height: fit-content;">
-                                                        <div class="card orders-graph">
-                                                            <div class="card-header">
-                                                                <h5 class="card-title">Disponibilidad de Máquinas</h5>
-                                                            </div>
-                                                            <div class="card-body pt-2">
-                                                                <div class="chart-container">
-                                                                    <!-- <canvas id="chartTimeProcessProducts"></canvas> -->
-                                                                    <canvas id="chartMachinesAvailable"></canvas>
-                                                                </div>
-                                                            </div>
+                                            <!-- Begin OC chart -->
+                                            <div class="col-md-4 col-lg-4" style="height: fit-content;">
+                                                <div class="card orders-graph">
+                                                    <div class="card-header">
+                                                        <h5 class="card-title">Disponibilidad de Máquinas</h5>
+                                                    </div>
+                                                    <div class="card-body pt-2">
+                                                        <div class="chart-container">
+                                                            <!-- <canvas id="chartTimeProcessProducts"></canvas> -->
+                                                            <canvas id="chartMachinesAvailable"></canvas>
                                                         </div>
                                                     </div>
-                                                    <!-- Begin Inventory classification chart -->
-                                                    <div class="col-md-4 col-lg-3" style="height: fit-content;">
-                                                        <div class="card orders-graph">
-                                                            <div class="card-header">
-                                                                <h5 class="card-title">Entregas a tiempo</h5>
-                                                            </div>
-                                                            <div class="card-body pt-2">
-                                                                <div class="chart-container">
-                                                                    <!-- <canvas id="chartTimeProcessProducts"></canvas> -->
-                                                                    <canvas id="onTimeDeliveryChart"></canvas>
-                                                                </div>
-                                                            </div>
+                                                </div>
+                                            </div>
+                                            <!-- Begin Inventory classification chart -->
+                                            <div class="col-md-4 col-lg-4" style="height: fit-content;">
+                                                <div class="card orders-graph">
+                                                    <div class="card-header">
+                                                        <h5 class="card-title">Moldes No Disponibles</h5>
+                                                    </div>
+                                                    <div class="card-body pt-2">
+                                                        <div class="chart-container">
+                                                            <!-- <canvas id="chartTimeProcessProducts"></canvas> -->
+                                                            <canvas id="moldUnavailable"></canvas>
                                                         </div>
                                                     </div>
-                                                    <!-- <div class="col-md-4 col-lg-3">
-                                <div class="card">
-                                    <div class="card-header">
-                                        <h5 class="card-title">Tiempos Fabricación (Prom)</h5>
-                                    </div>
-                                    <div class="card-body p-0">
-                                        <ul class="list-group list-group-flush">
-                                            <li class="list-group-item py-4">
-                                                <div class="media">
-                                                    <div class="media-body">
-                                                        <p class="text-muted mb-2">Alistamiento</p>
-                                                        <h4 class="mb-0 number" id="enlistmentTime"></h4>
-                                                    </div>
-                                                    <div class="avatar avatar-md bg-info mr-0 align-self-center">
-                                                        <i class="bx bxs-time fs-lg"></i>
-                                                    </div>
-                                                </div>
-                                            </li>
-                                            <li class="list-group-item py-4">
-                                                <div class="media">
-                                                    <div class="media-body">
-                                                        <p class="text-muted mb-2">Operación</p>
-                                                        <h4 class="mb-0 number" id="operationTime"></h4>
-                                                    </div>
-                                                    <div class="avatar avatar-md bg-primary mr-0 align-self-center">
-                                                        <i class="bx bxs-time-five fs-lg"></i>
-                                                    </div>
-                                                </div>
-                                            </li>
-                                            <li class="list-group-item py-4">
-                                                <div class="media">
-                                                    <div class="media-body">
-                                                        <p class="text-muted mb-2">Tiempo Total Promedio</p>
-                                                        <h4 class="mb-0" id="averageTotalTime"></h4>
-                                                    </div>
-                                                    <div class="avatar avatar-md bg-danger mr-0 align-self-center">
-                                                        <i class='bx bx-error-circle fs-lg'></i>
-                                                    </div>
-                                                </div>
-                                            </li>
-                                        </ul>
-                                    </div>
-                                </div>
-                            </div> -->
-                                                    <!-- End total revenue chart -->
-                                                </div>
-                                                <div class="row">
-                                                    <div class="col-md-4 col-lg-4" style="height: fit-content;">
-                                                        <div class="card orders-graph">
-                                                            <div class="card-header">
-                                                                <h5 class="card-title">Rotación Inventario ABC</h5>
-                                                            </div>
-                                                            <div class="card-body pt-2">
-                                                                <div class="chart-container">
-                                                                    <!-- <canvas id="chartTimeProcessProducts"></canvas> -->
-                                                                    <canvas id="chartClasificationABC"></canvas>
-                                                                </div>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                    <div class="col-md-4 col-lg-8" style="height: fit-content;">
-                                                        <div class="card orders-graph">
-                                                            <div class="card-header">
-                                                                <h5 class="card-title">Clientes con mayor número de pedidos</h5>
-                                                            </div>
-                                                            <div class="card-body pt-2">
-                                                                <div class="chart-container">
-                                                                    <!-- <canvas id="chartTimeProcessProducts"></canvas> -->
-                                                                    <canvas id="chartOrdersClients"></canvas>
-                                                                </div>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                    <!-- <div class="col-lg-4">
-                                <div class="card">
-                                    <div class="card-header">
-                                        <h5 class="card-title">Costo Mano de Obra (Min)</h5>
-                                    </div>
-                                    <div class="card-body">
-                                        <div class="chart-container">
-                                            <canvas id="chartWorkForceGeneral"></canvas>
-                                            <div class="center-text">
-                                                <p class="text-muted mb-1 font-weight-600">Total Costo </p>
-                                                <h4 class="mb-0 font-weight-bold" id="totalCostWorkforce"></h4>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="col-lg-4">
-                                <div class="card">
-                                    <div class="card-header">
-                                        <h5 class="card-title">Costo Carga Fabril</h5>
-                                    </div>
-                                    <div class="card-body">
-                                        <div class="chart-container">
-                                            <canvas id="chartFactoryLoadCost"></canvas>
-                                            <div class="center-text">
-                                                <p class="text-muted mb-1 font-weight-600">Tiempo Total</p>
-                                                <h4 class="mb-0 font-weight-bold" id="factoryLoadCost"></h4>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div> -->
-                                                    <!-- </div> -->
-                                                    <!-- <div class="row"> -->
-                                                    <!-- <div class="col-lg-4">
-                                <div class="card">
-                                    <div class="card-header">
-                                        <h5 class="card-title">Gastos Generales</h5>
-                                    </div>
-                                    <div class="card-body pt-2">
-                                        <div class="chart-container">
-                                            <canvas id="chartExpensesGenerals"></canvas>
-                                            <div class="center-text">
-                                                <p class="text-muted mb-1 font-weight-600">Total Gastos </p>
-                                                <h4 class="mb-0 font-weight-bold" id="totalCost"></h4>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="col-lg-12" style="height: fit-content;">
-                                <div class=" card">
-                                    <div class="card-header">
-                                        <h5 class="card-title">Tiempo Total de Fabricación por Producto (min)</h5>
-                                    </div>
-                                    <div class="card-body pt-2">
-                                        <canvas id="chartTimeProcessProducts"></canvas>
-                                        <div class="center-text">
-                                            <p class="text-muted mb-1 font-weight-600"></p>
-                                            <h4 class="mb-0 font-weight-bold"></h4>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div> -->
                                                 </div>
                                             </div>
-                                        </div>
 
-                                        <!-- Begin total orders vs clients chart -->
-                                        <div class="col-md-4 col-lg-9" style="height: fit-content;">
-                                            <div class="card">
-                                                <div class="card-header">
-                                                    <h5 class="card-title"> </h5>
-                                                </div>
-                                                <div class="card-body pt-2">
-                                                    <canvas id="chartProductsCost"></canvas>
+                                            <!-- End total revenue chart -->
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-md-4 col-lg-4" style="height: fit-content;">
+                                                <div class="card orders-graph">
+                                                    <div class="card-header">
+                                                        <h5 class="card-title">Rotación Inventario ABC</h5>
+                                                    </div>
+                                                    <div class="card-body pt-2">
+                                                        <div class="chart-container">
+                                                            <!-- <canvas id="chartTimeProcessProducts"></canvas> -->
+                                                            <canvas id="chartClasificationABC"></canvas>
+                                                        </div>
+                                                    </div>
                                                 </div>
                                             </div>
+                                            <div class="col-md-4 col-lg-8" style="height: fit-content;">
+                                                <div class="card orders-graph">
+                                                    <div class="card-header">
+                                                        <h5 class="card-title">Clientes con mayor número de pedidos</h5>
+                                                    </div>
+                                                    <div class="card-body pt-2">
+                                                        <div class="chart-container">
+                                                            <!-- <canvas id="chartTimeProcessProducts"></canvas> -->
+                                                            <canvas id="chartOrdersClients"></canvas>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!-- Begin total orders vs clients chart -->
+                                <div class="col-md-4 col-lg-9" style="height: fit-content;">
+                                    <div class="card">
+                                        <div class="card-header">
+                                            <h5 class="card-title"> </h5>
+                                        </div>
+                                        <div class="card-body pt-2">
+                                            <canvas id="chartProductsCost"></canvas>
                                         </div>
                                     </div>
                                 </div>
