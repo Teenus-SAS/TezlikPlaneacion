@@ -4,8 +4,13 @@ const indicatorsGlobal = async () => {
       url: `/api/dashboardIndicators`,
     });
 
-    const { productsOutStock, ordersNoProgramed, OrdersNoMP, percentage_dispatch } =
-      response;
+    const {
+      productsOutStock,
+      mpOutStock,
+      ordersNoProgramed,
+      OrdersNoMP,
+      percentage_dispatch,
+    } = response;
 
     const formatPercentage = (value) =>
       value !== undefined ? value.toFixed(2).replace(".", ",") : "0";
@@ -13,13 +18,19 @@ const indicatorsGlobal = async () => {
     // Formatear los valores
     const formattedValues = {
       productsOutStock: formatPercentage(productsOutStock),
+      mpOutStock: formatPercentage(mpOutStock),
       ordersNoProgramed: formatPercentage(ordersNoProgramed),
       OrdersNoMP: formatPercentage(OrdersNoMP),
       OrdersDelivered: formatPercentage(percentage_dispatch),
     };
 
     // Actualizar el DOM
-    $("#productStockout").text(`${formattedValues.productsOutStock}% | ${response.totalProducts}`);
+    $("#productStockout").text(
+      `${response.totalProducts} | ${formattedValues.productsOutStock}%`
+    );
+    $("#productStockout").text(
+      `${response.totalMPLowStock} | ${formattedValues.percentageMPLowStock}%`
+    );
     $("#ordersNoProgramed").text(`${formattedValues.ordersNoProgramed}%`);
     $("#ordersNoMP").text(`${formattedValues.OrdersNoMP}%`);
     $("#ordersDelivered").text(`${formattedValues.OrdersDelivered}%`);

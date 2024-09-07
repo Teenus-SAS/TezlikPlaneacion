@@ -43,14 +43,17 @@ class DashboardGeneralDao
         $percent = $stmt->fetch($connection::FETCH_ASSOC);
         return $percent;
     }
-    
+
     public function findMPOutOfStock($id_company)
     {
         $connection = Connection::getInstance()->getConnection();
-        $sql = "SELECT (COUNT(CASE WHEN pi.quantity = 0 THEN 1 END) * 100.0 / COUNT(*)) AS MPOutStock,
-                    COUNT(*) AS totalProducts
-                FROM products_inventory pi
-                WHERE id_company = :id_company";
+        $sql = "SELECT 
+                    COUNT(CASE WHEN (mi.quantity - mi.reserved) < mi.minimum_stock THEN 1 END) AS totalMPLowStock,
+                    COUNT(*) AS total_materiales,
+                    (COUNT(CASE WHEN (mi.quantity - mi.reserved) < mi.minimum_stock THEN 1 END) / COUNT(*)) * 100 AS percentageMPLowStock
+                FROM materials_inventory mi
+                INNER JOIN materials m ON mi.id_material = m.id_material
+                WHERE m.id_company = :id_company";
         $stmt = $connection->prepare($sql);
         $stmt->execute(['id_company' => $id_company]);
         $percent = $stmt->fetch($connection::FETCH_ASSOC);

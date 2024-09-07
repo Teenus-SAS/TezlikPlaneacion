@@ -81,7 +81,7 @@ if (sizeof($_SESSION) == 0)
                                         <div class="media align-items-center">
                                             <div class="media-body">
                                                 <span class="text-muted text-uppercase font-size-12 font-weight-bold">Materia Prima Agotada</span>
-                                                <h2 class="mb-0 mt-1 text-danger" id="MPStockout"></h2>
+                                                <h2 class="mb-0 mt-1 text-danger" id="mpOutStock"></h2>
                                             </div>
                                             <div class="text-center">
                                                 <div id="t-rev"></div>
