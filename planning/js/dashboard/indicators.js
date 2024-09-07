@@ -28,7 +28,7 @@ const indicatorsGlobal = async () => {
     $("#productStockout").text(
       `${response.totalProducts} | ${formattedValues.productsOutStock}%`
     );
-    $("#productStockout").text(
+    $("#mpOutStock").text(
       `${response.totalMPLowStock} | ${formattedValues.mpOutStock}%`
     );
     $("#ordersNoProgramed").text(`${formattedValues.ordersNoProgramed}%`);
