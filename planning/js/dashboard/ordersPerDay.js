@@ -10,7 +10,7 @@ $(document).ready(function () {
         const days = data.map((order) => order.day);
         const totalOrders = data.map((order) => order.total_orders);
 
-        GraphOrdersPerDay(days, totalOrders);
+        ChartOrdersPerDay(days, totalOrders);
       });
   }, 1000);
 
@@ -31,7 +31,10 @@ $(document).ready(function () {
   };
 });
 
-const GraphOrdersPerDay = (days, totalOrders) => {
+const ChartOrdersPerDay = (days, totalOrders) => {
+  // Obtener el valor máximo del conjunto de datos
+  const maxOrder = Math.max(...totalOrders);
+
   // Crear el gráfico de líneas
   const ctx = document.getElementById("chartOrdersxDay").getContext("2d");
   const ordersChart = new Chart(ctx, {
@@ -40,7 +43,7 @@ const GraphOrdersPerDay = (days, totalOrders) => {
       labels: days, // Eje X: días
       datasets: [
         {
-          label: "Órdenes por día",
+          label: "Pedidos por día",
           data: totalOrders, // Eje Y: total de órdenes
           borderColor: "rgba(75, 192, 192, 1)",
           backgroundColor: "rgba(75, 192, 192, 0.2)",
@@ -54,18 +57,48 @@ const GraphOrdersPerDay = (days, totalOrders) => {
       scales: {
         x: {
           title: {
-            display: true,
+            display: false,
             text: "Día",
           },
         },
         y: {
           beginAtZero: true,
+          max: maxOrder + 1, // Ajusta el eje Y a un punto por encima del dato máximo
           title: {
-            display: true,
-            text: "Órdenes",
+            display: false,
+            text: "Pedidos",
+          },
+        },
+      },
+      plugins: {
+        legend: {
+          display: false,
+        },
+        datalabels: {
+          display: true, // Habilitar las etiquetas
+          color: "black",
+          anchor: "end", // Anclar la etiqueta al final del punto
+          align: "top", // Alinear la etiqueta por encima del punto
+          font: {
+            size: 12,
+          },
+          formatter: function (value) {
+            // Personalizar el formato de las etiquetas
+            return value.toFixed(0); // Mostrar el valor como entero
+          },
+        },
+        tooltip: {
+          mode: "index", // Asegurarse de que solo se muestre una tooltip por punto
+          intersect: false, // Permite mostrar la tooltip incluso si el cursor no está exactamente sobre el punto
+          callbacks: {
+            label: function (context) {
+              // Personalizar el formato de la tooltip
+              return "Pedidos: " + context.parsed.y.toFixed(0);
+            },
           },
         },
       },
     },
+    plugins: [ChartDataLabels], // Añadir el plugin de etiquetas
   });
 };

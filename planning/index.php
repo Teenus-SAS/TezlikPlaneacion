@@ -99,7 +99,7 @@ if (sizeof($_SESSION) == 0)
                                         <div class="media align-items-center">
                                             <div class="media-body">
                                                 <span class="text-muted text-uppercase font-size-12 font-weight-bold">Pedidos No Programados</span>
-                                                <h2 class="mb-0 mt-1 text-danger" id="ordersNoProgramed"></h2>
+                                                <h2 class="mb-0 mt-1 text-warning" id="ordersNoProgramed"></h2>
                                             </div>
                                             <div class="text-center">
                                                 <div id="t-rev"></div>
@@ -116,8 +116,8 @@ if (sizeof($_SESSION) == 0)
                                     <div class="card-body">
                                         <div class="media align-items-center">
                                             <div class="media-body">
-                                                <span class="text-muted text-uppercase font-size-12 font-weight-bold">Pedidos Sin MP</span>
-                                                <h2 class="mb-0 mt-1 text-info" id="ordersNoMP"></h2>
+                                                <span class="text-muted text-uppercase font-size-12 font-weight-bold">Pedidos Sin MP Completa</span>
+                                                <h2 class="mb-0 mt-1 text-danger" id="ordersNoMP"></h2>
                                             </div>
                                             <div class="text-center">
                                                 <div id="t-order"></div>
