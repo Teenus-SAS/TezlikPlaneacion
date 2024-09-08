@@ -80,7 +80,7 @@ if (sizeof($_SESSION) == 0)
                                     <div class="card-body">
                                         <div class="media align-items-center">
                                             <div class="media-body">
-                                                <span class="text-muted text-uppercase font-size-12 font-weight-bold">Materia Prima Agotada</span>
+                                                <span class="text-muted text-uppercase font-size-12 font-weight-bold">MP Agotada</span>
                                                 <h2 class="mb-0 mt-1 text-danger" id="mpOutStock"></h2>
                                             </div>
                                             <div class="text-center">
@@ -116,7 +116,7 @@ if (sizeof($_SESSION) == 0)
                                     <div class="card-body">
                                         <div class="media align-items-center">
                                             <div class="media-body">
-                                                <span class="text-muted text-uppercase font-size-12 font-weight-bold">Pedidos Sin Materia Prima</span>
+                                                <span class="text-muted text-uppercase font-size-12 font-weight-bold">Pedidos Sin MP</span>
                                                 <h2 class="mb-0 mt-1 text-info" id="ordersNoMP"></h2>
                                             </div>
                                             <div class="text-center">
