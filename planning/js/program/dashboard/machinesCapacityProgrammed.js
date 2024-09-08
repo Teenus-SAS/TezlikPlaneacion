@@ -24,61 +24,65 @@ $(document).ready(function () {
     return color;
   };
 });
-
+chartMachineCapacityProgrammed;
 const ChartMachinesCapacityProgrammed = (data) => {
   //Obtener labels y valores
-  const labels = data.map((item) => `${item.machine}`);
-  const values = data.map((item) => item.total_minutes);
+  const machineNames = data.map((item) => `${item.machine_name}`);
+  const capacityHours = data.map((item) => item.monthly_capacity_hours);
+  const programmedHours = data.map((item) => item.total_programmed_hours);
 
   //Graficar
-  const ctx = document
-    .getElementById("chartMachineCapacityProgrammed")
-    .getContext("2d");
-  const machineMinutesChart = new Chart(ctx, {
+  // Crear el gráfico de barras apiladas
+  const ctx = document.getElementById("chartMachineCapacityProgrammed").getContext("2d");
+  const capacityChart = new Chart(ctx, {
     type: "bar",
     data: {
-      labels: labels, // Nombres de las máquinas
+      labels: machineNames, // Nombres de las máquinas en el eje X
       datasets: [
         {
-          label: "Total Minutes",
-          data: values, // Minutos por máquina
-          backgroundColor: [
-            "rgba(75, 192, 192, 0.2)",
-            "rgba(153, 102, 255, 0.2)",
-            "rgba(255, 159, 64, 0.2)",
-            "rgba(54, 162, 235, 0.2)",
-          ],
-          borderColor: [
-            "rgba(75, 192, 192, 1)",
-            "rgba(153, 102, 255, 1)",
-            "rgba(255, 159, 64, 1)",
-            "rgba(54, 162, 235, 1)",
-          ],
+          label: "Capacidad Total Mensual (Horas)", // Etiqueta para la capacidad total mensual
+          data: capacityHours, // Datos de capacidad total mensual
+          backgroundColor: "rgba(75, 192, 192, 0.8)", // Azul para la capacidad total
+          borderColor: "rgba(75, 192, 192, 1)",
+          borderWidth: 1,
+        },
+        {
+          label: "Capacidad Programada (Horas)", // Etiqueta para la capacidad programada
+          data: programmedHours, // Datos de capacidad programada
+          backgroundColor: "rgba(255, 205, 86, 0.8)", // Amarillo para la capacidad programada
+          borderColor: "rgba(255, 205, 86, 1)",
           borderWidth: 1,
         },
       ],
     },
     options: {
-      maintainAspectRatio: false,
       scales: {
+        x: {
+          stacked: true, // Apilamiento en el eje X
+          title: {
+            display: true,
+            text: "Máquinas",
+          },
+        },
         y: {
+          stacked: true, // Apilamiento en el eje Y
           beginAtZero: true,
+          title: {
+            display: true,
+            text: "Horas",
+          },
         },
       },
       plugins: {
         legend: {
-          display: false, // Oculta la leyenda
+          display: true, // Mostrar la leyenda
+          position: "top", // Colocar la leyenda arriba
         },
-        datalabels: {
-          anchor: "center",
-          align: "center",
-          color: "black",
-          font: {
-            size: 12,
-            weight: "bold",
-          },
-          formatter: function (value) {
-            return value; // Mostrar el valor en el centro de la barra
+        tooltip: {
+          callbacks: {
+            label: function (tooltipItem) {
+              return tooltipItem.raw + " horas"; // Mostrar el valor en horas en el tooltip
+            },
           },
         },
       },

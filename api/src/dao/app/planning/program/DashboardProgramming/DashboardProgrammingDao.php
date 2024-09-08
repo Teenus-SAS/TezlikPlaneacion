@@ -52,10 +52,25 @@ class DashboardProgrammingDao
     {
         $connection = Connection::getInstance()->getConnection();
 
-        $sql = "SELECT m.machine, SUM(p.min_programming) AS total_minutes
-                FROM programming p
-                JOIN machines m ON p.id_machine = m.id_machine
-                WHERE p.id_company = :id_company
+        $sql = "SELECT m.machine AS machine_name, (pp.hours_day * 
+                    CASE 
+                        WHEN MONTH(CURDATE()) = 1 THEN pp.january
+                        WHEN MONTH(CURDATE()) = 2 THEN pp.february
+                        WHEN MONTH(CURDATE()) = 3 THEN pp.march
+                        WHEN MONTH(CURDATE()) = 4 THEN pp.april
+                        WHEN MONTH(CURDATE()) = 5 THEN pp.may
+                        WHEN MONTH(CURDATE()) = 6 THEN pp.june
+                        WHEN MONTH(CURDATE()) = 7 THEN pp.july
+                        WHEN MONTH(CURDATE()) = 8 THEN pp.august
+                        WHEN MONTH(CURDATE()) = 9 THEN pp.september
+                        WHEN MONTH(CURDATE()) = 10 THEN pp.october
+                        WHEN MONTH(CURDATE()) = 11 THEN pp.november
+                        WHEN MONTH(CURDATE()) = 12 THEN pp.december
+                    END) AS monthly_capacity_hours, -- Capacidad mensual en horas
+                    COALESCE(SUM(p.min_programming) / 60, 0) AS total_programmed_hours -- Capacidad programada en horas
+                FROM machines m
+                LEFT JOIN plan_program_machines pp ON m.id_machine = pp.id_machine
+                LEFT JOIN programming p ON m.id_machine = p.id_machine AND p.id_company = :id_company
                 GROUP BY m.machine;";
         $stmt = $connection->prepare($sql);
         $stmt->execute(['id_company' => $id_company]);
