@@ -44,17 +44,17 @@ const ChartMachinesCapacityProgrammed = (data) => {
       labels: machineNames, // Nombres de las máquinas en el eje X
       datasets: [
         {
-          label: "Capacidad Total Mensual (Horas)", // Etiqueta para la capacidad total mensual
-          data: capacityHours, // Datos de capacidad total mensual
-          backgroundColor: "rgba(75, 192, 192, 0.8)", // Azul para la capacidad total
-          borderColor: "rgba(75, 192, 192, 1)",
-          borderWidth: 1,
-        },
-        {
           label: "Capacidad Programada (Horas)", // Etiqueta para la capacidad programada
           data: programmedHours, // Datos de capacidad programada
           backgroundColor: "rgba(255, 205, 86, 0.8)", // Amarillo para la capacidad programada
           borderColor: "rgba(255, 205, 86, 1)",
+          borderWidth: 1,
+        },
+        {
+          label: "Capacidad Total Mensual (Horas)", // Etiqueta para la capacidad total mensual
+          data: capacityHours, // Datos de capacidad total mensual
+          backgroundColor: "rgba(75, 192, 192, 0.8)", // Azul para la capacidad total
+          borderColor: "rgba(75, 192, 192, 1)",
           borderWidth: 1,
         },
       ],
