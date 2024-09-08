@@ -33,7 +33,9 @@ const ChartMachinesCapacityProgrammed = (data) => {
 
   //Graficar
   // Crear el gráfico de barras apiladas
-  const ctx = document.getElementById("chartMachineCapacityProgrammed").getContext("2d");
+  const ctx = document
+    .getElementById("chartMachineCapacityProgrammed")
+    .getContext("2d");
   const capacityChart = new Chart(ctx, {
     type: "bar",
     data: {
@@ -56,6 +58,7 @@ const ChartMachinesCapacityProgrammed = (data) => {
       ],
     },
     options: {
+      maintainAspectRatio: false,
       scales: {
         x: {
           stacked: true, // Apilamiento en el eje X
