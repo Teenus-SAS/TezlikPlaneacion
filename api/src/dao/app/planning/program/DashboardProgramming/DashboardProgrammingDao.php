@@ -70,7 +70,8 @@ class DashboardProgrammingDao
                     COALESCE(SUM(p.min_programming) / 60, 0) AS total_programmed_hours -- Capacidad programada en horas
                 FROM machines m
                 LEFT JOIN plan_program_machines pp ON m.id_machine = pp.id_machine
-                LEFT JOIN programming p ON m.id_machine = p.id_machine AND p.id_company = :id_company
+                LEFT JOIN programming p ON m.id_machine = p.id_machine 
+                WHERE m.id_company = :id_company
                 GROUP BY m.machine;";
         $stmt = $connection->prepare($sql);
         $stmt->execute(['id_company' => $id_company]);
