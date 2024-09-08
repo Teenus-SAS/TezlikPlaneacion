@@ -359,7 +359,7 @@ if (sizeof($_SESSION) == 0)
                                                             <div class="card-body pt-2">
                                                                 <div class="chart-container">
                                                                     <!-- <canvas id="chartTimeProcessProducts"></canvas> -->
-                                                                    <canvas id="chartCapacityPerMachine"></canvas>
+                                                                    <canvas id="chartMachineCapacityProgrammed"></canvas>
                                                                 </div>
                                                             </div>
                                                         </div>

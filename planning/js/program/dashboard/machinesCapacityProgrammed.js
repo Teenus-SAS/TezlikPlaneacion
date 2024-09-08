@@ -31,7 +31,7 @@ const ChartMachinesCapacityProgrammed = (data) => {
   const values = data.map((item) => item.total_minutes);
 
   //Graficar
-  const ctx = document.getElementById("machineMinutesChart").getContext("2d");
+  const ctx = document.getElementById("chartMachineCapacityProgrammed").getContext("2d");
   const machineMinutesChart = new Chart(ctx, {
     type: "bar",
     data: {
