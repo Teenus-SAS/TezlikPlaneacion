@@ -26,3 +26,13 @@ $app->get('/machinesAvailable', function (Request $request, Response $response, 
     $response->getBody()->write(json_encode($machinesAvailable, JSON_NUMERIC_CHECK));
     return $response->withHeader('Content-Type', 'application/json');
 });
+
+$app->get('/machinesCapacityProgrammed', function (Request $request, Response $response, $args) use ($dashboardProgrammingDao) {
+    session_start();
+    $id_company = $_SESSION['id_company'];
+
+    $machinesCapacityProgrammed = $dashboardProgrammingDao->findMachinesCapacityProgrammedByCompany($id_company);
+
+    $response->getBody()->write(json_encode($machinesCapacityProgrammed, JSON_NUMERIC_CHECK));
+    return $response->withHeader('Content-Type', 'application/json');
+});

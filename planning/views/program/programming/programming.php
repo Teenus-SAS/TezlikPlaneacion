@@ -351,15 +351,15 @@ if (sizeof($_SESSION) == 0)
                                                     <!-- End total revenue chart -->
                                                 </div>
                                                 <div class="row">
-                                                    <div class="col-md-4 col-lg-4" style="height: fit-content;">
+                                                    <div class="col-md-12 col-lg-12" style="height: fit-content;">
                                                         <div class="card orders-graph">
                                                             <div class="card-header">
-                                                                <h5 class="card-title">Rotación Inventario ABC</h5>
+                                                                <h5 class="card-title">Capacidad de Producción por Máquina</h5>
                                                             </div>
                                                             <div class="card-body pt-2">
                                                                 <div class="chart-container">
                                                                     <!-- <canvas id="chartTimeProcessProducts"></canvas> -->
-                                                                    <canvas id="chartClasificationABC"></canvas>
+                                                                    <canvas id="chartCapacityPerMachine"></canvas>
                                                                 </div>
                                                             </div>
                                                         </div>

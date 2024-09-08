@@ -47,4 +47,20 @@ class DashboardProgrammingDao
         $machinesAvailable = $stmt->fetchAll($connection::FETCH_ASSOC);
         return $machinesAvailable;
     }
+
+    public function findMachinesCapacityProgrammedByCompany($id_company)
+    {
+        $connection = Connection::getInstance()->getConnection();
+
+        $sql = "SELECT m.machine, SUM(p.min_programming) AS total_minutes
+                FROM programming p
+                JOIN machines m ON p.id_machine = m.id_machine
+                WHERE p.id_company = :id_company
+                GROUP BY m.machine;";
+        $stmt = $connection->prepare($sql);
+        $stmt->execute(['id_company' => $id_company]);
+        $this->logger->info(__FUNCTION__, array('query' => $stmt->queryString, 'errors' => $stmt->errorInfo()));
+        $machinesCapacityProgrammed = $stmt->fetchAll($connection::FETCH_ASSOC);
+        return $machinesCapacityProgrammed;
+    }
 }

@@ -1,10 +1,10 @@
 $(document).ready(function () {
   setTimeout(() => {
-    fetch(`/api/staffAvailable`)
+    fetch(`/api/machinesCapacityProgrammed`)
       .then((response) => response.text())
       .then((data) => {
         data = JSON.parse(data);
-        GraphStaffAvailable(data);
+        ChartMachinesCapacityProgrammed(data);
       });
   }, 3000);
 
@@ -25,30 +25,38 @@ $(document).ready(function () {
   };
 });
 
-const GraphStaffAvailable = (data) => {
+const ChartMachinesCapacityProgrammed = (data) => {
   //Obtener labels y valores
   const labels = data.map((item) => `${item.machine}`);
-  const values = data.map((item) => item.total_operadores);
+  const values = data.map((item) => item.total_minutes);
 
-  // Configuración del gráfico
-  const ctx = document.getElementById("staffAvailableChart").getContext("2d");
-  const myChart = new Chart(ctx, {
-    plugins: [ChartDataLabels],
+  //Graficar
+  const ctx = document.getElementById("machineMinutesChart").getContext("2d");
+  const machineMinutesChart = new Chart(ctx, {
     type: "bar",
     data: {
-      labels: labels,
+      labels: labels, // Nombres de las máquinas
       datasets: [
         {
-          label: "Total Operadores",
-          data: values,
-          backgroundColor: "rgba(54, 162, 235, 0.2)",
-          borderColor: "rgba(54, 162, 235, 1)",
+          label: "Total Minutes",
+          data: values, // Minutos por máquina
+          backgroundColor: [
+            "rgba(75, 192, 192, 0.2)",
+            "rgba(153, 102, 255, 0.2)",
+            "rgba(255, 159, 64, 0.2)",
+            "rgba(54, 162, 235, 0.2)",
+          ],
+          borderColor: [
+            "rgba(75, 192, 192, 1)",
+            "rgba(153, 102, 255, 1)",
+            "rgba(255, 159, 64, 1)",
+            "rgba(54, 162, 235, 1)",
+          ],
           borderWidth: 1,
         },
       ],
     },
     options: {
-      maintainAspectRatio: false, // Para usar el tamaño del contenedor y no mantener el ratio
       scales: {
         y: {
           beginAtZero: true,
@@ -56,26 +64,18 @@ const GraphStaffAvailable = (data) => {
       },
       plugins: {
         legend: {
-          display: false,
+          display: false, // Oculta la leyenda
         },
         datalabels: {
           anchor: "center",
           align: "center",
-          offset: 2,
           color: "black",
           font: {
-            size: "12",
-            weight: "normal",
+            size: 12,
+            weight: "bold",
           },
           formatter: function (value) {
-            return value; // Agregar el símbolo de porcentaje a las etiquetas
-          },
-        },
-        tooltip: {
-          callbacks: {
-            label: function (tooltipItem) {
-              return tooltipItem.raw; // Mostrar solo el valor en el tooltip
-            },
+            return value; // Mostrar el valor en el centro de la barra
           },
         },
       },
