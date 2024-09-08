@@ -28,8 +28,14 @@ chartMachineCapacityProgrammed;
 const ChartMachinesCapacityProgrammed = (data) => {
   //Obtener labels y valores
   const machineNames = data.map((item) => `${item.machine_name}`);
-  const capacityHours = data.map((item) => item.monthly_capacity_hours);
-  const programmedHours = data.map((item) => item.total_programmed_hours);
+  const capacityHours = data.map(
+    (item) =>
+      item.monthly_capacity_hours -
+      item.total_programmed_hours / item.monthly_capacity_hours
+  );
+  const programmedHours = data.map(
+    (item) => item.total_programmed_hours / item.monthly_capacity_hours
+  );
 
   //Graficar
   // Crear el gráfico de barras apiladas
