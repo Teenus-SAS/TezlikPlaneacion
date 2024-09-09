@@ -48,14 +48,15 @@ $app->post('/productsMeasuresDataValidation', function (Request $request, Respon
 
         $dataImportProduct = [];
 
+        $debugg = [];
+
         for ($i = 0; $i < count($products); $i++) {
             if (
                 empty($products[$i]['referenceProduct']) || empty($products[$i]['product']) ||
                 empty($products[$i]['origin']) || empty($products[$i]['composite'])
             ) {
                 $i = $i + 2;
-                $dataImportProduct = array('error' => true, 'message' => "Campos vacios, fila: $i");
-                break;
+                array_push($debugg, array('error' => true, 'message' => "Campos vacios, fila: $i"));
             }
 
             if (
@@ -63,29 +64,25 @@ $app->post('/productsMeasuresDataValidation', function (Request $request, Respon
                 empty(trim($products[$i]['origin'])) || empty(trim($products[$i]['composite']))
             ) {
                 $i = $i + 2;
-                $dataImportProduct = array('error' => true, 'message' => "Campos vacios, fila: $i");
-                break;
+                array_push($debugg, array('error' => true, 'message' => "Campos vacios, fila: $i"));
             }
 
             if ($flag_products_measure == '1') {
                 if (empty($products[$i]['productType'])) {
                     $i = $i + 2;
-                    $dataImportProduct = array('error' => true, 'message' => "Campos vacios, fila: $i");
-                    break;
+                    array_push($debugg, array('error' => true, 'message' => "Campos vacios, fila: $i"));
                 }
 
                 if (empty(trim($products[$i]['productType']))) {
                     $i = $i + 2;
-                    $dataImportProduct = array('error' => true, 'message' => "Campos vacios, fila: $i");
-                    break;
+                    array_push($debugg, array('error' => true, 'message' => "Campos vacios, fila: $i"));
                 }
 
                 $findPType = $productsTypeDao->findProductsType($products[$i], $id_company);
 
                 if (!$findPType) {
                     $i = $i + 2;
-                    $dataImportProduct =  array('error' => true, 'message' => "Tipo de producto no existe en la base de datos. Fila: $i");
-                    break;
+                    array_push($debugg, array('error' => true, 'message' => "Tipo de producto no existe en la base de datos. Fila: $i"));
                 }
 
                 $origin = $products[$i]['origin'];
@@ -96,8 +93,7 @@ $app->post('/productsMeasuresDataValidation', function (Request $request, Respon
                         empty($products[$i]['usefulLength']) || empty($products[$i]['totalWidth']) || empty($products[$i]['window']) || empty($products[$i]['productType'])
                     ) {
                         $i = $i + 2;
-                        $dataImportProduct = array('error' => true, 'message' => "Campos vacios, fila: $i");
-                        break;
+                        array_push($debugg, array('error' => true, 'message' => "Campos vacios, fila: $i"));
                     }
 
                     if (
@@ -105,8 +101,7 @@ $app->post('/productsMeasuresDataValidation', function (Request $request, Respon
                         empty(trim($products[$i]['usefulLength'])) || empty(trim($products[$i]['totalWidth'])) || empty(trim($products[$i]['window'])) || empty(trim($products[$i]['productType']))
                     ) {
                         $i = $i + 2;
-                        $dataImportProduct = array('error' => true, 'message' => "Campos vacios, fila: $i");
-                        break;
+                        array_push($debugg, array('error' => true, 'message' => "Campos vacios, fila: $i"));
                     }
 
                     $data = floatval($products[$i]['width']) * floatval($products[$i]['high']) * floatval($products[$i]['length']) * floatval($products[$i]['usefulLength']) *
@@ -114,8 +109,7 @@ $app->post('/productsMeasuresDataValidation', function (Request $request, Respon
 
                     if (is_nan($data) || $data <= 0) {
                         $i = $i + 2;
-                        $dataImportProduct = array('error' => true, 'message' => "Campos vacios, fila: $i");
-                        break;
+                        array_push($debugg, array('error' => true, 'message' => "Campos vacios, fila: $i"));
                     }
                 }
             }
@@ -126,8 +120,7 @@ $app->post('/productsMeasuresDataValidation', function (Request $request, Respon
 
             if (isset($duplicateTracker[$refProduct]) || isset($duplicateTracker[$nameProduct])) {
                 $i = $i + 2;
-                $dataImportProduct =  array('error' => true, 'message' => "Duplicación encontrada en la fila: $i.<br>- Referencia: $refProduct<br>- Producto: $nameProduct");
-                break;
+                array_push($debugg, array('error' => true, 'message' => "Duplicación encontrada en la fila: $i.<br>- Referencia: $refProduct<br>- Producto: $nameProduct"));
             } else {
                 $duplicateTracker[$refProduct] = true;
                 $duplicateTracker[$nameProduct] = true;
@@ -137,15 +130,13 @@ $app->post('/productsMeasuresDataValidation', function (Request $request, Respon
 
             if (sizeof($findProduct) > 1) {
                 $i = $i + 2;
-                $dataImportProduct =  array('error' => true, 'message' => "Referencia y nombre de producto ya existente, fila: $i.<br>- Referencia: $refProduct<br>- Producto: $nameProduct");
-                break;
+                array_push($debugg, array('error' => true, 'message' => "Referencia y nombre de producto ya existente, fila: $i.<br>- Referencia: $refProduct<br>- Producto: $nameProduct"));
             }
 
             if ($findProduct) {
                 if ($findProduct[0]['product'] != $nameProduct || $findProduct[0]['reference'] != $refProduct) {
                     $i = $i + 2;
-                    $dataImportProduct =  array('error' => true, 'message' => "Referencia o nombre de producto ya existente, fila: $i.<br>- Referencia: $refProduct<br>- Producto: $nameProduct");
-                    break;
+                    array_push($debugg, array('error' => true, 'message' => "Referencia o nombre de producto ya existente, fila: $i.<br>- Referencia: $refProduct<br>- Producto: $nameProduct"));
                 }
             }
         }
@@ -153,7 +144,7 @@ $app->post('/productsMeasuresDataValidation', function (Request $request, Respon
         $insert = 0;
         $update = 0;
 
-        if (sizeof($dataImportProduct) == 0) {
+        if (sizeof($debugg) == 0) {
             for ($i = 0; $i < count($products); $i++) {
                 $findProduct = $generalProductsDao->findProduct($products[$i], $id_company);
 
@@ -168,7 +159,10 @@ $app->post('/productsMeasuresDataValidation', function (Request $request, Respon
     } else
         $dataImportProduct = array('error' => true, 'message' => 'El archivo se encuentra vacio. Intente nuevamente');
 
-    $response->getBody()->write(json_encode($dataImportProduct, JSON_NUMERIC_CHECK));
+    $data['import'] = $dataImportProduct;
+    $data['debugg'] = $debugg;
+
+    $response->getBody()->write(json_encode($data, JSON_NUMERIC_CHECK));
     return $response->withHeader('Content-Type', 'application/json');
 });
 
@@ -214,8 +208,8 @@ $app->post('/addProductMeasure', function (Request $request, Response $response,
         $products = $dataProduct['importProducts'];
 
         for ($i = 0; $i < sizeof($products); $i++) {
-            $findProduct = $generalProductsDao->findProduct($products[$i], $id_company);
-            $products[$i]['idProduct'] = $findProduct['id_product'];
+            // $findProduct = $generalProductsDao->findProduct($products[$i], $id_company);
+            // $products[$i]['idProduct'] = $findProduct['id_product'];
 
             $products[$i]['origin'] == 'COMERCIALIZADO' ? $products[$i]['origin'] = 1 : $products[$i]['origin'] = 2;
             $products[$i]['composite'] == 'SI' ? $products[$i]['composite'] = 1 : $products[$i]['composite'] = 0;
@@ -258,7 +252,7 @@ $app->post('/addProductMeasure', function (Request $request, Response $response,
         }
 
         if ($resolution == null)
-            $resp = array('success' => true, 'message' => 'Productos importadas correctamente');
+            $resp = array('success' => true, 'message' => 'Productos importados correctamente');
         else if (isset($resolution['info']))
             $resp = array('info' => true, 'message' => $resolution['message']);
         else

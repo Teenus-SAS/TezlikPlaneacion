@@ -108,7 +108,9 @@ $(document).ready(function () {
       url: '/api/productsMeasuresDataValidation',
       data: { importProducts: data },
       success: function (resp) {
-        if (resp.error == true) {
+        let arr = resp.import;
+
+        if (arr.length > 0 && arr.error == true) {
           $('.cardLoading').remove();
           $('.cardBottons').show(400);
           $('#fileProducts').val('');
@@ -116,29 +118,62 @@ $(document).ready(function () {
           $('#formImportProduct').trigger('reset');
           return false;
         }
-        bootbox.confirm({
-          title: '¿Desea continuar con la importación?',
-          message: `Se encontraron los siguientes registros:<br><br>Datos a insertar: ${resp.insert}<br>Datos a actualizar: ${resp.update}`,
-          buttons: {
-            confirm: {
-              label: 'Si',
-              className: 'btn-success',
+
+        if (resp.debugg.length > 0) {
+          $('.cardLoading').remove();
+          $('.cardBottons').show(400);
+          $('#fileProducts').val('');
+
+          // Generar el HTML para cada mensaje
+          let concatenatedMessages = resp.debugg.map(item =>
+            `<li>
+              <span class="badge badge-danger" style="font-size: 16px;">${item.message}</span>
+            </li>
+            <br>`
+          ).join('');
+
+          // Mostramos el mensaje con Bootbox
+          bootbox.alert({
+            title: 'Errores',
+            message: `
+            <div class="container">
+              <div class="col-12">
+                <ul>
+                  ${concatenatedMessages}
+                </ul>
+              </div> 
+            </div>`,
+            size: 'large',
+            backdrop: true
+          });
+          return false;
+        }
+        
+        if (typeof arr === 'object' && !Array.isArray(arr) && arr !== null && resp.debugg.length == 0) {
+          bootbox.confirm({
+            title: '¿Desea continuar con la importación?',
+            message: `Se encontraron los siguientes registros:<br><br>Datos a insertar: ${arr.insert}<br>Datos a actualizar: ${arr.update}`,
+            buttons: {
+              confirm: {
+                label: 'Si',
+                className: 'btn-success',
+              },
+              cancel: {
+                label: 'No',
+                className: 'btn-danger',
+              },
             },
-            cancel: {
-              label: 'No',
-              className: 'btn-danger',
+            callback: function (result) {
+              if (result) {
+                saveProductTable(data);
+              } else {
+                $('.cardLoading').remove();
+                $('.cardBottons').show(400);
+                $('#fileProducts').val('');
+              }
             },
-          },
-          callback: function (result) {
-            if (result) {
-              saveProductTable(data);
-            } else {
-              $('.cardLoading').remove();
-              $('.cardBottons').show(400);
-              $('#fileProducts').val('');
-            }
-          },
-        });
+          });
+        }
       },
     });
   };

@@ -89,6 +89,7 @@ $app->post('/materialsDataValidation', function (Request $request, Response $res
         $update = 0;
 
         $materials = $dataMaterial['importMaterials'];
+        $debugg = [];
 
         // Verificar duplicados
         $duplicateTracker = [];
@@ -100,28 +101,24 @@ $app->post('/materialsDataValidation', function (Request $request, Response $res
                 empty($materials[$i]['magnitude']) || empty($materials[$i]['unit'])
             ) {
                 $i = $i + 2;
-                $dataImportMaterial = array('error' => true, 'message' => "Campos vacios, fila: $i");
-                break;
+                array_push($debugg, array('error' => true, 'message' => "Campos vacios, fila: $i"));
             }
             if (
                 empty(trim($materials[$i]['refRawMaterial'])) || empty(trim($materials[$i]['nameRawMaterial'])) ||
                 empty(trim($materials[$i]['magnitude'])) || empty(trim($materials[$i]['unit']))
             ) {
                 $i = $i + 2;
-                $dataImportMaterial = array('error' => true, 'message' => "Campos vacios, fila: $i");
-                break;
+                array_push($debugg, array('error' => true, 'message' => "Campos vacios, fila: $i"));
             }
 
             if ($_SESSION['flag_products_measure'] == '1') {
                 if (empty($materials[$i]['materialType'])) {
                     $i = $i + 2;
-                    $dataImportMaterial = array('error' => true, 'message' => "Campos vacios, fila: $i");
-                    break;
+                    array_push($debugg, array('error' => true, 'message' => "Campos vacios, fila: $i"));
                 }
                 if (empty(trim($materials[$i]['materialType']))) {
                     $i = $i + 2;
-                    $dataImportMaterial = array('error' => true, 'message' => "Campos vacios, fila: $i");
-                    break;
+                    array_push($debugg, array('error' => true, 'message' => "Campos vacios, fila: $i"));
                 }
             }
 
@@ -131,8 +128,7 @@ $app->post('/materialsDataValidation', function (Request $request, Response $res
 
             if (isset($duplicateTracker[$refRawMaterial]) || isset($duplicateTracker[$nameRawMaterial])) {
                 $i = $i + 2;
-                $dataImportMaterial =  array('error' => true, 'message' => "Duplicación encontrada en la fila: $i.<br>- Referencia: $refRawMaterial<br>- Material: $nameRawMaterial");
-                break;
+                array_push($debugg, array('error' => true, 'message' => "Duplicación encontrada en la fila: $i.<br>- Referencia: $refRawMaterial<br>- Material: $nameRawMaterial"));
             } else {
                 $duplicateTracker[$refRawMaterial] = true;
                 $duplicateTracker[$nameRawMaterial] = true;
@@ -142,15 +138,13 @@ $app->post('/materialsDataValidation', function (Request $request, Response $res
 
             if (sizeof($findMaterial) > 1) {
                 $i = $i + 2;
-                $dataImportMaterial =  array('error' => true, 'message' => "Referencia o nombre de material ya existente, fila: $i.<br>- Referencia: $refRawMaterial<br>- Material: $nameRawMaterial");
-                break;
+                array_push($debugg, array('error' => true, 'message' => "Referencia o nombre de material ya existente, fila: $i.<br>- Referencia: $refRawMaterial<br>- Material: $nameRawMaterial"));
             }
 
             if ($findMaterial) {
                 if ($findMaterial[0]['material'] != $nameRawMaterial || $findMaterial[0]['reference'] != $refRawMaterial) {
                     $i = $i + 2;
-                    $dataImportMaterial =  array('error' => true, 'message' => "Referencia o nombre de material ya existente, fila: $i.<br>- Referencia: $refRawMaterial<br>- Material: $nameRawMaterial");
-                    break;
+                    array_push($debugg, array('error' => true, 'message' => "Referencia o nombre de material ya existente, fila: $i.<br>- Referencia: $refRawMaterial<br>- Material: $nameRawMaterial"));
                 }
             }
 
@@ -159,8 +153,7 @@ $app->post('/materialsDataValidation', function (Request $request, Response $res
 
             if (!$magnitude) {
                 $i = $i + 2;
-                $dataImportMaterial = array('error' => true, 'message' => "Magnitud no existe en la base de datos. Fila: $i");
-                break;
+                array_push($debugg, array('error' => true, 'message' => "Magnitud no existe en la base de datos. Fila: $i"));
             }
 
             $materials[$i]['idMagnitude'] = $magnitude['id_magnitude'];
@@ -170,8 +163,7 @@ $app->post('/materialsDataValidation', function (Request $request, Response $res
 
             if (!$unit) {
                 $i = $i + 2;
-                $dataImportMaterial = array('error' => true, 'message' => "Unidad no existe en la base de datos. Fila: $i");
-                break;
+                array_push($debugg, array('error' => true, 'message' => "Unidad no existe en la base de datos. Fila: $i"));
             }
 
             if ($_SESSION['flag_products_measure'] == '1') {
@@ -180,13 +172,12 @@ $app->post('/materialsDataValidation', function (Request $request, Response $res
 
                 if (!$materialType) {
                     $i = $i + 2;
-                    $dataImportMaterial = array('error' => true, 'message' => "Tipo de material no existe en la base de datos. Fila: $i");
-                    break;
+                    array_push($debugg, array('error' => true, 'message' => "Tipo de material no existe en la base de datos. Fila: $i"));
                 }
             }
         }
 
-        if (sizeof($dataImportMaterial) == 0) {
+        if (sizeof($debugg) == 0) {
             for ($i = 0; $i < count($materials); $i++) {
                 $findMaterial = $generalMaterialsDao->findMaterial($materials[$i], $id_company);
                 if (!$findMaterial) $insert = $insert + 1;
@@ -198,7 +189,10 @@ $app->post('/materialsDataValidation', function (Request $request, Response $res
     } else
         $dataImportMaterial = array('error' => true, 'message' => 'El archivo se encuentra vacio. Intente nuevamente');
 
-    $response->getBody()->write(json_encode($dataImportMaterial, JSON_NUMERIC_CHECK));
+    $data['import'] = $dataImportMaterial;
+    $data['debugg'] = $debugg;
+
+    $response->getBody()->write(json_encode($data, JSON_NUMERIC_CHECK));
     return $response->withHeader('Content-Type', 'application/json');
 });
 

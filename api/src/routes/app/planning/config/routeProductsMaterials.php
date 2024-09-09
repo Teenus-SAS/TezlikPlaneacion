@@ -99,6 +99,7 @@ $app->post('/productsMaterialsDataValidation', function (Request $request, Respo
         $update = 0;
 
         $productMaterials = $dataProductMaterial['importProducts'];
+        $debugg = [];
 
         for ($i = 0; $i < sizeof($productMaterials); $i++) {
             if (
@@ -106,16 +107,14 @@ $app->post('/productsMaterialsDataValidation', function (Request $request, Respo
                 empty($productMaterials[$i]['nameRawMaterial']) || $productMaterials[$i]['quantity'] == '' || empty($productMaterials[$i]['type'])
             ) {
                 $i = $i + 2;
-                $dataImportProductsMaterials = array('error' => true, 'message' => "Columna vacia en la fila: {$i}");
-                break;
+                array_push($debugg, array('error' => true, 'message' => "Columna vacia en la fila: {$i}"));
             }
             if (
                 empty(trim($productMaterials[$i]['referenceProduct'])) || empty(trim($productMaterials[$i]['product'])) || empty(trim($productMaterials[$i]['refRawMaterial'])) ||
                 empty(trim($productMaterials[$i]['nameRawMaterial'])) || trim($productMaterials[$i]['quantity']) == '' || empty($productMaterials[$i]['type'])
             ) {
                 $i = $i + 2;
-                $dataImportProductsMaterials = array('error' => true, 'message' => "Columna vacia en la fila: {$i}");
-                break;
+                array_push($debugg, array('error' => true, 'message' => "Columna vacia en la fila: {$i}"));
             }
 
             $quantity = str_replace(',', '.', $productMaterials[$i]['quantity']);
@@ -124,8 +123,7 @@ $app->post('/productsMaterialsDataValidation', function (Request $request, Respo
 
             if ($quantity <= 0 || is_nan($quantity)) {
                 $i = $i + 2;
-                $dataImportProductsMaterials = array('error' => true, 'message' => "La cantidad debe ser mayor a cero (0)<br>Fila: {$i}");
-                break;
+                array_push($debugg, array('error' => true, 'message' => "La cantidad debe ser mayor a cero (0)<br>Fila: {$i}"));
             }
 
             // Consultar magnitud
@@ -133,8 +131,7 @@ $app->post('/productsMaterialsDataValidation', function (Request $request, Respo
 
             if (!$magnitude) {
                 $i = $i + 2;
-                $dataImportProductsMaterials = array('error' => true, 'message' => "Magnitud no existe en la base de datos. Fila: $i");
-                break;
+                array_push($debugg, array('error' => true, 'message' => "Magnitud no existe en la base de datos. Fila: $i"));
             }
 
             $productMaterials[$i]['idMagnitude'] = $magnitude['id_magnitude'];
@@ -144,16 +141,14 @@ $app->post('/productsMaterialsDataValidation', function (Request $request, Respo
 
             if (!$unit) {
                 $i = $i + 2;
-                $dataImportProductsMaterials = array('error' => true, 'message' => "Unidad no existe en la base de datos. Fila: $i");
-                break;
+                array_push($debugg, array('error' => true, 'message' => "Unidad no existe en la base de datos. Fila: $i"));
             }
 
             // Obtener id producto
             $findProduct = $productsDao->findProduct($productMaterials[$i], $id_company);
             if (!$findProduct) {
                 $i = $i + 2;
-                $dataImportProductsMaterials = array('error' => true, 'message' => "Producto no existe en la base de datos<br>Fila: {$i}");
-                break;
+                array_push($debugg, array('error' => true, 'message' => "Producto no existe en la base de datos<br>Fila: {$i}"));
             } else $productMaterials[$i]['idProduct'] = $findProduct['id_product'];
 
             $type = $productMaterials[$i]['type'];
@@ -163,8 +158,7 @@ $app->post('/productsMaterialsDataValidation', function (Request $request, Respo
                 $findMaterial = $materialsDao->findMaterial($productMaterials[$i], $id_company);
                 if (!$findMaterial) {
                     $i = $i + 2;
-                    $dataImportProductsMaterials = array('error' => true, 'message' => "Materia prima no existe en la base de datos<br>Fila: {$i}");
-                    break;
+                    array_push($debugg, array('error' => true, 'message' => "Materia prima no existe en la base de datos<br>Fila: {$i}"));
                 } else $productMaterials[$i]['material'] = $findMaterial['id_material'];
 
                 $findProductsMaterials = $generalProductsMaterialsDao->findProductMaterial($productMaterials[$i], $id_company);
@@ -179,14 +173,12 @@ $app->post('/productsMaterialsDataValidation', function (Request $request, Respo
                 $findProduct = $productsDao->findProduct($arr, $id_company);
                 if (!$findProduct) {
                     $i = $i + 2;
-                    $dataImportProductsMaterials = array('error' => true, 'message' => "Producto no existe en la base de datos.<br>Fila: {$i}");
-                    break;
+                    array_push($debugg, array('error' => true, 'message' => "Producto no existe en la base de datos.<br>Fila: {$i}"));
                 }
 
                 if ($findProduct['composite'] == 0) {
                     $i = $i + 2;
-                    $dataImportProductsMaterials = array('error' => true, 'message' => "Producto no está definido como compuesto.<br>Fila: {$i}");
-                    break;
+                    array_push($debugg, array('error' => true, 'message' => "Producto no está definido como compuesto.<br>Fila: {$i}"));
                 }
 
                 $productMaterials[$i]['compositeProduct'] = $findProduct['id_product'];
@@ -202,7 +194,10 @@ $app->post('/productsMaterialsDataValidation', function (Request $request, Respo
     } else
         $dataImportProductsMaterials = array('error' => true, 'message' => 'El archivo se encuentra vacio. Intente nuevamente');
 
-    $response->getBody()->write(json_encode($dataImportProductsMaterials, JSON_NUMERIC_CHECK));
+    $data['import'] = $dataImportProductsMaterials;
+    $data['debugg'] = $debugg;
+
+    $response->getBody()->write(json_encode($data, JSON_NUMERIC_CHECK));
     return $response->withHeader('Content-Type', 'application/json');
 });
 
