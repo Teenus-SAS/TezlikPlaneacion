@@ -90,35 +90,34 @@ $app->post('/productsMeasuresDataValidation', function (Request $request, Respon
 
                 $origin = $products[$i]['origin'];
 
-                switch ($origin) {
-                    case 'MANUFACTURADO':
-                        if (
-                            empty($products[$i]['width']) || empty($products[$i]['inks']) || empty($products[$i]['high']) || empty($products[$i]['length']) ||
-                            empty($products[$i]['usefulLength']) || empty($products[$i]['totalWidth']) || empty($products[$i]['window']) || empty($products[$i]['productType'])
-                        ) {
-                            $i = $i + 2;
-                            $dataImportProduct = array('error' => true, 'message' => "Campos vacios, fila: $i");
-                            break;
-                        }
-
-                        if (
-                            empty(trim($products[$i]['width'])) || empty(trim($products[$i]['inks'])) || empty(trim($products[$i]['high'])) || empty(trim($products[$i]['length'])) ||
-                            empty(trim($products[$i]['usefulLength'])) || empty(trim($products[$i]['totalWidth'])) || empty(trim($products[$i]['window'])) || empty(trim($products[$i]['productType']))
-                        ) {
-                            $i = $i + 2;
-                            $dataImportProduct = array('error' => true, 'message' => "Campos vacios, fila: $i");
-                            break;
-                        }
-
-                        $data = floatval($products[$i]['width']) * floatval($products[$i]['high']) * floatval($products[$i]['length']) * floatval($products[$i]['usefulLength']) *
-                            floatval($products[$i]['totalWidth']) * floatval($products[$i]['window']) * floatval($products[$i]['inks']);
-
-                        if (is_nan($data) || $data <= 0) {
-                            $i = $i + 2;
-                            $dataImportProduct = array('error' => true, 'message' => "Campos vacios, fila: $i");
-                            break;
-                        }
+                if ($origin == 'MANUFACTURADO') {
+                    if (
+                        empty($products[$i]['width']) || empty($products[$i]['inks']) || empty($products[$i]['high']) || empty($products[$i]['length']) ||
+                        empty($products[$i]['usefulLength']) || empty($products[$i]['totalWidth']) || empty($products[$i]['window']) || empty($products[$i]['productType'])
+                    ) {
+                        $i = $i + 2;
+                        $dataImportProduct = array('error' => true, 'message' => "Campos vacios, fila: $i");
                         break;
+                    }
+
+                    if (
+                        empty(trim($products[$i]['width'])) || empty(trim($products[$i]['inks'])) || empty(trim($products[$i]['high'])) || empty(trim($products[$i]['length'])) ||
+                        empty(trim($products[$i]['usefulLength'])) || empty(trim($products[$i]['totalWidth'])) || empty(trim($products[$i]['window'])) || empty(trim($products[$i]['productType']))
+                    ) {
+                        $i = $i + 2;
+                        $dataImportProduct = array('error' => true, 'message' => "Campos vacios, fila: $i");
+                        break;
+                    }
+
+                    $data = floatval($products[$i]['width']) * floatval($products[$i]['high']) * floatval($products[$i]['length']) * floatval($products[$i]['usefulLength']) *
+                        floatval($products[$i]['totalWidth']) * floatval($products[$i]['window']) * floatval($products[$i]['inks']);
+
+                    if (is_nan($data) || $data <= 0) {
+                        $i = $i + 2;
+                        $dataImportProduct = array('error' => true, 'message' => "Campos vacios, fila: $i");
+                        break;
+                    }
+                    break;
                 }
             }
 
