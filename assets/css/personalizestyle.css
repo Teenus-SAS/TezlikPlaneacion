@@ -188,7 +188,7 @@
 .orders-graph {
     height: 400px;
     /* Ajusta el tamaño según tus necesidades */
-    width: auto;
+    width: auto !important;
     /* Asegura que el card ocupe el 100% del contenedor */
     display: flex;
     align-items: center;
@@ -200,7 +200,7 @@
     height: 100%;
 }
 
-/* canvas {
+canvas {
     width: 100% !important;
     height: auto !important;
-} */
+}
