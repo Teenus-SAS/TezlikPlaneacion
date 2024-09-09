@@ -100,25 +100,25 @@ $app->post('/materialsDataValidation', function (Request $request, Response $res
                 empty($materials[$i]['refRawMaterial']) || empty($materials[$i]['nameRawMaterial']) ||
                 empty($materials[$i]['magnitude']) || empty($materials[$i]['unit'])
             ) {
-                $i = $i + 2;
-                array_push($debugg, array('error' => true, 'message' => "Campos vacios, fila: $i"));
+                $row = $i + 2;
+                array_push($debugg, array('error' => true, 'message' => "Campos vacios, fila: $row"));
             }
             if (
                 empty(trim($materials[$i]['refRawMaterial'])) || empty(trim($materials[$i]['nameRawMaterial'])) ||
                 empty(trim($materials[$i]['magnitude'])) || empty(trim($materials[$i]['unit']))
             ) {
-                $i = $i + 2;
-                array_push($debugg, array('error' => true, 'message' => "Campos vacios, fila: $i"));
+                $row = $i + 2;
+                array_push($debugg, array('error' => true, 'message' => "Campos vacios, fila: $row"));
             }
 
             if ($_SESSION['flag_products_measure'] == '1') {
                 if (empty($materials[$i]['materialType'])) {
-                    $i = $i + 2;
-                    array_push($debugg, array('error' => true, 'message' => "Campos vacios, fila: $i"));
+                    $row = $i + 2;
+                    array_push($debugg, array('error' => true, 'message' => "Campos vacios, fila: $row"));
                 }
                 if (empty(trim($materials[$i]['materialType']))) {
-                    $i = $i + 2;
-                    array_push($debugg, array('error' => true, 'message' => "Campos vacios, fila: $i"));
+                    $row = $i + 2;
+                    array_push($debugg, array('error' => true, 'message' => "Campos vacios, fila: $row"));
                 }
             }
 
@@ -127,8 +127,8 @@ $app->post('/materialsDataValidation', function (Request $request, Response $res
             $nameRawMaterial = strtoupper(trim($item['nameRawMaterial']));
 
             if (isset($duplicateTracker[$refRawMaterial]) || isset($duplicateTracker[$nameRawMaterial])) {
-                $i = $i + 2;
-                array_push($debugg, array('error' => true, 'message' => "Duplicación encontrada en la fila: $i.<br>- Referencia: $refRawMaterial<br>- Material: $nameRawMaterial"));
+                $row = $i + 2;
+                array_push($debugg, array('error' => true, 'message' => "Duplicación encontrada en la fila: $row.<br>- Referencia: $refRawMaterial<br>- Material: $nameRawMaterial"));
             } else {
                 $duplicateTracker[$refRawMaterial] = true;
                 $duplicateTracker[$nameRawMaterial] = true;
@@ -137,14 +137,14 @@ $app->post('/materialsDataValidation', function (Request $request, Response $res
             $findMaterial = $generalMaterialsDao->findMaterialByReferenceOrName($materials[$i], $id_company);
 
             if (sizeof($findMaterial) > 1) {
-                $i = $i + 2;
-                array_push($debugg, array('error' => true, 'message' => "Referencia o nombre de material ya existente, fila: $i.<br>- Referencia: $refRawMaterial<br>- Material: $nameRawMaterial"));
+                $row = $i + 2;
+                array_push($debugg, array('error' => true, 'message' => "Referencia o nombre de material ya existente, fila: $row.<br>- Referencia: $refRawMaterial<br>- Material: $nameRawMaterial"));
             }
 
             if ($findMaterial) {
                 if ($findMaterial[0]['material'] != $nameRawMaterial || $findMaterial[0]['reference'] != $refRawMaterial) {
-                    $i = $i + 2;
-                    array_push($debugg, array('error' => true, 'message' => "Referencia o nombre de material ya existente, fila: $i.<br>- Referencia: $refRawMaterial<br>- Material: $nameRawMaterial"));
+                    $row = $i + 2;
+                    array_push($debugg, array('error' => true, 'message' => "Referencia o nombre de material ya existente, fila: $row.<br>- Referencia: $refRawMaterial<br>- Material: $nameRawMaterial"));
                 }
             }
 
@@ -152,8 +152,8 @@ $app->post('/materialsDataValidation', function (Request $request, Response $res
             $magnitude = $magnitudesDao->findMagnitude($materials[$i]);
 
             if (!$magnitude) {
-                $i = $i + 2;
-                array_push($debugg, array('error' => true, 'message' => "Magnitud no existe en la base de datos. Fila: $i"));
+                $row = $i + 2;
+                array_push($debugg, array('error' => true, 'message' => "Magnitud no existe en la base de datos. Fila: $row"));
             }
 
             $materials[$i]['idMagnitude'] = $magnitude['id_magnitude'];
@@ -162,8 +162,8 @@ $app->post('/materialsDataValidation', function (Request $request, Response $res
             $unit = $unitsDao->findUnit($materials[$i]);
 
             if (!$unit) {
-                $i = $i + 2;
-                array_push($debugg, array('error' => true, 'message' => "Unidad no existe en la base de datos. Fila: $i"));
+                $row = $i + 2;
+                array_push($debugg, array('error' => true, 'message' => "Unidad no existe en la base de datos. Fila: $row"));
             }
 
             if ($_SESSION['flag_products_measure'] == '1') {
@@ -171,8 +171,8 @@ $app->post('/materialsDataValidation', function (Request $request, Response $res
                 $materialType = $materialsTypeDao->findMaterialsType($materials[$i], $id_company);
 
                 if (!$materialType) {
-                    $i = $i + 2;
-                    array_push($debugg, array('error' => true, 'message' => "Tipo de material no existe en la base de datos. Fila: $i"));
+                    $row = $i + 2;
+                    array_push($debugg, array('error' => true, 'message' => "Tipo de material no existe en la base de datos. Fila: $row"));
                 }
             }
         }

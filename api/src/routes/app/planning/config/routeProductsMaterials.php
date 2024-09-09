@@ -106,15 +106,15 @@ $app->post('/productsMaterialsDataValidation', function (Request $request, Respo
                 empty($productMaterials[$i]['referenceProduct']) || empty($productMaterials[$i]['product']) || empty($productMaterials[$i]['refRawMaterial']) ||
                 empty($productMaterials[$i]['nameRawMaterial']) || $productMaterials[$i]['quantity'] == '' || empty($productMaterials[$i]['type'])
             ) {
-                $i = $i + 2;
-                array_push($debugg, array('error' => true, 'message' => "Columna vacia en la fila: {$i}"));
+                $row = $i + 2;
+                array_push($debugg, array('error' => true, 'message' => "Columna vacia en la fila: $row"));
             }
             if (
                 empty(trim($productMaterials[$i]['referenceProduct'])) || empty(trim($productMaterials[$i]['product'])) || empty(trim($productMaterials[$i]['refRawMaterial'])) ||
                 empty(trim($productMaterials[$i]['nameRawMaterial'])) || trim($productMaterials[$i]['quantity']) == '' || empty($productMaterials[$i]['type'])
             ) {
-                $i = $i + 2;
-                array_push($debugg, array('error' => true, 'message' => "Columna vacia en la fila: {$i}"));
+                $row = $i + 2;
+                array_push($debugg, array('error' => true, 'message' => "Columna vacia en la fila: $row"));
             }
 
             $quantity = str_replace(',', '.', $productMaterials[$i]['quantity']);
@@ -122,16 +122,16 @@ $app->post('/productsMaterialsDataValidation', function (Request $request, Respo
             $quantity = 1 * $quantity;
 
             if ($quantity <= 0 || is_nan($quantity)) {
-                $i = $i + 2;
-                array_push($debugg, array('error' => true, 'message' => "La cantidad debe ser mayor a cero (0)<br>Fila: {$i}"));
+                $row = $i + 2;
+                array_push($debugg, array('error' => true, 'message' => "La cantidad debe ser mayor a cero (0)<br>Fila: $row"));
             }
 
             // Consultar magnitud
             $magnitude = $magnitudesDao->findMagnitude($productMaterials[$i]);
 
             if (!$magnitude) {
-                $i = $i + 2;
-                array_push($debugg, array('error' => true, 'message' => "Magnitud no existe en la base de datos. Fila: $i"));
+                $row = $i + 2;
+                array_push($debugg, array('error' => true, 'message' => "Magnitud no existe en la base de datos. Fila: $row"));
             }
 
             $productMaterials[$i]['idMagnitude'] = $magnitude['id_magnitude'];
@@ -140,15 +140,15 @@ $app->post('/productsMaterialsDataValidation', function (Request $request, Respo
             $unit = $unitsDao->findUnit($productMaterials[$i]);
 
             if (!$unit) {
-                $i = $i + 2;
-                array_push($debugg, array('error' => true, 'message' => "Unidad no existe en la base de datos. Fila: $i"));
+                $row = $i + 2;
+                array_push($debugg, array('error' => true, 'message' => "Unidad no existe en la base de datos. Fila: $row"));
             }
 
             // Obtener id producto
             $findProduct = $productsDao->findProduct($productMaterials[$i], $id_company);
             if (!$findProduct) {
-                $i = $i + 2;
-                array_push($debugg, array('error' => true, 'message' => "Producto no existe en la base de datos<br>Fila: {$i}"));
+                $row = $i + 2;
+                array_push($debugg, array('error' => true, 'message' => "Producto no existe en la base de datos<br>Fila: $row"));
             } else $productMaterials[$i]['idProduct'] = $findProduct['id_product'];
 
             $type = $productMaterials[$i]['type'];
@@ -157,8 +157,8 @@ $app->post('/productsMaterialsDataValidation', function (Request $request, Respo
                 // Obtener id materia prima
                 $findMaterial = $materialsDao->findMaterial($productMaterials[$i], $id_company);
                 if (!$findMaterial) {
-                    $i = $i + 2;
-                    array_push($debugg, array('error' => true, 'message' => "Materia prima no existe en la base de datos<br>Fila: {$i}"));
+                    $row = $i + 2;
+                    array_push($debugg, array('error' => true, 'message' => "Materia prima no existe en la base de datos<br>Fila: $row"));
                 } else $productMaterials[$i]['material'] = $findMaterial['id_material'];
 
                 $findProductsMaterials = $generalProductsMaterialsDao->findProductMaterial($productMaterials[$i], $id_company);
@@ -172,13 +172,13 @@ $app->post('/productsMaterialsDataValidation', function (Request $request, Respo
 
                 $findProduct = $productsDao->findProduct($arr, $id_company);
                 if (!$findProduct) {
-                    $i = $i + 2;
-                    array_push($debugg, array('error' => true, 'message' => "Producto no existe en la base de datos.<br>Fila: {$i}"));
+                    $row = $i + 2;
+                    array_push($debugg, array('error' => true, 'message' => "Producto no existe en la base de datos.<br>Fila: $row"));
                 }
 
                 if ($findProduct['composite'] == 0) {
-                    $i = $i + 2;
-                    array_push($debugg, array('error' => true, 'message' => "Producto no está definido como compuesto.<br>Fila: {$i}"));
+                    $row = $i + 2;
+                    array_push($debugg, array('error' => true, 'message' => "Producto no está definido como compuesto.<br>Fila: $row"));
                 }
 
                 $productMaterials[$i]['compositeProduct'] = $findProduct['id_product'];
