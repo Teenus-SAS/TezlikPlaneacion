@@ -55,34 +55,34 @@ $app->post('/productsMeasuresDataValidation', function (Request $request, Respon
                 empty($products[$i]['referenceProduct']) || empty($products[$i]['product']) ||
                 empty($products[$i]['origin']) || empty($products[$i]['composite'])
             ) {
-                $i = $i + 2;
-                array_push($debugg, array('error' => true, 'message' => "Campos vacios, fila: $i"));
+                $row = $i + 2;
+                array_push($debugg, array('error' => true, 'message' => "Campos vacios, fila: $row"));
             }
 
             if (
                 empty(trim($products[$i]['referenceProduct'])) || empty(trim($products[$i]['product'])) ||
                 empty(trim($products[$i]['origin'])) || empty(trim($products[$i]['composite']))
             ) {
-                $i = $i + 2;
-                array_push($debugg, array('error' => true, 'message' => "Campos vacios, fila: $i"));
+                $row = $i + 2;
+                array_push($debugg, array('error' => true, 'message' => "Campos vacios, fila: $row"));
             }
 
             if ($flag_products_measure == '1') {
                 if (empty($products[$i]['productType'])) {
-                    $i = $i + 2;
-                    array_push($debugg, array('error' => true, 'message' => "Campos vacios, fila: $i"));
+                    $row = $i + 2;
+                    array_push($debugg, array('error' => true, 'message' => "Campos vacios, fila: $row"));
                 }
 
                 if (empty(trim($products[$i]['productType']))) {
-                    $i = $i + 2;
-                    array_push($debugg, array('error' => true, 'message' => "Campos vacios, fila: $i"));
+                    $row = $i + 2;
+                    array_push($debugg, array('error' => true, 'message' => "Campos vacios, fila: $row"));
                 }
 
                 $findPType = $productsTypeDao->findProductsType($products[$i], $id_company);
 
                 if (!$findPType) {
-                    $i = $i + 2;
-                    array_push($debugg, array('error' => true, 'message' => "Tipo de producto no existe en la base de datos. Fila: $i"));
+                    $row = $i + 2;
+                    array_push($debugg, array('error' => true, 'message' => "Tipo de producto no existe en la base de datos. Fila: $row"));
                 }
 
                 $origin = $products[$i]['origin'];
@@ -92,24 +92,24 @@ $app->post('/productsMeasuresDataValidation', function (Request $request, Respon
                         empty($products[$i]['width']) || empty($products[$i]['inks']) || empty($products[$i]['high']) || empty($products[$i]['length']) ||
                         empty($products[$i]['usefulLength']) || empty($products[$i]['totalWidth']) || empty($products[$i]['window']) || empty($products[$i]['productType'])
                     ) {
-                        $i = $i + 2;
-                        array_push($debugg, array('error' => true, 'message' => "Campos vacios, fila: $i"));
+                        $row = $i + 2;
+                        array_push($debugg, array('error' => true, 'message' => "Campos vacios, fila: $row"));
                     }
 
                     if (
                         empty(trim($products[$i]['width'])) || empty(trim($products[$i]['inks'])) || empty(trim($products[$i]['high'])) || empty(trim($products[$i]['length'])) ||
                         empty(trim($products[$i]['usefulLength'])) || empty(trim($products[$i]['totalWidth'])) || empty(trim($products[$i]['window'])) || empty(trim($products[$i]['productType']))
                     ) {
-                        $i = $i + 2;
-                        array_push($debugg, array('error' => true, 'message' => "Campos vacios, fila: $i"));
+                        $row = $i + 2;
+                        array_push($debugg, array('error' => true, 'message' => "Campos vacios, fila: $row"));
                     }
 
                     $data = floatval($products[$i]['width']) * floatval($products[$i]['high']) * floatval($products[$i]['length']) * floatval($products[$i]['usefulLength']) *
                         floatval($products[$i]['totalWidth']) * floatval($products[$i]['window']) * floatval($products[$i]['inks']);
 
                     if (is_nan($data) || $data <= 0) {
-                        $i = $i + 2;
-                        array_push($debugg, array('error' => true, 'message' => "Campos vacios, fila: $i"));
+                        $row = $i + 2;
+                        array_push($debugg, array('error' => true, 'message' => "Campos vacios, fila: $row"));
                     }
                 }
             }
@@ -119,8 +119,8 @@ $app->post('/productsMeasuresDataValidation', function (Request $request, Respon
             $nameProduct = strtoupper(trim($item['product']));
 
             if (isset($duplicateTracker[$refProduct]) || isset($duplicateTracker[$nameProduct])) {
-                $i = $i + 2;
-                array_push($debugg, array('error' => true, 'message' => "Duplicación encontrada en la fila: $i.<br>- Referencia: $refProduct<br>- Producto: $nameProduct"));
+                $row = $i + 2;
+                array_push($debugg, array('error' => true, 'message' => "Duplicación encontrada en la fila: $row.<br>- Referencia: $refProduct<br>- Producto: $nameProduct"));
             } else {
                 $duplicateTracker[$refProduct] = true;
                 $duplicateTracker[$nameProduct] = true;
@@ -129,14 +129,14 @@ $app->post('/productsMeasuresDataValidation', function (Request $request, Respon
             $findProduct = $generalProductsDao->findProductByReferenceOrName($products[$i], $id_company);
 
             if (sizeof($findProduct) > 1) {
-                $i = $i + 2;
-                array_push($debugg, array('error' => true, 'message' => "Referencia y nombre de producto ya existente, fila: $i.<br>- Referencia: $refProduct<br>- Producto: $nameProduct"));
+                $row = $i + 2;
+                array_push($debugg, array('error' => true, 'message' => "Referencia y nombre de producto ya existente, fila: $row.<br>- Referencia: $refProduct<br>- Producto: $nameProduct"));
             }
 
             if ($findProduct) {
                 if ($findProduct[0]['product'] != $nameProduct || $findProduct[0]['reference'] != $refProduct) {
-                    $i = $i + 2;
-                    array_push($debugg, array('error' => true, 'message' => "Referencia o nombre de producto ya existente, fila: $i.<br>- Referencia: $refProduct<br>- Producto: $nameProduct"));
+                    $row = $i + 2;
+                    array_push($debugg, array('error' => true, 'message' => "Referencia o nombre de producto ya existente, fila: $row.<br>- Referencia: $refProduct<br>- Producto: $nameProduct"));
                 }
             }
         }
