@@ -235,6 +235,11 @@ $(document).ready(function () {
       return false;
     }
 
+    if (!applicationDate && !deliveryDate) {
+      toastr.error("Ingrese todos los campos");
+      return false;
+    }
+
     if (applicationDate > deliveryDate) {
       toastr.error(
         "Ingrese una fecha de solicitud menor a la fecha de entrega"
