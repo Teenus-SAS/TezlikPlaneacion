@@ -21,7 +21,7 @@ $(document).ready(function () {
     const yyyy = today.getFullYear();
     const mm = String(today.getMonth() + 1).padStart(2, "0"); // Enero es 0!
     const dd = String(today.getDate()).padStart(2, "0");
-    const formattedDate = dd + "-" + mm + "-" + yyyy;
+    const formattedDate = yyyy + "-" + mm + "-" + dd;
 
     // Asignar la fecha formateada al input
     document.getElementById("dateOrder").value = formattedDate;
