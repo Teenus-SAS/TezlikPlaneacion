@@ -117,7 +117,6 @@ $app->post('/productsMeasuresDataValidation', function (Request $request, Respon
                         $dataImportProduct = array('error' => true, 'message' => "Campos vacios, fila: $i");
                         break;
                     }
-                    break;
                 }
             }
 
