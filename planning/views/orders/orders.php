@@ -124,8 +124,8 @@ if (sizeof($_SESSION) == 0)
                                                     <input class="form-control text-center" name="order" id="order">
                                                 </div> -->
                                                 <div class="col-sm-2 floating-label enable-floating-label show-label mt-2">
-                                                    <label for="minDate text-center">Fecha Min Entrega</label>
-                                                    <input class="form-control" type="date" name="minDate" id="minDate" min="<?php echo date('Y-m-d'); ?>">
+                                                    <label for="minDate">Fecha Min Entrega</label>
+                                                    <input class="form-control text-center" type="date" name="minDate" id="minDate" min="<?php echo date('Y-m-d'); ?>">
                                                 </div>
                                                 <div class="col-sm-2 floating-label enable-floating-label show-label mt-2">
                                                     <label for="">Fecha Max Entrega</label>
