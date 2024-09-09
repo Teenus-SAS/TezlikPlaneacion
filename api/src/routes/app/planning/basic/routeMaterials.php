@@ -127,7 +127,7 @@ $app->post('/materialsDataValidation', function (Request $request, Response $res
 
             $item = $materials[$i];
             $refRawMaterial = trim($item['refRawMaterial']);
-            $nameRawMaterial = trim($item['nameRawMaterial']);
+            $nameRawMaterial = strtoupper(trim($item['nameRawMaterial']));
 
             if (isset($duplicateTracker[$refRawMaterial]) || isset($duplicateTracker[$nameRawMaterial])) {
                 $i = $i + 2;

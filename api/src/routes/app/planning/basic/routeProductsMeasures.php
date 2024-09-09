@@ -122,7 +122,7 @@ $app->post('/productsMeasuresDataValidation', function (Request $request, Respon
 
             $item = $products[$i];
             $refProduct = trim($item['referenceProduct']);
-            $nameProduct = trim($item['product']);
+            $nameProduct = strtoupper(trim($item['product']));
 
             if (isset($duplicateTracker[$refProduct]) || isset($duplicateTracker[$nameProduct])) {
                 $i = $i + 2;
