@@ -135,6 +135,11 @@ $(document).ready(function () {
           },
         },
         {
+          title: "Fecha Creacion",
+          data: "creation_date",
+          className: "uniqueClassName dt-head-center",
+        },
+        {
           title: "Referencia",
           data: "reference",
           className: "uniqueClassName dt-head-center",
@@ -143,7 +148,7 @@ $(document).ready(function () {
           title: "Descripción",
           data: "material",
           className: "uniqueClassName dt-head-center",
-        }, 
+        },
         {
           title: "Proveedor Sugerido",
           data: "provider",
@@ -189,11 +194,6 @@ $(document).ready(function () {
 
             return `${quantity} ${data.abbreviation}`;
           },
-        },
-        {
-          title: "Fecha Creacion",
-          data: "creation_date",
-          className: "uniqueClassName dt-head-center", 
         },
         {
           title: "Fecha Solicitud",
@@ -252,13 +252,13 @@ $(document).ready(function () {
           quantity_requested += parseFloat(data[display[i]].quantity_requested);
         }
 
-        $('#lblTotalQRequired').html(
+        $("#lblTotalQRequired").html(
           quantity_required.toLocaleString("es-CO", {
             minimumFractionDigits: 0,
             maximumFractionDigits: 0,
           })
         );
-        $('#lblTotalQRequested').html(
+        $("#lblTotalQRequested").html(
           quantity_requested.toLocaleString("es-CO", {
             minimumFractionDigits: 0,
             maximumFractionDigits: 0,
