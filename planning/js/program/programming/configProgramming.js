@@ -55,15 +55,7 @@ $(document).ready(function () {
       if (!sessionStorage.getItem('dataProgramming') || sessionStorage.getItem('dataProgramming').includes('[object Object]'))
       {
         ciclesMachines.sort((a, b) => a.id_process - b.id_process);
-
-        // // Crear el mapa único procesos
-        // let uniquePCMap = new Map(ciclesMachines.map(item => [item.id_process, { [`process-${item.id_process}`]: [] }]));
-        
-        // // Convertir el mapa en un array
-        // let uniqueArrayPC = Array.from(uniquePCMap.values()); 
-
-        // Crear una copia profunda del array para 'sim_2'
-        // let uniqueArrayPC2 = uniqueArrayPC.map(item => JSON.parse(JSON.stringify(item)));
+ 
         // Crear el mapa único procesos y maquinas
         let uniquePCMMap = new Map
           (

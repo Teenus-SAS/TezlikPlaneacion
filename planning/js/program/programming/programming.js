@@ -410,15 +410,7 @@ $(document).ready(function () {
       sim == 1 ? (key = 0) : (key = 1);
       // Encontrar el objeto correspondiente en multiarray
       let targetArray = generalMultiArray[key][`sim_${sim}`];
-
-      // if (targetArray) {
-      //   for (let i = 0; i < targetArray.length; i++) {
-      //     if (targetArray[i][`process-${id_process}`]) {
-      //       targetArray[i][`process-${id_process}`].push(dataProgramming);
-      //       break; // Salir del bucle después de encontrar y actualizar el proceso
-      //     }
-      //   }
-      // };
+ 
       if (targetArray) {
         for (let i = 0; i < targetArray.length; i++) {
           // Verificar si existe el process con el id_process
