@@ -13,6 +13,18 @@ $(document).ready(function () {
 
     $("#formCreateOrder").trigger("reset");
     $("#btnCreateOrder").text("Crear");
+
+    // Obtener la fecha actual
+    const today = new Date();
+
+    // Formatear la fecha al formato "YYYY-MM-DD"
+    const yyyy = today.getFullYear();
+    const mm = String(today.getMonth() + 1).padStart(2, "0"); // Enero es 0!
+    const dd = String(today.getDate()).padStart(2, "0");
+    const formattedDate = dd + "-" + mm + "-" + yyyy;
+
+    // Asignar la fecha formateada al input
+    document.getElementById("dateOrder").value = formattedDate;
   });
 
   $("#btnCreateOrder").click(function (e) {
@@ -34,7 +46,7 @@ $(document).ready(function () {
     let data = tblOrder.fnGetData(row);
 
     sessionStorage.setItem("id_order", data.id_order);
- 
+
     $("#dateOrder").val(data.date_order);
     $("#minDate").val(data.min_date);
     $("#maxDate").val(data.max_date);
@@ -60,7 +72,7 @@ $(document).ready(function () {
     );
   });
 
-  const checkDataOrder = async (url, idOrder) => { 
+  const checkDataOrder = async (url, idOrder) => {
     let dateOrder = $("#dateOrder").val();
     let minDate = $("#minDate").val();
     let maxDate = $("#maxDate").val();
@@ -73,7 +85,7 @@ $(document).ready(function () {
 
     if (
       isNaN(data) ||
-      data <= 0 || 
+      data <= 0 ||
       !dateOrder ||
       dateOrder == "" ||
       !minDate ||
