@@ -135,6 +135,32 @@ $(document).ready(function () {
           },
         },
         {
+          title: "Fecha Creacion",
+          data: "creation_date",
+          className: "uniqueClassName dt-head-center",
+        },
+        {
+          title: "Fecha Solicitud",
+          data: "application_date",
+          className: "uniqueClassName dt-head-center",
+          visible: visible,
+        },
+        {
+          title: "Fecha Entrega",
+          data: null,
+          className: "uniqueClassName dt-head-center",
+          visible: visible,
+          render: function (data) {
+            let delivery_date = data.delivery_date;
+            let status = data.status;
+            let nameDate = "Fecha Entrega";
+
+            if (status == "Recibido") nameDate = "Fecha Recibido";
+
+            return `<a href="javascript:;"><i title="${nameDate}" style="color:black;">${delivery_date}</i></a>`;
+          },
+        },
+        {
           title: "Referencia",
           data: "reference",
           className: "uniqueClassName dt-head-center",
@@ -143,7 +169,7 @@ $(document).ready(function () {
           title: "Descripción",
           data: "material",
           className: "uniqueClassName dt-head-center",
-        }, 
+        },
         {
           title: "Proveedor Sugerido",
           data: "provider",
@@ -191,37 +217,12 @@ $(document).ready(function () {
           },
         },
         {
-          title: "Fecha Creacion",
-          data: "creation_date",
-          className: "uniqueClassName dt-head-center", 
-        },
-        {
-          title: "Fecha Solicitud",
-          data: "application_date",
-          className: "uniqueClassName dt-head-center",
-          visible: visible,
-        },
-        {
           title: "Estado",
           data: "status",
           className: "uniqueClassName dt-head-center",
           render: renderRequisitionStatus,
         },
-        {
-          title: "Fecha",
-          data: null,
-          className: "uniqueClassName dt-head-center",
-          visible: visible,
-          render: function (data) {
-            let delivery_date = data.delivery_date;
-            let status = data.status;
-            let nameDate = "Fecha Entrega";
 
-            if (status == "Recibido") nameDate = "Fecha Recibido";
-
-            return `<a href="javascript:;"><i title="${nameDate}" style="color:black;">${delivery_date}</i></a>`;
-          },
-        },
         {
           title: "Orden de Compra",
           data: "purchase_order",
@@ -252,13 +253,13 @@ $(document).ready(function () {
           quantity_requested += parseFloat(data[display[i]].quantity_requested);
         }
 
-        $('#lblTotalQRequired').html(
+        $("#lblTotalQRequired").html(
           quantity_required.toLocaleString("es-CO", {
             minimumFractionDigits: 0,
             maximumFractionDigits: 0,
           })
         );
-        $('#lblTotalQRequested').html(
+        $("#lblTotalQRequested").html(
           quantity_requested.toLocaleString("es-CO", {
             minimumFractionDigits: 0,
             maximumFractionDigits: 0,
@@ -285,7 +286,7 @@ $(document).ready(function () {
     if (data.status != "Recibido") {
       action = `<a href="javascript:;" <i id="upd-${
         data.id_requisition
-      }" class="bx bx-edit-alt updateRequisition" data-toggle='tooltip' title='Actualizar Requisicion' style="font-size: 30px;"></i></a>
+      }" class="fas fa-caret-square-right updateRequisition" data-toggle='tooltip' title='Ejecutar Requisicion' style="font-size: 30px;"></i></a>
               <a href="javascript:;" <i id="${
                 data.id_requisition
               }" class="mdi mdi-delete-forever" data-toggle='tooltip' title='Eliminar Requisicion' style="font-size: 30px;color:red" onclick="deleteFunction(${
