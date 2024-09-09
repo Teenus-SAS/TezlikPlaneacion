@@ -186,9 +186,9 @@
 }
 
 .orders-graph {
-    /* height: 400px; */
+    height: 400px;
     /* Ajusta el tamaño según tus necesidades */
-    /* width: 100%; */
+    width: auto;
     /* Asegura que el card ocupe el 100% del contenedor */
     display: flex;
     align-items: center;
@@ -200,9 +200,7 @@
     height: 100%;
 }
 
-canvas {
+/* canvas {
     width: 100% !important;
-    /* Asegura que el canvas ocupe todo el ancho disponible */
     height: auto !important;
-    /* Asegura que el canvas ocupe todo el alto disponible */
-}
+} */
