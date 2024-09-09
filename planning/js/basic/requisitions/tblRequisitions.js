@@ -140,6 +140,27 @@ $(document).ready(function () {
           className: "uniqueClassName dt-head-center",
         },
         {
+          title: "Fecha Solicitud",
+          data: "application_date",
+          className: "uniqueClassName dt-head-center",
+          visible: visible,
+        },
+        {
+          title: "Fecha Entrega",
+          data: null,
+          className: "uniqueClassName dt-head-center",
+          visible: visible,
+          render: function (data) {
+            let delivery_date = data.delivery_date;
+            let status = data.status;
+            let nameDate = "Fecha Entrega";
+
+            if (status == "Recibido") nameDate = "Fecha Recibido";
+
+            return `<a href="javascript:;"><i title="${nameDate}" style="color:black;">${delivery_date}</i></a>`;
+          },
+        },
+        {
           title: "Referencia",
           data: "reference",
           className: "uniqueClassName dt-head-center",
@@ -196,32 +217,12 @@ $(document).ready(function () {
           },
         },
         {
-          title: "Fecha Solicitud",
-          data: "application_date",
-          className: "uniqueClassName dt-head-center",
-          visible: visible,
-        },
-        {
           title: "Estado",
           data: "status",
           className: "uniqueClassName dt-head-center",
           render: renderRequisitionStatus,
         },
-        {
-          title: "Fecha",
-          data: null,
-          className: "uniqueClassName dt-head-center",
-          visible: visible,
-          render: function (data) {
-            let delivery_date = data.delivery_date;
-            let status = data.status;
-            let nameDate = "Fecha Entrega";
 
-            if (status == "Recibido") nameDate = "Fecha Recibido";
-
-            return `<a href="javascript:;"><i title="${nameDate}" style="color:black;">${delivery_date}</i></a>`;
-          },
-        },
         {
           title: "Orden de Compra",
           data: "purchase_order",
