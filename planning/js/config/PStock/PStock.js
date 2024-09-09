@@ -39,6 +39,7 @@ $(document).ready(function () {
     const data = tblPStock.fnGetData(row);
 
     sessionStorage.setItem("idStock", data.id_stock_product);
+    // sessionStorage.setItem("composite", data.composite);
     $(`#refProduct option[value=${data.id_product}]`).prop("selected", true);
     $(`#selectNameProduct option[value=${data.id_product}]`).prop(
       "selected",

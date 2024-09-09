@@ -140,7 +140,12 @@ $app->post('/addPStock', function (Request $request, Response $response, $args) 
             // }
 
             if ($resolution == null) {
-                $arr = $minimumStockDao->calcStockByProduct($dataStock['idProduct']);
+                $product = $generalProductsDao->findProductById($dataStock['idProduct']);
+
+                if ($product['composite'] == 0)
+                    $arr = $minimumStockDao->calcStockByProduct($dataStock['idProduct']);
+                else
+                    $arr = $minimumStockDao->calcStockByComposite($dataStock['idProduct']);
 
                 if (isset($arr['stock']))
                     $resolution = $generalProductsDao->updateStockByProduct($dataStock['idProduct'], $arr['stock']);
@@ -191,7 +196,12 @@ $app->post('/addPStock', function (Request $request, Response $response, $args) 
 
             if (isset($resolution['info'])) break;
 
-            $arr = $minimumStockDao->calcStockByProduct($stock[$i]['idProduct']);
+            $product = $generalProductsDao->findProductById($stock[$i]['idProduct']);
+
+            if ($product['composite'] == 0)
+                $arr = $minimumStockDao->calcStockByProduct($stock[$i]['idProduct']);
+            else
+                $arr = $minimumStockDao->calcStockByComposite($stock[$i]['idProduct']);
 
             if (isset($arr['stock']))
                 $resolution = $generalProductsDao->updateStockByProduct($stock[$i]['idProduct'], $arr['stock']);
@@ -234,8 +244,8 @@ $app->post('/updatePStock', function (Request $request, Response $response, $arg
     $compositeProductsDao,
     $minimumStockDao
 ) {
-    session_start();
-    $id_company = $_SESSION['id_company'];
+    // session_start();
+    // $id_company = $_SESSION['id_company'];
     $dataStock = $request->getParsedBody();
 
     $stock = $generalStockDao->findStock($dataStock);
@@ -245,9 +255,19 @@ $app->post('/updatePStock', function (Request $request, Response $response, $arg
         $resolution = $stockDao->updateStock($dataStock);
 
         if ($resolution == null) {
-            $arr = $minimumStockDao->calcStockByProduct($dataStock['idProduct']);
-            if (isset($arr['stock']))
-                $resolution = $generalProductsDao->updateStockByProduct($dataStock['idProduct'], $arr['stock']);
+            $product = $generalProductsDao->findProductById($dataStock['idProduct']);
+
+            if ($product['composite'] == 0)
+                $arr = $minimumStockDao->calcStockByProduct($dataStock['idProduct']);
+            else
+                $arr = $minimumStockDao->calcStockByComposite($dataStock['idProduct']);
+
+            if (isset($arr['info'])) {
+                $resolution = $arr;
+            } else {
+                if (isset($arr['stock']))
+                    $resolution = $generalProductsDao->updateStockByProduct($dataStock['idProduct'], $arr['stock']);
+            }
         }
 
         // if ($resolution == null) {

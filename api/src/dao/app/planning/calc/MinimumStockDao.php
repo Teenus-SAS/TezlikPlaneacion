@@ -81,7 +81,7 @@ class MinimumStockDao
                                             pi.quantity
                                           FROM plan_unit_sales us
                                           LEFT JOIN stock_products s ON s.id_product = us.id_product 
-                                          INNER JOIN products_inventory pi ON pi.id_product = us.id_product
+                                          LEFT JOIN products_inventory pi ON pi.id_product = us.id_product
                                           WHERE us.id_product = :id_product;");
             $stmt->execute(['id_product' => $id_product]);
             $product = $stmt->fetch($connection::FETCH_ASSOC);
