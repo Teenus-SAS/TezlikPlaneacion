@@ -117,19 +117,19 @@ if (sizeof($_SESSION) == 0)
                                             <div class="form-row">
                                                 <div class="col-sm-2 floating-label enable-floating-label show-label mt-2">
                                                     <label for="dateOrder">Fecha</label>
-                                                    <input class="form-control" type="date" name="dateOrder" id="dateOrder" min="<?php echo date('Y-m-d'); ?>">
+                                                    <input class="form-control text-center" type="date" name="dateOrder" id="dateOrder" min="<?php echo date('Y-m-d'); ?>" disabled>
                                                 </div>
                                                 <!-- <div class="col-sm-2 floating-label enable-floating-label show-label mt-2">
                                                     <label for="order">No Pedido</label>
                                                     <input class="form-control text-center" name="order" id="order">
                                                 </div> -->
                                                 <div class="col-sm-2 floating-label enable-floating-label show-label mt-2">
-                                                    <label for="minDate">Fecha Min Entrega</label>
+                                                    <label for="minDate text-center">Fecha Min Entrega</label>
                                                     <input class="form-control" type="date" name="minDate" id="minDate" min="<?php echo date('Y-m-d'); ?>">
                                                 </div>
                                                 <div class="col-sm-2 floating-label enable-floating-label show-label mt-2">
                                                     <label for="">Fecha Max Entrega</label>
-                                                    <input class="form-control" type="date" name="maxDate" id="maxDate" min="<?php echo date('Y-m-d'); ?>">
+                                                    <input class="form-control text-center" type="date" name="maxDate" id="maxDate" min="<?php echo date('Y-m-d'); ?>">
                                                 </div>
                                                 <div class="w-100"></div>
                                                 <div class="col-sm-2 floating-label enable-floating-label show- mb-3 label cardSelect">
