@@ -203,6 +203,6 @@
 canvas {
     width: 100% !important;
     /* Asegura que el canvas ocupe todo el ancho disponible */
-    height: 100% !important;
+    height: auto !important;
     /* Asegura que el canvas ocupe todo el alto disponible */
 }
