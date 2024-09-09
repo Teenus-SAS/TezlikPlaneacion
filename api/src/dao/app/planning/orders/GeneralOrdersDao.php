@@ -175,7 +175,10 @@ class GeneralOrdersDao
     {
         $connection = Connection::getInstance()->getConnection();
 
-        $stmt = $connection->prepare("SELECT CONCAT('PED', COUNT(id_order) + 1) AS num_order FROM plan_orders WHERE id_company = :id_company");
+        $sql = "SELECT CONCAT('PED', COUNT(id_order) + 1) AS num_order 
+                FROM plan_orders 
+                WHERE id_company = :id_company";
+        $stmt = $connection->prepare($sql);
         $stmt->execute(['id_company' => $id_company]);
 
         $this->logger->info(__FUNCTION__, array('query' => $stmt->queryString, 'errors' => $stmt->errorInfo()));
