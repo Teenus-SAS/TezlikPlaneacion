@@ -25,7 +25,7 @@ $(document).ready(function () {
   };
 });
 
-const ChartMachinesAvailable = (data) => {
+ChartMachinesAvailable = (data) => {
   // Extraer etiquetas y colores
   const labels = data.map((item) => item.machine);
   const colors = data.map((item) =>
