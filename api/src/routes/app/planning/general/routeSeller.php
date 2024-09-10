@@ -59,7 +59,7 @@ $app->post('/sellersDataValidation', function (Request $request, Response $respo
 
             if (isset($duplicateTracker[$email])) {
                 $i = $i + 2;
-                $dataImportSellers =  array('error' => true, 'message' => "Duplicación encontrada en la fila: $i.<br>- Email: $email");
+                $dataImportSellers =  array('error' => true, 'message' => "fila-$i: Duplicidad encontrada: Email: $email");
                 break;
             } else {
                 $duplicateTracker[$email] = true;

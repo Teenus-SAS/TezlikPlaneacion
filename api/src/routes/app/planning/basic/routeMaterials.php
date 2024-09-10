@@ -128,7 +128,7 @@ $app->post('/materialsDataValidation', function (Request $request, Response $res
 
             if (isset($duplicateTracker[$refRawMaterial]) || isset($duplicateTracker[$nameRawMaterial])) {
                 $row = $i + 2;
-                array_push($debugg, array('error' => true, 'message' => "Duplicación encontrada en la fila: $row.<br>- Referencia: $refRawMaterial<br>- Material: $nameRawMaterial"));
+                array_push($debugg, array('error' => true, 'message' => "Fila-$row: Duplicidad encontrada: $refRawMaterial, $nameRawMaterial"));
             } else {
                 $duplicateTracker[$refRawMaterial] = true;
                 $duplicateTracker[$nameRawMaterial] = true;
@@ -138,13 +138,13 @@ $app->post('/materialsDataValidation', function (Request $request, Response $res
 
             if (sizeof($findMaterial) > 1) {
                 $row = $i + 2;
-                array_push($debugg, array('error' => true, 'message' => "Referencia o nombre de material ya existente, fila: $row.<br>- Referencia: $refRawMaterial<br>- Material: $nameRawMaterial"));
+                array_push($debugg, array('error' => true, 'message' => "Fila-$row: Referencia o nombre de materia prima ya existente: $refRawMaterial, $nameRawMaterial"));
             }
 
             if ($findMaterial) {
                 if ($findMaterial[0]['material'] != $nameRawMaterial || $findMaterial[0]['reference'] != $refRawMaterial) {
                     $row = $i + 2;
-                    array_push($debugg, array('error' => true, 'message' => "Referencia o nombre de material ya existente, fila: $row.<br>- Referencia: $refRawMaterial<br>- Material: $nameRawMaterial"));
+                    array_push($debugg, array('error' => true, 'message' => "fila-$row: Referencia o nombre de materia prima ya existe: $refRawMaterial, $nameRawMaterial"));
                 }
             }
 
@@ -172,7 +172,7 @@ $app->post('/materialsDataValidation', function (Request $request, Response $res
 
                 if (!$materialType) {
                     $row = $i + 2;
-                    array_push($debugg, array('error' => true, 'message' => "Tipo de material no existe en la base de datos. Fila: $row"));
+                    array_push($debugg, array('error' => true, 'message' => "Fila-$row: Tipo de material no existe."));
                 }
             }
         }

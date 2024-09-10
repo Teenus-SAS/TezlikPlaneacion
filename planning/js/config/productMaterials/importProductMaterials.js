@@ -1,29 +1,29 @@
 $(document).ready(function () {
-  $('.cardImport').hide();
+  $(".cardImport").hide();
 
-  $('#btnImportProduct').on('click', function () {
-    $('.cardAddNewProduct').hide(800);
-    $('.cardAddMaterials').hide(800);
-    $('.cardImport').toggle(800);
-    $('.cardAddNewProduct').hide();
+  $("#btnImportProduct").on("click", function () {
+    $(".cardAddNewProduct").hide(800);
+    $(".cardAddMaterials").hide(800);
+    $(".cardImport").toggle(800);
+    $(".cardAddNewProduct").hide();
   });
 
-  $('#btnImportProductsMaterials').click(function (e) {
+  $("#btnImportProductsMaterials").click(function (e) {
     e.preventDefault();
- 
-    const fileInput = document.getElementById('fileProductsMaterials');
+
+    const fileInput = document.getElementById("fileProductsMaterials");
     const selectedFile = fileInput.files[0];
-    
+
     if (!fileProductsMaterials) {
-      toastr.error('Seleccione un archivo');
+      toastr.error("Seleccione un archivo");
       return false;
     }
-    
-    $('.cardBottons').hide();
-    
-    let form = document.getElementById('formProductMaterial');
+
+    $(".cardBottons").hide();
+
+    let form = document.getElementById("formProductMaterial");
     form.insertAdjacentHTML(
-      'beforeend',
+      "beforeend",
       `<div class="col-sm-1 cardLoading" style="margin-top: 7px; margin-left: 15px">
         <div class="spinner-grow text-dark" role="status">
             <span class="sr-only">Loading...</span>
@@ -40,13 +40,17 @@ $(document).ready(function () {
           expectedHeaders.splice(4, 1);
         }
 
-        const missingHeaders = expectedHeaders.filter(header => !actualHeaders.includes(header));
+        const missingHeaders = expectedHeaders.filter(
+          (header) => !actualHeaders.includes(header)
+        );
 
         if (missingHeaders.length > 0) {
-          $('.cardLoading').remove();
-          $('.cardBottons').show(400);
-          $('#fileProductsMaterials').val('');
-          toastr.error('Archivo no corresponde con el formato. Verifique nuevamente');
+          $(".cardLoading").remove();
+          $(".cardBottons").show(400);
+          $("#fileProductsMaterials").val("");
+          toastr.error(
+            "Archivo no corresponde con el formato. Verifique nuevamente"
+          );
           return false;
         }
 
@@ -54,7 +58,6 @@ $(document).ready(function () {
           !item.referencia_producto ? item.referencia_producto = '' : item.referencia_producto;
           !item.producto ? item.producto = '' : item.producto;
           !item.referencia_material ? item.referencia_material = '' : item.referencia_material;
-          !item.tipo_material ? item.tipo_material = '' : item.tipo_material;
           !item.material ? item.material = '' : item.material;
           !item.magnitud ? item.magnitud = '' : item.magnitud;
           !item.unidad ? item.unidad = '' : item.unidad;
@@ -71,55 +74,57 @@ $(document).ready(function () {
             unit: item.unidad,
             quantity: item.cantidad,
             type: item.tipo,
-          }
+          };
         });
 
         checkDataPM(dataToImport);
       })
       .catch(() => {
-        $('.cardLoading').remove();
-        $('.cardBottons').show(400);
-        $('#fileProductsMaterials').val('');
+        $(".cardLoading").remove();
+        $(".cardBottons").show(400);
+        $("#fileProductsMaterials").val("");
 
-        toastr.error('Ocurrio un error. Intente Nuevamente');
+        toastr.error("Ocurrio un error. Intente Nuevamente");
       });
   });
 
   /* Mensaje de advertencia */
   const checkDataPM = (data) => {
     $.ajax({
-      type: 'POST',
-      url: '/api/productsMaterialsDataValidation',
+      type: "POST",
+      url: "/api/productsMaterialsDataValidation",
       data: { importProducts: data },
       success: function (resp) {
         let arr = resp.import;
 
         if (arr.length > 0 && arr.error == true) {
-          $('.cardLoading').remove();
-          $('.cardBottons').show(400);
-          $('#fileProductsMaterials').val('');
+          $(".cardLoading").remove();
+          $(".cardBottons").show(400);
+          $("#fileProductsMaterials").val("");
 
-          $('#formImportProductMaterial').trigger('reset');
+          $("#formImportProductMaterial").trigger("reset");
           toastr.error(resp.message);
           return false;
         }
 
         if (resp.debugg.length > 0) {
-          $('.cardLoading').remove();
-          $('.cardBottons').show(400);
-          $('#fileProductsMaterials').val('');
+          $(".cardLoading").remove();
+          $(".cardBottons").show(400);
+          $("#fileProductsMaterials").val("");
 
           // Generar el HTML para cada mensaje
-          let concatenatedMessages = resp.debugg.map(item =>
-            `<li>
-              <span class="badge badge-danger" style="font-size: 16px;">${item.message}</span>
-            </li>
-            <br>`
-          ).join('');
+          let concatenatedMessages = resp.debugg
+            .map(
+              (item) =>
+                `<li>
+              <span class="badge text-danger" style="font-size: 16px;">${item.message}</span>
+            </li>`
+            )
+            .join("");
 
           // Mostramos el mensaje con Bootbox
           bootbox.alert({
-            title: 'Errores',
+            title: "Estado Importación Data",
             message: `
             <div class="container">
               <div class="col-12">
@@ -128,33 +133,38 @@ $(document).ready(function () {
                 </ul>
               </div> 
             </div>`,
-            size: 'large',
-            backdrop: true
+            size: "large",
+            backdrop: true,
           });
           return false;
         }
-        
-        if (typeof arr === 'object' && !Array.isArray(arr) && arr !== null && resp.debugg.length == 0) {
+
+        if (
+          typeof arr === "object" &&
+          !Array.isArray(arr) &&
+          arr !== null &&
+          resp.debugg.length == 0
+        ) {
           bootbox.confirm({
-            title: '¿Desea continuar con la importación?',
+            title: "¿Desea continuar con la importación?",
             message: `Se han encontrado los siguientes registros:<br><br>Datos a insertar: ${arr.insert} <br>Datos a actualizar: ${arr.update}`,
             buttons: {
               confirm: {
-                label: 'Si',
-                className: 'btn-success',
+                label: "Si",
+                className: "btn-success",
               },
               cancel: {
-                label: 'No',
-                className: 'btn-danger',
+                label: "No",
+                className: "btn-danger",
               },
             },
             callback: function (result) {
               if (result) {
                 saveProduct(data);
               } else {
-                $('.cardLoading').remove();
-                $('.cardBottons').show(400);
-                $('#fileProductsMaterials').val('');
+                $(".cardLoading").remove();
+                $(".cardBottons").show(400);
+                $("#fileProductsMaterials").val("");
               }
             },
           });
@@ -166,13 +176,13 @@ $(document).ready(function () {
   const saveProduct = (data) => {
     // console.log(data);
     $.ajax({
-      type: 'POST',
-      url: '/api/addProductsMaterials',
+      type: "POST",
+      url: "/api/addProductsMaterials",
       data: { importProducts: data },
       success: function (r) {
-        $('.cardLoading').remove();
-        $('.cardBottons').show(400);
-        $('#fileProductsMaterials').val('');
+        $(".cardLoading").remove();
+        $(".cardBottons").show(400);
+        $("#fileProductsMaterials").val("");
 
         messageMaterial(r);
       },
@@ -180,25 +190,14 @@ $(document).ready(function () {
   };
 
   /* Descargar formato */
-  $('#btnDownloadImportsProductsMaterials').click(function (e) {
+  $("#btnDownloadImportsProductsMaterials").click(function (e) {
     e.preventDefault();
+    let link = document.createElement('a');
+    link.target = '_blank';
 
-    if (flag_products_measure == '1')
-      url = 'assets/formatsXlsx/Productos_Materias(bolsas).xlsx';
-    else
-      url = 'assets/formatsXlsx/Productos_Materias.xlsx';
-
-    let newFileName = 'Productos_Materias.xlsx';
-
-    fetch(url)
-      .then(response => response.blob())
-      .then(blob => {
-        let link = document.createElement('a');
-        link.href = URL.createObjectURL(blob);
-        link.download = newFileName;
-
-        document.body.appendChild(link);
-        link.click();
+    link.href = 'assets/formatsXlsx/Productos_Materias.xlsx';
+    document.body.appendChild(link);
+    link.click();
 
         document.body.removeChild(link);
         URL.revokeObjectURL(link.href); // liberar memoria

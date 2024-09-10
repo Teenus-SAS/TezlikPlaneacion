@@ -1,33 +1,33 @@
 $(document).ready(function () {
   let selectedFile;
 
-  $('.cardImportPMeasure').hide();
+  $(".cardImportPMeasure").hide();
 
-  $('#btnImportNewPMeasure').click(function (e) {
+  $("#btnImportNewPMeasure").click(function (e) {
     e.preventDefault();
-    $('.cardCreatePMeasure').hide(800);
-    $('.cardImportPMeasure').toggle(800);
+    $(".cardCreatePMeasure").hide(800);
+    $(".cardImportPMeasure").toggle(800);
   });
 
-  $('#fileProducts').change(function (e) {
+  $("#fileProducts").change(function (e) {
     e.preventDefault();
     selectedFile = e.target.files[0];
   });
 
-  $('#btnImportProducts').click(function (e) {
+  $("#btnImportProducts").click(function (e) {
     e.preventDefault();
-    file = $('#fileProducts').val();
+    file = $("#fileProducts").val();
 
     if (!file) {
-      toastr.error('Seleccione un archivo');
+      toastr.error("Seleccione un archivo");
       return false;
     }
 
-    $('.cardBottons').hide();
+    $(".cardBottons").hide();
 
-    let form = document.getElementById('formProducts');
+    let form = document.getElementById("formProducts");
     form.insertAdjacentHTML(
-      'beforeend',
+      "beforeend",
       `<div class="col-sm-1 cardLoading" style="margin-top: 7px; margin-left: 15px">
         <div class="spinner-grow text-dark" role="status">
             <span class="sr-only">Loading...</span>
@@ -37,23 +37,43 @@ $(document).ready(function () {
 
     importFile(selectedFile)
       .then((data) => {
+        let expectedHeaders = [
+          "referencia_producto",
+          "producto",
+          "tipo_producto",
+          "ancho",
+          "alto",
+          "largo",
+          "largo_util",
+          "ancho_total",
+          "ventanilla",
+          "tinta",
+          "origen",
+          "compuesto",
+        ];
 
-        let expectedHeaders = ['referencia_producto', 'producto', 'tipo_producto', 'ancho', 'alto', 'largo', 'largo_util', 'ancho_total', 'ventanilla', 'tinta', 'origen', 'compuesto'];
-        
-        if (flag_products_measure == '0') {
-          expectedHeaders = ['referencia_producto', 'producto', 'origen', 'compuesto']; 
+        if (flag_products_measure == "0") {
+          expectedHeaders = [
+            "referencia_producto",
+            "producto",
+            "origen",
+            "compuesto",
+          ];
         }
-        
+
         const actualHeaders = Object.keys(data[0]);
 
-        const missingHeaders = expectedHeaders.filter(header => !actualHeaders.includes(header));
-
+        const missingHeaders = expectedHeaders.filter(
+          (header) => !actualHeaders.includes(header)
+        );
 
         if (missingHeaders.length > 0) {
-          $('.cardLoading').remove();
-          $('.cardBottons').show(400);
-          $('#fileProducts').val('');
-          toastr.error('Archivo no corresponde con el formato. Verifique nuevamente');
+          $(".cardLoading").remove();
+          $(".cardBottons").show(400);
+          $("#fileProducts").val("");
+          toastr.error(
+            "Archivo no corresponde con el formato. Verifique nuevamente"
+          );
           return false;
         }
 
@@ -107,47 +127,49 @@ $(document).ready(function () {
         checkProduct(productsToImport);
       })
       .catch(() => {
-        $('.cardLoading').remove();
-        $('.cardBottons').show(400);
-        $('#fileProducts').val('');
-        toastr.error('Ocurrio un error. Intente Nuevamente');
+        $(".cardLoading").remove();
+        $(".cardBottons").show(400);
+        $("#fileProducts").val("");
+        toastr.error("Ocurrio un error. Intente Nuevamente");
       });
   });
 
   /* Mensaje de advertencia */
   const checkProduct = (data) => {
     $.ajax({
-      type: 'POST',
-      url: '/api/productsMeasuresDataValidation',
+      type: "POST",
+      url: "/api/productsMeasuresDataValidation",
       data: { importProducts: data },
       success: function (resp) {
         let arr = resp.import;
 
         if (arr.length > 0 && arr.error == true) {
-          $('.cardLoading').remove();
-          $('.cardBottons').show(400);
-          $('#fileProducts').val('');
+          $(".cardLoading").remove();
+          $(".cardBottons").show(400);
+          $("#fileProducts").val("");
           toastr.error(resp.message);
-          $('#formImportProduct').trigger('reset');
+          $("#formImportProduct").trigger("reset");
           return false;
         }
 
         if (resp.debugg.length > 0) {
-          $('.cardLoading').remove();
-          $('.cardBottons').show(400);
-          $('#fileProducts').val('');
+          $(".cardLoading").remove();
+          $(".cardBottons").show(400);
+          $("#fileProducts").val("");
 
           // Generar el HTML para cada mensaje
-          let concatenatedMessages = resp.debugg.map(item =>
-            `<li>
+          let concatenatedMessages = resp.debugg
+            .map(
+              (item) =>
+                `<li>
               <span class="badge badge-danger" style="font-size: 16px;">${item.message}</span>
-            </li>
-            <br>`
-          ).join('');
+            </li>`
+            )
+            .join("");
 
           // Mostramos el mensaje con Bootbox
           bootbox.alert({
-            title: 'Errores',
+            title: "Estado Importación Data",
             message: `
             <div class="container">
               <div class="col-12">
@@ -156,33 +178,38 @@ $(document).ready(function () {
                 </ul>
               </div> 
             </div>`,
-            size: 'large',
-            backdrop: true
+            size: "large",
+            backdrop: true,
           });
           return false;
         }
-        
-        if (typeof arr === 'object' && !Array.isArray(arr) && arr !== null && resp.debugg.length == 0) {
+
+        if (
+          typeof arr === "object" &&
+          !Array.isArray(arr) &&
+          arr !== null &&
+          resp.debugg.length == 0
+        ) {
           bootbox.confirm({
-            title: '¿Desea continuar con la importación?',
+            title: "¿Desea continuar con la importación?",
             message: `Se encontraron los siguientes registros:<br><br>Datos a insertar: ${arr.insert}<br>Datos a actualizar: ${arr.update}`,
             buttons: {
               confirm: {
-                label: 'Si',
-                className: 'btn-success',
+                label: "Si",
+                className: "btn-success",
               },
               cancel: {
-                label: 'No',
-                className: 'btn-danger',
+                label: "No",
+                className: "btn-danger",
               },
             },
             callback: function (result) {
               if (result) {
                 saveProductTable(data);
               } else {
-                $('.cardLoading').remove();
-                $('.cardBottons').show(400);
-                $('#fileProducts').val('');
+                $(".cardLoading").remove();
+                $(".cardBottons").show(400);
+                $("#fileProducts").val("");
               }
             },
           });
@@ -194,34 +221,33 @@ $(document).ready(function () {
   /* Guardar Importacion */
   const saveProductTable = (data) => {
     $.ajax({
-      type: 'POST',
-      url: '/api/addProductMeasure',
+      type: "POST",
+      url: "/api/addProductMeasure",
       //data: data,
       data: { importProducts: data },
       success: function (r) {
-        $('.cardLoading').remove();
-        $('.cardBottons').show(400);
-        $('#fileProducts').val('');
+        $(".cardLoading").remove();
+        $(".cardBottons").show(400);
+        $("#fileProducts").val("");
         messageProducts(r);
       },
     });
   };
 
   /* Descargar formato */
-  $('#btnDownloadImportsProducts').click(async function (e) {
+  $("#btnDownloadImportsProducts").click(async function (e) {
     e.preventDefault();
 
-    if (flag_products_measure == '1')
-      url = 'assets/formatsXlsx/Medidas_Productos.xlsx';
-    else
-      url = 'assets/formatsXlsx/Productos_No_Medidas.xlsx';
+    if (flag_products_measure == "1")
+      url = "assets/formatsXlsx/Medidas_Productos.xlsx";
+    else url = "assets/formatsXlsx/Productos_No_Medidas.xlsx";
 
-    let newFileName = 'Productos.xlsx';
+    let newFileName = "Productos.xlsx";
 
     fetch(url)
-      .then(response => response.blob())
-      .then(blob => {
-        let link = document.createElement('a');
+      .then((response) => response.blob())
+      .then((blob) => {
+        let link = document.createElement("a");
         link.href = URL.createObjectURL(blob);
         link.download = newFileName;
 

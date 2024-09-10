@@ -111,14 +111,13 @@ $(document).ready(function () {
           // Generar el HTML para cada mensaje
           let concatenatedMessages = resp.debugg.map(item =>
             `<li>
-              <span class="badge badge-danger" style="font-size: 16px;">${item.message}</span>
-            </li>
-            <br>`
+              <span class="badge text-danger" style="font-size: 16px;">${item.message}</span>
+            </li>`
           ).join('');
 
           // Mostramos el mensaje con Bootbox
           bootbox.alert({
-            title: 'Errores',
+            title: 'Estado Importación Data',
             message: `
             <div class="container">
               <div class="col-12">

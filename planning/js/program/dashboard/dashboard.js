@@ -1,11 +1,11 @@
 //Ocultar graficos
 $(".staffAvailableCardChart. machinesAvailableCardChart").hide();
 
-// Función para mostrar el gráfico correspondiente
+// Mostrar el gráfico
 function showChart(cardClass, chartClass) {
   $(cardClass).click(function (e) {
     e.preventDefault();
-    $(chartClass).stop(true, true).slideDown(800); // Usar slideDown para una animación más suave
+    $(chartClass).stop(true, true).slideDown(800);
   });
 }
 

@@ -70,7 +70,7 @@ $app->post('/clientsDataValidation', function (Request $request, Response $respo
 
             if (isset($duplicateTracker[$nitClient]) || isset($duplicateTracker[$nameClient])) {
                 $i = $i + 2;
-                $dataImportClients =  array('error' => true, 'message' => "Duplicación encontrada en la fila: $i.<br>- NIT: $nitClient<br>- Cliente: $nameClient");
+                $dataImportClients =  array('error' => true, 'message' => "fila-$i: Duplicidad encontrada: NIT: $nitClient, Cliente: $nameClient");
                 break;
             } else {
                 $duplicateTracker[$nitClient] = true;
@@ -81,14 +81,14 @@ $app->post('/clientsDataValidation', function (Request $request, Response $respo
 
             if (sizeof($findClient) > 1) {
                 $i = $i + 2;
-                $dataImportClients =  array('error' => true, 'message' => "NIT y nombre de cliente ya existente, fila: $i.<br>- NIT: $nitClient<br>- Cliente: $nameClient");
+                $dataImportClients =  array('error' => true, 'message' => "fila-$i: NIT y nombre de cliente ya existen: NIT: $nitClient, Cliente: $nameClient");
                 break;
             }
 
             if ($findClient) {
                 if ($findClient[0]['nit'] != $nitClient || $findClient[0]['client'] != $nameClient) {
                     $i = $i + 2;
-                    $dataImportClients =  array('error' => true, 'message' => "NIT o nombre de cliente ya existente, fila: $i.<br>- NIT: $nitClient<br>- Cliente: $nameClient");
+                    $dataImportClients =  array('error' => true, 'message' => "fila: $i: NIT o nombre de cliente ya existen: NIT: $nitClient, Cliente: $nameClient");
                     break;
                 }
             }
