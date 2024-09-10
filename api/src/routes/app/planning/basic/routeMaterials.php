@@ -154,14 +154,16 @@ $app->post('/materialsDataValidation', function (Request $request, Response $res
             if (!$magnitude) {
                 $row = $i + 2;
                 array_push($debugg, array('error' => true, 'message' => "Magnitud no existe en la base de datos. Fila: $row"));
-            } else $materials[$i]['idMagnitude'] = $magnitude['id_magnitude'];
+            } else {
+                $materials[$i]['idMagnitude'] = $magnitude['id_magnitude'];
 
-            // Consultar unidad
-            $unit = $unitsDao->findUnit($materials[$i]);
+                // Consultar unidad
+                $unit = $unitsDao->findUnit($materials[$i]);
 
-            if (!$unit) {
-                $row = $i + 2;
-                array_push($debugg, array('error' => true, 'message' => "Unidad no existe en la base de datos. Fila: $row"));
+                if (!$unit) {
+                    $row = $i + 2;
+                    array_push($debugg, array('error' => true, 'message' => "Unidad no existe en la base de datos. Fila: $row"));
+                }
             }
 
             if ($_SESSION['flag_products_measure'] == '1') {

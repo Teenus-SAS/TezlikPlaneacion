@@ -33,8 +33,12 @@ $(document).ready(function () {
 
     importFile(selectedFile)
       .then((data) => {
-        const expectedHeaders = ['referencia_producto', 'producto', 'referencia_material', 'material', 'magnitud', 'unidad', 'cantidad', 'tipo'];
+        const expectedHeaders = ['referencia_producto', 'producto', 'referencia_material', 'material', 'tipo_material', 'magnitud', 'unidad', 'cantidad', 'tipo'];
         const actualHeaders = Object.keys(data[0]);
+
+        if (flag_products_measure == '0') {
+          expectedHeaders.splice(4, 1);
+        }
 
         const missingHeaders = expectedHeaders.filter(header => !actualHeaders.includes(header));
 
@@ -50,6 +54,7 @@ $(document).ready(function () {
           !item.referencia_producto ? item.referencia_producto = '' : item.referencia_producto;
           !item.producto ? item.producto = '' : item.producto;
           !item.referencia_material ? item.referencia_material = '' : item.referencia_material;
+          !item.tipo_material ? item.tipo_material = '' : item.tipo_material;
           !item.material ? item.material = '' : item.material;
           !item.magnitud ? item.magnitud = '' : item.magnitud;
           !item.unidad ? item.unidad = '' : item.unidad;
@@ -61,6 +66,7 @@ $(document).ready(function () {
             product: item.producto,
             refRawMaterial: item.referencia_material,
             nameRawMaterial: item.material,
+            materialType: item.tipo_material,
             magnitude: item.magnitud,
             unit: item.unidad,
             quantity: item.cantidad,
@@ -176,14 +182,27 @@ $(document).ready(function () {
   /* Descargar formato */
   $('#btnDownloadImportsProductsMaterials').click(function (e) {
     e.preventDefault();
-    let link = document.createElement('a');
-    link.target = '_blank';
 
-    link.href = 'assets/formatsXlsx/Productos_Materias.xlsx';
-    document.body.appendChild(link);
-    link.click();
+    if (flag_products_measure == '1')
+      url = 'assets/formatsXlsx/Productos_Materias(bolsas).xlsx';
+    else
+      url = 'assets/formatsXlsx/Productos_Materias.xlsx';
 
-    document.body.removeChild(link);
-    delete link;
+    let newFileName = 'Productos_Materias.xlsx';
+
+    fetch(url)
+      .then(response => response.blob())
+      .then(blob => {
+        let link = document.createElement('a');
+        link.href = URL.createObjectURL(blob);
+        link.download = newFileName;
+
+        document.body.appendChild(link);
+        link.click();
+
+        document.body.removeChild(link);
+        URL.revokeObjectURL(link.href); // liberar memoria
+      })
+      .catch(console.error);
   });
 });
