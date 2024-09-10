@@ -132,14 +132,16 @@ $app->post('/productsMaterialsDataValidation', function (Request $request, Respo
             if (!$magnitude) {
                 $row = $i + 2;
                 array_push($debugg, array('error' => true, 'message' => "Magnitud no existe en la base de datos. Fila: $row"));
-            } else $productMaterials[$i]['idMagnitude'] = $magnitude['id_magnitude'];
+            } else {
+                $productMaterials[$i]['idMagnitude'] = $magnitude['id_magnitude'];
 
-            // Consultar unidad
-            $unit = $unitsDao->findUnit($productMaterials[$i]);
+                // Consultar unidad
+                $unit = $unitsDao->findUnit($productMaterials[$i]);
 
-            if (!$unit) {
-                $row = $i + 2;
-                array_push($debugg, array('error' => true, 'message' => "Unidad no existe en la base de datos. Fila: $row"));
+                if (!$unit) {
+                    $row = $i + 2;
+                    array_push($debugg, array('error' => true, 'message' => "Unidad no existe en la base de datos. Fila: $row"));
+                }
             }
 
             // Obtener id producto
