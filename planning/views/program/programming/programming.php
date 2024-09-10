@@ -421,6 +421,7 @@ if (sizeof($_SESSION) == 0)
     <!-- <script src="/planning/js/basic/machines/configMachines.js"></script> -->
     <script src="/planning/js/program/programming/programming.js"></script>
     <script src="/planning/js/program/programming/configProgramming.js"></script>
+    <script src="/planning/js/program/dashboard/dashboard.js"></script>
     <script src="/planning/js/program/dashboard/staffAvailable.js"></script>
     <script src="/planning/js/program/dashboard/machinesAvailable.js"></script>
     <script src="/planning/js/program/dashboard/machinesCapacityProgrammed.js"></script>
