@@ -57,7 +57,7 @@ $app->post('/planningMachinesDataValidation', function (Request $request, Respon
                 $planningMachines[$i]['september'] > 30 ||  $planningMachines[$i]['october'] > 31 ||  $planningMachines[$i]['november'] > 30 ||  $planningMachines[$i]['december'] > 31
             ) {
                 $i = $i + 2;
-                $dataImportPlanMachines = array('error' => true, 'message' => "El valor es mayor al ultimo dia del mes<br>Fila: {$i}");
+                $dataImportPlanMachines = array('error' => true, 'message' => "Fila-$i: El valor es mayor al último día del mes");
                 break;
             }
 
@@ -65,7 +65,7 @@ $app->post('/planningMachinesDataValidation', function (Request $request, Respon
             $findMachine = $machinesDao->findMachine($planningMachines[$i], $id_company);
             if (!$findMachine) {
                 $i = $i + 2;
-                $dataImportPlanMachines = array('error' => true, 'message' => "Maquina no existe en la base de datos<br>Fila: {$i}");
+                $dataImportPlanMachines = array('error' => true, 'message' => "Fila-$i: Máquina no existe");
                 break;
             } else $planningMachines[$i]['idMachine'] = $findMachine['id_machine'];
 
@@ -75,7 +75,7 @@ $app->post('/planningMachinesDataValidation', function (Request $request, Respon
                 empty($planningMachines[$i]['august']) || empty($planningMachines[$i]['september']) ||  empty($planningMachines[$i]['october']) ||  empty($planningMachines[$i]['november']) ||  empty($planningMachines[$i]['december'])
             ) {
                 $i = $i + 2;
-                $dataImportPlanMachines = array('error' => true, 'message' => "Columna vacia en la fila: {$i}");
+                $dataImportPlanMachines = array('error' => true, 'message' => "Fila-$i: Columna vacia");
                 break;
             }
 

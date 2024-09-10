@@ -107,14 +107,14 @@ $app->post('/productsMaterialsDataValidation', function (Request $request, Respo
                 empty($productMaterials[$i]['nameRawMaterial']) || $productMaterials[$i]['quantity'] == '' || empty($productMaterials[$i]['type'])
             ) {
                 $row = $i + 2;
-                array_push($debugg, array('error' => true, 'message' => "fila-$row: Columna vacia"));
+                array_push($debugg, array('error' => true, 'message' => "Fila-$row: Columna vacia"));
             }
             if (
                 empty(trim($productMaterials[$i]['referenceProduct'])) || empty(trim($productMaterials[$i]['product'])) || empty(trim($productMaterials[$i]['refRawMaterial'])) ||
                 empty(trim($productMaterials[$i]['nameRawMaterial'])) || trim($productMaterials[$i]['quantity']) == '' || empty($productMaterials[$i]['type'])
             ) {
                 $row = $i + 2;
-                array_push($debugg, array('error' => true, 'message' => "fila-$row: Columna vacia"));
+                array_push($debugg, array('error' => true, 'message' => "Fila-$row: Columna vacia"));
             }
 
             $quantity = str_replace(',', '.', $productMaterials[$i]['quantity']);
@@ -131,7 +131,7 @@ $app->post('/productsMaterialsDataValidation', function (Request $request, Respo
 
             if (!$magnitude) {
                 $row = $i + 2;
-                array_push($debugg, array('error' => true, 'message' => "Fila-$row: Magnitud no existe."));
+                array_push($debugg, array('error' => true, 'message' => "Fila-$row: Magnitud no Existe."));
             } else {
                 $productMaterials[$i]['idMagnitude'] = $magnitude['id_magnitude'];
 
@@ -140,7 +140,7 @@ $app->post('/productsMaterialsDataValidation', function (Request $request, Respo
 
                 if (!$unit) {
                     $row = $i + 2;
-                    array_push($debugg, array('error' => true, 'message' => "Fila-$row: Unidad no existe."));
+                    array_push($debugg, array('error' => true, 'message' => "Fila-$row: Unidad no Existe."));
                 }
             }
 
@@ -148,7 +148,7 @@ $app->post('/productsMaterialsDataValidation', function (Request $request, Respo
             $findProduct = $productsDao->findProduct($productMaterials[$i], $id_company);
             if (!$findProduct) {
                 $row = $i + 2;
-                array_push($debugg, array('error' => true, 'message' => "Fila-$row: Producto no existe"));
+                array_push($debugg, array('error' => true, 'message' => "Fila-$row: Producto no Existe"));
             } else $productMaterials[$i]['idProduct'] = $findProduct['id_product'];
 
             $type = $productMaterials[$i]['type'];
@@ -158,7 +158,7 @@ $app->post('/productsMaterialsDataValidation', function (Request $request, Respo
                 $findMaterial = $materialsDao->findMaterial($productMaterials[$i], $id_company);
                 if (!$findMaterial) {
                     $row = $i + 2;
-                    array_push($debugg, array('error' => true, 'message' => "Fila-$row: Materia prima no existe"));
+                    array_push($debugg, array('error' => true, 'message' => "Fila-$row: Materia prima no Existe"));
                 } else $productMaterials[$i]['material'] = $findMaterial['id_material'];
 
                 if (sizeof($debugg) == 0) {

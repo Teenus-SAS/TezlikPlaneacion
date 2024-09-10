@@ -61,7 +61,7 @@ $app->post('/pStockDataValidation', function (Request $request, Response $respon
                 $stock[$i]['max'] == '' || $stock[$i]['min'] == ''
             ) {
                 $i = $i + 2;
-                $dataImportStock = array('error' => true, 'message' => "Columna vacia en la fila: {$i}");
+                $dataImportStock = array('error' => true, 'message' => "Fila-$i: Columna vacia");
                 break;
             }
 
@@ -70,7 +70,7 @@ $app->post('/pStockDataValidation', function (Request $request, Response $respon
                 trim($stock[$i]['max']) == '' || trim($stock[$i]['min']) == ''
             ) {
                 $i = $i + 2;
-                $dataImportStock = array('error' => true, 'message' => "Columna vacia en la fila: {$i}");
+                $dataImportStock = array('error' => true, 'message' => "Fila-$i: Columna vacia");
                 break;
             }
 
@@ -81,13 +81,13 @@ $app->post('/pStockDataValidation', function (Request $request, Response $respon
 
             if ($data <= 0 || is_nan($data)) {
                 $i = $i + 2;
-                $dataImportStock = array('error' => true, 'message' => "La cantidad debe ser mayor a cero (0)<br>Fila: {$i}");
+                $dataImportStock = array('error' => true, 'message' => "Fila-$i: La cantidad debe ser mayor a cero (0)");
                 break;
             }
 
             if ($min > $max) {
                 $i = $i + 2;
-                $dataImportStock = array('error' => true, 'message' => "Tiempo minimo de producción mayor a el tiempo maximo<br>Fila: {$i}");
+                $dataImportStock = array('error' => true, 'message' => "Fila-$i: Tiempo minimo mayor al tiempo máximo de Producción");
                 break;
             }
 
@@ -95,7 +95,7 @@ $app->post('/pStockDataValidation', function (Request $request, Response $respon
             $findProduct = $generalProductsDao->findProduct($stock[$i], $id_company);
             if (!$findProduct) {
                 $i = $i + 2;
-                $dataImportStock = array('error' => true, 'message' => "Producto no existe en la base de datos<br>Fila: {$i}");
+                $dataImportStock = array('error' => true, 'message' => "Fila-$i: Producto no Existe");
                 break;
             } else $stock[$i]['idProduct'] = $findProduct['id_product'];
 

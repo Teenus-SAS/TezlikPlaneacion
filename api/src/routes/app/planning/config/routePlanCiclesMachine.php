@@ -106,7 +106,7 @@ $app->post('/planCiclesMachineDataValidation', function (Request $request, Respo
                 empty($planCiclesMachine[$i]['machine']) || empty($planCiclesMachine[$i]['ciclesHour'])
             ) {
                 $row = $i + 2;
-                array_push($debugg, array('error' => true, 'message' => "Columna vacia en la fila: $row"));
+                array_push($debugg, array('error' => true, 'message' => "Fila-$row: Columna vacia"));
             }
 
             if (
@@ -114,21 +114,21 @@ $app->post('/planCiclesMachineDataValidation', function (Request $request, Respo
                 empty(trim($planCiclesMachine[$i]['machine'])) || empty(trim($planCiclesMachine[$i]['ciclesHour']))
             ) {
                 $row = $i + 2;
-                array_push($debugg, array('error' => true, 'message' => "Columna vacia en la fila: $row"));
+                array_push($debugg, array('error' => true, 'message' => "Fila-$row: Columna vacia"));
             }
 
             // Obtener id producto
             $findProduct = $productsDao->findProduct($planCiclesMachine[$i], $id_company);
             if (!$findProduct) {
                 $row = $i + 2;
-                array_push(array('error' => true, 'message' => "No existe el producto en la base de datos<br>Fila: $row"));
+                array_push(array('error' => true, 'message' => "Fila-$row: Producto no Existe"));
             } else $planCiclesMachine[$i]['idProduct'] = $findProduct['id_product'];
 
             // Obtener id proceso
             $findProcess = $processDao->findProcess($planCiclesMachine[$i], $id_company);
             if (!$findProcess) {
                 $row = $i + 2;
-                array_push($debugg, array('error' => true, 'message' => "No existe el proceso en la base de datos<br>Fila: $row"));
+                array_push($debugg, array('error' => true, 'message' => "Fila-$row: Proceso no Existe"));
             } else $planCiclesMachine[$i]['idProcess'] = $findProcess['id_process'];
 
             // Obtener id maquina 
@@ -139,7 +139,7 @@ $app->post('/planCiclesMachineDataValidation', function (Request $request, Respo
                 $findMachine = $machinesDao->findMachine($planCiclesMachine[$i], $id_company);
                 if (!$findMachine) {
                     $row = $i + 2;
-                    array_push($debugg, array('error' => true, 'message' => "Maquina no existe en la base de datos <br>Fila: $row"));
+                    array_push($debugg, array('error' => true, 'message' => "Fila-$row: Máquina no Existe"));
                 } else $planCiclesMachine[$i]['idMachine'] = $findMachine['id_machine'];
             }
 
