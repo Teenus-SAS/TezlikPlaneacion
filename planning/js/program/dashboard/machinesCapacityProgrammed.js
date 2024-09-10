@@ -24,7 +24,7 @@ $(document).ready(function () {
     return color;
   };
 });
-chartMachineCapacityProgrammed;
+
 const ChartMachinesCapacityProgrammed = (data) => {
   //Obtener labels y valores
   const machineNames = data.map((item) => `${item.machine_name}`);

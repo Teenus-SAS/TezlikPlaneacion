@@ -5,6 +5,7 @@ $(document).ready(function () {
       .then((data) => {
         data = JSON.parse(data);
         ChartMachinesAvailable(data);
+        IndicatorCapacityProgrammed(data);
       });
   }, 3000);
 
@@ -69,4 +70,20 @@ const ChartMachinesAvailable = (data) => {
       },
     },
   });
+
+  //Indicator
+
+  IndicatorCapacityProgrammed = (data) => {
+    // Filtrar máquinas disponibles (status = 1)
+    const availableMachines = machines.filter(
+      (machine) => machine.status === 1
+    );
+
+    // Calcular el margen de disponibilidad
+    const totalMachines = machines.length;
+    const availableMachinesCount = availableMachines.length;
+    const availableMargin = (availableMachinesCount / totalMachines) * 100;
+
+    $("#machinesAvailableIndicator").val(`${availableMargin.toFixed(2)}%`);
+  };
 };

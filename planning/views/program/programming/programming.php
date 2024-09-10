@@ -227,19 +227,19 @@ if (sizeof($_SESSION) == 0)
                                         <div class="page-content-wrapper mt-3">
                                             <div class="container-fluid">
                                                 <!-- Widget  -->
-                                                <!-- <div class="row">
+                                                <div class="row">
                                                     <div class="col-md-6 col-xl-3">
                                                         <div class="card">
                                                             <div class="card-body">
                                                                 <div class="media align-items-center">
                                                                     <div class="media-body">
-                                                                        <span class="text-muted text-uppercase font-size-12 font-weight-bold">Productos Agotados</span>
-                                                                        <h2 class="mb-0 mt-1 text-danger" id="productStockout"></h2>
+                                                                        <span class="text-muted text-uppercase font-size-12 font-weight-bold">Personal Disponible</span>
+                                                                        <h2 class="mb-0 mt-1 text-info" id="staffAvailableIndicator">95%</h2>
                                                                     </div>
                                                                     <div class="text-center">
                                                                         <div id="t-rev"></div>
                                                                         <span class="text-danger font-weight-bold font-size-23">
-                                                                            <i class='fas fa-times-circle fs-lg'></i>
+                                                                            <i class='fas fa-users fs-lg'></i>
                                                                         </span>
                                                                     </div>
                                                                 </div>
@@ -251,13 +251,13 @@ if (sizeof($_SESSION) == 0)
                                                             <div class="card-body">
                                                                 <div class="media align-items-center">
                                                                     <div class="media-body">
-                                                                        <span class="text-muted text-uppercase font-size-12 font-weight-bold">Pedidos No Programados</span>
-                                                                        <h2 class="mb-0 mt-1 text-danger" id="ordersNoProgramed"></h2>
+                                                                        <span class="text-muted text-uppercase font-size-12 font-weight-bold">Máquinas Disponibles</span>
+                                                                        <h2 class="mb-0 mt-1 text-info" id="machinesAvailableIndicator">100%</h2>
                                                                     </div>
                                                                     <div class="text-center">
                                                                         <div id="t-rev"></div>
                                                                         <span class="text-warning font-weight-bold font-size-13">
-                                                                            <i class='fas fa-calendar-times fs-lg'></i>
+                                                                            <i class='fas fa-cogs fs-lg'></i>
                                                                         </span>
                                                                     </div>
                                                                 </div>
@@ -269,13 +269,13 @@ if (sizeof($_SESSION) == 0)
                                                             <div class="card-body">
                                                                 <div class="media align-items-center">
                                                                     <div class="media-body">
-                                                                        <span class="text-muted text-uppercase font-size-12 font-weight-bold">Pedidos Sin Materia Prima</span>
-                                                                        <h2 class="mb-0 mt-1 text-info" id="ordersNoMP"></h2>
+                                                                        <span class="text-muted text-uppercase font-size-12 font-weight-bold">Moldes Disponibles</span>
+                                                                        <h2 class="mb-0 mt-1 text-info" id="ordersNoMP">50%</h2>
                                                                     </div>
                                                                     <div class="text-center">
                                                                         <div id="t-order"></div>
                                                                         <span class="text-info font-weight-bold font-size-13">
-                                                                            <i class="fas fa-calendar-check fs-lg"></i>
+                                                                            <i class="fas fa-grip-vertical fs-lg"></i>
                                                                         </span>
                                                                     </div>
                                                                 </div>
@@ -300,7 +300,7 @@ if (sizeof($_SESSION) == 0)
                                                             </div>
                                                         </div>
                                                     </div>
-                                                </div> -->
+                                                </div>
                                                 <!-- Row 2-->
                                                 <div class="row align-items-stretch">
 
@@ -351,20 +351,19 @@ if (sizeof($_SESSION) == 0)
                                                     <!-- End total revenue chart -->
                                                 </div>
                                                 <div class="row">
-                                                    <div class="col-md-12 col-lg-12" style="height: fit-content;">
+                                                    <div class="col-md-12 col-lg-8">
                                                         <div class="card orders-graph">
                                                             <div class="card-header">
                                                                 <h5 class="card-title">Capacidad de Producción por Máquina</h5>
                                                             </div>
                                                             <div class="card-body pt-2">
                                                                 <div class="chart-container">
-                                                                    <!-- <canvas id="chartTimeProcessProducts"></canvas> -->
                                                                     <canvas id="chartMachineCapacityProgrammed"></canvas>
                                                                 </div>
                                                             </div>
                                                         </div>
                                                     </div>
-                                                    <div class="col-md-4 col-lg-8" style="height: fit-content;">
+                                                    <div class="col-md-4 col-lg-8">
                                                         <div class="card orders-graph">
                                                             <div class="card-header">
                                                                 <h5 class="card-title">Clientes con mayor número de pedidos</h5>

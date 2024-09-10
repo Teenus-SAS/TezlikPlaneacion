@@ -16,6 +16,7 @@ class DashboardProgrammingDao
         $this->logger->pushHandler(new RotatingFileHandler(Constants::LOGS_PATH . 'querys.log', 20, Logger::DEBUG));
     }
 
+    //Encontrar Empleadoas disponibles por empresa
     public function findStaffAvailableByCompany($id_company)
     {
         $connection = Connection::getInstance()->getConnection();
@@ -33,11 +34,12 @@ class DashboardProgrammingDao
         return $staffAvailable;
     }
 
+    //Encontrar Maquinas dispobles por empresa
     public function findMachinesAvailableByCompany($id_company)
     {
         $connection = Connection::getInstance()->getConnection();
 
-        $sql = "SELECT m.machine, pm.number_workers AS status
+        $sql = "SELECT m.machine, pm.status_machine AS status
                 FROM plan_program_machines pm
                 INNER JOIN machines m ON pm.id_machine = m.id_machine
                 WHERE pm.id_company = :id_company;";

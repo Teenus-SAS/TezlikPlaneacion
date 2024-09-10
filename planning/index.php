@@ -74,7 +74,7 @@ if (sizeof($_SESSION) == 0)
                                     </div>
                                 </div>
                             </div>
-                            
+
                             <div class="col-auto">
                                 <div class="card">
                                     <div class="card-body">
@@ -221,7 +221,6 @@ if (sizeof($_SESSION) == 0)
                                     </div>
                                     <div class="card-body pt-2">
                                         <div class="chart-container">
-                                            <!-- <canvas id="chartTimeProcessProducts"></canvas> -->
                                             <canvas id="chartOrdersxDay"></canvas>
                                         </div>
                                     </div>
