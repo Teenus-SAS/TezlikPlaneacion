@@ -229,7 +229,7 @@ if (sizeof($_SESSION) == 0)
                                                 <!-- Widget  -->
                                                 <div class="row">
                                                     <div class="col-md-6 col-xl-3">
-                                                        <div class="card">
+                                                        <div class="card staffAvailableCard">
                                                             <div class="card-body">
                                                                 <div class="media align-items-center">
                                                                     <div class="media-body">
@@ -247,7 +247,7 @@ if (sizeof($_SESSION) == 0)
                                                         </div>
                                                     </div>
                                                     <div class="col-md-6 col-xl-3">
-                                                        <div class="card">
+                                                        <div class="card machinesAvailableCard">
                                                             <div class="card-body">
                                                                 <div class="media align-items-center">
                                                                     <div class="media-body">
@@ -306,7 +306,7 @@ if (sizeof($_SESSION) == 0)
 
                                                     <!-- Begin total orders vs clients chart -->
                                                     <div class="col-md-4 col-lg-4">
-                                                        <div class="card orders-graph">
+                                                        <div class="card orders-graph staffAvailableCardChart">
                                                             <div class="card-header">
                                                                 <h5 class="card-title">Personal Disponible y Requerido</h5>
                                                             </div>
@@ -320,8 +320,8 @@ if (sizeof($_SESSION) == 0)
                                                     </div>
 
                                                     <!-- Begin OC chart -->
-                                                    <div class="col-md-4 col-lg-4" style="height: fit-content;">
-                                                        <div class="card orders-graph">
+                                                    <div class="col-md-4 col-lg-4">
+                                                        <div class="card orders-graph machinesAvailableCardChart">
                                                             <div class="card-header">
                                                                 <h5 class="card-title">Disponibilidad de Máquinas</h5>
                                                             </div>
