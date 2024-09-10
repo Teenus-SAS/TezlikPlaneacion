@@ -1,13 +1,12 @@
 $(document).ready(function () {
-  setTimeout(() => {
-    fetch(`/api/machinesAvailable`)
-      .then((response) => response.text())
-      .then((data) => {
-        data = JSON.parse(data);
-        ChartMachinesAvailable(data);
-        IndicatorCapacityProgrammed(data);
-      });
-  }, 3000);
+  //Obtener data
+  fetch(`/api/machinesAvailable`)
+    .then((response) => response.text())
+    .then((data) => {
+      data = JSON.parse(data);
+      ChartMachinesAvailable(data);
+      IndicatorMachinesAvailable(data);
+    });
 
   /* Colors */
   dynamicColors = () => {
@@ -73,7 +72,7 @@ const ChartMachinesAvailable = (data) => {
 
   //Indicator
 
-  IndicatorCapacityProgrammed = (data) => {
+  IndicatorMachinesAvailable = (data) => {
     // Filtrar máquinas disponibles (status = 1)
     const availableMachines = machines.filter(
       (machine) => machine.status === 1
