@@ -54,6 +54,40 @@ class ProductsPlansDao
         }
     }
 
+    public function insertProductMechanicalPlanByCompany($dataProduct, $id_company)
+    {
+        try {
+            $connection = Connection::getInstance()->getConnection();
+
+            $stmt = $connection->prepare("INSERT INTO products_plans (id_company, id_product, mechanical_plan) 
+                    VALUES (:id_company, :id_product, :mechanical_plan)");
+            $stmt->execute([
+                'id_company' => $id_company,
+                'id_product' => $dataProduct['idProduct'],
+                'mechanical_plan' => $dataProduct['mechanicalFile']
+            ]);
+        } catch (\Exception $e) {
+            return ['info' => true, 'message' => $e->getMessage()];
+        }
+    }
+
+    public function insertProductAssemblyPlanByCompany($dataProduct, $id_company)
+    {
+        try {
+            $connection = Connection::getInstance()->getConnection();
+
+            $stmt = $connection->prepare("INSERT INTO products_plans (id_company, id_product, assembly_plan) 
+                    VALUES (:id_company, :id_product, :assembly_plan)");
+            $stmt->execute([
+                'id_company' => $id_company,
+                'id_product' => $dataProduct['idProduct'],
+                'assembly_plan' => $dataProduct['assemblyFile']
+            ]);
+        } catch (\Exception $e) {
+            return ['info' => true, 'message' => $e->getMessage()];
+        }
+    }
+
     public function updateProductPlan($dataProduct)
     {
         try {
@@ -64,6 +98,38 @@ class ProductsPlansDao
             $stmt->execute([
                 'id_product_plan' => $dataProduct['idProductPlan'],
                 'mechanical_plan' => $dataProduct['mechanicalFile'],
+                'assembly_plan' => $dataProduct['assemblyFile']
+            ]);
+        } catch (\Exception $e) {
+            return ['info' => true, 'message' => $e->getMessage()];
+        }
+    }
+
+    public function updateProductMechanicalPlan($dataProduct)
+    {
+        try {
+            $connection = Connection::getInstance()->getConnection();
+
+            $stmt = $connection->prepare("UPDATE products_plans SET mechanical_plan = :mechanical_plan
+                                          WHERE id_product_plan = :id_product_plan");
+            $stmt->execute([
+                'id_product_plan' => $dataProduct['idProductPlan'],
+                'mechanical_plan' => $dataProduct['mechanicalFile'],
+            ]);
+        } catch (\Exception $e) {
+            return ['info' => true, 'message' => $e->getMessage()];
+        }
+    }
+
+    public function updateProductAssemblyPlan($dataProduct)
+    {
+        try {
+            $connection = Connection::getInstance()->getConnection();
+
+            $stmt = $connection->prepare("UPDATE products_plans SET assembly_plan = :assembly_plan
+                                          WHERE id_product_plan = :id_product_plan");
+            $stmt->execute([
+                'id_product_plan' => $dataProduct['idProductPlan'],
                 'assembly_plan' => $dataProduct['assemblyFile']
             ]);
         } catch (\Exception $e) {

@@ -34,21 +34,28 @@ $app->post('/addProductPlan', function (Request $request, Response $response, $a
     if (!$findProduct) {
         $resolution = null;
 
-        $mechanicalFile = $filesDao->saveProductsPlansFile($_FILES['mechanicalPlaneFile'], $id_company);
+        if (isset($_FILES['mechanicalPlaneFile'])) {
+            $mechanicalFile = $filesDao->saveProductsPlansFile($_FILES['mechanicalPlaneFile'], $id_company);
 
-        if (isset($mechanicalFile['info']))
-            $resolution = $mechanicalFile;
+            if (isset($mechanicalFile['info']))
+                $resolution = $mechanicalFile;
 
-        $assemblyFile = $filesDao->saveProductsPlansFile($_FILES['assemblyPlaneFile'], $id_company);
+            if ($resolution == null) {
+                $dataProduct['mechanicalFile'] = $mechanicalFile;
+                $resolution = $productsPlansDao->insertProductMechanicalPlanByCompany($dataProduct, $id_company);
+            }
+        }
 
-        if (isset($assemblyFile['info']))
-            $resolution = $assemblyFile;
+        if (isset($_FILES['assemblyPlaneFile'])) {
+            $assemblyFile = $filesDao->saveProductsPlansFile($_FILES['assemblyPlaneFile'], $id_company);
 
-        if ($resolution == null) {
-            $dataProduct['mechanicalFile'] = $mechanicalFile;
-            $dataProduct['assemblyFile'] = $assemblyFile;
+            if (isset($assemblyFile['info']))
+                $resolution = $assemblyFile;
 
-            $resolution = $productsPlansDao->insertProductPlanByCompany($dataProduct, $id_company);
+            if ($resolution == null) {
+                $dataProduct['assemblyFile'] = $assemblyFile;
+                $resolution = $productsPlansDao->insertProductAssemblyPlanByCompany($dataProduct, $id_company);
+            }
         }
 
         if ($resolution == null)
@@ -75,21 +82,29 @@ $app->post('/updateProductPlan', function (Request $request, Response $response,
     $dataProduct = $request->getParsedBody();
 
     $resolution = null;
-    $mechanicalFile = $filesDao->saveProductsPlansFile($_FILES['mechanicalPlaneFile'], $id_company);
 
-    if (isset($mechanicalFile['info']))
-        $resolution = $mechanicalFile;
+    if (isset($_FILES['mechanicalPlaneFile'])) {
+        $mechanicalFile = $filesDao->saveProductsPlansFile($_FILES['mechanicalPlaneFile'], $id_company);
 
-    $assemblyFile = $filesDao->saveProductsPlansFile($_FILES['assemblyPlaneFile'], $id_company);
+        if (isset($mechanicalFile['info']))
+            $resolution = $mechanicalFile;
 
-    if (isset($assemblyFile['info']))
-        $resolution = $assemblyFile;
+        if ($resolution == null) {
+            $dataProduct['mechanicalFile'] = $mechanicalFile;
+            $resolution = $productsPlansDao->updateProductMechanicalPlan($dataProduct);
+        }
+    }
 
-    if ($resolution == null) {
-        $dataProduct['mechanicalFile'] = $mechanicalFile;
-        $dataProduct['assemblyFile'] = $assemblyFile;
+    if (isset($_FILES['assemblyPlaneFile'])) {
+        $assemblyFile = $filesDao->saveProductsPlansFile($_FILES['assemblyPlaneFile'], $id_company);
 
-        $resolution = $productsPlansDao->updateProductPlan($dataProduct);
+        if (isset($assemblyFile['info']))
+            $resolution = $assemblyFile;
+
+        if ($resolution == null) {
+            $dataProduct['assemblyFile'] = $assemblyFile;
+            $resolution = $productsPlansDao->updateProductAssemblyPlan($dataProduct);
+        }
     }
 
     if ($resolution == null)

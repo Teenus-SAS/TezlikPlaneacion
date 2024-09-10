@@ -85,29 +85,42 @@ $(document).ready(function () {
           let totalWidth = 0;
           let window = 0;
           let inks = 0;
-          let origin = "";
+          let origin = '';
+          
+          !item.referencia_producto ? item.referencia_producto = '' : item.referencia_producto;
+          !item.producto ? item.producto = '' : item.producto;
+          !item.tipo_producto ? item.tipo_producto = '' : item.tipo_producto;
+          !item.ancho ? item.ancho = '' : item.ancho;
+          !item.alto ? item.alto = '' : item.alto;
+          !item.largo ? item.largo = '' : item.largo;
+          !item.largo_util ? item.largo_util = '' : item.largo_util;
+          !item.ancho_total ? item.ancho_total = '' : item.ancho_total;
+          !item.ventanilla ? item.ventanilla = '' : item.ventanilla;
+          !item.tinta ? item.tinta = '' : item.tinta;
+          !item.origen ? item.origen = '' : item.origen;
+          !item.compuesto ? item.compuesto = '' : item.compuesto;
 
-          item.ancho ? (width = item.ancho) : width;
-          item.alto ? (high = item.alto) : high;
-          item.largo ? (length = item.largo) : length;
-          item.largo_util ? (usefulLength = item.largo_util) : usefulLength;
-          item.ancho_total ? (totalWidth = item.ancho_total) : totalWidth;
-          item.ventanilla ? (window = item.ventanilla) : window;
-          item.tinta ? (inks = item.tinta) : inks;
-          item.origen ? (origin = "COMERCIALIZADO") : origin;
-
+          item.ancho ? width = item.ancho : width;
+          item.alto ? high = item.alto : high;
+          item.largo ? length = item.largo : length;
+          item.largo_util ? usefulLength = item.largo_util : usefulLength;
+          item.ancho_total ? totalWidth = item.ancho_total : totalWidth;
+          item.ventanilla ? window = item.ventanilla : window;
+          item.tinta ? inks = item.tinta : inks;
+          item.origen ? origin = 'COMERCIALIZADO' : origin;
+          
           return {
             referenceProduct: item.referencia_producto,
             product: item.producto,
             productType: item.tipo_producto,
-            width: item.ancho,
-            high: item.alto,
-            length: item.largo,
-            usefulLength: item.largo_util,
-            totalWidth: item.ancho_total,
-            window: item.ventanilla,
-            inks: item.tinta,
-            origin: item.origen,
+            width: width,
+            high: high,
+            length: length,
+            usefulLength: usefulLength,
+            totalWidth: totalWidth,
+            window: window,
+            inks: inks,
+            origin: origin,
             composite: item.compuesto,
           };
         });

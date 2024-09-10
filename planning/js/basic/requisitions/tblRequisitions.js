@@ -241,6 +241,7 @@ $(document).ready(function () {
           title: "Acciones",
           data: null,
           className: "uniqueClassName dt-head-center",
+          visible: visible == true ? false : true,
           render: (data) => renderRequisitionActions(data, visible),
         },
       ],

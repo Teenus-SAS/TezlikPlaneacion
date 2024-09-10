@@ -56,24 +56,23 @@ $(document).ready(function () {
         }
 
         let materialsToImport = data.map((item) => {
-          if (flag_products_measure == '1')
-            return {
-              refRawMaterial: item.referencia,
-              nameRawMaterial: item.material,
-              materialType: item.tipo_material,
-              magnitude: item.magnitud,
-              unit: item.unidad,
-              quantity: item.existencia,
-              grammage: item.gramaje
-            };
-          else
-            return {
-              refRawMaterial: item.referencia,
-              nameRawMaterial: item.material,
-              magnitude: item.magnitud,
-              unit: item.unidad,
-              quantity: item.existencia,
-            };
+          !item.referencia ? item.referencia = '' : item.referencia;
+          !item.material ? item.material = '' : item.material;
+          !item.tipo_material ? item.tipo_material = '' : item.tipo_material;
+          !item.magnitud ? item.magnitud = '' : item.magnitud;
+          !item.unidad ? item.unidad = '' : item.unidad;
+          !item.existencia ? item.existencia = '' : item.existencia;
+          !item.gramaje ? item.gramaje = '' : item.gramaje;
+ 
+          return {
+            refRawMaterial: item.referencia,
+            nameRawMaterial: item.material,
+            materialType: item.tipo_material,
+            magnitude: item.magnitud,
+            unit: item.unidad,
+            quantity: item.existencia,
+            grammage: item.gramaje
+          };
         });
 
         checkRawMaterial(materialsToImport);
