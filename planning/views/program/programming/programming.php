@@ -130,7 +130,7 @@ if (sizeof($_SESSION) == 0)
                                                     </div>
                                                     <div class="col-sm-2 floating-label enable-floating-label show-label mb-2 p-1">
                                                         <label for="">MP Disponible</label>
-                                                        <input type="text" class="form-control text-center" id="quantityMP" name="quantityMP" readonly>
+                                                        <button class="form-control text-center" type="number" name="quantityMP" id="quantityMP" data-toggle="tooltip" readonly></button>
                                                     </div>
 
                                                     <div class="col-sm-2 floating-label enable-floating-label show-label mb-2 p-1">

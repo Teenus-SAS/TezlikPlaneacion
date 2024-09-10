@@ -47,6 +47,15 @@ $(document).ready(function () {
         }
 
         let dataToImport = data.map((item) => {
+          !item.referencia_producto ? item.referencia_producto = '' : item.referencia_producto;
+          !item.producto ? item.producto = '' : item.producto;
+          !item.referencia_material ? item.referencia_material = '' : item.referencia_material;
+          !item.material ? item.material = '' : item.material;
+          !item.magnitud ? item.magnitud = '' : item.magnitud;
+          !item.unidad ? item.unidad = '' : item.unidad;
+          !item.cantidad ? item.cantidad = 0 : item.cantidad;
+          !item.tipo ? item.tipo = '' : item.tipo;
+
           return {
             referenceProduct: item.referencia_producto,
             product: item.producto,

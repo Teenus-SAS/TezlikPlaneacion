@@ -547,7 +547,7 @@ $app->post('/addProductsMaterials', function (Request $request, Response $respon
         for ($i = 0; $i < sizeof($products); $i++) {
             if (intval($products[$i]['available']) < 0) {
                 $data = [];
-                $arr2 = $generalOrdersDao->findLastNumOrderByCompany($id_company);
+                $arr2 = $generalOrdersDao->findLastOrderByNumOrder($products[$i]['num_order']);
 
                 $client = $generalClientsDao->findInternalClient($id_company);
                 $seller = $generalSellersDao->findInternalSeller($id_company);
@@ -712,7 +712,7 @@ $app->post('/updatePlanProductsMaterials', function (Request $request, Response 
             for ($i = 0; $i < sizeof($products); $i++) {
                 if (intval($products[$i]['available']) < 0) {
                     $data = [];
-                    $arr2 = $generalOrdersDao->findLastNumOrderByCompany($id_company);
+                    $arr2 = $generalOrdersDao->findLastOrderByNumOrder($products[$i]['num_order']);
 
                     $client = $generalClientsDao->findInternalClient($id_company);
                     $seller = $generalSellersDao->findInternalSeller($id_company);
@@ -865,7 +865,7 @@ $app->post('/deletePlanProductMaterial', function (Request $request, Response $r
         for ($i = 0; $i < sizeof($products); $i++) {
             if (intval($products[$i]['available']) < 0) {
                 $data = [];
-                $arr2 = $generalOrdersDao->findLastNumOrderByCompany($id_company);
+                $arr2 = $generalOrdersDao->findLastOrderByNumOrder($products[$i]['num_order']);
 
                 $client = $generalClientsDao->findInternalClient($id_company);
                 $seller = $generalSellersDao->findInternalSeller($id_company);

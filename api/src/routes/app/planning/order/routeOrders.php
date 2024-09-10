@@ -433,7 +433,7 @@ $app->post('/addOrder', function (Request $request, Response $response, $args) u
         for ($i = 0; $i < sizeof($products); $i++) {
             if (intval($products[$i]['available']) < 0) {
                 $data = [];
-                $arr2 = $generalOrdersDao->findLastNumOrderByCompany($id_company);
+                $arr2 = $generalOrdersDao->findLastOrderByNumOrder($products[$i]['num_order']);
 
                 $client = $generalClientsDao->findInternalClient($id_company);
                 $seller = $generalSellersDao->findInternalSeller($id_company);
@@ -452,8 +452,6 @@ $app->post('/addOrder', function (Request $request, Response $response, $args) u
                     $findOrder = $generalOrdersDao->findLastSameOrder($data);
                     if (!$findOrder) {
                         $resolution = $ordersDao->insertOrderByCompany($data, $id_company);
-                        // $generalProductsDao->updateAccumulatedQuantity($products[$i]['id_child_product'], abs($products[$i]['available']), 2);
-
                         if (isset($resolution['info'])) break;
                         $lastOrder = $lastDataDao->findLastInsertedOrder($id_company);
 
@@ -673,7 +671,7 @@ $app->post('/updateOrder', function (Request $request, Response $response, $args
     for ($i = 0; $i < sizeof($products); $i++) {
         if (intval($products[$i]['available']) < 0) {
             $data = [];
-            $arr2 = $generalOrdersDao->findLastNumOrderByCompany($id_company);
+            $arr2 = $generalOrdersDao->findLastOrderByNumOrder($products[$i]['num_order']);
 
             $client = $generalClientsDao->findInternalClient($id_company);
             $seller = $generalSellersDao->findInternalSeller($id_company);
@@ -893,7 +891,7 @@ $app->post('/deleteOrder', function (Request $request, Response $response, $args
             for ($i = 0; $i < sizeof($products); $i++) {
                 if (intval($products[$i]['available']) < 0) {
                     $data = [];
-                    $arr2 = $generalOrdersDao->findLastNumOrderByCompany($id_company);
+                    $arr2 = $generalOrdersDao->findLastOrderByNumOrder($products[$i]['num_order']);
 
                     $client = $generalClientsDao->findInternalClient($id_company);
                     $seller = $generalSellersDao->findInternalSeller($id_company);

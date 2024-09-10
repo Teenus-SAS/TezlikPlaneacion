@@ -620,7 +620,7 @@ $(document).ready(function () {
           let productsMaterials = allProductsMaterials.filter(item => item.id_product == this.value);
           productsMaterials = productsMaterials.sort((a, b) => a.quantity - b.quantity);
           // let quantity = parseFloat(productsMaterials[0].quantity) / parseFloat(productOrders[i].original_quantity);
-          $('#quantityMP').val(Math.floor(productsMaterials[0].quantity).toLocaleString('es-CO', { maximumFractionDigits: 0 }));
+          $('#quantityMP').html(Math.floor(productsMaterials[0].quantity).toLocaleString('es-CO', { maximumFractionDigits: 0 }));
 
           dataProgramming['id_order'] = productOrders[i].id_order;
           dataProgramming['num_order'] = num_order;
@@ -666,8 +666,7 @@ $(document).ready(function () {
     if (allTblData.length > 0) {
       let id_product = $('#selectNameProduct').val();
       let machine = parseFloat($('#idMachine').val());
-      let id_order = $('#order').val();
-      // let num_order = $('#order :selected').text().trim();
+      let id_order = $('#order').val(); 
 
       let data = allTblData.filter(item => item.id_product == id_product);
 
@@ -725,6 +724,49 @@ $(document).ready(function () {
           minDate.value = max_date;
         }
       }
+    }
+  });
+
+  // Mostrar MP Disponible
+  $('#quantityMP').click(function (e) { 
+    e.preventDefault();
+
+    let id_product = $('#selectNameProduct').val();
+    
+    if (id_product) {
+      let productsMaterials = allProductsMaterials.filter(item => item.id_product == id_product);
+      productsMaterials = productsMaterials.sort((a, b) => a.quantity - b.quantity);
+
+      // Mostramos el mensaje con Bootbox
+      bootbox.alert({
+        title: 'Materia Prima',
+        message: `
+            <div class="container">
+              <div class="col-12">
+                <div class="table-responsive">
+                  <table class="fixed-table-loading table table-hover">
+                    <thead>
+                      <tr>
+                        <th>Referencia</th>
+                        <th>Descripción</th>
+                        <th>Cantidad Disponible</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <tr>
+                        <td>${productsMaterials[0].reference_material}</td>
+                        <td>${productsMaterials[0].material}</td>
+                        <td>${Math.floor(productsMaterials[0].quantity).toLocaleString('es-CO', { maximumFractionDigits: 0 })}</td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </div>
+              </div> 
+            </div>`,
+        size: 'large',
+        backdrop: true
+      });
+      return false;
     }
   });
 });

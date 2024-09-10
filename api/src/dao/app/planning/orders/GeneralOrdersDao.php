@@ -186,6 +186,21 @@ class GeneralOrdersDao
         $order = $stmt->fetch($connection::FETCH_ASSOC);
         return $order;
     }
+    public function findLastOrderByNumOrder($num_order)
+    {
+        $connection = Connection::getInstance()->getConnection();
+
+        $sql = "SELECT CONCAT(num_order, '-', COUNT(id_order) + 1) AS num_order 
+                FROM plan_orders 
+                WHERE num_order = :num_order";
+        $stmt = $connection->prepare($sql);
+        $stmt->execute(['num_order' => $num_order]);
+
+        $this->logger->info(__FUNCTION__, array('query' => $stmt->queryString, 'errors' => $stmt->errorInfo()));
+
+        $order = $stmt->fetch($connection::FETCH_ASSOC);
+        return $order;
+    }
 
     public function changeStatusOrder($num_order, $id_product)
     {

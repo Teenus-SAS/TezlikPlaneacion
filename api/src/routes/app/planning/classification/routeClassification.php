@@ -31,14 +31,14 @@ $app->get('/classification/{months}', function (Request $request, Response $resp
 
     for ($i = 0; $i < sizeof($products); $i++) {
         if (isset($resolution)) break;
-        // $composite = $generalCompositeProductsDao->findCompositeProductByChild($products[$i]['id_product']);
+        $composite = $generalCompositeProductsDao->findCompositeProductByChild($products[$i]['id_product']);
 
-        // if ($composite) {
-        //     $inventory = $generalProductsDao->findProductById($composite['id_product']);
-        // } else {
-        $inventory = $classificationDao->calcInventoryABCBYProduct($products[$i]['id_product'], $args['months']);
-        $inventory = $classificationDao->calcClassificationByProduct($inventory['year_sales'], $id_company);
-        // }
+        if (sizeof($composite) > 0) {
+            $inventory = $generalProductsDao->findProductById($composite[0]['id_product']);
+        } else {
+            $inventory = $classificationDao->calcInventoryABCBYProduct($products[$i]['id_product'], $args['months']);
+            $inventory = $classificationDao->calcClassificationByProduct($inventory['year_sales'], $id_company);
+        }
 
         $resolution = $classificationDao->updateProductClassification($products[$i]['id_product'], $inventory['classification']);
     }

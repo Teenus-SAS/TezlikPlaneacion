@@ -52,7 +52,7 @@ $app->get('/explosionMaterials', function (Request $request, Response $response,
     for ($i = 0; $i < sizeof($products); $i++) {
         if (intval($products[$i]['available']) < 0) {
             $data = [];
-            $arr2 = $generalOrdersDao->findLastNumOrderByCompany($id_company);
+            $arr2 = $generalOrdersDao->findLastOrderByNumOrder($products[$i]['num_order']);
 
             $client = $generalClientsDao->findInternalClient($id_company);
             $seller = $generalSellersDao->findInternalSeller($id_company);

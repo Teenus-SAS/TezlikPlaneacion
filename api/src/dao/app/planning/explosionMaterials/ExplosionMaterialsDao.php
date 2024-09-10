@@ -20,7 +20,7 @@ class ExplosionMaterialsDao
   {
     $connection = Connection::getInstance()->getConnection();
 
-    $stmt = $connection->prepare("SELECT cp.id_product, o.id_order, cp.id_child_product, SUM(pi.quantity) AS quantity_product, cpi.quantity AS quantity_material, u.abbreviation, (o.original_quantity * cp.quantity) AS need, cpi.minimum_stock, p.reference AS reference_material, p.product AS material
+    $stmt = $connection->prepare("SELECT cp.id_product, o.id_order, o.num_order, cp.id_child_product, SUM(pi.quantity) AS quantity_product, cpi.quantity AS quantity_material, u.abbreviation, (o.original_quantity * cp.quantity) AS need, cpi.minimum_stock, p.reference AS reference_material, p.product AS material
                                       FROM composite_products cp
                                         LEFT JOIN products_inventory pi ON pi.id_product = cp.id_product
                                         LEFT JOIN products_inventory cpi ON cpi.id_product = cp.id_child_product
@@ -207,6 +207,7 @@ class ExplosionMaterialsDao
 
         if ($repeat == false) {
           $data[] = array(
+            'num_order' => $arr['num_order'],
             'id_product' => $arr['id_product'],
             'id_child_product' => $arr['id_child_product'],
             'quantity_product' => $arr['quantity_product'],
