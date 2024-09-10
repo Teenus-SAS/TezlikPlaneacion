@@ -154,9 +154,7 @@ $app->post('/materialsDataValidation', function (Request $request, Response $res
             if (!$magnitude) {
                 $row = $i + 2;
                 array_push($debugg, array('error' => true, 'message' => "Magnitud no existe en la base de datos. Fila: $row"));
-            }
-
-            $materials[$i]['idMagnitude'] = $magnitude['id_magnitude'];
+            } else $materials[$i]['idMagnitude'] = $magnitude['id_magnitude'];
 
             // Consultar unidad
             $unit = $unitsDao->findUnit($materials[$i]);

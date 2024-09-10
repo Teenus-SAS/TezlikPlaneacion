@@ -132,9 +132,7 @@ $app->post('/productsMaterialsDataValidation', function (Request $request, Respo
             if (!$magnitude) {
                 $row = $i + 2;
                 array_push($debugg, array('error' => true, 'message' => "Magnitud no existe en la base de datos. Fila: $row"));
-            }
-
-            $productMaterials[$i]['idMagnitude'] = $magnitude['id_magnitude'];
+            } else $productMaterials[$i]['idMagnitude'] = $magnitude['id_magnitude'];
 
             // Consultar unidad
             $unit = $unitsDao->findUnit($productMaterials[$i]);
@@ -161,9 +159,11 @@ $app->post('/productsMaterialsDataValidation', function (Request $request, Respo
                     array_push($debugg, array('error' => true, 'message' => "Materia prima no existe en la base de datos<br>Fila: $row"));
                 } else $productMaterials[$i]['material'] = $findMaterial['id_material'];
 
-                $findProductsMaterials = $generalProductsMaterialsDao->findProductMaterial($productMaterials[$i], $id_company);
-                if (!$findProductsMaterials) $insert = $insert + 1;
-                else $update = $update + 1;
+                if (sizeof($debugg) == 0) {
+                    $findProductsMaterials = $generalProductsMaterialsDao->findProductMaterial($productMaterials[$i], $id_company);
+                    if (!$findProductsMaterials) $insert = $insert + 1;
+                    else $update = $update + 1;
+                }
             } else if ($type == 'PRODUCTO') {
                 // Obtener id productos compuestos
                 $arr = [];
@@ -176,20 +176,24 @@ $app->post('/productsMaterialsDataValidation', function (Request $request, Respo
                     array_push($debugg, array('error' => true, 'message' => "Producto no existe en la base de datos.<br>Fila: $row"));
                 }
 
-                if ($findProduct['composite'] == 0) {
-                    $row = $i + 2;
-                    array_push($debugg, array('error' => true, 'message' => "Producto no está definido como compuesto.<br>Fila: $row"));
+                if (sizeof($debugg) == 0) {
+                    if ($findProduct['composite'] == 0) {
+                        $row = $i + 2;
+                        array_push($debugg, array('error' => true, 'message' => "Producto no está definido como compuesto.<br>Fila: $row"));
+                    }
+
+                    $productMaterials[$i]['compositeProduct'] = $findProduct['id_product'];
+
+                    $findComposite = $generalCompositeProductsDao->findCompositeProduct($productMaterials[$i]);
+                    if (!$findComposite) $insert += 1;
+                    else $update += 1;
                 }
-
-                $productMaterials[$i]['compositeProduct'] = $findProduct['id_product'];
-
-                $findComposite = $generalCompositeProductsDao->findCompositeProduct($productMaterials[$i]);
-                if (!$findComposite) $insert += 1;
-                else $update += 1;
             }
 
-            $dataImportProductsMaterials['insert'] = $insert;
-            $dataImportProductsMaterials['update'] = $update;
+            if (sizeof($debugg) == 0) {
+                $dataImportProductsMaterials['insert'] = $insert;
+                $dataImportProductsMaterials['update'] = $update;
+            }
         }
     } else
         $dataImportProductsMaterials = array('error' => true, 'message' => 'El archivo se encuentra vacio. Intente nuevamente');

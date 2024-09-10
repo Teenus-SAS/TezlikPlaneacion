@@ -98,40 +98,37 @@ $app->post('/planCiclesMachineDataValidation', function (Request $request, Respo
         $update = 0;
 
         $planCiclesMachine = $dataPlanCiclesMachine['importPlanCiclesMachine'];
+        $debugg = [];
 
         for ($i = 0; $i < sizeof($planCiclesMachine); $i++) {
             if (
                 empty($planCiclesMachine[$i]['referenceProduct']) || empty($planCiclesMachine[$i]['product']) || empty($planCiclesMachine[$i]['process']) ||
                 empty($planCiclesMachine[$i]['machine']) || empty($planCiclesMachine[$i]['ciclesHour'])
             ) {
-                $i = $i + 2;
-                $dataImportPlanCiclesMachine = array('error' => true, 'message' => "Columna vacia en la fila: {$i}");
-                break;
+                $row = $i + 2;
+                array_push($debugg, array('error' => true, 'message' => "Columna vacia en la fila: $row"));
             }
 
             if (
                 empty(trim($planCiclesMachine[$i]['referenceProduct'])) || empty(trim($planCiclesMachine[$i]['product'])) || empty(trim($planCiclesMachine[$i]['process'])) ||
                 empty(trim($planCiclesMachine[$i]['machine'])) || empty(trim($planCiclesMachine[$i]['ciclesHour']))
             ) {
-                $i = $i + 2;
-                $dataImportPlanCiclesMachine = array('error' => true, 'message' => "Columna vacia en la fila: {$i}");
-                break;
+                $row = $i + 2;
+                array_push($debugg, array('error' => true, 'message' => "Columna vacia en la fila: $row"));
             }
 
             // Obtener id producto
             $findProduct = $productsDao->findProduct($planCiclesMachine[$i], $id_company);
             if (!$findProduct) {
-                $i = $i + 2;
-                $dataImportPlanCiclesMachine = array('error' => true, 'message' => "No existe el producto en la base de datos<br>Fila: {$i}");
-                break;
+                $row = $i + 2;
+                array_push(array('error' => true, 'message' => "No existe el producto en la base de datos<br>Fila: $row"));
             } else $planCiclesMachine[$i]['idProduct'] = $findProduct['id_product'];
 
             // Obtener id proceso
             $findProcess = $processDao->findProcess($planCiclesMachine[$i], $id_company);
             if (!$findProcess) {
-                $i = $i + 2;
-                $dataImportPlanCiclesMachine = array('error' => true, 'message' => "No existe el proceso en la base de datos<br>Fila: {$i}");
-                break;
+                $row = $i + 2;
+                array_push($debugg, array('error' => true, 'message' => "No existe el proceso en la base de datos<br>Fila: $row"));
             } else $planCiclesMachine[$i]['idProcess'] = $findProcess['id_process'];
 
             // Obtener id maquina 
@@ -141,22 +138,26 @@ $app->post('/planCiclesMachineDataValidation', function (Request $request, Respo
             } else {
                 $findMachine = $machinesDao->findMachine($planCiclesMachine[$i], $id_company);
                 if (!$findMachine) {
-                    $i = $i + 2;
-                    $dataImportPlanCiclesMachine = array('error' => true, 'message' => "Maquina no existe en la base de datos <br>Fila: {$i}");
-                    break;
+                    $row = $i + 2;
+                    array_push($debugg, array('error' => true, 'message' => "Maquina no existe en la base de datos <br>Fila: $row"));
                 } else $planCiclesMachine[$i]['idMachine'] = $findMachine['id_machine'];
             }
 
-            $findPlanCiclesMachine = $generalPlanCiclesMachinesDao->findPlansCiclesMachine($planCiclesMachine[$i], $id_company);
+            if (sizeof($debugg) == 0) {
+                $findPlanCiclesMachine = $generalPlanCiclesMachinesDao->findPlansCiclesMachine($planCiclesMachine[$i], $id_company);
 
-            if (!$findPlanCiclesMachine) $insert = $insert + 1;
-            else $update = $update + 1;
-            $dataImportPlanCiclesMachine['insert'] = $insert;
-            $dataImportPlanCiclesMachine['update'] = $update;
+                if (!$findPlanCiclesMachine) $insert = $insert + 1;
+                else $update = $update + 1;
+                $dataImportPlanCiclesMachine['insert'] = $insert;
+                $dataImportPlanCiclesMachine['update'] = $update;
+            }
         }
     } else $dataImportPlanCiclesMachine = array('error' => true, 'message' => 'El archivo se encuentra vacio. Intente nuevamente');
 
-    $response->getBody()->write(json_encode($dataImportPlanCiclesMachine, JSON_NUMERIC_CHECK));
+    $data['import'] = $dataImportPlanCiclesMachine;
+    $data['debugg'] = $debugg;
+
+    $response->getBody()->write(json_encode($data, JSON_NUMERIC_CHECK));
     return $response->withHeader('Content-Type', 'application/json');
 });
 
