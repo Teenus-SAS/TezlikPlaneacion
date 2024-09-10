@@ -158,7 +158,7 @@ $app->post('/productsMaterialsDataValidation', function (Request $request, Respo
                 $findMaterial = $materialsDao->findMaterial($productMaterials[$i], $id_company);
                 if (!$findMaterial) {
                     $row = $i + 2;
-                    array_push($debugg, array('error' => true, 'message' => "Materia prima no existe en la base de datos<br>Fila: $row"));
+                    array_push($debugg, array('error' => true, 'message' => "Fila: $row: Materia prima no existe en la base de datos"));
                 } else $productMaterials[$i]['material'] = $findMaterial['id_material'];
 
                 if (sizeof($debugg) == 0) {
