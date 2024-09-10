@@ -132,7 +132,7 @@ $(document).ready(function () {
 
           // Mostramos el mensaje con Bootbox
           bootbox.alert({
-            title: "Errores",
+            title: "Estado Importación Data",
             message: `
             <div class="container">
               <div class="col-12">
