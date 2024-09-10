@@ -63,11 +63,12 @@ $(document).ready(function () {
     let idProduct = $('#selectNameProduct').val();
     let mechanicalPlaneFile = $("#mechanicalPlaneFile")[0].files[0];
     let assemblyPlaneFile = $("#assemblyPlaneFile")[0].files[0];
-
-    if (!idProduct || !mechanicalPlaneFile || !assemblyPlaneFile) {
+ 
+    if (!idProduct || (!mechanicalPlaneFile && !assemblyPlaneFile)) {
       toastr.error("Seleccione un archivo correspondiente");
       return false;
     }
+    
 
     let dataProduct = new FormData(formAddProductPlan);
     dataProduct.append("idProduct", idProduct);
