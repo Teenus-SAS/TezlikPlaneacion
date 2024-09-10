@@ -72,7 +72,7 @@ ChartMachinesAvailable = (data) => {
 
   //Indicator
 
-  IndicatorMachinesAvailable = (data) => {
+  IndicatorMachinesAvailable = (machines) => {
     // Filtrar máquinas disponibles (status = 1)
     const availableMachines = machines.filter(
       (machine) => machine.status === 1
