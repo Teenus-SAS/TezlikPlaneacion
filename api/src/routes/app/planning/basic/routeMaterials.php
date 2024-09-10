@@ -128,7 +128,7 @@ $app->post('/materialsDataValidation', function (Request $request, Response $res
 
             if (isset($duplicateTracker[$refRawMaterial]) || isset($duplicateTracker[$nameRawMaterial])) {
                 $row = $i + 2;
-                array_push($debugg, array('error' => true, 'message' => "Fila-$row: Duplicidad encontrada: Referencia: $refRawMaterial, Materia Prima: $nameRawMaterial"));
+                array_push($debugg, array('error' => true, 'message' => "Fila-$row: Duplicidad encontrada: $refRawMaterial, $nameRawMaterial"));
             } else {
                 $duplicateTracker[$refRawMaterial] = true;
                 $duplicateTracker[$nameRawMaterial] = true;
@@ -138,13 +138,13 @@ $app->post('/materialsDataValidation', function (Request $request, Response $res
 
             if (sizeof($findMaterial) > 1) {
                 $row = $i + 2;
-                array_push($debugg, array('error' => true, 'message' => "Fila-$row: Referencia o nombre de materia prima ya existente: Referencia: $refRawMaterial, Materia Prima: $nameRawMaterial"));
+                array_push($debugg, array('error' => true, 'message' => "Fila-$row: Referencia o nombre de materia prima ya existente: $refRawMaterial, $nameRawMaterial"));
             }
 
             if ($findMaterial) {
                 if ($findMaterial[0]['material'] != $nameRawMaterial || $findMaterial[0]['reference'] != $refRawMaterial) {
                     $row = $i + 2;
-                    array_push($debugg, array('error' => true, 'message' => "fila-$row: Referencia o nombre de materia prima ya existe: Referencia: $refRawMaterial, Materia Prima: $nameRawMaterial"));
+                    array_push($debugg, array('error' => true, 'message' => "fila-$row: Referencia o nombre de materia prima ya existe: $refRawMaterial, $nameRawMaterial"));
                 }
             }
 
@@ -153,7 +153,7 @@ $app->post('/materialsDataValidation', function (Request $request, Response $res
 
             if (!$magnitude) {
                 $row = $i + 2;
-                array_push($debugg, array('error' => true, 'message' => "Fila-$row: Magnitud no existe en la base de datos."));
+                array_push($debugg, array('error' => true, 'message' => "Fila-$row: Magnitud no existe."));
             } else $materials[$i]['idMagnitude'] = $magnitude['id_magnitude'];
 
             // Consultar unidad
@@ -161,7 +161,7 @@ $app->post('/materialsDataValidation', function (Request $request, Response $res
 
             if (!$unit) {
                 $row = $i + 2;
-                array_push($debugg, array('error' => true, 'message' => "Fila-$row: Unidad no existe en la base de datos."));
+                array_push($debugg, array('error' => true, 'message' => "Fila-$row: Unidad no existe."));
             }
 
             if ($_SESSION['flag_products_measure'] == '1') {
@@ -170,7 +170,7 @@ $app->post('/materialsDataValidation', function (Request $request, Response $res
 
                 if (!$materialType) {
                     $row = $i + 2;
-                    array_push($debugg, array('error' => true, 'message' => "Fila-$row: Tipo de material no existe en la base de datos."));
+                    array_push($debugg, array('error' => true, 'message' => "Fila-$row: Tipo de material no existe."));
                 }
             }
         }
