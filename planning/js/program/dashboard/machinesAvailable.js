@@ -83,6 +83,6 @@ ChartMachinesAvailable = (data) => {
     const availableMachinesCount = availableMachines.length;
     const availableMargin = (availableMachinesCount / totalMachines) * 100;
 
-    $("#machinesAvailableIndicator").val(`${availableMargin.toFixed(2)}%`);
+    $("#machinesAvailableIndicator").text(`${availableMargin.toFixed(2)}%`);
   };
 };
