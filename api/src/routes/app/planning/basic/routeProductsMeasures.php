@@ -120,7 +120,7 @@ $app->post('/productsMeasuresDataValidation', function (Request $request, Respon
 
             if (isset($duplicateTracker[$refProduct]) || isset($duplicateTracker[$nameProduct])) {
                 $row = $i + 2;
-                array_push($debugg, array('error' => true, 'message' => "Duplicación encontrada en la fila: $row.<br>- Referencia: $refProduct<br>- Producto: $nameProduct"));
+                array_push($debugg, array('error' => true, 'message' => "fila-$row: Duplicidad encontrada: Referencia: $refProduct, Producto: $nameProduct"));
             } else {
                 $duplicateTracker[$refProduct] = true;
                 $duplicateTracker[$nameProduct] = true;
@@ -130,13 +130,13 @@ $app->post('/productsMeasuresDataValidation', function (Request $request, Respon
 
             if (sizeof($findProduct) > 1) {
                 $row = $i + 2;
-                array_push($debugg, array('error' => true, 'message' => "Referencia y nombre de producto ya existente, fila: $row.<br>- Referencia: $refProduct<br>- Producto: $nameProduct"));
+                array_push($debugg, array('error' => true, 'message' => "fila-$row: Referencia y/o producto ya existe, Referencia: $refProduct, Producto: $nameProduct"));
             }
 
             if ($findProduct) {
                 if ($findProduct[0]['product'] != $nameProduct || $findProduct[0]['reference'] != $refProduct) {
                     $row = $i + 2;
-                    array_push($debugg, array('error' => true, 'message' => "Referencia o nombre de producto ya existente, fila: $row.<br>- Referencia: $refProduct<br>- Producto: $nameProduct"));
+                    array_push($debugg, array('error' => true, 'message' => "fila-$row: Referencia y/o producto ya existe: Referencia: $refProduct, Producto: $nameProduct"));
                 }
             }
         }
