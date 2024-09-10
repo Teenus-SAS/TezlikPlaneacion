@@ -192,12 +192,23 @@ $(document).ready(function () {
   /* Descargar formato */
   $("#btnDownloadImportsProductsMaterials").click(function (e) {
     e.preventDefault();
-    let link = document.createElement('a');
-    link.target = '_blank';
+ 
+    if (flag_products_measure == '1')
+      url = 'assets/formatsXlsx/Productos_Materias(bolsas).xlsx';
+    else
+      url = 'assets/formatsXlsx/Productos_Materias.xlsx';
 
-    link.href = 'assets/formatsXlsx/Productos_Materias.xlsx';
-    document.body.appendChild(link);
-    link.click();
+    let newFileName = 'Productos_Materias.xlsx';
+
+    fetch(url)
+      .then(response => response.blob())
+      .then(blob => {
+        let link = document.createElement('a');
+        link.href = URL.createObjectURL(blob);
+        link.download = newFileName;
+
+        document.body.appendChild(link);
+        link.click();
 
         document.body.removeChild(link);
         URL.revokeObjectURL(link.href); // liberar memoria
