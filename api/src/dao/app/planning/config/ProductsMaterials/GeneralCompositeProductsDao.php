@@ -72,7 +72,7 @@ class GeneralCompositeProductsDao
         $stmt = $connection->prepare("SELECT cp.id_product, cp.id_child_product, cp.quantity
                                       FROM composite_products cp
                                       INNER JOIN products p ON p.id_product = cp.id_child_product
-                                      WHERE cp.id_child_product = :id_child_product AND p.active = 1 
+                                      WHERE cp.id_child_product = :id_child_product
                                       GROUP BY cp.id_product");
         $stmt->execute([
             'id_child_product' => $id_child_product
