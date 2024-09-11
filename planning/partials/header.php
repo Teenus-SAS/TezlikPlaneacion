@@ -3,6 +3,19 @@
     <div class="navbar-header">
         <div class="left-bar">
             <div class="d-flex justify-content-center">
+                <?php
+                $logoCompany = $_SESSION['logoCompany'];
+                ?>
+                <div class="image_width">
+                    <img src="<?php echo $logoCompany; ?>" alt="">
+                </div>
+            </div>
+            <a class="navbar-toggle collapsed" href="javascript:void(0)" data-toggle="collapse" data-target="#topnav-menu-content" aria-expanded="false">
+                <span></span>
+                <span></span>
+                <span></span>
+            </a>
+            <!-- <div class="d-flex justify-content-center">
                 <div class="d-lg-none">
                     <a href="/planning" class="logo logo-dark">
                         <span class="logo-sm"><img src="/assets/images/favicon/favicon_tezlik.jpg" alt="icon tezlik"></span>
@@ -20,12 +33,7 @@
                         <span class="logo-lg"><img src="/assets/images/logo/logo_tezlik.png" alt="Lettstart Admin"></span>
                     </a>
                 </div>
-            </div>
-            <a class="navbar-toggle collapsed" href="javascript:void(0)" data-toggle="collapse" data-target="#topnav-menu-content" aria-expanded="false">
-                <span></span>
-                <span></span>
-                <span></span>
-            </a>
+            </div> -->
         </div>
         <div class="right-bar">
             <div class="dropdown-mega dropdown d-inline-flex ml-0 ml-sm-2">

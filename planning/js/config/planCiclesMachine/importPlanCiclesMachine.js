@@ -51,6 +51,11 @@ $(document).ready(function () {
         }
 
         let planCiclesMachineToImport = data.map((item) => {
+          !item.referencia_producto ? item.referencia_producto = '' : item.referencia_producto;
+          !item.producto ? item.producto = '' : item.producto;
+          !item.maquina ? item.maquina = '' : item.maquina;
+          !item.ciclo_hora ? item.ciclo_hora = '' : item.ciclo_hora;
+
           return {
             referenceProduct: item.referencia_producto,
             product: item.producto,

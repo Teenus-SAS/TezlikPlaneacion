@@ -52,8 +52,10 @@ $(document).ready(function () {
 
     $("#email").prop("disabled", false);
     let imageProd = $("#formFile")[0].files[0];
+    let imageCompany = $('#formFileC')[0].files[0];
     dataProfile = new FormData(formSaveProfile);
     dataProfile.append("avatar", imageProd);
+    dataProfile.append('logo', imageCompany);
     dataProfile.append("admin", 0);
 
     $.ajax({

@@ -122,11 +122,16 @@ class GeneralOrdersDao
         $connection = Connection::getInstance()->getConnection();
 
         $stmt = $connection->prepare("SELECT * FROM plan_orders 
-                                      WHERE num_order = :num_order AND id_product = :id_product AND id_client = :id_client AND status = 1");
+                                      WHERE min_date = :min_date AND max_date = :max_date AND id_seller = :id_seller 
+                                            AND original_quantity = :original_quantity AND id_product = :id_product AND 
+                                            id_client = :id_client AND status = 1");
         $stmt->execute([
-            'num_order' => trim($dataOrder['order']),
+            'min_date' => trim($dataOrder['minDate']),
+            'max_date' => trim($dataOrder['maxDate']),
             'id_product' => $dataOrder['idProduct'],
-            'id_client' => $dataOrder['idClient']
+            'id_seller' => $dataOrder['idSeller'],
+            'id_client' => $dataOrder['idClient'],
+            'original_quantity' => trim($dataOrder['originalQuantity']),
         ]);
         $this->logger->info(__FUNCTION__, array('query' => $stmt->queryString, 'errors' => $stmt->errorInfo()));
         $orders = $stmt->fetch($connection::FETCH_ASSOC);

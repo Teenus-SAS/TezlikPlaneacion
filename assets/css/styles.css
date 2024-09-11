@@ -730,6 +730,18 @@ h6 {
   font-family: 'Nunito Sans', sans-serif;
 }
 
+.image_width {
+  display: flex;
+  height: 10vh;
+
+}
+
+@media screen and (max-width: 600px) {
+  .image_width {
+    display: none;
+  }
+}
+
 p {
   line-height: 1.6;
 }

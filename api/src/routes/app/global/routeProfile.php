@@ -3,17 +3,24 @@
 use TezlikPlaneacion\dao\AutenticationUserDao;
 use TezlikPlaneacion\dao\CompaniesDao;
 use TezlikPlaneacion\dao\FilesDao;
+use TezlikPlaneacion\dao\LicenseCompanyDao;
 use TezlikPlaneacion\dao\ProfileDao;
 
 $profileDao = new ProfileDao();
 $FilesDao = new FilesDao();
 $usersDao = new AutenticationUserDao();
 $companyDao = new CompaniesDao();
+$licenseDao = new LicenseCompanyDao();
 
 use Psr\Http\Message\ResponseInterface as Response;
 use Psr\Http\Message\ServerRequestInterface as Request;
 
-$app->post('/updateProfile', function (Request $request, Response $response, $args) use ($profileDao, $FilesDao, $usersDao) {
+$app->post('/updateProfile', function (Request $request, Response $response, $args) use (
+    $profileDao,
+    $FilesDao,
+    $licenseDao,
+    $usersDao
+) {
     session_start();
     $dataUser = $request->getParsedBody();
 
@@ -29,6 +36,8 @@ $app->post('/updateProfile', function (Request $request, Response $response, $ar
             if (isset($_FILES['logo']))
                 $FilesDao->logoCompany($id_company);
         }
+        $dataCompany = $licenseDao->findLicenseCompany($id_company);
+        $_SESSION['logoCompany'] = $dataCompany['logo'];
     }
 
     if ($profile == null) {

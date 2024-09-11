@@ -90,6 +90,7 @@ $app->post('/userAutentication', function (Request $request, Response $response,
         $_SESSION["time"] = microtime(true);
         $_SESSION['plan'] = $dataCompany['plan'];
         $_SESSION['months'] = $dataCompany['months'];
+        $_SESSION['logoCompany'] = $dataCompany['logo'];
 
         // Guardar accesos de usario 
         $userAccessDao->setGeneralAccess($user['id_user']);

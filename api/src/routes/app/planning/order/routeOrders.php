@@ -227,36 +227,42 @@ $app->post('/addOrder', function (Request $request, Response $response, $args) u
 
         $dataOrder = $convertDataDao->changeDateOrder($dataOrder);
 
-        $order = $generalOrdersDao->findLastNumOrderByCompany($id_company);
-        $dataOrder['order'] = $order['num_order'];
+        $findOrder = $generalOrdersDao->findSameOrder($dataOrder);
+        if (!$findOrder) {
+            $order = $generalOrdersDao->findLastNumOrderByCompany($id_company);
+            $dataOrder['order'] = $order['num_order'];
 
-        $resolution = $ordersDao->insertOrderByCompany($dataOrder, $id_company);
+            $resolution = $ordersDao->insertOrderByCompany($dataOrder, $id_company);
 
-        if ($resolution == null) {
-            $arr = $lastDataDao->findLastInsertedOrder($id_company);
-            $dataOrder['idOrder'] = $arr['id_order'];
-            $dataOrder['route'] = 1;
+            if ($resolution == null) {
+                $arr = $lastDataDao->findLastInsertedOrder($id_company);
+                $dataOrder['idOrder'] = $arr['id_order'];
+                $dataOrder['route'] = 1;
 
-            $programmingRoutes = $generalProgrammingRoutesDao->findProgrammingRoutes($dataOrder['idProduct'], $dataOrder['idOrder']);
+                $programmingRoutes = $generalProgrammingRoutesDao->findProgrammingRoutes($dataOrder['idProduct'], $dataOrder['idOrder']);
 
-            if (!$programmingRoutes) {
-                $data = [];
-                $data['idProduct'] = $dataOrder['idProduct'];
-                $data['idOrder'] = $dataOrder['idOrder'];
-                $data['route'] = 1;
+                if (!$programmingRoutes) {
+                    $data = [];
+                    $data['idProduct'] = $dataOrder['idProduct'];
+                    $data['idOrder'] = $dataOrder['idOrder'];
+                    $data['route'] = 1;
 
-                $resolution = $programmingRoutesDao->insertProgrammingRoutes($data, $id_company);
+                    $resolution = $programmingRoutesDao->insertProgrammingRoutes($data, $id_company);
+                }
             }
+
+            $data[0] = $dataOrder['order'] . '-' . $dataOrder['idProduct'];
+
+            if ($resolution == null)
+                $resp = array('success' => true, 'message' => 'Pedido ingresado correctamente');
+            else if (isset($resolution['info']))
+                $resp = array('info' => true, 'message' => $resolution['message']);
+            else
+                $resp = array('error' => true, 'message' => 'Ocurrio un error mientras ingresaba la información. Intente nuevamente');
+        } else {
+            $resolution = 1;
+            $resp = array('error' => true, 'message' => 'Pedido duplicado. Ingrese otro pedido');
         }
-
-        $data[0] = $dataOrder['order'] . '-' . $dataOrder['idProduct'];
-
-        if ($resolution == null)
-            $resp = array('success' => true, 'message' => 'Pedido ingresado correctamente');
-        else if (isset($resolution['info']))
-            $resp = array('info' => true, 'message' => $resolution['message']);
-        else
-            $resp = array('error' => true, 'message' => 'Ocurrio un error mientras ingresaba la información. Intente nuevamente');
     } else {
         $order = $dataOrder['importOrder'];
         $importOrder = [];
@@ -275,9 +281,6 @@ $app->post('/addOrder', function (Request $request, Response $response, $args) u
             $arr['idClient'] = $findClient['id_client'];
 
             $repeat = false;
-
-            $k = $generalOrdersDao->findSameOrder($arr);
-            if ($k) $arr['originalQuantity'] += $k['original_quantity'];
 
             for ($i = 0; $i < sizeof($importOrder); $i++) {
                 if ($importOrder[$i]['referenceProduct'] == trim($arr['referenceProduct']) && $importOrder[$i]['eamil'] == trim($arr['email']) && $importOrder[$i]['client'] == strtoupper(trim($arr['client']))) {
