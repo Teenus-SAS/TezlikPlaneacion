@@ -45,7 +45,7 @@ if (sizeof($_SESSION) == 0)
                                 <div class="page-title">
                                     <h3 class="mb-1 font-weight-bold text-dark">Almacen</h3>
                                     <ol class="breadcrumb mb-3 mb-md-0">
-                                        <li class="breadcrumb-item active">Listado de Almacen</li>
+                                        <li class="breadcrumb-item active">Entrega y Recibo de Materia Prima y Producto Terminado</li>
                                     </ol>
                                 </div>
                             </div>
@@ -124,13 +124,18 @@ if (sizeof($_SESSION) == 0)
 
                                 <ul class="nav nav-tabs" id="pills-tab" role="tablist">
                                     <li class="nav-item">
-                                        <a class="nav-link active selectNavigation" id="receive" data-toggle="pill" href="javascript:;" role="tab" aria-controls="pills-activity" aria-selected="true">
-                                            <i class="bi bi-download mr-1"></i>Recibir Materia Prima
+                                        <a class="nav-link active selectNavigation" id="receiveOC" data-toggle="pill" href="javascript:;" role="tab" aria-controls="pills-activity" aria-selected="true">
+                                            <i class="fas fa-dolly mr-1"></i>Ordenes de Compra
                                         </a>
                                     </li>
                                     <li class="nav-item">
-                                        <a class="nav-link selectNavigation" id="deliver" data-toggle="pill" href="javascript:;" role="tab" aria-controls="pills-projects" aria-selected="false">
-                                            <i class="bi bi-upload mr-1"></i>Entregar Materia Prima
+                                        <a class="nav-link selectNavigation" id="deliverOP" data-toggle="pill" href="javascript:;" role="tab" aria-controls="pills-projects" aria-selected="false">
+                                            <i class="	fas fa-clipboard-list mr-1"></i>Ordenes de Produccion (Entregar)
+                                        </a>
+                                    </li>
+                                    <li class="nav-item">
+                                        <a class="nav-link selectNavigation" id="receiveOP" data-toggle="pill" href="javascript:;" role="tab" aria-controls="pills-projects" aria-selected="false">
+                                            <i class="fas fa-dolly-flatbed mr-1"></i>Ordenes de Produccion (Recibir)
                                         </a>
                                     </li>
                                 </ul>

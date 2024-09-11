@@ -17,7 +17,7 @@ if (sizeof($_SESSION) == 0)
 	<meta name="keywords" content="">
 	<meta name="author" content="">
 	<meta name="viewport" content="width=device-width, initial-scale=1" />
-	<title>Tezlik - Cost | Details Production Order</title>
+	<title>TezlikSoftware | Production Order</title>
 	<link rel="shortcut icon" href="/assets/images/favicon/favicon_tezlik.jpg" type="image/x-icon" />
 	<?php include_once dirname(dirname(dirname(__DIR__))) . '/global/partials/scriptsCSS.php'; ?>
 	<style>
@@ -75,17 +75,14 @@ if (sizeof($_SESSION) == 0)
 												<button class="btn btn-danger mr-2" id="btnNewSend"><i class="fa fa-mail-bulk"></i> Enviar</button>
 											</div>
 											<hr> -->
-										<div class="col-sm-5 col-xl-6 d-flex justify-content-end btnPrintPDF">
+										<div class="col-sm-12 col-xl-12 d-flex justify-content-end btnPrintPDF">
 											<div class="col-xs-2 mt-2 mr-2" id="btnPdf">
-												<a href="javascript:;" <i class="bi bi-filetype-pdf" data-toggle='tooltip' onclick="printPDF()" style="font-size: 30px; color:red;"></i></a>
+												<button class="btn btn-success" onclick="printPDF()">Imprimir PDF</button>
 											</div>
 										</div>
 
-										<!-- <div class="row">
-											
-
-										</div> -->
-										<div class="row">
+										<hr>
+										<div class=" row">
 											<div class="col-sm-3">
 												<img src="" id="logo" alt="logo_company">
 											</div>
@@ -144,7 +141,7 @@ if (sizeof($_SESSION) == 0)
 
 										<div class="row py-4">
 											<div class="col-10 mb-3">
-												<h5 class=" font-weight-bold text-dark">1. INFORMACIÓN DEL PRODUCTO</h5>
+												<h4 class=" font-weight-bold text-dark">1. Información del Producto</h4>
 											</div>
 											<div class="col-4">
 												<div class="form-group floating-label enable-floating-label show-label">
@@ -189,7 +186,7 @@ if (sizeof($_SESSION) == 0)
 										<hr>
 										<div class="row py-4">
 											<div class="col-10">
-												<h5 class="font-weight-bold text-dark">2. Materiales y Componentes</h5>
+												<h4 class="font-weight-bold text-dark">2. Materiales y Componentes</h4>
 											</div>
 										</div>
 										<div class="row">
@@ -278,7 +275,7 @@ if (sizeof($_SESSION) == 0)
 
 										<div class="row py-4">
 											<div class="col-10">
-												<h5 class="font-weight-bold text-dark">4. Instrucciones de Producción</h5>
+												<h4 class="font-weight-bold text-dark">4. Proceso de Producción</h4>
 											</div>
 										</div>
 										<div class="row">
@@ -288,7 +285,7 @@ if (sizeof($_SESSION) == 0)
 														<thead class="thead-light">
 															<tr>
 																<th>No</th>
-																<th>Proceso de Producción</th>
+																<th>Proceso</th>
 																<th>Fecha Inicio</th>
 																<th>Fecha Final</th>
 															</tr>
@@ -299,25 +296,82 @@ if (sizeof($_SESSION) == 0)
 												</div>
 											</div>
 										</div>
+										<div class="row py-4">
+											<div class="col-10">
+												<h4 class="font-weight-bold text-dark">5. Ejecución Producción</h4>
+											</div>
+										</div>
+										<div class="row">
+											<div class="col-sm-3 floating-label enable-floating-label show-label">
+												<label for="startDateTime">Inicio</label>
+												<input type="datetime-local" class="form-control text-center" id="startDateTime">
+											</div>
+											<div class="col-sm-3 floating-label enable-floating-label show-label">
+												<label for="endDateTime">Finalización</label>
+												<input type="datetime-local" class="form-control text-center" id="endDateTime">
+											</div>
+											<div class="col-sm-6 floating-label enable-floating-label show-label" style="margin-bottom:20px">
+												<label for="operator">Operario</label>
+												<select class="form-control operator" name="operator" id="operator"></select>
+											</div>
+											<div class="col-sm-2 floating-label enable-floating-label show-label">
+												<label for="waste">Desperdicio (Und)</label>
+												<input type="number" class="form-control text-center" id="waste" name="waste">
+											</div>
+											<div class="col-sm-2 floating-label enable-floating-label show-label">
+												<label for="quantityProduction">Cantidad (Und)</label>
+												<input type="number" class="form-control text-center" id="quantityProduction" name="quantityProduction">
+											</div>
+
+											<?php if ($_SESSION['flag_products_measure'] == 1) { ?>
+												<div class="col-sm-2 floating-label enable-floating-label show-label">
+													<label for="quantityKgProduction">Cantidad (Kg)</label>
+													<input type="number" class="form-control text-center" id="quantityKgProduction" name="quantityKgProduction">
+												</div>
+											<?php } ?>
+
+											<div class="col-sm-2 floating-label enable-floating-label show-label">
+												<button class="btn btn-info mt-1">Entregar</button>
+											</div>
+
+											<div class="col-12">
+												<div class="table-responsive">
+													<table class="fixed-table-loading table table-hover text-center">
+														<thead class="thead-light">
+															<tr>
+																<th>Fecha</th>
+																<th>Operador</th>
+																<th>Desperdicio</th>
+																<th>Cantidad Entregada</th>
+															</tr>
+														</thead>
+														<tbody id="tblPartialsDeliveryBody">
+														</tbody>
+													</table>
+												</div>
+											</div>
+
+
+
+										</div>
 									</div>
 								</div>
 							</div>
 						</div>
 					</div>
 				</div>
+				<!-- Main content end -->
+
+				<!-- Footer -->
 			</div>
-			<!-- Main content end -->
-
-			<!-- Footer -->
+			<?php include_once  dirname(dirname(dirname(__DIR__))) . '/global/partials/footer.php'; ?>
 		</div>
-		<?php include_once  dirname(dirname(dirname(__DIR__))) . '/global/partials/footer.php'; ?>
-	</div>
-	<!-- Page End -->
+		<!-- Page End -->
 
-	<?php include_once dirname(dirname(dirname(__DIR__))) . '/global/partials/scriptsJS.php'; ?>
-	<script src="/planning/js/productionOrder/detailsProductionOrder.js"></script>
-	<script src="/global/js/global/companyData.js"></script>
-	<script src="/global/js/global/printPdf.js"></script>
+		<?php include_once dirname(dirname(dirname(__DIR__))) . '/global/partials/scriptsJS.php'; ?>
+		<script src="/planning/js/productionOrder/detailsProductionOrder.js"></script>
+		<script src="/global/js/global/companyData.js"></script>
+		<script src="/global/js/global/printPdf.js"></script>
 </body>
 
 </html>
