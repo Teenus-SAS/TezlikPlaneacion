@@ -17,7 +17,7 @@ if (sizeof($_SESSION) == 0)
 	<meta name="keywords" content="">
 	<meta name="author" content="">
 	<meta name="viewport" content="width=device-width, initial-scale=1" />
-	<title>Tezlik - Cost | Details Production Order</title>
+	<title>TezlikSoftware | Production Order</title>
 	<link rel="shortcut icon" href="/assets/images/favicon/favicon_tezlik.jpg" type="image/x-icon" />
 	<?php include_once dirname(dirname(dirname(__DIR__))) . '/global/partials/scriptsCSS.php'; ?>
 	<style>
@@ -299,6 +299,43 @@ if (sizeof($_SESSION) == 0)
 												</div>
 											</div>
 										</div>
+										<div class="row py-4">
+											<div class="col-10">
+												<h5 class="font-weight-bold text-dark">5. Ejecución Producción</h5>
+											</div>
+										</div>
+										<div class="row">
+											<div class="col-sm-3 floating-label enable-floating-label show-label">
+												<label for="">Fecha Inicio</label>
+												<input type="date" class="form-control text-center" id="width"></input>
+											</div>
+											<div class="col-sm-3 floating-label enable-floating-label show-label">
+												<label for="">Fecha Finalizacion</label>
+												<input type="date" class="form-control text-center" id="high">
+											</div>
+											<div class="col-sm-6 floating-label enable-floating-label show-label" style="margin-bottom:20px">
+												<label for="operator">Operario</label>
+												<select class="form-control operator" name="operator" id="operator"></select>
+											</div>
+											<div class="col-sm-2 floating-label enable-floating-label show-label">
+												<label for="waste">Desperdicio</label>
+												<input type="number" class="form-control text-center" id="waste" name="waste">
+											</div>
+											<div class="col-sm-2 floating-label enable-floating-label show-label">
+												<label for="quantityProduction">Cantidad (Und)</label>
+												<input type="number" class="form-control text-center" id="quantityProduction" name="quantityProduction">
+											</div>
+
+											<?php if ($_SESSION['flag_products_measure'] == 1) { ?>
+												<div class="col-sm-2 floating-label enable-floating-label show-label">
+													<label for="quantityKgProduction">Cantidad (Kg)</label>
+													<input type="number" class="form-control text-center" id="quantityKgProduction" name="quantityKgProduction">
+												</div>
+											<?php } ?>
+										</div>
+
+
+
 									</div>
 								</div>
 							</div>
