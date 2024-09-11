@@ -71,7 +71,10 @@ $(document).ready(function () {
           className: "uniqueClassName dt-head-center",
           render: function (data) {
             !data.delivery_date &&
-            (data.status == "PROGRAMAR" || data.status == "POR PROCESAR")
+            (data.status == "PROGRAMAR" ||
+              data.status == "POR PROCESAR" ||
+              data.status == "SIN FICHA TECNICA" ||
+              data.status == "SIN MATERIA PRIMA")
               ? (action = `<a href="javascript:;" <i class="bx bx-edit-alt updateOrder" id="${data.id_order}" data-toggle='tooltip' title='Actualizar Pedido' style="font-size: 30px;"></i></a><a href="javascript:;" <i class="mdi mdi-delete-forever" id="${data.id_order}" data-toggle='tooltip' title='Eliminar Pedido' style="font-size: 30px;color:red" onclick="deleteFunction()"></i></a>`)
               : (action = "");
 
@@ -94,7 +97,7 @@ $(document).ready(function () {
           className: "uniqueuniqueClassName dt-head-center",
           render: function (data) {
             return `${data.firstname} ${data.lastname}`;
-          }
+          },
         },
         {
           title: "Cliente",
@@ -147,7 +150,7 @@ $(document).ready(function () {
             else badge = "badge-danger";
             return `<span class="badge ${badge}" style="font-size: large;">${data.classification}</span>`;
           },
-        }, 
+        },
       ],
     });
   };
