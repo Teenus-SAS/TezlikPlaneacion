@@ -455,7 +455,7 @@ $app->post('/addProductsMaterials', function (Request $request, Response $respon
         }
 
         if ($resolution == null)
-            $resp = array('success' => true, 'message' => 'Materia prima importada correctamente');
+            $resp = array('success' => true, 'message' => 'Ficha Técnica Materia Prima importada correctamente');
         else if (isset($resolution['info']))
             $resp = array('info' => true, 'message' => $resolution['message']);
 
