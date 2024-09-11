@@ -222,3 +222,17 @@ $app->get('/deletePayroll/{id_plan_payroll}', function (Request $request, Respon
     $response->getBody()->write(json_encode($resp));
     return $response->withStatus(200)->withHeader('Content-Type', 'application/json');
 });
+
+$app->get('/changeStatusPayroll/{id_plan_payroll}/{status}', function (Request $request, Response $response, $args) use ($generalPayrollDao) {
+    $resolution = $generalPayrollDao->changeStatusPayroll($args['id_plan_payroll'], $args['status']);
+
+    if ($resolution == null)
+        $resp = array('success' => true, 'message' => 'Empleado modificado correctamente');
+    else if (isset($resolution['info']))
+        $resp = array('info' => true, 'message' => $resolution['message']);
+    else
+        $resp = array('error' => true, 'message' => 'Ocurrió un error mientras modificaba los datos. Intente nuevamente');
+
+    $response->getBody()->write(json_encode($resp));
+    return $response->withStatus(200)->withHeader('Content-Type', 'application/json');
+});

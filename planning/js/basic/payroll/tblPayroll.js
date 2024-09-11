@@ -50,6 +50,16 @@ $(document).ready(function () {
         className: "uniqueClassName dt-head-center ",
       },
       {
+        title: "Disponible",
+        data: null,
+        className: "uniqueClassName dt-head-center ",
+        render: function (data) {
+          return `<a href="javascript:;">
+                    <i id="${data.id_plan_payroll}" class="${data.status == 0 ? 'bi bi-person-fill-check' : 'bi bi-person-fill-x'} statusPY" data-toggle='tooltip' title='${data.status == 0 ? 'Activar' : 'Desactivar'} empleado' style="font-size:25px; color: ${data.status == 0 ? '#ffaa00' : '#ff0000'};"></i>
+                  </a>`;
+        }
+      },
+      {
         title: "Acciones",
         data: "id_plan_payroll",
         className: "uniqueClassName dt-head-center ",

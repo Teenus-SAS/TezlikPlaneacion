@@ -34,4 +34,19 @@ class GeneralPayrollDao
         $payroll = $stmt->fetch($connection::FETCH_ASSOC);
         return $payroll;
     }
+
+    public function changeStatusPayroll($id_plan_payroll, $status)
+    {
+        try {
+            $connection = Connection::getInstance()->getConnection();
+
+            $stmt = $connection->prepare("UPDATE plan_payroll SET status = :status WHERE id_plan_payroll = :id_plan_payroll");
+            $stmt->execute([
+                'status' => $status,
+                'id_plan_payroll' => $id_plan_payroll
+            ]);
+        } catch (\Exception $e) {
+            return ['info' => true, 'message' => $e->getMessage()];
+        }
+    }
 }

@@ -118,6 +118,44 @@ $(document).ready(function () {
     });
   };
 
+  // Estado empleado
+  $(document).on("click", ".statusPY", function () {
+    //obtener data
+    let row = $(this).closest("tr")[0];
+    let data = tblEmployees.fnGetData(row);
+
+    bootbox.confirm({
+      title: "Nomina",
+      message: `Está seguro de que este empleado ${
+        data.status == "0"
+          ? "se <b>Desactive</b>"
+          : "se <b>Active</b>"
+      }?`,
+      buttons: {
+        confirm: {
+          label: "Si",
+          className: "btn-success",
+        },
+        cancel: {
+          label: "No",
+          className: "btn-danger",
+        },
+      },
+      callback: function (result) {
+        if (result == true) {
+          $.get(
+            `/api/changeStatusPayroll/${data.id_plan_payroll}/${
+              data.status == "0" ? "1" : "0"
+            }`,
+            function (data, textStatus, jqXHR) {
+              messagePayroll(data);
+            }
+          );
+        }
+      },
+    });
+  });
+
   /* Mensaje de exito */
 
   messagePayroll = (data) => {
