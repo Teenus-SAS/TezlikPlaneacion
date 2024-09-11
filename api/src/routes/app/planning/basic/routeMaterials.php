@@ -308,10 +308,10 @@ $app->post('/addMaterials', function (Request $request, Response $response, $arg
                                 // Guardar Unidad convertida
                                 $generalProductsMaterialsDao->saveQuantityConverted($k['id_product_material'], $quantity);
 
-                                $arr = $minimumStockDao->calcStockByMaterial($materials[$i]['idMaterial']);
+                                $arr = $minimumStockDao->calcStockByMaterial($k['id_material']);
 
                                 if (isset($arr['stock']))
-                                    $resolution = $generalMaterialsDao->updateStockMaterial($materials[$i]['idMaterial'], $arr['stock']);
+                                    $resolution = $generalMaterialsDao->updateStockMaterial($k['id_material'], $arr['stock']);
                             }
 
                             if (isset($resolution['info'])) break;
@@ -520,10 +520,10 @@ $app->post('/updateMaterials', function (Request $request, Response $response, $
                         // Guardar Unidad convertida
                         $generalProductsMaterialsDao->saveQuantityConverted($k['id_product_material'], $quantity);
 
-                        $arr = $minimumStockDao->calcStockByMaterial($dataMaterial['idMaterial']);
+                        $arr = $minimumStockDao->calcStockByMaterial($k['id_material']);
 
                         if (isset($arr['stock']))
-                            $resolution = $generalMaterialsDao->updateStockMaterial($dataMaterial['idMaterial'], $arr['stock']);
+                            $resolution = $generalMaterialsDao->updateStockMaterial($k['id_material'], $arr['stock']);
                     }
 
                     if (isset($resolution['info'])) break;

@@ -72,8 +72,9 @@ class GeneralProductsDao
     {
         $connection = Connection::getInstance()->getConnection();
 
-        $stmt = $connection->prepare("SELECT p.classification, IFNULL(pm.length, 0) AS length, IFNULL(pm.total_width, 0) AS total_width, IFNULL(pm.window, 0) AS window
-                                      FROM products_inventory p
+        $stmt = $connection->prepare("SELECT p.composite, pi.classification, IFNULL(pm.length, 0) AS length, IFNULL(pm.total_width, 0) AS total_width, IFNULL(pm.window, 0) AS window
+                                      FROM products p
+                                      LEFT JOIN products_inventory pi ON pi.id_product = p.id_product
                                       LEFT JOIN products_measures pm ON pm.id_product = p.id_product
                                       WHERE p.id_product = :id_product");
         $stmt->execute([

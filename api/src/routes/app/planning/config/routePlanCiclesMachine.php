@@ -70,18 +70,6 @@ $app->get('/routesCiclesMachine/{id_product}', function (Request $request, Respo
     return $response->withHeader('Content-Type', 'application/json');
 });
 
-// $app->get('/planCiclesMachine/{id_product}/{id_machine}', function (Request $request, Response $response, $args) use (
-//     $generalPlanCiclesMachinesDao
-// ) {
-//     session_start();
-//     $id_company = $_SESSION['id_company'];
-
-//     $planCiclesMachine = $generalPlanCiclesMachinesDao->findPlanCiclesMachineByProductAndMachine($args['id_product'], $args['id_machine'], $id_company);
-
-//     $response->getBody()->write(json_encode($planCiclesMachine, JSON_NUMERIC_CHECK));
-//     return $response->withHeader('Content-Type', 'application/json');
-// });
-
 $app->post('/planCiclesMachineDataValidation', function (Request $request, Response $response, $args) use (
     $generalPlanCiclesMachinesDao,
     $processDao,
@@ -121,7 +109,7 @@ $app->post('/planCiclesMachineDataValidation', function (Request $request, Respo
             $findProduct = $productsDao->findProduct($planCiclesMachine[$i], $id_company);
             if (!$findProduct) {
                 $row = $i + 2;
-                array_push(array('error' => true, 'message' => "Fila-$row: Producto no Existe"));
+                array_push($debugg, array('error' => true, 'message' => "Fila-$row: Producto no Existe"));
             } else $planCiclesMachine[$i]['idProduct'] = $findProduct['id_product'];
 
             // Obtener id proceso
