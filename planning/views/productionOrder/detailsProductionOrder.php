@@ -84,7 +84,7 @@ if (sizeof($_SESSION) == 0)
 										<hr>
 										<div class=" row">
 											<div class="col-sm-3">
-												<img src="" id="logo" alt="logo_company">
+												<img src="" id="logo" alt="logo_company" style="width: -webkit-fill-available;">
 											</div>
 											<div class="col-sm-9">
 												<div class="row">
