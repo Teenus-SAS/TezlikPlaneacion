@@ -89,7 +89,7 @@ $(document).ready(function () {
     let row = $(this.activeElement).closest("tr")[0];
     let data = tblEmployees.fnGetData(row);
 
-    const { id_plan_payroll } = data; 
+    const { id_plan_payroll } = data;
 
     bootbox.confirm({
       title: "Eliminar",
@@ -126,11 +126,9 @@ $(document).ready(function () {
 
     bootbox.confirm({
       title: "Nomina",
-      message: `Está seguro de que este empleado ${
-        data.status == "0"
-          ? "se <b>Desactive</b>"
-          : "se <b>Active</b>"
-      }?`,
+      message: `Está seguro de cambiar el estado ${
+        data.status == "1" ? "a <b>No Disponible</b>" : "a <b>Disponible</b>"
+      } este empleado?`,
       buttons: {
         confirm: {
           label: "Si",
