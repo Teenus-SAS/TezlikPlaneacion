@@ -247,6 +247,8 @@ $app->post('/addPlanCiclesMachine', function (Request $request, Response $respon
                 $planCiclesMachine[$i]['idMachine'] = $findMachine['id_machine'];
             }
 
+            $planCiclesMachine[$i]['ciclesHour'] = str_replace('.', ',', $planCiclesMachine[$i]['ciclesHour']);
+
             $findPlanCiclesMachine = $generalPlanCiclesMachinesDao->findPlansCiclesMachine($planCiclesMachine[$i], $id_company);
             if (!$findPlanCiclesMachine) {
                 $resolution = $planCiclesMachineDao->addPlanCiclesMachines($planCiclesMachine[$i], $id_company);

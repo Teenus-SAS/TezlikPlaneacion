@@ -193,9 +193,9 @@ $app->post('/addProduct', function (Request $request, Response $response, $args)
     /* Inserta datos */
     $dataProducts = sizeof($dataProduct);
     $resp = [];
+    $resolution = null;
 
     if ($dataProducts > 1) {
-        $resolution = null;
 
         // if ($flag_products_measure == '1') {
         $product = $generalProductsDao->findProductInventory($dataProduct['idProduct'], $id_company);
