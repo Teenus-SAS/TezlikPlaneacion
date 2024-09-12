@@ -90,7 +90,7 @@ $(document).ready(function () {
     const quantity = parseFloat($("#pQuantity").val());
 
     if (quantity < 0 || !idProduct) {
-      toastr.error("Ingrese una cantidad válida y seleccionar un producto.");
+      toastr.error("Ingrese una cantidad válida.");
       return false;
   }
 
