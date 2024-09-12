@@ -20,8 +20,8 @@ class Planning_machinesDao
     {
         $connection = Connection::getInstance()->getConnection();
 
-        $stmt = $connection->prepare("SELECT pm.id_program_machine, pm.id_machine, m.machine, pm.number_workers, pm.hours_day, pm.hour_start, pm.hour_end, pm.year, pm.january, pm.february,
-                                             pm.march, pm.april, pm.may, pm.june, pm.july, pm.august, pm.september, pm.october, pm.november, pm.december, pm.work_shift, pm.status                            
+        $stmt = $connection->prepare("SELECT pm.id_program_machine, pm.type_program_machine, pm.id_machine, m.machine, pm.number_workers, pm.hours_day, pm.hour_start, pm.hour_end, pm.year, pm.january, pm.february,
+                                             pm.march, pm.april, pm.may, pm.june, pm.july, pm.august, pm.september, pm.october, pm.november, pm.december, pm.work_shift, pm.status             
                                       FROM plan_program_machines pm
                                         INNER JOIN machines m ON m.id_machine = pm.id_machine
                                       WHERE pm.id_company = :id_company;");
@@ -34,11 +34,12 @@ class Planning_machinesDao
     {
         $connection = Connection::getInstance()->getConnection();
         try {
-            $stmt = $connection->prepare("INSERT INTO plan_program_machines (id_machine, id_company, number_workers, hours_day, hour_start, hour_end, year, january, 
+            $stmt = $connection->prepare("INSERT INTO plan_program_machines (type_program_machine, id_machine, id_company, number_workers, hours_day, hour_start, hour_end, year, january, 
                                                         february, march, april, may, june, july, august, september, october, november, december, work_shift)
-                                      VALUES (:id_machine, :id_company, :number_workers, :hours_day, :hour_start, :hour_end, :year, :january, 
+                                      VALUES (:type_program_machine, :id_machine, :id_company, :number_workers, :hours_day, :hour_start, :hour_end, :year, :january, 
                                               :february, :march, :april, :may, :june, :july, :august, :september, :october, :november, :december, :work_shift)");
             $stmt->execute([
+                'type_program_machine' => $dataPMachines['typePM'],
                 'id_machine' => $dataPMachines['idMachine'],
                 'id_company' => $id_company,
                 'number_workers' => $dataPMachines['numberWorkers'],
@@ -73,12 +74,13 @@ class Planning_machinesDao
         $connection = Connection::getInstance()->getConnection();
 
         try {
-            $stmt = $connection->prepare("UPDATE plan_program_machines SET id_machine = :id_machine, number_workers = :number_workers, hours_day = :hours_day, hour_start = :hour_start, hour_end = :hour_end, 
+            $stmt = $connection->prepare("UPDATE plan_program_machines SET type_program_machine = :type_program_machine, id_machine = :id_machine, number_workers = :number_workers, hours_day = :hours_day, hour_start = :hour_start, hour_end = :hour_end, 
                                                     year = :year, january = :january, february = :february, march = :march, april = :april, may = :may, june = :june, july = :july,
                                                     august = :august, september = :september, october = :october, november = :november, december = :december, work_shift = :work_shift
                                           WHERE id_program_machine = :id_program_machine");
             $stmt->execute([
                 'id_program_machine' => $dataPMachines['idProgramMachine'],
+                'type_program_machine' => $dataPMachines['typePM'],
                 'id_machine' => $dataPMachines['idMachine'],
                 'number_workers' => $dataPMachines['numberWorkers'],
                 'hours_day' => $dataPMachines['hoursDay'],

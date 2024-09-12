@@ -54,26 +54,65 @@ $app->post('/planningMachinesDataValidation', function (Request $request, Respon
 
         for ($i = 0; $i < sizeof($planningMachines); $i++) {
             if (
-                empty($planningMachines[$i]['numberWorkers']) || empty($planningMachines[$i]['workShift']) ||  empty($planningMachines[$i]['hoursDay']) || empty($planningMachines[$i]['hourStart']) || empty($planningMachines[$i]['january']) || empty($planningMachines[$i]['february']) ||
-                empty($planningMachines[$i]['march']) || empty($planningMachines[$i]['april']) || empty($planningMachines[$i]['may']) || empty($planningMachines[$i]['june']) || empty($planningMachines[$i]['july']) || empty($planningMachines[$i]['august']) || empty($planningMachines[$i]['september']) ||
-                empty($planningMachines[$i]['october']) ||  empty($planningMachines[$i]['november']) ||  empty($planningMachines[$i]['december']) || empty($planningMachines[$i]['active'])
+                empty($planningMachines[$i]['type']) ||
+                empty($planningMachines[$i]['numberWorkers']) ||
+                empty($planningMachines[$i]['workShift']) ||
+                empty($planningMachines[$i]['hoursDay']) ||
+                empty($planningMachines[$i]['hourStart']) ||
+                empty($planningMachines[$i]['january']) ||
+                empty($planningMachines[$i]['february']) ||
+                empty($planningMachines[$i]['march']) ||
+                empty($planningMachines[$i]['april']) ||
+                empty($planningMachines[$i]['may']) ||
+                empty($planningMachines[$i]['june']) ||
+                empty($planningMachines[$i]['july']) ||
+                empty($planningMachines[$i]['august']) ||
+                empty($planningMachines[$i]['september']) ||
+                empty($planningMachines[$i]['october']) ||
+                empty($planningMachines[$i]['november']) ||
+                empty($planningMachines[$i]['december']) ||
+                empty($planningMachines[$i]['active'])
             ) {
                 $row = $i + 2;
                 array_push($debugg, array('error' => true, 'message' => "Fila-$row: Columna vacia"));
             }
             if (
-                empty(trim($planningMachines[$i]['numberWorkers'])) || empty(trim($planningMachines[$i]['workShift'])) || empty(trim($planningMachines[$i]['hoursDay'])) || empty(trim($planningMachines[$i]['hourStart'])) || empty(trim($planningMachines[$i]['january'])) || empty(trim($planningMachines[$i]['february'])) ||
-                empty(trim($planningMachines[$i]['march'])) || empty(trim($planningMachines[$i]['april'])) || empty(trim($planningMachines[$i]['may'])) || empty(trim($planningMachines[$i]['june'])) || empty(trim($planningMachines[$i]['july'])) || empty(trim($planningMachines[$i]['august'])) || empty(trim($planningMachines[$i]['september'])) ||
-                empty(trim($planningMachines[$i]['october'])) || empty(trim($planningMachines[$i]['november'])) || empty(trim($planningMachines[$i]['december'])) || empty(trim($planningMachines[$i]['active']))
+                empty(trim($planningMachines[$i]['type'])) ||
+                empty(trim($planningMachines[$i]['numberWorkers'])) ||
+                empty(trim($planningMachines[$i]['workShift'])) ||
+                empty(trim($planningMachines[$i]['hoursDay'])) ||
+                empty(trim($planningMachines[$i]['hourStart'])) ||
+                empty(trim($planningMachines[$i]['january'])) ||
+                empty(trim($planningMachines[$i]['february'])) ||
+                empty(trim($planningMachines[$i]['march'])) ||
+                empty(trim($planningMachines[$i]['april'])) ||
+                empty(trim($planningMachines[$i]['may'])) ||
+                empty(trim($planningMachines[$i]['june'])) ||
+                empty(trim($planningMachines[$i]['july'])) ||
+                empty(trim($planningMachines[$i]['august'])) ||
+                empty(trim($planningMachines[$i]['september'])) ||
+                empty(trim($planningMachines[$i]['october'])) ||
+                empty(trim($planningMachines[$i]['november'])) ||
+                empty(trim($planningMachines[$i]['december'])) ||
+                empty(trim($planningMachines[$i]['active']))
             ) {
                 $row = $i + 2;
                 array_push($debugg, array('error' => true, 'message' => "Fila-$row: Columna vacia"));
             }
 
             if (
-                $planningMachines[$i]['january'] > 31 || $planningMachines[$i]['february'] > 28 || $planningMachines[$i]['march'] > 31 || $planningMachines[$i]['april'] > 30 ||
-                $planningMachines[$i]['may'] > 31 || $planningMachines[$i]['june'] > 30 || $planningMachines[$i]['july'] > 31 || $planningMachines[$i]['august'] > 31 ||
-                $planningMachines[$i]['september'] > 30 ||  $planningMachines[$i]['october'] > 31 ||  $planningMachines[$i]['november'] > 30 ||  $planningMachines[$i]['december'] > 31
+                $planningMachines[$i]['january'] > 31 ||
+                $planningMachines[$i]['february'] > 28 ||
+                $planningMachines[$i]['march'] > 31 ||
+                $planningMachines[$i]['april'] > 30 ||
+                $planningMachines[$i]['may'] > 31 ||
+                $planningMachines[$i]['june'] > 30 ||
+                $planningMachines[$i]['july'] > 31 ||
+                $planningMachines[$i]['august'] > 31 ||
+                $planningMachines[$i]['september'] > 30 ||
+                $planningMachines[$i]['october'] > 31 ||
+                $planningMachines[$i]['november'] > 30 ||
+                $planningMachines[$i]['december'] > 31
             ) {
                 $row = $i + 2;
                 array_push($debugg, array('error' => true, 'message' => "Fila-$row: El valor es mayor al último día del mes"));
@@ -163,6 +202,8 @@ $app->post('/addPlanningMachines', function (Request $request, Response $respons
             $planningMachines[$i]['year'] = date('Y');
             $planningMachines[$i]['hourStart'] = date("G.i", strtotime($planningMachines[$i]['hourStart']));
             $planningMachines[$i]['hourEnd'] = $hourEnd;
+
+            $planningMachines[$i]['type'] == 'PROCESO MANUAL' ? $planningMachines[$i]['typePM'] = 0 : $planningMachines[$i]['typePM'] = 1;
 
             if (!$findPlanMachines) $resolution = $planningMachinesDao->insertPlanMachinesByCompany($planningMachines[$i], $id_company);
             else {

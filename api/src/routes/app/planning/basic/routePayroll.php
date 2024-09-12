@@ -94,7 +94,7 @@ $app->post('/payrollDataValidation', function (Request $request, Response $respo
 
         if (sizeof($debugg) == 0) {
             for ($i = 0; $i < count($payroll); $i++) {
-                $findPayroll = $generalPayrollDao->findPayroll($payroll[$i], $id_company);
+                $findPayroll = $generalPayrollDao->findPayrollByEmployee($payroll[$i], $id_company);
 
                 if (!$findPayroll)
                     $insert = $insert + 1;
@@ -159,7 +159,7 @@ $app->post('/addPayroll', function (Request $request, Response $response, $args)
             $findArea = $generalAreaDao->findArea($payroll[$i], $id_company);
             $payroll[$i]['idArea'] = $findArea['id_plan_area'];
 
-            $findPayroll = $generalPayrollDao->findPayroll($payroll[$i], $id_company);
+            $findPayroll = $generalPayrollDao->findPayrollByEmployee($payroll[$i], $id_company);
             if (!$findPayroll) {
                 $resolution = $payrollDao->insertPayrollByCompany($payroll[$i], $id_company);
 

@@ -65,6 +65,7 @@ $(document).ready(function () {
 
     // Asignar valores
     $(`#idMachine`).val(data.id_machine).prop("selected", true);
+    $(`#typePM`).val(data.type_program_machine).prop("selected", true);
     $("#numberWorkers").val(data.number_workers);
     $("#workShift").val(data.work_shift);
     $("#hoursDay").val(data.hours_day);
@@ -107,12 +108,13 @@ $(document).ready(function () {
   });
 
   const checkDataPlanningMachines = async (url, idProgramMachine) => {
+    const typePM = parseInt($("#typePM").val());
     const idMachine = parseInt($("#idMachine").val());
     const numberWorkers = parseInt($("#numberWorkers").val());
     const workShift = parseInt($("#workShift").val());
     const hoursDay = parseInt($("#hoursDay").val());
 
-    const data = idMachine * numberWorkers * workShift * hoursDay;
+    const data = typePM * idMachine * numberWorkers * workShift * hoursDay;
 
     if (!data) {
       toastr.error("Ingrese todos los campos");

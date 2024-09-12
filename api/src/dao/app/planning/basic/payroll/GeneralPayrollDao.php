@@ -35,6 +35,22 @@ class GeneralPayrollDao
         return $payroll;
     }
 
+    public function findPayrollByEmployee($dataPayroll)
+    {
+        $connection = Connection::getInstance()->getConnection();
+
+        $stmt = $connection->prepare("SELECT * FROM plan_payroll WHERE firstname = :firstname AND lastname = :lastname AND position = :position");
+        $stmt->execute([
+            'firstname' => strtoupper(trim($dataPayroll['firstname'])),
+            'lastname' => strtoupper(trim($dataPayroll['lastname'])),
+            'position' => strtoupper(trim($dataPayroll['position'])),
+        ]);
+        $this->logger->info(__FUNCTION__, array('query' => $stmt->queryString, 'errors' => $stmt->errorInfo()));
+
+        $payroll = $stmt->fetch($connection::FETCH_ASSOC);
+        return $payroll;
+    }
+
     public function changeStatusPayroll($id_plan_payroll, $status)
     {
         try {

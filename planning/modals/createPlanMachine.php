@@ -15,23 +15,34 @@
                                         <div class="col-12 col-lg-12 titlePayroll">
                                             <label for=""><b>Descripción</b></label>
                                         </div>
-                                        <div class="col-12 col-lg-5">
+                                        <div class="col-12 col-lg-6">
+                                            <div class="form-group floating-label enable-floating-label show-label">
+                                                <select class="form-control" name="typePM" id="typePM">
+                                                    <option disabled selected>Seleccionar</option>
+                                                    <option value="0">PROCESO MANUAL</option>
+                                                    <option value="1">MAQUINA</option>
+                                                </select>
+                                                <label for="typePM">Tipo<span class="text-danger">*</span></label>
+                                                <div class="validation-error d-none font-size-13">Requerido</div>
+                                            </div>
+                                        </div>
+                                        <div class="col-12 col-lg-6">
                                             <div class="form-group floating-label enable-floating-label show-label">
                                                 <select class="form-control idMachine" name="idMachine" id="idMachine"></select>
                                                 <label for="idMachine">Maquina<span class="text-danger">*</span></label>
                                                 <div class="validation-error d-none font-size-13">Requerido</div>
                                             </div>
                                         </div>
-                                        <div class="col-12 col-lg-2">
+                                        <div class="col-12 col-lg-3">
                                             <div class="form-group floating-label enable-floating-label show-label">
-                                                <input id="numberWorkers" name="numberWorkers" type="number" class="form-control">
+                                                <input id="numberWorkers" name="numberWorkers" type="number" class="form-control text-center" readonly>
                                                 <label for="numberWorkers">No Trabajadores<span class="text-danger">*</span></label>
                                                 <div class="validation-error d-none font-size-13">Requerido</div>
                                             </div>
                                         </div>
-                                        <div class="col-12 col-lg-2">
+                                        <div class="col-12 col-lg-3">
                                             <div class="form-group floating-label enable-floating-label show-label">
-                                                <input id="workShift" name="workShift" type="number" class="form-control">
+                                                <input id="workShift" name="workShift" type="number" class="form-control text-center">
                                                 <label for="workShift">Total Turnos<span class="text-danger">*</span></label>
                                                 <div class="validation-error d-none font-size-13">Requerido</div>
                                             </div>

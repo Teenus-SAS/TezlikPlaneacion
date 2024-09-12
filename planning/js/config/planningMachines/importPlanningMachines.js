@@ -36,7 +36,7 @@ $(document).ready(function () {
 
     importFile(selectedFile)
       .then((data) => {
-        const expectedHeaders = ['maquina', 'no_trabajadores', 'total_turno', 'hora_dia', 'hora_inicio', 'enero', 'febrero', 'marzo', 'abril', 'mayo', 'junio', 'julio', 'agosto', 'septiembre', 'octubre', 'noviembre', 'diciembre', 'disponible'];
+        const expectedHeaders = ['tipo', 'maquina', 'no_trabajadores', 'total_turno', 'hora_dia', 'hora_inicio', 'enero', 'febrero', 'marzo', 'abril', 'mayo', 'junio', 'julio', 'agosto', 'septiembre', 'octubre', 'noviembre', 'diciembre', 'disponible'];
         const actualHeaders = Object.keys(data[0]);
 
         const missingHeaders = expectedHeaders.filter(header => !actualHeaders.includes(header));
@@ -50,6 +50,7 @@ $(document).ready(function () {
         }
 
         let machinesToImport = data.map((item) => {
+          !item.tipo ? item.tipo = '' : item.tipo;
           !item.maquina ? item.maquina = '' : item.maquina;
           !item.no_trabajadores ? item.no_trabajadores = 0 : item.no_trabajadores;
           !item.total_turno ? item.total_turno = 0 : item.total_turno;
@@ -71,6 +72,7 @@ $(document).ready(function () {
           !item.disponible ? item.disponible = '' : item.disponible;
 
           return {
+            type: item.maquina,
             machine: item.maquina,
             numberWorkers: item.no_trabajadores,
             workShift: item.total_turno,
@@ -205,6 +207,7 @@ $(document).ready(function () {
       let hourStart = moment((data[i].hour_start).toFixed(2), ['HH:mm']).format('h:mm A');
 
       planningMachines.push({
+        tipo: data[i].type_program_machine == '0' ? 'PROCESO MANUAL' : 'MAQUINA',
         maquina: data[i].machine,
         no_trabajadores: data[i].number_workers,
         total_turno: data[i].work_shift,

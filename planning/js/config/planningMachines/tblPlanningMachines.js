@@ -144,4 +144,12 @@ $(document).ready(function () {
       },
     ],
   });
+
+  $('#idMachine').change(function (e) { 
+    e.preventDefault();
+    
+    let dataMachines = JSON.parse(sessionStorage.getItem('machinesData'));
+    let data = dataMachines.find(item => item.id_machine == this.value);
+    $('#numberWorkers').val(data.employees);
+  });
 });
