@@ -66,6 +66,7 @@ $(document).ready(function () {
     // Asignar valores
     $(`#idMachine`).val(data.id_machine).prop("selected", true);
     $("#numberWorkers").val(data.number_workers);
+    $("#workShift").val(data.work_shift);
     $("#hoursDay").val(data.hours_day);
 
     // Formatear horas
@@ -94,20 +95,7 @@ $(document).ready(function () {
             .format("MMMM")
             .toLowerCase()}`
         ]
-      );
-
-    /* $("#month-1").val(data.january);
-    $("#month-2").val(data.february);
-    $("#month-3").val(data.march);
-    $("#month-4").val(data.april);
-    $("#month-5").val(data.may);
-    $("#month-6").val(data.june);
-    $("#month-7").val(data.july);
-    $("#month-8").val(data.august);
-    $("#month-9").val(data.september);
-    $("#month-10").val(data.october);
-    $("#month-11").val(data.november);
-    $("#month-12").val(data.december); */
+      ); 
 
     // Desplazamiento parte superior
     $("html, body").animate(
@@ -121,9 +109,10 @@ $(document).ready(function () {
   const checkDataPlanningMachines = async (url, idProgramMachine) => {
     const idMachine = parseInt($("#idMachine").val());
     const numberWorkers = parseInt($("#numberWorkers").val());
+    const workShift = parseInt($("#workShift").val());
     const hoursDay = parseInt($("#hoursDay").val());
 
-    const data = idMachine * numberWorkers * hoursDay;
+    const data = idMachine * numberWorkers * workShift * hoursDay;
 
     if (!data) {
       toastr.error("Ingrese todos los campos");
@@ -175,6 +164,42 @@ $(document).ready(function () {
       },
     });
   };
+
+  // Estado empleado
+  $(document).on("click", ".statusPM", function () {
+    //obtener data
+    let row = $(this).closest("tr")[0];
+    let data = tblPlanMachines.fnGetData(row);
+
+    bootbox.confirm({
+      title: "Programacion Maquina",
+      message: `Está seguro de cambiar el estado ${
+        data.status == "1" ? "a <b>No Disponible</b>" : "a <b>Disponible</b>"
+      } de esta maquina?`,
+      buttons: {
+        confirm: {
+          label: "Si",
+          className: "btn-success",
+        },
+        cancel: {
+          label: "No",
+          className: "btn-danger",
+        },
+      },
+      callback: function (result) {
+        if (result == true) {
+          $.get(
+            `/api/changeStatusPMachine/${data.id_program_machine}/${
+              data.status == "0" ? "1" : "0"
+            }`,
+            function (data, textStatus, jqXHR) {
+              message(data);
+            }
+          );
+        }
+      },
+    });
+  });
 
   /* Mensaje de exito */
 

@@ -70,14 +70,15 @@ $(document).ready(function () {
   $(document).on('blur','.hours', function () {
     let hourStart = $('#hourStart').val();
     let hoursDay = parseFloat($('#hoursDay').val());
+    let workShift = parseFloat($('#workShift').val());
 
     if (!hourStart || hourStart == '') {
       toastr.error('Ingrese hora inicial');
       return false;
     }
     
-    if (!hoursDay || hoursDay == '') {
-      return false; 
+    if (!hoursDay || hoursDay == '' || !workShift || workShift == '') {
+      return false;
     }
 
     var date = new Date("2000-01-01 " + hourStart);
@@ -85,7 +86,7 @@ $(document).ready(function () {
     var horas = date.getHours();
     var minutos = date.getMinutes();
  
-    var hourEnd = parseFloat(horas + '.' + (minutos < 10 ? '0' : '') + minutos) + hoursDay;
+    var hourEnd = parseFloat(horas + '.' + (minutos < 10 ? '0' : '') + minutos) + (hoursDay * workShift);
 
     hourEnd = moment(hourEnd.toFixed(2), ['HH:mm']).format('h:mm A');
 

@@ -21,7 +21,7 @@ class Planning_machinesDao
         $connection = Connection::getInstance()->getConnection();
 
         $stmt = $connection->prepare("SELECT pm.id_program_machine, pm.id_machine, m.machine, pm.number_workers, pm.hours_day, pm.hour_start, pm.hour_end, pm.year, pm.january, pm.february,
-                                             pm.march, pm.april, pm.may, pm.june, pm.july, pm.august, pm.september, pm.october, pm.november, pm.december                                
+                                             pm.march, pm.april, pm.may, pm.june, pm.july, pm.august, pm.september, pm.october, pm.november, pm.december, pm.work_shift, pm.status                            
                                       FROM plan_program_machines pm
                                         INNER JOIN machines m ON m.id_machine = pm.id_machine
                                       WHERE pm.id_company = :id_company;");
@@ -35,20 +35,30 @@ class Planning_machinesDao
         $connection = Connection::getInstance()->getConnection();
         try {
             $stmt = $connection->prepare("INSERT INTO plan_program_machines (id_machine, id_company, number_workers, hours_day, hour_start, hour_end, year, january, 
-                                                        february, march, april, may, june, july, august, september, october, november, december)
+                                                        february, march, april, may, june, july, august, september, october, november, december, work_shift)
                                       VALUES (:id_machine, :id_company, :number_workers, :hours_day, :hour_start, :hour_end, :year, :january, 
-                                              :february, :march, :april, :may, :june, :july, :august, :september, :october, :november, :december)");
+                                              :february, :march, :april, :may, :june, :july, :august, :september, :october, :november, :december, :work_shift)");
             $stmt->execute([
-                'id_company' => $id_company,                            'april' => $dataPMachines['april'],
-                'id_machine' => $dataPMachines['idMachine'],            'may' => $dataPMachines['may'],
-                'number_workers' => $dataPMachines['numberWorkers'],    'june' => $dataPMachines['june'],
-                'hours_day' => $dataPMachines['hoursDay'],              'july' => $dataPMachines['july'],
-                'hour_start' => $dataPMachines['hourStart'],            'august' => $dataPMachines['august'],
-                'hour_end' => $dataPMachines['hourEnd'],                'september' => $dataPMachines['september'],
-                'year' =>  $dataPMachines['year'],                      'october' => $dataPMachines['october'],
-                'january' => $dataPMachines['january'],                 'november' => $dataPMachines['november'],
-                'february' => $dataPMachines['february'],               'december' => $dataPMachines['december'],
-                'march' => $dataPMachines['march']
+                'id_machine' => $dataPMachines['idMachine'],
+                'id_company' => $id_company,
+                'number_workers' => $dataPMachines['numberWorkers'],
+                'hours_day' => $dataPMachines['hoursDay'],
+                'hour_start' => $dataPMachines['hourStart'],
+                'hour_end' => $dataPMachines['hourEnd'],
+                'year' =>  $dataPMachines['year'],
+                'january' => $dataPMachines['january'],
+                'february' => $dataPMachines['february'],
+                'march' => $dataPMachines['march'],
+                'april' => $dataPMachines['april'],
+                'may' => $dataPMachines['may'],
+                'june' => $dataPMachines['june'],
+                'july' => $dataPMachines['july'],
+                'august' => $dataPMachines['august'],
+                'september' => $dataPMachines['september'],
+                'october' => $dataPMachines['october'],
+                'november' => $dataPMachines['november'],
+                'december' => $dataPMachines['december'],
+                'work_shift' => $dataPMachines['workShift'],
             ]);
             $this->logger->info(__FUNCTION__, array('query' => $stmt->queryString, 'errors' => $stmt->errorInfo()));
         } catch (\Exception $e) {
@@ -65,19 +75,29 @@ class Planning_machinesDao
         try {
             $stmt = $connection->prepare("UPDATE plan_program_machines SET id_machine = :id_machine, number_workers = :number_workers, hours_day = :hours_day, hour_start = :hour_start, hour_end = :hour_end, 
                                                     year = :year, january = :january, february = :february, march = :march, april = :april, may = :may, june = :june, july = :july,
-                                                    august = :august, september = :september, october = :october, november = :november, december = :december
+                                                    august = :august, september = :september, october = :october, november = :november, december = :december, work_shift = :work_shift
                                           WHERE id_program_machine = :id_program_machine");
             $stmt->execute([
-                'id_program_machine' => $dataPMachines['idProgramMachine'],     'april' => $dataPMachines['april'],
-                'id_machine' => $dataPMachines['idMachine'],                    'may' => $dataPMachines['may'],
-                'number_workers' => $dataPMachines['numberWorkers'],            'june' => $dataPMachines['june'],
-                'hours_day' => $dataPMachines['hoursDay'],                      'july' => $dataPMachines['july'],
-                'hour_start' => $dataPMachines['hourStart'],                    'august' => $dataPMachines['august'],
-                'hour_end' => $dataPMachines['hourEnd'],                        'september' => $dataPMachines['september'],
-                'year' => $dataPMachines['year'],                               'october' => $dataPMachines['october'],
-                'january' => $dataPMachines['january'],                         'november' => $dataPMachines['november'],
-                'february' => $dataPMachines['february'],                       'december' => $dataPMachines['december'],
-                'march' => $dataPMachines['march']
+                'id_program_machine' => $dataPMachines['idProgramMachine'],
+                'id_machine' => $dataPMachines['idMachine'],
+                'number_workers' => $dataPMachines['numberWorkers'],
+                'hours_day' => $dataPMachines['hoursDay'],
+                'hour_start' => $dataPMachines['hourStart'],
+                'hour_end' => $dataPMachines['hourEnd'],
+                'year' => $dataPMachines['year'],
+                'january' => $dataPMachines['january'],
+                'february' => $dataPMachines['february'],
+                'march' => $dataPMachines['march'],
+                'april' => $dataPMachines['april'],
+                'may' => $dataPMachines['may'],
+                'june' => $dataPMachines['june'],
+                'july' => $dataPMachines['july'],
+                'august' => $dataPMachines['august'],
+                'september' => $dataPMachines['september'],
+                'october' => $dataPMachines['october'],
+                'november' => $dataPMachines['november'],
+                'december' => $dataPMachines['december'],
+                'work_shift' => $dataPMachines['workShift'],
             ]);
             $this->logger->info(__FUNCTION__, array('query' => $stmt->queryString, 'errors' => $stmt->errorInfo()));
         } catch (\Exception $e) {

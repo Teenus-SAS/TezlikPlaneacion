@@ -65,7 +65,7 @@ class GeneralPlanCiclesMachinesDao
                                         INNER JOIN products p ON p.id_product = pcm.id_product
                                         LEFT JOIN machines m ON m.id_machine = pcm.id_machine
                                         LEFT JOIN process pc ON pc.id_process = pcm.id_process 
-                                        LEFT JOIN plan_payroll py ON py.id_process = pcm.id_process AND py.id_machine = pcm.id_machine
+                                        LEFT JOIN plan_payroll py ON py.id_process = pcm.id_process AND py.id_machine = pcm.id_machine AND py.status = 1
                                       WHERE pcm.id_product = :id_product AND pcm.id_company = :id_company
                                       GROUP BY pcm.id_cicles_machine
                                       ORDER BY `pcm`.`route` ASC;");

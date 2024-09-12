@@ -78,6 +78,17 @@ class LastDataDao
         return $material;
     }
 
+    /* Nomina */
+    public function lastInsertedPayrollId($id_company)
+    {
+        $connection = Connection::getInstance()->getConnection();
+        $sql = "SELECT MAX(id_plan_payroll) AS id_plan_payroll FROM plan_payroll WHERE id_company = :id_company";
+        $query = $connection->prepare($sql);
+        $query->execute(['id_company' => $id_company]);
+        $payroll = $query->fetch($connection::FETCH_ASSOC);
+        return $payroll;
+    }
+
     /* Requisicion */
     public function lastInsertedRequisitionId($id_company)
     {

@@ -4,6 +4,7 @@ use TezlikPlaneacion\dao\GeneralAreaDao;
 use TezlikPlaneacion\dao\GeneralMachinesDao;
 use TezlikPlaneacion\dao\GeneralPayrollDao;
 use TezlikPlaneacion\dao\GeneralProcessDao;
+use TezlikPlaneacion\dao\LastDataDao;
 use TezlikPlaneacion\dao\PayrollDao;
 
 $payrollDao = new PayrollDao();
@@ -11,6 +12,7 @@ $generalPayrollDao = new GeneralPayrollDao();
 $generalProcessDao = new GeneralProcessDao();
 $generalMachinesDao = new GeneralMachinesDao();
 $generalAreaDao = new GeneralAreaDao();
+$lastDataDao = new LastDataDao();
 
 use Psr\Http\Message\ResponseInterface as Response;
 use Psr\Http\Message\ServerRequestInterface as Request;
@@ -41,63 +43,57 @@ $app->post('/payrollDataValidation', function (Request $request, Response $respo
         $payroll = $dataPayroll['importPayroll'];
 
         $dataImportPayroll = [];
+        $debugg = [];
 
         for ($i = 0; $i < count($payroll); $i++) {
             if (
-                empty($payroll[$i]['firstname']) || empty($payroll[$i]['lastname']) ||
-                empty($payroll[$i]['position']) || empty($payroll[$i]['process']) ||
-                empty($payroll[$i]['machine']) || empty($payroll[$i]['area'])
+                empty($payroll[$i]['firstname']) || empty($payroll[$i]['lastname']) || empty($payroll[$i]['position']) ||  empty($payroll[$i]['process']) ||
+                empty($payroll[$i]['machine']) || empty($payroll[$i]['area']) || empty($payroll[$i]['active'])
             ) {
-                $i = $i + 2;
-                $dataImportPayroll = array('error' => true, 'message' => "Campos vacios, fila: $i");
-                break;
+                $row = $i + 2;
+                array_push($debugg, array('error' => true, 'message' => "Campos vacios, fila: $row"));
             }
             if (
-                empty(trim($payroll[$i]['firstname'])) || empty(trim($payroll[$i]['lastname'])) ||
-                empty(trim($payroll[$i]['position'])) || empty(trim($payroll[$i]['process'])) ||
-                empty(trim($payroll[$i]['machine'])) || empty(trim($payroll[$i]['area']))
+                empty(trim($payroll[$i]['firstname'])) || empty(trim($payroll[$i]['lastname'])) || empty(trim($payroll[$i]['position'])) || empty(trim($payroll[$i]['process'])) ||
+                empty(trim($payroll[$i]['machine'])) || empty(trim($payroll[$i]['area'])) || empty(trim($payroll[$i]['active']))
             ) {
-                $i = $i + 2;
-                $dataImportPayroll = array('error' => true, 'message' => "Campos vacios, fila: $i");
-                break;
+                $row = $i + 2;
+                array_push($debugg, array('error' => true, 'message' => "Campos vacios, fila: $row"));
             }
+
+            // Obtener proceso
+            $findProcess = $generalProcessDao->findProcess($payroll[$i], $id_company);
+
+            if (!$findProcess) {
+                $row = $i + 2;
+                array_push($debugg, array('error' => true, 'message' => "Proceso no existe en la base de datos. Fila: $row"));
+            } else
+                $payroll[$i]['idProcess'] = $findProcess['id_process'];
+
+            // Obtener Maquina
+            $findMachine = $generalMachinesDao->findMachine($payroll[$i], $id_company);
+
+            if (!$findMachine) {
+                $row = $i + 2;
+                array_push($debugg, array('error' => true, 'message' => "Maquina no existe en la base de datos. Fila: $row"));
+            } else
+                $payroll[$i]['idMachine'] = $findMachine['id_machine'];
+
+            // Obtener area
+            $findArea = $generalAreaDao->findArea($payroll[$i], $id_company);
+
+            if (!$findArea) {
+                $row = $i + 2;
+                array_push($debugg, array('error' => true, 'message' => "Area no existe en la base de datos. Fila: $row"));
+            } else
+                $payroll[$i]['idArea'] = $findArea['id_plan_area'];
         }
 
         $insert = 0;
         $update = 0;
 
-        if (sizeof($dataImportPayroll) == 0) {
+        if (sizeof($debugg) == 0) {
             for ($i = 0; $i < count($payroll); $i++) {
-                // Obtener proceso
-                $findProcess = $generalProcessDao->findProcess($payroll[$i], $id_company);
-
-                if (!$findProcess) {
-                    $i = $i + 2;
-                    $dataImportPayroll =  array('error' => true, 'message' => "Proceso no existe en la base de datos. Fila: $i");
-                    break;
-                }
-                $payroll[$i]['idProcess'] = $findProcess['id_process'];
-
-                // Obtener Maquina
-                $findMachine = $generalMachinesDao->findMachine($payroll[$i], $id_company);
-
-                if (!$findMachine) {
-                    $i = $i + 2;
-                    $dataImportPayroll =  array('error' => true, 'message' => "Maquina no existe en la base de datos. Fila: $i");
-                    break;
-                }
-                $payroll[$i]['idMachine'] = $findMachine['id_machine'];
-
-                // Obtener area
-                $findArea = $generalAreaDao->findArea($payroll[$i], $id_company);
-
-                if (!$findArea) {
-                    $i = $i + 2;
-                    $dataImportPayroll =  array('error' => true, 'message' => "Area no existe en la base de datos. Fila: $i");
-                    break;
-                }
-                $payroll[$i]['idArea'] = $findArea['id_plan_area'];
-
                 $findPayroll = $generalPayrollDao->findPayroll($payroll[$i], $id_company);
 
                 if (!$findPayroll)
@@ -110,7 +106,10 @@ $app->post('/payrollDataValidation', function (Request $request, Response $respo
     } else
         $dataImportPayroll = array('error' => true, 'message' => 'El archivo se encuentra vacio. Intente nuevamente');
 
-    $response->getBody()->write(json_encode($dataImportPayroll, JSON_NUMERIC_CHECK));
+    $data['import'] = $dataImportPayroll;
+    $data['debugg'] = $debugg;
+
+    $response->getBody()->write(json_encode($data, JSON_NUMERIC_CHECK));
     return $response->withHeader('Content-Type', 'application/json');
 });
 
@@ -119,7 +118,8 @@ $app->post('/addPayroll', function (Request $request, Response $response, $args)
     $generalPayrollDao,
     $generalProcessDao,
     $generalMachinesDao,
-    $generalAreaDao
+    $generalAreaDao,
+    $lastDataDao
 ) {
     session_start();
     $id_company = $_SESSION['id_company'];
@@ -162,10 +162,18 @@ $app->post('/addPayroll', function (Request $request, Response $response, $args)
             $findPayroll = $generalPayrollDao->findPayroll($payroll[$i], $id_company);
             if (!$findPayroll) {
                 $resolution = $payrollDao->insertPayrollByCompany($payroll[$i], $id_company);
+
+                $lastData = $lastDataDao->lastInsertedPayrollId($id_company);
+                $payroll[$i]['idPayroll'] = $lastData['id_plan_payroll'];
             } else {
                 $payroll[$i]['idPayroll'] = $findPayroll['id_plan_payroll'];
                 $resolution = $payrollDao->updatePayroll($payroll[$i]);
             }
+
+            if (isset($resolution['info'])) break;
+
+            $payroll[$i]['active'] == 'SI' ? $payroll[$i]['status'] = 1 : $payroll[$i]['status'] = 0;
+            $resolution = $generalPayrollDao->changeStatusPayroll($payroll[$i]['idPayroll'], $payroll[$i]['status']);
 
             if (isset($resolution['info'])) break;
         }

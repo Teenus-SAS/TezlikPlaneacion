@@ -27,4 +27,19 @@ class GeneralPlanningMachinesDao
         $planningMachines = $stmt->fetch($connection::FETCH_ASSOC);
         return $planningMachines;
     }
+
+    public function changeStatusPmachine($id_program_machine, $status)
+    {
+        try {
+            $connection = Connection::getInstance()->getConnection();
+
+            $stmt = $connection->prepare("UPDATE plan_program_machines SET status = :status WHERE id_program_machine = :id_program_machine");
+            $stmt->execute([
+                'status' => $status,
+                'id_program_machine' => $id_program_machine
+            ]);
+        } catch (\Exception $e) {
+            return ['info' => true, 'message' => $e->getMessage()];
+        }
+    }
 }

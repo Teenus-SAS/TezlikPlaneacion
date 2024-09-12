@@ -49,44 +49,57 @@ $app->post('/planningMachinesDataValidation', function (Request $request, Respon
         $update = 0;
 
         $planningMachines = $dataPMachines['importPlanMachines'];
+        $dataImportPlanMachines = [];
+        $debugg = [];
 
         for ($i = 0; $i < sizeof($planningMachines); $i++) {
+            if (
+                empty($planningMachines[$i]['numberWorkers']) || empty($planningMachines[$i]['workShift']) ||  empty($planningMachines[$i]['hoursDay']) || empty($planningMachines[$i]['hourStart']) || empty($planningMachines[$i]['january']) || empty($planningMachines[$i]['february']) ||
+                empty($planningMachines[$i]['march']) || empty($planningMachines[$i]['april']) || empty($planningMachines[$i]['may']) || empty($planningMachines[$i]['june']) || empty($planningMachines[$i]['july']) || empty($planningMachines[$i]['august']) || empty($planningMachines[$i]['september']) ||
+                empty($planningMachines[$i]['october']) ||  empty($planningMachines[$i]['november']) ||  empty($planningMachines[$i]['december']) || empty($planningMachines[$i]['active'])
+            ) {
+                $row = $i + 2;
+                array_push($debugg, array('error' => true, 'message' => "Fila-$row: Columna vacia"));
+            }
+            if (
+                empty(trim($planningMachines[$i]['numberWorkers'])) || empty(trim($planningMachines[$i]['workShift'])) || empty(trim($planningMachines[$i]['hoursDay'])) || empty(trim($planningMachines[$i]['hourStart'])) || empty(trim($planningMachines[$i]['january'])) || empty(trim($planningMachines[$i]['february'])) ||
+                empty(trim($planningMachines[$i]['march'])) || empty(trim($planningMachines[$i]['april'])) || empty(trim($planningMachines[$i]['may'])) || empty(trim($planningMachines[$i]['june'])) || empty(trim($planningMachines[$i]['july'])) || empty(trim($planningMachines[$i]['august'])) || empty(trim($planningMachines[$i]['september'])) ||
+                empty(trim($planningMachines[$i]['october'])) || empty(trim($planningMachines[$i]['november'])) || empty(trim($planningMachines[$i]['december'])) || empty(trim($planningMachines[$i]['active']))
+            ) {
+                $row = $i + 2;
+                array_push($debugg, array('error' => true, 'message' => "Fila-$row: Columna vacia"));
+            }
+
             if (
                 $planningMachines[$i]['january'] > 31 || $planningMachines[$i]['february'] > 28 || $planningMachines[$i]['march'] > 31 || $planningMachines[$i]['april'] > 30 ||
                 $planningMachines[$i]['may'] > 31 || $planningMachines[$i]['june'] > 30 || $planningMachines[$i]['july'] > 31 || $planningMachines[$i]['august'] > 31 ||
                 $planningMachines[$i]['september'] > 30 ||  $planningMachines[$i]['october'] > 31 ||  $planningMachines[$i]['november'] > 30 ||  $planningMachines[$i]['december'] > 31
             ) {
-                $i = $i + 2;
-                $dataImportPlanMachines = array('error' => true, 'message' => "Fila-$i: El valor es mayor al último día del mes");
-                break;
+                $row = $i + 2;
+                array_push($debugg, array('error' => true, 'message' => "Fila-$row: El valor es mayor al último día del mes"));
             }
 
             // Obtener id maquina
             $findMachine = $machinesDao->findMachine($planningMachines[$i], $id_company);
             if (!$findMachine) {
-                $i = $i + 2;
-                $dataImportPlanMachines = array('error' => true, 'message' => "Fila-$i: Máquina no existe");
-                break;
+                $row = $i + 2;
+                array_push($debugg, array('error' => true, 'message' => "Fila-$row: Máquina no existe"));
             } else $planningMachines[$i]['idMachine'] = $findMachine['id_machine'];
 
-            if (
-                empty($planningMachines[$i]['numberWorkers']) || empty($planningMachines[$i]['hoursDay']) || empty($planningMachines[$i]['hourStart']) || empty($planningMachines[$i]['january']) || empty($planningMachines[$i]['february']) ||
-                empty($planningMachines[$i]['march']) || empty($planningMachines[$i]['april']) || empty($planningMachines[$i]['may']) || empty($planningMachines[$i]['june']) || empty($planningMachines[$i]['july']) ||
-                empty($planningMachines[$i]['august']) || empty($planningMachines[$i]['september']) ||  empty($planningMachines[$i]['october']) ||  empty($planningMachines[$i]['november']) ||  empty($planningMachines[$i]['december'])
-            ) {
-                $i = $i + 2;
-                $dataImportPlanMachines = array('error' => true, 'message' => "Fila-$i: Columna vacia");
-                break;
+            if (sizeof($debugg) == 0) {
+                $findPlanMachines = $generalPlanningMachinesDao->findPlanMachines($planningMachines[$i], $id_company);
+                if (!$findPlanMachines) $insert = $insert + 1;
+                else $update = $update + 1;
+                $dataImportPlanMachines['insert'] = $insert;
+                $dataImportPlanMachines['update'] = $update;
             }
-
-            $findPlanMachines = $generalPlanningMachinesDao->findPlanMachines($planningMachines[$i], $id_company);
-            if (!$findPlanMachines) $insert = $insert + 1;
-            else $update = $update + 1;
-            $dataImportPlanMachines['insert'] = $insert;
-            $dataImportPlanMachines['update'] = $update;
         }
     } else $dataImportPlanMachines = array('error' => true, 'message' => 'El archivo se encuentra vacio. Intente nuevamente');
-    $response->getBody()->write(json_encode($dataImportPlanMachines, JSON_NUMERIC_CHECK));
+
+    $data['import'] = $dataImportPlanMachines;
+    $data['debugg'] = $debugg;
+
+    $response->getBody()->write(json_encode($data, JSON_NUMERIC_CHECK));
     return $response->withHeader('Content-Type', 'application/json');
 });
 
@@ -255,6 +268,22 @@ $app->get('/deletePlanningMachines/{id_program_machine}/{id}', function (Request
 
     if ($planningMachines == null) $resp = array('success' => true, 'message' => 'Planeación de maquina eliminada correctamente');
     else $resp = array('error' => true, 'message' => 'No se pudo eliminar la planeación, existe información asociada a ella');
+    $response->getBody()->write(json_encode($resp));
+    return $response->withStatus(200)->withHeader('Content-Type', 'application/json');
+});
+
+$app->get('/changeStatusPMachine/{id_program_machine}/{status}', function (Request $request, Response $response, $args) use (
+    $generalPlanningMachinesDao
+) {
+    $resolution = $generalPlanningMachinesDao->changeStatusPmachine($args['id_program_machine'], $args['status']);
+
+    if ($resolution == null)
+        $resp = array('success' => true, 'message' => 'Programacion de maquina modificada correctamente');
+    else if (isset($resolution['info']))
+        $resp = array('info' => true, 'message' => $resolution['message']);
+    else
+        $resp = array('error' => true, 'message' => 'Ocurrió un error mientras modificaba los datos. Intente nuevamente');
+
     $response->getBody()->write(json_encode($resp));
     return $response->withStatus(200)->withHeader('Content-Type', 'application/json');
 });
