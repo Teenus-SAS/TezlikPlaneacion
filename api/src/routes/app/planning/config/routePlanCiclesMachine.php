@@ -86,6 +86,7 @@ $app->post('/planCiclesMachineDataValidation', function (Request $request, Respo
         $update = 0;
 
         $planCiclesMachine = $dataPlanCiclesMachine['importPlanCiclesMachine'];
+        $dataImportPlanCiclesMachine = [];
         $debugg = [];
 
         for ($i = 0; $i < sizeof($planCiclesMachine); $i++) {

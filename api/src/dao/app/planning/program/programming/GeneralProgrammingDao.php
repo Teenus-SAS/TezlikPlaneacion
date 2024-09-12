@@ -36,7 +36,7 @@ class GeneralProgrammingDao
     {
         $connection = Connection::getInstance()->getConnection();
 
-        $stmt = $connection->prepare("SELECT CONCAT('OP', MAX(id_programming) + 1) AS op FROM programming WHERE id_company = :id_company");
+        $stmt = $connection->prepare("SELECT CONCAT('OP', COUNT(id_programming) + 1) AS op FROM programming WHERE id_company = :id_company");
         $stmt->execute(['id_company' => $id_company]);
 
         $this->logger->info(__FUNCTION__, array('query' => $stmt->queryString, 'errors' => $stmt->errorInfo()));
