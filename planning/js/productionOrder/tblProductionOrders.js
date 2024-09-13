@@ -14,28 +14,35 @@ $(document).ready(function () {
   });
 
   loadData = async (op) => {
-    try { 
+    try {
       const [dataPO, dataFTMaterials] = await Promise.all([
         searchData('/api/productionOrder'),
         op == 1 ? searchData('/api/allProductsMaterials') : ''
       ]);
-
+ 
       let dataPOP = dataPO.filter(item => item.status == 'EN PRODUCCION');
       let dataPON = dataPO.filter(item => item.status != 'EN PRODUCCION');
 
       sessionStorage.setItem('dataPOP', JSON.stringify(dataPOP));
       sessionStorage.setItem('dataPON', JSON.stringify(dataPON));
+      sessionStorage.setItem('dataOP', JSON.stringify(dataPO));
 
-      if(op == 1)
+      if (op == 1)
         sessionStorage.setItem('dataFTMaterials', JSON.stringify(dataFTMaterials));
+
+      let element = document.getElementsByClassName('selectNavigation');
+
+      if (element[1].className.includes('active'))
+        loadTblProductionOrders(dataPON);
+      else
+        loadTblProductionOrders(dataPOP);
       
-      loadTblProductionOrders(dataPOP); 
     } catch (error) {
       console.error('Error loading data:', error);
     }
   };
 
-  const loadTblProductionOrders = (data) => {
+  loadTblProductionOrders = (data) => {
     if ($.fn.dataTable.isDataTable("#tblProductionOrders")) {
       $("#tblProductionOrders").DataTable().clear();
       $("#tblProductionOrders").DataTable().rows.add(data).draw();
@@ -43,7 +50,7 @@ $(document).ready(function () {
     }
 
     tblProductionOrders = $("#tblProductionOrders").dataTable({
-      // destroy: true,
+      destroy: true,
       pageLength: 50,
       data: data,
       language: {
@@ -114,14 +121,22 @@ $(document).ready(function () {
           data: null,
           className: "uniqueClassName dt-head-center",
           render: function (data) {
-            if (data.status == "EN PRODUCCION") {
-              return `
-                <a href="/planning/details-production-order" <i id="${data.id_programming}" class="mdi mdi-playlist-check" data-toggle='tooltip' title='Ver Orden' style="font-size: 30px;color:black" onclick="seePO()"></i></a>
-                <button type="button" id="${data.status}" class="btn btn-sm btn-warning changeStatus" style="font-size: 12px;">Fabricado</button>
-              `;
-            } else {
-              return "";
-            }
+            // if (data.status == "EN PRODUCCION") {
+            //   return `
+            //     <a href="/planning/details-production-order" <i id="${data.id_programming}" class="mdi mdi-playlist-check" data-toggle='tooltip' title='Ver Orden' style="font-size: 30px;color:black" onclick="seePO()"></i></a>
+            //     <button type="button" id="${data.status}" class="btn btn-sm btn-warning changeStatus" style="font-size: 12px;">Fabricado</button>
+            //   `;
+            // } else {
+            //   return `<a href="/planning/details-production-order" <i id="${data.id_programming}" class="mdi mdi-playlist-check" data-toggle='tooltip' title='Ver Orden' style="font-size: 30px;color:black" onclick="seePO()"></i></a>`;
+            // }
+            return `
+              <a href="javascript:;">
+                    <i id="${data.id_programming}" class="${data.flag_cancel == 0 ? 'bi bi-x-circle-fill' : 'bi bi-check-circle-fill'} changeFlagOP" data-toggle='tooltip' title='${data.flag_cancel == 0 ? 'Anular': 'Aprobar'} Orden de Produccion' style="font-size:25px; color: ${data.flag_cancel == 0 ? '#ff0000' : '#7bb520'};"></i>
+                  </a>
+              <a href="/planning/details-production-order">
+                    <i id="${data.id_programming}" class="mdi mdi-playlist-check" data-toggle='tooltip' title='Ver Orden' style="font-size: 30px;color:black" onclick="seePO()"></i>
+                  </a>
+            `;
           },
         },
       ],

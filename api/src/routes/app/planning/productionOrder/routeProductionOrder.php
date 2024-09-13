@@ -74,3 +74,17 @@ $app->post('/changeStatusOP', function (Request $request, Response $response, $a
     $response->getBody()->write(json_encode($resp));
     return $response->withHeader('Content-Type', 'application/json');
 });
+
+$app->get('/changeFlagOP/{id_programming}/{flag}', function (Request $request, Response $response, $args) use ($generalProgrammingDao) {
+    $resolution = $generalProgrammingDao->changeFlagProgramming($args['id_programming'], $args['flag']);
+
+    if ($resolution == null)
+        $resp = array('success' => true, 'message' => 'Orden de produccion modificada correctamente');
+    else if (isset($resolution['info']))
+        $resp = array('info' => true, 'message' => $resolution['message']);
+    else
+        $resp = array('error' => true, 'message' => 'Ocurrió un error mientras modificaba los datos. Intente nuevamente');
+
+    $response->getBody()->write(json_encode($resp));
+    return $response->withStatus(200)->withHeader('Content-Type', 'application/json');
+});
