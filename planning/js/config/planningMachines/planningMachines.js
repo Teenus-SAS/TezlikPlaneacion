@@ -114,7 +114,7 @@ $(document).ready(function () {
     const workShift = parseInt($("#workShift").val());
     const hoursDay = parseInt($("#hoursDay").val());
 
-    const data = typePM * idMachine * numberWorkers * workShift * hoursDay;
+    const data = idMachine * numberWorkers * workShift * hoursDay;
 
     if (!data) {
       toastr.error("Ingrese todos los campos");
