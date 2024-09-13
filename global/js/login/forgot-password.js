@@ -12,6 +12,7 @@ $(document).ready(function () {
       url: '/api/forgotPassword',
       data: { data: email },
       success: function (data, textStatus, xhr) {
+        const { success, error, info, message } = data;
         if (success) {
           toastr.success(message);
           setTimeout(() => {

@@ -1,24 +1,25 @@
 $(document).ready(function () {
-  $('#btnChangePass').on('click', function (e) {
-    let pass = $('#inputNewPass').val();
-    let pass1 = $('#inputNewPass1').val();
+  $("#btnChangePass").on("click", function (e) {
+    let pass = $("#inputNewPass").val();
+    let pass1 = $("#inputNewPass1").val();
 
-    let data = $('#frmChangePasword').serialize();
+    let data = $("#frmChangePasword").serialize();
 
     if (pass != pass1) {
-      toastr.error('los password no coinciden intente nuevamente');
+      toastr.error("los password no coinciden intente nuevamente");
       return false;
     }
 
     $.ajax({
-      type: 'POST',
-      url: '/api/changePassword',
+      type: "POST",
+      url: "/api/changePassword",
       data: data,
       success: function (data, textStatus, xhr) {
+        const { success, error, info, message } = data;
         if (success) {
           toastr.success(message);
           setTimeout(() => {
-            location.href = '../../../';
+            location.href = "../../../";
           }, 2000);
         } else if (error) toastr.error(message);
       },

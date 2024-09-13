@@ -1,5 +1,5 @@
 $(document).ready(function () {
-  $('.auth-user-testimonial .owl-carousel').owlCarousel({
+  $(".auth-user-testimonial .owl-carousel").owlCarousel({
     loop: true,
     margin: 0,
     nav: false,
@@ -20,31 +20,31 @@ $(document).ready(function () {
   });
 
   //Initialize form
-  $('#loginForm').validate({
+  $("#loginForm").validate({
     focusInvalid: false,
     rules: {
-      'validation-email': {
+      "validation-email": {
         required: true,
         email: true,
       },
-      'validation-password': {
+      "validation-password": {
         required: true,
       },
     },
     errorPlacement: function errorPlacement(error, element) {
-      $(element).siblings('.validation-error').removeClass('d-none');
+      $(element).siblings(".validation-error").removeClass("d-none");
       return true;
     },
     highlight: function (element) {
       var $el = $(element);
-      var $parent = $el.parents('.form-group');
-      $parent.addClass('invalid-field');
+      var $parent = $el.parents(".form-group");
+      $parent.addClass("invalid-field");
     },
     unhighlight: function (element) {
       var $el = $(element);
-      var $parent = $el.parents('.form-group');
-      $parent.removeClass('invalid-field');
-      $(element).siblings('.validation-error').addClass('d-none');
+      var $parent = $el.parents(".form-group");
+      $parent.removeClass("invalid-field");
+      $(element).siblings(".validation-error").addClass("d-none");
     },
     submitHandler: function (form) {
       var formdata = $(form).serializeArray();
@@ -55,21 +55,22 @@ $(document).ready(function () {
       /* alert("Data has been submitted. Please see console log");
                                     console.log("form data ===>", data); */
       login(data);
-      $(form).trigger('reset');
-      $('.floating-label').removeClass('enable-floating-label');
+      $(form).trigger("reset");
+      $(".floating-label").removeClass("enable-floating-label");
     },
   });
 
   const login = (data) => {
     $.ajax({
-      type: 'POST',
-      url: '/api/userAutentication',
+      type: "POST",
+      url: "/api/userAutentication",
       data: data,
       success: function (data, textStatus, xhr) {
-        if (data.error) {
+        const { success, error, info, message } = data;
+        if (error) {
           toastr.error(message);
           return false;
-        } else if (data.success) {
+        } else if (success) {
           location.href = data.location;
         }
       },
@@ -77,20 +78,20 @@ $(document).ready(function () {
   };
 
   // const validationCode = () => {
-  $('#btnCheckCode').click(function (e) {
+  $("#btnCheckCode").click(function (e) {
     e.preventDefault();
 
-    codeUser = $('#factor').val();
+    codeUser = $("#factor").val();
     $.ajax({
-      type: 'POST',
-      url: '/api/checkCode',
+      type: "POST",
+      url: "/api/checkCode",
       data: codeUser,
       success: function (data) {
         if (data.error) {
           toastr.error(message);
           return false;
         } else if (data.success) {
-          location.href = '../../app/';
+          location.href = "../../app/";
         }
       },
     });
