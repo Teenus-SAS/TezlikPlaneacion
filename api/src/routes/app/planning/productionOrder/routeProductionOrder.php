@@ -3,8 +3,12 @@
 use TezlikPlaneacion\dao\GeneralOrdersDao;
 use TezlikPlaneacion\dao\GeneralProductsDao;
 use TezlikPlaneacion\dao\GeneralProgrammingDao;
+use TezlikPlaneacion\dao\ProductionOrderDao;
+use TezlikPlaneacion\dao\ProductionOrderPartialDao;
 
 $generalProgrammingDao = new GeneralProgrammingDao();
+$productionOrderDao = new ProductionOrderDao();
+$productionOrderPartialDao = new ProductionOrderPartialDao();
 $generalOrdersDao = new GeneralOrdersDao();
 $generalProductsDao = new GeneralProductsDao();
 
@@ -13,12 +17,12 @@ use Psr\Http\Message\ServerRequestInterface as Request;
 
 
 $app->get('/productionOrder', function (Request $request, Response $response, $args) use (
-    $generalProgrammingDao,
+    $productionOrderDao,
 ) {
     session_start();
     $id_company = $_SESSION['id_company'];
-    $programming = $generalProgrammingDao->findAllProductionOrder($id_company);
-    $response->getBody()->write(json_encode($programming, JSON_NUMERIC_CHECK));
+    $programming = $productionOrderDao->findAllProductionOrder($id_company);
+    $response->getBody()->write(json_encode($programming));
     return $response->withHeader('Content-Type', 'application/json');
 });
 
@@ -87,4 +91,42 @@ $app->get('/changeFlagOP/{id_programming}/{flag}', function (Request $request, R
 
     $response->getBody()->write(json_encode($resp));
     return $response->withStatus(200)->withHeader('Content-Type', 'application/json');
+});
+
+$app->get('/productionOrderPartial', function (Request $request, Response $response, $args) use ($productionOrderPartialDao) {
+    session_start();
+    $id_company = $_SESSION['id_company'];
+
+    $productionOrder = $productionOrderPartialDao->findAllOPPartialBycompany($id_company);
+
+    $response->getBody()->write(json_encode($productionOrder));
+    return $response->withHeader('Content-Type', 'application/json');
+});
+
+$app->get('/productionOrderPartial/{id_programming}', function (Request $request, Response $response, $args) use ($productionOrderPartialDao) {
+    session_start();
+    $id_company = $_SESSION['id_company'];
+
+    $productionOrder = $productionOrderPartialDao->findAllOPPartialById($args['id_programming'], $id_company);
+
+    $response->getBody()->write(json_encode($productionOrder));
+    return $response->withHeader('Content-Type', 'application/json');
+});
+
+$app->post('/addOPPartial', function (Request $request, Response $response, $args) use ($productionOrderPartialDao) {
+    session_start();
+    $id_company = $_SESSION['id_company'];
+    $dataOP = $request->getParsedBody();
+
+    $resolution = $productionOrderPartialDao->insertOPPartialByCompany($dataOP, $id_company);
+
+    if ($resolution == null)
+        $resp = ['success' => true, 'message' => 'Orden de producción entregada correctamente'];
+    else if (isset($resolution['info']))
+        $resp = ['info' => true, 'message' => $resolution['message']];
+    else
+        $resp = ['error' => true, 'message' => 'Ocurrio un error al guardar la información. Intente nuevamente'];
+
+    $response->getBody()->write(json_encode($resp));
+    return $response->withHeader('Content-Type', 'application/json');
 });

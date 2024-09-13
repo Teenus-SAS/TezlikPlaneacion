@@ -8,13 +8,25 @@ $(document).ready(function () {
       $("#tblStore").DataTable().destroy();
       $("#tblStore").empty();
     }
+    $('.cardOC, .cardOP').hide();
 
-    if (this.id == "receive") {
+    if (this.id == "receiveOC") {
+      $('.cardOC').show();
       loadTblStoreMaterial(requisitions);
       $("#btnExportStore").hide();
-    } else if (this.id == "deliver") {
+    } else if (this.id == "deliverOC") {
+      $('.cardOC').show();
       $("#btnExportStore").show();
       loadTblStoreOrder(store);
+    } else if (this.id == "receiveOP") { 
+      $('.cardOP').show(); 
+    }
+
+    let tables = document.getElementsByClassName("dataTable");
+
+    for (let table of tables) {
+      table.style.width = "100%";
+      table.firstElementChild.style.width = "100%";
     }
   });
 

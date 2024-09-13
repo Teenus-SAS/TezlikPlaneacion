@@ -238,15 +238,16 @@ class GeneralMaterialsDao
         }
     }
 
-    public function saveUserDeliveredMaterial($id_material, $id_user)
+    public function saveUserDeliveredMaterial($id_company, $id_material, $id_user)
     {
         $connection = Connection::getInstance()->getConnection();
 
         try {
-            $stmt = $connection->prepare("UPDATE materials_inventory SET id_user_delivered = :id_user
-                                          WHERE id_material = :id_material");
+            $stmt = $connection->prepare("INSERT INTO users_store (id_company, id_material, id_user_delivered)
+                                          VALUES (:id_company, :id_material, :id_user_delivered)");
             $stmt->execute([
-                'id_user' => $id_user,
+                'id_company' => $id_company,
+                'id_user_delivered' => $id_user,
                 'id_material' => $id_material,
             ]);
             $this->logger->info(__FUNCTION__, array('query' => $stmt->queryString, 'errors' => $stmt->errorInfo()));

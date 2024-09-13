@@ -246,6 +246,7 @@ $app->post('/saveAdmissionDate', function (Request $request, Response $response,
     $transitMaterialsDao
 ) {
     session_start();
+    $id_company = $_SESSION['id_company'];
     $id_user = $_SESSION['idUser'];
 
     $dataRequisition = $request->getParsedBody();
@@ -259,7 +260,7 @@ $app->post('/saveAdmissionDate', function (Request $request, Response $response,
     }
 
     if ($requisition == null) {
-        $requisition = $generalRequisitionsDao->saveUserDeliverRequisition($dataRequisition['idRequisition'], $id_user);
+        $requisition = $generalRequisitionsDao->saveUserDeliverRequisition($id_company, $dataRequisition['idRequisition'], $id_user);
     }
 
     if ($requisition == null) {

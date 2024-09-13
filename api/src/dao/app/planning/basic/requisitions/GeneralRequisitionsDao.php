@@ -160,14 +160,15 @@ class GeneralRequisitionsDao
         }
     }
 
-    public function saveUserDeliverRequisition($id_requisition, $id_user)
+    public function saveUserDeliverRequisition($id_company, $id_requisition, $id_user)
     {
         $connection = Connection::getInstance()->getConnection();
 
         try {
-            $stmt = $connection->prepare("UPDATE requisitions SET id_user_deliver = :id_user
-                                          WHERE id_requisition = :id_requisition");
+            $stmt = $connection->prepare("INSERT INTO users_requisitions (id_company, id_requisition, id_user_deliver)
+                                          VALUES (:id_company, :id_requisition, :id_user_deliver)");
             $stmt->execute([
+                'id_company' => $id_company,
                 'id_user' => $id_user,
                 'id_requisition' => $id_requisition,
             ]);

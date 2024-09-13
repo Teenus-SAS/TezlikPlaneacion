@@ -59,6 +59,7 @@ $app->post('/deliverStore', function (Request $request, Response $response, $arg
     $generalMaterialsDao
 ) {
     session_start();
+    $id_company = $_SESSION['id_company'];
     $id_rol = $_SESSION['rol'];
     $id_user = $_SESSION['idUser'];
     $dataStore = $request->getParsedBody();
@@ -98,7 +99,7 @@ $app->post('/deliverStore', function (Request $request, Response $response, $arg
     }
 
     if ($store == null) {
-        $store = $generalMaterialsDao->saveUserDeliveredMaterial($dataStore['idMaterial'], $id_user);
+        $store = $generalMaterialsDao->saveUserDeliveredMaterial($id_company, $dataStore['idMaterial'], $id_user);
     }
 
     if ($store == null)

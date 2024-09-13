@@ -9,7 +9,7 @@ $(document).ready(function () {
 
         if (data.flag_cancel == 1) $('.cardExcOP').hide();
         else $('.cardExcOP').show();
-        
+
         $('#imgClient').empty();
 
         if(data.img)
@@ -76,15 +76,18 @@ $(document).ready(function () {
                 <td>${max_date}</td>
             </tr>`
         );
+
+        if (data.flag_cancel == 0)
+            loadTblPartialsDelivery(id_programming);
     };
 
     const formatQuantity = (quantity, abbreviation) => {
         quantity = parseFloat(quantity);
         
-        if (Math.abs(quantity) < 0.01) 
+        if (Math.abs(quantity) < 0.01)
             return quantity.toLocaleString('es-CO', { minimumFractionDigits: 2, maximumFractionDigits: 9 });
         
-        if (Math.abs(quantity) > 1) 
+        if (Math.abs(quantity) > 1)
             return quantity.toLocaleString('es-CO', { minimumFractionDigits: 2, maximumFractionDigits: 9 });
             
         if (abbreviation === "UND")
@@ -98,7 +101,95 @@ $(document).ready(function () {
             });
         
         return quantity;
-    }
+    }; 
+
+    // Entregas Parciales
+    $('#btnDeliverPartialOP').click(async function (e) {
+        e.preventDefault();
+
+        let startDateTime = $('#startDateTime').val();
+        let endDateTime = $('#endDateTime').val();
+        let operator = parseInt($('#operator').val());
+        let waste = parseInt($('#waste').val());
+        let quantityProduction = parseInt($('#quantityProduction').val());
+
+        let data = operator * waste * quantityProduction;
+
+        if (!startDateTime || startDateTime == '' || !endDateTime || endDateTime == '' || isNaN(data) || data <= 0) {
+            toastr.error('Ingrese todos los campos');
+            return false;
+        };
+        let id_programming = sessionStorage.getItem('id_programming');
+
+        let dataOP = new FormData(formAddOPPArtial);
+        dataOP.append('idProgramming', id_programming);
+
+        let resp = await sendDataPOST('/api/addOPPartial', dataOP);
+
+        const { success, error, info, message } = resp;
+        if (success) {
+            $("#formAddOPPArtial").trigger("reset");
+            toastr.success(message);
+            loadAllDataPO();
+            return false;
+        } else if (error) toastr.error(message);
+        else if (info) toastr.info(message);
+    });
+
+    const loadTblPartialsDelivery = (id_programming) => {
+        tblPartialsDelivery = $('#tblPartialsDelivery').dataTable({
+            destroy: true,
+            pageLength: 50,
+            ajax: {
+                url: `/api/productionOrderPartial/${id_programming}`,
+                dataSrc: '',
+            },
+            language: {
+                url: '/assets/plugins/i18n/Spanish.json',
+            },
+            columns: [
+                {
+                    title: 'No.',
+                    data: null,
+                    className: 'uniqueClassName dt-head-center',
+                    render: function (data, type, full, meta) {
+                        return meta.row + 1;
+                    },
+                },
+                {
+                    title: "Fechas",
+                    data: null,
+                    className: "uniqueClassName dt-head-center",
+                    width: "200px",
+                    render: function (data, type, full, meta) {
+                        const start_date = full.start_date;
+                        const end_date = full.end_date;
+
+                        return `Inicio: ${moment(start_date).format(
+                            "DD/MM/YYYY HH:mm A"
+                        )}<br>Fin: ${moment(end_date).format("DD/MM/YYYY HH:mm A")}`;
+                    },
+                },
+                {
+                    title: 'Operador',
+                    data: 'operator',
+                    className: 'uniqueClassName dt-head-center',
+                },
+                {
+                    title: 'Desperdicio',
+                    data: 'waste',
+                    className: 'uniqueClassName dt-head-center',
+                    render: $.fn.dataTable.render.number('.', ',', 0, ''),
+                },
+                {
+                    title: 'Cantidad Entregada',
+                    data: 'partial_quantity',
+                    className: 'uniqueClassName dt-head-center',
+                    render: $.fn.dataTable.render.number('.', ',', 0, ''),
+                },
+            ],
+        });
+    };
 
     loadAllDataPO();
 });
