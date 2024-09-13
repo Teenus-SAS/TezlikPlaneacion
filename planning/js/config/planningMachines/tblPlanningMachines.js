@@ -43,7 +43,7 @@ $(document).ready(function () {
         className: "uniqueClassName dt-head-center ",
         render: function (data) {
           return `<a href="javascript:;">
-                    <i id="${data.id_program_machine}" class="${data.status == 1 ? 'bi bi-person-fill-check' : 'bi bi-person-fill-x'} statusPM" data-toggle='tooltip' title='${data.status == 0 ? 'Activar' : 'Desactivar'} maquina' style="font-size:25px; color: ${data.status == 0 ? '#ff0000' : '#7bb520'};"></i>
+                    <i id="${data.id_program_machine}" class="${data.status == 0 ? 'fas fa-check' : 'fa fa-times'} statusPM" data-toggle='tooltip' title='${data.status == 0 ? 'Activar' : 'Desactivar'} maquina' style="font-size:25px; color: ${data.status == 0 ? '#ff0000' : '#7bb520'};"></i>
                   </a>`;
         }
       },
