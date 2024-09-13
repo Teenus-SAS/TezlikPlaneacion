@@ -44,11 +44,11 @@ $(document).ready(function () {
         render: function (data) {
           return `<a href="javascript:;">
                     <i id="${data.id_program_machine}" class="${
-            data.status == 0 ? "fa fa-times" : "fas fa-check"
+            data.status == 1 ? "fas fa-check" : "fa fa-times"
           } statusPM" data-toggle='tooltip' title='${
-            data.status == 0 ? "Activar" : "Desactivar"
+            data.status == 1 ? "Activar" : "Desactivar"
           } maquina' style="font-size:25px; color: ${
-            data.status == 0 ? "#7bb520" : "#ff0000"
+            data.status == 1 ? "#7bb520" : "#ff0000"
           };"></i>
                   </a>`;
         },
