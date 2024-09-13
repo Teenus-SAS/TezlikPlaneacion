@@ -42,7 +42,7 @@ class DashboardProgrammingDao
     {
         $connection = Connection::getInstance()->getConnection();
 
-        $sql = "SELECT m.machine, pm.status_machine AS status
+        $sql = "SELECT m.machine, pm.status AS status
                 FROM plan_program_machines pm
                 INNER JOIN machines m ON pm.id_machine = m.id_machine
                 WHERE pm.id_company = :id_company;";
