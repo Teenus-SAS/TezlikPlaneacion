@@ -87,7 +87,7 @@
                                             <label for=""><b>Meses</b></label>
                                         </div>
 
-                                        <div class="col-12 col-lg-3">
+                                        <div class="col-12 col-lg-2">
                                             <div class="form-group floating-label enable-floating-label show-label">
                                                 <input id="month-1" name="january" type="number" class="form-control text-center month" min="1" max="31">
                                                 <label for="month-1">Enero<span class="text-danger">*</span></label>
@@ -95,7 +95,7 @@
                                             </div>
                                         </div>
 
-                                        <div class="col-12 col-lg-3">
+                                        <div class="col-12 col-lg-2">
                                             <div class="form-group floating-label enable-floating-label show-label">
                                                 <input id="month-2" name="february" type="number" class="form-control text-center month" min="1" max="28">
                                                 <label for="month-2">Febrero<span class="text-danger">*</span></label>
@@ -103,7 +103,7 @@
                                             </div>
                                         </div>
 
-                                        <div class="col-12 col-lg-3">
+                                        <div class="col-12 col-lg-2">
                                             <div class="form-group floating-label enable-floating-label show-label">
                                                 <input id="month-3" name="march" type="number" class="form-control text-center month" min="1" max="31">
                                                 <label for="month-3">Marzo<span class="text-danger">*</span></label>
@@ -111,7 +111,7 @@
                                             </div>
                                         </div>
 
-                                        <div class="col-12 col-lg-3">
+                                        <div class="col-12 col-lg-2">
                                             <div class="form-group floating-label enable-floating-label show-label">
                                                 <input id="month-4" name="april" type="number" class="form-control text-center month" min="1" max="30">
                                                 <label for="month-4">Abril<span class="text-danger">*</span></label>
@@ -119,7 +119,7 @@
                                             </div>
                                         </div>
 
-                                        <div class="col-12 col-lg-3">
+                                        <div class="col-12 col-lg-2">
                                             <div class="form-group floating-label enable-floating-label show-label">
                                                 <input id="month-5" name="may" type="number" class="form-control text-center month" min="1" max="31">
                                                 <label for="month-5">Mayo<span class="text-danger">*</span></label>
@@ -127,7 +127,7 @@
                                             </div>
                                         </div>
 
-                                        <div class="col-12 col-lg-3">
+                                        <div class="col-12 col-lg-2">
                                             <div class="form-group floating-label enable-floating-label show-label">
                                                 <input id="month-6" name="june" type="number" class="form-control text-center month" min="1" max="30">
                                                 <label for="month-6">Junio<span class="text-danger">*</span></label>
@@ -135,7 +135,7 @@
                                             </div>
                                         </div>
 
-                                        <div class="col-12 col-lg-3">
+                                        <div class="col-12 col-lg-2">
                                             <div class="form-group floating-label enable-floating-label show-label">
                                                 <input id="month-7" name="july" type="number" class="form-control text-center month" min="1" max="31">
                                                 <label for="month-7">Julio<span class="text-danger">*</span></label>
@@ -143,7 +143,7 @@
                                             </div>
                                         </div>
 
-                                        <div class="col-12 col-lg-3">
+                                        <div class="col-12 col-lg-2">
                                             <div class="form-group floating-label enable-floating-label show-label">
                                                 <input id="month-8" name="august" type="number" class="form-control text-center month" min="1" max="31">
                                                 <label for="month-8">Agosto<span class="text-danger">*</span></label>
@@ -151,7 +151,7 @@
                                             </div>
                                         </div>
 
-                                        <div class="col-12 col-lg-3">
+                                        <div class="col-12 col-lg-2">
                                             <div class="form-group floating-label enable-floating-label show-label">
                                                 <input id="month-9" name="september" type="number" class="form-control text-center month" min="1" max="30">
                                                 <label for="month-9">Septiembre<span class="text-danger">*</span></label>
@@ -159,7 +159,7 @@
                                             </div>
                                         </div>
 
-                                        <div class="col-12 col-lg-3">
+                                        <div class="col-12 col-lg-2">
                                             <div class="form-group floating-label enable-floating-label show-label">
                                                 <input id="month-10" name="october" type="number" class="form-control text-center month" min="1" max="31">
                                                 <label for="month-10">Octubre<span class="text-danger">*</span></label>
@@ -167,7 +167,7 @@
                                             </div>
                                         </div>
 
-                                        <div class="col-12 col-lg-3">
+                                        <div class="col-12 col-lg-2">
                                             <div class="form-group floating-label enable-floating-label show-label">
                                                 <input id="month-11" name="november" type="number" class="form-control text-center month" min="1" max="30">
                                                 <label for="month-11">Noviembre<span class="text-danger">*</span></label>
@@ -175,7 +175,7 @@
                                             </div>
                                         </div>
 
-                                        <div class="col-12 col-lg-3">
+                                        <div class="col-12 col-lg-2">
                                             <div class="form-group floating-label enable-floating-label show-label">
                                                 <input id="month-12" name="december" type="number" class="form-control text-center month" min="1" max="31">
                                                 <label for="month-12">Diciembre<span class="text-danger">*</span></label>
