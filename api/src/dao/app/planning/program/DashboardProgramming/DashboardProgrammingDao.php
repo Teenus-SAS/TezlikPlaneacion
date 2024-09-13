@@ -45,7 +45,7 @@ class DashboardProgrammingDao
         $sql = "SELECT m.machine, pm.status AS status
                 FROM plan_program_machines pm
                 INNER JOIN machines m ON pm.id_machine = m.id_machine
-                WHERE pm.id_company = :id_company;";
+                WHERE pm.type_program_machine = 1 AND pm.id_company = :id_company;";
         $stmt = $connection->prepare($sql);
         $stmt->execute(['id_company' => $id_company]);
         $this->logger->info(__FUNCTION__, array('query' => $stmt->queryString, 'errors' => $stmt->errorInfo()));
