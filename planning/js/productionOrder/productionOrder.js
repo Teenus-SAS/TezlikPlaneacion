@@ -45,6 +45,38 @@ $(document).ready(function () {
     sessionStorage.setItem("id_programming", idProgramming);
   };
 
+  $(document).on('click', '.changeFlagOP', function () {
+    //obtener data
+    let row = $(this).closest("tr")[0];
+    let data = tblProductionOrders.fnGetData(row);
+    let id_programming = data.id_programming;
+    let flag_cancel = data.flag_cancel;
+
+    bootbox.confirm({
+      title: "Orden de Producción",
+      message: `¿ Está seguro de ${flag_cancel == 0 ? 'anular' : 'aprobar'} esta orden. ?`,
+      buttons: {
+        confirm: {
+          label: "Si",
+          className: "btn-success",
+        },
+        cancel: {
+          label: "No",
+          className: "btn-danger",
+        },
+      },
+      callback: function (result) {
+        if (result == true) {
+          $.get(`/api/changeFlagOP/${id_programming}/${flag_cancel == 0 ? '1' : '0'}`,
+            function (resp, textStatus, jqXHR) {
+              message(resp);
+            },
+          );
+        }
+      },
+    });
+  });
+
   /* Mensaje de exito */
   const message = (data) => {
     const { success, error, info, message } = data;

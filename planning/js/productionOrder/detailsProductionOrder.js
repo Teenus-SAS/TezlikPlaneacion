@@ -1,12 +1,15 @@
 $(document).ready(function () {
     const loadAllDataPO = () => {
-        let dataPOP = JSON.parse(sessionStorage.getItem('dataPOP'));
+        let dataOP = JSON.parse(sessionStorage.getItem('dataOP'));
         let dataFTMaterials = JSON.parse(sessionStorage.getItem('dataFTMaterials'));
         let id_programming = sessionStorage.getItem('id_programming');
 
-        let data = dataPOP.find(item => item.id_programming == id_programming);
+        let data = dataOP.find(item => item.id_programming == id_programming);
         let dataFT = dataFTMaterials.filter(item => item.id_product == data.id_product);
 
+        if (data.flag_cancel == 1) $('.cardExcOP').hide();
+        else $('.cardExcOP').show();
+        
         $('#imgClient').empty();
 
         if(data.img)
@@ -16,8 +19,8 @@ $(document).ready(function () {
         $('#txtNumOrder').html(data.num_order);
 
         let date_order = moment(data.date_order).format("DD/MM/YYYY");
-        let min_date = moment(data.min_date_order).format("DD/MM/YYYY");
-        let max_date = moment(data.max_date_order).format("DD/MM/YYYY");
+        let min_date = moment(data.min_date_order).format("DD/MM/YYYY") == "Invalid date" ? "0000-00-00" : moment(data.min_date_order).format("DD/MM/YYYY");
+        let max_date = moment(data.max_date_order).format("DD/MM/YYYY") == "Invalid date" ? "0000-00-00" : moment(data.max_date_order).format("DD/MM/YYYY");
         
         $('#txtEDate').html(
             `<p><b class="font-weight-bold text-dark">Fecha de Emisión:</b>  ${date_order}</p>`
