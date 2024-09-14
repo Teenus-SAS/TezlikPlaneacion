@@ -169,6 +169,7 @@ $app->post('/productsMeasuresDataValidation', function (Request $request, Respon
 $app->post('/addProductMeasure', function (Request $request, Response $response, $args) use (
     $productsMeasuresDao,
     $lastDataDao,
+    $productsInventoryDao,
     $productsTypeDao,
     $productsDao,
     $generalPMeasuresDao,
@@ -188,10 +189,15 @@ $app->post('/addProductMeasure', function (Request $request, Response $response,
         if (!$findProduct) {
             $resolution = $productsDao->insertProductByCompany($dataProduct, $id_company);
 
-            if ($resolution == null && $flag_products_measure == '1') {
+            if ($resolution == null) {
                 $lastData = $lastDataDao->lastInsertedProductId($id_company);
                 $dataProduct['idProduct'] = $lastData['id_product'];
+                $dataProduct['quantity'] = 0;
 
+                $resolution = $productsInventoryDao->insertProductsInventory($dataProduct, $id_company);
+            }
+
+            if ($resolution == null && $flag_products_measure == '1') {
                 $resolution = $productsMeasuresDao->insertPMeasureByCompany($dataProduct, $id_company);
             }
 
@@ -208,9 +214,6 @@ $app->post('/addProductMeasure', function (Request $request, Response $response,
         $products = $dataProduct['importProducts'];
 
         for ($i = 0; $i < sizeof($products); $i++) {
-            // $findProduct = $generalProductsDao->findProduct($products[$i], $id_company);
-            // $products[$i]['idProduct'] = $findProduct['id_product'];
-
             $products[$i]['origin'] == 'COMERCIALIZADO' ? $products[$i]['origin'] = 1 : $products[$i]['origin'] = 2;
             $products[$i]['composite'] == 'SI' ? $products[$i]['composite'] = 1 : $products[$i]['composite'] = 0;
 
@@ -220,12 +223,18 @@ $app->post('/addProductMeasure', function (Request $request, Response $response,
             } else $products[$i]['idProductType'] = 0;
 
             $findProduct = $generalProductsDao->findProduct($products[$i], $id_company);
+
             if (!$findProduct) {
                 $resolution = $productsDao->insertProductByCompany($products[$i], $id_company);
                 if (isset($resolution['info'])) break;
 
                 $lastData = $lastDataDao->lastInsertedProductId($id_company);
                 $products[$i]['idProduct'] = $lastData['id_product'];
+                $products[$i]['quantity'] = 0;
+
+                if (isset($resolution['info'])) break;
+
+                $resolution = $productsInventoryDao->insertProductsInventory($products[$i], $id_company);
             } else {
                 $products[$i]['idProduct'] = $findProduct['id_product'];
 

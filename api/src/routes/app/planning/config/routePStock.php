@@ -54,24 +54,24 @@ $app->post('/pStockDataValidation', function (Request $request, Response $respon
         $update = 0;
 
         $stock = $dataStock['importStock'];
+        $dataImportStock = [];
+        $debugg = [];
 
         for ($i = 0; $i < sizeof($stock); $i++) {
             if (
                 empty($stock[$i]['referenceProduct']) || empty($stock[$i]['product']) ||
                 $stock[$i]['max'] == '' || $stock[$i]['min'] == ''
             ) {
-                $i = $i + 2;
-                $dataImportStock = array('error' => true, 'message' => "Fila-$i: Columna vacia");
-                break;
+                $row = $i + 2;
+                array_push($debugg, array('error' => true, 'message' => "Fila-$row: Columna vacia"));
             }
 
             if (
                 empty(trim($stock[$i]['referenceProduct'])) || empty(trim($stock[$i]['product'])) ||
                 trim($stock[$i]['max']) == '' || trim($stock[$i]['min']) == ''
             ) {
-                $i = $i + 2;
-                $dataImportStock = array('error' => true, 'message' => "Fila-$i: Columna vacia");
-                break;
+                $row = $i + 2;
+                array_push($debugg, array('error' => true, 'message' => "Fila-$row: Columna vacia"));
             }
 
             $max = str_replace(',', '.', $stock[$i]['max']);
@@ -80,35 +80,37 @@ $app->post('/pStockDataValidation', function (Request $request, Response $respon
             $data = $max * $min;
 
             if ($data <= 0 || is_nan($data)) {
-                $i = $i + 2;
-                $dataImportStock = array('error' => true, 'message' => "Fila-$i: La cantidad debe ser mayor a cero (0)");
-                break;
+                $row = $i + 2;
+                array_push($debugg, array('error' => true, 'message' => "Fila-$row: La cantidad debe ser mayor a cero (0)"));
             }
 
             if ($min > $max) {
-                $i = $i + 2;
-                $dataImportStock = array('error' => true, 'message' => "Fila-$i: Tiempo minimo mayor al tiempo máximo de Producción");
-                break;
+                $row = $i + 2;
+                array_push($debugg, array('error' => true, 'message' => "Fila-$row: Tiempo minimo mayor al tiempo máximo de Producción"));
             }
 
             // Obtener id producto
             $findProduct = $generalProductsDao->findProduct($stock[$i], $id_company);
             if (!$findProduct) {
-                $i = $i + 2;
-                $dataImportStock = array('error' => true, 'message' => "Fila-$i: Producto no Existe");
-                break;
+                $row = $i + 2;
+                array_push($debugg, array('error' => true, 'message' => "Fila-$row: Producto no Existe"));
             } else $stock[$i]['idProduct'] = $findProduct['id_product'];
 
-            $findstock = $generalStockDao->findStock($stock[$i]);
-            if (!$findstock) $insert = $insert + 1;
-            else $update = $update + 1;
-            $dataImportStock['insert'] = $insert;
-            $dataImportStock['update'] = $update;
+            if (sizeof($debugg) == 0) {
+                $findstock = $generalStockDao->findStock($stock[$i]);
+                if (!$findstock) $insert = $insert + 1;
+                else $update = $update + 1;
+                $dataImportStock['insert'] = $insert;
+                $dataImportStock['update'] = $update;
+            }
         }
     } else
         $dataImportStock = array('error' => true, 'message' => 'El archivo se encuentra vacio. Intente nuevamente');
 
-    $response->getBody()->write(json_encode($dataImportStock, JSON_NUMERIC_CHECK));
+    $data['import'] = $dataImportStock;
+    $data['debugg'] = $debugg;
+
+    $response->getBody()->write(json_encode($data, JSON_NUMERIC_CHECK));
     return $response->withHeader('Content-Type', 'application/json');
 });
 

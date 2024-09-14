@@ -64,24 +64,24 @@ $app->post('/rMStockDataValidation', function (Request $request, Response $respo
         $update = 0;
 
         $stock = $dataStock['importStock'];
+        $dataImportStock = [];
+        $debugg = [];
 
         for ($i = 0; $i < sizeof($stock); $i++) {
             if (
                 empty($stock[$i]['refRawMaterial']) || empty($stock[$i]['nameRawMaterial']) ||
                 $stock[$i]['min'] == '' || $stock[$i]['max'] == '' || $stock[$i]['quantity'] == ''
             ) {
-                $i = $i + 2;
-                $dataImportStock = array('error' => true, 'message' => "Fila-$i: Columna vacia");
-                break;
+                $row = $i + 2;
+                array_push($debugg, array('error' => true, 'message' => "Fila-$row: Columna vacia"));
             }
 
             if (
                 empty(trim($stock[$i]['refRawMaterial'])) || empty(trim($stock[$i]['nameRawMaterial'])) ||
                 trim($stock[$i]['min']) == '' || trim($stock[$i]['max']) == '' || trim($stock[$i]['quantity']) == ''
             ) {
-                $i = $i + 2;
-                $dataImportStock = array('error' => true, 'message' => "Fila-$i: Columna vacia");
-                break;
+                $row = $i + 2;
+                array_push($debugg, array('error' => true, 'message' => "Fila-$row: Columna vacia"));
             }
 
             $min = str_replace(',', '.', $stock[$i]['min']);
@@ -91,43 +91,46 @@ $app->post('/rMStockDataValidation', function (Request $request, Response $respo
             $data = $min * $max * $quantity;
 
             if ($data <= 0 || is_nan($data)) {
-                $i = $i + 2;
-                $dataImportStock = array('error' => true, 'message' => "Fila-$i: La cantidad debe ser mayor a cero (0)");
-                break;
+                $row = $i + 2;
+                array_push($debugg, array('error' => true, 'message' => "Fila-$row: La cantidad debe ser mayor a cero (0)"));
             }
 
             if ($min > $max) {
-                $i = $i + 2;
-                $dataImportStock = array('error' => true, 'message' => "Fila-$i: Tiempo mínimo mayor al tiempo maximo de producción");
-                break;
+                $row = $i + 2;
+                array_push($debugg, array('error' => true, 'message' => "Fila-$row: Tiempo mínimo mayor al tiempo maximo de producción"));
             }
 
             // Obtener id materia prima
             $findMaterial = $generalMaterialsDao->findMaterial($stock[$i], $id_company);
             if (!$findMaterial) {
-                $i = $i + 2;
-                $dataImportStock = array('error' => true, 'message' => "Fila-$i: Materia prima no Existe");
-                break;
+                $row = $i + 2;
+                array_push($debugg, array('error' => true, 'message' => "Fila-$row: Materia prima no Existe"));
             } else $stock[$i]['idMaterial'] = $findMaterial['id_material'];
 
             // Obtener id proveedor
             $findClient = $generalClientsDao->findClientByName($stock[$i], $id_company, 2);
             if (!$findClient) {
-                $i = $i + 2;
-                $dataImportStock = array('error' => true, 'message' => "Fila-$i: Cliente no Existe o es tipo cliente.");
+                $row = $i + 2;
+                array_push($debugg, array('error' => true, 'message' => "Fila-$row: Cliente no Existe o es tipo cliente."));
                 break;
-            } else $stock[$i]['idProvider'] = $findClient['id_client'];
+            } else
+                $stock[$i]['idProvider'] = $findClient['id_client'];
 
-            $findstock = $generalStockDao->findStock($stock[$i]);
-            if (!$findstock) $insert = $insert + 1;
-            else $update = $update + 1;
-            $dataImportStock['insert'] = $insert;
-            $dataImportStock['update'] = $update;
+            if (sizeof($debugg) == 0) {
+                $findstock = $generalStockDao->findStock($stock[$i]);
+                if (!$findstock) $insert = $insert + 1;
+                else $update = $update + 1;
+                $dataImportStock['insert'] = $insert;
+                $dataImportStock['update'] = $update;
+            }
         }
     } else
         $dataImportStock = array('error' => true, 'message' => 'El archivo se encuentra vacio. Intente nuevamente');
 
-    $response->getBody()->write(json_encode($dataImportStock, JSON_NUMERIC_CHECK));
+    $data['import'] = $dataImportStock;
+    $data['debugg'] = $debugg;
+
+    $response->getBody()->write(json_encode($data, JSON_NUMERIC_CHECK));
     return $response->withHeader('Content-Type', 'application/json');
 });
 
@@ -232,9 +235,11 @@ $app->post('/addRMStock', function (Request $request, Response $response, $args)
             $findMaterial = $generalMaterialsDao->findMaterial($stock[$i], $id_company);
             $stock[$i]['idMaterial'] = $findMaterial['id_material'];
 
+            $stock[$i]['idProvider'] = 0;
             // Obtener id proveedor
             $findClient = $generalClientsDao->findClientByName($stock[$i], $id_company, 2);
-            $stock[$i]['idProvider'] = $findClient['id_client'];
+            if (!$findClient)
+                $stock[$i]['idProvider'] = $findClient['id_client'];
 
             $findstock = $generalStockDao->findstock($stock[$i], $id_company);
             if (!$findstock)

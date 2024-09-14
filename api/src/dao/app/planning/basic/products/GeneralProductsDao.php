@@ -37,7 +37,7 @@ class GeneralProductsDao
     {
         $connection = Connection::getInstance()->getConnection();
         $stmt = $connection->prepare("SELECT p.id_product, p.reference, p.product, pi.quantity, pi.minimum_stock,
-                                             IFNULL(sp.max_term, 0) AS max_term, IFNULL(sp.usual_term, 0) AS usual_term                              
+                                             IFNULL(sp.max_term, 0) AS max_term, IFNULL(sp.min_term, 0) AS min_term                              
                                       FROM products p
                                           INNER JOIN products_inventory pi ON pi.id_product = p.id_product
                                           LEFT JOIN stock_products sp ON sp.id_product = p.id_product
@@ -76,7 +76,8 @@ class GeneralProductsDao
                                       FROM products p
                                       LEFT JOIN products_inventory pi ON pi.id_product = p.id_product
                                       LEFT JOIN products_measures pm ON pm.id_product = p.id_product
-                                      WHERE p.id_product = :id_product");
+                                      WHERE p.id_product = :id_product
+                                      ORDER BY pi.classification ASC");
         $stmt->execute([
             'id_product' => $id_product
         ]);

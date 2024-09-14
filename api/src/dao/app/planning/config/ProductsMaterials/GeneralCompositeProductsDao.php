@@ -69,11 +69,13 @@ class GeneralCompositeProductsDao
     public function findCompositeProductByChild($id_child_product)
     {
         $connection = Connection::getInstance()->getConnection();
-        $stmt = $connection->prepare("SELECT cp.id_product, cp.id_child_product, cp.quantity
+        $stmt = $connection->prepare("SELECT cp.id_product, cp.id_child_product, cp.quantity, pi.classification
                                       FROM composite_products cp
                                       INNER JOIN products p ON p.id_product = cp.id_child_product
+                                      INNER JOIN products_inventory pi ON pi.id_product = p.id_product
                                       WHERE cp.id_child_product = :id_child_product
-                                      GROUP BY cp.id_product");
+                                      GROUP BY cp.id_product
+                                      ORDER BY pi.classification ASC;");
         $stmt->execute([
             'id_child_product' => $id_child_product
         ]);

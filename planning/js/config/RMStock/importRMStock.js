@@ -51,7 +51,14 @@ $(document).ready(function () {
           return false;
         }
 
-        let StockToImport = data.map((item) => {
+        let stockToImport = data.map((item) => {
+          !item.referencia_material ? item.referencia_material = '' : item.referencia_material;
+          !item.material ? item.material = '' : item.material;
+          !item.proveedor ? item.proveedor = '' : item.proveedor;
+          !item.plazo_minimo ? item.plazo_minimo = 0 : item.plazo_minimo;
+          !item.plazo_maximo ? item.plazo_maximo = 0 : item.plazo_maximo;
+          !item.cantidad_minima ? item.cantidad_minima = 0 : item.cantidad_minima;
+
           return {
             refRawMaterial: item.referencia_material,
             nameRawMaterial: item.material,
@@ -61,7 +68,7 @@ $(document).ready(function () {
             quantity: item.cantidad_minima,
           };
         });
-        checkStock(StockToImport);
+        checkStock(stockToImport);
       })
       .catch(() => {
         $('.cardLoading').remove();
@@ -73,13 +80,15 @@ $(document).ready(function () {
   });
 
   /* Mensaje de advertencia */
-  checkStock = (data) => {
+  const checkStock = (data) => {
     $.ajax({
       type: 'POST',
       url: '/api/rMStockDataValidation',
       data: { importStock: data },
       success: function (resp) {
-        if (resp.error == true) {
+        let arr = resp.import;
+
+        if (arr.length > 0 && arr.error == true) {
           $('.cardLoading').remove();
           $('.cardBottons').show(400);
           $('#fileRMStock').val('');
@@ -89,29 +98,60 @@ $(document).ready(function () {
           return false;
         }
 
-        bootbox.confirm({
-          title: '¿Desea continuar con la importación?',
-          message: `Se han encontrado los siguientes registros:<br><br>Datos a insertar: ${resp.insert} <br>Datos a actualizar: ${resp.update}`,
-          buttons: {
-            confirm: {
-              label: 'Si',
-              className: 'btn-success',
+        if (resp.debugg.length > 0) {
+          $('.cardLoading').remove();
+          $('.cardBottons').show(400);
+          $('#formImportRMStock').val('');
+
+          // Generar el HTML para cada mensaje
+          let concatenatedMessages = resp.debugg.map(item =>
+            `<li>
+              <span class="badge text-danger" style="font-size: 16px;">${item.message}</span>
+            </li>`
+          ).join('');
+
+          // Mostramos el mensaje con Bootbox
+          bootbox.alert({
+            title: 'Estado Importación Data',
+            message: `
+            <div class="container">
+              <div class="col-12">
+                <ul>
+                  ${concatenatedMessages}
+                </ul>
+              </div> 
+            </div>`,
+            size: 'large',
+            backdrop: true
+          });
+          return false;
+        }
+        
+        if (typeof arr === 'object' && !Array.isArray(arr) && arr !== null && resp.debugg.length == 0) {
+          bootbox.confirm({
+            title: '¿Desea continuar con la importación?',
+            message: `Se han encontrado los siguientes registros:<br><br>Datos a insertar: ${arr.insert} <br>Datos a actualizar: ${arr.update}`,
+            buttons: {
+              confirm: {
+                label: 'Si',
+                className: 'btn-success',
+              },
+              cancel: {
+                label: 'No',
+                className: 'btn-danger',
+              },
             },
-            cancel: {
-              label: 'No',
-              className: 'btn-danger',
+            callback: function (result) {
+              if (result) {
+                saveStockTable(data);
+              } else {
+                $('.cardLoading').remove();
+                $('.cardBottons').show(400);
+                $('#fileRMStock').val('');
+              }
             },
-          },
-          callback: function (result) {
-            if (result) {
-              saveStockTable(data);
-            } else {
-              $('.cardLoading').remove();
-              $('.cardBottons').show(400);
-              $('#fileRMStock').val('');
-            }
-          },
-        });
+          });
+        }
       },
     });
   };

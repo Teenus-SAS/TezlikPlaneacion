@@ -68,22 +68,37 @@ $app->post('/productsDataValidation', function (Request $request, Response $resp
         // Verificar duplicados
         // $duplicateTracker = [];
         $dataImportProduct = [];
+        $debugg = [];
 
         for ($i = 0; $i < count($products); $i++) {
             if (
-                empty($products[$i]['referenceProduct']) || empty($products[$i]['product'])
+                empty($products[$i]['referenceProduct']) || empty($products[$i]['product']) || empty($products[$i]['quantity'])
             ) {
-                $i = $i + 2;
-                $dataImportProduct = array('error' => true, 'message' => "Campos vacios, fila: $i");
-                break;
+                $row = $i + 2;
+                array_push($debugg, array('error' => true, 'message' => "Campos vacios, fila: $row"));
             }
+
             if (
-                empty(trim($products[$i]['referenceProduct'])) || empty(trim($products[$i]['product']))
+                empty(trim($products[$i]['referenceProduct'])) || empty(trim($products[$i]['product'])) || empty(trim($products[$i]['quantity']))
             ) {
-                $i = $i + 2;
-                $dataImportProduct = array('error' => true, 'message' => "Campos vacios, fila: $i");
-                break;
+                $row = $i + 2;
+                array_push($debugg, array('error' => true, 'message' => "Campos vacios, fila: $row"));
             }
+
+            $quantity = 1 * floatval($products[$i]['quantity']);
+
+            if (is_nan($quantity) || $quantity <= 0) {
+                $row = $i + 2;
+                array_push($debugg, array('error' => true, 'message' => "Ingrese una cantidad válida, fila: $row"));
+            }
+
+            $findProduct = $generalProductsDao->findProduct($products[$i], $id_company);
+
+            if (!$findProduct) {
+                $row = $i + 2;
+                array_push($debugg, array('error' => true, 'message' => "Producto no existe en la base de datos. Fila: $row"));
+            }
+            $products[$i]['idProduct'] = $findProduct['id_product'];
 
             // if ($_SESSION['flag_products_measure'] == '1') {
             //     if (empty($products[$i]['productType'])) {
@@ -142,20 +157,9 @@ $app->post('/productsDataValidation', function (Request $request, Response $resp
         $insert = 0;
         $update = 0;
 
-        if (sizeof($dataImportProduct) == 0) {
+        if (sizeof($debugg) == 0) {
             for ($i = 0; $i < count($products); $i++) {
-                $findProduct = $generalProductsDao->findProduct($products[$i], $id_company);
-
-                // if ($_SESSION['flag_products_measure'] == '1') {
-                if (!$findProduct) {
-                    $i = $i + 2;
-                    $dataImportProduct =  array('error' => true, 'message' => "Producto no existe en la base de datos. Fila: $i");
-                    break;
-                }
-                $products[$i]['idProduct'] = $findProduct['id_product'];
-
                 $findProduct = $generalProductsDao->findProductInventory($products[$i]['idProduct'], $id_company);
-                // }
 
                 if (!$findProduct) $insert = $insert + 1;
                 else $update = $update + 1;
@@ -196,29 +200,12 @@ $app->post('/addProduct', function (Request $request, Response $response, $args)
     $resolution = null;
 
     if ($dataProducts > 1) {
-
-        // if ($flag_products_measure == '1') {
         $product = $generalProductsDao->findProductInventory($dataProduct['idProduct'], $id_company);
 
         if (!$product) {
             $resolution = $productsInventoryDao->insertProductsInventory($dataProduct, $id_company);
         } else
             $resp = array('info' => true, 'message' => 'El producto ya existe en la base de datos. Ingrese uno nuevo');
-        // } else {
-        //     $product = $generalProductsDao->findProductByReferenceOrName($dataProduct, $id_company);
-        //     if (!$product) {
-        //         //INGRESA id_company, referencia, producto. BD
-        //         $resolution = $productsDao->insertProductByCompany($dataProduct, $id_company);
-        //         //ULTIMO REGISTRO DE ID, EL MÁS ALTO
-        //         $lastProductId = $lastDataDao->lastInsertedProductId($id_company);
-
-        //         $dataProduct['idProduct'] = $lastProductId['id_product'];
-
-        //         if ($resolution == null)
-        //             $resolution = $productsInventoryDao->insertProductsInventory($dataProduct, $id_company);
-        //     } else
-        //         $resp = array('info' => true, 'message' => 'El producto ya existe en la base de datos. Ingrese uno nuevo');
-        // }
 
         if (sizeof($resp) == 0) {
             if ($resolution == null) {
