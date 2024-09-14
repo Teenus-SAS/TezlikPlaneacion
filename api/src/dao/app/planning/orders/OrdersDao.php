@@ -20,11 +20,11 @@ class OrdersDao
     {
         $connection = Connection::getInstance()->getConnection();
 
-        $stmt = $connection->prepare("SELECT o.id_order, o.id_client, o.id_product, o.num_order, ps.status, o.date_order, pi.accumulated_quantity, o.accumulated_quantity, o.original_quantity, p.reference, p.product, c.client, o.min_date, o.max_date, o.delivery_date,
-                                             o.office_date, pi.classification, s.id_seller, s.firstname, s.lastname
+        $stmt = $connection->prepare("SELECT o.id_order, o.id_client, o.id_product, o.num_order, ps.status, o.date_order, IFNULL(pi.accumulated_quantity, 0) AS accumulated_quantity, o.accumulated_quantity, o.original_quantity, p.reference, p.product, c.client, o.min_date, o.max_date, o.delivery_date,
+                                             o.office_date, IFNULL(pi.classification, '') AS classification, s.id_seller, s.firstname, s.lastname
                                       FROM plan_orders o
                                         INNER JOIN products p ON p.id_product = o.id_product
-                                        INNER JOIN products_inventory pi ON pi.id_product = o.id_product
+                                        LEFT JOIN products_inventory pi ON pi.id_product = o.id_product
                                         INNER JOIN sellers s ON s.id_seller = o.id_seller
                                         INNER JOIN plan_clients c ON c.id_client = o.id_client
                                         INNER JOIN plan_status ps ON ps.id_status = o.status

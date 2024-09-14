@@ -282,12 +282,12 @@ if (sizeof($_SESSION) == 0)
                                                         <td></td>
                                                         <td></td>
                                                         <td></td>
+                                                        <td></td>
+                                                        <td></td>
+                                                        <td></td>
                                                         <td>Total: </td>
                                                         <td id="lblTotalQRequired"></td>
                                                         <td id="lblTotalQRequested"></td>
-                                                        <td></td>
-                                                        <td></td>
-                                                        <td></td>
                                                         <td></td>
                                                         <td></td>
                                                         <td></td>

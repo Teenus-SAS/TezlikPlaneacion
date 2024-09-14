@@ -50,7 +50,7 @@ $app->get('/explosionMaterials', function (Request $request, Response $response,
     $products = $explosionMaterialsDao->setDataEXComposite($arr);
 
     for ($i = 0; $i < sizeof($products); $i++) {
-        if (intval($products[$i]['available']) < 0) {
+        if (intval($products[$i]['available']) < 0 && abs($products[$i]['available']) > $products[$i]['quantity_material']) {
             $data = [];
             $arr2 = $generalOrdersDao->findLastOrderByNumOrder($products[$i]['num_order']);
 
@@ -119,10 +119,10 @@ $app->get('/explosionMaterials', function (Request $request, Response $response,
             $requisition = $generalRequisitionsDao->findRequisitionByApplicationDate($materials[$i]['id_material']);
 
             if (!$requisition)
-                $generalRequisitionsDao->insertRequisitionAutoByCompany($data, $id_company);
+                $resolution = $generalRequisitionsDao->insertRequisitionAutoByCompany($data, $id_company);
             else {
                 $data['idRequisition'] = $requisition['id_requisition'];
-                $generalRequisitionsDao->updateRequisitionAuto($data);
+                $resolution = $generalRequisitionsDao->updateRequisitionAuto($data);
             }
         }
     }

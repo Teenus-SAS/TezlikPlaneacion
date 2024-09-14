@@ -597,7 +597,7 @@ $app->post('/addProductsMaterials', function (Request $request, Response $respon
         $products = $explosionMaterialsDao->setDataEXComposite($arr);
 
         for ($i = 0; $i < sizeof($products); $i++) {
-            if (intval($products[$i]['available']) < 0) {
+            if (intval($products[$i]['available']) < 0 && abs($products[$i]['available']) > $products[$i]['quantity_material']) {
                 $data = [];
                 $arr2 = $generalOrdersDao->findLastOrderByNumOrder($products[$i]['num_order']);
 
@@ -762,7 +762,7 @@ $app->post('/updatePlanProductsMaterials', function (Request $request, Response 
             $products = $explosionMaterialsDao->setDataEXComposite($arr);
 
             for ($i = 0; $i < sizeof($products); $i++) {
-                if (intval($products[$i]['available']) < 0) {
+                if (intval($products[$i]['available']) < 0 && abs($products[$i]['available']) > $products[$i]['quantity_material']) {
                     $data = [];
                     $arr2 = $generalOrdersDao->findLastOrderByNumOrder($products[$i]['num_order']);
 
@@ -915,7 +915,7 @@ $app->post('/deletePlanProductMaterial', function (Request $request, Response $r
         $products = $explosionMaterialsDao->setDataEXComposite($arr);
 
         for ($i = 0; $i < sizeof($products); $i++) {
-            if (intval($products[$i]['available']) < 0) {
+            if (intval($products[$i]['available']) < 0 && abs($products[$i]['available']) > $products[$i]['quantity_material']) {
                 $data = [];
                 $arr2 = $generalOrdersDao->findLastOrderByNumOrder($products[$i]['num_order']);
 

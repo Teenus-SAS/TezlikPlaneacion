@@ -195,11 +195,11 @@ class GeneralOrdersDao
     {
         $connection = Connection::getInstance()->getConnection();
 
-        $sql = "SELECT CONCAT(num_order, '-', COUNT(id_order) + 1) AS num_order 
+        $sql = "SELECT CONCAT('$num_order', '-', COUNT(IFNULL(id_order, 0)) + 1) AS num_order 
                 FROM plan_orders 
-                WHERE num_order = :num_order";
+                WHERE num_order LIKE '$num_order-%'";
         $stmt = $connection->prepare($sql);
-        $stmt->execute(['num_order' => $num_order]);
+        $stmt->execute();
 
         $this->logger->info(__FUNCTION__, array('query' => $stmt->queryString, 'errors' => $stmt->errorInfo()));
 
