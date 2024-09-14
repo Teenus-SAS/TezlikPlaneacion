@@ -4,7 +4,7 @@ $(document).ready(function () {
       .then((response) => response.text())
       .then((data) => {
         data = JSON.parse(data);
-        GraphPendingOC(data);
+        GraphPendingOC(data.participacion, data.total_requisiciones);
       });
   }, 1000);
 
@@ -25,26 +25,26 @@ $(document).ready(function () {
   };
 });
 
-const GraphPendingOC = (data) => {
+const GraphPendingOC = (participacion, totalOC) => {
   // Separamos los datos por estado para crear los datasets
-  
+
   const ctx = document.getElementById("pendingOCChart").getContext("2d");
   const pendingOCChart = new Chart(ctx, {
     plugins: [ChartDataLabels],
     type: "bar",
     data: {
-      labels: ["Ejecucion Ordenes de Compra"],
+      labels: ["Ordenes de Compra"],
       datasets: [
         {
           label: "",
-          data: [data.participacion],
+          data: [participacion],
           backgroundColor: "rgba(75, 192, 192, 0.2)", // Color para "Entregado a tiempo"
           borderColor: "rgba(75, 192, 192, 1)", // Borde para "Entregado a tiempo"
           borderWidth: 1,
         },
         {
           label: "",
-          data: [100 - data.participacion],
+          data: [100 - participacion],
           backgroundColor: "rgba(255, 99, 132, 0.2)", // Color para "No entregado a tiempo"
           borderColor: "rgba(255, 99, 132, 1)", // Borde para "No entregado a tiempo"
           borderWidth: 1,
@@ -67,7 +67,7 @@ const GraphPendingOC = (data) => {
           max: 100,
           title: {
             display: true,
-            text: "Porcentaje (%)", // Etiqueta para el eje Y
+            text: "", // Etiqueta para el eje Y
           },
           ticks: {
             callback: function (value) {
@@ -89,8 +89,17 @@ const GraphPendingOC = (data) => {
             size: "12",
             weight: "normal",
           },
-          formatter: function (value) {
-            return value + "%"; // Agregar el símbolo de porcentaje a las etiquetas
+          formatter: function (value, context) {
+            if (context.datasetIndex === 0) {
+              // Calcula el número de pedidos entregados a tiempo
+              const executionsOC = Math.round((participacion / 100) * totalOC);
+              return `${executionsOC} (${value}%)`; // Muestra el número y el porcentaje
+            } else {
+              // Calcula el número de pedidos no entregados a tiempo
+              const notExecutionOC =
+                totalOC - Math.round((participacion / 100) * totalOC);
+              return `${notExecutionOC} (${value}%)`; // Muestra el número y el porcentaje
+            }
           },
         },
         tooltip: {

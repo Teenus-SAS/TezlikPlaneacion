@@ -239,7 +239,7 @@ if (sizeof($_SESSION) == 0)
                                                                     <div class="text-center">
                                                                         <div id="t-rev"></div>
                                                                         <span class="text-danger font-weight-bold font-size-23">
-                                                                            <i class='fas fa-users fs-lg'></i>
+                                                                            <i class='fas fa-users fs-lg' style="color: #7bb520;"></i>
                                                                         </span>
                                                                     </div>
                                                                 </div>

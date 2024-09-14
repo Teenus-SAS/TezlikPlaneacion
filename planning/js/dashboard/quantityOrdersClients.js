@@ -4,7 +4,7 @@ $(document).ready(function () {
       .then((response) => response.text())
       .then((data) => {
         data = JSON.parse(data);
-        GraphQuantityOrdersByClients(data);
+        ChartQuantityOrdersByClients(data);
       });
   }, 1000);
 
@@ -25,7 +25,7 @@ $(document).ready(function () {
   };
 });
 
-const GraphQuantityOrdersByClients = (data) => {
+const ChartQuantityOrdersByClients = (data) => {
   // Preparar los datos para Chart.js
   const chartData = {
     labels: data.map((item) => item.client),
@@ -53,8 +53,16 @@ const GraphQuantityOrdersByClients = (data) => {
         display: false,
       },
       datalabels: {
-        anchor: "center",
-        align: "center",
+        anchor: "center", // Posición de la etiqueta (en el centro)
+        align: "center", // Alineación de la etiqueta
+        color: "black", // Color del texto de las etiquetas
+        font: {
+          size: 10, // Tamaño del texto
+          weight: "normal", // Peso del texto (negrita)
+        },
+        formatter: function (value) {
+          return value; // Muestra el valor de los pedidos
+        },
       },
     },
   };
@@ -65,5 +73,6 @@ const GraphQuantityOrdersByClients = (data) => {
     type: "bar",
     data: chartData,
     options: options,
+    plugins: [ChartDataLabels], // Asegúrate de incluir el plugin
   });
 };

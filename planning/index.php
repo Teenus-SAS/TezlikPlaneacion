@@ -62,7 +62,10 @@ if (sizeof($_SESSION) == 0)
                                         <div class="media align-items-center">
                                             <div class="media-body">
                                                 <span class="text-muted text-uppercase font-size-12 font-weight-bold">Productos Agotados</span>
-                                                <h2 class="mb-0 mt-1 text-danger" id="productStockout"></h2>
+                                                <h2 class="mb-0 mt-1 text-info">
+                                                    <span id="productStockout"></span>
+                                                    <span id="productPercentStockOut" style="color: red; font-size: 0.6em; vertical-align: middle;"></span>
+                                                </h2>
                                             </div>
                                             <div class="text-center">
                                                 <div id="t-rev"></div>
@@ -80,8 +83,11 @@ if (sizeof($_SESSION) == 0)
                                     <div class="card-body">
                                         <div class="media align-items-center">
                                             <div class="media-body">
-                                                <span class="text-muted text-uppercase font-size-12 font-weight-bold">MP Agotada</span>
-                                                <h2 class="mb-0 mt-1 text-danger" id="mpOutStock"></h2>
+                                                <span class="text-muted text-uppercase font-size-12 font-weight-bold">Materia Prima Agotada</span>
+                                                <h2 class="mb-0 mt-1 text-info">
+                                                    <span id="mpOutStock"></span>
+                                                    <span id="mpPercentageOutStock" style="color: red; font-size: 0.6em; vertical-align: middle;"></span>
+                                                </h2>
                                             </div>
                                             <div class="text-center">
                                                 <div id="t-rev"></div>
@@ -99,7 +105,10 @@ if (sizeof($_SESSION) == 0)
                                         <div class="media align-items-center">
                                             <div class="media-body">
                                                 <span class="text-muted text-uppercase font-size-12 font-weight-bold">Pedidos No Programados</span>
-                                                <h2 class="mb-0 mt-1 text-warning" id="ordersNoProgramed"></h2>
+                                                <h2 class="mb-0 mt-1 text-warning">
+                                                    <span id="ordersNoProgramed"></span>
+                                                    <span class="text-info" id="percentOrdersNoProgramed" style="font-size: 0.6em; vertical-align: middle;"></span>
+                                                </h2>
                                             </div>
                                             <div class="text-center">
                                                 <div id="t-rev"></div>
@@ -134,8 +143,11 @@ if (sizeof($_SESSION) == 0)
                                     <div class="card-body">
                                         <div class="media align-items-center">
                                             <div class="media-body">
-                                                <span class="text-muted text-uppercase font-size-12 font-weight-bold">Pedidos en Despacho</span>
-                                                <h2 class="mb-0 mt-1 text-warning" id="ordersDelivered"></h2>
+                                                <span class="text-muted text-uppercase font-size-12 font-weight-bold">Pedidos Entregados</span>
+                                                <h2 class="mb-0 mt-1 text-success">
+                                                    <span id="totalOrdersDispatch"></span>
+                                                    <span class="text-info" id="percentOrdersDelivered" style="font-size: 0.6em; vertical-align: middle;"></span>
+                                                </h2>
                                             </div>
                                             <div class="text-center">
                                                 <div id="t-user"></div>
@@ -217,7 +229,7 @@ if (sizeof($_SESSION) == 0)
                             <div class="col-md-4 col-lg-6">
                                 <div class="card orders-graph">
                                     <div class="card-header">
-                                        <h5 class="card-title">Pedidos x día</h5>
+                                        <h5 class="card-title">Pedidos por día</h5>
                                     </div>
                                     <div class="card-body pt-2">
                                         <div class="chart-container">
@@ -231,7 +243,7 @@ if (sizeof($_SESSION) == 0)
                             <div class="col-md-4 col-lg-3" style="height: fit-content;">
                                 <div class="card orders-graph">
                                     <div class="card-header">
-                                        <h5 class="card-title">Ordenes de Compra</h5>
+                                        <h5 class="card-title">Ejecución OC</h5>
                                     </div>
                                     <div class="card-body pt-2">
                                         <div class="chart-container">
@@ -245,7 +257,7 @@ if (sizeof($_SESSION) == 0)
                             <div class="col-md-4 col-lg-3" style="height: fit-content;">
                                 <div class="card orders-graph">
                                     <div class="card-header">
-                                        <h5 class="card-title">Entregas a tiempo</h5>
+                                        <h5 class="card-title">Cumplimiento de Entregas</h5>
                                     </div>
                                     <div class="card-body pt-2">
                                         <div class="chart-container">

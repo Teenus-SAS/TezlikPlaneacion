@@ -63,7 +63,8 @@ class DashboardGeneralDao
     public function findOrdersNoProgramm($id_company)
     {
         $connection = Connection::getInstance()->getConnection();
-        $sql = "SELECT (COUNT(CASE WHEN po.status IN (1, 5, 6, 9) THEN 1 END) * 100.0 / COUNT(*)) AS ordersNoProgramed 
+        $sql = "SELECT COUNT(CASE WHEN po.status IN (1, 5, 6, 9) THEN 1 END) AS totalOrdersNoProgrammed, 
+                      (COUNT(CASE WHEN po.status IN (1, 5, 6, 9) THEN 1 END) * 100.0 / COUNT(*)) AS ordersNoProgramed 
                 FROM plan_orders po
                 WHERE max_date <> '0000-00-00' AND id_company = :id_company";
         $stmt = $connection->prepare($sql);
@@ -89,9 +90,9 @@ class DashboardGeneralDao
         $connection = Connection::getInstance()->getConnection();
         $sql = "SELECT
                     COUNT(*) AS total_orders,
-                    SUM(CASE WHEN status IN (2, 3) THEN 1 ELSE 0 END) AS orders_dispatch,
+                    SUM(CASE WHEN status IN (3) THEN 1 ELSE 0 END) AS orders_dispatch,
                     ROUND(
-                        (SUM(CASE WHEN status IN (2, 3) THEN 1 ELSE 0 END) / COUNT(*)) * 100,
+                        (SUM(CASE WHEN status IN (3) THEN 1 ELSE 0 END) / COUNT(*)) * 100,
                         2
                     ) AS percentage_dispatch
                 FROM plan_orders
@@ -105,9 +106,10 @@ class DashboardGeneralDao
     public function findOrdersDeliveredOnTime($id_company)
     {
         $connection = Connection::getInstance()->getConnection();
-        $sql = "SELECT ROUND( SUM( CASE WHEN delivery_date IS NOT NULL AND delivery_date <= max_date THEN 1 WHEN delivery_date IS NULL AND CURDATE() <= max_date THEN 1 ELSE 0 END ) / COUNT(*) * 100, 2 ) AS deliveredOnTime 
+        $sql = "SELECT COUNT(*) AS totalDeliveredOnTime, 
+                        ROUND( SUM( CASE WHEN delivery_date IS NOT NULL AND delivery_date <= max_date THEN 1 WHEN delivery_date IS NULL AND CURDATE() <= max_date THEN 1 ELSE 0 END ) / COUNT(*) * 100, 2 ) AS deliveredOnTime 
                 FROM plan_orders 
-                WHERE max_date <> '0000-00-00' AND id_company = :id_company";
+                WHERE max_date <> '0000-00-00' AND status = 3 AND id_company = :id_company";
         $stmt = $connection->prepare($sql);
         $stmt->execute(['id_company' => $id_company]);
         $percent = $stmt->fetch($connection::FETCH_ASSOC);

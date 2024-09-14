@@ -1,12 +1,22 @@
 $(document).ready(function () {
   //Obtener data
-  fetch(`/api/machinesAvailable`)
-    .then((response) => response.text())
-    .then((data) => {
+  async function fetchMachinesAvailable() {
+    try {
+      const response = await fetch(`/api/machinesAvailable`);
+
+      if (!response.ok) throw new Error("Network response was not ok");
+
+      let data = await response.text();
       data = JSON.parse(data);
-      ChartMachinesAvailable(data);
-      IndicatorMachinesAvailable(data);
-    });
+
+      await ChartMachinesAvailable(data); // Espera a que termine ChartMachinesAvailable
+      IndicatorMachinesAvailable(data); // Llama a IndicatorMachinesAvailable
+    } catch (error) {
+      console.error("Error fetching machines available data:", error);
+    }
+  }
+
+  fetchMachinesAvailable();
 
   /* Colors */
   dynamicColors = () => {

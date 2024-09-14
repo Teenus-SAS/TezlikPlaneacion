@@ -66,8 +66,9 @@ $(document).ready(function () {
       url: "/api/userAutentication",
       data: data,
       success: function (data, textStatus, xhr) {
-        if (data.error) {
-          toastr.error(data.message);
+        const { success, error, info, message } = data;
+        if (error) {
+          toastr.error(message);
           return false;
         } else if (success) {
           location.href = data.location;

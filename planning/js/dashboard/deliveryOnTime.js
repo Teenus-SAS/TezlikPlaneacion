@@ -4,7 +4,7 @@ $(document).ready(function () {
       .then((response) => response.text())
       .then((data) => {
         data = JSON.parse(data);
-        GraphDeliverOnTime(data.deliveredOnTime);
+        GraphDeliverOnTime(data.deliveredOnTime, data.totalDeliveredOnTime);
       });
   }, 1000);
 
@@ -25,7 +25,7 @@ $(document).ready(function () {
   };
 });
 
-const GraphDeliverOnTime = (percentageOnTime) => {
+const GraphDeliverOnTime = (percentageOnTime, totalOrders) => {
   const ctx = document.getElementById("onTimeDeliveryChart").getContext("2d");
   const onTimeDeliveryChart = new Chart(ctx, {
     plugins: [ChartDataLabels],
@@ -65,7 +65,7 @@ const GraphDeliverOnTime = (percentageOnTime) => {
           max: 100,
           title: {
             display: true,
-            text: "Porcentaje (%)", // Etiqueta para el eje Y
+            text: "", // Etiqueta para el eje Y
           },
           ticks: {
             callback: function (value) {
@@ -87,8 +87,20 @@ const GraphDeliverOnTime = (percentageOnTime) => {
             size: "12",
             weight: "normal",
           },
-          formatter: function (value) {
-            return value + "%"; // Agregar el símbolo de porcentaje a las etiquetas
+          formatter: function (value, context) {
+            if (context.datasetIndex === 0) {
+              // Calcula el número de pedidos entregados a tiempo
+              const onTimeOrders = Math.round(
+                (percentageOnTime / 100) * totalOrders
+              );
+              return `${onTimeOrders} (${value}%)`; // Muestra el número y el porcentaje
+            } else {
+              // Calcula el número de pedidos no entregados a tiempo
+              const notOnTimeOrders =
+                totalOrders -
+                Math.round((percentageOnTime / 100) * totalOrders);
+              return `${notOnTimeOrders} (${value}%)`; // Muestra el número y el porcentaje
+            }
           },
         },
         tooltip: {

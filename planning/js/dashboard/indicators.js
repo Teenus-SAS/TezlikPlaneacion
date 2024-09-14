@@ -8,8 +8,10 @@ const indicatorsGlobal = async () => {
       productsOutStock,
       percentageMPLowStock,
       ordersNoProgramed,
+      totalOrdersNoProgrammed,
       OrdersNoMP,
       percentage_dispatch,
+      orders_dispatch,
     } = response;
 
     const formatPercentage = (value) =>
@@ -20,20 +22,30 @@ const indicatorsGlobal = async () => {
       productsOutStock: formatPercentage(productsOutStock),
       mpOutStock: formatPercentage(percentageMPLowStock),
       ordersNoProgramed: formatPercentage(ordersNoProgramed),
+      totalOrdersNoProgrammed: formatPercentage(totalOrdersNoProgrammed),
       OrdersNoMP: formatPercentage(OrdersNoMP),
-      OrdersDelivered: formatPercentage(percentage_dispatch),
+      percentOrdersDelivered: formatPercentage(percentage_dispatch),
+      totalOrdersDispatch: formatPercentage(orders_dispatch),
     };
 
     // Actualizar el DOM
-    $("#productStockout").text(
-      `${response.totalProducts} (${formattedValues.productsOutStock}%)`
+    $("#productStockout").text(`${response.totalProducts}`);
+    $("#productPercentStockOut").text(`${formattedValues.productsOutStock}%`);
+
+    $("#mpOutStock").text(`${response.totalMPLowStock}`);
+    $("#mpPercentageOutStock").text(`${formattedValues.mpOutStock}%`);
+
+    $("#ordersNoProgramed").text(`${formattedValues.totalOrdersNoProgrammed}`);
+    $("#percentOrdersNoProgramed").text(
+      `${formattedValues.ordersNoProgramed}%`
     );
-    $("#mpOutStock").text(
-      `${response.totalMPLowStock} (${formattedValues.mpOutStock}%)`
-    );
-    $("#ordersNoProgramed").text(`${formattedValues.ordersNoProgramed}%`);
+
     $("#ordersNoMP").text(`${formattedValues.OrdersNoMP}%`);
-    $("#ordersDelivered").text(`${formattedValues.OrdersDelivered}%`);
+
+    $("#totalOrdersDispatch").text(`${formattedValues.totalOrdersDispatch}`);
+    $("#percentOrdersDelivered").text(
+      `${formattedValues.percentOrdersDelivered}%`
+    );
   } catch (error) {
     console.error("Error fetching dashboard indicators:", error);
     toastr.error("Error al obtener los indicadores. Intente nuevamente");
