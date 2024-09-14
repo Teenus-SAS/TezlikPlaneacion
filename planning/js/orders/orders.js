@@ -33,7 +33,7 @@ $(document).ready(function () {
     const idOrder = sessionStorage.getItem("id_order");
     const apiUrl = idOrder ? "/api/updateOrder" : "/api/addOrder";
 
-    checkDataArea(apiUrl, idOrder);
+    checkDataOrder(apiUrl, idOrder);
   });
 
   $(document).on("click", ".updateOrder", function () {
