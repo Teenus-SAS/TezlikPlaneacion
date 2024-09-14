@@ -30,11 +30,10 @@ $(document).ready(function () {
   $("#btnCreateOrder").click(function (e) {
     e.preventDefault();
 
-    let idOrder = sessionStorage.getItem("id_order");
+    const idOrder = sessionStorage.getItem("id_order");
+    const apiUrl = idOrder ? "/api/updateOrder" : "/api/addOrder";
 
-    if (!idOrder || idOrder == null) {
-      checkDataOrder("/api/addOrder", idOrder);
-    } else checkDataOrder("/api/updateOrder", idOrder);
+    checkDataArea(apiUrl, idOrder);
   });
 
   $(document).on("click", ".updateOrder", function () {
@@ -107,7 +106,8 @@ $(document).ready(function () {
       return false;
     }
 
-    let date = new Date().toISOString().split("T")[0];
+    //let date = new Date().toISOString().split("T")[0];
+    let date = new Date().toLocaleDateString("en-CA");
 
     if (minDate < date || maxDate < date || dateOrder < date) {
       toastr.error("Fecha por debajo de la fecha actual");
