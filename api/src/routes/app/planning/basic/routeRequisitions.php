@@ -8,9 +8,11 @@ use TezlikPlaneacion\dao\GeneralRMStockDao;
 use TezlikPlaneacion\dao\LastDataDao;
 use TezlikPlaneacion\dao\requisitionsDao;
 use TezlikPlaneacion\dao\TransitMaterialsDao;
+use TezlikPlaneacion\dao\UsersRequisitionsDao;
 
 $requisitionsDao = new requisitionsDao();
 $generalRequisitionsDao = new GeneralRequisitionsDao();
+$usersRequisitonsDao = new UsersRequisitionsDao();
 $transitMaterialsDao = new TransitMaterialsDao();
 $generalMaterialsDao = new GeneralMaterialsDao();
 $generalClientsDao = new GeneralClientsDao();
@@ -243,7 +245,8 @@ $app->post('/updateRequisition', function (Request $request, Response $response,
 $app->post('/saveAdmissionDate', function (Request $request, Response $response, $args) use (
     $generalRequisitionsDao,
     $generalMaterialsDao,
-    $transitMaterialsDao
+    $transitMaterialsDao,
+    $usersRequisitonsDao
 ) {
     session_start();
     $id_company = $_SESSION['id_company'];
@@ -260,7 +263,7 @@ $app->post('/saveAdmissionDate', function (Request $request, Response $response,
     }
 
     if ($requisition == null) {
-        $requisition = $generalRequisitionsDao->saveUserDeliverRequisition($id_company, $dataRequisition['idRequisition'], $id_user);
+        $requisition = $usersRequisitonsDao->saveUserDeliverRequisition($id_company, $dataRequisition['idRequisition'], $id_user);
     }
 
     if ($requisition == null) {
@@ -309,4 +312,10 @@ $app->post('/deleteRequisition', function (Request $request, Response $response,
 
     $response->getBody()->write(json_encode($resp));
     return $response->withStatus(200)->withHeader('Content-Type', 'application/json');
+});
+
+$app->get('/usersRequisitions/{id_requisition}', function (Request $request, Response $response, $args) use ($usersRequisitonsDao) {
+    $users = $usersRequisitonsDao->findAllUsersRequesitionsById($args['id_requisition']);
+    $response->getBody()->write(json_encode($users));
+    return $response->withHeader('Content-Type', 'application/json');
 });

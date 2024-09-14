@@ -5,12 +5,14 @@ use TezlikPlaneacion\dao\GeneralMaterialsDao;
 use TezlikPlaneacion\dao\GeneralProgrammingDao;
 use TezlikPlaneacion\dao\ProductsMaterialsDao;
 use TezlikPlaneacion\dao\StoreDao;
+use TezlikPlaneacion\dao\UsersStoreDao;
 
 $storeDao = new StoreDao();
 $autenticationDao = new AutenticationUserDao();
 $programmingDao = new GeneralProgrammingDao();
 $productsMaterialsDao = new ProductsMaterialsDao();
 $generalMaterialsDao = new GeneralMaterialsDao();
+$usersStoreDao = new UsersStoreDao();
 
 use Psr\Http\Message\ResponseInterface as Response;
 use Psr\Http\Message\ServerRequestInterface as Request;
@@ -56,7 +58,8 @@ $app->get('/store', function (Request $request, Response $response, $args) use (
 $app->post('/deliverStore', function (Request $request, Response $response, $args) use (
     $storeDao,
     $autenticationDao,
-    $generalMaterialsDao
+    $generalMaterialsDao,
+    $usersStoreDao
 ) {
     session_start();
     $id_company = $_SESSION['id_company'];
@@ -99,7 +102,7 @@ $app->post('/deliverStore', function (Request $request, Response $response, $arg
     }
 
     if ($store == null) {
-        $store = $generalMaterialsDao->saveUserDeliveredMaterial($id_company, $dataStore['idMaterial'], $id_user);
+        $store = $usersStoreDao->saveUserDeliveredMaterial($id_company, $dataStore['idMaterial'], $id_user);
     }
 
     if ($store == null)
@@ -113,4 +116,10 @@ $app->post('/deliverStore', function (Request $request, Response $response, $arg
         $resp = array('error' => true, 'message' => 'Ocurrio un error al guardar la información. Intente nuevamente');
     $response->getBody()->write(json_encode($resp));
     return $response->withStatus(200)->withHeader('Content-Type', 'application/json');
+});
+
+$app->get('/usersStore/{id_material}', function (Request $request, Response $response, $args) use ($usersStoreDao) {
+    $users = $usersStoreDao->findAllUserStoreById($args['id_material']);
+    $response->getBody()->write(json_encode($users));
+    return $response->withHeader('Content-Type', 'application/json');
 });

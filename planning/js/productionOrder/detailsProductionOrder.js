@@ -172,8 +172,11 @@ $(document).ready(function () {
                 },
                 {
                     title: 'Operador',
-                    data: 'operator',
+                    data: null,
                     className: 'uniqueClassName dt-head-center',
+                    render: function (data) {
+                        return `${data.firstname} ${data.lastname}`;
+                    }
                 },
                 {
                     title: 'Desperdicio',

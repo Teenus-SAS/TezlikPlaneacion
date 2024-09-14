@@ -316,7 +316,13 @@ if (sizeof($_SESSION) == 0)
 													<div class="col-sm-6 floating-label enable-floating-label show-label" style="margin-bottom:20px">
 														<label for="operator">Operario</label>
 														<select class="form-control operator" name="operator" id="operator">
-															<option value="1">OPERARIO 1</option>
+															<option disabled selected>Seleccionar</option>
+															<?php
+															$id_user = $_SESSION['idUser'];
+															$name = $_SESSION['name'];
+															$lastname = $_SESSION['lastname'];
+															?>
+															<option value="<?php echo $id_user ?>"><?php echo "$name $lastname" ?></option>
 														</select>
 													</div>
 													<div class="col-sm-2 floating-label enable-floating-label show-label">

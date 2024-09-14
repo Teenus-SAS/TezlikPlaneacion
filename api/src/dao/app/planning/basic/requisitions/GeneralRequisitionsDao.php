@@ -19,17 +19,56 @@ class GeneralRequisitionsDao
     public function findAllActualRequisitionByCompany($id_company)
     {
         $connection = Connection::getInstance()->getConnection();
-        $stmt = $connection->prepare("SELECT r.id_requisition, r.id_material, m.reference, m.material, r.creation_date, r.application_date, r.delivery_date, r.quantity_requested, r.quantity_required, r.purchase_order, 
-                                             r.admission_date, cu.abbreviation, IFNULL(r.id_provider, 0) AS id_provider, IFNULL(c.client, '') AS provider,
-                                             IFNULL(ur.id_user, 0) AS id_user_requisition, IFNULL(ur.firstname, '') AS firstname_requisition, IFNULL(ur.lastname, '') AS lastname_requisition, IFNULL(urd.id_user, 0) AS id_user_deliver, IFNULL(urd.firstname, '') AS firstname_deliver, IFNULL(urd.lastname, '') AS lastname_deliver
-                                      FROM requisitions r
-                                        INNER JOIN materials m ON m.id_material = r.id_material 
-                                        INNER JOIN convert_units cu ON cu.id_unit = m.unit
-                                        LEFT JOIN plan_clients c ON c.id_client = r.id_provider
-                                        LEFT JOIN users ur ON ur.id_user = r.id_user_requisition
-                                        LEFT JOIN users urd ON urd.id_user = r.id_user_deliver
-                                      WHERE r.id_company = :id_company 
-                                      AND (r.admission_date IS NULL OR MONTH(r.admission_date) = MONTH(CURRENT_DATE))
+        // $stmt = $connection->prepare("SELECT r.id_requisition, r.id_material, m.reference, m.material, r.creation_date, r.application_date, r.delivery_date, r.quantity_requested, r.quantity_required, r.purchase_order, 
+        //                                      r.admission_date, cu.abbreviation, IFNULL(r.id_provider, 0) AS id_provider, IFNULL(c.client, '') AS provider,
+        //                                      IFNULL(ur.id_user, 0) AS id_user_requisition, IFNULL(ur.firstname, '') AS firstname_requisition, IFNULL(ur.lastname, '') AS lastname_requisition, IFNULL(urd.id_user, 0) AS id_user_deliver, IFNULL(urd.firstname, '') AS firstname_deliver, IFNULL(urd.lastname, '') AS lastname_deliver
+        //                               FROM requisitions r
+        //                                 INNER JOIN materials m ON m.id_material = r.id_material 
+        //                                 INNER JOIN convert_units cu ON cu.id_unit = m.unit
+        //                                 LEFT JOIN plan_clients c ON c.id_client = r.id_provider
+        //                                 LEFT JOIN users ur ON ur.id_user = r.id_user_requisition
+        //                                 LEFT JOIN users urd ON urd.id_user = r.id_user_deliver
+        //                               WHERE r.id_company = :id_company 
+        //                               AND (r.admission_date IS NULL OR MONTH(r.admission_date) = MONTH(CURRENT_DATE))
+        //                               ORDER BY r.admission_date ASC");
+        $stmt = $connection->prepare("SELECT 
+                                        -- Columnas
+                                            r.id_requisition, 
+                                            r.id_material, 
+                                            m.reference, 
+                                            m.material, 
+                                            r.creation_date, 
+                                            r.application_date, 
+                                            r.delivery_date, 
+                                            r.quantity_requested, 
+                                            r.quantity_required, 
+                                            r.purchase_order, 
+                                            r.admission_date, 
+                                            cu.abbreviation, 
+                                            IFNULL(r.id_provider, 0) AS id_provider, 
+                                            IFNULL(c.client, '') AS provider,
+                                            IFNULL(ur.id_user, 0) AS id_user_requisition, 
+                                            IFNULL(ur.firstname, '') AS firstname_requisition, 
+                                            IFNULL(ur.lastname, '') AS lastname_requisition,
+                                            IFNULL(last_user.id_user_deliver, 0) AS id_user_deliver, 
+                                            IFNULL(last_user.firstname_deliver, '') AS firstname_deliver, 
+                                            IFNULL(last_user.lastname_deliver, '') AS lastname_deliver
+                                      FROM 
+                                            requisitions r
+                                            INNER JOIN materials m ON m.id_material = r.id_material 
+                                            INNER JOIN convert_units cu ON cu.id_unit = m.unit
+                                            LEFT JOIN plan_clients c ON c.id_client = r.id_provider
+                                            LEFT JOIN users ur ON ur.id_user = r.id_user_requisition
+                                            -- Subconsulta para obtener el último usuario de entrega
+                                            LEFT JOIN (
+                                                SELECT cur.id_requisition, curd.id_user AS id_user_deliver, curd.firstname AS firstname_deliver, curd.lastname AS lastname_deliver
+                                                FROM users_requisitions cur
+                                                INNER JOIN users curd ON curd.id_user = cur.id_user_deliver
+                                                WHERE cur.id_company = :id_company
+                                                ORDER BY cur.id_user_requisition DESC
+                                                LIMIT 1
+                                            ) AS last_user ON last_user.id_requisition = r.id_requisition
+                                      WHERE r.id_company = :id_company AND (r.admission_date IS NULL OR MONTH(r.admission_date) = MONTH(CURRENT_DATE))
                                       ORDER BY r.admission_date ASC");
         $stmt->execute(['id_company' => $id_company]);
 
@@ -74,8 +113,8 @@ class GeneralRequisitionsDao
             'id_company' => $id_company
         ]);
         $this->logger->info(__FUNCTION__, array('query' => $stmt->queryString, 'errors' => $stmt->errorInfo()));
-        $molds = $stmt->fetch($connection::FETCH_ASSOC);
-        return $molds;
+        $requisition = $stmt->fetch($connection::FETCH_ASSOC);
+        return $requisition;
     }
 
     public function findRequisitionByApplicationDate($id_material)
@@ -151,26 +190,6 @@ class GeneralRequisitionsDao
             $stmt->execute([
                 'id_requisition' => $dataRequisition['idRequisition'],
                 'admission_date' => $dataRequisition['date'],
-            ]);
-            $this->logger->info(__FUNCTION__, array('query' => $stmt->queryString, 'errors' => $stmt->errorInfo()));
-        } catch (\Exception $e) {
-            $message = $e->getMessage();
-            $error = array('info' => true, 'message' => $message);
-            return $error;
-        }
-    }
-
-    public function saveUserDeliverRequisition($id_company, $id_requisition, $id_user)
-    {
-        $connection = Connection::getInstance()->getConnection();
-
-        try {
-            $stmt = $connection->prepare("INSERT INTO users_requisitions (id_company, id_requisition, id_user_deliver)
-                                          VALUES (:id_company, :id_requisition, :id_user_deliver)");
-            $stmt->execute([
-                'id_company' => $id_company,
-                'id_user' => $id_user,
-                'id_requisition' => $id_requisition,
             ]);
             $this->logger->info(__FUNCTION__, array('query' => $stmt->queryString, 'errors' => $stmt->errorInfo()));
         } catch (\Exception $e) {

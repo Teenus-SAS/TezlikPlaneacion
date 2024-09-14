@@ -20,8 +20,10 @@ class ProductionOrderPartialDao
     {
         $connection = Connection::getInstance()->getConnection();
 
-        $stmt = $connection->prepare("SELECT * FROM prod_order_part_deliv 
-                                      WHERE id_company = :id_company");
+        $stmt = $connection->prepare("SELECT po.id_part_deliv, po.id_programming, po.start_date, po.end_date, po.operator, u.firstname, u.lastname, po.waste, po.partial_quantity
+                                      FROM prod_order_part_deliv po
+                                        INNER JOIN users u ON u.id_user = po.operator
+                                      WHERE po.id_company = :id_company");
         $stmt->execute([
             'id_company' => $id_company
         ]);
@@ -35,8 +37,10 @@ class ProductionOrderPartialDao
     {
         $connection = Connection::getInstance()->getConnection();
 
-        $stmt = $connection->prepare("SELECT * FROM prod_order_part_deliv 
-                                      WHERE id_programming = :id_programming AND id_company = :id_company");
+        $stmt = $connection->prepare("SELECT po.id_part_deliv, po.id_programming, po.start_date, po.end_date, po.operator, u.firstname, u.lastname, po.waste, po.partial_quantity
+                                      FROM prod_order_part_deliv po
+                                        INNER JOIN users u ON u.id_user = po.operator
+                                      WHERE po.id_programming = :id_programming AND po.id_company = :id_company");
         $stmt->execute([
             'id_programming' => $id_programming,
             'id_company' => $id_company

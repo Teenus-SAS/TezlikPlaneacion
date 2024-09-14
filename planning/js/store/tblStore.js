@@ -128,7 +128,10 @@ $(document).ready(function () {
             if (!data.admission_date || data.admission_date == "0000-00-00 00:00:00")
               action = `<button class="btn btn-info changeDate" id="delivery">Recibir MP</button>`;
             else { 
-              action = `Recibido: <br>${data.firstname_deliver} ${data.lastname_deliver}<br>${data.admission_date}`;
+              action = `Recibido: <br>${data.firstname_deliver} ${data.lastname_deliver}<br>${data.admission_date}
+                        <a href="javascript:;">
+                          <i id="${data.id_requisition}" class="mdi mdi-playlist-check seeReceiveOC" data-toggle='tooltip' title='Ver Usuarios' style="font-size: 30px;color:black"></i>
+                        </a>`;
             }
 
             return action;
@@ -252,7 +255,10 @@ $(document).ready(function () {
                   hour12: true,
                 });
 
-              action = `Entregado: ${data.firstname_delivered} ${data.lastname_delivered}<br>${fechaHoraFormateada}`;
+              action = `Entregado: ${data.firstname_delivered} ${data.lastname_delivered}<br>${fechaHoraFormateada}
+              <a href="javascript:;">
+                          <i id="${data.id_material}" class="mdi mdi-playlist-check seeDeliverOC" data-toggle='tooltip' title='Ver Usuarios' style="font-size: 30px;color:black"></i>
+              </a>`;
             }
 
             return action;

@@ -53,6 +53,54 @@ $(document).ready(function () {
     });
   });
 
+  $(document).on('click', '.seeReceiveOC', async function (e) {
+    e.preventDefault();
+
+    const row = $(this).closest("tr")[0];
+    let data = tblStore.fnGetData(row);
+
+    let users = await searchData(`/api/usersRequisitions/${data.id_requisition}`);
+    let rows = '';
+
+    for (let i = 0; i < users.length; i++) {
+      rows +=
+        `<tr>
+          <td>${i + 1}</td>
+          <td>${data[i].firstname}</td>
+          <td>${data[i].lastname}</td>
+          <td>${data[i].email}</td>
+        </tr>`;
+    }
+
+    // Mostramos el mensaje con Bootbox
+    bootbox.alert({
+      title: 'Usuarios',
+      message: `
+            <div class="container">
+              <div class="col-12">
+                <div class="table-responsive">
+                  <table class="fixed-table-loading table table-hover">
+                    <thead>
+                      <tr>
+                        <th>No</th>
+                        <th>Nombre</th>
+                        <th>Apellido</th>
+                        <th>Email</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      ${rows}
+                    </tbody>
+                  </table>
+                </div>
+              </div> 
+            </div>`,
+      size: 'large',
+      backdrop: true
+    });
+    return false;
+  });
+
   // Entregar MP
 
   const itemsToRemove = ["idMaterial", "stored", "pending", "delivered"];
@@ -140,35 +188,55 @@ $(document).ready(function () {
         message(resp, 2);
       },
     });
-  };
-  // $('#btnSaveDeliver').click(function (e) {
-  //     e.preventDefault();
+  }; 
 
-  //     let email = $('#email').val();
-  //     let password = $('#password').val();
+  $(document).on('click', '.seeDeliverOC', async function (e) {
+    e.preventDefault();
 
-  //     if (!email || !password) {
-  //         toastr.error('Ingrese los datos');
-  //         return false;
-  //     }
+    const row = $(this).closest("tr")[0];
+    let data = tblStore.fnGetData(row);
 
-  //     let dataStore = {};
-  //     dataStore['idMaterial'] = sessionStorage.getItem('idMaterial');
-  //     dataStore['stored'] = sessionStorage.getItem('stored');
-  //     dataStore['pending'] = sessionStorage.getItem('pending');
-  //     dataStore['delivered'] = sessionStorage.getItem('delivered');
-  //     // dataStore['email'] = email;
-  //     // dataStore['password'] = password;
+    let users = await searchData(`/api/usersStore/${data.id_material}`);
+    let rows = '';
 
-  //     $.ajax({
-  //         type: "POST",
-  //         url: '/api/deliverStore',
-  //         data: dataStore,
-  //         success: function (resp) {
-  //             message(resp, 2);
-  //         }
-  //     });
-  // });
+    for (let i = 0; i < users.length; i++) {
+      rows +=
+        `<tr>
+          <td>${i + 1}</td>
+          <td>${data[i].firstname}</td>
+          <td>${data[i].lastname}</td>
+          <td>${data[i].email}</td>
+        </tr>`;
+    }
+
+    // Mostramos el mensaje con Bootbox
+    bootbox.alert({
+      title: 'Usuarios',
+      message: `
+            <div class="container">
+              <div class="col-12">
+                <div class="table-responsive">
+                  <table class="fixed-table-loading table table-hover">
+                    <thead>
+                      <tr>
+                        <th>No</th>
+                        <th>Nombre</th>
+                        <th>Apellido</th>
+                        <th>Email</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      ${rows}
+                    </tbody>
+                  </table>
+                </div>
+              </div> 
+            </div>`,
+      size: 'large',
+      backdrop: true
+    });
+    return false;
+  });
 
   const message = (data, op) => {
     const { success, error, info, message } = data;
