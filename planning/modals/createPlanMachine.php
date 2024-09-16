@@ -47,7 +47,7 @@
 
                                         <div class="col-12 col-lg-3">
                                             <div class="form-group floating-label enable-floating-label show-label">
-                                                <input id="workShift" name="workShift" type="number" class="form-control text-center">
+                                                <input id="workShift" name="workShift" type="number" class="form-control text-center hours">
                                                 <label for="workShift">Turnos<span class="text-danger">*</span></label>
                                                 <div class="validation-error d-none font-size-13">Requerido</div>
                                             </div>
