@@ -20,11 +20,13 @@ class Planning_machinesDao
     {
         $connection = Connection::getInstance()->getConnection();
 
-        $stmt = $connection->prepare("SELECT pm.id_program_machine, pm.type_program_machine, pm.id_machine, m.machine, pm.number_workers, pm.hours_day, pm.hour_start, pm.hour_end, pm.year, pm.january, pm.february,
+        $stmt = $connection->prepare("SELECT pm.id_program_machine, pm.type_program_machine, pm.id_machine, m.machine, COUNT(py.id_plan_payroll) AS number_workers, pm.hours_day, pm.hour_start, pm.hour_end, pm.year, pm.january, pm.february,
                                              pm.march, pm.april, pm.may, pm.june, pm.july, pm.august, pm.september, pm.october, pm.november, pm.december, pm.work_shift, pm.status             
                                       FROM plan_program_machines pm
                                         INNER JOIN machines m ON m.id_machine = pm.id_machine
-                                      WHERE pm.id_company = :id_company;");
+                                        LEFT JOIN plan_payroll py ON py.id_machine = pm.id_machine
+                                      WHERE pm.id_company = :id_company
+                                      GROUP BY pm.id_program_machine");
         $stmt->execute(['id_company' => $id_company]);
         $planningMachines = $stmt->fetchAll($connection::FETCH_ASSOC);
         return $planningMachines;
