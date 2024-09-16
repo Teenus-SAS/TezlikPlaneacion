@@ -130,3 +130,34 @@ $app->post('/addOPPartial', function (Request $request, Response $response, $arg
     $response->getBody()->write(json_encode($resp));
     return $response->withHeader('Content-Type', 'application/json');
 });
+
+$app->post('/saveReceiveOCDate', function (Request $request, Response $response, $args) use (
+    $productionOrderPartialDao,
+    $generalProductsDao,
+) {
+    // session_start();
+    // $id_company = $_SESSION['id_company'];
+    // $id_user = $_SESSION['idUser'];
+
+    $dataOP = $request->getParsedBody();
+
+    $resolution = $productionOrderPartialDao->updateDateReceive($dataOP);
+
+    if ($resolution == null) {
+        $resolution = $generalProductsDao->updateAccumulatedQuantity($dataOP['idProduct'], $dataOP['quantity'], 2);
+    }
+
+    // if ($requisition == null) {
+    //     $requisition = $usersRequisitonsDao->saveUserDeliverRequisition($id_company, $dataRequisition['idRequisition'], $id_user);
+    // } 
+
+    if ($resolution == null)
+        $resp = array('success' => true, 'message' => 'Fecha guardada correctamente');
+    else if (isset($resolution['info']))
+        $resp = array('info' => true, 'message' => $resolution['message']);
+    else
+        $resp = array('error' => true, 'message' => 'Ocurrio un error mientras modificaba la información. Intente nuevamente');
+
+    $response->getBody()->write(json_encode($resp));
+    return $response->withStatus(200)->withHeader('Content-Type', 'application/json');
+});

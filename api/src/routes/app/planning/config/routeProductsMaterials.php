@@ -103,6 +103,7 @@ $app->post('/productsMaterialsDataValidation', function (Request $request, Respo
 
         $productMaterials = $dataProductMaterial['importProducts'];
         $debugg = [];
+        $dataImportProductsMaterials = [];
 
         for ($i = 0; $i < sizeof($productMaterials); $i++) {
             if (
