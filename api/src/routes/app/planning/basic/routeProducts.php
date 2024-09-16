@@ -72,14 +72,14 @@ $app->post('/productsDataValidation', function (Request $request, Response $resp
 
         for ($i = 0; $i < count($products); $i++) {
             if (
-                empty($products[$i]['referenceProduct']) || empty($products[$i]['product']) || empty($products[$i]['quantity'])
+                empty($products[$i]['referenceProduct']) || empty($products[$i]['product']) || $products[$i]['quantity'] == ''
             ) {
                 $row = $i + 2;
                 array_push($debugg, array('error' => true, 'message' => "Campos vacios, fila: $row"));
             }
 
             if (
-                empty(trim($products[$i]['referenceProduct'])) || empty(trim($products[$i]['product'])) || empty(trim($products[$i]['quantity']))
+                empty(trim($products[$i]['referenceProduct'])) || empty(trim($products[$i]['product'])) || trim($products[$i]['quantity']) == ''
             ) {
                 $row = $i + 2;
                 array_push($debugg, array('error' => true, 'message' => "Campos vacios, fila: $row"));
