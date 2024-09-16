@@ -180,9 +180,9 @@ class GeneralOrdersDao
     {
         $connection = Connection::getInstance()->getConnection();
 
-        $sql = "SELECT CONCAT('PED', COUNT(id_order) + 1) AS num_order 
+        $sql = "SELECT CONCAT('PED', COUNT(IFNULL(id_order, 0)) + 1) AS num_order 
                 FROM plan_orders 
-                WHERE id_company = :id_company";
+                WHERE id_company = :id_company AND num_order NOT LIKE '%-%'";
         $stmt = $connection->prepare($sql);
         $stmt->execute(['id_company' => $id_company]);
 
@@ -191,6 +191,7 @@ class GeneralOrdersDao
         $order = $stmt->fetch($connection::FETCH_ASSOC);
         return $order;
     }
+
     public function findLastOrderByNumOrder($num_order)
     {
         $connection = Connection::getInstance()->getConnection();

@@ -61,7 +61,7 @@ class GeneralClientsDao
         ]);
         $this->logger->info(__FUNCTION__, array('query' => $stmt->queryString, 'errors' => $stmt->errorInfo()));
 
-        $client = $stmt->fetchAll($connection::FETCH_ASSOC);
+        $client = $stmt->fetch($connection::FETCH_ASSOC);
         return $client;
     }
 
