@@ -21,7 +21,7 @@ class ProductsInventoryDao
         $connection = Connection::getInstance()->getConnection();
 
         try {
-            $stmt = $connection->prepare("INSERT INTO products_inventory (id_product, quantity, id_company) 
+            $stmt = $connection->prepare("INSERT INTO inv_products (id_product, quantity, id_company) 
                                           VALUES (:id_product, :quantity, :id_company)");
             $stmt->execute([
                 'id_product' => $dataProduct['idProduct'],
@@ -41,7 +41,7 @@ class ProductsInventoryDao
         $connection = Connection::getInstance()->getConnection();
 
         try {
-            $stmt = $connection->prepare("UPDATE products_inventory SET quantity = :quantity WHERE id_product = :id_product");
+            $stmt = $connection->prepare("UPDATE inv_products SET quantity = :quantity WHERE id_product = :id_product");
             $stmt->execute([
                 'id_product' => $dataProduct['idProduct'],
                 'quantity' => $dataProduct['quantity']
@@ -59,12 +59,12 @@ class ProductsInventoryDao
         $connection = Connection::getInstance()->getConnection();
 
         try {
-            $stmt = $connection->prepare("SELECT * FROM products_inventory WHERE id_product_inventory = :id_product_inventory");
+            $stmt = $connection->prepare("SELECT * FROM inv_products WHERE id_product_inventory = :id_product_inventory");
             $stmt->execute(['id_product_inventory' => $id_product_inventory]);
             $rows = $stmt->rowCount();
 
             if ($rows > 0) {
-                $stmt = $connection->prepare("DELETE FROM products_inventory WHERE id_product_inventory = :id_product_inventory");
+                $stmt = $connection->prepare("DELETE FROM inv_products WHERE id_product_inventory = :id_product_inventory");
                 $stmt->execute(['id_product_inventory' => $id_product_inventory]);
                 $this->logger->info(__FUNCTION__, array('query' => $stmt->queryString, 'errors' => $stmt->errorInfo()));
             }

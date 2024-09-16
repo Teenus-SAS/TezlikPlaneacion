@@ -22,7 +22,7 @@ class InventoryDao
         $stmt = $connection->prepare("SELECT m.id_material, m.reference, m.material, m.material AS descript, mg.id_magnitude, mg.magnitude, 
                                          u.id_unit, u.unit, u.abbreviation, mi.quantity
                                   FROM materials m
-                                    INNER JOIN materials_inventory mi ON mi.id_material = m.id_material
+                                    INNER JOIN inv_materials mi ON mi.id_material = m.id_material
                                     INNER JOIN convert_units u ON u.id_unit = m.unit
                                     INNER JOIN convert_magnitudes mg ON mg.id_magnitude = u.id_magnitude
                                   WHERE m.id_company = :id_company ORDER BY m.material ASC");
@@ -87,7 +87,7 @@ class InventoryDao
                                       FROM products p
                                         INNER JOIN products_materials pm ON pm.id_product = p.id_product
                                         INNER JOIN materials m ON m.id_material = pm.id_material
-                                        INNER JOIN materials_inventory mi ON mi.id_material = pm.id_material
+                                        INNER JOIN inv_materials mi ON mi.id_material = pm.id_material
                                       WHERE p.reference = :reference AND p.id_company = :id_company AND m.reference NOT IN (:id_material)");
         $stmt->execute([
             'reference' => $dataInventory[0]['refProduct'],

@@ -21,7 +21,7 @@ class UsersRequisitionsDao
         $connection = Connection::getInstance()->getConnection();
 
         $stmt = $connection->prepare("SELECT u.id_user, u.firstname, u.lastname, u.email
-                                      FROM users_requisitions ur
+                                      FROM requisitions_users ur
                                       INNER JOIN users u ON u.id_user = ur.id_user_deliver
                                       WHERE ur.id_requisition = :id_requisition");
         $stmt->execute([

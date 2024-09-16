@@ -24,7 +24,7 @@ class GeneralOfficesDao
                                              IFNULL(uso.id_user, 0) AS id_user_order, IFNULL(uso.firstname, '') AS firstname_order, IFNULL(uso.lastname, '') AS lastname_order
                                       FROM plan_orders o
                                         INNER JOIN products p ON p.id_product = o.id_product
-                                        INNER JOIN products_inventory pi ON pi.id_product = o.id_product
+                                        INNER JOIN inv_products pi ON pi.id_product = o.id_product
                                         INNER JOIN plan_clients c ON c.id_client = o.id_client
                                         INNER JOIN plan_status ps ON ps.id_status = o.status
                                         LEFT JOIN users uso ON uso.id_user = o.id_user_order
@@ -47,7 +47,7 @@ class GeneralOfficesDao
                                              IFNULL(uso.id_user, 0) AS id_user_order, IFNULL(uso.firstname, '') AS firstname_order, IFNULL(uso.lastname, '') AS lastname_order
                                       FROM plan_orders o
                                         INNER JOIN products p ON p.id_product = o.id_product
-                                        INNER JOIN products_inventory pi ON pi.id_product = o.id_product
+                                        INNER JOIN inv_products pi ON pi.id_product = o.id_product
                                         INNER JOIN plan_clients c ON c.id_client = o.id_client
                                         INNER JOIN plan_status ps ON ps.id_status = o.status
                                         LEFT JOIN users uso ON uso.id_user = o.id_user_order

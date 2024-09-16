@@ -19,7 +19,7 @@ class GeneralPStockDao
     public function findStock($dataStock)
     {
         $connection = Connection::getInstance()->getConnection();
-        $stmt = $connection->prepare("SELECT * FROM stock_products WHERE id_product = :id_product");
+        $stmt = $connection->prepare("SELECT * FROM inv_stock_products WHERE id_product = :id_product");
         $stmt->execute([
             'id_product' => $dataStock['idProduct'],
         ]);

@@ -23,7 +23,7 @@ class GeneralProductsDao
                                          IFNULL(u.feb, 0) AS feb, IFNULL(u.mar, 0) AS mar, IFNULL(u.apr, 0) AS apr, IFNULL(u.may, 0) AS may, IFNULL(u.jun, 0) AS jun, IFNULL(u.jul, 0) AS jul, IFNULL(u.aug, 0) AS aug, IFNULL(u.sept, 0) AS sept, IFNULL(u.oct, 0) AS oct, IFNULL(u.nov, 0) AS nov, IFNULL(u.dece, 0) AS dece
                                   FROM products p
                                   LEFT JOIN plan_unit_sales u ON u.id_product = p.id_product 
-                                  INNER JOIN products_inventory pi ON pi.id_product = p.id_product 
+                                  INNER JOIN inv_products pi ON pi.id_product = p.id_product 
                                   WHERE p.id_company = :id_company");
         $stmt->execute(['id_company' => $id_company]);
 
@@ -39,8 +39,8 @@ class GeneralProductsDao
         $stmt = $connection->prepare("SELECT p.id_product, p.reference, p.product, pi.quantity, pi.minimum_stock,
                                              IFNULL(sp.max_term, 0) AS max_term, IFNULL(sp.min_term, 0) AS min_term                              
                                       FROM products p
-                                          INNER JOIN products_inventory pi ON pi.id_product = p.id_product
-                                          LEFT JOIN stock_products sp ON sp.id_product = p.id_product
+                                          INNER JOIN inv_products pi ON pi.id_product = p.id_product
+                                          LEFT JOIN inv_stock_products sp ON sp.id_product = p.id_product
                                       WHERE p.id_company = :id_company ORDER BY p.product ASC");
         $stmt->execute(['id_company' => $id_company]);
 
@@ -74,7 +74,7 @@ class GeneralProductsDao
 
         $stmt = $connection->prepare("SELECT p.composite, pi.classification, IFNULL(pm.length, 0) AS length, IFNULL(pm.total_width, 0) AS total_width, IFNULL(pm.window, 0) AS window
                                       FROM products p
-                                      LEFT JOIN products_inventory pi ON pi.id_product = p.id_product
+                                      LEFT JOIN inv_products pi ON pi.id_product = p.id_product
                                       LEFT JOIN products_measures pm ON pm.id_product = p.id_product
                                       WHERE p.id_product = :id_product
                                       ORDER BY pi.classification ASC");
@@ -150,7 +150,7 @@ class GeneralProductsDao
     {
         $connection = Connection::getInstance()->getConnection();
 
-        $stmt = $connection->prepare("SELECT * FROM products_inventory
+        $stmt = $connection->prepare("SELECT * FROM inv_products
                                       WHERE id_product = :id_product AND id_company = :id_company");
         $stmt->execute([
             'id_product' => $id_product,
@@ -180,13 +180,13 @@ class GeneralProductsDao
 
         try {
             if ($op == 1) {
-                $stmt = $connection->prepare("UPDATE products_inventory SET accumulated_quantity = :accumulated_quantity WHERE id_product = :id_product");
+                $stmt = $connection->prepare("UPDATE inv_products SET accumulated_quantity = :accumulated_quantity WHERE id_product = :id_product");
                 $stmt->execute([
                     'accumulated_quantity' => $accumulated_quantity,
                     'id_product' => $id_product
                 ]);
             } else {
-                $stmt = $connection->prepare("UPDATE products_inventory SET accumulated_quantity = :accumulated_quantity, quantity = :quantity
+                $stmt = $connection->prepare("UPDATE inv_products SET accumulated_quantity = :accumulated_quantity, quantity = :quantity
                                               WHERE id_product = :id_product");
                 $stmt->execute([
                     'quantity' => $accumulated_quantity,
@@ -207,7 +207,7 @@ class GeneralProductsDao
         $connection = Connection::getInstance()->getConnection();
 
         try {
-            $stmt = $connection->prepare("UPDATE products_inventory
+            $stmt = $connection->prepare("UPDATE inv_products
                                           SET accumulated_quantity = quantity
                                           WHERE id_company = :id_company");
 
@@ -226,7 +226,7 @@ class GeneralProductsDao
         $connection = Connection::getInstance()->getConnection();
 
         try {
-            $stmt = $connection->prepare("UPDATE products_inventory
+            $stmt = $connection->prepare("UPDATE inv_products
                                           SET accumulated_quantity = 0
                                           WHERE id_company = :id_company");
 
@@ -246,7 +246,7 @@ class GeneralProductsDao
         $connection = Connection::getInstance()->getConnection();
 
         try {
-            $stmt = $connection->prepare("UPDATE products_inventory SET status_ds = :status_ds WHERE id_product = :id_product");
+            $stmt = $connection->prepare("UPDATE inv_products SET status_ds = :status_ds WHERE id_product = :id_product");
 
             $stmt->execute([
                 'status_ds' => $status_ds,
@@ -265,7 +265,7 @@ class GeneralProductsDao
         $connection = Connection::getInstance()->getConnection();
 
         try {
-            $stmt = $connection->prepare("UPDATE products_inventory SET reserved = :reserved WHERE id_product = :id_product");
+            $stmt = $connection->prepare("UPDATE inv_products SET reserved = :reserved WHERE id_product = :id_product");
 
             $stmt->execute([
                 'reserved' => $reserved,
@@ -284,7 +284,7 @@ class GeneralProductsDao
         $connection = Connection::getInstance()->getConnection();
 
         try {
-            $stmt = $connection->prepare("UPDATE products_inventory SET minimum_stock = :minimum_stock WHERE id_product = :id_product");
+            $stmt = $connection->prepare("UPDATE inv_products SET minimum_stock = :minimum_stock WHERE id_product = :id_product");
 
             $stmt->execute([
                 'minimum_stock' => $stock,
@@ -302,7 +302,7 @@ class GeneralProductsDao
         $connection = Connection::getInstance()->getConnection();
 
         try {
-            $stmt = $connection->prepare("UPDATE products_inventory SET classification = 'C' WHERE id_company = :id_company");
+            $stmt = $connection->prepare("UPDATE inv_products SET classification = 'C' WHERE id_company = :id_company");
 
             $stmt->execute([
                 'id_company' => $id_company
@@ -338,12 +338,12 @@ class GeneralProductsDao
         $connection = Connection::getInstance()->getConnection();
 
         try {
-            $stmt = $connection->prepare("SELECT * FROM products_inventory WHERE id_product = :id_product");
+            $stmt = $connection->prepare("SELECT * FROM inv_products WHERE id_product = :id_product");
             $stmt->execute(['id_product' => $id_product]);
             $rows = $stmt->rowCount();
 
             if ($rows > 0) {
-                $stmt = $connection->prepare("DELETE FROM products_inventory WHERE id_product = :id_product");
+                $stmt = $connection->prepare("DELETE FROM inv_products WHERE id_product = :id_product");
                 $stmt->execute(['id_product' => $id_product]);
                 $this->logger->info(__FUNCTION__, array('query' => $stmt->queryString, 'errors' => $stmt->errorInfo()));
             }

@@ -23,7 +23,7 @@ class OfficesDao
         $stmt = $connection->prepare("SELECT o.id_order, o.id_client, p.reference, pi.quantity, pi.minimum_stock, o.id_product, ps.status, o.num_order, o.date_order, o.original_quantity, p.product, c.client, o.min_date, o.max_date, o.delivery_date
                                       FROM plan_orders o
                                         INNER JOIN products p ON p.id_product = o.id_product
-                                        INNER JOIN products_inventory pi ON pi.id_product = p.id_product
+                                        INNER JOIN inv_products pi ON pi.id_product = p.id_product
                                         INNER JOIN plan_clients c ON c.id_client = o.id_client
                                         INNER JOIN plan_status ps ON ps.id_status = o.status
                                       WHERE o.status IN (2, 3) AND o.id_company = :id_company

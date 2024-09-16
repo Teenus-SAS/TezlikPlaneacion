@@ -24,7 +24,7 @@ class ProductsMaterialsDao
                                              ((mi.quantity / pm.quantity_converted) - IFNULL((SELECT SUM(quantity) FROM programming WHERE id_product = pm.id_product), 0)) AS total_quantity
                                       FROM products_materials pm
                                         LEFT JOIN materials m ON m.id_material = pm.id_material
-                                        LEFT JOIN materials_inventory mi ON mi.id_material = pm.id_material
+                                        LEFT JOIN inv_materials mi ON mi.id_material = pm.id_material
                                         LEFT JOIN convert_units u ON u.id_unit = pm.id_unit
                                         LEFT JOIN convert_magnitudes mg ON mg.id_magnitude = u.id_magnitude
                                       WHERE pm.id_product = :id_product AND pm.id_company = :id_company -- AND pm.id_material IN (SELECT id_material FROM materials INNER JOIN convert_units ON convert_units.id_unit = materials.unit WHERE id_material = pm.id_material)

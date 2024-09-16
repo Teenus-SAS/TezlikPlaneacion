@@ -21,9 +21,9 @@ class ExplosionMaterialsDao
     $connection = Connection::getInstance()->getConnection();
 
     $stmt = $connection->prepare("SELECT cp.id_product, o.id_order, o.num_order, cp.id_child_product, SUM(IFNULL(pi.quantity, 0)) AS quantity_product, IFNULL(cpi.quantity, 0) AS quantity_material, u.abbreviation, (o.original_quantity * cp.quantity) AS need, IFNULL(cpi.minimum_stock, 0) AS minimum_stock, p.reference AS reference_material, p.product AS material
-                                      FROM composite_products cp
-                                        LEFT JOIN products_inventory pi ON pi.id_product = cp.id_product
-                                        LEFT JOIN products_inventory cpi ON cpi.id_product = cp.id_child_product
+                                      FROM products_composite cp
+                                        LEFT JOIN inv_products pi ON pi.id_product = cp.id_product
+                                        LEFT JOIN inv_products cpi ON cpi.id_product = cp.id_child_product
                                         LEFT JOIN products p ON p.id_product = cp.id_child_product
                                         INNER JOIN convert_units u ON u.id_unit = cp.id_unit
                                         INNER JOIN plan_orders o ON o.id_product = cp.id_product
@@ -44,9 +44,9 @@ class ExplosionMaterialsDao
     $connection = Connection::getInstance()->getConnection();
 
     $stmt = $connection->prepare("SELECT cp.id_product, o.id_order, cp.id_composite_product, SUM(pi.quantity) AS quantity_product, cpi.quantity AS quantity_material, u.abbreviation, (o.original_quantity * cpi.quantity) AS need, pi.minimum_stock
-                                      FROM composite_products cp
-                                        LEFT JOIN products_inventory pi ON pi.id_product = cp.id_product
-                                        LEFT JOIN products_inventory cpi ON cpi.id_product = cp.id_child_product 
+                                      FROM products_composite cp
+                                        LEFT JOIN inv_products pi ON pi.id_product = cp.id_product
+                                        LEFT JOIN inv_products cpi ON cpi.id_product = cp.id_child_product 
                                         INNER JOIN convert_units u ON u.id_unit = cp.id_unit
                                         INNER JOIN plan_orders o ON o.id_product = cp.id_product
                                       WHERE cp.id_product = :id_product AND o.status IN (1,4,5,6)
@@ -68,10 +68,10 @@ class ExplosionMaterialsDao
     $stmt = $connection->prepare("SELECT p.id_product, o.id_order, pm.id_product_material, p.reference AS reference_product, p.product, SUM(IFNULL(pi.quantity, 0)) AS quantity_product, m.id_material, m.reference AS reference_material, m.material, mi.quantity AS quantity_material, u.abbreviation, 
                                          mi.transit, (o.original_quantity * pm.quantity_converted) AS need, mi.minimum_stock
                                       FROM products p
-                                        LEFT JOIN products_inventory pi ON pi.id_product = p.id_product
+                                        LEFT JOIN inv_products pi ON pi.id_product = p.id_product
                                         INNER JOIN products_materials pm ON pm.id_product = p.id_product
                                         INNER JOIN materials m ON m.id_material = pm.id_material
-                                        INNER JOIN materials_inventory mi ON mi.id_material = pm.id_material
+                                        INNER JOIN inv_materials mi ON mi.id_material = pm.id_material
                                         INNER JOIN convert_units u ON u.id_unit = m.unit
                                         INNER JOIN plan_orders o ON o.id_product = p.id_product
                                         LEFT JOIN requisitions r ON r.id_material = pm.id_material
@@ -96,10 +96,10 @@ class ExplosionMaterialsDao
                                          -- IFNULL(SUM(IF(IFNULL(r.admission_date, 0) = 0 AND r.application_date != '0000-00-00' AND r.delivery_date != '0000-00-00', r.quantity_required, 0)), 0) AS transit,
                                          mi.transit, (o.original_quantity * pm.quantity_converted) AS need, mi.minimum_stock
                                       FROM products p
-                                        INNER JOIN products_inventory pi ON pi.id_product = p.id_product
+                                        INNER JOIN inv_products pi ON pi.id_product = p.id_product
                                         INNER JOIN products_materials pm ON pm.id_product = p.id_product
                                         INNER JOIN materials m ON m.id_material = pm.id_material
-                                        INNER JOIN materials_inventory mi ON mi.id_material = pm.id_material
+                                        INNER JOIN inv_materials mi ON mi.id_material = pm.id_material
                                         INNER JOIN convert_units u ON u.id_unit = m.unit
                                         INNER JOIN plan_orders o ON o.id_product = p.id_product
                                         LEFT JOIN requisitions r ON r.id_material = pm.id_material
@@ -124,9 +124,9 @@ class ExplosionMaterialsDao
                                          -- IFNULL(SUM(IF(IFNULL(r.admission_date, 0) = 0 AND r.application_date != '0000-00-00' AND r.delivery_date != '0000-00-00', r.quantity_required, 0)), 0) AS transit,
                                          mi.transit, (o.original_quantity * pm.quantity_converted) AS need, mi.minimum_stock 
                                       FROM materials m
-                                        INNER JOIN materials_inventory mi ON mi.id_material = m.id_material
+                                        INNER JOIN inv_materials mi ON mi.id_material = m.id_material
                                         INNER JOIN products_materials pm ON pm.id_material = m.id_material
-                                        INNER JOIN products_inventory pi ON pi.id_product = pm.id_product
+                                        INNER JOIN inv_products pi ON pi.id_product = pm.id_product
                                         INNER JOIN products p ON p.id_product = pm.id_product
                                         INNER JOIN convert_units u ON u.id_unit = m.unit
                                         INNER JOIN plan_orders o ON o.id_product = pm.id_product

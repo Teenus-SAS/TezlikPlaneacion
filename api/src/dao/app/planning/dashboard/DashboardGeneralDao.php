@@ -22,7 +22,7 @@ class DashboardGeneralDao
 
         $stmt = $connection->prepare("SELECT SUM(CASE WHEN classification = 'A' THEN 1 ELSE 0 END) AS A, SUM(CASE WHEN classification = 'B' THEN 1 ELSE 0 END) AS B,
                                              SUM(CASE WHEN classification = 'C' THEN 1 ELSE 0 END) AS C
-                                      FROM products_inventory
+                                      FROM inv_products
                                       WHERE id_company = :id_company");
         $stmt->execute([
             'id_company' => $id_company
@@ -36,7 +36,7 @@ class DashboardGeneralDao
         $connection = Connection::getInstance()->getConnection();
         $sql = "SELECT (COUNT(CASE WHEN pi.quantity = 0 THEN 1 END) * 100.0 / COUNT(*)) AS productsOutStock,
                     COUNT(*) AS totalProducts
-                FROM products_inventory pi
+                FROM inv_products pi
                 WHERE id_company = :id_company";
         $stmt = $connection->prepare($sql);
         $stmt->execute(['id_company' => $id_company]);
@@ -51,7 +51,7 @@ class DashboardGeneralDao
                     COUNT(CASE WHEN (mi.quantity - mi.reserved) < mi.minimum_stock THEN 1 END) AS totalMPLowStock,
                     COUNT(*) AS total_materiales,
                     (COUNT(CASE WHEN (mi.quantity - mi.reserved) < mi.minimum_stock THEN 1 END) / COUNT(*)) * 100 AS percentageMPLowStock
-                FROM materials_inventory mi
+                FROM inv_materials mi
                 INNER JOIN materials m ON mi.id_material = m.id_material
                 WHERE m.id_company = :id_company";
         $stmt = $connection->prepare($sql);

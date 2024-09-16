@@ -19,7 +19,7 @@ class GeneralRMStockDao
     public function findStock($dataStock)
     {
         $connection = Connection::getInstance()->getConnection();
-        $stmt = $connection->prepare("SELECT * FROM stock_materials WHERE id_material = :id_material AND id_provider = :id_provider");
+        $stmt = $connection->prepare("SELECT * FROM inv_stock_materials WHERE id_material = :id_material AND id_provider = :id_provider");
         $stmt->execute([
             'id_material' => $dataStock['idMaterial'],
             'id_provider' => $dataStock['idProvider']
@@ -36,7 +36,7 @@ class GeneralRMStockDao
     {
         $connection = Connection::getInstance()->getConnection();
         $stmt = $connection->prepare("SELECT id_provider, (max_term - min_term) AS average
-                                      FROM stock_materials
+                                      FROM inv_stock_materials
                                       WHERE id_material = :id_material  
                                       ORDER BY `average`, `min_quantity` ASC");
         $stmt->execute(['id_material' => $id_material]);

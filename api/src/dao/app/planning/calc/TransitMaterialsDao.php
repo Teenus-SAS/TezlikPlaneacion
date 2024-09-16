@@ -47,7 +47,7 @@ class TransitMaterialsDao
     {
         try {
             $connection = Connection::getInstance()->getconnection();
-            $stmt = $connection->prepare("UPDATE materials_inventory SET transit = :transit WHERE id_material = :id_material");
+            $stmt = $connection->prepare("UPDATE inv_materials SET transit = :transit WHERE id_material = :id_material");
             $stmt->execute([
                 'transit' => $quantity,
                 'id_material' => $id_material,

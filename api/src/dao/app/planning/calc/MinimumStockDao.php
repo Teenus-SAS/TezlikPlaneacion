@@ -80,8 +80,8 @@ class MinimumStockDao
                                             ) AS stock, 
                                             pi.quantity
                                           FROM plan_unit_sales us
-                                          LEFT JOIN stock_products s ON s.id_product = us.id_product 
-                                          LEFT JOIN products_inventory pi ON pi.id_product = us.id_product
+                                          LEFT JOIN inv_stock_products s ON s.id_product = us.id_product 
+                                          LEFT JOIN inv_products pi ON pi.id_product = us.id_product
                                           WHERE us.id_product = :id_product;");
             $stmt->execute(['id_product' => $id_product]);
             $product = $stmt->fetch($connection::FETCH_ASSOC);
@@ -100,7 +100,7 @@ class MinimumStockDao
                                             SUM(
                                                 (  
                                                     (
-                                                        SELECT (IFNULL(max_term, 0) - IFNULL(min_term, 0)) FROM stock_materials 
+                                                        SELECT (IFNULL(max_term, 0) - IFNULL(min_term, 0)) FROM inv_stock_materials 
                                                         WHERE id_material = pm.id_material  
                                                         ORDER BY `(IFNULL(max_term, 0) - IFNULL(min_term, 0))`, `min_quantity` ASC LIMIT 1
                                                     )
@@ -194,9 +194,9 @@ class MinimumStockDao
                                                         )
                                                     ) * cp.quantity
                                                 ) AS stock  
-                                            FROM composite_products cp 
+                                            FROM products_composite cp 
                                             LEFT JOIN plan_unit_sales u ON u.id_product = cp.id_product
-                                            LEFT JOIN stock_products sp ON sp.id_product = cp.id_child_product
+                                            LEFT JOIN inv_stock_products sp ON sp.id_product = cp.id_child_product
                                             WHERE cp.id_child_product = :id_product");
             $stmt->execute([
                 'id_product' => $id_product,

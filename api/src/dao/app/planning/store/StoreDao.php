@@ -27,7 +27,7 @@ class StoreDao
         //                                 INNER JOIN plan_orders o ON o.id_order = pg.id_order
         //                                 INNER JOIN products_materials pm ON pm.id_product = pg.id_product
         //                                 INNER JOIN materials m ON m.id_material = pm.id_material
-        //                                 INNER JOIN materials_inventory mi ON mi.id_material = pm.id_material
+        //                                 INNER JOIN inv_materials mi ON mi.id_material = pm.id_material
         //                                 INNER JOIN convert_units u ON u.id_unit = m.unit 
         //                                 LEFT JOIN users us ON us.id_user = mi.id_user_delivered
         //                               WHERE pg.id_company = :id_company AND pg.status = 1
@@ -56,7 +56,7 @@ class StoreDao
                                         INNER JOIN plan_orders o ON o.id_order = pg.id_order
                                         INNER JOIN products_materials pm ON pm.id_product = pg.id_product
                                         INNER JOIN materials m ON m.id_material = pm.id_material
-                                        INNER JOIN materials_inventory mi ON mi.id_material = pm.id_material
+                                        INNER JOIN inv_materials mi ON mi.id_material = pm.id_material
                                         INNER JOIN convert_units u ON u.id_unit = m.unit
                                             -- Subconsulta para obtener el último usuario de entrega
                                         LEFT JOIN(
@@ -98,7 +98,7 @@ class StoreDao
         $connection = Connection::getInstance()->getConnection();
 
         try {
-            $stmt = $connection->prepare("UPDATE materials_inventory SET status = :status WHERE id_material = :id_material");
+            $stmt = $connection->prepare("UPDATE inv_materials SET status = :status WHERE id_material = :id_material");
             $stmt->execute([
                 'status' => $status,
                 'id_material' => $dataStore['idMaterial']

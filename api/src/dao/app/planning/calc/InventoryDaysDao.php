@@ -23,7 +23,7 @@ class InventoryDaysDao
             $stmt = $connection->prepare("SELECT (pi.quantity / ((IFNULL(u.jan, 0) + IFNULL(u.feb, 0) + IFNULL(u.mar, 0) + IFNULL(u.apr, 0) + IFNULL(u.may, 0) + IFNULL(u.jun, 0) + IFNULL(u.jul, 0) + IFNULL(u.aug, 0) + IFNULL(u.sept, 0) + IFNULL(u.oct, 0) + IFNULL(u.nov, 0) + IFNULL(u.dece, 0)) / 
                                                  NULLIF((u.jan > 0) + (u.feb > 0) + (u.mar > 0) + (u.apr > 0) + (u.may > 0) + (u.jun > 0) + (u.jul > 0) + (u.aug > 0) + (u.sept > 0) + (u.oct > 0) + (u.nov > 0) + (u.dece > 0), 0)) * 
                                                  (SELECT days FROM sale_days WHERE month = MONTH(CURRENT_DATE()) AND year = YEAR(CURRENT_DATE()) AND id_company = pi.id_company)) AS days
-                                      FROM products_inventory pi
+                                      FROM inv_products pi
                                       LEFT JOIN plan_unit_sales u ON u.id_product = pi.id_product
                                       WHERE pi.id_product = :id_product");
             $stmt->execute(['id_product' => $id_product]);
@@ -41,7 +41,7 @@ class InventoryDaysDao
         $connection = Connection::getInstance()->getConnection();
 
         try {
-            $stmt = $connection->prepare("UPDATE products_inventory SET days = :days WHERE id_product = :id_product");
+            $stmt = $connection->prepare("UPDATE inv_products SET days = :days WHERE id_product = :id_product");
             $stmt->execute([
                 'id_product' => $id_product,
                 'days' => $inventoryDay
@@ -77,7 +77,7 @@ class InventoryDaysDao
                                                     )
                                                 )
                                             , 0) AS days
-                                            FROM materials_inventory m
+                                            FROM inv_materials m
                                             INNER JOIN products_materials pm ON pm.id_material = m.id_material
                                             LEFT JOIN plan_unit_sales u ON u.id_product = pm.id_product
                                             WHERE m.id_material = :id_material");
@@ -96,7 +96,7 @@ class InventoryDaysDao
         $connection = Connection::getInstance()->getConnection();
 
         try {
-            $stmt = $connection->prepare("UPDATE materials_inventory SET days = :days WHERE id_material = :id_material");
+            $stmt = $connection->prepare("UPDATE inv_materials SET days = :days WHERE id_material = :id_material");
             $stmt->execute([
                 'id_material' => $id_material,
                 'days' => $inventoryDay

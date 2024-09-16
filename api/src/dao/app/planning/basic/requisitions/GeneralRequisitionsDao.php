@@ -62,7 +62,7 @@ class GeneralRequisitionsDao
                                             -- Subconsulta para obtener el último usuario de entrega
                                             LEFT JOIN (
                                                 SELECT cur.id_requisition, curd.id_user AS id_user_deliver, curd.firstname AS firstname_deliver, curd.lastname AS lastname_deliver
-                                                FROM users_requisitions cur
+                                                FROM requisitions_users cur
                                                 INNER JOIN users curd ON curd.id_user = cur.id_user_deliver
                                                 WHERE cur.id_company = :id_company
                                                 ORDER BY cur.id_user_requisition DESC

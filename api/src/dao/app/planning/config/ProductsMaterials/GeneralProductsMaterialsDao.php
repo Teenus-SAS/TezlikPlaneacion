@@ -45,7 +45,7 @@ class GeneralProductsMaterialsDao
                                       FROM products p
                                         INNER JOIN products_materials pm ON pm.id_product = p.id_product
                                         INNER JOIN materials m ON m.id_material = pm.id_material
-                                        INNER JOIN materials_inventory mi ON mi.id_material = pm.id_material
+                                        INNER JOIN inv_materials mi ON mi.id_material = pm.id_material
                                         LEFT JOIN convert_units u ON u.id_unit = pm.id_unit
                                         LEFT JOIN convert_magnitudes mg ON mg.id_magnitude = u.id_magnitude
                                       WHERE pm.id_company = :id_company
@@ -92,7 +92,7 @@ class GeneralProductsMaterialsDao
 
         $stmt = $connection->prepare("SELECT pm.id_product_material, pm.id_material, pm.id_product, pi.quantity
                                       FROM products_materials pm
-                                      INNER JOIN products_inventory pi ON pi.id_product = pm.id_product
+                                      INNER JOIN inv_products pi ON pi.id_product = pm.id_product
                                       INNER JOIN plan_unit_sales u ON u.id_product = pm.id_product
                                       WHERE id_material = :id_material");
         $stmt->execute(['id_material' => $id_material]);

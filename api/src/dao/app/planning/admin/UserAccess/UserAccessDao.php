@@ -40,7 +40,7 @@ class UserAccessDao
                                             IFNULL(usa.stock, 0) AS stock, 
                                         -- Accesos (General)
                                             IFNULL(usa.sale, 0) AS sale, 
-                                            IFNULL(usa.inventory_abc, 0) AS inventory_abc, 
+                                            IFNULL(usa.inv_abc, 0) AS inventory_abc, 
                                             IFNULL(usa.client, 0) AS client, 
                                         -- Accesos (Administrador)
                                             IFNULL(usa.user, 0) AS user, 
@@ -85,7 +85,7 @@ class UserAccessDao
                                                             stock, 
                                                         -- Accesos (General)
                                                             sale, 
-                                                            inventory_abc,
+                                                            inv_abc,
                                                             client,
                                                         -- Accesos (Administrador)
                                                             user,
@@ -174,7 +174,7 @@ class UserAccessDao
                                                             stock = :stock, 
                                                         -- Accesos (General)
                                                             sale = :sale, 
-                                                            inventory_abc = :inventory_abc, 
+                                                            inv_abc = :inventory_abc, 
                                                             client = :client, 
                                                         -- Accesos (Administrador)
                                                             user = :user,

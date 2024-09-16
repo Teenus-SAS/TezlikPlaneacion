@@ -20,9 +20,9 @@ class PStockDao
     {
         $connection = Connection::getInstance()->getConnection();
         $stmt = $connection->prepare("SELECT s.id_stock_product, p.id_product, p.reference, p.product, pi.quantity, s.max_term, s.min_term, p.composite
-                                      FROM stock_products s
+                                      FROM inv_stock_products s
                                         INNER JOIN products p ON p.id_product = s.id_product
-                                        INNER JOIN products_inventory pi ON pi.id_product = s.id_product
+                                        INNER JOIN inv_products pi ON pi.id_product = s.id_product
                                       WHERE s.id_company = :id_company");
         $stmt->execute(['id_company' => $id_company]);
 
@@ -38,7 +38,7 @@ class PStockDao
         $connection = Connection::getInstance()->getConnection();
 
         try {
-            $stmt = $connection->prepare("INSERT INTO stock_products (id_company, id_product, max_term, min_term) 
+            $stmt = $connection->prepare("INSERT INTO inv_stock_products (id_company, id_product, max_term, min_term) 
                                           VALUES (:id_company, :id_product, :max_term, :min_term)");
             $stmt->execute([
                 'id_company' => $id_company,
@@ -59,7 +59,7 @@ class PStockDao
         $connection = Connection::getInstance()->getConnection();
 
         try {
-            $stmt = $connection->prepare("UPDATE stock_products SET id_product = :id_product, max_term = :max_term, min_term = :min_term 
+            $stmt = $connection->prepare("UPDATE inv_stock_products SET id_product = :id_product, max_term = :max_term, min_term = :min_term 
                                           WHERE id_stock_product = :id_stock_product");
             $stmt->execute([
                 'id_stock_product' => $dataStock['idStock'],

@@ -21,9 +21,9 @@ class RMStockDao
         $connection = Connection::getInstance()->getConnection();
         $stmt = $connection->prepare("SELECT s.id_stock_material, s.id_material, m.reference, m.material, IFNULL(mg.id_magnitude, 0) AS id_magnitude, IFNULL(mg.magnitude, '') AS magnitude, IFNULL(u.id_unit, 0) AS id_unit, IFNULL(u.unit, '') AS unit, IFNULL(u.abbreviation, '') AS abbreviation,
                                              IFNULL(s.id_provider, 0) AS id_provider, IFNULL(c.id_client, '') AS id_client, IFNULL(c.client, '') AS client, m.unit, mi.quantity, s.min_term, s.max_term, s.min_quantity, (s.max_term - s.min_term) AS average
-                                      FROM stock_materials s
+                                      FROM inv_stock_materials s
                                         INNER JOIN materials m ON m.id_material = s.id_material
-                                        INNER JOIN materials_inventory mi ON mi.id_material = s.id_material
+                                        INNER JOIN inv_materials mi ON mi.id_material = s.id_material
                                         LEFT JOIN convert_units u ON u.id_unit = m.unit
                                         LEFT JOIN convert_magnitudes mg ON mg.id_magnitude = u.id_magnitude
                                         LEFT JOIN plan_clients c ON c.id_client = s.id_provider
@@ -42,7 +42,7 @@ class RMStockDao
         $connection = Connection::getInstance()->getConnection();
 
         try {
-            $stmt = $connection->prepare("INSERT INTO stock_materials (id_company, id_material, id_provider, min_term, max_term, min_quantity) 
+            $stmt = $connection->prepare("INSERT INTO inv_stock_materials (id_company, id_material, id_provider, min_term, max_term, min_quantity) 
                                           VALUES (:id_company, :id_material, :id_provider, :min_term, :max_term, :min_quantity)");
             $stmt->execute([
                 'id_company' => $id_company,
@@ -65,7 +65,7 @@ class RMStockDao
         $connection = Connection::getInstance()->getConnection();
 
         try {
-            $stmt = $connection->prepare("UPDATE stock_materials SET id_material = :id_material, min_term = :min_term, max_term = :max_term, min_quantity = :min_quantity 
+            $stmt = $connection->prepare("UPDATE inv_stock_materials SET id_material = :id_material, min_term = :min_term, max_term = :max_term, min_quantity = :min_quantity 
                                           WHERE id_stock_material = :id_stock_material");
             $stmt->execute([
                 'id_stock_material' => $dataStock['idStock'],

@@ -26,7 +26,7 @@ class ProductionOrderPartialDao
                                         INNER JOIN users u ON u.id_user = po.operator
                                         INNER JOIN programming pg ON pg.id_programming = po.id_programming
                                         INNER JOIN products p ON p.id_product = pg.id_product
-                                        LEFT JOIN products_inventory pi ON pi.id_product = pg.id_product
+                                        LEFT JOIN inv_products pi ON pi.id_product = pg.id_product
                                         LEFT JOIN users ur ON ur.id_user = po.id_user_receive
                                       WHERE po.id_company = :id_company");
         $stmt->execute([

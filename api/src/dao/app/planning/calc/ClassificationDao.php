@@ -101,7 +101,7 @@ class ClassificationDao
         $connection = Connection::getInstance()->getConnection();
 
         try {
-            $stmt = $connection->prepare("UPDATE products_inventory SET classification = :classification WHERE id_product = :id_product");
+            $stmt = $connection->prepare("UPDATE inv_products SET classification = :classification WHERE id_product = :id_product");
             $stmt->execute([
                 'id_product' => $id_product,
                 'classification' => $classification

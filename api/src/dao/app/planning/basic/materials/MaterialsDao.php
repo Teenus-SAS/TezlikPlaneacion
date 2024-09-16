@@ -22,7 +22,7 @@ class MaterialsDao
     $stmt = $connection->prepare("SELECT m.id_material, m.reference, m.material, m.material AS descript, mg.id_magnitude, mg.magnitude, u.id_unit, 
                                          m.grammage, u.unit, u.abbreviation, mi.quantity, mi.reserved, mi.minimum_stock, mi.transit, mi.days, m.id_material_type, IFNULL(mt.material_type, '') AS material_type                      
                                   FROM materials m
-                                    INNER JOIN materials_inventory mi ON mi.id_material = m.id_material
+                                    INNER JOIN inv_materials mi ON mi.id_material = m.id_material
                                     LEFT JOIN materials_type mt ON mt.id_material_type = m.id_material_type
                                     INNER JOIN convert_units u ON u.id_unit = m.unit
                                     INNER JOIN convert_magnitudes mg ON mg.id_magnitude = u.id_magnitude 

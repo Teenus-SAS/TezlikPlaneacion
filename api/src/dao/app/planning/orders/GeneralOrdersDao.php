@@ -24,7 +24,7 @@ class GeneralOrdersDao
                                              CONCAT(o.num_order, '-' , o.id_product) AS concate                                      
                                       FROM plan_orders o
                                         INNER JOIN products p ON p.id_product = o.id_product
-                                        INNER JOIN products_inventory pi ON pi.id_product = o.id_product
+                                        INNER JOIN inv_products pi ON pi.id_product = o.id_product
                                         INNER JOIN plan_clients c ON c.id_client = o.id_client  
                                         INNER JOIN plan_status ps ON ps.id_status = o.status
                                       WHERE o.status_order = 0 AND o.id_company = :id_company AND o.status NOT IN (3)
@@ -47,8 +47,8 @@ class GeneralOrdersDao
                                       FROM plan_orders o
                                         INNER JOIN products p ON p.id_product = o.id_product
                                         LEFT JOIN products_materials pm ON pm.id_product = o.id_product 
-                                        LEFT JOIN materials_inventory m ON mi.id_material = pm.id_material
-                                        INNER JOIN products_inventory pi ON pi.id_product = o.id_product
+                                        LEFT JOIN inv_materials m ON mi.id_material = pm.id_material
+                                        INNER JOIN inv_products pi ON pi.id_product = o.id_product
                                         INNER JOIN plan_clients c ON c.id_client = o.id_client  
                                         INNER JOIN plan_status ps ON ps.id_status = o.status
                                       WHERE 
@@ -164,7 +164,7 @@ class GeneralOrdersDao
         $stmt = $connection->prepare("SELECT o.original_quantity, pi.quantity, pi.accumulated_quantity, ps.status
                                       FROM plan_orders o
                                         INNER JOIN products p ON p.id_product = o.id_product
-                                        INNER JOIN products_inventory pi ON pi.id_product = o.id_product
+                                        INNER JOIN inv_products pi ON pi.id_product = o.id_product
                                         INNER JOIN plan_status ps ON ps.id_status = o.status
                                       WHERE o.id_order = :id_order");
         $stmt->execute([

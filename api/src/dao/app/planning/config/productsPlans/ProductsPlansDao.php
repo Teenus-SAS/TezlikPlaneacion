@@ -22,7 +22,7 @@ class ProductsPlansDao
         $stmt = $connection->prepare("SELECT pp.id_product_plan, p.id_product, p.reference, p.product, pi.quantity, pp.mechanical_plan, pp.assembly_plan
                                       FROM products_plans pp
                                         INNER JOIN products p ON p.id_product = pp.id_product
-                                        LEFT JOIN products_inventory pi ON pi.id_product = pp.id_product
+                                        LEFT JOIN inv_products pi ON pi.id_product = pp.id_product
                                       WHERE pp.id_company = :id_company AND pp.id_product = :id_product");
         $stmt->execute([
             'id_company' => $id_company,

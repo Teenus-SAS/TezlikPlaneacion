@@ -22,7 +22,7 @@ class GeneralCompositeProductsDao
         // $stmt = $connection->prepare("SELECT cp.id_composite_product, 0 AS id_product_material, cp.id_child_product, cp.id_product, p.reference, p.reference AS reference_material, p.product AS material, mg.id_magnitude, mg.magnitude, 
         //                                      u.id_unit, u.unit, u.abbreviation, cp.quantity, 'Producto' AS type
         //                               FROM products p 
-        //                                 INNER JOIN composite_products cp ON cp.id_child_product = p.id_product 
+        //                                 INNER JOIN products_composite cp ON cp.id_child_product = p.id_product 
         //                                 INNER JOIN convert_units u ON u.id_unit = cp.id_unit
         //                                 INNER JOIN convert_magnitudes mg ON mg.id_magnitude = u.id_magnitude
         //                               WHERE cp.id_company = :id_company AND p.active = 1 AND (SELECT active FROM products WHERE id_product = cp.id_product) = 1");
@@ -30,8 +30,8 @@ class GeneralCompositeProductsDao
                                              p.product AS material, (pi.quantity / cp.quantity) AS quantity, cp.quantity AS quantity_ftm, 'PRODUCTO' AS type,
                                              IFNULL(mg.id_magnitude, 0) AS id_magnitude, IFNULL(mg.magnitude, '') AS magnitude, IFNULL(u.id_unit, 0) AS id_unit, IFNULL(u.unit, '') AS unit, IFNULL(u.abbreviation, '') AS abbreviation 
                                       FROM products p 
-                                        INNER JOIN composite_products cp ON cp.id_child_product = p.id_product 
-                                        INNER JOIN products_inventory pi ON pi.id_product = cp.id_child_product
+                                        INNER JOIN products_composite cp ON cp.id_child_product = p.id_product 
+                                        INNER JOIN inv_products pi ON pi.id_product = cp.id_child_product
                                         LEFT JOIN convert_units u ON u.id_unit = cp.id_unit
                                         LEFT JOIN convert_magnitudes mg ON mg.id_magnitude = u.id_magnitude
                                       WHERE p.id_company = :id_company");
@@ -44,7 +44,7 @@ class GeneralCompositeProductsDao
     public function findCompositeProduct($dataProduct)
     {
         $connection = Connection::getInstance()->getConnection();
-        $stmt = $connection->prepare("SELECT * FROM composite_products WHERE id_product = :id_product AND id_child_product = :id_child_product");
+        $stmt = $connection->prepare("SELECT * FROM products_composite WHERE id_product = :id_product AND id_child_product = :id_child_product");
         $stmt->execute([
             'id_product' => $dataProduct['idProduct'],
             'id_child_product' => $dataProduct['compositeProduct']
@@ -57,7 +57,7 @@ class GeneralCompositeProductsDao
     public function findCompositeProductCost($id_product)
     {
         $connection = Connection::getInstance()->getConnection();
-        $stmt = $connection->prepare("SELECT * FROM composite_products WHERE id_product = :id_product");
+        $stmt = $connection->prepare("SELECT * FROM products_composite WHERE id_product = :id_product");
         $stmt->execute([
             'id_product' => $id_product
         ]);
@@ -70,9 +70,9 @@ class GeneralCompositeProductsDao
     {
         $connection = Connection::getInstance()->getConnection();
         $stmt = $connection->prepare("SELECT cp.id_product, cp.id_child_product, cp.quantity, pi.classification
-                                      FROM composite_products cp
+                                      FROM products_composite cp
                                       INNER JOIN products p ON p.id_product = cp.id_child_product
-                                      INNER JOIN products_inventory pi ON pi.id_product = p.id_product
+                                      INNER JOIN inv_products pi ON pi.id_product = p.id_product
                                       WHERE cp.id_child_product = :id_child_product
                                       GROUP BY cp.id_product
                                       ORDER BY pi.classification ASC;");
@@ -88,12 +88,12 @@ class GeneralCompositeProductsDao
     {
         $connection = Connection::getInstance()->getConnection();
 
-        $stmt = $connection->prepare("SELECT * FROM composite_products WHERE id_product = :id_product");
+        $stmt = $connection->prepare("SELECT * FROM products_composite WHERE id_product = :id_product");
         $stmt->execute(['id_product' => $id_product]);
         $rows = $stmt->rowCount();
 
         if ($rows > 0) {
-            $stmt = $connection->prepare("DELETE FROM composite_products WHERE id_product = :id_product");
+            $stmt = $connection->prepare("DELETE FROM products_composite WHERE id_product = :id_product");
             $stmt->execute(['id_product' => $id_product]);
             $this->logger->info(__FUNCTION__, array('query' => $stmt->queryString, 'errors' => $stmt->errorInfo()));
         }
@@ -103,12 +103,12 @@ class GeneralCompositeProductsDao
     {
         $connection = Connection::getInstance()->getConnection();
 
-        $stmt = $connection->prepare("SELECT * FROM composite_products WHERE id_child_product = :id_child_product");
+        $stmt = $connection->prepare("SELECT * FROM products_composite WHERE id_child_product = :id_child_product");
         $stmt->execute(['id_child_product' => $id_child_product]);
         $rows = $stmt->rowCount();
 
         if ($rows > 0) {
-            $stmt = $connection->prepare("DELETE FROM composite_products WHERE id_child_product = :id_child_product");
+            $stmt = $connection->prepare("DELETE FROM products_composite WHERE id_child_product = :id_child_product");
             $stmt->execute(['id_child_product' => $id_child_product]);
             $this->logger->info(__FUNCTION__, array('query' => $stmt->queryString, 'errors' => $stmt->errorInfo()));
         }
