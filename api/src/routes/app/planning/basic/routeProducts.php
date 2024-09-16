@@ -170,7 +170,10 @@ $app->post('/productsDataValidation', function (Request $request, Response $resp
     } else
         $dataImportProduct = array('error' => true, 'message' => 'El archivo se encuentra vacio. Intente nuevamente');
 
-    $response->getBody()->write(json_encode($dataImportProduct, JSON_NUMERIC_CHECK));
+    $data['import'] = $dataImportProduct;
+    $data['debugg'] = $debugg;
+
+    $response->getBody()->write(json_encode($debugg, JSON_NUMERIC_CHECK));
     return $response->withHeader('Content-Type', 'application/json');
 });
 
