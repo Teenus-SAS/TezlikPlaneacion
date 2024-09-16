@@ -87,7 +87,7 @@ $app->post('/productsDataValidation', function (Request $request, Response $resp
 
             $quantity = 1 * floatval($products[$i]['quantity']);
 
-            if (is_nan($quantity) || $quantity <= 0) {
+            if (is_nan($quantity) || $quantity < 0) {
                 $row = $i + 2;
                 array_push($debugg, array('error' => true, 'message' => "Ingrese una cantidad válida, fila: $row"));
             }
