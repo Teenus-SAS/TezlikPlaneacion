@@ -88,9 +88,9 @@ $app->post('/rMStockDataValidation', function (Request $request, Response $respo
             $max = str_replace(',', '.', $stock[$i]['max']);
             $quantity = str_replace(',', '.', $stock[$i]['quantity']);
 
-            $data = $min * $max * $quantity;
+            $quantityx = $min * $max * $quantity;
 
-            if ($data <= 0 || is_nan($data)) {
+            if ($quantityx <= 0 || is_nan($quantityx)) {
                 $row = $i + 2;
                 array_push($debugg, array('error' => true, 'message' => "Fila-$row: La cantidad debe ser mayor a cero (0)"));
             }

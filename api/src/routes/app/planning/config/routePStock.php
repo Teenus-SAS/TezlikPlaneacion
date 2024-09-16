@@ -77,9 +77,9 @@ $app->post('/pStockDataValidation', function (Request $request, Response $respon
             $max = str_replace(',', '.', $stock[$i]['max']);
             $min = str_replace(',', '.', $stock[$i]['min']);
 
-            $data = $max * $min;
+            $val = $max * $min;
 
-            if ($data <= 0 || is_nan($data)) {
+            if ($val <= 0 || is_nan($val)) {
                 $row = $i + 2;
                 array_push($debugg, array('error' => true, 'message' => "Fila-$row: La cantidad debe ser mayor a cero (0)"));
             }
