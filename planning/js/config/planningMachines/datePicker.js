@@ -1,7 +1,7 @@
 $(document).ready(function () {
   /* Horas */
-  $('#hourStartPicker').datetimepicker({ format: 'HH:mm A' });
-  $('#hourEndPicker').datetimepicker({ format: 'HH:mm A' });
+  $('#hourStartPicker').datetimepicker({ format: 'hh:mm A' });
+  $('#hourEndPicker').datetimepicker({ format: 'hh:mm A' });
 
   /* Meses */
   let date = new Date();
@@ -67,7 +67,7 @@ $(document).ready(function () {
     $(`#${id}`).val('');
   };
 
-  $(document).on('blur','.hours', function () {
+  $(document).on('blur', '.hours', function () {
     let hourStart = $('#hourStart').val();
     let hoursDay = parseFloat($('#hoursDay').val());
     let workShift = parseFloat($('#workShift').val());
@@ -77,18 +77,27 @@ $(document).ready(function () {
       return false;
     }
     
-    if (!hoursDay || hoursDay == '' || !workShift || workShift == '') {
+    if (!hoursDay || hoursDay == '' || !workShift || workShift == '' || workShift > 3) {
       return false;
     }
-
-    var date = new Date("2000-01-01 " + hourStart);
-
-    var horas = date.getHours();
-    var minutos = date.getMinutes();
  
-    var hourEnd = parseFloat(horas + '.' + (minutos < 10 ? '0' : '') + minutos) + (hoursDay * workShift);
+    // var date = new Date("2000-01-01 " + hourStart);
 
-    hourEnd = moment(hourEnd.toFixed(2), ['HH:mm']).format('h:mm A');
+    // var horas = date.getHours();
+    // var minutos = date.getMinutes();
+ 
+    // var hourEnd = parseFloat(horas + '.' + (minutos < 10 ? '0' : '') + minutos) + (hoursDay * workShift);
+
+    // hourEnd = moment(hourEnd.toFixed(2), ['HH:mm']).format('h:mm A');
+
+    // Convertir la hora de inicio a un objeto moment
+    var startMoment = moment("2000-01-01 " + hourStart, "YYYY-MM-DD HH:mm");
+
+    // Sumar la cantidad de horas (en este caso, `hoursDay * workShift`)
+    var endMoment = startMoment.add(hoursDay * workShift, 'hours');
+
+    // Formatear el resultado final en formato de 12 horas con AM/PM
+    var hourEnd = endMoment.format('h:mm A');
 
     $('#hourEnd').val(hourEnd);
   });

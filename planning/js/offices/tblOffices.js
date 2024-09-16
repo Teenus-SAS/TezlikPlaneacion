@@ -178,17 +178,17 @@ $(document).ready(function () {
             return action;
           },
         },
-        {
-          title: "Cancelar",
-          data: null,
-          className: "uniqueClassName dt-head-center",
-          visible: visible,
-          render: function (data) {
-            return data.status == "DESPACHO"
-              ? `<a href="javascript:;" <i class="fas fa-times cancelOrder" id="${data.id_order}" data-toggle='tooltip' title='Cancelar DESPACHO' style="font-size: 30px;color:red;"></i></a>`
-              : "";
-          },
-        },
+        // {
+        //   title: "Cancelar",
+        //   data: null,
+        //   className: "uniqueClassName dt-head-center",
+        //   visible: visible,
+        //   render: function (data) {
+        //     return data.status == "DESPACHO"
+        //       ? `<a href="javascript:;" <i class="fas fa-times cancelOrder" id="${data.id_order}" data-toggle='tooltip' title='Cancelar DESPACHO' style="font-size: 30px;color:red;"></i></a>`
+        //       : "";
+        //   },
+        // },
       ],
     });
   };
