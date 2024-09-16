@@ -173,7 +173,7 @@ $app->post('/productsDataValidation', function (Request $request, Response $resp
     $data['import'] = $dataImportProduct;
     $data['debugg'] = $debugg;
 
-    $response->getBody()->write(json_encode($debugg, JSON_NUMERIC_CHECK));
+    $response->getBody()->write(json_encode($data, JSON_NUMERIC_CHECK));
     return $response->withHeader('Content-Type', 'application/json');
 });
 
