@@ -81,7 +81,7 @@ class GeneralUserAccessDao
                                             -- Accesos (General)
                                                 IFNULL(pua.client, 0) AS client, 
                                                 IFNULL(pua.sale, 0) AS sale, 
-                                                IFNULL(pua.inv_abc, 0) AS inventory_abc, 
+                                                IFNULL(pua.inventory_abc, 0) AS inventory_abc, 
                                             -- Accesos (Administrador)
                                                 IFNULL(pua.user, 0) AS planning_user,
                                             -- Accesos (Navegación)
