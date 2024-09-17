@@ -128,9 +128,9 @@ $app->post('/rMStockDataValidation', function (Request $request, Response $respo
                 }
 
                 if ($status == true)
-                    $findstock = $generalStockDao->findStock($stock[$i]);
+                    $findStock = $generalStockDao->findStock($stock[$i]);
 
-                if (!$findstock) $insert = $insert + 1;
+                if (!$findStock) $insert = $insert + 1;
                 else $update = $update + 1;
 
                 $dataImportStock['insert'] = $insert;
