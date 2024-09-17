@@ -102,7 +102,7 @@ $(document).ready(function () {
         if (resp.debugg.length > 0) {
           $('.cardLoading').remove();
           $('.cardBottons').show(400);
-          $('#formImportEmployees').val('');
+          $('#fileEmployees').val('');
 
           // Generar el HTML para cada mensaje
           let concatenatedMessages = resp.debugg.map(item =>

@@ -65,7 +65,7 @@ class ExplosionMaterialsDao
   {
     $connection = Connection::getInstance()->getConnection();
 
-    $stmt = $connection->prepare("SELECT p.id_product, o.id_order, pm.id_product_material, p.reference AS reference_product, p.product, SUM(IFNULL(pi.quantity, 0)) AS quantity_product, m.id_material, m.reference AS reference_material, m.material, mi.quantity AS quantity_material, u.abbreviation, 
+    $stmt = $connection->prepare("SELECT p.id_product, o.id_order, o.num_order, pm.id_product_material, p.reference AS reference_product, p.product, SUM(IFNULL(pi.quantity, 0)) AS quantity_product, m.id_material, m.reference AS reference_material, m.material, mi.quantity AS quantity_material, u.abbreviation, 
                                          mi.transit, (o.original_quantity * pm.quantity_converted) AS need, mi.minimum_stock
                                       FROM products p
                                         LEFT JOIN inv_products pi ON pi.id_product = p.id_product
@@ -93,7 +93,6 @@ class ExplosionMaterialsDao
     $connection = Connection::getInstance()->getConnection();
 
     $stmt = $connection->prepare("SELECT p.id_product, o.id_order, pm.id_product_material, p.reference AS reference_product, p.product, SUM(pi.quantity) AS quantity_product, m.id_material, m.reference AS reference_material, m.material, mi.quantity AS quantity_material, u.abbreviation, 
-                                         -- IFNULL(SUM(IF(IFNULL(r.admission_date, 0) = 0 AND r.application_date != '0000-00-00' AND r.delivery_date != '0000-00-00', r.quantity_required, 0)), 0) AS transit,
                                          mi.transit, (o.original_quantity * pm.quantity_converted) AS need, mi.minimum_stock
                                       FROM products p
                                         INNER JOIN inv_products pi ON pi.id_product = p.id_product
@@ -121,7 +120,6 @@ class ExplosionMaterialsDao
     $connection = Connection::getInstance()->getConnection();
 
     $stmt = $connection->prepare("SELECT p.id_product, o.id_order, pm.id_product_material, p.reference AS reference_product, p.product, SUM(pi.quantity) AS quantity_product, m.id_material, m.reference AS reference_material, m.material, mi.quantity AS quantity_material, u.abbreviation, 
-                                         -- IFNULL(SUM(IF(IFNULL(r.admission_date, 0) = 0 AND r.application_date != '0000-00-00' AND r.delivery_date != '0000-00-00', r.quantity_required, 0)), 0) AS transit,
                                          mi.transit, (o.original_quantity * pm.quantity_converted) AS need, mi.minimum_stock 
                                       FROM materials m
                                         INNER JOIN inv_materials mi ON mi.id_material = m.id_material
@@ -153,6 +151,8 @@ class ExplosionMaterialsDao
         $repeat = false;
         for ($i = 0; $i < sizeof($data); $i++) {
           if ($data[$i]['id_material'] == $arr['id_material']) {
+            $data[$i]['num_order'] = $data[$i]['num_order'] . ', ' . $arr['num_order'];
+            // array_push($data[$i]['num_order'], $arr['num_order']);
             $data[$i]['transit'] = $arr['transit'];
             $data[$i]['need'] += $arr['need'];
             $data[$i]['minimum_stock'] = $arr['minimum_stock'];
@@ -164,6 +164,7 @@ class ExplosionMaterialsDao
 
         if ($repeat == false) {
           $data[] = array(
+            'num_order' => $arr['num_order'],
             'id_product' => $arr['id_product'],
             'reference_product' => $arr['reference_product'],
             'product' => $arr['product'],
