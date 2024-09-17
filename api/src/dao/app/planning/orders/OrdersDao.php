@@ -22,12 +22,12 @@ class OrdersDao
 
         $stmt = $connection->prepare("SELECT o.id_order, o.id_client, o.id_product, o.num_order, ps.status, o.date_order, IFNULL(pi.accumulated_quantity, 0) AS accumulated_quantity, o.accumulated_quantity, o.original_quantity, p.reference, p.product, c.client, o.min_date, o.max_date, o.delivery_date,
                                              o.office_date, IFNULL(pi.classification, '') AS classification, s.id_seller, s.firstname, s.lastname
-                                      FROM plan_orders o
+                                      FROM orders o
                                         INNER JOIN products p ON p.id_product = o.id_product
                                         LEFT JOIN inv_products pi ON pi.id_product = o.id_product
                                         INNER JOIN sellers s ON s.id_seller = o.id_seller
                                         INNER JOIN plan_clients c ON c.id_client = o.id_client
-                                        INNER JOIN plan_status ps ON ps.id_status = o.status
+                                        INNER JOIN orders_status ps ON ps.id_status = o.status
                                       WHERE o.status_order = 0 AND o.id_company = :id_company ORDER BY o.num_order DESC");
         $stmt->execute(['id_company' => $id_company]);
 
@@ -43,7 +43,7 @@ class OrdersDao
         $connection = Connection::getInstance()->getConnection();
 
         try {
-            $stmt = $connection->prepare("INSERT INTO plan_orders (num_order, date_order, min_date, max_date, id_company, id_product, id_seller, id_client, original_quantity, status) 
+            $stmt = $connection->prepare("INSERT INTO orders (num_order, date_order, min_date, max_date, id_company, id_product, id_seller, id_client, original_quantity, status) 
                                           VALUES (:num_order, :date_order, :min_date, :max_date, :id_company, :id_product, :id_seller, :id_client, :original_quantity, :status)");
             $stmt->execute([
                 'num_order' => trim($dataOrder['order']),
@@ -72,7 +72,7 @@ class OrdersDao
         $connection = Connection::getInstance()->getConnection();
 
         try {
-            $stmt = $connection->prepare("UPDATE plan_orders SET date_order = :date_order, min_date = :min_date, max_date = :max_date, id_product = :id_product,
+            $stmt = $connection->prepare("UPDATE orders SET date_order = :date_order, min_date = :min_date, max_date = :max_date, id_product = :id_product,
                                                  id_seller = :id_seller, id_client = :id_client, original_quantity = :original_quantity, status = :status, status_order = 0
                                           WHERE id_order = :id_order");
             $stmt->execute([
@@ -99,12 +99,12 @@ class OrdersDao
         $connection = Connection::getInstance()->getConnection();
 
         try {
-            $stmt = $connection->prepare("SELECT * FROM plan_orders WHERE id_order = :id_order");
+            $stmt = $connection->prepare("SELECT * FROM orders WHERE id_order = :id_order");
             $stmt->execute(['id_order' => $id_order]);
             $row = $stmt->rowCount();
 
             if ($row > 0) {
-                $stmt = $connection->prepare("DELETE FROM plan_orders WHERE id_order = :id_order");
+                $stmt = $connection->prepare("DELETE FROM orders WHERE id_order = :id_order");
                 $stmt->execute(['id_order' => $id_order]);
                 $this->logger->info(__FUNCTION__, array('query' => $stmt->queryString, 'errors' => $stmt->errorInfo()));
             }

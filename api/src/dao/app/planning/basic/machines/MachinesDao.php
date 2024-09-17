@@ -21,7 +21,7 @@ class MachinesDao
     $connection = Connection::getInstance()->getConnection();
     $stmt = $connection->prepare("SELECT m.id_machine, m.machine, pcm.cicles_hour, COUNT(DISTINCT py.id_plan_payroll) AS employees
                                   FROM machines m
-                                   LEFT JOIN plan_cicles_machine pcm ON pcm.id_machine = m.id_machine 
+                                   LEFT JOIN machine_cicles pcm ON pcm.id_machine = m.id_machine 
                                    LEFT JOIN plan_payroll py ON py.id_machine = m.id_machine AND py.status = 1
                                   WHERE m.id_company = :id_company
                                   GROUP BY m.id_machine;");

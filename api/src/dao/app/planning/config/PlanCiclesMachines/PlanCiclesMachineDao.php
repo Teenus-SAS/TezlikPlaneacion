@@ -22,7 +22,7 @@ class PlanCiclesMachineDao
 
         $stmt = $connection->prepare("SELECT pcm.id_cicles_machine, pcm.id_product, p.reference, p.product, pcm.id_process, IFNULL(pc.process, '') AS process, pcm.id_machine, 
                                              m.machine, pcm.cicles_hour, pcm.units_turn, pcm.units_month, pcm.route
-                                      FROM plan_cicles_machine pcm
+                                      FROM machine_cicles pcm
                                        INNER JOIN machines m ON m.id_machine = pcm.id_machine
                                        INNER JOIN products p ON p.id_product = pcm.id_product
                                        LEFT JOIN process pc ON pc.id_process = pcm.id_process
@@ -39,7 +39,7 @@ class PlanCiclesMachineDao
         $ciclesHour = str_replace('.', '', $dataCiclesMachine['ciclesHour']);
 
         try {
-            $stmt = $connection->prepare("INSERT INTO plan_cicles_machine (id_product, id_process, id_machine, id_company, cicles_hour) 
+            $stmt = $connection->prepare("INSERT INTO machine_cicles (id_product, id_process, id_machine, id_company, cicles_hour) 
                                           VALUES(:id_product, :id_process, :id_machine, :id_company, :cicles_hour)");
             $stmt->execute([
                 'id_product' => $dataCiclesMachine['idProduct'],
@@ -63,7 +63,7 @@ class PlanCiclesMachineDao
         $ciclesHour = str_replace('.', '', $dataCiclesMachine['ciclesHour']);
 
         try {
-            $stmt = $connection->prepare("UPDATE plan_cicles_machine SET id_product = :id_product, id_process = :id_process, id_machine = :id_machine, cicles_hour = :cicles_hour 
+            $stmt = $connection->prepare("UPDATE machine_cicles SET id_product = :id_product, id_process = :id_process, id_machine = :id_machine, cicles_hour = :cicles_hour 
                                           WHERE id_cicles_machine = :id_cicles_machine");
             $stmt->execute([
                 'id_cicles_machine' => $dataCiclesMachine['idCiclesMachine'],
@@ -84,12 +84,12 @@ class PlanCiclesMachineDao
     {
         $connection = Connection::getInstance()->getConnection();
 
-        $stmt = $connection->prepare("SELECT * FROM plan_cicles_machine WHERE id_cicles_machine = :id_cicles_machine");
+        $stmt = $connection->prepare("SELECT * FROM machine_cicles WHERE id_cicles_machine = :id_cicles_machine");
         $stmt->execute(['id_cicles_machine' => $id_cicles_machine]);
         $rows = $stmt->rowCount();
 
         if ($rows > 0) {
-            $stmt = $connection->prepare("DELETE FROM plan_cicles_machine WHERE id_cicles_machine = :id_cicles_machine");
+            $stmt = $connection->prepare("DELETE FROM machine_cicles WHERE id_cicles_machine = :id_cicles_machine");
             $stmt->execute(['id_cicles_machine' => $id_cicles_machine]);
             $this->logger->info(__FUNCTION__, array('query' => $stmt->queryString, 'errors' => $stmt->errorInfo()));
         }

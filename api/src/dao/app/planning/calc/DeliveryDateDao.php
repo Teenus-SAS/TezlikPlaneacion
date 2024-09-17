@@ -23,7 +23,7 @@ class DeliveryDateDao
         for ($i = 1; $i < 8; $i++) {
             $stmt = $connection->prepare("SELECT IF(ELT(WEEKDAY(DATE_SUB(o.max_date, INTERVAL {$i} DAY)) + 1, 'Lunes', 'Martes', 'Miercoles', 'Jueves', 'Viernes', 'Sabado', 'Domingo') = mc.dia_entrega, 
                                                 DATE_SUB(o.max_date, INTERVAL {$i} DAY), 0) AS delivery_date
-                                            FROM plan_orders o
+                                            FROM orders o
                                             INNER JOIN plan_inv_molds mc ON mc.id_cliente = o.id_client
                                             WHERE o.id_order = :id_order;");
             $stmt->execute([
@@ -41,7 +41,7 @@ class DeliveryDateDao
         $connection = Connection::getInstance()->getConnection();
 
         try {
-            $stmt = $connection->prepare("UPDATE plan_orders SET delivery_date = :delivery_date WHERE id_order = :id_order");
+            $stmt = $connection->prepare("UPDATE orders SET delivery_date = :delivery_date WHERE id_order = :id_order");
             $stmt->execute([
                 'id_order' => $dataOrder['idOrder'],
                 'delivery_date' => $deliveryDate

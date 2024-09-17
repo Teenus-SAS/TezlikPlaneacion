@@ -21,7 +21,7 @@ class UsersStoreDao
         $connection = Connection::getInstance()->getConnection();
 
         $stmt = $connection->prepare("SELECT u.id_user, u.firstname, u.lastname, u.email
-                                      FROM users_store us
+                                      FROM store_users us
                                       INNER JOIN users u ON u.id_user = us.id_user_deliver
                                       WHERE us.id_material = :id_material");
         $stmt->execute([
@@ -37,7 +37,7 @@ class UsersStoreDao
         $connection = Connection::getInstance()->getConnection();
 
         try {
-            $stmt = $connection->prepare("INSERT INTO users_store (id_company, id_material, id_user_delivered)
+            $stmt = $connection->prepare("INSERT INTO store_users (id_company, id_material, id_user_delivered)
                                           VALUES (:id_company, :id_material, :id_user_delivered)");
             $stmt->execute([
                 'id_company' => $id_company,

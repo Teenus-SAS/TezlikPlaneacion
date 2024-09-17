@@ -21,7 +21,7 @@ class CompaniesDao
     public function findAllCompanies()
     {
         $connection = Connection::getInstance()->getConnection();
-        $stmt = $connection->prepare("SELECT * FROM companies");
+        $stmt = $connection->prepare("SELECT * FROM admin_companies");
         $stmt->execute();
         $this->logger->info(__FUNCTION__, array('query' => $stmt->queryString, 'errors' => $stmt->errorInfo()));
         $companyData = $stmt->fetchAll($connection::FETCH_ASSOC);
@@ -34,8 +34,8 @@ class CompaniesDao
     {
         $connection = Connection::getInstance()->getConnection();
         $stmt = $connection->prepare("SELECT cp.id_company, cp.company, cp.state, cp.city, cp.country, cp.address,
-                                      cp.telephone, cp.nit, cp.logo, cp.created_at FROM companies cp 
-                                      INNER JOIN companies_licenses cl ON cp.id_company = cl.id_company 
+                                      cp.telephone, cp.nit, cp.logo, cp.created_at FROM admin_companies cp 
+                                      INNER JOIN admin_companies_licenses cl ON cp.id_company = cl.id_company 
                                       WHERE cl.license_status = :stat");
         $stmt->execute(['stat' => $stat]);
         $this->logger->info(__FUNCTION__, array('query' => $stmt->queryString, 'errors' => $stmt->errorInfo()));
@@ -51,7 +51,7 @@ class CompaniesDao
         $connection = Connection::getInstance()->getConnection();
         try {
 
-            $stmt = $connection->prepare("INSERT INTO companies (company, state, city, country, address, telephone, nit)
+            $stmt = $connection->prepare("INSERT INTO admin_companies (company, state, city, country, address, telephone, nit)
                                           VALUES (:company, :state, :city, :country, :address, :telephone, :nit)");
             $stmt->execute([
                 'company' => $dataCompany['company'],              'state' => $dataCompany['companyState'],
@@ -74,7 +74,7 @@ class CompaniesDao
         $connection = Connection::getInstance()->getConnection();
         try {
 
-            $stmt = $connection->prepare("UPDATE companies SET company = :company, state = :state, city = :city,
+            $stmt = $connection->prepare("UPDATE admin_companies SET company = :company, state = :state, city = :city,
                                           country = :country, address = :address, telephone = :telephone, nit = :nit
                                           WHERE id_company = :id_company");
             $stmt->execute([

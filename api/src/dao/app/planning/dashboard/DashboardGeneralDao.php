@@ -65,7 +65,7 @@ class DashboardGeneralDao
         $connection = Connection::getInstance()->getConnection();
         $sql = "SELECT COUNT(CASE WHEN po.status IN (1, 5, 6, 9) THEN 1 END) AS totalOrdersNoProgrammed, 
                       (COUNT(CASE WHEN po.status IN (1, 5, 6, 9) THEN 1 END) * 100.0 / COUNT(*)) AS ordersNoProgramed 
-                FROM plan_orders po
+                FROM orders po
                 WHERE max_date <> '0000-00-00' AND id_company = :id_company";
         $stmt = $connection->prepare($sql);
         $stmt->execute(['id_company' => $id_company]);
@@ -77,7 +77,7 @@ class DashboardGeneralDao
     {
         $connection = Connection::getInstance()->getConnection();
         $sql = "SELECT (COUNT(CASE WHEN po.status IN (6) THEN 1 END) * 100.0 / COUNT(*)) AS OrdersNoMP 
-                FROM plan_orders po
+                FROM orders po
                 WHERE id_company = :id_company";
         $stmt = $connection->prepare($sql);
         $stmt->execute(['id_company' => $id_company]);
@@ -95,7 +95,7 @@ class DashboardGeneralDao
                         (SUM(CASE WHEN status IN (3) THEN 1 ELSE 0 END) / COUNT(*)) * 100,
                         2
                     ) AS percentage_dispatch
-                FROM plan_orders
+                FROM orders
                 WHERE max_date <> '0000-00-00' AND id_company = :id_company";
         $stmt = $connection->prepare($sql);
         $stmt->execute(['id_company' => $id_company]);
@@ -108,7 +108,7 @@ class DashboardGeneralDao
         $connection = Connection::getInstance()->getConnection();
         $sql = "SELECT COUNT(*) AS totalDeliveredOnTime, 
                         ROUND( SUM( CASE WHEN delivery_date IS NOT NULL AND delivery_date <= max_date THEN 1 WHEN delivery_date IS NULL AND CURDATE() <= max_date THEN 1 ELSE 0 END ) / COUNT(*) * 100, 2 ) AS deliveredOnTime 
-                FROM plan_orders 
+                FROM orders 
                 WHERE max_date <> '0000-00-00' AND status = 3 AND id_company = :id_company";
         $stmt = $connection->prepare($sql);
         $stmt->execute(['id_company' => $id_company]);
@@ -140,7 +140,7 @@ class DashboardGeneralDao
         $anio = date('Y'); // Año actual        
 
         $sql = "SELECT DATE(date_order) AS day, COUNT(*) AS total_orders
-                FROM plan_orders
+                FROM orders
                 WHERE 
                     MONTH(date_order) = $mes  -- Reemplaza <mes> por el número del mes que deseas filtrar (Ej: 8 para agosto)
                     AND YEAR(date_order) = $anio  -- Reemplaza <año> por el año que deseas filtrar
@@ -158,7 +158,7 @@ class DashboardGeneralDao
         $connection = Connection::getInstance()->getConnection();
 
         $sql = "SELECT pc.client, COUNT(po.id_client) AS total_pedidos
-                FROM plan_orders po
+                FROM orders po
                 INNER JOIN plan_clients pc ON po.id_client = pc.id_client
                 WHERE po.id_company = :id_company
                 GROUP BY pc.client

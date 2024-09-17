@@ -22,7 +22,7 @@ class UnitSalesDao
         $stmt = $connection->prepare("SELECT u.id_unit_sales, u.id_product, p.reference, p.product, u.year, u.jan, u.feb, u.mar, u.apr, u.may, u.jun, u.jul, u.aug, u.sept, u.oct, u.nov, u.dece,
                                              (u.jan + u.feb + u.mar + u.apr + u.may + u.jun + u.jul + u.aug + u.sept + u.oct + u.nov + u.dece) / NULLIF((u.jan > 0) + (u.feb > 0) + 
                                              (u.mar > 0) + (u.apr > 0) + (u.may > 0) + (u.jun > 0) + (u.jul > 0) + (u.aug > 0) + (u.sept > 0) + (u.oct > 0) + (u.nov > 0) + (u.dece > 0), 0) AS average_month 
-                                      FROM plan_unit_sales u 
+                                      FROM sales_by_units u 
                                       INNER JOIN products p ON p.id_product = u.id_product 
                                       WHERE u.id_company = :id_company");
         $stmt->execute(['id_company' => $id_company]);
@@ -40,7 +40,7 @@ class UnitSalesDao
         $year =  date('Y');
 
         try {
-            $stmt = $connection->prepare("INSERT INTO plan_unit_sales (id_company, id_product, year, jan, feb, mar, apr, may, jun, jul, aug, sept, oct, nov, dece) 
+            $stmt = $connection->prepare("INSERT INTO sales_by_units (id_company, id_product, year, jan, feb, mar, apr, may, jun, jul, aug, sept, oct, nov, dece) 
                                           VALUES (:id_company, :id_product, :year, :jan, :feb, :mar, :apr, :may, :jun, :jul, :aug, :sept, :oct, :nov, :dece)");
             $stmt->execute([
                 'id_company'  => $id_company,                       'jun' => $dataSale['june'],
@@ -67,7 +67,7 @@ class UnitSalesDao
         $year =  date('Y');
 
         try {
-            $stmt = $connection->prepare("UPDATE plan_unit_sales SET id_product = :id_product, year = :year, jan = :jan, feb = :feb, mar = :mar, apr = :apr, may = :may, 
+            $stmt = $connection->prepare("UPDATE sales_by_units SET id_product = :id_product, year = :year, jan = :jan, feb = :feb, mar = :mar, apr = :apr, may = :may, 
                                                             jun = :jun, jul = :jul, aug = :aug, sept = :sept, oct = :oct, nov = :nov, dece = :dece
                                           WHERE id_unit_sales = :id_unit_sales");
             $stmt->execute([
@@ -92,12 +92,12 @@ class UnitSalesDao
     {
         $connection = Connection::getInstance()->getConnection();
         try {
-            $stmt = $connection->prepare("SELECT * FROM plan_unit_sales WHERE id_unit_sales = :id_unit_sales");
+            $stmt = $connection->prepare("SELECT * FROM sales_by_units WHERE id_unit_sales = :id_unit_sales");
             $stmt->execute(['id_unit_sales' => $id_unit_sales]);
             $rows = $stmt->rowCount();
 
             if ($rows > 0) {
-                $stmt = $connection->prepare("DELETE FROM plan_unit_sales WHERE id_unit_sales = :id_unit_sales");
+                $stmt = $connection->prepare("DELETE FROM sales_by_units WHERE id_unit_sales = :id_unit_sales");
                 $stmt->execute(['id_unit_sales' => $id_unit_sales]);
                 $this->logger->info(__FUNCTION__, array('query' => $stmt->queryString, 'errors' => $stmt->errorInfo()));
             }

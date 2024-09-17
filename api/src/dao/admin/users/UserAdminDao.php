@@ -22,7 +22,7 @@ class UserAdminDao
 
         $stmt = $connection->prepare("SELECT u.id_user, u.firstname, u.lastname, u.position, u.email, c.id_company, c.company 
                                       FROM users u
-                                        INNER JOIN companies c ON c.id_company = u.id_company");
+                                        INNER JOIN admin_companies c ON c.id_company = u.id_company");
         $stmt->execute();
         $this->logger->info(__FUNCTION__, array('query' => $stmt->queryString, 'errors' => $stmt->errorInfo()));
         $users = $stmt->fetchAll($connection::FETCH_ASSOC);
@@ -34,7 +34,7 @@ class UserAdminDao
     {
         $connection = Connection::getInstance()->getConnection();
 
-        $stmt = $connection->prepare("SELECT * FROM admins");
+        $stmt = $connection->prepare("SELECT * FROM admin_users");
         $stmt->execute();
         $this->logger->info(__FUNCTION__, array('query' => $stmt->queryString, 'errors' => $stmt->errorInfo()));
         $users = $stmt->fetchAll($connection::FETCH_ASSOC);
@@ -48,7 +48,7 @@ class UserAdminDao
         $email = $_SESSION['email'];
         $connection = Connection::getInstance()->getConnection();
 
-        $stmt = $connection->prepare("SELECT * FROM admins WHERE email = :email");
+        $stmt = $connection->prepare("SELECT * FROM admin_users WHERE email = :email");
         $stmt->execute(['email' => $email]);
         $this->logger->info(__FUNCTION__, array('query' => $stmt->queryString, 'errors' => $stmt->errorInfo()));
 
@@ -63,7 +63,7 @@ class UserAdminDao
         try {
             $pass = password_hash($newPass, PASSWORD_DEFAULT);
 
-            $stmt = $connection->prepare("INSERT INTO admins (firstname, lastname, email, password) 
+            $stmt = $connection->prepare("INSERT INTO admin_users (firstname, lastname, email, password) 
                                           VALUES (:firstname, :lastname, :email, :pass)");
             $stmt->execute([
                 'firstname' => $dataUser['firstname'],
@@ -87,7 +87,7 @@ class UserAdminDao
 
         try {
 
-            $stmt = $connection->prepare("UPDATE admins SET firstname = :firstname, lastname = :lastname, email = :email
+            $stmt = $connection->prepare("UPDATE admin_users SET firstname = :firstname, lastname = :lastname, email = :email
                                           WHERE id_admin = :id_admin");
             $stmt->execute([
                 'firstname' => $dataUser['firstname'],
@@ -112,7 +112,7 @@ class UserAdminDao
         $connection = Connection::getInstance()->getConnection();
 
         try {
-            $stmt = $connection->prepare("DELETE FROM admins WHERE id_admin = :id_admin");
+            $stmt = $connection->prepare("DELETE FROM admin_users WHERE id_admin = :id_admin");
             $stmt->execute(['id_admin' => $id_admin]);
             $this->logger->info(__FUNCTION__, array('query' => $stmt->queryString, 'errors' => $stmt->errorInfo()));
         } catch (\Exception $e) {

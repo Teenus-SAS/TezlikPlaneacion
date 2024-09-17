@@ -24,8 +24,8 @@ class MaterialsDao
                                   FROM materials m
                                     INNER JOIN inv_materials mi ON mi.id_material = m.id_material
                                     LEFT JOIN materials_type mt ON mt.id_material_type = m.id_material_type
-                                    INNER JOIN convert_units u ON u.id_unit = m.unit
-                                    INNER JOIN convert_magnitudes mg ON mg.id_magnitude = u.id_magnitude 
+                                    INNER JOIN admin_units u ON u.id_unit = m.unit
+                                    INNER JOIN admin_magnitudes mg ON mg.id_magnitude = u.id_magnitude 
                                   WHERE m.id_company = :id_company ORDER BY m.reference ASC");
     $stmt->execute(['id_company' => $id_company]);
 

@@ -22,8 +22,8 @@ class ProgrammingDao
 
         $stmt = $connection->prepare("SELECT p.id_product, p.product, o.id_order, o.num_order
                                       FROM products p 
-                                      INNER JOIN plan_cicles_machine pcm ON pcm.id_product = p.id_product
-                                      INNER JOIN plan_orders o ON o.id_product = p.id_product 
+                                      INNER JOIN machine_cicles pcm ON pcm.id_product = p.id_product
+                                      INNER JOIN orders o ON o.id_product = p.id_product 
                                       WHERE pcm.id_machine = :id_machine");
         $stmt->execute(['id_machine' => $dataProgramming['idMachine']]);
         $this->logger->info(__FUNCTION__, array('query' => $stmt->queryString, 'errors' => $stmt->errorInfo()));
@@ -37,8 +37,8 @@ class ProgrammingDao
 
         $stmt = $connection->prepare("SELECT m.id_machine, m.machine, o.id_order, o.num_order 
                                       FROM machines m 
-                                      INNER JOIN plan_cicles_machine pcm ON pcm.id_machine = m.id_machine 
-                                      INNER JOIN plan_orders o ON o.id_product = pcm.id_product
+                                      INNER JOIN machine_cicles pcm ON pcm.id_machine = m.id_machine 
+                                      INNER JOIN orders o ON o.id_product = pcm.id_product
                                       WHERE o.id_product = :id_product");
         $stmt->execute(['id_product' => $dataProgramming['idProduct']]);
         $this->logger->info(__FUNCTION__, array('query' => $stmt->queryString, 'errors' => $stmt->errorInfo()));
@@ -53,7 +53,7 @@ class ProgrammingDao
         $stmt = $connection->prepare("SELECT o.id_order, p.id_product, p.reference, p.product, pi.quantity, o.original_quantity, IFNULL(o.accumulated_quantity, 0) AS accumulated_quantity
                                       FROM products p
                                       INNER JOIN inv_products pi ON pi.id_product = p.id_product
-                                      INNER JOIN plan_orders o ON o.id_product = p.id_product
+                                      INNER JOIN orders o ON o.id_product = p.id_product
                                       WHERE o.num_order = :num_order AND o.status IN (1, 4)
                                       AND (o.accumulated_quantity IS NULL OR o.accumulated_quantity != 0)
                                       GROUP BY p.id_product");
@@ -74,12 +74,12 @@ class ProgrammingDao
                                              (SELECT IFNULL((1*cm.quantity/cpm.quantity), 0) FROM products_materials cpm INNER JOIN inv_materials cm ON cm.id_material = cpm.id_material WHERE cpm.id_product = pg.id_product ORDER BY `IFNULL((1*cm.quantity/cpm.quantity), 0)` ASC LIMIT 1) AS quantity_mp, pc.id_process, pc.process,
                                              pg.status, pg.min_programming, 1 AS bd_status
                                       FROM programming pg
-                                        INNER JOIN plan_orders o ON o.id_order = pg.id_order
+                                        INNER JOIN orders o ON o.id_order = pg.id_order
                                         INNER JOIN products p ON p.id_product = pg.id_product
                                         INNER JOIN machines m ON m.id_machine = pg.id_machine
                                         INNER JOIN plan_clients c ON c.id_client = o.id_client
-                                        INNER JOIN plan_program_machines pm ON pm.id_machine = pg.id_machine
-                                        INNER JOIN plan_cicles_machine cp ON cp.id_product = pg.id_product AND cp.id_machine = pg.id_machine 
+                                        INNER JOIN machine_programs pm ON pm.id_machine = pg.id_machine
+                                        INNER JOIN machine_cicles cp ON cp.id_product = pg.id_product AND cp.id_machine = pg.id_machine 
                                         INNER JOIN process pc ON pc.id_process = cp.id_process
                                       WHERE pg.id_company = :id_company AND pg.status = 0");
         $stmt->execute(['id_company' => $id_company]);

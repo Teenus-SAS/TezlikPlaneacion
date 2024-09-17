@@ -54,7 +54,7 @@ class UserAccessDao
                                             IFNULL(usa.office, 0) AS office, 
                                             IFNULL(usa.store, 0) AS store
                                         FROM users us
-                                            LEFT JOIN planning_user_access usa ON usa.id_user = us.id_user 
+                                            LEFT JOIN users_access usa ON usa.id_user = us.id_user 
                                         WHERE us.id_company = :id_company");
         $stmt->execute(['id_company' => $id_company]);
         $this->logger->info(__FUNCTION__, array('query' => $stmt->queryString, 'errors' => $stmt->errorInfo()));
@@ -69,7 +69,7 @@ class UserAccessDao
         $connection = Connection::getInstance()->getConnection();
 
         try {
-            $stmt = $connection->prepare("INSERT INTO planning_user_access 
+            $stmt = $connection->prepare("INSERT INTO users_access 
                                                       (
                                                         -- Informacion Usuario
                                                             id_user,
@@ -155,13 +155,13 @@ class UserAccessDao
             si el usuario es > 1 no hacer nada
             de lo contrario realizar la actualizacion
          */
-        $stmt = $connection->prepare("SELECT * FROM planning_user_access");
+        $stmt = $connection->prepare("SELECT * FROM users_access");
         $stmt->execute();
         $rows = $stmt->rowCount();
 
         if ($rows > 1) {
             try {
-                $stmt = $connection->prepare("UPDATE planning_user_access SET 
+                $stmt = $connection->prepare("UPDATE users_access SET 
                                                         -- Accesos (Basicos)
                                                             create_product = :create_product, 
                                                             create_material = :create_material, 
@@ -213,7 +213,7 @@ class UserAccessDao
     public function deleteUserAccess($dataUser)
     {
         $connection = Connection::getInstance()->getConnection();
-        $stmt = $connection->prepare("DELETE FROM planning_user_access WHERE id_user = :id_user");
+        $stmt = $connection->prepare("DELETE FROM users_access WHERE id_user = :id_user");
         $stmt->execute(['id_user' => $dataUser['id_user']]);
         $this->logger->info(__FUNCTION__, array('query' => $stmt->queryString, 'errors' => $stmt->errorInfo()));
     }

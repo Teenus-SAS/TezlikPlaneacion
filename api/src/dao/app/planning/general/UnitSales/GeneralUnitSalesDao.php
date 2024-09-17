@@ -20,7 +20,7 @@ class GeneralUnitSalesDao
     // {
     //     $connection = Connection::getInstance()->getConnection();
     //     $stmt = $connection->prepare("SELECT p.id_product FROM products p
-    //                                   INNER JOIN plan_unit_sales u ON u.id_product = p.id_product 
+    //                                   INNER JOIN sales_by_units u ON u.id_product = p.id_product 
     //                                   WHERE p.id_company = :id_company");
     //     $stmt->execute(['id_company' => $id_company]);
 
@@ -34,7 +34,7 @@ class GeneralUnitSalesDao
     {
         $connection = Connection::getInstance()->getConnection();
 
-        $stmt = $connection->prepare("SELECT id_unit_sales FROM plan_unit_sales
+        $stmt = $connection->prepare("SELECT id_unit_sales FROM sales_by_units
                                   WHERE id_product = :id_product AND id_company = :id_company");
         $stmt->execute([
             'id_product' => $dataSale['idProduct'],
@@ -48,7 +48,7 @@ class GeneralUnitSalesDao
     {
         $connection = Connection::getInstance()->getConnection();
 
-        $stmt = $connection->prepare("SELECT *, 'false' AS new FROM sale_days WHERE id_company = :id_company");
+        $stmt = $connection->prepare("SELECT *, 'false' AS new FROM sales_days WHERE id_company = :id_company");
         $stmt->execute([
             'id_company' => $id_company
         ]);
@@ -74,7 +74,7 @@ class GeneralUnitSalesDao
     {
         $connection = Connection::getInstance()->getConnection();
 
-        $stmt = $connection->prepare("SELECT * FROM sale_days WHERE year = :year AND month = :month AND id_company = :id_company");
+        $stmt = $connection->prepare("SELECT * FROM sales_days WHERE year = :year AND month = :month AND id_company = :id_company");
         $stmt->execute([
             'id_company' => $id_company,
             'year' => $dataSale['year'],
@@ -89,7 +89,7 @@ class GeneralUnitSalesDao
         try {
             $connection = Connection::getInstance()->getConnection();
 
-            $stmt = $connection->prepare("INSERT INTO sale_days (id_company, days, month, year) VALUES (:id_company, :days, :month, :year)");
+            $stmt = $connection->prepare("INSERT INTO sales_days (id_company, days, month, year) VALUES (:id_company, :days, :month, :year)");
             $stmt->execute([
                 'id_company' => $id_company,
                 'days' => $dataSale['days'],
@@ -106,7 +106,7 @@ class GeneralUnitSalesDao
         try {
             $connection = Connection::getInstance()->getConnection();
 
-            $stmt = $connection->prepare("UPDATE sale_days SET days = :days, month = :month, year = :year WHERE id_sale_day = :id_sale_day");
+            $stmt = $connection->prepare("UPDATE sales_days SET days = :days, month = :month, year = :year WHERE id_sale_day = :id_sale_day");
             $stmt->execute([
                 'id_sale_day' => $dataSale['idSaleDay'],
                 'days' => $dataSale['days'],

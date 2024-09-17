@@ -23,8 +23,8 @@ class CompaniesAllowedUsersDao
     {
         $connection = Connection::getInstance()->getConnection();
 
-        $stmt = $connection->prepare("SELECT cp.company, cl.quantity_user FROM companies cp 
-                                      INNER JOIN companies_licenses cl ON cp.id_company = cl.id_company
+        $stmt = $connection->prepare("SELECT cp.company, cl.quantity_user FROM admin_companies cp 
+                                      INNER JOIN admin_companies_licenses cl ON cp.id_company = cl.id_company
                                       WHERE cl.license_status = 0");
         $stmt->execute();
         $this->logger->info(__FUNCTION__, array('query' => $stmt->queryString, 'errors' => $stmt->errorInfo()));
@@ -41,7 +41,7 @@ class CompaniesAllowedUsersDao
         $connection = Connection::getInstance()->getConnection();
 
         try {
-            $stmt = $connection->prepare("UPDATE companies_licenses SET quantity_user = :quantity_user
+            $stmt = $connection->prepare("UPDATE admin_companies_licenses SET quantity_user = :quantity_user
                                           WHERE id_company_license = :id_company_license");
             $stmt->execute([
                 'id_company_license' => $id_company_license,

@@ -36,7 +36,7 @@ class GeneralProductsInProcessDao
     {
         $connection = Connection::getInstance()->getConnection();
 
-        $stmt = $connection->prepare("SELECT * FROM plan_products_categories 
+        $stmt = $connection->prepare("SELECT * FROM products_categories 
                                        WHERE final_product = :final_product, id_product = :id_product AND id_company = :id_company");
         $stmt->execute([
             'final_product' => $dataProduct['finalProduct'],

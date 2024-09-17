@@ -59,15 +59,15 @@ class ProductionOrderDao
                                                 c.client, 
                                                 c.img        
                                       FROM programming pg
-                                        INNER JOIN plan_orders o ON o.id_order = pg.id_order
+                                        INNER JOIN orders o ON o.id_order = pg.id_order
                                         INNER JOIN products p ON p.id_product = pg.id_product
                                         LEFT JOIN products_measures pms ON pms.id_product = pg.id_product
                                         INNER JOIN machines m ON m.id_machine = pg.id_machine
                                         INNER JOIN plan_clients c ON c.id_client = o.id_client
-                                        INNER JOIN plan_program_machines pm ON pm.id_machine = pg.id_machine
-                                        INNER JOIN plan_cicles_machine pcm ON pcm.id_product = pg.id_product AND pcm.id_machine = pg.id_machine
+                                        INNER JOIN machine_programs pm ON pm.id_machine = pg.id_machine
+                                        INNER JOIN machine_cicles pcm ON pcm.id_product = pg.id_product AND pcm.id_machine = pg.id_machine
                                         INNER JOIN process pc ON pc.id_process = pcm.id_process
-                                        INNER JOIN plan_status ps ON ps.id_status = o.status
+                                        INNER JOIN orders_status ps ON ps.id_status = o.status
                                       WHERE pg.status = 1 AND pg.id_company = :id_company
                                         ORDER BY pg.id_programming ASC");
         $stmt->execute([

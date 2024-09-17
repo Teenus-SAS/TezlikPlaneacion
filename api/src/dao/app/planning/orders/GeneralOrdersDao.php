@@ -22,11 +22,11 @@ class GeneralOrdersDao
 
         $stmt = $connection->prepare("SELECT o.id_order, o.id_client, o.id_product, o.num_order, ps.status, o.date_order, o.original_quantity, p.product, c.client, o.min_date, o.max_date, o.delivery_date, pi.quantity AS quantity_pro, pi.accumulated_quantity,
                                              CONCAT(o.num_order, '-' , o.id_product) AS concate                                      
-                                      FROM plan_orders o
+                                      FROM orders o
                                         INNER JOIN products p ON p.id_product = o.id_product
                                         INNER JOIN inv_products pi ON pi.id_product = o.id_product
                                         INNER JOIN plan_clients c ON c.id_client = o.id_client  
-                                        INNER JOIN plan_status ps ON ps.id_status = o.status
+                                        INNER JOIN orders_status ps ON ps.id_status = o.status
                                       WHERE o.status_order = 0 AND o.id_company = :id_company AND o.status NOT IN (3)
                                       ORDER BY o.status ASC");
         $stmt->execute(['id_company' => $id_company]);
@@ -44,13 +44,13 @@ class GeneralOrdersDao
 
         $stmt = $connection->prepare("SELECT o.id_order, o.id_client, o.id_product, o.num_order, ps.status, o.date_order, o.original_quantity, p.product, c.client, o.min_date, o.max_date, pi.status_ds, mi.id_material, o.delivery_date, pi.accumulated_quantity, IFNULL(mi.quantity, 0) AS quantity_material,
                                              IFNULL((SELECT id_programming FROM programming WHERE id_order = o.id_order LIMIT 1), 0) AS programming
-                                      FROM plan_orders o
+                                      FROM orders o
                                         INNER JOIN products p ON p.id_product = o.id_product
                                         LEFT JOIN products_materials pm ON pm.id_product = o.id_product 
                                         LEFT JOIN inv_materials m ON mi.id_material = pm.id_material
                                         INNER JOIN inv_products pi ON pi.id_product = o.id_product
                                         INNER JOIN plan_clients c ON c.id_client = o.id_client  
-                                        INNER JOIN plan_status ps ON ps.id_status = o.status
+                                        INNER JOIN orders_status ps ON ps.id_status = o.status
                                       WHERE 
                                         o.status_order = 0 
                                         AND o.id_company = :id_company 
@@ -70,7 +70,7 @@ class GeneralOrdersDao
     {
         $connection = Connection::getInstance()->getConnection();
 
-        $stmt = $connection->prepare("SELECT * FROM plan_orders WHERE id_product = :id_product");
+        $stmt = $connection->prepare("SELECT * FROM orders WHERE id_product = :id_product");
         $stmt->execute(['id_product' => $id_product]);
 
         $this->logger->info(__FUNCTION__, array('query' => $stmt->queryString, 'errors' => $stmt->errorInfo()));
@@ -86,7 +86,7 @@ class GeneralOrdersDao
         $connection = Connection::getInstance()->getConnection();
 
         $stmt = $connection->prepare("SELECT o.id_order, o.num_order, o.date_order, o.original_quantity, o.quantity, o.accumulated_quantity, p.product, c.client
-                                      FROM plan_orders o
+                                      FROM orders o
                                         INNER JOIN products p ON p.id_product = o.id_product
                                         INNER JOIN plan_clients c ON c.id_client = o.id_client
                                       WHERE o.id_order = :id_order AND o.id_company = :id_company");
@@ -105,7 +105,7 @@ class GeneralOrdersDao
     {
         $connection = Connection::getInstance()->getConnection();
 
-        $stmt = $connection->prepare("SELECT * FROM plan_orders WHERE num_order = :num_order AND id_product = :id_product AND id_company = :id_company");
+        $stmt = $connection->prepare("SELECT * FROM orders WHERE num_order = :num_order AND id_product = :id_product AND id_company = :id_company");
         $stmt->execute([
             'num_order' => trim($dataOrder['order']),
             'id_product' => $dataOrder['idProduct'],
@@ -121,7 +121,7 @@ class GeneralOrdersDao
     {
         $connection = Connection::getInstance()->getConnection();
 
-        $stmt = $connection->prepare("SELECT * FROM plan_orders 
+        $stmt = $connection->prepare("SELECT * FROM orders 
                                       WHERE min_date = :min_date AND max_date = :max_date AND id_seller = :id_seller 
                                             AND original_quantity = :original_quantity AND id_product = :id_product AND 
                                             id_client = :id_client AND status = 1");
@@ -143,7 +143,7 @@ class GeneralOrdersDao
     {
         $connection = Connection::getInstance()->getConnection();
 
-        $stmt = $connection->prepare("SELECT * FROM plan_orders 
+        $stmt = $connection->prepare("SELECT * FROM orders 
                                       WHERE min_date = '0000-00-00' AND max_date = '0000-00-00' 
                                       AND id_product = :id_product 
                                       AND id_client = :id_client");
@@ -162,10 +162,10 @@ class GeneralOrdersDao
         $connection = Connection::getInstance()->getConnection();
 
         $stmt = $connection->prepare("SELECT o.original_quantity, pi.quantity, pi.accumulated_quantity, ps.status
-                                      FROM plan_orders o
+                                      FROM orders o
                                         INNER JOIN products p ON p.id_product = o.id_product
                                         INNER JOIN inv_products pi ON pi.id_product = o.id_product
-                                        INNER JOIN plan_status ps ON ps.id_status = o.status
+                                        INNER JOIN orders_status ps ON ps.id_status = o.status
                                       WHERE o.id_order = :id_order");
         $stmt->execute([
             'id_order' => $id_order
@@ -181,7 +181,7 @@ class GeneralOrdersDao
         $connection = Connection::getInstance()->getConnection();
 
         $sql = "SELECT CONCAT('PED', COUNT(IFNULL(id_order, 0)) + 1) AS num_order 
-                FROM plan_orders 
+                FROM orders 
                 WHERE id_company = :id_company AND num_order NOT LIKE '%-%'";
         $stmt = $connection->prepare($sql);
         $stmt->execute(['id_company' => $id_company]);
@@ -197,7 +197,7 @@ class GeneralOrdersDao
         $connection = Connection::getInstance()->getConnection();
 
         $sql = "SELECT CONCAT('$num_order', '-', COUNT(IFNULL(id_order, 0)) + 1) AS num_order 
-                FROM plan_orders 
+                FROM orders 
                 WHERE num_order LIKE '$num_order-%'";
         $stmt = $connection->prepare($sql);
         $stmt->execute();
@@ -213,7 +213,7 @@ class GeneralOrdersDao
         $connection = Connection::getInstance()->getConnection();
 
         try {
-            $stmt = $connection->prepare("UPDATE plan_orders SET status_order = 0 WHERE num_order = :num_order AND id_product = :id_product");
+            $stmt = $connection->prepare("UPDATE orders SET status_order = 0 WHERE num_order = :num_order AND id_product = :id_product");
             $stmt->execute([
                 'num_order' => $num_order,
                 'id_product' => $id_product,
@@ -231,7 +231,7 @@ class GeneralOrdersDao
         $connection = Connection::getInstance()->getConnection();
 
         try {
-            $stmt = $connection->prepare("UPDATE plan_orders SET status = :status WHERE id_order = :id_order");
+            $stmt = $connection->prepare("UPDATE orders SET status = :status WHERE id_order = :id_order");
             $stmt->execute([
                 'status' => $status,
                 'id_order' => $id_order
@@ -249,7 +249,7 @@ class GeneralOrdersDao
         $connection = Connection::getInstance()->getConnection();
 
         try {
-            $stmt = $connection->prepare("UPDATE plan_orders SET status = :status WHERE id_product = :id_product");
+            $stmt = $connection->prepare("UPDATE orders SET status = :status WHERE id_product = :id_product");
             $stmt->execute([
                 'status' => $status,
                 'id_product' => $id_product
@@ -269,7 +269,7 @@ class GeneralOrdersDao
 
             $dataOrder['accumulated_quantity_order'] == '' ? $quantity = null : $quantity = $dataOrder['accumulated_quantity_order'];
 
-            $stmt = $connection->prepare("UPDATE plan_orders SET accumulated_quantity = :accumulated_quantity WHERE id_order = :id_order");
+            $stmt = $connection->prepare("UPDATE orders SET accumulated_quantity = :accumulated_quantity WHERE id_order = :id_order");
             $stmt->execute([
                 'accumulated_quantity' => $quantity,
                 'id_order' => $dataOrder['id_order']
@@ -287,7 +287,7 @@ class GeneralOrdersDao
         try {
             $connection = Connection::getInstance()->getConnection();
 
-            $stmt = $connection->prepare("UPDATE plan_orders SET office_date = :office_date WHERE id_order = :id_order");
+            $stmt = $connection->prepare("UPDATE orders SET office_date = :office_date WHERE id_order = :id_order");
             $stmt->execute([
                 'office_date' => $date,
                 'id_order' => $id_order

@@ -26,7 +26,7 @@ class AutenticationUserDao
     $user = $stmt->fetch($connection::FETCH_ASSOC);
 
     if ($op == 2 && !$user) {
-      $stmt = $connection->prepare("SELECT * FROM admins WHERE email = :email");
+      $stmt = $connection->prepare("SELECT * FROM admin_users WHERE email = :email");
       $stmt->execute(['email' => $dataUser]);
       $user = $stmt->fetch($connection::FETCH_ASSOC);
       $user['rol'] = 'admin';
@@ -40,7 +40,7 @@ class AutenticationUserDao
   /* public function checkUserAdmin($dataUser)
   {
     $connection = Connection::getInstance()->getConnection();
-    $stmt = $connection->prepare("SELECT * FROM admins WHERE email = :email");
+    $stmt = $connection->prepare("SELECT * FROM admin_users WHERE email = :email");
     $stmt->execute(['email' => $dataUser]);
     $this->logger->info(__FUNCTION__, array('query' => $stmt->queryString, 'errors' => $stmt->errorInfo()));
     $user = $stmt->fetch($connection::FETCH_ASSOC);

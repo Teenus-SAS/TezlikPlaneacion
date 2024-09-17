@@ -25,7 +25,7 @@ class ClassificationDao
                                                IF(IFNULL(u.may, 0) > 0, 1, 0) + IF(IFNULL(u.jun, 0) > 0, 1, 0) + IF(IFNULL(u.jul, 0) > 0, 1, 0) + IF(IFNULL(u.aug, 0) > 0, 1, 0) + 
                                                IF(IFNULL(u.sept, 0) > 0, 1, 0) + IF(IFNULL(u.oct, 0) > 0, 1, 0) + IF(IFNULL(u.nov, 0) > 0, 1, 0) + IF(IFNULL(u.dece, 0) > 0, 1, 0)) / :cant_months) AS year_sales                                             
                                       FROM products p
-                                      LEFT JOIN plan_unit_sales u ON u.id_product = p.id_product
+                                      LEFT JOIN sales_by_units u ON u.id_product = p.id_product
                                       WHERE p.id_product = :id_product");
         $stmt->execute([
             'cant_months' => $months,
@@ -65,7 +65,7 @@ class ClassificationDao
     //                                            IF(may > 0, 1, 0) + IF(jun > 0, 1, 0) + IF(jul > 0, 1, 0) + IF(aug > 0, 1, 0) + 
     //                                            IF(sept > 0, 1, 0) + IF(oct > 0, 1, 0) + IF(nov > 0, 1, 0) + IF(dece > 0, 1, 0)) / :cant_months) AS year_sales,
     //                                          ((jan + feb + mar + apr + may + jun + jul + aug + sept + oct + nov + dece)/:cant_months) AS average_units
-    //                                   FROM plan_unit_sales 
+    //                                   FROM sales_by_units 
     //                                   WHERE id_product = :id_product AND id_company = :id_company;");
     //     $stmt->execute([
     //         'cant_months' => $dataInventory['cantMonths'],

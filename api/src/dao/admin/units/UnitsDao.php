@@ -21,8 +21,8 @@ class UnitsDao
         $connection = Connection::getInstance()->getConnection();
 
         $stmt = $connection->prepare("SELECT u.id_unit, m.id_magnitude, m.magnitude, u.unit, u.abbreviation
-                                      FROM convert_units u
-                                        INNER JOIN convert_magnitudes m ON m.id_magnitude = u.id_magnitude
+                                      FROM admin_units u
+                                        INNER JOIN admin_magnitudes m ON m.id_magnitude = u.id_magnitude
                                       ORDER BY m.magnitude ASC");
         $stmt->execute();
 
@@ -35,7 +35,7 @@ class UnitsDao
     {
         $connection = Connection::getInstance()->getConnection();
 
-        $stmt = $connection->prepare("SELECT * FROM convert_units WHERE id_magnitude = :id_magnitude");
+        $stmt = $connection->prepare("SELECT * FROM admin_units WHERE id_magnitude = :id_magnitude");
         $stmt->execute(['id_magnitude' => $id_magnitude]);
 
         $units = $stmt->fetchAll($connection::FETCH_ASSOC);
@@ -47,7 +47,7 @@ class UnitsDao
     {
         $connection = Connection::getInstance()->getConnection();
 
-        $stmt = $connection->prepare("SELECT * FROM convert_units WHERE id_magnitude = :id_magnitude AND unit = :unit");
+        $stmt = $connection->prepare("SELECT * FROM admin_units WHERE id_magnitude = :id_magnitude AND unit = :unit");
         $stmt->execute([
             'id_magnitude' => $dataUnit['idMagnitude'],
             'unit' => strtoupper(trim($dataUnit['unit']))
@@ -63,7 +63,7 @@ class UnitsDao
         $connection = Connection::getInstance()->getConnection();
 
         try {
-            $stmt = $connection->prepare("INSERT INTO convert_units (id_magnitude, unit, abbreviation) 
+            $stmt = $connection->prepare("INSERT INTO admin_units (id_magnitude, unit, abbreviation) 
                                           VALUES (:id_magnitude, :unit, :abbreviation)");
             $stmt->execute([
                 'id_magnitude' => $dataUnit['magnitude'],
@@ -87,7 +87,7 @@ class UnitsDao
         $connection = Connection::getInstance()->getConnection();
 
         try {
-            $stmt = $connection->prepare("UPDATE convert_units SET id_magnitude = :id_magnitude, unit = :unit, abbreviation = :abbreviation 
+            $stmt = $connection->prepare("UPDATE admin_units SET id_magnitude = :id_magnitude, unit = :unit, abbreviation = :abbreviation 
                                           WHERE id_unit = :id_unit");
             $stmt->execute([
                 'id_unit' => $dataUnit['idUnit'],
@@ -108,12 +108,12 @@ class UnitsDao
         $connection = Connection::getInstance()->getConnection();
 
         try {
-            $stmt = $connection->prepare("SELECT * FROM convert_units WHERE id_unit = :id_unit");
+            $stmt = $connection->prepare("SELECT * FROM admin_units WHERE id_unit = :id_unit");
             $stmt->execute(['id_unit' => $id_unit]);
             $row = $stmt->rowCount();
 
             if ($row > 0) {
-                $stmt = $connection->prepare("DELETE FROM convert_units WHERE id_unit = :id_unit");
+                $stmt = $connection->prepare("DELETE FROM admin_units WHERE id_unit = :id_unit");
                 $stmt->execute(['id_unit' => $id_unit]);
             }
         } catch (\Exception $e) {

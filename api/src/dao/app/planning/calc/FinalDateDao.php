@@ -43,9 +43,9 @@ class FinalDateDao
             DATE_ADD(pg.min_date, INTERVAL IFNULL((IFNULL(o.original_quantity, 0) / IFNULL(cm.cicles_hour, 0)) / IFNULL(pm.hours_day, 0), 0) DAY) AS final_date, 
             IF((SELECT id_programming FROM programming WHERE id_machine = pg.id_machine AND id_programming <= pg.id_programming LIMIT 1) = pg.id_programming, HOUR(pg.max_date), (SELECT HOUR(pg.max_date) FROM programming WHERE id_machine = pg.id_machine AND id_programming < pg.id_programming LIMIT 1)) AS last_hour
                                           FROM programming pg
-                                            LEFT JOIN plan_orders o ON o.id_order = pg.id_order
-                                            LEFT JOIN plan_program_machines pm ON pm.id_machine = pg.id_machine
-                                            LEFT JOIN plan_cicles_machine cm ON cm.id_product = pg.id_product AND cm.id_machine = pg.id_machine
+                                            LEFT JOIN orders o ON o.id_order = pg.id_order
+                                            LEFT JOIN machine_programs pm ON pm.id_machine = pg.id_machine
+                                            LEFT JOIN machine_cicles cm ON cm.id_product = pg.id_product AND cm.id_machine = pg.id_machine
                                           WHERE pg.id_programming = :id_programming");
             $stmt->execute(['id_programming' => $id_programming]);
             $this->logger->info(__FUNCTION__, array('query' => $stmt->queryString, 'errors' => $stmt->errorInfo()));

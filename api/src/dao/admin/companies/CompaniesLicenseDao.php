@@ -36,8 +36,8 @@ class CompaniesLicenseDao
                                                 cl.plan,  
                                             -- Otros
                                                 CASE WHEN cl.license_end > CURRENT_DATE THEN TIMESTAMPDIFF(DAY, CURRENT_DATE, license_end) ELSE 0 END AS license_days
-                                      FROM companies cp 
-                                        INNER JOIN companies_licenses cl ON cp.id_company = cl.id_company
+                                      FROM admin_companies cp 
+                                        INNER JOIN admin_companies_licenses cl ON cp.id_company = cl.id_company
                                         INNER JOIN plans_access pa ON cl.plan = pa.id_plan
                                       WHERE cl.license_status = 1");
         $stmt->execute();
@@ -57,7 +57,7 @@ class CompaniesLicenseDao
                 $licenseStart = date('Y-m-d');
                 $licenseEnd = date("Y-m-d", strtotime($licenseStart . "+ 30 day"));
 
-                $stmt = $connection->prepare("INSERT INTO companies_licenses (id_company, license_start, license_end, flag_products_measure, quantity_user, license_status, plan)
+                $stmt = $connection->prepare("INSERT INTO admin_companies_licenses (id_company, license_start, license_end, flag_products_measure, quantity_user, license_status, plan)
                                               VALUES (:id_company, :license_start, :license_end, :flag_products_measure, :quantity_user, :license_status, :plan)");
                 $stmt->execute([
                     'id_company' => $id_company,
@@ -69,7 +69,7 @@ class CompaniesLicenseDao
                     'plan' => 4,
                 ]);
             } else {
-                $stmt = $connection->prepare("INSERT INTO companies_licenses (id_company, license_start, license_end, flag_products_measure, quantity_user, license_status, plan)
+                $stmt = $connection->prepare("INSERT INTO admin_companies_licenses (id_company, license_start, license_end, flag_products_measure, quantity_user, license_status, plan)
                                           VALUES (:id_company, :license_start, :license_end, :flag_products_measure, :quantity_user, :license_status, :plan)");
                 $stmt->execute([
                     'id_company' => $id_company,
@@ -99,7 +99,7 @@ class CompaniesLicenseDao
     {
         $connection = Connection::getInstance()->getConnection();
         try {
-            $stmt = $connection->prepare("UPDATE companies_licenses SET license_start = :license_start, license_end = :license_end,
+            $stmt = $connection->prepare("UPDATE admin_companies_licenses SET license_start = :license_start, license_end = :license_end,
                                                  flag_products_measure = :flag_products_measure, quantity_user = :quantity_user, plan = :plan
                                           WHERE id_company = :id_company");
             $stmt->execute([

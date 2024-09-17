@@ -21,7 +21,7 @@ class GeneralPlanCiclesMachinesDao
     {
         $connection = Connection::getInstance()->getConnection();
 
-        $stmt = $connection->prepare("SELECT * FROM plan_cicles_machine WHERE id_cicles_machine = :id_cicles_machine");
+        $stmt = $connection->prepare("SELECT * FROM machine_cicles WHERE id_cicles_machine = :id_cicles_machine");
         $stmt->execute(['id_cicles_machine' => $id_cicles_machine]);
         $planCiclesMachine = $stmt->fetch($connection::FETCH_ASSOC);
         return $planCiclesMachine;
@@ -31,7 +31,7 @@ class GeneralPlanCiclesMachinesDao
     // {
     //     $connection = Connection::getInstance()->getConnection();
 
-    //     $stmt = $connection->prepare("SELECT *  FROM plan_cicles_machine
+    //     $stmt = $connection->prepare("SELECT *  FROM machine_cicles
     //                                   WHERE id_product = :id_product AND id_company = :id_company");
     //     $stmt->execute([
     //         'id_product' => $dataCiclesMachine['idProduct'],
@@ -45,7 +45,7 @@ class GeneralPlanCiclesMachinesDao
     {
         $connection = Connection::getInstance()->getConnection();
 
-        $stmt = $connection->prepare("SELECT *  FROM plan_cicles_machine
+        $stmt = $connection->prepare("SELECT *  FROM machine_cicles
                                       WHERE id_machine = :id_machine AND id_company = :id_company");
         $stmt->execute([
             'id_machine' => $id_machine,
@@ -61,7 +61,7 @@ class GeneralPlanCiclesMachinesDao
 
         $stmt = $connection->prepare("SELECT pcm.id_cicles_machine, pcm.cicles_hour, pcm.units_turn, pcm.units_month, p.id_product, p.reference, p.product, IFNULL(pc.id_process, 0) AS id_process, IFNULL(pc.process, '') AS process, IFNULL(pcm.id_machine, 0) AS id_machine, 
                                              IFNULL(m.machine, 'PROCESO MANUAL') AS machine, COUNT(DISTINCT py.id_plan_payroll) AS employees, ROW_NUMBER() OVER () AS route
-                                      FROM plan_cicles_machine pcm
+                                      FROM machine_cicles pcm
                                         INNER JOIN products p ON p.id_product = pcm.id_product
                                         LEFT JOIN machines m ON m.id_machine = pcm.id_machine
                                         LEFT JOIN process pc ON pc.id_process = pcm.id_process 
@@ -82,7 +82,7 @@ class GeneralPlanCiclesMachinesDao
         $connection = Connection::getInstance()->getConnection();
 
         $stmt = $connection->prepare("SELECT pcm.id_cicles_machine, pcm.cicles_hour, pcm.units_turn, pcm.units_month, p.id_product, p.reference, p.product, IFNULL(pc.id_process, 0) AS id_process, IFNULL(pc.process, '') AS process, m.id_machine, m.machine, pcm.route
-                                      FROM plan_cicles_machine pcm
+                                      FROM machine_cicles pcm
                                         INNER JOIN products p ON p.id_product = pcm.id_product
                                         INNER JOIN machines m ON m.id_machine = pcm.id_machine
                                         LEFT JOIN process pc ON pc.id_process = pcm.id_process
@@ -100,7 +100,7 @@ class GeneralPlanCiclesMachinesDao
     {
         $connection = Connection::getInstance()->getConnection();
 
-        $stmt = $connection->prepare("SELECT * FROM plan_cicles_machine
+        $stmt = $connection->prepare("SELECT * FROM machine_cicles
                                       WHERE id_product = :id_product AND id_machine = :id_machine AND id_process = :id_process");
         $stmt->execute([
             'id_product' => $id_product,
@@ -115,7 +115,7 @@ class GeneralPlanCiclesMachinesDao
     {
         $connection = Connection::getInstance()->getConnection();
 
-        $stmt = $connection->prepare("SELECT * FROM plan_cicles_machine
+        $stmt = $connection->prepare("SELECT * FROM machine_cicles
                                       WHERE id_product = :id_product AND id_process = :id_process AND id_machine = :id_machine AND id_company = :id_company");
         $stmt->execute([
             'id_product' => $dataCiclesMachine['idProduct'],
@@ -132,7 +132,7 @@ class GeneralPlanCiclesMachinesDao
         $connection = Connection::getInstance()->getConnection();
 
         $stmt = $connection->prepare("SELECT MAX(route) + 1 AS route
-                                      FROM plan_cicles_machine
+                                      FROM machine_cicles
                                       WHERE id_product = :id_product");
         $stmt->execute([
             'id_product' => $id_product,
@@ -145,7 +145,7 @@ class GeneralPlanCiclesMachinesDao
     {
         try {
             $connection = Connection::getInstance()->getConnection();
-            $stmt = $connection->prepare("UPDATE plan_cicles_machine SET units_turn = :units_turn, units_month = :units_month
+            $stmt = $connection->prepare("UPDATE machine_cicles SET units_turn = :units_turn, units_month = :units_month
                                           WHERE id_cicles_machine = :id_cicles_machine");
             $stmt->execute([
                 'units_turn' => $dataCiclesMachine['units_turn'],
@@ -161,7 +161,7 @@ class GeneralPlanCiclesMachinesDao
     {
         try {
             $connection = Connection::getInstance()->getConnection();
-            $stmt = $connection->prepare("UPDATE plan_cicles_machine SET route = :route WHERE id_cicles_machine = :id_cicles_machine");
+            $stmt = $connection->prepare("UPDATE machine_cicles SET route = :route WHERE id_cicles_machine = :id_cicles_machine");
             $stmt->execute([
                 'route' => $dataCiclesMachine['route'],
                 'id_cicles_machine' => $dataCiclesMachine['idCiclesMachine']

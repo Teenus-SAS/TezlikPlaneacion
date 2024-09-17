@@ -45,14 +45,14 @@ class StatusActiveUserDao
       $stmt = $connection->prepare("UPDATE users SET session_active = :session_active WHERE id_user = :id_user");
       $stmt->execute(['session_active' => $session, 'id_user' => $id_user]);
     } else if ($case == 2) {
-      $stmt = $connection->prepare("SELECT session_active FROM admins WHERE id_admin = :id_admin");
+      $stmt = $connection->prepare("SELECT session_active FROM admin_users WHERE id_admin = :id_admin");
       $stmt->execute(['id_admin' => $id_user]);
       $session = $stmt->fetch($connection::FETCH_ASSOC);
       $session = $session['session_active'];
 
       ($session == 1 ? $session = 0 : $session == 0) ? $session = 1 : $session;
 
-      $stmt = $connection->prepare("UPDATE admins SET session_active = :session_active WHERE id_admin = :id_admin");
+      $stmt = $connection->prepare("UPDATE admin_users SET session_active = :session_active WHERE id_admin = :id_admin");
       $stmt->execute(['session_active' => $session, 'id_admin' => $id_user]);
     }
   }

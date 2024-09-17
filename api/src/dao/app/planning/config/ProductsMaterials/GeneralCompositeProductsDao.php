@@ -23,8 +23,8 @@ class GeneralCompositeProductsDao
         //                                      u.id_unit, u.unit, u.abbreviation, cp.quantity, 'Producto' AS type
         //                               FROM products p 
         //                                 INNER JOIN products_composite cp ON cp.id_child_product = p.id_product 
-        //                                 INNER JOIN convert_units u ON u.id_unit = cp.id_unit
-        //                                 INNER JOIN convert_magnitudes mg ON mg.id_magnitude = u.id_magnitude
+        //                                 INNER JOIN admin_units u ON u.id_unit = cp.id_unit
+        //                                 INNER JOIN admin_magnitudes mg ON mg.id_magnitude = u.id_magnitude
         //                               WHERE cp.id_company = :id_company AND p.active = 1 AND (SELECT active FROM products WHERE id_product = cp.id_product) = 1");
         $stmt = $connection->prepare("SELECT cp.id_composite_product, 0 AS id_product_material, cp.id_product, p.reference AS reference_product, p.product, cp.id_child_product, p.reference AS reference_material, 
                                              p.product AS material, (pi.quantity / cp.quantity) AS quantity, cp.quantity AS quantity_ftm, 'PRODUCTO' AS type,
@@ -32,8 +32,8 @@ class GeneralCompositeProductsDao
                                       FROM products p 
                                         INNER JOIN products_composite cp ON cp.id_child_product = p.id_product 
                                         INNER JOIN inv_products pi ON pi.id_product = cp.id_child_product
-                                        LEFT JOIN convert_units u ON u.id_unit = cp.id_unit
-                                        LEFT JOIN convert_magnitudes mg ON mg.id_magnitude = u.id_magnitude
+                                        LEFT JOIN admin_units u ON u.id_unit = cp.id_unit
+                                        LEFT JOIN admin_magnitudes mg ON mg.id_magnitude = u.id_magnitude
                                       WHERE p.id_company = :id_company");
         $stmt->execute(['id_company' => $id_company]);
         $compositeProducts = $stmt->fetchAll($connection::FETCH_ASSOC);

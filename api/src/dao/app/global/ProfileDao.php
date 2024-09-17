@@ -54,7 +54,7 @@ class ProfileDao
 
         try {
             if (empty($dataAdmin['password'])) {
-                $stmt = $connection->prepare("UPDATE admins SET firstname = :firstname, lastname = :lastname
+                $stmt = $connection->prepare("UPDATE admin_users SET firstname = :firstname, lastname = :lastname
                                           WHERE id_admin = :id_admin");
                 $stmt->execute([
                     'id_admin' => $dataAdmin['idUser'],
@@ -63,7 +63,7 @@ class ProfileDao
                 ]);
             } else {
                 $pass = password_hash($dataAdmin['password'], PASSWORD_DEFAULT);
-                $stmt = $connection->prepare("UPDATE admins SET firstname = :firstname, lastname = :lastname, password = :pass
+                $stmt = $connection->prepare("UPDATE admin_users SET firstname = :firstname, lastname = :lastname, password = :pass
                                           WHERE id_admin = :id_admin");
                 $stmt->execute([
                     'id_admin' => $dataAdmin['idUser'],

@@ -22,11 +22,11 @@ class GeneralOfficesDao
 
         $stmt = $connection->prepare("SELECT o.id_order, o.id_client, p.reference, pi.quantity, pi.minimum_stock, pi.accumulated_quantity, o.id_product, ps.status, o.num_order, o.date_order, o.original_quantity, p.product, c.client, o.min_date, o.max_date, o.delivery_date,
                                              IFNULL(last_user.id_user, 0) AS id_user_order, IFNULL(last_user.firstname, '') AS firstname_order, IFNULL(last_user.lastname, '') AS lastname_order
-                                      FROM plan_orders o
+                                      FROM orders o
                                         INNER JOIN products p ON p.id_product = o.id_product
                                         INNER JOIN inv_products pi ON pi.id_product = o.id_product
                                         INNER JOIN plan_clients c ON c.id_client = o.id_client
-                                        INNER JOIN plan_status ps ON ps.id_status = o.status
+                                        INNER JOIN orders_status ps ON ps.id_status = o.status
                                      -- Subconsulta para obtener el último usuario de entrega
                                         LEFT JOIN (
                                             SELECT uof.id_order, curd.id_user AS id_user_deliver, curd.firstname AS firstname_deliver, curd.lastname AS lastname_deliver
@@ -53,11 +53,11 @@ class GeneralOfficesDao
 
         $stmt = $connection->prepare("SELECT o.id_order, o.id_client, o.id_product, pi.minimum_stock, o.num_order, ps.status, o.date_order, o.original_quantity, p.reference, p.product, pi.quantity, pi.accumulated_quantity, c.client, o.min_date, o.max_date, o.delivery_date
                                              IFNULL(last_user.id_user, 0) AS id_user_order, IFNULL(last_user.firstname, '') AS firstname_order, IFNULL(last_user.lastname, '') AS lastname_order
-                                      FROM plan_orders o
+                                      FROM orders o
                                         INNER JOIN products p ON p.id_product = o.id_product
                                         INNER JOIN inv_products pi ON pi.id_product = o.id_product
                                         INNER JOIN plan_clients c ON c.id_client = o.id_client
-                                        INNER JOIN plan_status ps ON ps.id_status = o.status
+                                        INNER JOIN orders_status ps ON ps.id_status = o.status
                                      -- Subconsulta para obtener el último usuario de entrega
                                         LEFT JOIN (
                                             SELECT uof.id_order, curd.id_user AS id_user_deliver, curd.firstname AS firstname_deliver, curd.lastname AS lastname_deliver

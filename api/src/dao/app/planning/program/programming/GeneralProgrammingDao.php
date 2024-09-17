@@ -54,11 +54,11 @@ class GeneralProgrammingDao
                                              (SELECT IFNULL((1*cm.quantity/cpm.quantity), 0) FROM products_materials cpm INNER JOIN inv_materials cm ON cm.id_material = cpm.id_material WHERE cpm.id_product = pg.id_product ORDER BY `IFNULL((1*cm.quantity/cpm.quantity), 0)` ASC LIMIT 1) AS quantity_mp,
                                              pg.status
                                       FROM programming pg
-                                        INNER JOIN plan_orders o ON o.id_order = pg.id_order
+                                        INNER JOIN orders o ON o.id_order = pg.id_order
                                         INNER JOIN products p ON p.id_product = pg.id_product
                                         INNER JOIN machines m ON m.id_machine = pg.id_machine
                                         INNER JOIN plan_clients c ON c.id_client = o.id_client
-                                        INNER JOIN plan_program_machines pm ON pm.id_machine = pg.id_machine
+                                        INNER JOIN machine_programs pm ON pm.id_machine = pg.id_machine
                                       WHERE pg.id_company = :id_company AND pg.status = 1");
         $stmt->execute(['id_company' => $id_company]);
 
@@ -77,12 +77,12 @@ class GeneralProgrammingDao
                                              (SELECT IFNULL((1*cm.quantity/cpm.quantity), 0) FROM products_materials cpm INNER JOIN inv_materials cm ON cm.id_material = cpm.id_material WHERE cpm.id_product = pg.id_product ORDER BY `IFNULL((1*cm.quantity/cpm.quantity), 0)` ASC LIMIT 1) AS quantity_mp, pc.id_process, pc.process,
                                              pg.status
                                       FROM programming pg
-                                        INNER JOIN plan_orders o ON o.id_order = pg.id_order
+                                        INNER JOIN orders o ON o.id_order = pg.id_order
                                         INNER JOIN products p ON p.id_product = pg.id_product
                                         INNER JOIN machines m ON m.id_machine = pg.id_machine
                                         INNER JOIN plan_clients c ON c.id_client = o.id_client
-                                        INNER JOIN plan_program_machines pm ON pm.id_machine = pg.id_machine
-                                        INNER JOIN plan_cicles_machine cp ON cp.id_product = pg.id_product AND cp.id_machine = pg.id_machine 
+                                        INNER JOIN machine_programs pm ON pm.id_machine = pg.id_machine
+                                        INNER JOIN machine_cicles cp ON cp.id_product = pg.id_product AND cp.id_machine = pg.id_machine 
                                         INNER JOIN process pc ON pc.id_process = cp.id_process
                                       WHERE pg.id_machine = :id_machine AND pg.id_company = :id_company AND pg.status = 0");
         $stmt->execute([
@@ -100,8 +100,8 @@ class GeneralProgrammingDao
         $connection = Connection::getInstance()->getConnection();
 
         $stmt = $connection->prepare("SELECT o.id_order, o.id_client, o.id_product, o.num_order, ps.status, o.date_order, o.accumulated_quantity, o.original_quantity, o.min_date, o.max_date, o.delivery_date, o.office_date
-                                      FROM plan_orders o
-                                        INNER JOIN plan_status ps ON ps.id_status = o.status
+                                      FROM orders o
+                                        INNER JOIN orders_status ps ON ps.id_status = o.status
                                       WHERE o.id_company = :id_company
                                       AND o.status IN (1, 4) AND (o.accumulated_quantity IS NULL OR o.accumulated_quantity != 0)");
         $stmt->execute(['id_company' => $id_company]);
@@ -161,7 +161,7 @@ class GeneralProgrammingDao
         $connection = Connection::getInstance()->getConnection();
 
         $stmt = $connection->prepare("SELECT o.original_quantity, (SELECT IFNULL(SUM(quantity), 0) FROM programming WHERE id_order = o.id_order) AS quantity_programming
-                                      FROM plan_orders o 
+                                      FROM orders o 
                                       WHERE o.id_order = :id_order");
         $stmt->execute([
             'id_order' => $id_order

@@ -20,7 +20,7 @@ class GeneralOrderTypesDao
     {
         $connection = Connection::getInstance()->getConnection();
 
-        $stmt = $connection->prepare("SELECT * FROM plan_orders_types WHERE order_type = :order_type");
+        $stmt = $connection->prepare("SELECT * FROM orders_types WHERE order_type = :order_type");
         $stmt->execute([
             'order_type' => ucfirst(strtolower(trim($dataOrderTypes['orderType'])))
         ]);

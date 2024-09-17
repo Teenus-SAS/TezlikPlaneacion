@@ -24,8 +24,8 @@ class CompositeProductsDao
                                       FROM products p 
                                         INNER JOIN products_composite cp ON cp.id_child_product = p.id_product 
                                         LEFT JOIN inv_products pi ON pi.id_product = cp.id_child_product
-                                        INNER JOIN convert_units u ON u.id_unit = cp.id_unit
-                                        INNER JOIN convert_magnitudes mg ON mg.id_magnitude = u.id_magnitude
+                                        INNER JOIN admin_units u ON u.id_unit = cp.id_unit
+                                        INNER JOIN admin_magnitudes mg ON mg.id_magnitude = u.id_magnitude
                                       WHERE cp.id_company = :id_company AND cp.id_product = :id_product");
         $stmt->execute(['id_product' => $idProduct, 'id_company' => $id_company]);
         $compositeProducts = $stmt->fetchAll($connection::FETCH_ASSOC);

@@ -22,7 +22,7 @@ class LastDataDao
         $connection = Connection::getInstance()->getConnection();
 
         $stmt = $connection->prepare("SELECT cp.company, us.firstname, us.lastname, us.last_login 
-                                      FROM users us INNER JOIN companies cp ON cp.id_company = us.id_company
+                                      FROM users us INNER JOIN admin_companies cp ON cp.id_company = us.id_company
                                       WHERE us.session_active = 1 ORDER BY us.last_login DESC");
         $stmt->execute();
         $this->logger->info(__FUNCTION__, array('query' => $stmt->queryString, 'errors' => $stmt->errorInfo()));
@@ -37,7 +37,7 @@ class LastDataDao
     {
         $connection = Connection::getInstance()->getConnection();
 
-        $stmt = $connection->prepare("SELECT MAX(id_company) AS idCompany FROM companies");
+        $stmt = $connection->prepare("SELECT MAX(id_company) AS idCompany FROM admin_companies");
         $stmt->execute();
         $lastId = $stmt->fetch($connection::FETCH_ASSOC);
 
@@ -141,7 +141,7 @@ class LastDataDao
     {
         $connection = Connection::getInstance()->getConnection();
 
-        $stmt = $connection->prepare("SELECT MAX(id_cicles_machine) AS id_cicles_machine FROM plan_cicles_machine WHERE id_company = :id_company");
+        $stmt = $connection->prepare("SELECT MAX(id_cicles_machine) AS id_cicles_machine FROM machine_cicles WHERE id_company = :id_company");
         $stmt->execute(['id_company' => $id_company]);
 
         $this->logger->info(__FUNCTION__, array('query' => $stmt->queryString, 'errors' => $stmt->errorInfo()));
@@ -154,7 +154,7 @@ class LastDataDao
     {
         $connection = Connection::getInstance()->getConnection();
 
-        $stmt = $connection->prepare("SELECT MAX(id_order) AS id_order FROM plan_orders WHERE id_company = :id_company");
+        $stmt = $connection->prepare("SELECT MAX(id_order) AS id_order FROM orders WHERE id_company = :id_company");
         $stmt->execute(['id_company' => $id_company]);
         $this->logger->info(__FUNCTION__, array('query' => $stmt->queryString, 'errors' => $stmt->errorInfo()));
 

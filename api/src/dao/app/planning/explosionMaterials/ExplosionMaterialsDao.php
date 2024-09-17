@@ -25,8 +25,8 @@ class ExplosionMaterialsDao
                                         LEFT JOIN inv_products pi ON pi.id_product = cp.id_product
                                         LEFT JOIN inv_products cpi ON cpi.id_product = cp.id_child_product
                                         LEFT JOIN products p ON p.id_product = cp.id_child_product
-                                        INNER JOIN convert_units u ON u.id_unit = cp.id_unit
-                                        INNER JOIN plan_orders o ON o.id_product = cp.id_product
+                                        INNER JOIN admin_units u ON u.id_unit = cp.id_unit
+                                        INNER JOIN orders o ON o.id_product = cp.id_product
                                       WHERE cp.id_company = :id_company AND o.status IN (1,4,5,6)
                                       GROUP BY cp.id_composite_product, o.id_order");
     $stmt->execute(['id_company' => $id_company]);
@@ -47,8 +47,8 @@ class ExplosionMaterialsDao
                                       FROM products_composite cp
                                         LEFT JOIN inv_products pi ON pi.id_product = cp.id_product
                                         LEFT JOIN inv_products cpi ON cpi.id_product = cp.id_child_product 
-                                        INNER JOIN convert_units u ON u.id_unit = cp.id_unit
-                                        INNER JOIN plan_orders o ON o.id_product = cp.id_product
+                                        INNER JOIN admin_units u ON u.id_unit = cp.id_unit
+                                        INNER JOIN orders o ON o.id_product = cp.id_product
                                       WHERE cp.id_product = :id_product AND o.status IN (1,4,5,6)
                                       GROUP BY cp.id_composite_product, o.id_order");
     $stmt->execute(['id_product' => $id_product]);
@@ -72,8 +72,8 @@ class ExplosionMaterialsDao
                                         INNER JOIN products_materials pm ON pm.id_product = p.id_product
                                         INNER JOIN materials m ON m.id_material = pm.id_material
                                         INNER JOIN inv_materials mi ON mi.id_material = pm.id_material
-                                        INNER JOIN convert_units u ON u.id_unit = m.unit
-                                        INNER JOIN plan_orders o ON o.id_product = p.id_product
+                                        INNER JOIN admin_units u ON u.id_unit = m.unit
+                                        INNER JOIN orders o ON o.id_product = p.id_product
                                         LEFT JOIN requisitions r ON r.id_material = pm.id_material
                                         LEFT JOIN programming pg ON pg.id_order = o.id_order
                                       WHERE p.id_company = :id_company AND o.status IN (1,4,5,6)
@@ -100,8 +100,8 @@ class ExplosionMaterialsDao
                                         INNER JOIN products_materials pm ON pm.id_product = p.id_product
                                         INNER JOIN materials m ON m.id_material = pm.id_material
                                         INNER JOIN inv_materials mi ON mi.id_material = pm.id_material
-                                        INNER JOIN convert_units u ON u.id_unit = m.unit
-                                        INNER JOIN plan_orders o ON o.id_product = p.id_product
+                                        INNER JOIN admin_units u ON u.id_unit = m.unit
+                                        INNER JOIN orders o ON o.id_product = p.id_product
                                         LEFT JOIN requisitions r ON r.id_material = pm.id_material
                                         LEFT JOIN programming pg ON pg.id_order = o.id_order
                                       WHERE p.id_product = :id_product AND o.status IN (1,4,5,6)
@@ -128,8 +128,8 @@ class ExplosionMaterialsDao
                                         INNER JOIN products_materials pm ON pm.id_material = m.id_material
                                         INNER JOIN inv_products pi ON pi.id_product = pm.id_product
                                         INNER JOIN products p ON p.id_product = pm.id_product
-                                        INNER JOIN convert_units u ON u.id_unit = m.unit
-                                        INNER JOIN plan_orders o ON o.id_product = pm.id_product
+                                        INNER JOIN admin_units u ON u.id_unit = m.unit
+                                        INNER JOIN orders o ON o.id_product = pm.id_product
                                         LEFT JOIN requisitions r ON r.id_material = m.id_material
                                         LEFT JOIN programming pg ON pg.id_order = o.id_order
                                       WHERE m.id_material = :id_material AND o.status IN (1,4,5,6)

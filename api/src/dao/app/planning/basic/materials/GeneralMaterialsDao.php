@@ -23,8 +23,8 @@ class GeneralMaterialsDao
                                              IFNULL(s.min_term, 0) AS min_term, IFNULL(s.max_term, 0) AS max_term, IFNULL(s.min_quantity, 0) AS min_quantity, mi.minimum_stock, IFNULL(s.id_provider, 0) AS id_provider, IFNULL(c.client, '') AS client                               
                                       FROM materials m
                                           INNER JOIN inv_materials mi ON mi.id_material = m.id_material
-                                          INNER JOIN convert_units u ON u.id_unit = m.unit
-                                          INNER JOIN convert_magnitudes mg ON mg.id_magnitude = u.id_magnitude
+                                          INNER JOIN admin_units u ON u.id_unit = m.unit
+                                          INNER JOIN admin_magnitudes mg ON mg.id_magnitude = u.id_magnitude
                                           LEFT JOIN inv_stock_materials s ON s.id_material = m.id_material
                                           LEFT JOIN plan_clients c ON c.id_client = s.id_provider
                                       WHERE m.id_company = :id_company ORDER BY m.material ASC");
@@ -44,7 +44,7 @@ class GeneralMaterialsDao
 
         $stmt = $connection->prepare("SELECT IFNULL(SUM(pg.quantity * pm.quantity), 0) AS reserved
                                       FROM programming pg 
-                                        LEFT JOIN plan_orders o ON o.id_order = pg.id_order
+                                        LEFT JOIN orders o ON o.id_order = pg.id_order
                                         LEFT JOIN products_materials pm ON pm.id_product = pg.id_product 
                                       WHERE pm.id_material = :id_material AND o.status IN(4,7) AND pg.new_programming = 1");
         $stmt->execute([
@@ -104,8 +104,8 @@ class GeneralMaterialsDao
                                              u.id_unit, u.abbreviation, mi.quantity
                                       FROM materials m
                                         INNER JOIN inv_materials mi ON mi.id_material = m.id_material
-                                        INNER JOIN convert_units u ON u.id_unit = m.unit
-                                        INNER JOIN convert_magnitudes mg ON mg.id_magnitude = u.id_magnitude
+                                        INNER JOIN admin_units u ON u.id_unit = m.unit
+                                        INNER JOIN admin_magnitudes mg ON mg.id_magnitude = u.id_magnitude
                                       WHERE m.id_material = :id_material AND m.id_company = :id_company");
         $stmt->execute([
             'id_material' => $id_material,

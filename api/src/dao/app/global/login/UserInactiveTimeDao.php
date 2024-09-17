@@ -30,7 +30,7 @@ class UserInactiveTimeDao extends StatusActiveUserDao
         $stmt = $connection->prepare("SELECT session_active FROM users WHERE id_user = :id_user");
         $stmt->execute(['id_user' => $id_user]);
       } else if ($case == 2) {
-        $stmt = $connection->prepare("SELECT session_active FROM admins WHERE id_admin = :id_admin");
+        $stmt = $connection->prepare("SELECT session_active FROM admin_users WHERE id_admin = :id_admin");
         $stmt->execute(['id_admin' => $id_user]);
       }
     }

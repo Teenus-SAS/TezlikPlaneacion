@@ -22,7 +22,7 @@ class GeneralProductsDao
         $stmt = $connection->prepare("SELECT p.id_product, p.reference, p.product, p.product AS descript, p.img, pi.quantity, pi.reserved, pi.classification, 'UNIDAD' AS unit, IFNULL(u.jan , 0) AS jan, pi.minimum_stock, 
                                          IFNULL(u.feb, 0) AS feb, IFNULL(u.mar, 0) AS mar, IFNULL(u.apr, 0) AS apr, IFNULL(u.may, 0) AS may, IFNULL(u.jun, 0) AS jun, IFNULL(u.jul, 0) AS jul, IFNULL(u.aug, 0) AS aug, IFNULL(u.sept, 0) AS sept, IFNULL(u.oct, 0) AS oct, IFNULL(u.nov, 0) AS nov, IFNULL(u.dece, 0) AS dece
                                   FROM products p
-                                  LEFT JOIN plan_unit_sales u ON u.id_product = p.id_product 
+                                  LEFT JOIN sales_by_units u ON u.id_product = p.id_product 
                                   INNER JOIN inv_products pi ON pi.id_product = p.id_product 
                                   WHERE p.id_company = :id_company");
         $stmt->execute(['id_company' => $id_company]);
@@ -93,8 +93,8 @@ class GeneralProductsDao
         $stmt = $connection->prepare("SELECT pm.id_product, m.id_magnitude
                                       FROM products p
                                         INNER JOIN products_materials pm ON pm.id_product = p.id_product
-                                        INNER JOIN convert_units c ON c.id_unit = pm.id_unit
-                                        INNER JOIN convert_magnitudes m ON m.id_magnitude = c.id_magnitude
+                                        INNER JOIN admin_units c ON c.id_unit = pm.id_unit
+                                        INNER JOIN admin_magnitudes m ON m.id_magnitude = c.id_magnitude
                                       WHERE pm.id_material =:id_material AND p.id_company = :id_company");
         $stmt->execute(['id_material' => $idMaterial, 'id_company' => $id_company]);
         $dataProduct = $stmt->fetchAll($connection::FETCH_ASSOC);
@@ -165,7 +165,7 @@ class GeneralProductsDao
         $connection = Connection::getInstance()->getConnection();
 
         $stmt = $connection->prepare("SELECT SUM(original_quantity) AS reserved
-                                      FROM plan_orders 
+                                      FROM orders 
                                       WHERE id_product = :id_product AND status = 2");
         $stmt->execute([
             'id_product' => $id_product

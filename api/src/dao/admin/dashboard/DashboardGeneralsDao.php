@@ -32,7 +32,7 @@ class DashboardGeneralsDao
     public function findAllCompanies()
     {
         $connection = Connection::getInstance()->getConnection();
-        $stmt = $connection->prepare("SELECT COUNT(id_company) AS companies FROM companies");
+        $stmt = $connection->prepare("SELECT COUNT(id_company) AS admin_companies FROM admin_companies");
         $stmt->execute();
         $this->logger->info(__FUNCTION__, array('query' => $stmt->queryString, 'errors' => $stmt->errorInfo()));
         $companies = $stmt->fetch($connection::FETCH_ASSOC);

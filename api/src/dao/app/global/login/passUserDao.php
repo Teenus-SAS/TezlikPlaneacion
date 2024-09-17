@@ -43,9 +43,9 @@ class PassUserDao
         $stmt->execute(['email' => $email]);
         $rows = $stmt->rowCount();
 
-        //Valide en la tabla de admins
+        //Valide en la tabla de admin_users
         if (!$rows) {
-            $stmt = $connection->prepare("SELECT * FROM admins WHERE email = :email");
+            $stmt = $connection->prepare("SELECT * FROM admin_users WHERE email = :email");
             $stmt->execute(['email' => $email]);
             $rows = $stmt->rowCount();
             $admins = 1;
@@ -63,7 +63,7 @@ class PassUserDao
             $pass = password_hash($new_pass, PASSWORD_DEFAULT);
 
             if ($admins)
-                $stmt = $connection->prepare("UPDATE admins SET password = :pass WHERE email = :email");
+                $stmt = $connection->prepare("UPDATE admin_users SET password = :pass WHERE email = :email");
             else
                 $stmt = $connection->prepare("UPDATE users SET password = :pass WHERE email = :email");
 

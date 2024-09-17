@@ -22,8 +22,8 @@ class LicenseCompanyDao
         $connection = Connection::getInstance()->getConnection();
 
         $stmt = $connection->prepare("SELECT * , CASE WHEN cl.license_end > CURRENT_DATE THEN TIMESTAMPDIFF(DAY, CURRENT_DATE, license_end) ELSE 0 END license_days
-                                        FROM companies c
-                                        INNER JOIN companies_licenses cl ON cl.id_company = c.id_company
+                                        FROM admin_companies c
+                                        INNER JOIN admin_companies_licenses cl ON cl.id_company = c.id_company
                                       WHERE c.id_company = :id_company");
         $stmt->execute(['id_company' => $id_company]);
         $this->logger->info(__FUNCTION__, array('query' => $stmt->queryString, 'errors' => $stmt->errorInfo()));
@@ -39,7 +39,7 @@ class LicenseCompanyDao
             $licenseStart = date('Y-m-d');
             $licenseEnd = date("Y-m-d", strtotime($licenseStart . "+ 30 day"));
 
-            $stmt = $connection->prepare("INSERT INTO companies_licenses (id_company, license_start, quantity_user, license_status)
+            $stmt = $connection->prepare("INSERT INTO admin_companies_licenses (id_company, license_start, quantity_user, license_status)
                                           VALUES (:id_company, :license_start, :quantity_user, :license_status)");
             $stmt->execute([
                 'id_company' => $id_company,
@@ -61,7 +61,7 @@ class LicenseCompanyDao
     {
         $connection = Connection::getInstance()->getConnection();
         try {
-            $stmt = $connection->prepare("UPDATE companies_licenses SET license_start = :license_start, license_end = :license_end, quantity_user = :quantity_user, license_status = :license_status
+            $stmt = $connection->prepare("UPDATE admin_companies_licenses SET license_start = :license_start, license_end = :license_end, quantity_user = :quantity_user, license_status = :license_status
                                           WHERE id_company_license = :id_company_license");
             $stmt->execute([
                 'id_company_license' => $dataLicenseCompany['idCompanyLicense'],
@@ -81,12 +81,12 @@ class LicenseCompanyDao
     public function deleteLicenseCompany($id_company_license)
     {
         $connection = Connection::getInstance()->getConnection();
-        $stmt = $connection->prepare("SELECT * FROM companies_licenses WHERE id_company_license = :id_company_license");
+        $stmt = $connection->prepare("SELECT * FROM admin_companies_licenses WHERE id_company_license = :id_company_license");
         $stmt->execute(['id_company_license' => $id_company_license]);
         $rows = $stmt->rowCount();
 
         if ($rows > 0) {
-            $stmt = $connection->prepare("DELETE FROM companies_licenses WHERE id_company_license = :id_company_license");
+            $stmt = $connection->prepare("DELETE FROM admin_companies_licenses WHERE id_company_license = :id_company_license");
             $stmt->execute(['id_company_license' => $id_company_license]);
             $this->logger->info(__FUNCTION__, array('query' => $stmt->queryString, 'errors' => $stmt->errorInfo()));
         }

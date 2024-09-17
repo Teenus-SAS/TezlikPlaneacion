@@ -21,7 +21,7 @@ class GeneralPlanningMachinesDao
     {
         $connection = Connection::getInstance()->getConnection();
 
-        $stmt = $connection->prepare("SELECT * FROM plan_program_machines 
+        $stmt = $connection->prepare("SELECT * FROM machine_programs 
                                       WHERE id_machine = :id_machine AND id_company = :id_company");
         $stmt->execute(['id_machine' => $dataPMachines['idMachine'], 'id_company' => $id_company]);
         $planningMachines = $stmt->fetch($connection::FETCH_ASSOC);
@@ -33,7 +33,7 @@ class GeneralPlanningMachinesDao
         try {
             $connection = Connection::getInstance()->getConnection();
 
-            $stmt = $connection->prepare("UPDATE plan_program_machines SET status = :status WHERE id_program_machine = :id_program_machine");
+            $stmt = $connection->prepare("UPDATE machine_programs SET status = :status WHERE id_program_machine = :id_program_machine");
             $stmt->execute([
                 'status' => $status,
                 'id_program_machine' => $id_program_machine

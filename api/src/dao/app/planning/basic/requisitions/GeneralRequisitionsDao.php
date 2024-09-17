@@ -24,7 +24,7 @@ class GeneralRequisitionsDao
         //                                      IFNULL(ur.id_user, 0) AS id_user_requisition, IFNULL(ur.firstname, '') AS firstname_requisition, IFNULL(ur.lastname, '') AS lastname_requisition, IFNULL(urd.id_user, 0) AS id_user_deliver, IFNULL(urd.firstname, '') AS firstname_deliver, IFNULL(urd.lastname, '') AS lastname_deliver
         //                               FROM requisitions r
         //                                 INNER JOIN materials m ON m.id_material = r.id_material 
-        //                                 INNER JOIN convert_units cu ON cu.id_unit = m.unit
+        //                                 INNER JOIN admin_units cu ON cu.id_unit = m.unit
         //                                 LEFT JOIN plan_clients c ON c.id_client = r.id_provider
         //                                 LEFT JOIN users ur ON ur.id_user = r.id_user_requisition
         //                                 LEFT JOIN users urd ON urd.id_user = r.id_user_deliver
@@ -56,7 +56,7 @@ class GeneralRequisitionsDao
                                       FROM 
                                             requisitions r
                                             INNER JOIN materials m ON m.id_material = r.id_material 
-                                            INNER JOIN convert_units cu ON cu.id_unit = m.unit
+                                            INNER JOIN admin_units cu ON cu.id_unit = m.unit
                                             LEFT JOIN plan_clients c ON c.id_client = r.id_provider
                                             LEFT JOIN users ur ON ur.id_user = r.id_user_requisition
                                             -- Subconsulta para obtener el último usuario de entrega
@@ -86,7 +86,7 @@ class GeneralRequisitionsDao
                                              IFNULL(ur.id_user, 0) AS id_user_requisition, IFNULL(ur.firstname, '') AS firstname_requisition, IFNULL(ur.lastname, '') AS lastname_requisition
                                       FROM requisitions r
                                         INNER JOIN materials m ON m.id_material = r.id_material
-                                        INNER JOIN convert_units cu ON cu.id_unit = m.unit
+                                        INNER JOIN admin_units cu ON cu.id_unit = m.unit
                                         LEFT JOIN plan_clients c ON c.id_client = r.id_provider
                                         LEFT JOIN users ur ON ur.id_user = r.id_user_requisition
                                       WHERE r.id_company = :id_company

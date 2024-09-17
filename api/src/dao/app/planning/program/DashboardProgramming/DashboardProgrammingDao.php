@@ -43,7 +43,7 @@ class DashboardProgrammingDao
         $connection = Connection::getInstance()->getConnection();
 
         $sql = "SELECT m.machine, pm.status AS status
-                FROM plan_program_machines pm
+                FROM machine_programs pm
                 INNER JOIN machines m ON pm.id_machine = m.id_machine
                 WHERE pm.type_program_machine = 1 AND pm.id_company = :id_company;";
         $stmt = $connection->prepare($sql);
@@ -74,7 +74,7 @@ class DashboardProgrammingDao
                     END) AS monthly_capacity_hours, -- Capacidad mensual en horas
                     COALESCE(SUM(p.min_programming) / 60, 0) AS total_programmed_hours -- Capacidad programada en horas
                 FROM machines m
-                LEFT JOIN plan_program_machines pp ON m.id_machine = pp.id_machine
+                LEFT JOIN machine_programs pp ON m.id_machine = pp.id_machine
                 LEFT JOIN programming p ON m.id_machine = p.id_machine 
                 WHERE m.id_company = :id_company
                 GROUP BY m.machine;";

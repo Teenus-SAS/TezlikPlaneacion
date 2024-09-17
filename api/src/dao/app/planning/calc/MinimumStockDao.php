@@ -22,9 +22,9 @@ class MinimumStockDao
     //     $stmt = $connection->prepare("SELECT 
     //                                         (((us.jan + us.feb + us.mar + us.apr + us.may + us.jun + us.jul + us.aug + us.sept + us.oct + us.nov + us.dece) / 
     //                                         (ppm.january + ppm.february + ppm.march + ppm.april + ppm.may + ppm.june + ppm.july + ppm.august + ppm.september + ppm.october + ppm.november + ppm.december)) * pp.lead_time) AS minimum_stock 
-    //                                   FROM plan_unit_sales us 
-    //                                     INNER JOIN plan_cicles_machine cm ON cm.id_product = us.id_product 
-    //                                     INNER JOIN plan_program_machines ppm ON ppm.id_machine = cm.id_machine 
+    //                                   FROM sales_by_units us 
+    //                                     INNER JOIN machine_cicles cm ON cm.id_product = us.id_product 
+    //                                     INNER JOIN machine_programs ppm ON ppm.id_machine = cm.id_machine 
     //                                     INNER JOIN products_materials pm ON pm.id_product = us.id_product
     //                                     INNER JOIN products_providers pp ON pp.id_material = pm.id_material
     //                                   WHERE us.id_product = :id_product AND us.id_company = :id_company");
@@ -79,7 +79,7 @@ class MinimumStockDao
                                                 )
                                             ) AS stock, 
                                             pi.quantity
-                                          FROM plan_unit_sales us
+                                          FROM sales_by_units us
                                           LEFT JOIN inv_stock_products s ON s.id_product = us.id_product 
                                           LEFT JOIN inv_products pi ON pi.id_product = us.id_product
                                           WHERE us.id_product = :id_product;");
@@ -139,7 +139,7 @@ class MinimumStockDao
                                                 ) * pm.quantity_converted
                                             ) AS stock  
                                           FROM products_materials pm 
-                                          LEFT JOIN plan_unit_sales u ON u.id_product = pm.id_product
+                                          LEFT JOIN sales_by_units u ON u.id_product = pm.id_product
                                           WHERE pm.id_material = :id_material");
             $stmt->execute([
                 'id_material' => $id_material,
@@ -195,7 +195,7 @@ class MinimumStockDao
                                                     ) * cp.quantity
                                                 ) AS stock  
                                             FROM products_composite cp 
-                                            LEFT JOIN plan_unit_sales u ON u.id_product = cp.id_product
+                                            LEFT JOIN sales_by_units u ON u.id_product = cp.id_product
                                             LEFT JOIN inv_stock_products sp ON sp.id_product = cp.id_child_product
                                             WHERE cp.id_child_product = :id_product");
             $stmt->execute([

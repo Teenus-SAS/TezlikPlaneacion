@@ -25,9 +25,9 @@ class ConsolidatedDao
                                              ROUND(IFNULL(pi.quantity/(((pph.january + pph.february + pph.march + pph.april + pph.may + pph.june + pph.july + pph.august + pph.september + pph.october + pph.november + pph.december)/12)/4/7), 0)) AS inventory_days, 0 AS week_minimum_stock, 0 AS produce_ajusted
                                       FROM products p
                                       INNER JOIN inv_products pi ON pi.id_product = p.id_product
-                                      INNER JOIN plan_orders o ON o.id_product = p.id_product
+                                      INNER JOIN orders o ON o.id_product = p.id_product
                                       LEFT JOIN products_price_history pph ON pph.id_product = p.id_product
-                                      INNER JOIN plan_orders_types ot ON ot.id_order_type = o.id_order_type
+                                      INNER JOIN orders_types ot ON ot.id_order_type = o.id_order_type
                                       WHERE o.id_company = :id_company;");
         $stmt->execute(['id_company' => $id_company]);
         $this->logger->info(__FUNCTION__, array('query' => $stmt->queryString, 'errors' => $stmt->errorInfo()));
@@ -36,10 +36,10 @@ class ConsolidatedDao
         // Obtener tipos de pedidos en la base de datos
         for ($i = 0; $i < sizeof($dataOrderTypes); $i++) {
             $stmt = $connection->prepare("SELECT o.num_order, p.reference, pi.quantity, IF(o.id_order_type = :id_order_type, 
-                                                 (SELECT COUNT(id_order) FROM plan_orders WHERE id_product = o.id_product), 0) AS order_type    
+                                                 (SELECT COUNT(id_order) FROM orders WHERE id_product = o.id_product), 0) AS order_type    
                                           FROM products p
                                           INNER JOIN inv_products pi ON pi.id_product = p.id_product
-                                          INNER JOIN plan_orders o ON o.id_product = p.id_product
+                                          INNER JOIN orders o ON o.id_product = p.id_product
                                           LEFT JOIN products_price_history pph ON pph.id_product = p.id_product        
                                           WHERE o.id_company = :id_company;");
             $stmt->execute([
@@ -71,7 +71,7 @@ class ConsolidatedDao
 
         $orderTypes = "";
         for ($i = 0; $i < sizeof($dataOrderTypes); $i++) {
-            $orderType = "IF(o.id_order_type = {$dataOrderTypes[$i]['id_order_type']}, (SELECT COUNT(id_order) FROM plan_orders WHERE id_product = o.id_product), 0) +";
+            $orderType = "IF(o.id_order_type = {$dataOrderTypes[$i]['id_order_type']}, (SELECT COUNT(id_order) FROM orders WHERE id_product = o.id_product), 0) +";
             $orderTypes = $orderType . $orderTypes;
         }
 
@@ -81,7 +81,7 @@ class ConsolidatedDao
                                              ROUND(IFNULL(((pph.january + pph.february + pph.march + pph.april + pph.may + pph.june + pph.july + pph.august + pph.september + pph.october + pph.november + pph.december)/12)/4*:week + (:order_types) - pi.quantity, 0)) AS produce_ajusted
                                       FROM products p
                                       INNER JOIN inv_products pi ON pi.id_product = p.id_product
-                                      INNER JOIN plan_orders o ON o.id_product = p.id_product
+                                      INNER JOIN orders o ON o.id_product = p.id_product
                                       LEFT JOIN products_price_history pph ON pph.id_product = p.id_product        
                                       WHERE o.id_company = :id_company;");
         $stmt->execute([

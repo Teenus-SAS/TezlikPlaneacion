@@ -50,7 +50,7 @@ class GeneralUserAccessDao
                                                 IFNULL(usa.production_order, 0) AS production_order, 
                                                 IFNULL(usa.store, 0) AS store
                                       FROM users us
-                                        LEFT JOIN planning_user_access usa ON us.id_user = usa.id_user
+                                        LEFT JOIN users_access usa ON us.id_user = usa.id_user
                                       WHERE us.id_company = :id_company AND us.id_user = :id_user");
         $stmt->execute(['id_company' => $id_company, 'id_user' => $id_user]);
         $this->logger->info(__FUNCTION__, array('query' => $stmt->queryString, 'errors' => $stmt->errorInfo()));
@@ -102,8 +102,8 @@ class GeneralUserAccessDao
                                                 pa.plan_office AS plan_planning_office,
                                                 cl.flag_products_measure
                                       FROM users u
-                                        LEFT JOIN planning_user_access pua ON pua.id_user = u.id_user
-                                        INNER JOIN companies_licenses cl ON cl.id_company = u.id_company
+                                        LEFT JOIN users_access pua ON pua.id_user = u.id_user
+                                        INNER JOIN admin_companies_licenses cl ON cl.id_company = u.id_company
                                         INNER JOIN plans_access pa ON pa.id_plan = cl.plan
                                       WHERE u.id_user = :id_user");
         $stmt->execute(['id_user' => $id_user]);

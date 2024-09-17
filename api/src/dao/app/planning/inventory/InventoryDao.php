@@ -23,8 +23,8 @@ class InventoryDao
                                          u.id_unit, u.unit, u.abbreviation, mi.quantity
                                   FROM materials m
                                     INNER JOIN inv_materials mi ON mi.id_material = m.id_material
-                                    INNER JOIN convert_units u ON u.id_unit = m.unit
-                                    INNER JOIN convert_magnitudes mg ON mg.id_magnitude = u.id_magnitude
+                                    INNER JOIN admin_units u ON u.id_unit = m.unit
+                                    INNER JOIN admin_magnitudes mg ON mg.id_magnitude = u.id_magnitude
                                   WHERE m.id_company = :id_company ORDER BY m.material ASC");
         $stmt->execute(['id_company' => $id_company]);
 

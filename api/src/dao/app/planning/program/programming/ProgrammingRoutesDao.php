@@ -22,8 +22,8 @@ class ProgrammingRoutesDao
 
         $stmt = $connection->prepare("SELECT pr.id_programming_routes, pr.id_order, o.num_order, pr.id_product, pr.route, pcm.route AS route1, p.id_process, p.process
                                         FROM programming_routes pr
-                                        INNER JOIN plan_orders o ON o.id_order = pr.id_order
-                                        INNER JOIN plan_cicles_machine pcm ON pcm.id_product = pr.id_product -- AND FIND_IN_SET(pcm.route, pr.route) > 0
+                                        INNER JOIN orders o ON o.id_order = pr.id_order
+                                        INNER JOIN machine_cicles pcm ON pcm.id_product = pr.id_product -- AND FIND_IN_SET(pcm.route, pr.route) > 0
                                         INNER JOIN process p ON p.id_process = pcm.id_process
                                         WHERE pr.id_company = :id_company");
         $stmt->execute(['id_company' => $id_company]);

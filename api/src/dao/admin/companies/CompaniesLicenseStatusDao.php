@@ -20,7 +20,7 @@ class CompaniesLicenseStatusDao
     public function status($id_company)
     {
         $connection = Connection::getInstance()->getConnection();
-        $stmt = $connection->prepare("SELECT * FROM companies_licenses WHERE id_company = :id_company");
+        $stmt = $connection->prepare("SELECT * FROM admin_companies_licenses WHERE id_company = :id_company");
         $stmt->execute(['id_company' => $id_company]);
         $status = $stmt->fetch($connection::FETCH_ASSOC);
         $this->logger->info(__FUNCTION__, array('query' => $stmt->queryString, 'errors' => $stmt->errorInfo()));
@@ -32,7 +32,7 @@ class CompaniesLicenseStatusDao
     {
         $connection = Connection::getInstance()->getConnection();
         try {
-            $stmt = $connection->prepare("UPDATE companies_licenses SET license_status = :stat 
+            $stmt = $connection->prepare("UPDATE admin_companies_licenses SET license_status = :stat 
                                           WHERE id_company = :id_company");
             $stmt->execute([
                 'stat' => $status,
@@ -50,7 +50,7 @@ class CompaniesLicenseStatusDao
     {
         $connection = Connection::getInstance()->getConnection();
         try {
-            $stmt = $connection->prepare("UPDATE companies_licenses SET months = :months 
+            $stmt = $connection->prepare("UPDATE admin_companies_licenses SET months = :months 
                                           WHERE id_company = :id_company");
             $stmt->execute([
                 'months' => $months,

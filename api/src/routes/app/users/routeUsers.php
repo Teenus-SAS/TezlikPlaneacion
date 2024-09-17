@@ -52,7 +52,7 @@ $app->post('/addUser', function (Request $request, Response $response, $args) us
 
     !isset($_SESSION['id_company']) ? $id_company = $dataUser['company'] : $id_company = $_SESSION['id_company'];
 
-    //selecciona quantity_user de companies_licenses que tengan el id_company
+    //selecciona quantity_user de admin_companies_licenses que tengan el id_company
     $quantityAllowsUsers = $quantityUsersDao->quantityUsersAllows($id_company);
 
     //obtener cantidad de usuarios creados con el id_company

@@ -19,7 +19,7 @@ class CompanyDao
   public function findDataCompanyByCompany($id_company)
   {
     $connection = Connection::getInstance()->getConnection();
-    $stmt = $connection->prepare("SELECT * FROM companies WHERE id_company = :id_company;");
+    $stmt = $connection->prepare("SELECT * FROM admin_companies WHERE id_company = :id_company;");
     $stmt->execute(['id_company' => $id_company]);
 
     $this->logger->info(__FUNCTION__, array('query' => $stmt->queryString, 'errors' => $stmt->errorInfo()));
@@ -33,7 +33,7 @@ class CompanyDao
   {
     $connection = Connection::getInstance()->getConnection();
     try {
-      $stmt = $connection->prepare("INSERT INTO companies (company, state, city, country, address, 
+      $stmt = $connection->prepare("INSERT INTO admin_companies (company, state, city, country, address, 
                                                 telephone, nit, logo, created_at, creador)
                                     VALUES (:company, :state, :city, :country, :address, 
                                                 :telephone, :nit, :logo, :created_at, :creador)");
@@ -53,7 +53,7 @@ class CompanyDao
       ]);
       $this->logger->info(__FUNCTION__, array('query' => $stmt->queryString, 'errors' => $stmt->errorInfo()));
 
-      $stmt = $connection->prepare("SELECT MAX(id_company) AS id_company FROM companies");
+      $stmt = $connection->prepare("SELECT MAX(id_company) AS id_company FROM admin_companies");
       $stmt->execute();
       $id_company = $stmt->fetch($connection::FETCH_ASSOC);
       return $id_company;
@@ -74,7 +74,7 @@ class CompanyDao
       session_start();
       $id_company = $_SESSION['id_company'];
 
-      $stmt = $connection->prepare("UPDATE companies SET company = :company, state = :state, city = :city, country = :country, address = :address, 
+      $stmt = $connection->prepare("UPDATE admin_companies SET company = :company, state = :state, city = :city, country = :country, address = :address, 
                                                   telephone = :telephone, nit = :nit, logo = :logo, created_at = :created_at, creador =:creador
                                     WHERE id_company = :id_company");
       $stmt->execute([
@@ -103,12 +103,12 @@ class CompanyDao
   public function deleteCompany($id_company)
   {
     $connection = Connection::getInstance()->getConnection();
-    $stmt = $connection->prepare("SELECT * FROM companies WHERE id_company = :id_company");
+    $stmt = $connection->prepare("SELECT * FROM admin_companies WHERE id_company = :id_company");
     $stmt->execute(['id_company' => $id_company]);
     $rows = $stmt->rowCount();
 
     if ($rows > 0) {
-      $stmt = $connection->prepare("DELETE FROM companies WHERE id_company = :id_company");
+      $stmt = $connection->prepare("DELETE FROM admin_companies WHERE id_company = :id_company");
       $stmt->execute(['id_company' => $id_company]);
       $this->logger->info(__FUNCTION__, array('query' => $stmt->queryString, 'errors' => $stmt->errorInfo()));
     }
