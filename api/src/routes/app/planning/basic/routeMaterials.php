@@ -563,6 +563,7 @@ $app->post('/updateMaterials', function (Request $request, Response $response, $
 
                     $data['idProvider'] = $id_provider;
 
+                    $data['numOrder'] = $materials[$i]['num_order'];
                     $data['applicationDate'] = '';
                     $data['deliveryDate'] = '';
                     $data['requiredQuantity'] = abs($materials[$i]['available']);

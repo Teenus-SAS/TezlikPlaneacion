@@ -197,7 +197,7 @@ $app->post('/addRMStock', function (Request $request, Response $response, $args)
                         if ($provider) $id_provider = $provider['id_provider'];
 
                         $data['idProvider'] = $id_provider;
-
+                        $data['numOrder'] = $materials[$i]['num_order'];
                         $data['applicationDate'] = '';
                         $data['deliveryDate'] = '';
                         $data['requiredQuantity'] = abs($materials[$i]['available']);
@@ -347,7 +347,7 @@ $app->post('/updateRMStock', function (Request $request, Response $response, $ar
                     if ($provider) $id_provider = $provider['id_provider'];
 
                     $data['idProvider'] = $id_provider;
-
+                    $data['numOrder'] = $materials[$i]['num_order'];
                     $data['applicationDate'] = '';
                     $data['deliveryDate'] = '';
                     $data['requiredQuantity'] = abs($materials[$i]['available']);

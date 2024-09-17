@@ -656,6 +656,7 @@ $app->post('/addProductsMaterials', function (Request $request, Response $respon
 
                 if ($provider) $id_provider = $provider['id_provider'];
 
+                $data['numOrder'] = $materials[$i]['num_order'];
                 $data['idProvider'] = $id_provider;
                 $data['applicationDate'] = '';
                 $data['deliveryDate'] = '';
@@ -825,6 +826,7 @@ $app->post('/updatePlanProductsMaterials', function (Request $request, Response 
 
                     if ($provider) $id_provider = $provider['id_provider'];
 
+                    $data['numOrder'] = $materials[$i]['num_order'];
                     $data['idProvider'] = $id_provider;
                     $data['applicationDate'] = '';
                     $data['deliveryDate'] = '';
@@ -974,6 +976,7 @@ $app->post('/deletePlanProductMaterial', function (Request $request, Response $r
 
                 if ($provider) $id_provider = $provider['id_provider'];
 
+                $data['numOrder'] = $materials[$i]['num_order'];
                 $data['idProvider'] = $id_provider;
                 $data['applicationDate'] = '';
                 $data['deliveryDate'] = '';

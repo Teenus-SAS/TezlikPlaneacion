@@ -328,6 +328,7 @@ $app->post('/saveProgramming', function (Request $request, Response $response, $
                 $data['idProvider'] = $id_provider;
 
                 $data['applicationDate'] = '';
+                $data['numOrder'] = $materials[$i]['num_order'];
                 $data['deliveryDate'] = '';
                 $data['requiredQuantity'] = abs($materials[$i]['available']);
                 $data['purchaseOrder'] = '';

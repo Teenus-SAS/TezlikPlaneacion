@@ -284,6 +284,7 @@ $app->post('/addUnitSales', function (Request $request, Response $response, $arg
 
                     if ($provider) $id_provider = $provider['id_provider'];
 
+                    $data['numOrder'] = $materials[$i]['num_order'];
                     $data['idProvider'] = $id_provider;
                     $data['applicationDate'] = '';
                     $data['deliveryDate'] = '';
@@ -539,6 +540,7 @@ $app->post('/updateUnitSale', function (Request $request, Response $response, $a
                     if ($provider) $id_provider = $provider['id_provider'];
 
                     $data['idProvider'] = $id_provider;
+                    $data['numOrder'] = $materials[$i]['num_order'];
                     $data['applicationDate'] = '';
                     $data['deliveryDate'] = '';
                     $data['requiredQuantity'] = abs($materials[$i]['available']);

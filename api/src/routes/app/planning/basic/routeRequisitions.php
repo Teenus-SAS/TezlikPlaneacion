@@ -193,6 +193,7 @@ $app->post('/addRequisition', function (Request $request, Response $response, $a
 
             if ($provider) $id_provider = $provider['id_provider'];
 
+            $data['numOrder'] = $materials[$i]['num_order'];
             $data['idProvider'] = $id_provider;
             $data['applicationDate'] = '';
             $data['deliveryDate'] = '';

@@ -491,6 +491,7 @@ $app->post('/addOrder', function (Request $request, Response $response, $args) u
                 if ($provider) $id_provider = $provider['id_provider'];
 
                 $data['idProvider'] = $id_provider;
+                $data['numOrder'] = $materials[$i]['num_order'];
                 $data['applicationDate'] = '';
                 $data['deliveryDate'] = '';
                 $data['requiredQuantity'] = abs($materials[$i]['available']);
@@ -731,6 +732,7 @@ $app->post('/updateOrder', function (Request $request, Response $response, $args
             if ($provider) $id_provider = $provider['id_provider'];
 
             $data['idProvider'] = $id_provider;
+            $data['numOrder'] = $materials[$i]['num_order'];
             $data['applicationDate'] = '';
             $data['deliveryDate'] = '';
             $data['requiredQuantity'] = abs($materials[$i]['available']);
