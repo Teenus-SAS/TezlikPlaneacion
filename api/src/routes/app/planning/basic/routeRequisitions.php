@@ -55,50 +55,53 @@ $app->post('/requisitionDataValidation', function (Request $request, Response $r
         $update = 0;
 
         $requisition = $dataRequisition['importRequisition'];
+        $dataImportRequisition = [];
+        $debugg = [];
 
         for ($i = 0; $i < sizeof($requisition); $i++) {
             if (
                 empty($requisition[$i]['refRawMaterial']) || empty($requisition[$i]['nameRawMaterial']) || empty($requisition[$i]['applicationDate']) ||
-                empty($requisition[$i]['deliveryDate']) || empty($requisition[$i]['quantity'])
+                empty($requisition[$i]['deliveryDate']) || empty($requisition[$i]['quantity']) || empty($requisition[$i]['purchaseOrder'])
             ) {
-                $i = $i + 2;
-                $dataImportRequisition = array('error' => true, 'message' => "Campos vacios. Fila: {$i}");
-                break;
+                $row = $i + 2;
+                array_push($debugg, array('error' => true, 'message' => "Campos vacios. Fila: {$row}"));
             }
             if (
                 trim(empty($requisition[$i]['refRawMaterial'])) || trim(empty($requisition[$i]['nameRawMaterial'])) || trim(empty($requisition[$i]['applicationDate'])) ||
-                trim(empty($requisition[$i]['deliveryDate'])) || trim(empty($requisition[$i]['quantity']))
+                trim(empty($requisition[$i]['deliveryDate'])) || trim(empty($requisition[$i]['quantity'])) || trim(empty($requisition[$i]['purchaseOrder']))
             ) {
-                $i = $i + 2;
-                $dataImportRequisition = array('error' => true, 'message' => "Campos vacios. Fila: {$i}");
-                break;
+                $row = $i + 2;
+                array_push($debugg, array('error' => true, 'message' => "Campos vacios. Fila: {$row}"));
             }
 
             // Obtener id material
             $findMaterial = $generalMaterialsDao->findMaterial($requisition[$i], $id_company);
             if (!$findMaterial) {
-                $i = $i + 2;
-                $dataImportRequisition = array('error' => true, 'message' => "Material no existe en la base de datos<br>Fila: {$i}");
-                break;
+                $row = $i + 2;
+                array_push($debugg, array('error' => true, 'message' => "Material no existe en la base de datos<br>Fila: {$row}"));
             } else $requisition[$i]['idMaterial'] = $findMaterial['id_material'];
 
             // Obtener id proveedor
             $findClient = $generalClientsDao->findClientByName($requisition[$i], $id_company, 2);
             if (!$findClient) {
-                $i = $i + 2;
-                $dataImportRequisition = array('error' => true, 'message' => "Cliente no existe en la base de datos o es tipo cliente.<br>Fila: {$i}");
-                break;
+                $row = $i + 2;
+                array_push($debugg, array('error' => true, 'message' => "Cliente no existe en la base de datos o es tipo cliente.<br>Fila: {$row}"));
             } else $requisition[$i]['idProvider'] = $findClient['id_client'];
 
-            $findRequisition = $generalRequisitionsDao->findRequisition($requisition[$i], $id_company);
-            !$findRequisition ? $insert = $insert + 1 : $update = $update + 1;
-            $dataImportRequisition['insert'] = $insert;
-            $dataImportRequisition['update'] = $update;
+            if (sizeof($debugg) == 0) {
+                $findRequisition = $generalRequisitionsDao->findRequisition($requisition[$i], $id_company);
+                !$findRequisition ? $insert = $insert + 1 : $update = $update + 1;
+                $dataImportRequisition['insert'] = $insert;
+                $dataImportRequisition['update'] = $update;
+            }
         }
     } else
         $dataImportRequisition = array('error' => true, 'message' => 'El archivo se encuentra vacio. Intente nuevamente');
 
-    $response->getBody()->write(json_encode($dataImportRequisition, JSON_NUMERIC_CHECK));
+    $data['import'] = $dataImportRequisition;
+    $data['debugg'] = $debugg;
+
+    $response->getBody()->write(json_encode($data, JSON_NUMERIC_CHECK));
     return $response->withHeader('Content-Type', 'application/json');
 });
 
@@ -148,12 +151,16 @@ $app->post('/addRequisition', function (Request $request, Response $response, $a
             $findClient = $generalClientsDao->findClientByName($requisition[$i], $id_company, 2);
             $requisition[$i]['idProvider'] = $findClient['id_client'];
 
-            !isset($requisition[$i]['purchaseOrder']) ? $requisition[$i]['purchaseOrder'] = '' : $requisition[$i]['purchaseOrder'];
             $requisition[$i]['idUser'] = $id_user;
+            $findRequisition = $generalRequisitionsDao->findRequisition($requisition[$i], $id_company);
 
-            $resolution = $requisitionsDao->insertRequisitionManualByCompany($requisition[$i], $id_company);
+            if (!$findRequisition) {
+                $resolution = $requisitionsDao->insertRequisitionManualByCompany($requisition[$i], $id_company);
+            } else {
+                $requisition[$i]['idRequisition'] = $findRequisition['id_requisition'];
+                $resolution = $requisitionsDao->updateRequisitionManual($requisition[$i]);
+            }
             // $lastData = $lastDataDao->lastInsertedRequisitionId($id_company);
-
             // $resolution = $generalRequisitionsDao->saveUserRequisition($lastData['id_requisition'], $id_user);
 
             if (isset($resolution['info'])) break;

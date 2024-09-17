@@ -85,7 +85,7 @@ class GeneralOrdersDao
     {
         $connection = Connection::getInstance()->getConnection();
 
-        $stmt = $connection->prepare("SELECT o.id_order, o.num_order, o.date_order, o.original_quantity, o.quantity, o.accumulated_quantity, p.product, c.client
+        $stmt = $connection->prepare("SELECT o.id_order, o.num_order, o.date_order, o.original_quantity, o.accumulated_quantity, p.product, c.client
                                       FROM plan_orders o
                                         INNER JOIN products p ON p.id_product = o.id_product
                                         INNER JOIN plan_clients c ON c.id_client = o.id_client
@@ -290,6 +290,24 @@ class GeneralOrdersDao
             $stmt = $connection->prepare("UPDATE plan_orders SET office_date = :office_date WHERE id_order = :id_order");
             $stmt->execute([
                 'office_date' => $date,
+                'id_order' => $id_order
+            ]);
+        } catch (\Exception $e) {
+            $message = $e->getMessage();
+
+            $error = array('info' => true, 'message' => $message);
+            return $error;
+        }
+    }
+
+    public function updateNeedOrder($id_order, $need)
+    {
+        try {
+            $connection = Connection::getInstance()->getConnection();
+
+            $stmt = $connection->prepare("UPDATE plan_orders SET need = :need WHERE id_order = :id_order");
+            $stmt->execute([
+                'need' => $need,
                 'id_order' => $id_order
             ]);
         } catch (\Exception $e) {

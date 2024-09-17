@@ -52,6 +52,14 @@ $(document).ready(function () {
         }
 
         let requisitionToImport = data.map((item) => {
+          !item.referencia_material ? item.referencia_material = '' : item.referencia_material;
+          !item.material ? item.material = '' : item.material;
+          !item.proveedor ? item.proveedor = '' : item.proveedor;
+          !item.fecha_solicitud ? item.fecha_solicitud = '' : item.fecha_solicitud;
+          !item.fecha_entrega ? item.fecha_entrega = '' : item.fecha_entrega;
+          !item.cantidad_solicitada ? item.cantidad_solicitada = 0 : item.cantidad_solicitada;
+          !item.orden_compra ? item.orden_compra = '' : item.orden_compra;
+
           return {
             refRawMaterial: item.referencia_material,
             nameRawMaterial: item.material,
@@ -80,9 +88,11 @@ $(document).ready(function () {
       url: '/api/requisitionDataValidation',
       data: { importRequisition: data },
       success: function (resp) {
-        if (resp.error == true) {
+        let arr = resp.import;
+
+        if (arr.length > 0 && arr.error == true) {
           $('.cardLoading').remove();
-        $('.cardBottons').show(400);
+          $('.cardBottons').show(400);
           $('#fileRequisitions').val('');
           
           $('#formImportRequisitions').trigger('reset');
@@ -90,29 +100,60 @@ $(document).ready(function () {
           return false;
         }
 
-        bootbox.confirm({
-          title: '¿Desea continuar con la importación?',
-          message: `Se han encontrado los siguientes registros:<br><br>Datos a insertar: ${resp.insert}`,
-          buttons: {
-            confirm: {
-              label: 'Si',
-              className: 'btn-success',
+        if (resp.debugg.length > 0) {
+          $('.cardLoading').remove();
+          $('.cardBottons').show(400);
+          $('#fileRequisitions').val('');
+
+          // Generar el HTML para cada mensaje
+          let concatenatedMessages = resp.debugg.map(item =>
+            `<li>
+              <span class="badge text-danger" style="font-size: 16px;">${item.message}</span>
+            </li>`
+          ).join('');
+
+          // Mostramos el mensaje con Bootbox
+          bootbox.alert({
+            title: 'Estado Importación Data',
+            message: `
+            <div class="container">
+              <div class="col-12">
+                <ul>
+                  ${concatenatedMessages}
+                </ul>
+              </div> 
+            </div>`,
+            size: 'large',
+            backdrop: true
+          });
+          return false;
+        }
+        
+        if (typeof arr === 'object' && !Array.isArray(arr) && arr !== null && resp.debugg.length == 0) {
+          bootbox.confirm({
+            title: '¿Desea continuar con la importación?',
+            message: `Se han encontrado los siguientes registros:<br><br>Datos a insertar: ${arr.insert} <br>Datos a actualizar: ${arr.update}`,
+            buttons: {
+              confirm: {
+                label: 'Si',
+                className: 'btn-success',
+              },
+              cancel: {
+                label: 'No',
+                className: 'btn-danger',
+              },
             },
-            cancel: {
-              label: 'No',
-              className: 'btn-danger',
+            callback: function (result) {
+              if (result) {
+                saveMachineTable(data);
+              } else {
+                $('.cardLoading').remove();
+                $('.cardBottons').show(400);
+                $('#fileRequisitions').val('');
+              }
             },
-          },
-          callback: function (result) {
-            if (result) {
-              saveMachineTable(data);
-            } else {
-              $('.cardLoading').remove();
-              $('.cardBottons').show(400);
-              $('#fileRequisitions').val('');
-            }
-          },
-        });
+          });
+        }
       },
     });
   };

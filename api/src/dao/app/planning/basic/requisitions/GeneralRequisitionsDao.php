@@ -34,6 +34,7 @@ class GeneralRequisitionsDao
         $stmt = $connection->prepare("SELECT 
                                         -- Columnas
                                             r.id_requisition, 
+                                            r.num_order,
                                             r.id_material, 
                                             m.reference, 
                                             m.material, 
@@ -81,7 +82,7 @@ class GeneralRequisitionsDao
     public function findAllMinAndMaxRequisitionByCompany($min_date, $max_date, $id_company)
     {
         $connection = Connection::getInstance()->getConnection();
-        $stmt = $connection->prepare("SELECT r.id_requisition, r.id_material, m.reference, m.material, r.creation_date, r.application_date, r.delivery_date, r.quantity_requested, r.quantity_required, 
+        $stmt = $connection->prepare("SELECT r.id_requisition, r.num_order, r.id_material, m.reference, m.material, r.creation_date, r.application_date, r.delivery_date, r.quantity_requested, r.quantity_required, 
                                              r.purchase_order, r.admission_date, cu.abbreviation, IFNULL(r.id_provider, 0) AS id_provider, IFNULL(c.client, '') AS provider,
                                              IFNULL(ur.id_user, 0) AS id_user_requisition, IFNULL(ur.firstname, '') AS firstname_requisition, IFNULL(ur.lastname, '') AS lastname_requisition
                                       FROM requisitions r
@@ -107,9 +108,14 @@ class GeneralRequisitionsDao
     {
         $connection = Connection::getInstance()->getConnection();
 
-        $stmt = $connection->prepare("SELECT * FROM requisitions WHERE id_material = :id_material AND id_company = :id_company");
+        $stmt = $connection->prepare("SELECT * FROM requisitions 
+                                      WHERE id_material = :id_material 
+                                      AND id_provider = :id_provicer
+                                      AND application_date = '0000-00-00'
+                                      AND id_company = :id_company");
         $stmt->execute([
             'id_material' => $dataRequisition['idMaterial'],
+            'id_provider' => $dataRequisition['idProvider'],
             'id_company' => $id_company
         ]);
         $this->logger->info(__FUNCTION__, array('query' => $stmt->queryString, 'errors' => $stmt->errorInfo()));
@@ -136,10 +142,11 @@ class GeneralRequisitionsDao
         $connection = Connection::getInstance()->getConnection();
 
         try {
-            $stmt = $connection->prepare("INSERT INTO requisitions (id_company, id_material, id_provider, application_date, delivery_date, quantity_required, purchase_order) 
-                                          VALUES (:id_company, :id_material, :id_provider, :application_date, :delivery_date, :quantity_required, :purchase_order)");
+            $stmt = $connection->prepare("INSERT INTO requisitions (id_company, num_order, id_material, id_provider, application_date, delivery_date, quantity_required, purchase_order) 
+                                          VALUES (:id_company, :num_order, :id_material, :id_provider, :application_date, :delivery_date, :quantity_required, :purchase_order)");
             $stmt->execute([
                 'id_company' => $id_company,
+                'num_order' => $dataRequisition['numOrder'],
                 'id_material' => $dataRequisition['idMaterial'],
                 'id_provider' => $dataRequisition['idProvider'],
                 'application_date' => $dataRequisition['applicationDate'],
@@ -161,11 +168,12 @@ class GeneralRequisitionsDao
         $connection = Connection::getInstance()->getConnection();
 
         try {
-            $stmt = $connection->prepare("UPDATE requisitions SET id_material = :id_material, id_provider = :id_provider, application_date = :application_date, 
+            $stmt = $connection->prepare("UPDATE requisitions SET num_order = :num_order, id_material = :id_material, id_provider = :id_provider, application_date = :application_date, 
                                                                   delivery_date = :delivery_date, quantity_required = :quantity_required, purchase_order = :purchase_order
                                     WHERE id_requisition = :id_requisition");
             $stmt->execute([
                 'id_requisition' => $dataRequisition['idRequisition'],
+                'num_order' => $dataRequisition['numOrder'],
                 'id_material' => $dataRequisition['idMaterial'],
                 'id_provider' => $dataRequisition['idProvider'],
                 'application_date' => $dataRequisition['applicationDate'],

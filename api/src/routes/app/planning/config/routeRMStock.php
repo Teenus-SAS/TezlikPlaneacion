@@ -117,9 +117,22 @@ $app->post('/rMStockDataValidation', function (Request $request, Response $respo
                 $stock[$i]['idProvider'] = $findClient['id_client'];
 
             if (sizeof($debugg) == 0) {
-                $findstock = $generalStockDao->findStock($stock[$i]);
+                $status = true;
+                $findStock = $generalStockDao->findAllStockByMaterial($stock[$i]);
+
+                foreach ($findStock as $arr) {
+                    if ($arr['id_provider'] == 0) {
+                        $status = false;
+                        break;
+                    }
+                }
+
+                if ($status == true)
+                    $findstock = $generalStockDao->findStock($stock[$i]);
+
                 if (!$findstock) $insert = $insert + 1;
                 else $update = $update + 1;
+
                 $dataImportStock['insert'] = $insert;
                 $dataImportStock['update'] = $update;
             }
@@ -241,11 +254,25 @@ $app->post('/addRMStock', function (Request $request, Response $response, $args)
             if (!$findClient)
                 $stock[$i]['idProvider'] = $findClient['id_client'];
 
-            $findstock = $generalStockDao->findstock($stock[$i], $id_company);
+            $status = true;
+            $findStock = $generalStockDao->findAllStockByMaterial($stock[$i]);
+
+            foreach ($findStock as $arr) {
+                if ($arr['id_provider'] == 0) {
+                    $status = false;
+                    $stock[$i]['idStock'] = $arr['id_stock_material'];
+                    break;
+                }
+            }
+
+            if ($status == true)
+                $findstock = $generalStockDao->findstock($stock[$i], $id_company);
+
             if (!$findstock)
                 $resolution = $stockDao->insertStockByCompany($stock[$i], $id_company);
             else {
-                $stock[$i]['idStock'] = $findstock['id_stock_material'];
+                !isset($stock[$i]['idStock']) ? $stock[$i]['idStock'] = $findstock['id_stock_material'] : $stock;
+
                 $resolution = $stockDao->updateStock($stock[$i]);
             }
 

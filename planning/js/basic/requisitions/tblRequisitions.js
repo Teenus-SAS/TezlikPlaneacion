@@ -161,6 +161,11 @@ $(document).ready(function () {
           },
         },
         {
+          title: "Pedido",
+          data: "num_order",
+          className: "uniqueClassName dt-head-center",
+        },
+        {
           title: "Referencia",
           data: "reference",
           className: "uniqueClassName dt-head-center",
