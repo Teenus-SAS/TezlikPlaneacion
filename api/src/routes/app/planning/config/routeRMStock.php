@@ -251,7 +251,7 @@ $app->post('/addRMStock', function (Request $request, Response $response, $args)
             $stock[$i]['idProvider'] = 0;
             // Obtener id proveedor
             $findClient = $generalClientsDao->findClientByName($stock[$i], $id_company, 2);
-            if (!$findClient)
+            if ($findClient)
                 $stock[$i]['idProvider'] = $findClient['id_client'];
 
             $status = true;
