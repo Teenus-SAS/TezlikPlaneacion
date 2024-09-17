@@ -65,12 +65,12 @@ class RMStockDao
         $connection = Connection::getInstance()->getConnection();
 
         try {
-            $stmt = $connection->prepare("UPDATE inv_stock_materials SET id_material = :id_material, min_term = :min_term, max_term = :max_term, min_quantity = :min_quantity 
+            $stmt = $connection->prepare("UPDATE inv_stock_materials SET id_material = :id_material, id_provider = :id_provider, min_term = :min_term, max_term = :max_term, min_quantity = :min_quantity 
                                           WHERE id_stock_material = :id_stock_material");
             $stmt->execute([
                 'id_stock_material' => $dataStock['idStock'],
                 'id_material' => $dataStock['idMaterial'],
-                // 'id_provider' => $dataStock['idProvider'],
+                'id_provider' => $dataStock['idProvider'],
                 'min_term' => $dataStock['min'],
                 'max_term' => $dataStock['max'],
                 'min_quantity' => $dataStock['quantity']
