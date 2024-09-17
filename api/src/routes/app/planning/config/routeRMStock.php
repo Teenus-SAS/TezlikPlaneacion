@@ -266,12 +266,12 @@ $app->post('/addRMStock', function (Request $request, Response $response, $args)
             }
 
             if ($status == true)
-                $findstock = $generalStockDao->findstock($stock[$i], $id_company);
+                $findStock = $generalStockDao->findstock($stock[$i], $id_company);
 
-            if (!$findstock)
+            if (!$findStock)
                 $resolution = $stockDao->insertStockByCompany($stock[$i], $id_company);
             else {
-                !isset($stock[$i]['idStock']) ? $stock[$i]['idStock'] = $findstock['id_stock_material'] : $stock;
+                !isset($stock[$i]['idStock']) ? $stock[$i]['idStock'] = $findStock['id_stock_material'] : $stock;
 
                 $resolution = $stockDao->updateStock($stock[$i]);
             }
