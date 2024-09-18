@@ -354,7 +354,7 @@ if (sizeof($_SESSION) == 0)
                                                     <div class="col-md-12 col-lg-8">
                                                         <div class="card orders-graph">
                                                             <div class="card-header">
-                                                                <h5 class="card-title">Capacidad de Producción por Máquina</h5>
+                                                                <h5 class="card-title">Capacidad de Producción</h5>
                                                             </div>
                                                             <div class="card-body pt-2">
                                                                 <div class="chart-container">

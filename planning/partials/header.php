@@ -126,7 +126,7 @@
                                                                 <li class="planStock" style="display: none;">
                                                                 <?php } ?>
                                                                 <i class="fas fa-truck"></i>
-                                                                <a href="/planning/stock">Proveedores (Tiempos Entrega)</a>
+                                                                <a href="/planning/stock">Tiempos Producción y Recepción MP</a>
                                                                 </li>
                                                                 <li class="planCalendar">
                                                                     <i class="fas fa-calendar-alt"></i>
