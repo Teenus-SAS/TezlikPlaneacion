@@ -41,7 +41,7 @@ $(document).ready(function () {
       },
       {
         title: "Clasificación",
-        data: classification,
+        data: "classification",
         className: "uniqueClassName dt-head-center",
         render: function (data) {
           if (data.classification == "A") badge = "badge-success";
