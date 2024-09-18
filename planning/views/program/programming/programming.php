@@ -49,7 +49,7 @@ if (sizeof($_SESSION) == 0)
                                 </div>
                             </div>
                             <div class="col-sm-7 col-xl-8 form-inline justify-content-sm-end">
-                                <div class="col-sm-7 col-xl-1 form-inline justify-content-sm-end cardBottons">
+                                <div class="col-sm-7 col-xl-1 form-inline justify-content-sm-end">
                                     <button class="btn btn-warning" id="btnNewProgramming" name="btnNewProgramming">Programar</button>
                                 </div>
                                 <div class="col-sm-7 col-xl-2 floating-label enable-floating-label show-label form-inline justify-content-sm-end mb-0 cardBottons">

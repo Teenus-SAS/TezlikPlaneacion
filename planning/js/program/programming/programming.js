@@ -377,6 +377,7 @@ $(document).ready(function () {
     }
 
     let allTblData = flattenData(generalMultiArray);
+    let sim = $("#simulationType").val();
 
     quantityMissing < 0 ? (quantityMissing = 0) : quantityMissing;
 
@@ -386,6 +387,7 @@ $(document).ready(function () {
 
     if (quantityMissing - quantityProgramming > 0)
       dataProgramming["route"] = allProcess[0].route;
+    dataProgramming["sim"] = sim;
 
     hideCardAndResetForm();
 
@@ -411,7 +413,6 @@ $(document).ready(function () {
         quantity_programming: quantityProgramming,
       });
 
-      let sim = $("#simulationType").val();
       let key;
 
       sim == 1 ? (key = 0) : (key = 1);
@@ -533,6 +534,14 @@ $(document).ready(function () {
         uniqueArray.push(item); // También agregamos el elemento al array de elementos únicos
       }
     });
+
+    sessionStorage.setItem('allOrders', JSON.stringify(allOrders));
+    sessionStorage.setItem('allOrdersProgramming', JSON.stringify(allOrdersProgramming));
+    sessionStorage.setItem('allProcess', JSON.stringify(allProcess));
+    sessionStorage.setItem('allCiclesMachines', JSON.stringify(allCiclesMachines));
+    sessionStorage.setItem('allPlanningMachines', JSON.stringify(allPlanningMachines));
+    sessionStorage.setItem('allProductsMaterials', JSON.stringify(allProductsMaterials));
+
 
     // Cargar selects de maquinas por pedidos programados
     loadDataMachinesProgramming(uniqueArray);
@@ -764,6 +773,7 @@ $(document).ready(function () {
             data: { data: allTblData },
             success: function (resp) {
               allTblData = [];
+              sessionStorage.clear();
               $(".cardAddOP").show(800);
               message(resp);
             },

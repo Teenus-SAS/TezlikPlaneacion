@@ -4,7 +4,7 @@ $(document).ready(function () {
   allProcess = [];
   let machines = [];
   allCiclesMachines = [];
-  let allPlanningMachines = [];
+  allPlanningMachines = [];
   allOrders = [];
   allProgramming = [];
   allProductsMaterials = [];
@@ -17,6 +17,13 @@ $(document).ready(function () {
 
   loadAllDataProgramming = async () => {
     try {
+      let storOrders = sessionStorage.getItem('allOrders');
+      let storOrdersProgramming = sessionStorage.getItem('allOrdersProgramming');
+      let storProcess = sessionStorage.getItem('allProcess');
+      let storCiclesMachines = sessionStorage.getItem('allCiclesMachines');
+      let storPlanningMachines = sessionStorage.getItem('allPlanningMachines');
+      let storProductsMaterials = sessionStorage.getItem('allProductsMaterials');
+
       const [
         ordersProgramming,
         process,
@@ -28,15 +35,15 @@ $(document).ready(function () {
         productsMaterials,
         compositeProducts
       ] = await Promise.all([
-        searchData('/api/ordersProgramming'),
-        searchData('/api/processProgramming'),
+        !storOrdersProgramming ? searchData('/api/ordersProgramming') : JSON.parse(storOrdersProgramming),
+        !storProcess ? searchData('/api/processProgramming') : JSON.parse(storProcess),
         searchData('/api/machines'),
-        searchData('/api/planCiclesMachine'),
-        searchData('/api/planningMachines'),
-        searchData('/api/orders'),
+        !storCiclesMachines ? searchData('/api/planCiclesMachine') : JSON.parse(storCiclesMachines),
+        !storPlanningMachines ? searchData('/api/planningMachines') : JSON.parse(storPlanningMachines),
+        !storOrders ? searchData('/api/orders') : JSON.parse(storOrders),
         searchData('/api/programming'),
-        searchData('/api/allProductsMaterials'),
-        searchData('/api/allCompositeProducts'),
+        !storProductsMaterials ? searchData('/api/allProductsMaterials') : [],
+        !storProductsMaterials ? searchData('/api/allCompositeProducts') : [],
       ]);
       let data = [];
   
@@ -49,7 +56,13 @@ $(document).ready(function () {
       allProducts = products;
       allProgramming = programming;
       // copyAllProgramming = allProgramming;
-      allProductsMaterials = [...productsMaterials, ...compositeProducts];
+
+      if(!storProductsMaterials){
+        allProductsMaterials = [...productsMaterials, ...compositeProducts];
+      } else {
+        allProductsMaterials = JSON.parse(storProductsMaterials);
+      }
+
       data = programming;
 
       if (!sessionStorage.getItem('dataProgramming') || sessionStorage.getItem('dataProgramming').includes('[object Object]'))
