@@ -26,7 +26,7 @@ class OrdersDao
                                         INNER JOIN products p ON p.id_product = o.id_product
                                         LEFT JOIN inv_products pi ON pi.id_product = o.id_product
                                         INNER JOIN sellers s ON s.id_seller = o.id_seller
-                                        INNER JOIN plan_clients c ON c.id_client = o.id_client
+                                        INNER JOIN third_parties c ON c.id_client = o.id_client
                                         INNER JOIN orders_status ps ON ps.id_status = o.status
                                       WHERE o.status_order = 0 AND o.id_company = :id_company ORDER BY o.num_order DESC");
         $stmt->execute(['id_company' => $id_company]);

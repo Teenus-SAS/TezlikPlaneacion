@@ -25,7 +25,7 @@ class GeneralOrdersDao
                                       FROM orders o
                                         INNER JOIN products p ON p.id_product = o.id_product
                                         INNER JOIN inv_products pi ON pi.id_product = o.id_product
-                                        INNER JOIN plan_clients c ON c.id_client = o.id_client  
+                                        INNER JOIN third_parties c ON c.id_client = o.id_client  
                                         INNER JOIN orders_status ps ON ps.id_status = o.status
                                       WHERE o.status_order = 0 AND o.id_company = :id_company AND o.status NOT IN (3)
                                       ORDER BY o.status ASC");
@@ -49,7 +49,7 @@ class GeneralOrdersDao
                                         LEFT JOIN products_materials pm ON pm.id_product = o.id_product 
                                         LEFT JOIN inv_materials m ON mi.id_material = pm.id_material
                                         INNER JOIN inv_products pi ON pi.id_product = o.id_product
-                                        INNER JOIN plan_clients c ON c.id_client = o.id_client  
+                                        INNER JOIN third_parties c ON c.id_client = o.id_client  
                                         INNER JOIN orders_status ps ON ps.id_status = o.status
                                       WHERE 
                                         o.status_order = 0 
@@ -88,7 +88,7 @@ class GeneralOrdersDao
         $stmt = $connection->prepare("SELECT o.id_order, o.num_order, o.date_order, o.original_quantity, o.accumulated_quantity, p.product, c.client
                                       FROM orders o
                                         INNER JOIN products p ON p.id_product = o.id_product
-                                        INNER JOIN plan_clients c ON c.id_client = o.id_client
+                                        INNER JOIN third_parties c ON c.id_client = o.id_client
                                       WHERE o.id_order = :id_order AND o.id_company = :id_company");
         $stmt->execute([
             'id_order' => $dataOrder['order'],

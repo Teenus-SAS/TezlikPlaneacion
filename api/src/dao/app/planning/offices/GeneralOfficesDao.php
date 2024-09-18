@@ -25,7 +25,7 @@ class GeneralOfficesDao
                                       FROM orders o
                                         INNER JOIN products p ON p.id_product = o.id_product
                                         INNER JOIN inv_products pi ON pi.id_product = o.id_product
-                                        INNER JOIN plan_clients c ON c.id_client = o.id_client
+                                        INNER JOIN third_parties c ON c.id_client = o.id_client
                                         INNER JOIN orders_status ps ON ps.id_status = o.status
                                      -- Subconsulta para obtener el último usuario de entrega
                                         LEFT JOIN (
@@ -56,7 +56,7 @@ class GeneralOfficesDao
                                       FROM orders o
                                         INNER JOIN products p ON p.id_product = o.id_product
                                         INNER JOIN inv_products pi ON pi.id_product = o.id_product
-                                        INNER JOIN plan_clients c ON c.id_client = o.id_client
+                                        INNER JOIN third_parties c ON c.id_client = o.id_client
                                         INNER JOIN orders_status ps ON ps.id_status = o.status
                                      -- Subconsulta para obtener el último usuario de entrega
                                         LEFT JOIN (

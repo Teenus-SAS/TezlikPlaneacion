@@ -26,7 +26,7 @@ class GeneralMaterialsDao
                                           INNER JOIN admin_units u ON u.id_unit = m.unit
                                           INNER JOIN admin_magnitudes mg ON mg.id_magnitude = u.id_magnitude
                                           LEFT JOIN inv_stock_materials s ON s.id_material = m.id_material
-                                          LEFT JOIN plan_clients c ON c.id_client = s.id_provider
+                                          LEFT JOIN third_parties c ON c.id_client = s.id_provider
                                       WHERE m.id_company = :id_company ORDER BY m.material ASC");
         $stmt->execute(['id_company' => $id_company]);
 

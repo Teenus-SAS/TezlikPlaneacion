@@ -82,7 +82,7 @@ class LastDataDao
     public function lastInsertedPayrollId($id_company)
     {
         $connection = Connection::getInstance()->getConnection();
-        $sql = "SELECT MAX(id_plan_payroll) AS id_plan_payroll FROM plan_payroll WHERE id_company = :id_company";
+        $sql = "SELECT MAX(id_plan_payroll) AS id_plan_payroll FROM payroll WHERE id_company = :id_company";
         $query = $connection->prepare($sql);
         $query->execute(['id_company' => $id_company]);
         $payroll = $query->fetch($connection::FETCH_ASSOC);
@@ -104,7 +104,7 @@ class LastDataDao
     {
         $connection = Connection::getInstance()->getConnection();
 
-        $stmt = $connection->prepare("SELECT MAX(id_client) AS id_client FROM plan_clients");
+        $stmt = $connection->prepare("SELECT MAX(id_client) AS id_client FROM third_parties");
         $stmt->execute();
         $this->logger->info(__FUNCTION__, array('query' => $stmt->queryString, 'errors' => $stmt->errorInfo()));
 

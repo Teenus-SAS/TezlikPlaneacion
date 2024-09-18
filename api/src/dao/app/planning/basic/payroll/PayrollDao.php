@@ -20,7 +20,7 @@ class PayrollDao
     {
         $connection = Connection::getInstance()->getConnection();
         $stmt = $connection->prepare("SELECT py.id_plan_payroll, py.firstname, py.lastname, py.position, py.status, pc.id_process, pc.process, m.id_machine, m.machine, a.id_plan_area, a.area
-                                      FROM plan_payroll py
+                                      FROM payroll py
                                         INNER JOIN process pc ON pc.id_process = py.id_process
                                         INNER JOIN machines m ON m.id_machine = py.id_machine
                                         INNER JOIN plan_areas a ON a.id_plan_area = py.id_area
@@ -38,7 +38,7 @@ class PayrollDao
         try {
             $connection = Connection::getInstance()->getConnection();
 
-            $stmt = $connection->prepare("INSERT INTO plan_payroll (id_company, firstname, lastname, position, id_process, id_machine, id_area, status)
+            $stmt = $connection->prepare("INSERT INTO payroll (id_company, firstname, lastname, position, id_process, id_machine, id_area, status)
                                           VALUES (:id_company, :firstname, :lastname, :position, :id_process, :id_machine, :id_area, :status)");
             $stmt->execute([
                 'id_company' => $id_company,
@@ -60,7 +60,7 @@ class PayrollDao
         try {
             $connection = Connection::getInstance()->getConnection();
 
-            $stmt = $connection->prepare("UPDATE plan_payroll SET firstname = :firstname, lastname = :lastname, position = :position, id_process = :id_process, id_machine = :id_machine, id_area = :id_area
+            $stmt = $connection->prepare("UPDATE payroll SET firstname = :firstname, lastname = :lastname, position = :position, id_process = :id_process, id_machine = :id_machine, id_area = :id_area
                                           WHERE id_plan_payroll = :id_plan_payroll");
             $stmt->execute([
                 'id_plan_payroll' => $dataPayroll['idPayroll'],
@@ -81,12 +81,12 @@ class PayrollDao
         try {
             $connection = Connection::getInstance()->getConnection();
 
-            $stmt = $connection->prepare("SELECT * FROM plan_payroll WHERE id_plan_payroll = :id_plan_payroll");
+            $stmt = $connection->prepare("SELECT * FROM payroll WHERE id_plan_payroll = :id_plan_payroll");
             $stmt->execute(['id_plan_payroll' => $id_plan_payroll]);
             $rows = $stmt->rowCount();
 
             if ($rows > 0) {
-                $stmt = $connection->prepare("DELETE FROM plan_payroll WHERE id_plan_payroll = :id_plan_payroll");
+                $stmt = $connection->prepare("DELETE FROM payroll WHERE id_plan_payroll = :id_plan_payroll");
                 $stmt->execute(['id_plan_payroll' => $id_plan_payroll]);
             }
         } catch (\Exception $e) {

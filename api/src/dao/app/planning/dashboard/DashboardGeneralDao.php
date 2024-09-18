@@ -159,7 +159,7 @@ class DashboardGeneralDao
 
         $sql = "SELECT pc.client, COUNT(po.id_client) AS total_pedidos
                 FROM orders po
-                INNER JOIN plan_clients pc ON po.id_client = pc.id_client
+                INNER JOIN third_parties pc ON po.id_client = pc.id_client
                 WHERE po.id_company = :id_company
                 GROUP BY pc.client
                 ORDER BY total_pedidos DESC

@@ -20,7 +20,7 @@ class GeneralClientsDao
     {
         $connection = Connection::getInstance()->getConnection();
 
-        $stmt = $connection->prepare("SELECT * FROM plan_clients WHERE nit = :nit AND id_company = :id_company -- AND type_client = :type_client");
+        $stmt = $connection->prepare("SELECT * FROM third_parties WHERE nit = :nit AND id_company = :id_company -- AND type_client = :type_client");
         $stmt->execute([
             'nit' => trim($dataClient['nit']),
             'id_company' => $id_company,
@@ -36,7 +36,7 @@ class GeneralClientsDao
     {
         $connection = Connection::getInstance()->getConnection();
 
-        $stmt = $connection->prepare("SELECT * FROM plan_clients 
+        $stmt = $connection->prepare("SELECT * FROM third_parties 
                                       WHERE (nit = :nit OR client = :client) AND id_company = :id_company");
         $stmt->execute([
             'nit' => trim($dataClient['nit']),
@@ -53,7 +53,7 @@ class GeneralClientsDao
     {
         $connection = Connection::getInstance()->getConnection();
 
-        $stmt = $connection->prepare("SELECT * FROM plan_clients WHERE client = :client AND id_company = :id_company AND type_client = :type_client");
+        $stmt = $connection->prepare("SELECT * FROM third_parties WHERE client = :client AND id_company = :id_company AND type_client = :type_client");
         $stmt->execute([
             'client' => strtoupper(trim($dataClient['client'])),
             'id_company' => $id_company,
@@ -69,7 +69,7 @@ class GeneralClientsDao
     {
         $connection = Connection::getInstance()->getConnection();
 
-        $stmt = $connection->prepare("SELECT * FROM plan_clients WHERE status = 1 AND id_company = :id_company");
+        $stmt = $connection->prepare("SELECT * FROM third_parties WHERE status = 1 AND id_company = :id_company");
         $stmt->execute(['id_company' => $id_company]);
         $this->logger->info(__FUNCTION__, array('query' => $stmt->queryString, 'errors' => $stmt->errorInfo()));
 
@@ -81,7 +81,7 @@ class GeneralClientsDao
     {
         try {
             $connection = Connection::getInstance()->getConnection();
-            $stmt = $connection->prepare("UPDATE plan_clients SET status = :status WHERE id_company = :id_company");
+            $stmt = $connection->prepare("UPDATE third_parties SET status = :status WHERE id_company = :id_company");
             $stmt->execute([
                 'id_company' => $id_company,
                 'status' => 0
@@ -95,7 +95,7 @@ class GeneralClientsDao
     {
         try {
             $connection = Connection::getInstance()->getConnection();
-            $stmt = $connection->prepare("UPDATE plan_clients SET status = :status WHERE id_client = :id_client");
+            $stmt = $connection->prepare("UPDATE third_parties SET status = :status WHERE id_client = :id_client");
             $stmt->execute([
                 'id_client' => $id_client,
                 'status' => $status
@@ -109,7 +109,7 @@ class GeneralClientsDao
     {
         try {
             $connection = Connection::getInstance()->getConnection();
-            $stmt = $connection->prepare("UPDATE plan_clients SET type_client = :type_client WHERE id_client = :id_client");
+            $stmt = $connection->prepare("UPDATE third_parties SET type_client = :type_client WHERE id_client = :id_client");
             $stmt->execute([
                 'id_client' => $id_client,
                 'type_client' => $type

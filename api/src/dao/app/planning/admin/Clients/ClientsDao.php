@@ -20,7 +20,7 @@ class ClientsDao
     {
         $connection = Connection::getInstance()->getConnection();
 
-        $stmt = $connection->prepare("SELECT * FROM plan_clients WHERE id_company = :id_company");
+        $stmt = $connection->prepare("SELECT * FROM third_parties WHERE id_company = :id_company");
         $stmt->execute(['id_company' => $id_company]);
         $this->logger->info(__FUNCTION__, array('query' => $stmt->queryString, 'errors' => $stmt->errorInfo()));
 
@@ -34,7 +34,7 @@ class ClientsDao
         $connection = Connection::getInstance()->getConnection();
 
         try {
-            $stmt = $connection->prepare("INSERT INTO plan_clients (nit, client, address, phone, city, id_company, type_client) 
+            $stmt = $connection->prepare("INSERT INTO third_parties (nit, client, address, phone, city, id_company, type_client) 
                                           VALUES (:nit, :client, :addr, :phone, :city, :id_company, :type_client)");
             $stmt->execute([
                 'id_company' => $id_company,
@@ -60,7 +60,7 @@ class ClientsDao
         $connection = Connection::getInstance()->getConnection();
 
         try {
-            $stmt = $connection->prepare("UPDATE plan_clients SET nit = :nit, client = :client, address = :addr, phone = :phone, city = :city
+            $stmt = $connection->prepare("UPDATE third_parties SET nit = :nit, client = :client, address = :addr, phone = :phone, city = :city
                                           WHERE id_client = :id_client");
             $stmt->execute([
                 'nit' => $dataClient['nit'],
@@ -83,12 +83,12 @@ class ClientsDao
         $connection = Connection::getInstance()->getconnection();
 
         try {
-            $stmt = $connection->prepare("SELECT * FROM plan_clients WHERE id_client = :id_client");
+            $stmt = $connection->prepare("SELECT * FROM third_parties WHERE id_client = :id_client");
             $stmt->execute(['id_client' => $id_client]);
             $row = $stmt->rowCount();
 
             if ($row > 0) {
-                $stmt = $connection->prepare("DELETE FROM plan_clients WHERE id_client = :id_client");
+                $stmt = $connection->prepare("DELETE FROM third_parties WHERE id_client = :id_client");
                 $stmt->execute(['id_client' => $id_client]);
                 $this->logger->info(__FUNCTION__, array('query' => $stmt->queryString, 'errors' => $stmt->errorInfo()));
             }

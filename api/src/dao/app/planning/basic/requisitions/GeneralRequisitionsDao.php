@@ -25,7 +25,7 @@ class GeneralRequisitionsDao
         //                               FROM requisitions r
         //                                 INNER JOIN materials m ON m.id_material = r.id_material 
         //                                 INNER JOIN admin_units cu ON cu.id_unit = m.unit
-        //                                 LEFT JOIN plan_clients c ON c.id_client = r.id_provider
+        //                                 LEFT JOIN third_parties c ON c.id_client = r.id_provider
         //                                 LEFT JOIN users ur ON ur.id_user = r.id_user_requisition
         //                                 LEFT JOIN users urd ON urd.id_user = r.id_user_deliver
         //                               WHERE r.id_company = :id_company 
@@ -58,7 +58,7 @@ class GeneralRequisitionsDao
                                             requisitions r
                                             INNER JOIN materials m ON m.id_material = r.id_material 
                                             INNER JOIN admin_units cu ON cu.id_unit = m.unit
-                                            LEFT JOIN plan_clients c ON c.id_client = r.id_provider
+                                            LEFT JOIN third_parties c ON c.id_client = r.id_provider
                                             LEFT JOIN users ur ON ur.id_user = r.id_user_requisition
                                             -- Subconsulta para obtener el último usuario de entrega
                                             LEFT JOIN (
@@ -88,7 +88,7 @@ class GeneralRequisitionsDao
                                       FROM requisitions r
                                         INNER JOIN materials m ON m.id_material = r.id_material
                                         INNER JOIN admin_units cu ON cu.id_unit = m.unit
-                                        LEFT JOIN plan_clients c ON c.id_client = r.id_provider
+                                        LEFT JOIN third_parties c ON c.id_client = r.id_provider
                                         LEFT JOIN users ur ON ur.id_user = r.id_user_requisition
                                       WHERE r.id_company = :id_company
                                       AND (r.application_date BETWEEN :min_date AND :max_date)");

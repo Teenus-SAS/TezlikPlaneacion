@@ -23,7 +23,7 @@ class LotsProductsDao
         $stmt = $connection->prepare("SELECT ((m.assembly_production - (m.assembly_time / 60)) * pcm.cicles_hour) AS economic_lot 
                                       FROM products p 
                                         INNER JOIN machine_cicles pcm ON pcm.id_product = p.id_product 
-                                        INNER JOIN plan_inv_molds m ON m.id_mold = p.id_mold 
+                                        INNER JOIN inv_molds m ON m.id_mold = p.id_mold 
                                       WHERE p.id_product = :id_product AND p.id_company = :id_company;");
         $stmt->execute([
             'id_product' => $dataProduct['idProduct'],

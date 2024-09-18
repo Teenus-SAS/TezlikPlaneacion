@@ -24,7 +24,7 @@ class Planning_machinesDao
                                              pm.march, pm.april, pm.may, pm.june, pm.july, pm.august, pm.september, pm.october, pm.november, pm.december, pm.work_shift, pm.status             
                                       FROM machine_programs pm
                                         INNER JOIN machines m ON m.id_machine = pm.id_machine
-                                        LEFT JOIN plan_payroll py ON py.id_machine = pm.id_machine
+                                        LEFT JOIN payroll py ON py.id_machine = pm.id_machine
                                       WHERE pm.id_company = :id_company
                                       GROUP BY pm.id_program_machine");
         $stmt->execute(['id_company' => $id_company]);

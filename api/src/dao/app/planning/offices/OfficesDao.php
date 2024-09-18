@@ -24,7 +24,7 @@ class OfficesDao
                                       FROM orders o
                                         INNER JOIN products p ON p.id_product = o.id_product
                                         INNER JOIN inv_products pi ON pi.id_product = p.id_product
-                                        INNER JOIN plan_clients c ON c.id_client = o.id_client
+                                        INNER JOIN third_parties c ON c.id_client = o.id_client
                                         INNER JOIN orders_status ps ON ps.id_status = o.status
                                       WHERE o.status IN (2, 3) AND o.id_company = :id_company
                                       ORDER BY o.num_order DESC");

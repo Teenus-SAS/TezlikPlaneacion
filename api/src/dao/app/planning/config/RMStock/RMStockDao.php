@@ -26,7 +26,7 @@ class RMStockDao
                                         INNER JOIN inv_materials mi ON mi.id_material = s.id_material
                                         LEFT JOIN admin_units u ON u.id_unit = m.unit
                                         LEFT JOIN admin_magnitudes mg ON mg.id_magnitude = u.id_magnitude
-                                        LEFT JOIN plan_clients c ON c.id_client = s.id_provider
+                                        LEFT JOIN third_parties c ON c.id_client = s.id_provider
                                       WHERE s.id_company = :id_company");
         $stmt->execute(['id_company' => $id_company]);
 

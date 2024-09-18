@@ -185,7 +185,7 @@ class FilesDao
         $fileType = pathinfo($targetFilePath, PATHINFO_EXTENSION);
 
         if (in_array($fileType, $allowTypes)) {
-            $sql = "UPDATE plan_clients SET img = :img WHERE id_client = :id_client";
+            $sql = "UPDATE third_parties SET img = :img WHERE id_client = :id_client";
             $query = $connection->prepare($sql);
             $query->execute([
                 'img' => $targetFilePath,

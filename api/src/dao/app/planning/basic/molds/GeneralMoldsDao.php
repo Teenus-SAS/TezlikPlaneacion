@@ -23,7 +23,7 @@ class GeneralMoldsDao
         $fecha_hoy = date('Y-m-d');
 
         try {
-            $stmt = $connection->prepare("UPDATE plan_inv_molds SET date_active = :date_active, active = 1 
+            $stmt = $connection->prepare("UPDATE inv_molds SET date_active = :date_active, active = 1 
                                           WHERE id_mold = :id_mold");
             $stmt->execute([
                 'date_active' => $fecha_hoy,
@@ -42,7 +42,7 @@ class GeneralMoldsDao
         $connection = Connection::getInstance()->getConnection();
 
         try {
-            $stmt = $connection->prepare("UPDATE plan_inv_molds SET date_active = '', observation = :observation, active = 0 
+            $stmt = $connection->prepare("UPDATE inv_molds SET date_active = '', observation = :observation, active = 0 
                                           WHERE id_mold = :id_mold");
             $stmt->execute([
                 'id_mold' => $dataMold['idMold'],

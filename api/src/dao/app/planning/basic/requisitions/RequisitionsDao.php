@@ -23,7 +23,7 @@ class RequisitionsDao
                                              r.purchase_order, r.admission_date, IFNULL(r.id_provider, 0) AS id_provider, IFNULL(c.client, '') AS provider, IFNULL(u.id_user, 0) AS id_user, IFNULL(u.firstname, '') AS firstname, IFNULL(u.lastname, '') AS lastname
                                       FROM requisitions r
                                         INNER JOIN materials m ON m.id_material = r.id_material
-                                        LEFT JOIN plan_clients c ON c.id_client = r.id_provider
+                                        LEFT JOIN third_parties c ON c.id_client = r.id_provider
                                         LEFT JOIN users u ON u.id_user = r.id_user_requisition
                                       WHERE r.id_company = :id_company");
         $stmt->execute(['id_company' => $id_company]);

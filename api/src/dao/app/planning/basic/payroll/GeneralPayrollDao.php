@@ -20,7 +20,7 @@ class GeneralPayrollDao
     {
         $connection = Connection::getInstance()->getConnection();
 
-        $stmt = $connection->prepare("SELECT * FROM plan_payroll WHERE firstname = :firstname AND lastname = :lastname AND 
+        $stmt = $connection->prepare("SELECT * FROM payroll WHERE firstname = :firstname AND lastname = :lastname AND 
                                       id_process = :id_process AND id_machine = :id_machine AND id_area = :id_area");
         $stmt->execute([
             'firstname' => strtoupper(trim($dataPayroll['firstname'])),
@@ -39,7 +39,7 @@ class GeneralPayrollDao
     {
         $connection = Connection::getInstance()->getConnection();
 
-        $stmt = $connection->prepare("SELECT * FROM plan_payroll WHERE firstname = :firstname AND lastname = :lastname AND position = :position");
+        $stmt = $connection->prepare("SELECT * FROM payroll WHERE firstname = :firstname AND lastname = :lastname AND position = :position");
         $stmt->execute([
             'firstname' => strtoupper(trim($dataPayroll['firstname'])),
             'lastname' => strtoupper(trim($dataPayroll['lastname'])),
@@ -56,7 +56,7 @@ class GeneralPayrollDao
         try {
             $connection = Connection::getInstance()->getConnection();
 
-            $stmt = $connection->prepare("UPDATE plan_payroll SET status = :status WHERE id_plan_payroll = :id_plan_payroll");
+            $stmt = $connection->prepare("UPDATE payroll SET status = :status WHERE id_plan_payroll = :id_plan_payroll");
             $stmt->execute([
                 'status' => $status,
                 'id_plan_payroll' => $id_plan_payroll

@@ -57,7 +57,7 @@ class GeneralProgrammingDao
                                         INNER JOIN orders o ON o.id_order = pg.id_order
                                         INNER JOIN products p ON p.id_product = pg.id_product
                                         INNER JOIN machines m ON m.id_machine = pg.id_machine
-                                        INNER JOIN plan_clients c ON c.id_client = o.id_client
+                                        INNER JOIN third_parties c ON c.id_client = o.id_client
                                         INNER JOIN machine_programs pm ON pm.id_machine = pg.id_machine
                                       WHERE pg.id_company = :id_company AND pg.status = 1");
         $stmt->execute(['id_company' => $id_company]);
@@ -80,7 +80,7 @@ class GeneralProgrammingDao
                                         INNER JOIN orders o ON o.id_order = pg.id_order
                                         INNER JOIN products p ON p.id_product = pg.id_product
                                         INNER JOIN machines m ON m.id_machine = pg.id_machine
-                                        INNER JOIN plan_clients c ON c.id_client = o.id_client
+                                        INNER JOIN third_parties c ON c.id_client = o.id_client
                                         INNER JOIN machine_programs pm ON pm.id_machine = pg.id_machine
                                         INNER JOIN machine_cicles cp ON cp.id_product = pg.id_product AND cp.id_machine = pg.id_machine 
                                         INNER JOIN process pc ON pc.id_process = cp.id_process
