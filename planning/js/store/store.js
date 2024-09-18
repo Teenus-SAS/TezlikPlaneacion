@@ -10,9 +10,9 @@ $(document).ready(function () {
     bootbox.confirm({
       title: "Ingrese Fecha De Ingreso!",
       message: `<div class="col-sm-12 floating-label enable-floating-label">
-                        <input class="form-control" type="date" name="date" id="date" max="${date}"></input>
-                        <label for="date">Fecha</span></label>
-                      </div>`,
+                    <input class="form-control" type="date" name="date" id="dateS" max="${date}"></input>
+                    <label for="date">Fecha</span></label>
+                </div>`,
       buttons: {
         confirm: {
           label: "Agregar",
@@ -25,7 +25,7 @@ $(document).ready(function () {
       },
       callback: function (result) {
         if (result) {
-          let date = $("#date").val();
+          let date = $("#dateS").val();
 
           if (!date) {
             toastr.error("Ingrese los campos");

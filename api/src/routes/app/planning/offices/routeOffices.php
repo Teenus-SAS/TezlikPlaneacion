@@ -121,7 +121,7 @@ $app->post('/changeOffices', function (Request $request, Response $response, $ar
             $seller = $generalSellersDao->findInternalSeller($id_company);
 
             if ($client && $seller) {
-                $data['order'] = $arr['num_order'];
+                $data['order'] = $arr2['num_order'];
                 $data['dateOrder'] = date('Y-m-d');
                 $data['minDate'] = '';
                 $data['maxDate'] = '';

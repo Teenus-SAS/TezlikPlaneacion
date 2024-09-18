@@ -194,8 +194,13 @@ $(document).ready(function () {
     // Formateo de cantidad requerida
     quantity_required =
       data.abbreviation === "UND"
-        ? Math.floor(data.quantity_required)
-        : data.quantity_required;
+        ? data.quantity_required = data.quantity_required.toLocaleString("es-CO", {
+          maximumFractionDigits: 0,
+        })
+        : data.quantity_required = data.quantity_required.toLocaleString("es-CO", {
+          minimumFractionDigits: 2,
+          maximumFractionDigits: 2,
+        });
 
     //Asignacion
     $("#requiredQuantity").val(`${quantity_required} ${data.abbreviation}`);
