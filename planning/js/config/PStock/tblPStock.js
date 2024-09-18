@@ -40,6 +40,17 @@ $(document).ready(function () {
         className: "uniqueClassName dt-head-center",
       },
       {
+        title: "Clasificación",
+        data: classification,
+        className: "uniqueClassName dt-head-center",
+        render: function (data) {
+          if (data.classification == "A") badge = "badge-success";
+          else if (data.classification == "B") badge = "badge-info";
+          else badge = "badge-danger";
+          return `<span class="badge ${badge}" style="font-size: large;">${data.classification}</span>`;
+        },
+      },
+      {
         title: "Acciones",
         data: "id_stock_product",
         className: "uniqueClassName dt-head-center",
