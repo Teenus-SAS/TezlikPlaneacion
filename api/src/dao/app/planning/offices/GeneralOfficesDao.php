@@ -32,8 +32,11 @@ class GeneralOfficesDao
                                             SELECT uof.id_order, curd.id_user AS id_user_deliver, curd.firstname AS firstname_deliver, curd.lastname AS lastname_deliver
                                                 FROM offices_users uof
                                                 INNER JOIN users curd ON curd.id_user = uof.id_user_deliver
-                                                ORDER BY uof.id_user_office DESC
-                                                LIMIT 1
+                                                WHERE uof.id_order = (
+                                                    SELECT MAX(uof_inner.id_order)
+                                                    FROM offices_users uof_inner
+                                                    WHERE uof_inner.id_order = uof.id_order
+                                                )
                                         ) AS last_user ON last_user.id_order = o.id_order
                                       WHERE o.status IN (2, 3) AND o.id_company = :id_company
                                       AND (o.delivery_date IS NULL OR MONTH(o.delivery_date) = MONTH(CURRENT_DATE)) ORDER BY `o`.`num_order` DESC");
@@ -62,8 +65,11 @@ class GeneralOfficesDao
                                             SELECT uof.id_order, curd.id_user AS id_user_deliver, curd.firstname AS firstname_deliver, curd.lastname AS lastname_deliver
                                                 FROM offices_users uof
                                                 INNER JOIN users curd ON curd.id_user = uof.id_user_deliver 
-                                                ORDER BY uof.id_user_office DESC
-                                                LIMIT 1
+                                                WHERE uof.id_order = (
+                                                    SELECT MAX(uof_inner.id_order)
+                                                    FROM offices_users uof_inner
+                                                    WHERE uof_inner.id_order = uof.id_order
+                                                )
                                         ) AS last_user ON last_user.id_order = o.id_order
                                       WHERE o.id_company = :id_company AND (o.delivery_date BETWEEN :min_date AND :max_date) ORDER BY `o`.`status` ASC");
         $stmt->execute([

@@ -61,12 +61,15 @@ class GeneralRequisitionsDao
                                             LEFT JOIN third_parties c ON c.id_client = r.id_provider
                                             LEFT JOIN users ur ON ur.id_user = r.id_user_requisition
                                             -- Subconsulta para obtener el último usuario de entrega
-                                             LEFT JOIN (
+                                            LEFT JOIN (
                                                 SELECT cur.id_requisition, curd.id_user AS id_user_deliver, curd.firstname AS firstname_deliver, curd.lastname AS lastname_deliver
                                                 FROM requisitions_users cur
                                                 INNER JOIN users curd ON curd.id_user = cur.id_user_deliver
-                                                ORDER BY cur.id_user_requisition DESC
-                                                LIMIT 1
+                                                WHERE cur.id_user_requisition = (
+                                                    SELECT MAX(cur_inner.id_user_requisition)
+                                                    FROM requisitions_users cur_inner
+                                                    WHERE cur_inner.id_requisition = cur.id_requisition
+                                                )
                                             ) AS last_user ON last_user.id_requisition = r.id_requisition
                                       WHERE r.id_company = :id_company AND (r.admission_date IS NULL OR MONTH(r.admission_date) = MONTH(CURRENT_DATE))
                                       ORDER BY r.admission_date ASC");

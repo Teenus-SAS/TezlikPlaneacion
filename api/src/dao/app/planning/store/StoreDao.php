@@ -66,10 +66,12 @@ class StoreDao
                                                 curd.lastname AS lastname_delivered
                                             FROM store_users cur
                                             INNER JOIN users curd ON curd.id_user = cur.id_user_delivered 
-                                            ORDER BY
-                                                cur.id_user_store
-                                            DESC
-                                            LIMIT 1) AS last_user ON last_user.id_material = m.id_material
+                                            WHERE cur.id_material = (
+                                                    SELECT MAX(cur_inner.id_material)
+                                                    FROM store_users cur_inner
+                                                    WHERE cur_inner.id_material = cur.id_material
+                                            )
+                                        ) AS last_user ON last_user.id_material = m.id_material
                                       WHERE pg.id_company = :id_company AND pg.status = 1
                                       GROUP BY
                                         pg.id_programming,
