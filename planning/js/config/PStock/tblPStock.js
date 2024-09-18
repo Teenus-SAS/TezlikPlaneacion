@@ -44,10 +44,10 @@ $(document).ready(function () {
         data: "classification",
         className: "uniqueClassName dt-head-center",
         render: function (data) {
-          if (data.classification == "A") badge = "badge-success";
-          else if (data.classification == "B") badge = "badge-info";
+          if (data == "A") badge = "badge-success";
+          else if (data == "B") badge = "badge-info";
           else badge = "badge-danger";
-          return `<span class="badge ${badge}" style="font-size: large;">${data.classification}</span>`;
+          return `<span class="badge ${badge}" style="font-size: large;">${data}</span>`;
         },
       },
       {
