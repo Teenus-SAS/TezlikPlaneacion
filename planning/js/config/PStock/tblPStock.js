@@ -30,16 +30,6 @@ $(document).ready(function () {
         className: "uniqueClassName dt-head-center",
       },
       {
-        title: "Tiempo Mínimo de Producción",
-        data: "min_term",
-        className: "uniqueClassName dt-head-center",
-      },
-      {
-        title: "Tiempo Máximo de Producción",
-        data: "max_term",
-        className: "uniqueClassName dt-head-center",
-      },
-      {
         title: "Clasificación",
         data: "classification",
         className: "uniqueClassName dt-head-center",
@@ -49,6 +39,16 @@ $(document).ready(function () {
           else badge = "badge-danger";
           return `<span class="badge ${badge}" style="font-size: large;">${data}</span>`;
         },
+      },
+      {
+        title: "Tiempo Mínimo de Producción",
+        data: "min_term",
+        className: "uniqueClassName dt-head-center",
+      },
+      {
+        title: "Tiempo Máximo de Producción",
+        data: "max_term",
+        className: "uniqueClassName dt-head-center",
       },
       {
         title: "Acciones",
