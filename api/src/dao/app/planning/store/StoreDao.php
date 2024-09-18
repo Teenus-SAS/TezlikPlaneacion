@@ -60,20 +60,16 @@ class StoreDao
                                         INNER JOIN admin_units u ON u.id_unit = m.unit
                                             -- Subconsulta para obtener el último usuario de entrega
                                         LEFT JOIN(
-                                        SELECT cur.id_material,
-                                            curd.id_user AS id_user_delivered,
-                                            curd.firstname AS firstname_delivered,
-                                            curd.lastname AS lastname_delivered
-                                        FROM
-                                            store_users cur
-                                        INNER JOIN users curd ON
-                                            curd.id_user = cur.id_user_delivered
-                                        WHERE
-                                            cur.id_company = :id_company
-                                        ORDER BY
-                                            cur.id_user_store
-                                        DESC
-                                        LIMIT 1) AS last_user ON last_user.id_material = m.id_material
+                                            SELECT cur.id_material,
+                                                curd.id_user AS id_user_delivered,
+                                                curd.firstname AS firstname_delivered,
+                                                curd.lastname AS lastname_delivered
+                                            FROM store_users cur
+                                            INNER JOIN users curd ON curd.id_user = cur.id_user_delivered 
+                                            ORDER BY
+                                                cur.id_user_store
+                                            DESC
+                                            LIMIT 1) AS last_user ON last_user.id_material = m.id_material
                                       WHERE pg.id_company = :id_company AND pg.status = 1
                                       GROUP BY
                                         pg.id_programming,

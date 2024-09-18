@@ -32,7 +32,6 @@ class GeneralOfficesDao
                                             SELECT uof.id_order, curd.id_user AS id_user_deliver, curd.firstname AS firstname_deliver, curd.lastname AS lastname_deliver
                                                 FROM offices_users uof
                                                 INNER JOIN users curd ON curd.id_user = uof.id_user_deliver
-                                                WHERE uof.id_company = :id_company
                                                 ORDER BY uof.id_user_office DESC
                                                 LIMIT 1
                                         ) AS last_user ON last_user.id_order = o.id_order
@@ -62,8 +61,7 @@ class GeneralOfficesDao
                                         LEFT JOIN (
                                             SELECT uof.id_order, curd.id_user AS id_user_deliver, curd.firstname AS firstname_deliver, curd.lastname AS lastname_deliver
                                                 FROM offices_users uof
-                                                INNER JOIN users curd ON curd.id_user = uof.id_user_deliver
-                                                WHERE uof.id_company = :id_company
+                                                INNER JOIN users curd ON curd.id_user = uof.id_user_deliver 
                                                 ORDER BY uof.id_user_office DESC
                                                 LIMIT 1
                                         ) AS last_user ON last_user.id_order = o.id_order
