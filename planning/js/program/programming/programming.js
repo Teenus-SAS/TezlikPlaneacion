@@ -54,10 +54,10 @@ $(document).ready(function () {
     $("#formCreateProgramming").trigger("reset");
   });
 
-  //Limpiar input MP Disponible
+  //Limpiar value MP Disponible
   $("#order").change(function (e) {
     e.preventDefault();
-    $("#quantityMP").val("");
+    $("#quantityMP").text("");
   });
 
   /* Crear nuevo programa de produccion */
