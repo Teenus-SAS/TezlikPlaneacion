@@ -67,11 +67,11 @@ $(document).ready(function () {
 
     //cargar formulario
     $(`#refMaterial option[value=${data.id_material}]`).prop("selected", true);
-    $(`#material option[value=${data.id_material}]`).prop("selected", true);
+    $(`#material option[value=${data.id_material}]`).prop("selected", true); 
     $("#referenceMName").val(data.reference);
     $("#materialName").val(data.material);
 
-    $("#providerName").val(data.client);
+    // $("#providerName").val(data.client);
 
     $(`#client option[value=${data.id_provider}]`).prop("selected", true);
     $("#rMMin").val(data.min_term);
