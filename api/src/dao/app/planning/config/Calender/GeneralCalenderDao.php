@@ -20,7 +20,7 @@ class GeneralCalenderDao
     public function findCalender($dataCalender, $id_company)
     {
         $connection = Connection::getInstance()->getConnection();
-        $stmt = $connection->prepare("SELECT * FROM calender
+        $stmt = $connection->prepare("SELECT * FROM machine_calender
                                       WHERE id_company = :id_company AND month = :month AND day = :day");
         $stmt->execute([
             'id_company' => $id_company,

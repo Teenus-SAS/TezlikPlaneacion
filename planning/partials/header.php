@@ -118,7 +118,7 @@
                                                             <li class="planningMachines" style="display: none;">
                                                             <?php } ?>
                                                             <i class="fas fa-cog"></i>
-                                                            <a href="/planning/planning-machines">Programación Máquinas</a>
+                                                            <a href="/planning/planning-machines">Programación Máquinas y Procesos</a>
                                                             </li>
                                                             <?php if ($_SESSION['stock'] == 1) { ?>
                                                                 <li class="planStock">

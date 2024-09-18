@@ -54,6 +54,12 @@ $(document).ready(function () {
     $("#formCreateProgramming").trigger("reset");
   });
 
+  //Limpiar input MP Disponible
+  $("#order").change(function (e) {
+    e.preventDefault();
+    $("#quantityMP").val("");
+  });
+
   /* Crear nuevo programa de produccion */
   $("#btnCreateProgramming").click(function (e) {
     e.preventDefault();
@@ -301,26 +307,26 @@ $(document).ready(function () {
             allOrdersProgramming[i].accumulated_quantity_order =
               allOrdersProgramming[i].accumulated_quantity -
                 quantityProgramming <
-                0
+              0
                 ? 0
                 : allOrdersProgramming[i].accumulated_quantity -
-                quantityProgramming;
+                  quantityProgramming;
             allOrdersProgramming[i].accumulated_quantity =
               ciclesMachine.length == 1
                 ? allOrdersProgramming[i].accumulated_quantity -
-                  quantityProgramming <
+                    quantityProgramming <
                   0
                   ? 0
                   : allOrdersProgramming[i].accumulated_quantity -
-                  quantityProgramming
+                    quantityProgramming
                 : allOrdersProgramming[i].original_quantity;
             allOrdersProgramming[i].quantity_programming =
               allOrdersProgramming[i].accumulated_quantity -
                 quantityProgramming <
-                0
+              0
                 ? 0
                 : allOrdersProgramming[i].accumulated_quantity -
-                quantityProgramming;
+                  quantityProgramming;
             quantityMissing =
               allOrdersProgramming[i].accumulated_quantity_order;
           }
@@ -368,7 +374,7 @@ $(document).ready(function () {
         allOrdersProgramming[i].flag_tbl = 0;
       }
     }
-    
+
     let allTblData = flattenData(generalMultiArray);
 
     quantityMissing < 0 ? (quantityMissing = 0) : quantityMissing;
@@ -410,15 +416,19 @@ $(document).ready(function () {
       sim == 1 ? (key = 0) : (key = 1);
       // Encontrar el objeto correspondiente en multiarray
       let targetArray = generalMultiArray[key][`sim_${sim}`];
- 
+
       if (targetArray) {
         for (let i = 0; i < targetArray.length; i++) {
           // Verificar si existe el process con el id_process
           if (targetArray[i][`process-${id_process}`]) {
             // Verificar si dentro del process existe la machine con el id_machine
-            if (targetArray[i][`process-${id_process}`][`machine-${id_machine}`]) {
+            if (
+              targetArray[i][`process-${id_process}`][`machine-${id_machine}`]
+            ) {
               // Agregar dataProgramming a la máquina correspondiente
-              targetArray[i][`process-${id_process}`][`machine-${id_machine}`].push(dataProgramming);
+              targetArray[i][`process-${id_process}`][
+                `machine-${id_machine}`
+              ].push(dataProgramming);
               break; // Salir del bucle después de encontrar y actualizar el proceso
             }
           }
@@ -487,11 +497,12 @@ $(document).ready(function () {
       for (let i = 0; i < generalMultiArray[key][`sim_${sim}`].length; i++) {
         if (generalMultiArray[key][`sim_${sim}`][i][`process-${id_process}`]) {
           // Agregar verificación para la máquina
-          let processMachines = generalMultiArray[key][`sim_${sim}`][i][`process-${id_process}`];
-    
+          let processMachines =
+            generalMultiArray[key][`sim_${sim}`][i][`process-${id_process}`];
+
           if (processMachines[`machine-${id_machine}`]) {
             let machineArray = processMachines[`machine-${id_machine}`];
-      
+
             for (let j = 0; j < machineArray.length; j++) {
               if (machineArray[j].id_programming == idProgramming) {
                 machineArray[j].accumulated_quantity = quantityMissing;
@@ -499,7 +510,8 @@ $(document).ready(function () {
                 machineArray[j].quantity_programming = quantityProgramming;
                 machineArray[j].min_date = dataProgramming["min_date"];
                 machineArray[j].max_date = dataProgramming["max_date"];
-                machineArray[j].min_programming = dataProgramming["min_programming"];
+                machineArray[j].min_programming =
+                  dataProgramming["min_programming"];
                 break;
               }
             }
