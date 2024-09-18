@@ -101,6 +101,7 @@ $(document).ready(function () {
 
   $(document).on("click", ".updateProgramming", async function (e) {
     $(".cardCreateProgramming").show(800);
+    $('.cardFormProgramming2').show(800);
     $("#btnCreateProgramming").text("Actualizar");
     let allTblData = flattenData(generalMultiArray);
 
@@ -135,7 +136,7 @@ $(document).ready(function () {
     productsMaterials = productsMaterials.sort(
       (a, b) => a.quantity - b.quantity
     );
-    $("#quantityMP").val(
+    $("#quantityMP").html(
       Math.floor(productsMaterials[0].quantity).toLocaleString("es-CO", {
         maximumFractionDigits: 0,
       })

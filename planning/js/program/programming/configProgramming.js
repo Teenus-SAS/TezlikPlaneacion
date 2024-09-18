@@ -56,23 +56,25 @@ $(document).ready(function () {
       {
         ciclesMachines.sort((a, b) => a.id_process - b.id_process);
  
-        // Crear el mapa único procesos y maquinas
-        let uniquePCMMap = new Map
-          (
-            ciclesMachines.map
-              (
-                item =>
-                  [
-                    item.id_process,
-                    {
-                      [`process-${item.id_process}`]:
-                      {
-                        [`machine-${item.id_machine}`]: []
-                      }
-                    }
-                  ]
-              )
-          );
+        // Crear el mapa único de procesos y máquinas
+        let uniquePCMMap = new Map();
+
+        ciclesMachines.forEach(item => {
+          // Verificar si el proceso ya existe en el mapa
+          if (!uniquePCMMap.has(item.id_process)) {
+            // Si no existe, crear el proceso con la primera máquina
+            uniquePCMMap.set(item.id_process, {
+              [`process-${item.id_process}`]: {
+                [`machine-${item.id_machine}`]: []
+              }
+            });
+          } else {
+            // Si ya existe, agregar la nueva máquina al proceso existente
+            let processData = uniquePCMMap.get(item.id_process);
+            processData[`process-${item.id_process}`][`machine-${item.id_machine}`] = [];
+            uniquePCMMap.set(item.id_process, processData); // Actualizar el mapa
+          }
+        });
         
         // Convertir el mapa en un array
         let uniqueArrayPCM = Array.from(uniquePCMMap.values());
