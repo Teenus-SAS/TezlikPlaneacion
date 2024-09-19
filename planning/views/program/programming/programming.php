@@ -305,7 +305,7 @@ if (sizeof($_SESSION) == 0)
                                                 <div class="row align-items-stretch">
 
                                                     <!-- Begin total orders vs clients chart -->
-                                                    <div class="col-md-4 col-lg-4">
+                                                    <div class="col-md-4 col-lg-8">
                                                         <div class="card orders-graph staffAvailableCardChart">
                                                             <div class="card-header">
                                                                 <h5 class="card-title">Personal Disponible y Requerido</h5>
@@ -334,24 +334,23 @@ if (sizeof($_SESSION) == 0)
                                                         </div>
                                                     </div>
                                                     <!-- Begin Inventory classification chart -->
-                                                    <div class="col-md-4 col-lg-4" style="height: fit-content;">
+                                                    <!-- <div class="col-md-4 col-lg-4" style="height: fit-content;">
                                                         <div class="card orders-graph">
                                                             <div class="card-header">
                                                                 <h5 class="card-title">Moldes No Disponibles</h5>
                                                             </div>
                                                             <div class="card-body pt-2">
                                                                 <div class="chart-container">
-                                                                    <!-- <canvas id="chartTimeProcessProducts"></canvas> -->
                                                                     <canvas id="moldUnavailable"></canvas>
                                                                 </div>
                                                             </div>
                                                         </div>
-                                                    </div>
+                                                    </div> -->
 
                                                     <!-- End total revenue chart -->
                                                 </div>
                                                 <div class="row">
-                                                    <div class="col-md-12 col-lg-8">
+                                                    <div class="col-md-12 col-lg-12">
                                                         <div class="card orders-graph">
                                                             <div class="card-header">
                                                                 <h5 class="card-title">Capacidad de Producción</h5>
@@ -363,26 +362,25 @@ if (sizeof($_SESSION) == 0)
                                                             </div>
                                                         </div>
                                                     </div>
-                                                    <div class="col-md-4 col-lg-8">
+                                                    <!-- <div class="col-md-4 col-lg-8">
                                                         <div class="card orders-graph">
                                                             <div class="card-header">
                                                                 <h5 class="card-title">Clientes con mayor número de pedidos</h5>
                                                             </div>
                                                             <div class="card-body pt-2">
                                                                 <div class="chart-container">
-                                                                    <!-- <canvas id="chartTimeProcessProducts"></canvas> -->
                                                                     <canvas id="chartOrdersClients"></canvas>
                                                                 </div>
                                                             </div>
                                                         </div>
-                                                    </div>
+                                                    </div> -->
 
                                                 </div>
                                             </div>
                                         </div>
 
                                         <!-- Begin total orders vs clients chart -->
-                                        <div class="col-md-4 col-lg-9" style="height: fit-content;">
+                                        <!-- <div class="col-md-4 col-lg-9" style="height: fit-content;">
                                             <div class="card">
                                                 <div class="card-header">
                                                     <h5 class="card-title"> </h5>
@@ -391,7 +389,7 @@ if (sizeof($_SESSION) == 0)
                                                     <canvas id="chartProductsCost"></canvas>
                                                 </div>
                                             </div>
-                                        </div>
+                                        </div> -->
                                     </div>
                                 </div>
                             </div>
