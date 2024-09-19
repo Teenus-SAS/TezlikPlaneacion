@@ -119,11 +119,11 @@ if (sizeof($_SESSION) == 0)
                                             <i class="fas fa-dolly mr-1"></i>Ordenes de Compra (Recibir)
                                         </a>
                                     </li>
-                                    <li class="nav-item">
+                                    <!-- <li class="nav-item">
                                         <a class="nav-link selectNavigation" id="deliverOC" data-toggle="pill" href="javascript:;" role="tab" aria-controls="pills-activity" aria-selected="true">
                                             <i class="fas fa-dolly mr-1"></i>Ordenes de Compra (Entregar)
                                         </a>
-                                    </li>
+                                    </li> -->
                                     <li class="nav-item">
                                         <a class="nav-link selectNavigation" id="receiveOP" data-toggle="pill" href="javascript:;" role="tab" aria-controls="pills-projects" aria-selected="false">
                                             <i class="fas fa-dolly-flatbed mr-1"></i>Ordenes de Produccion (Recibir)
