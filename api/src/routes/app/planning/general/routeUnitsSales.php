@@ -373,9 +373,9 @@ $app->post('/addUnitSales', function (Request $request, Response $response, $arg
 
             // Calcular stock producto
             if ($resolution == null) {
-                $product = $minimumStockDao->calcStockByProduct($dataSale['idProduct']);
+                $product = $minimumStockDao->calcStockByProduct($unitSales[$i]['idProduct']);
                 if (isset($product['stock']))
-                    $resolution = $generalProductsDao->updateStockByProduct($dataSale['idProduct'], $product['stock']);
+                    $resolution = $generalProductsDao->updateStockByProduct($unitSales[$i]['idProduct'], $product['stock']);
             }
 
             if (isset($resolution['info'])) break;

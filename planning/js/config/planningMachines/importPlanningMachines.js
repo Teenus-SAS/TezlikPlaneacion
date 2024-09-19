@@ -91,7 +91,7 @@ $(document).ready(function () {
             october: item.octubre,
             november: item.noviembre,
             december: item.diciembre,
-            acive: item.disponible,
+            active: item.disponible,
           };
         });
         checkMachine(machinesToImport);
