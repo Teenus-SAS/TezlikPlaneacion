@@ -111,7 +111,7 @@ class FilesDao
         $fileType = pathinfo($targetFilePath, PATHINFO_EXTENSION);
 
         if (in_array($fileType, $allowTypes)) {
-            $sql = "UPDATE companies SET logo = :logo WHERE id_company = :id_company";
+            $sql = "UPDATE admin_companies SET logo = :logo WHERE id_company = :id_company";
             $query = $connection->prepare($sql);
             $query->execute([
                 'logo' => $targetFilePath,
