@@ -49,17 +49,17 @@ if (sizeof($_SESSION) == 0)
                                 </div>
                             </div>
                             <div class="col-sm-7 col-xl-8 form-inline justify-content-sm-end">
-                                <div class="col-sm-7 col-xl-1 form-inline justify-content-sm-end">
-                                    <button class="btn btn-warning" id="btnNewProgramming" name="btnNewProgramming">Programar</button>
+                                <div class="col-sm-7 col-xl-3 form-inline justify-content-sm-end">
+                                    <button class="btn btn-warning w-100" id="btnNewProgramming" name="btnNewProgramming">Programar</button>
                                 </div>
                                 <div class="col-sm-7 col-xl-2 floating-label enable-floating-label show-label form-inline justify-content-sm-end mb-0 cardBottons">
                                     <div id="machines1">
-                                        <label>Maquina</label>
+                                        <label>Máquina</label>
                                         <select class="form-control idMachine" id="searchMachine">
                                         </select>
                                     </div>
                                 </div>
-                                <div class="col-sm-7 col-xl-2 floating-label enable-floating-label show-label form-inline justify-content-sm-end mb-0 mr-3 cardSimulation" style="display: none;">
+                                <div class="col-sm-7 col-xl-2 floating-label enable-floating-label show-label form-inline justify-content-sm-end mb-0 cardSimulation" style="display: none;">
                                     <div class="col-xs-4 mr-2">
                                         <label for="simulationType">Escenarios</label>
                                         <select name="simulationType" id="simulationType" class="form-control text-center">
@@ -74,7 +74,7 @@ if (sizeof($_SESSION) == 0)
                                     <button class="btn btn-primary" id="btnSavePrograming" name="btnSavePrograming">Guardar</button>
                                 </div>
                                 <div class="col-sm-7 col-xl-2 form-inline p-0 cardAddOP" style="display: none;">
-                                    <button class="btn btn-info" id="btnAddOP" name="btnAddOP">Crear OP</button>
+                                    <button class="btn btn-info w-100" id="btnAddOP" name="btnAddOP">Crear OP</button>
                                 </div>
                             </div>
                         </div>
