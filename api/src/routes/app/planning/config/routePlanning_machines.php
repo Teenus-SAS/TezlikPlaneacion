@@ -4,6 +4,7 @@ use TezlikPlaneacion\dao\CiclesMachineDao;
 use TezlikPlaneacion\dao\GeneralMachinesDao;
 use TezlikPlaneacion\dao\GeneralPlanCiclesMachinesDao;
 use TezlikPlaneacion\dao\GeneralPlanningMachinesDao;
+use TezlikPlaneacion\dao\LastDataDao;
 use TezlikPlaneacion\dao\Planning_machinesDao;
 use TezlikPlaneacion\dao\TimeConvertDao;
 
@@ -11,6 +12,7 @@ $planningMachinesDao = new Planning_machinesDao();
 $generalPlanningMachinesDao = new GeneralPlanningMachinesDao();
 $generalPlanCiclesMachinesDao = new GeneralPlanCiclesMachinesDao();
 $ciclesMachinesDao = new CiclesMachineDao();
+$lastDataDao = new LastDataDao();
 $machinesDao = new GeneralMachinesDao();
 $timeConvertDao = new TimeConvertDao();
 
@@ -148,6 +150,7 @@ $app->post('/addPlanningMachines', function (Request $request, Response $respons
     $generalPlanCiclesMachinesDao,
     $ciclesMachinesDao,
     $timeConvertDao,
+    $lastDataDao,
     $machinesDao
 ) {
     session_start();
@@ -205,11 +208,18 @@ $app->post('/addPlanningMachines', function (Request $request, Response $respons
 
             $planningMachines[$i]['type'] == 'PROCESO MANUAL' ? $planningMachines[$i]['typePM'] = 0 : $planningMachines[$i]['typePM'] = 1;
 
-            if (!$findPlanMachines) $resolution = $planningMachinesDao->insertPlanMachinesByCompany($planningMachines[$i], $id_company);
-            else {
+            if (!$findPlanMachines) {
+                $resolution = $planningMachinesDao->insertPlanMachinesByCompany($planningMachines[$i], $id_company);
+                $lastMachine = $lastDataDao->findLastInsertedPMachine($id_company);
+                $planningMachines[$i]['idProgramMachine'] = $lastMachine['id_program_machine'];
+            } else {
                 $planningMachines[$i]['idProgramMachine'] = $findPlanMachines['id_program_machine'];
                 $resolution = $planningMachinesDao->updatePlanMachines($planningMachines[$i]);
             }
+            $planningMachines[$i]['active'] == 'SI' ? $status = 1 : $status = 0;
+
+            $resolution = $generalPlanningMachinesDao->changeStatusPmachine($planningMachines[$i]['idProgramMachine'], $status);
+
 
             $machines = $generalPlanCiclesMachinesDao->findAllPlanCiclesMachine($planningMachines[$i]['idMachine'], $id_company);
 

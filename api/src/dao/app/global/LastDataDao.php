@@ -161,4 +161,16 @@ class LastDataDao
         $order = $stmt->fetch($connection::FETCH_ASSOC);
         return $order;
     }
+
+    public function findLastInsertedPMachine($id_company)
+    {
+        $connection = Connection::getInstance()->getConnection();
+
+        $stmt = $connection->prepare("SELECT MAX(id_program_machine) AS id_program_machine FROM machine_programs WHERE id_company = :id_company");
+        $stmt->execute(['id_company' => $id_company]);
+        $this->logger->info(__FUNCTION__, array('query' => $stmt->queryString, 'errors' => $stmt->errorInfo()));
+
+        $machine = $stmt->fetch($connection::FETCH_ASSOC);
+        return $machine;
+    }
 }
