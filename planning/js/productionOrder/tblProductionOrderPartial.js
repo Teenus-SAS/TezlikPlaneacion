@@ -74,7 +74,7 @@ $(document).ready(function () {
                 className: "uniqueClassName dt-head-center",
                 render: function (data) {
                     if (!data.receive_date || data.receive_date == "0000-00-00 00:00:00")
-                        action = `<button class="btn btn-info changeDate" id="delivery">Recibir OC</button>`;
+                        action = `<button class="btn btn-info changeDateOC" id="delivery">Recibir OC</button>`;
                     else {
                         action = `Recibido: <br>${data.firstname_deliver} ${data.lastname_deliver}<br>${data.receive_date}`;
                         // <a href="javascript:;">
@@ -89,7 +89,7 @@ $(document).ready(function () {
     });
 
     // Recibir OC
-    $(document).on("click", ".changeDate", function (e) {
+    $(document).on("click", ".changeDateOC", function (e) {
         e.preventDefault();
 
         let date = new Date().toISOString().split("T")[0];

@@ -34,12 +34,11 @@ $(document).ready(function () {
     $(".cardCreateProcess").show(800);
     $("#btnCreateProcess").text("Actualizar");
 
-    sessionStorage.setItem("id_process", data.id_process);
-
     // Obtener data
     let row = $(this).closest("tr")[0];
     let data = tblProcess.fnGetData(row);
-
+    
+    sessionStorage.setItem("id_process", data.id_process);
     // Asignar valores a los campos del formulario y animar
     $("#process").val(data.process);
     $("html, body").animate(

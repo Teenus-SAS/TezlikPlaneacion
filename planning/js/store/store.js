@@ -1,6 +1,6 @@
 $(document).ready(function () {
   // Recibir MP
-  $(document).on("click", ".changeDate", function (e) {
+  $(document).on("click", ".changeDateMP", function (e) {
     e.preventDefault();
 
     let date = new Date().toISOString().split("T")[0];

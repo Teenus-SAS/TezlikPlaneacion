@@ -107,7 +107,7 @@ $(document).ready(function () {
           item.ancho_total ? totalWidth = item.ancho_total : totalWidth;
           item.ventanilla ? window = item.ventanilla : window;
           item.tinta ? inks = item.tinta : inks;
-          item.origen ? origin = 'COMERCIALIZADO' : origin;
+          // item.origen ? origin = '' : origin;
           
           return {
             referenceProduct: item.referencia_producto,
@@ -120,7 +120,7 @@ $(document).ready(function () {
             totalWidth: totalWidth,
             window: window,
             inks: inks,
-            origin: origin,
+            origin: item.origen,
             composite: item.compuesto,
           };
         });

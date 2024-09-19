@@ -126,7 +126,7 @@ $(document).ready(function () {
           className: "uniqueClassName dt-head-center",
           render: function (data) {
             if (!data.admission_date || data.admission_date == "0000-00-00 00:00:00")
-              action = `<button class="btn btn-info changeDate" id="delivery">Recibir MP</button>`;
+              action = `<button class="btn btn-info changeDateMP" id="delivery">Recibir MP</button>`;
             else { 
               action = `Recibido: <br>${data.firstname_deliver} ${data.lastname_deliver}<br>${data.admission_date}
                         <a href="javascript:;">
