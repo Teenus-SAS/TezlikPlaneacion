@@ -299,15 +299,36 @@ $app->post('/updatePStock', function (Request $request, Response $response, $arg
     return $response->withStatus(200)->withHeader('Content-Type', 'application/json');
 });
 
-$app->get('/deletePlanstock/{id_stock}', function (Request $request, Response $response, $args) use ($stockDao) {
-    $stock = $stockDao->deletestock($args['id_stock']);
+$app->post('/deletePlanStock', function (Request $request, Response $response, $args) use (
+    $stockDao,
+    $generalProductsDao,
+    $minimumStockDao
+) {
+    $dataStock = $request->getParsedBody();
+    $resolution = $stockDao->deletestock($dataStock['idStock']);
 
-    if ($stock == null)
+    if ($resolution == null) {
+        $product = $generalProductsDao->findProductById($dataStock['idProduct']);
+
+        if ($product['composite'] == 0)
+            $arr = $minimumStockDao->calcStockByProduct($dataStock['idProduct']);
+        else
+            $arr = $minimumStockDao->calcStockByComposite($dataStock['idProduct']);
+
+        if (isset($arr['info'])) {
+            $resolution = $arr;
+        } else {
+            if (isset($arr['stock']))
+                $resolution = $generalProductsDao->updateStockByProduct($dataStock['idProduct'], $arr['stock']);
+        }
+    }
+
+    if ($resolution == null)
         $resp = array('success' => true, 'message' => 'Stock eliminado correctamente');
-
-    if ($stock != null)
-        $resp = array('error' => true, 'message' => 'No es posible eliminar el Stock, existe información asociada a él');
-
+    else if (isset($resolution['info']))
+        $resp = array('info' => true, 'message' => $resolution['message']);
+    else
+        $resp = array('error' => true, 'message' => 'Ocurrio un error mientras eliminaba la información. Intente nuevamente');
     $response->getBody()->write(json_encode($resp));
     return $response->withHeader('Content-Type', 'application/json');
 });

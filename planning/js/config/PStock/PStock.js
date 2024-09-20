@@ -91,7 +91,10 @@ $(document).ready(function () {
     const row = $(this.activeElement).closest("tr")[0];
     let data = tblPStock.fnGetData(row);
 
-    let id_stock = data.id_stock_product;
+    let dataStock = {};
+
+    dataStock['idStock']= data.id_stock_product;
+    dataStock['idProduct'] = data.id_product;
 
     bootbox.confirm({
       title: 'Eliminar',
@@ -109,9 +112,8 @@ $(document).ready(function () {
       },
       callback: function (result) {
         if (result) {
-          $.get(
-            `/api/deletePlanstock/${id_stock}`,
-            function (data, textStatus, jqXHR) {
+          $.post('/api/deletePlanStock', dataStock,
+            function (data, textStatus, jqXHR) { 
               messagePS(data);
             }
           );

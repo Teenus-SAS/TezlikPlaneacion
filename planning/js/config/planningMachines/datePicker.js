@@ -79,17 +79,8 @@ $(document).ready(function () {
     
     if (!hoursDay || hoursDay == '' || !workShift || workShift == '' || workShift > 3) {
       return false;
-    }
- 
-    // var date = new Date("2000-01-01 " + hourStart);
-
-    // var horas = date.getHours();
-    // var minutos = date.getMinutes();
- 
-    // var hourEnd = parseFloat(horas + '.' + (minutos < 10 ? '0' : '') + minutos) + (hoursDay * workShift);
-
-    // hourEnd = moment(hourEnd.toFixed(2), ['HH:mm']).format('h:mm A');
-
+    } 
+    
     // Convertir la hora de inicio a un objeto moment
     var startMoment = moment("2000-01-01 " + hourStart, "YYYY-MM-DD HH:mm");
 

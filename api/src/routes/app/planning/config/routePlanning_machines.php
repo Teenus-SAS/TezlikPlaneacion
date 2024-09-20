@@ -201,11 +201,11 @@ $app->post('/addPlanningMachines', function (Request $request, Response $respons
 
             $findPlanMachines = $generalPlanningMachinesDao->findPlanMachines($planningMachines[$i], $id_company);
 
-            $hourEnd = $timeConvertDao->calculateHourEnd($planningMachines[$i]['hourStart'], $planningMachines[$i]['hoursDay']);
+            $hourEnd = $timeConvertDao->calculateHourEnd($planningMachines[$i]['hourStart'], $planningMachines[$i]['workShift'], $planningMachines[$i]['hoursDay']);
 
             $planningMachines[$i]['year'] = date('Y');
             $planningMachines[$i]['hourStart'] = date("G.i", strtotime($planningMachines[$i]['hourStart']));
-            $planningMachines[$i]['hourEnd'] = $hourEnd;
+            $planningMachines[$i]['hourEnd'] = date("G.i", strtotime($hourEnd));
 
             $planningMachines[$i]['type'] == 'PROCESO MANUAL' ? $planningMachines[$i]['typePM'] = 0 : $planningMachines[$i]['typePM'] = 1;
 
