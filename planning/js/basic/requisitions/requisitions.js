@@ -150,13 +150,7 @@ $(document).ready(function () {
             .join("")}`
         ).val(data[field]);
       }
-    });
-    /* if (data.application_date != "0000-00-00" && data.application_date)
-      $("#applicationDate").val(data.application_date);
-    if (data.delivery_date != "0000-00-00" && data.delivery_date)
-      $("#deliveryDate").val(data.delivery_date);
-    if (data.purchase_order != "0000-00-00" && data.purchase_order)
-      $("#purchaseOrder").val(data.purchase_order); */
+    }); 
 
     let dataStock = JSON.parse(sessionStorage.getItem("stock"));
     let arr = dataStock.filter((item) => item.id_material == data.id_material);
@@ -289,6 +283,50 @@ $(document).ready(function () {
         if (result) {
           $.post(
             "/api/deleteRequisition",
+            dataRequisition,
+            function (data, textStatus, jqXHR) {
+              message(data);
+            }
+          );
+        }
+      },
+    });
+  };
+
+  /* Cancelar Compra */
+  cancelRQFunction = () => {
+    //obtener data
+    const row = $(this.activeElement).closest("tr")[0];
+    const data = tblRequisitions.fnGetData(row);
+
+    let dataRequisition = {};
+    dataRequisition["idRequisition"] = data.id_requisition;
+    dataRequisition["idMaterial"] = data.id_material;
+    dataRequisition["idUser"] = 0;
+    dataRequisition["idProvider"] = data.id_provider;
+    dataRequisition["applicationDate"] = '0000-00-00';
+    dataRequisition["deliveryDate"] = '0000-00-00';
+    dataRequisition["requestedQuantity"] = 0;
+    dataRequisition["purchaseOrder"] = '';
+
+    bootbox.confirm({
+      title: "Cancelar",
+      message:
+        "Está seguro de cancelar esta compra? Esta acción no se puede reversar.",
+      buttons: {
+        confirm: {
+          label: "Si",
+          className: "btn-success",
+        },
+        cancel: {
+          label: "No",
+          className: "btn-danger",
+        },
+      },
+      callback: function (result) {
+        if (result) {
+          $.post(
+            "/api/updateRequisition",
             dataRequisition,
             function (data, textStatus, jqXHR) {
               message(data);

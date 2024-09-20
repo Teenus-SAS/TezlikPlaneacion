@@ -235,7 +235,9 @@ $app->post('/updateRequisition', function (Request $request, Response $response,
     session_start();
     $id_user = $_SESSION['idUser'];
     $dataRequisition = $request->getParsedBody();
-    $dataRequisition['idUser'] = $id_user;
+
+    if (!isset($dataRequisition['idUser']))
+        $dataRequisition['idUser'] = $id_user;
 
     // $requisition = $generalRequisitionsDao->findRequisition($dataRequisition, $id_company);
     // !is_array($requisition) ? $data['id_requisition'] = 0 : $data = $requisition;
