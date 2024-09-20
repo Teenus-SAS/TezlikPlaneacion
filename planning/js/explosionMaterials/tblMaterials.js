@@ -18,6 +18,11 @@ $(document).ready(function () {
           return meta.row + 1;
         },
       },
+      // {
+      //   title: "Pedido",
+      //   data: "num_order",
+      //   className: "uniqueClassName dt-head-center",
+      // },
       {
         title: "Referencia",
         data: "reference_material",

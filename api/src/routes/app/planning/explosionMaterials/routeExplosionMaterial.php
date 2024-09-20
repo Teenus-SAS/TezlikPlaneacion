@@ -1,7 +1,10 @@
 <?php
 
 use TezlikPlaneacion\dao\ExplosionMaterialsDao;
+use TezlikPlaneacion\dao\ExplosionProductsDao;
 use TezlikPlaneacion\dao\GeneralClientsDao;
+use TezlikPlaneacion\dao\GeneralExplosionMaterialsDao;
+use TezlikPlaneacion\dao\GeneralExplosionProductsDao;
 use TezlikPlaneacion\dao\GeneralOrdersDao;
 use TezlikPlaneacion\dao\GeneralProductsDao;
 use TezlikPlaneacion\dao\GeneralProgrammingRoutesDao;
@@ -14,6 +17,9 @@ use TezlikPlaneacion\dao\ProgrammingRoutesDao;
 use TezlikPlaneacion\dao\RequisitionsDao;
 
 $explosionMaterialsDao = new ExplosionMaterialsDao();
+$explosionProductsDao = new ExplosionProductsDao();
+$generalExMaterialsDao = new GeneralExplosionMaterialsDao();
+$generalExProductsDao = new GeneralExplosionProductsDao();
 $requisitionsDao = new RequisitionsDao();
 $generalRequisitionsDao = new GeneralRequisitionsDao();
 $generalRMStockDao = new GeneralRMStockDao();
@@ -31,102 +37,13 @@ use Psr\Http\Message\ServerRequestInterface as Request;
 
 $app->get('/explosionMaterials', function (Request $request, Response $response, $args) use (
     $explosionMaterialsDao,
-    $generalRMStockDao,
-    $requisitionsDao,
-    $generalOrdersDao,
-    $generalProductsDao,
-    $lastDataDao,
-    $ordersDao,
-    $programmingRoutesDao,
-    $generalProgrammingRoutesDao,
-    $generalClientsDao,
-    $generalSellersDao,
-    $generalRequisitionsDao
+    $explosionProductsDao,
 ) {
     session_start();
     $id_company = $_SESSION['id_company'];
 
-    $arr = $explosionMaterialsDao->findAllCompositeConsolidated($id_company);
-    $products = $explosionMaterialsDao->setDataEXComposite($arr);
-
-    for ($i = 0; $i < sizeof($products); $i++) {
-        if (intval($products[$i]['available']) < 0 && abs($products[$i]['available']) > $products[$i]['quantity_material']) {
-            $data = [];
-            $arr2 = $generalOrdersDao->findLastOrderByNumOrder($products[$i]['num_order']);
-
-            $client = $generalClientsDao->findInternalClient($id_company);
-            $seller = $generalSellersDao->findInternalSeller($id_company);
-
-            if ($client && $seller) {
-                $data['order'] = $arr2['num_order'];
-                $data['dateOrder'] = date('Y-m-d');
-                $data['minDate'] = '';
-                $data['maxDate'] = '';
-                $data['idProduct'] = $products[$i]['id_child_product'];
-                $data['idClient'] = $client['id_client'];
-                $data['idSeller'] = $seller['id_seller'];
-                $data['route'] = 1;
-                $data['originalQuantity'] = abs($products[$i]['available']);
-
-                $findOrder = $generalOrdersDao->findLastSameOrder($data);
-                if (!$findOrder) {
-                    $resolution = $ordersDao->insertOrderByCompany($data, $id_company);
-                    // $generalProductsDao->updateAccumulatedQuantity($products[$i]['id_child_product'], abs($products[$i]['available']), 2);
-
-                    if (isset($resolution['info'])) break;
-                    $lastOrder = $lastDataDao->findLastInsertedOrder($id_company);
-
-                    $programmingRoutes = $generalProgrammingRoutesDao->findProgrammingRoutes($products[$i]['id_child_product'], $lastOrder['id_order']);
-
-                    if (!$programmingRoutes) {
-                        $data['idOrder'] = $lastOrder['id_order'];
-                        $data['route'] = 1;
-
-                        $resolution = $programmingRoutesDao->insertProgrammingRoutes($data, $id_company);
-                    }
-                } else {
-                    $data['idOrder'] = $findOrder['id_order'];
-                    $resolution = $ordersDao->updateOrder($data);
-                }
-                if (isset($resolution['info'])) break;
-            }
-        }
-    }
-
-    $arr = $explosionMaterialsDao->findAllMaterialsConsolidated($id_company);
-
-    $materials = $explosionMaterialsDao->setDataEXMaterials($arr);
-
-    for ($i = 0; $i < sizeof($materials); $i++) {
-        if (intval($materials[$i]['available']) < 0) {
-            $data = [];
-            $data['idMaterial'] = $materials[$i]['id_material'];
-
-            $provider = $generalRMStockDao->findProviderByStock($materials[$i]['id_material']);
-
-            $id_provider = 0;
-
-            if ($provider) $id_provider = $provider['id_provider'];
-
-            $data['idProvider'] = $id_provider;
-
-            $data['numOrder'] = $materials[$i]['num_order'];
-            $data['applicationDate'] = '';
-            $data['deliveryDate'] = '';
-            $data['requiredQuantity'] = abs($materials[$i]['available']);
-            $data['purchaseOrder'] = '';
-            $data['requestedQuantity'] = 0;
-
-            $requisition = $generalRequisitionsDao->findRequisitionByApplicationDate($materials[$i]['id_material']);
-
-            if (!$requisition)
-                $resolution = $generalRequisitionsDao->insertRequisitionAutoByCompany($data, $id_company);
-            else {
-                $data['idRequisition'] = $requisition['id_requisition'];
-                $resolution = $generalRequisitionsDao->updateRequisitionAuto($data);
-            }
-        }
-    }
+    $products = $explosionProductsDao->findAllExplosionProductsByCompany($id_company);
+    $materials = $explosionMaterialsDao->findAllExplosionMaterialsByCompany($id_company);
 
     $explosion = array_merge($materials, $products);
 

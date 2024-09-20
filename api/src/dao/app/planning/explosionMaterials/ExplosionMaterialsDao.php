@@ -16,19 +16,34 @@ class ExplosionMaterialsDao
     $this->logger->pushHandler(new RotatingFileHandler(Constants::LOGS_PATH . 'querys.log', 20, Logger::DEBUG));
   }
 
-  public function findAllCompositeConsolidated($id_company)
+  public function findAllExplosionMaterialsByCompany($id_company)
   {
     $connection = Connection::getInstance()->getConnection();
 
-    $stmt = $connection->prepare("SELECT cp.id_product, o.id_order, o.num_order, cp.id_child_product, SUM(IFNULL(pi.quantity, 0)) AS quantity_product, IFNULL(cpi.quantity, 0) AS quantity_material, u.abbreviation, (o.original_quantity * cp.quantity) AS need, IFNULL(cpi.minimum_stock, 0) AS minimum_stock, p.reference AS reference_material, p.product AS material
-                                      FROM products_composite cp
-                                        LEFT JOIN inv_products pi ON pi.id_product = cp.id_product
-                                        LEFT JOIN inv_products cpi ON cpi.id_product = cp.id_child_product
-                                        LEFT JOIN products p ON p.id_product = cp.id_child_product
-                                        INNER JOIN admin_units u ON u.id_unit = cp.id_unit
-                                        INNER JOIN orders o ON o.id_product = cp.id_product
-                                      WHERE cp.id_company = :id_company AND o.status IN (1,4,5,6)
-                                      GROUP BY cp.id_composite_product, o.id_order");
+    $stmt = $connection->prepare("SELECT
+                                    -- Columnas
+                                      exm.id_explosion_material,
+                                      IFNULL(
+                                                (
+                                                    SELECT GROUP_CONCAT(oo.num_order)
+                                                    FROM orders oo
+                                                    INNER JOIN plan_explosions_materials cexm ON cexm.order LIKE CONCAT('%', oo.id_order, '%')
+                                                    WHERE cexm.id_explosion_material = exm.id_explosion_material
+                                                )
+                                      , 0) AS num_order,
+                                      m.reference AS reference_material,
+                                      m.material,
+                                      au.abbreviation,
+                                      mi.quantity AS quantity_material,
+                                      mi.minimum_stock,
+                                      mi.transit,
+                                      exm.need,
+                                      exm.available
+                                  FROM plan_explosions_materials exm
+                                    INNER JOIN materials m ON m.id_material = exm.id_material
+                                    INNER JOIN inv_materials mi ON mi.id_material = exm.id_material
+                                    INNER JOIN admin_units au ON au.id_unit = m.unit
+                                  WHERE exm.id_company = :id_company");
     $stmt->execute(['id_company' => $id_company]);
 
     $this->logger->info(__FUNCTION__, array('query' => $stmt->queryString, 'errors' => $stmt->errorInfo()));
@@ -39,193 +54,60 @@ class ExplosionMaterialsDao
     return $materials;
   }
 
-  public function findAllCompositeConsolidatedByProduct($id_product)
-  {
-    $connection = Connection::getInstance()->getConnection();
-
-    $stmt = $connection->prepare("SELECT cp.id_product, o.id_order, cp.id_composite_product, SUM(pi.quantity) AS quantity_product, cpi.quantity AS quantity_material, u.abbreviation, (o.original_quantity * cpi.quantity) AS need, pi.minimum_stock
-                                      FROM products_composite cp
-                                        LEFT JOIN inv_products pi ON pi.id_product = cp.id_product
-                                        LEFT JOIN inv_products cpi ON cpi.id_product = cp.id_child_product 
-                                        INNER JOIN admin_units u ON u.id_unit = cp.id_unit
-                                        INNER JOIN orders o ON o.id_product = cp.id_product
-                                      WHERE cp.id_product = :id_product AND o.status IN (1,4,5,6)
-                                      GROUP BY cp.id_composite_product, o.id_order");
-    $stmt->execute(['id_product' => $id_product]);
-
-    $this->logger->info(__FUNCTION__, array('query' => $stmt->queryString, 'errors' => $stmt->errorInfo()));
-
-    $materials = $stmt->fetchAll($connection::FETCH_ASSOC);
-
-    $this->logger->notice("pedidos", array('pedidos' => $materials));
-    return $materials;
-  }
-
-  public function findAllMaterialsConsolidated($id_company)
-  {
-    $connection = Connection::getInstance()->getConnection();
-
-    $stmt = $connection->prepare("SELECT p.id_product, o.id_order, o.num_order, pm.id_product_material, p.reference AS reference_product, p.product, SUM(IFNULL(pi.quantity, 0)) AS quantity_product, m.id_material, m.reference AS reference_material, m.material, mi.quantity AS quantity_material, u.abbreviation, 
-                                         mi.transit, (o.original_quantity * pm.quantity_converted) AS need, mi.minimum_stock
-                                      FROM products p
-                                        LEFT JOIN inv_products pi ON pi.id_product = p.id_product
-                                        INNER JOIN products_materials pm ON pm.id_product = p.id_product
-                                        INNER JOIN materials m ON m.id_material = pm.id_material
-                                        INNER JOIN inv_materials mi ON mi.id_material = pm.id_material
-                                        INNER JOIN admin_units u ON u.id_unit = m.unit
-                                        INNER JOIN orders o ON o.id_product = p.id_product
-                                        LEFT JOIN requisitions r ON r.id_material = pm.id_material
-                                        LEFT JOIN programming pg ON pg.id_order = o.id_order
-                                      WHERE p.id_company = :id_company AND o.status IN (1,4,5,6)
-                                      GROUP BY pm.id_product_material, o.id_order");
-    $stmt->execute(['id_company' => $id_company]);
-
-    $this->logger->info(__FUNCTION__, array('query' => $stmt->queryString, 'errors' => $stmt->errorInfo()));
-
-    $materials = $stmt->fetchAll($connection::FETCH_ASSOC);
-
-    $this->logger->notice("pedidos", array('pedidos' => $materials));
-    return $materials;
-  }
-
-  public function findAllMaterialsConsolidatedByProduct($id_product)
-  {
-    $connection = Connection::getInstance()->getConnection();
-
-    $stmt = $connection->prepare("SELECT p.id_product, o.id_order, pm.id_product_material, p.reference AS reference_product, p.product, SUM(pi.quantity) AS quantity_product, m.id_material, m.reference AS reference_material, m.material, mi.quantity AS quantity_material, u.abbreviation, 
-                                         mi.transit, (o.original_quantity * pm.quantity_converted) AS need, mi.minimum_stock
-                                      FROM products p
-                                        INNER JOIN inv_products pi ON pi.id_product = p.id_product
-                                        INNER JOIN products_materials pm ON pm.id_product = p.id_product
-                                        INNER JOIN materials m ON m.id_material = pm.id_material
-                                        INNER JOIN inv_materials mi ON mi.id_material = pm.id_material
-                                        INNER JOIN admin_units u ON u.id_unit = m.unit
-                                        INNER JOIN orders o ON o.id_product = p.id_product
-                                        LEFT JOIN requisitions r ON r.id_material = pm.id_material
-                                        LEFT JOIN programming pg ON pg.id_order = o.id_order
-                                      WHERE p.id_product = :id_product AND o.status IN (1,4,5,6)
-                                      GROUP BY pm.id_product_material, o.id_order");
-    $stmt->execute(['id_product' => $id_product]);
-
-    $this->logger->info(__FUNCTION__, array('query' => $stmt->queryString, 'errors' => $stmt->errorInfo()));
-
-    $materials = $stmt->fetchAll($connection::FETCH_ASSOC);
-
-    $this->logger->notice("pedidos", array('pedidos' => $materials));
-    return $materials;
-  }
-
-  public function findAllMaterialsConsolidatedByMaterial($id_material)
-  {
-    $connection = Connection::getInstance()->getConnection();
-
-    $stmt = $connection->prepare("SELECT p.id_product, o.id_order, pm.id_product_material, p.reference AS reference_product, p.product, SUM(pi.quantity) AS quantity_product, m.id_material, m.reference AS reference_material, m.material, mi.quantity AS quantity_material, u.abbreviation, 
-                                         mi.transit, (o.original_quantity * pm.quantity_converted) AS need, mi.minimum_stock 
-                                      FROM materials m
-                                        INNER JOIN inv_materials mi ON mi.id_material = m.id_material
-                                        INNER JOIN products_materials pm ON pm.id_material = m.id_material
-                                        INNER JOIN inv_products pi ON pi.id_product = pm.id_product
-                                        INNER JOIN products p ON p.id_product = pm.id_product
-                                        INNER JOIN admin_units u ON u.id_unit = m.unit
-                                        INNER JOIN orders o ON o.id_product = pm.id_product
-                                        LEFT JOIN requisitions r ON r.id_material = m.id_material
-                                        LEFT JOIN programming pg ON pg.id_order = o.id_order
-                                      WHERE m.id_material = :id_material AND o.status IN (1,4,5,6)
-                                      GROUP BY pm.id_product_material, o.id_order");
-    $stmt->execute(['id_material' => $id_material]);
-
-    $this->logger->info(__FUNCTION__, array('query' => $stmt->queryString, 'errors' => $stmt->errorInfo()));
-
-    $materials = $stmt->fetchAll($connection::FETCH_ASSOC);
-
-    $this->logger->notice("pedidos", array('pedidos' => $materials));
-    return $materials;
-  }
-
-  public function setDataEXMaterials($materials)
+  public function insertNewEXMByCompany($dataEXM, $id_company)
   {
     try {
-      $data = array();
+      $connection = Connection::getInstance()->getConnection();
 
-      foreach ($materials as $arr) {
-        $repeat = false;
-        for ($i = 0; $i < sizeof($data); $i++) {
-          if ($data[$i]['id_material'] == $arr['id_material']) {
-            $data[$i]['num_order'] = $data[$i]['num_order'] . ', ' . $arr['num_order'];
-            // array_push($data[$i]['num_order'], $arr['num_order']);
-            $data[$i]['transit'] = $arr['transit'];
-            $data[$i]['need'] += $arr['need'];
-            $data[$i]['minimum_stock'] = $arr['minimum_stock'];
-            $data[$i]['available'] = $arr['quantity_material'] + $arr['transit'] - $data[$i]['minimum_stock'] - $data[$i]['need'];
-            $repeat = true;
-            break;
-          }
-        }
-
-        if ($repeat == false) {
-          $data[] = array(
-            'num_order' => $arr['num_order'],
-            'id_product' => $arr['id_product'],
-            'reference_product' => $arr['reference_product'],
-            'product' => $arr['product'],
-            'quantity_product' => $arr['quantity_product'],
-            'id_material' => $arr['id_material'],
-            'reference_material' => $arr['reference_material'],
-            'material' => $arr['material'],
-            'quantity_material' => $arr['quantity_material'],
-            'transit' => $arr['transit'],
-            'need' => $arr['need'],
-            'abbreviation' => $arr['abbreviation'],
-            'minimum_stock' => $arr['minimum_stock'],
-            'available' => $arr['quantity_material'] + $arr['transit'] - $arr['minimum_stock'] - $arr['need'],
-          );
-        }
-      }
-
-      return $data;
+      $stmt = $connection->prepare("INSERT INTO plan_explosions_materials (id_company, `order`, id_material, need, available)
+                                    VALUES (:id_company, :order, :id_material, :need, :available)");
+      $stmt->execute([
+        'id_company' => $id_company,
+        'order' => $dataEXM['id_order'],
+        'id_material' => $dataEXM['id_material'],
+        'need' => $dataEXM['need'],
+        'available' => $dataEXM['available'],
+      ]);
     } catch (\Exception $e) {
       return ['info' => true, 'message' => $e->getMessage()];
     }
   }
 
-  public function setDataEXComposite($products)
+  public function updateEXMaterials($dataEXM)
   {
     try {
-      $data = array();
+      $connection = Connection::getInstance()->getConnection();
 
-      foreach ($products as $arr) {
-        $repeat = false;
-        for ($i = 0; $i < sizeof($data); $i++) {
-          if ($data[$i]['id_child_product'] == $arr['id_child_product']) {
-            $data[$i]['need'] += $arr['need'];
-            $data[$i]['minimum_stock'] = $arr['minimum_stock'];
-            $data[$i]['available'] = $arr['quantity_material'] - $data[$i]['minimum_stock'] - $data[$i]['need'];
-            $repeat = true;
-            break;
-          }
-        }
-
-        if ($repeat == false) {
-          $data[] = array(
-            'num_order' => $arr['num_order'],
-            'id_product' => $arr['id_product'],
-            'id_child_product' => $arr['id_child_product'],
-            'quantity_product' => $arr['quantity_product'],
-            'reference_material' => $arr['reference_material'],
-            'material' => $arr['material'],
-            'quantity_material' => $arr['quantity_material'],
-            'need' => $arr['need'],
-            'abbreviation' => $arr['abbreviation'],
-            'minimum_stock' => $arr['minimum_stock'],
-            'transit' => 0,
-            'available' => $arr['quantity_material'] - $arr['minimum_stock'] - $arr['need'],
-          );
-        }
-      }
-
-      return $data;
+      $stmt = $connection->prepare("UPDATE plan_explosions_materials SET `order` = :order, id_material = :id_material, need = :need, available = :available
+                                          WHERE id_explosion_material = :id_explosion_material");
+      $stmt->execute([
+        'id_explosion_material' => $dataEXM['id_explosion_material'],
+        'order' => $dataEXM['id_order'],
+        'id_material' => $dataEXM['id_material'],
+        'need' => $dataEXM['need'],
+        'available' => $dataEXM['available'],
+      ]);
     } catch (\Exception $e) {
       return ['info' => true, 'message' => $e->getMessage()];
+    }
+  }
+
+  public function deleteEXMaterial($id_explosion_material)
+  {
+    try {
+      $connection = Connection::getInstance()->getConnection();
+
+      $stmt = $connection->prepare("SELECT * FROM plan_explosions_materials WHERE id_explosion_material = :id_explosion_material");
+      $stmt->execute(['id_explosion_material' => $id_explosion_material]);
+      $rows = $stmt->rowCount();
+
+      if ($rows > 0) {
+        $stmt = $connection->prepare("DELETE FROM plan_areas WHERE id_explosion_material = :id_explosion_material");
+        $stmt->execute(['id_explosion_material' => $id_explosion_material]);
+      }
+    } catch (\Exception $e) {
+      $message = $e->getMessage();
+      return ['info' => true, 'message' => $message];
     }
   }
 }

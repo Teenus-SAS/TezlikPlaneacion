@@ -5,8 +5,11 @@ use TezlikPlaneacion\Dao\CompositeProductsDao;
 use TezlikPlaneacion\dao\ConvertDataDao;
 use TezlikPlaneacion\dao\DeliveryDateDao;
 use TezlikPlaneacion\dao\ExplosionMaterialsDao;
+use TezlikPlaneacion\dao\ExplosionProductsdao;
 use TezlikPlaneacion\dao\FilterDataDao;
 use TezlikPlaneacion\dao\GeneralClientsDao;
+use TezlikPlaneacion\dao\GeneralExplosionMaterialsDao;
+use TezlikPlaneacion\dao\GeneralExplosionProductsDao;
 use TezlikPlaneacion\dao\GeneralOrdersDao;
 use TezlikPlaneacion\dao\GeneralOrderTypesDao;
 use TezlikPlaneacion\dao\GeneralPlanCiclesMachinesDao;
@@ -41,6 +44,9 @@ $compositeProductsDao = new CompositeProductsDao();
 $lastDataDao = new LastDataDao();
 $generalPlanCiclesMachinesDao = new GeneralPlanCiclesMachinesDao();
 $explosionMaterialsDao = new ExplosionMaterialsDao();
+$explosionProductsDao = new ExplosionProductsdao();
+$generalExProductsDao = new GeneralExplosionProductsDao();
+$generalExMaterialsDao = new GeneralExplosionMaterialsDao();
 $generalRequisitionsDao = new GeneralRequisitionsDao();
 $requisitionsDao = new RequisitionsDao();
 $filterDataDao = new FilterDataDao();
@@ -211,6 +217,9 @@ $app->post('/addOrder', function (Request $request, Response $response, $args) u
     $filterDataDao,
     $generalSellersDao,
     $explosionMaterialsDao,
+    $explosionProductsDao,
+    $generalExMaterialsDao,
+    $generalExProductsDao,
     $generalRequisitionsDao,
     $requisitionsDao,
     $programmingRoutesDao,
@@ -219,6 +228,7 @@ $app->post('/addOrder', function (Request $request, Response $response, $args) u
     session_start();
     $id_company = $_SESSION['id_company'];
     $dataOrder = $request->getParsedBody();
+    $resolution = null;
 
     $dataOrders = sizeof($dataOrder);
 
@@ -430,10 +440,19 @@ $app->post('/addOrder', function (Request $request, Response $response, $args) u
     //         }
     // }
     if ($resolution == null) { // Cambiar estado pedidos 
-        $arr = $explosionMaterialsDao->findAllCompositeConsolidated($id_company);
-        $products = $explosionMaterialsDao->setDataEXComposite($arr);
+        $arr = $generalExProductsDao->findAllCompositeConsolidated($id_company);
+        $products = $generalExProductsDao->setDataEXComposite($arr);
 
         for ($i = 0; $i < sizeof($products); $i++) {
+            $findEX = $generalExProductsDao->findEXProduct($products[$i]['id_child_product']);
+
+            if (!$findEX)
+                $resolution = $explosionProductsDao->insertNewEXPByCompany($products[$i], $id_company);
+            else {
+                $products[$i]['id_explosion_product'] = $findEX['id_explosion_product'];
+                $resolution = $explosionProductsDao->updateEXProduct($products[$i]);
+            }
+
             if (intval($products[$i]['available']) < 0 && abs($products[$i]['available']) > $products[$i]['quantity_material']) {
                 $data = [];
                 $arr2 = $generalOrdersDao->findLastOrderByNumOrder($products[$i]['num_order']);
@@ -475,11 +494,20 @@ $app->post('/addOrder', function (Request $request, Response $response, $args) u
             }
         }
 
-        $arr = $explosionMaterialsDao->findAllMaterialsConsolidated($id_company);
+        $arr = $generalExMaterialsDao->findAllMaterialsConsolidated($id_company);
 
-        $materials = $explosionMaterialsDao->setDataEXMaterials($arr);
+        $materials = $generalExMaterialsDao->setDataEXMaterials($arr);
 
         for ($i = 0; $i < sizeof($materials); $i++) {
+            $findEX = $generalExMaterialsDao->findEXMaterial($materials[$i]['id_material']);
+
+            if (!$findEX)
+                $resolution = $explosionMaterialsDao->insertNewEXMByCompany($materials[$i], $id_company);
+            else {
+                $materials[$i]['id_explosion_material'] = $findEX['id_explosion_material'];
+                $resolution = $explosionMaterialsDao->updateEXMaterials($materials[$i]);
+            }
+
             if (intval($materials[$i]['available']) < 0) {
                 $data = [];
                 $data['idMaterial'] = $materials[$i]['id_material'];
@@ -602,6 +630,9 @@ $app->post('/updateOrder', function (Request $request, Response $response, $args
     $generalSellersDao,
     $generalPlanCiclesMachinesDao,
     $explosionMaterialsDao,
+    $explosionProductsDao,
+    $generalExProductsDao,
+    $generalExMaterialsDao,
     $programmingRoutesDao,
     $generalProgrammingRoutesDao,
     $requisitionsDao,
@@ -669,10 +700,19 @@ $app->post('/updateOrder', function (Request $request, Response $response, $args
     //         $generalProductsDao->updateAccumulatedQuantity($orders[$i]['id_product'], $accumulated_quantity, 1);
     //     }
     // }  
-    $arr = $explosionMaterialsDao->findAllCompositeConsolidated($id_company);
-    $products = $explosionMaterialsDao->setDataEXComposite($arr);
+    $arr = $generalExProductsDao->findAllCompositeConsolidated($id_company);
+    $products = $generalExProductsDao->setDataEXComposite($arr);
 
     for ($i = 0; $i < sizeof($products); $i++) {
+        $findEX = $generalExProductsDao->findEXProduct($products[$i]['id_child_product']);
+
+        if (!$findEX)
+            $resolution = $explosionProductsDao->insertNewEXPByCompany($products[$i], $id_company);
+        else {
+            $products[$i]['id_explosion_product'] = $findEX['id_explosion_product'];
+            $resolution = $explosionProductsDao->updateEXProduct($products[$i]);
+        }
+
         if (intval($products[$i]['available']) < 0 && abs($products[$i]['available']) > $products[$i]['quantity_material']) {
             $data = [];
             $arr2 = $generalOrdersDao->findLastOrderByNumOrder($products[$i]['num_order']);
@@ -716,11 +756,20 @@ $app->post('/updateOrder', function (Request $request, Response $response, $args
         }
     }
 
-    $arr = $explosionMaterialsDao->findAllMaterialsConsolidated($id_company);
+    $arr = $generalExMaterialsDao->findAllMaterialsConsolidated($id_company);
 
-    $materials = $explosionMaterialsDao->setDataEXMaterials($arr);
+    $materials = $generalExMaterialsDao->setDataEXMaterials($arr);
 
     for ($i = 0; $i < sizeof($materials); $i++) {
+        $findEX = $generalExMaterialsDao->findEXMaterial($materials[$i]['id_material']);
+
+        if (!$findEX)
+            $resolution = $explosionMaterialsDao->insertNewEXMByCompany($materials[$i], $id_company);
+        else {
+            $materials[$i]['id_explosion_material'] = $findEX['id_explosion_material'];
+            $resolution = $explosionMaterialsDao->updateEXMaterials($materials[$i]);
+        }
+
         if (intval($materials[$i]['available']) < 0) {
             $data = [];
             $data['idMaterial'] = $materials[$i]['id_material'];
@@ -867,6 +916,9 @@ $app->post('/deleteOrder', function (Request $request, Response $response, $args
     $ordersDao,
     $generalRMStockDao,
     $explosionMaterialsDao,
+    $explosionProductsDao,
+    $generalExMaterialsDao,
+    $generalExProductsDao,
     $generalClientsDao,
     $generalSellersDao,
     $generalProductsDao,
@@ -890,10 +942,19 @@ $app->post('/deleteOrder', function (Request $request, Response $response, $args
         if (sizeof($orders) == 1) {
             $generalRequisitionsDao->deleteAllRequisitionPending();
         } else {
-            $arr = $explosionMaterialsDao->findAllCompositeConsolidated($id_company);
-            $products = $explosionMaterialsDao->setDataEXComposite($arr);
+            $arr = $generalExProductsDao->findAllCompositeConsolidated($id_company);
+            $products = $generalExProductsDao->setDataEXComposite($arr);
 
             for ($i = 0; $i < sizeof($products); $i++) {
+                $findEX = $generalExProductsDao->findEXProduct($products[$i]['id_child_product']);
+
+                if (!$findEX)
+                    $resolution = $explosionProductsDao->insertNewEXPByCompany($products[$i], $id_company);
+                else {
+                    $products[$i]['id_explosion_product'] = $findEX['id_explosion_product'];
+                    $resolution = $explosionProductsDao->updateEXProduct($products[$i]);
+                }
+
                 if (intval($products[$i]['available']) < 0 && abs($products[$i]['available']) > $products[$i]['quantity_material']) {
                     $data = [];
                     $arr2 = $generalOrdersDao->findLastOrderByNumOrder($products[$i]['num_order']);
@@ -938,11 +999,20 @@ $app->post('/deleteOrder', function (Request $request, Response $response, $args
                 }
             }
 
-            $arr = $explosionMaterialsDao->findAllMaterialsConsolidated($id_company);
+            $arr = $generalExMaterialsDao->findAllMaterialsConsolidated($id_company);
 
-            $materials = $explosionMaterialsDao->setDataEXMaterials($arr);
+            $materials = $generalExMaterialsDao->setDataEXMaterials($arr);
 
             for ($i = 0; $i < sizeof($materials); $i++) {
+                $findEX = $generalExMaterialsDao->findEXMaterial($materials[$i]['id_material']);
+
+                if (!$findEX)
+                    $resolution = $explosionMaterialsDao->insertNewEXMByCompany($materials[$i], $id_company);
+                else {
+                    $materials[$i]['id_explosion_material'] = $findEX['id_explosion_material'];
+                    $resolution = $explosionMaterialsDao->updateEXMaterials($materials[$i]);
+                }
+
                 if (intval($materials[$i]['available']) < 0) {
                     $data = [];
                     $data['idMaterial'] = $materials[$i]['id_material'];

@@ -4,6 +4,7 @@ use TezlikPlaneacion\Dao\CompositeProductsDao;
 use TezlikPlaneacion\Dao\ConversionUnitsDao;
 use TezlikPlaneacion\dao\ExplosionMaterialsDao;
 use TezlikPlaneacion\dao\FilterDataDao;
+use TezlikPlaneacion\dao\GeneralExplosionMaterialsDao;
 use TezlikPlaneacion\dao\GeneralMaterialsDao;
 use TezlikPlaneacion\dao\GeneralOrdersDao;
 use TezlikPlaneacion\dao\GeneralPlanCiclesMachinesDao;
@@ -43,6 +44,7 @@ $conversionUnitsDao = new ConversionUnitsDao();
 $minimumStockDao = new MinimumStockDao();
 $lastDataDao = new LastDataDao();
 $explosionMaterialsDao = new ExplosionMaterialsDao();
+$generalExMaterialsDao = new GeneralExplosionMaterialsDao();
 $generalRMStockDao = new GeneralRMStockDao();
 $generalRequisitionsDao = new GeneralRequisitionsDao();
 $requisitionsDao = new RequisitionsDao();
@@ -456,6 +458,7 @@ $app->post('/updateMaterials', function (Request $request, Response $response, $
     $conversionUnitsDao,
     $minimumStockDao,
     $explosionMaterialsDao,
+    $generalExMaterialsDao,
     $generalRMStockDao,
     $generalRequisitionsDao,
     $requisitionsDao
@@ -546,11 +549,20 @@ $app->post('/updateMaterials', function (Request $request, Response $response, $
         }
 
         if ($resolution == null) {
-            $arr = $explosionMaterialsDao->findAllMaterialsConsolidatedByMaterial($dataMaterial['idMaterial']);
+            $arr = $generalExMaterialsDao->findAllMaterialsConsolidatedByMaterial($dataMaterial['idMaterial']);
 
-            $materials = $explosionMaterialsDao->setDataEXMaterials($arr);
+            $materials = $generalExMaterialsDao->setDataEXMaterials($arr);
 
             for ($i = 0; $i < sizeof($materials); $i++) {
+                $findEX = $generalExMaterialsDao->findEXMaterial($materials[$i]['id_material']);
+
+                if (!$findEX)
+                    $resolution = $explosionMaterialsDao->insertNewEXMByCompany($materials[$i], $id_company);
+                else {
+                    $materials[$i]['id_explosion_material'] = $findEX['id_explosion_material'];
+                    $resolution = $explosionMaterialsDao->updateEXMaterials($materials[$i]);
+                }
+
                 if (intval($materials[$i]['available']) < 0) {
                     $data = [];
                     $data['idMaterial'] = $materials[$i]['id_material'];

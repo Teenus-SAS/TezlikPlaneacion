@@ -6,6 +6,7 @@ use TezlikPlaneacion\dao\ProgrammingDao;
 use TezlikPlaneacion\dao\DatesMachinesDao;
 use TezlikPlaneacion\dao\ExplosionMaterialsDao;
 use TezlikPlaneacion\dao\FinalDateDao;
+use TezlikPlaneacion\dao\GeneralExplosionMaterialsDao;
 use TezlikPlaneacion\dao\GeneralMaterialsDao;
 use TezlikPlaneacion\dao\GeneralOrdersDao;
 use TezlikPlaneacion\dao\GeneralPlanCiclesMachinesDao;
@@ -41,7 +42,7 @@ $generalPlanCiclesMachinesDao = new GeneralPlanCiclesMachinesDao();
 $explosionMaterialsDao = new ExplosionMaterialsDao();
 $productsMaterialsDao = new ProductsMaterialsDao();
 $storeDao = new StoreDao();
-$explosionMaterialsDao = new ExplosionMaterialsDao();
+$generalExMaterialsDao = new GeneralExplosionMaterialsDao();
 $generalRequisitionsDao = new GeneralRequisitionsDao();
 $generalRMStockDao = new GeneralRMStockDao();
 $requisitionsDao = new RequisitionsDao();
@@ -212,6 +213,7 @@ $app->post('/saveProgramming', function (Request $request, Response $response, $
     $lastDataDao,
     $generalRMStockDao,
     $explosionMaterialsDao,
+    $generalExMaterialsDao,
     $requisitionsDao,
     $generalRequisitionsDao
 ) {
@@ -311,10 +313,19 @@ $app->post('/saveProgramming', function (Request $request, Response $response, $
     }
 
     if ($result == null) {
-        $arr = $explosionMaterialsDao->findAllMaterialsConsolidated($id_company);
-        $materials = $explosionMaterialsDao->setDataEXMaterials($arr);
+        $arr = $generalExMaterialsDao->findAllMaterialsConsolidated($id_company);
+        $materials = $generalExMaterialsDao->setDataEXMaterials($arr);
 
         for ($i = 0; $i < sizeof($materials); $i++) {
+            $findEX = $generalExMaterialsDao->findEXMaterial($materials[$i]['id_material']);
+
+            if (!$findEX)
+                $result = $explosionMaterialsDao->insertNewEXMByCompany($materials[$i], $id_company);
+            else {
+                $materials[$i]['id_explosion_material'] = $findEX['id_explosion_material'];
+                $result = $explosionMaterialsDao->updateEXMaterials($materials[$i]);
+            }
+
             if (intval($materials[$i]['available']) < 0) {
                 $data = [];
                 $data['idMaterial'] = $materials[$i]['id_material'];
