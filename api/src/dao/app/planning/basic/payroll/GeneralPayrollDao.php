@@ -16,6 +16,22 @@ class GeneralPayrollDao
         $this->logger->pushHandler(new RotatingFileHandler(Constants::LOGS_PATH . 'querys.log', 20, Logger::DEBUG));
     }
 
+    public function findCountEmployeesByMachine($id_machine)
+    {
+        $connection = Connection::getInstance()->getConnection();
+
+        $stmt = $connection->prepare("SELECT COUNT(DISTINCT IFNULL(id_plan_payroll, 0)) AS employees
+                                      FROM payroll
+                                      WHERE id_machine = :id_machine AND status = 1");
+        $stmt->execute([
+            'id_machine' => $id_machine,
+        ]);
+        $this->logger->info(__FUNCTION__, array('query' => $stmt->queryString, 'errors' => $stmt->errorInfo()));
+
+        $payroll = $stmt->fetch($connection::FETCH_ASSOC);
+        return $payroll;
+    }
+
     public function findPayroll($dataPayroll)
     {
         $connection = Connection::getInstance()->getConnection();

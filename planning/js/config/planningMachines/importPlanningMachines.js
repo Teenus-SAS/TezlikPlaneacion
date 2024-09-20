@@ -52,7 +52,7 @@ $(document).ready(function () {
         let machinesToImport = data.map((item) => {
           !item.tipo ? item.tipo = '' : item.tipo;
           !item.maquina ? item.maquina = '' : item.maquina;
-          !item.no_trabajadores ? item.no_trabajadores = 0 : item.no_trabajadores;
+          // !item.no_trabajadores ? item.no_trabajadores = 0 : item.no_trabajadores;
           !item.total_turno ? item.total_turno = 0 : item.total_turno;
           !item.hora_dia ? item.hora_dia = 0 : item.hora_dia;
           !item.hora_inicio ? item.hora_inicio = 0 : item.hora_inicio;
@@ -74,7 +74,7 @@ $(document).ready(function () {
           return {
             type: item.maquina,
             machine: item.maquina,
-            numberWorkers: item.no_trabajadores,
+            // numberWorkers: item.no_trabajadores,
             workShift: item.total_turno,
             hoursDay: item.hora_dia,
             hourStart: item.hora_inicio,

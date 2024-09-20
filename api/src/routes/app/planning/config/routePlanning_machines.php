@@ -2,6 +2,7 @@
 
 use TezlikPlaneacion\dao\CiclesMachineDao;
 use TezlikPlaneacion\dao\GeneralMachinesDao;
+use TezlikPlaneacion\dao\GeneralPayrollDao;
 use TezlikPlaneacion\dao\GeneralPlanCiclesMachinesDao;
 use TezlikPlaneacion\dao\GeneralPlanningMachinesDao;
 use TezlikPlaneacion\dao\LastDataDao;
@@ -9,6 +10,7 @@ use TezlikPlaneacion\dao\Planning_machinesDao;
 use TezlikPlaneacion\dao\TimeConvertDao;
 
 $planningMachinesDao = new Planning_machinesDao();
+$generalPayrollDao = new GeneralPayrollDao();
 $generalPlanningMachinesDao = new GeneralPlanningMachinesDao();
 $generalPlanCiclesMachinesDao = new GeneralPlanCiclesMachinesDao();
 $ciclesMachinesDao = new CiclesMachineDao();
@@ -57,7 +59,6 @@ $app->post('/planningMachinesDataValidation', function (Request $request, Respon
         for ($i = 0; $i < sizeof($planningMachines); $i++) {
             if (
                 empty($planningMachines[$i]['type']) ||
-                empty($planningMachines[$i]['numberWorkers']) ||
                 empty($planningMachines[$i]['workShift']) ||
                 empty($planningMachines[$i]['hoursDay']) ||
                 empty($planningMachines[$i]['hourStart']) ||
@@ -80,7 +81,6 @@ $app->post('/planningMachinesDataValidation', function (Request $request, Respon
             }
             if (
                 empty(trim($planningMachines[$i]['type'])) ||
-                empty(trim($planningMachines[$i]['numberWorkers'])) ||
                 empty(trim($planningMachines[$i]['workShift'])) ||
                 empty(trim($planningMachines[$i]['hoursDay'])) ||
                 empty(trim($planningMachines[$i]['hourStart'])) ||
@@ -149,6 +149,7 @@ $app->post('/addPlanningMachines', function (Request $request, Response $respons
     $generalPlanningMachinesDao,
     $generalPlanCiclesMachinesDao,
     $ciclesMachinesDao,
+    $generalPayrollDao,
     $timeConvertDao,
     $lastDataDao,
     $machinesDao
@@ -208,6 +209,10 @@ $app->post('/addPlanningMachines', function (Request $request, Response $respons
 
             $planningMachines[$i]['type'] == 'PROCESO MANUAL' ? $planningMachines[$i]['typePM'] = 0 : $planningMachines[$i]['typePM'] = 1;
 
+            // obtener numero trabajadores
+            $payroll = $generalPayrollDao->findCountEmployeesByMachine($planningMachines[$i]['idMachine']);
+            $planningMachines[$i]['numberWorkers'] = $payroll['employees'];
+
             if (!$findPlanMachines) {
                 $resolution = $planningMachinesDao->insertPlanMachinesByCompany($planningMachines[$i], $id_company);
                 $lastMachine = $lastDataDao->findLastInsertedPMachine($id_company);
@@ -219,7 +224,6 @@ $app->post('/addPlanningMachines', function (Request $request, Response $respons
             $planningMachines[$i]['active'] == 'SI' ? $status = 1 : $status = 0;
 
             $resolution = $generalPlanningMachinesDao->changeStatusPmachine($planningMachines[$i]['idProgramMachine'], $status);
-
 
             $machines = $generalPlanCiclesMachinesDao->findAllPlanCiclesMachine($planningMachines[$i]['idMachine'], $id_company);
 
