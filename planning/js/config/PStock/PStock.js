@@ -86,40 +86,39 @@ $(document).ready(function () {
     messagePS(resp);
   };
 
-  /* Eliminar proceso 
+  /* Eliminar Producto */
+  deleteProductFunction = () => {
+    const row = $(this.activeElement).closest("tr")[0];
+    let data = tblPStock.fnGetData(row);
 
-    deleteFunction = () => {
-        const row = $(this.activeElement).closest("tr")[0];
-        let data = tblPStock.fnGetData(row);
+    let id_stock = data.id_stock_product;
 
-        // // let id_Stock = data.id_Stock;
-
-        bootbox.confirm({
-            title: 'Eliminar',
-            message:
-                'Está seguro de eliminar este proceso? Esta acción no se puede reversar.',
-            buttons: {
-                confirm: {
-                    label: 'Si',
-                    className: 'btn-success',
-                },
-                cancel: {
-                    label: 'No',
-                    className: 'btn-danger',
-                },
-            },
-            callback: function (result) {
-                if (result) {
-                    $.get(
-                        // `/api/deletePlanProcess/${id_Stock}`,
-                        function (data, textStatus, jqXHR) {
-                            message(data);
-                        }
-                    );
-                }
-            },
-        });
-    }; */
+    bootbox.confirm({
+      title: 'Eliminar',
+      message:
+        'Está seguro de eliminar este producto? Esta acción no se puede reversar.',
+      buttons: {
+        confirm: {
+          label: 'Si',
+          className: 'btn-success',
+        },
+        cancel: {
+          label: 'No',
+          className: 'btn-danger',
+        },
+      },
+      callback: function (result) {
+        if (result) {
+          $.get(
+            `/api/deletePlanstock/${id_stock}`,
+            function (data, textStatus, jqXHR) {
+              messagePS(data);
+            }
+          );
+        }
+      },
+    });
+  };
 
   /* Mensaje de exito */
 

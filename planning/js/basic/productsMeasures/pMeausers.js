@@ -160,7 +160,7 @@ $(document).ready(function () {
     let width, high, length, usefulLength, totalWidth, window;
 
     if (flag_products_measure == '1') {
-      if (isNaN(idProductType) || idProductMeasure <= 0) {
+      if (isNaN(idProductType) || idProductType <= 0) {
         toastr.error("Ingrese todos los campos");
         return false;
       }

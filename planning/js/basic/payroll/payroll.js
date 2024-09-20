@@ -84,7 +84,7 @@ $(document).ready(function () {
     messagePayroll(resp);
   };
 
-  /* Eliminar areas */
+  /* Eliminar Nomina */
   deletePayrollFunction = () => {
     let row = $(this.activeElement).closest("tr")[0];
     let data = tblEmployees.fnGetData(row);

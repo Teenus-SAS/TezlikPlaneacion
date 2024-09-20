@@ -246,8 +246,6 @@ $app->post('/updatePStock', function (Request $request, Response $response, $arg
     $compositeProductsDao,
     $minimumStockDao
 ) {
-    // session_start();
-    // $id_company = $_SESSION['id_company'];
     $dataStock = $request->getParsedBody();
 
     $stock = $generalStockDao->findStock($dataStock);
@@ -301,15 +299,15 @@ $app->post('/updatePStock', function (Request $request, Response $response, $arg
     return $response->withStatus(200)->withHeader('Content-Type', 'application/json');
 });
 
-// $app->get('/deletePlanstock/{id_stock}', function (Request $request, Response $response, $args) use ($stockDao) {
-//     $stock = $stockDao->deletestock($args['id_stock']);
+$app->get('/deletePlanstock/{id_stock}', function (Request $request, Response $response, $args) use ($stockDao) {
+    $stock = $stockDao->deletestock($args['id_stock']);
 
-//     if ($stock == null)
-//         $resp = array('success' => true, 'message' => 'Stock eliminado correctamente');
+    if ($stock == null)
+        $resp = array('success' => true, 'message' => 'Stock eliminado correctamente');
 
-//     if ($stock != null)
-//         $resp = array('error' => true, 'message' => 'No es posible eliminar el Stock, existe información asociada a él');
+    if ($stock != null)
+        $resp = array('error' => true, 'message' => 'No es posible eliminar el Stock, existe información asociada a él');
 
-//     $response->getBody()->write(json_encode($resp));
-//     return $response->withHeader('Content-Type', 'application/json');
-// });
+    $response->getBody()->write(json_encode($resp));
+    return $response->withHeader('Content-Type', 'application/json');
+});

@@ -55,7 +55,9 @@ $(document).ready(function () {
         data: "id_stock_product",
         className: "uniqueClassName dt-head-center",
         render: function (data) {
-          return `<a href="javascript:;" <i id="${data}" class="bx bx-edit-alt updatePStock" data-toggle='tooltip' title='Actualizar Stock' style="font-size: 30px;"></i></a>`;
+          return `
+          <a href="javascript:;" <i id="${data}" class="bx bx-edit-alt updatePStock" data-toggle='tooltip' title='Actualizar Stock' style="font-size: 30px;"></i></a>
+          <a href="javascript:;" <i id="${data}" class="mdi mdi-delete-forever" data-toggle='tooltip' title='Eliminar Stock' style="font-size: 30px;color:red" onclick="deleteProductFunction()"></i></a>`;
         },
       },
     ],
