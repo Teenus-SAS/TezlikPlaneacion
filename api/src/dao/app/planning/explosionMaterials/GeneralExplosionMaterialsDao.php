@@ -33,13 +33,14 @@ class GeneralExplosionMaterialsDao
 
         $stmt = $connection->prepare("SELECT pi.id_product, o.id_order, o.num_order, pm.id_product_material, SUM(IFNULL(pi.quantity, 0)) AS quantity_product, mi.id_material, mi.quantity AS quantity_material,
                                          mi.transit, (o.original_quantity * pm.quantity_converted) AS need, mi.minimum_stock
-                                      FROM inv_products pi
-                                        INNER JOIN products_materials pm ON pm.id_product = pi.id_product
+                                      FROM products p
+                                        INNER JOIN inv_products pi ON pi.id_product = p.id_product
+                                        INNER JOIN products_materials pm ON pm.id_product = p.id_product
                                         INNER JOIN inv_materials mi ON mi.id_material = pm.id_material 
-                                        INNER JOIN orders o ON o.id_product = pi.id_product
+                                        INNER JOIN orders o ON o.id_product = p.id_product
                                         LEFT JOIN requisitions r ON r.id_material = pm.id_material
                                         LEFT JOIN programming pg ON pg.id_order = o.id_order
-                                      WHERE pi.id_company = :id_company AND o.status IN (1,4,5,6)
+                                      WHERE p.id_company = :id_company AND o.status IN (1,4,5,6)
                                       GROUP BY pm.id_product_material, o.id_order");
         $stmt->execute(['id_company' => $id_company]);
 
@@ -57,13 +58,14 @@ class GeneralExplosionMaterialsDao
 
         $stmt = $connection->prepare("SELECT pi.id_product, o.id_order, o.num_order, pm.id_product_material, SUM(pi.quantity) AS quantity_product, mi.id_material, mi.quantity AS quantity_material,
                                          mi.transit, (o.original_quantity * pm.quantity_converted) AS need, mi.minimum_stock
-                                      FROM inv_products pi 
-                                        INNER JOIN products_materials pm ON pm.id_product = pi.id_product
+                                      FROM products p 
+                                        INNER JOIN inv_products pi ON pi.id_product = p.id_product
+                                        INNER JOIN products_materials pm ON pm.id_product = p.id_product
                                         INNER JOIN inv_materials mi ON mi.id_material = pm.id_material 
-                                        INNER JOIN orders o ON o.id_product = pi.id_product
+                                        INNER JOIN orders o ON o.id_product = p.id_product
                                         LEFT JOIN requisitions r ON r.id_material = pm.id_material
                                         LEFT JOIN programming pg ON pg.id_order = o.id_order
-                                      WHERE pi.id_product = :id_product AND o.status IN (1,4,5,6)
+                                      WHERE p.id_product = :id_product AND o.status IN (1,4,5,6)
                                       GROUP BY pm.id_product_material, o.id_order");
         $stmt->execute(['id_product' => $id_product]);
 
