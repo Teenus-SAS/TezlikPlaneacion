@@ -5,7 +5,7 @@ $(document).ready(function () {
     destroy: true,
     pageLength: 50,
     fixedHeader: true,
-    scrollY: "600px",
+    scrollY: "500px",
     scrollCollapse: true,
     ajax: {
       url: "/api/productsMeasures",
@@ -65,7 +65,7 @@ $(document).ready(function () {
         className: "uniqueClassName dt-head-center",
         render: (data) =>
           data
-            ? `<img src="${data}" alt="" style="width:80px;border-radius:100px">`
+            ? `<img src="${data}" alt="" style="width:30px;border-radius:100px">`
             : "",
       },
       {
