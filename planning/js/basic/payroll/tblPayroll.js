@@ -79,14 +79,15 @@ $(document).ready(function () {
         },
       },
     ],
-  });
-
-  $("#tblEmployees thead th").css({
-    "background-color": "#4CAF50" /* Color de fondo */,
-    color: "white" /* Color del texto */,
-    "text-align": "center" /* Centrar el texto */,
-    "font-weight": "bold" /* Texto en negrita */,
-    padding: "10px" /* Espaciado interno */,
-    border: "1px solid #ddd" /* Borde del encabezado */,
+    headerCallback: function (thead, data, start, end, display) {
+      $(thead).find("th").css({
+        "background-color": "#4CAF50" /* Color de fondo */,
+        color: "white" /* Color del texto */,
+        "text-align": "center" /* Centrar el texto */,
+        "font-weight": "bold" /* Texto en negrita */,
+        padding: "10px" /* Espaciado interno */,
+        border: "1px solid #ddd" /* Borde del encabezado */,
+      });
+    },
   });
 });
