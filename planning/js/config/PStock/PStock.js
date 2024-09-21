@@ -9,10 +9,11 @@ $(document).ready(function () {
   $("#btnNewPStock").click(function (e) {
     e.preventDefault();
 
-    $(".cardImportPStock").hide(800);
+    $(".cardImportPStock, .cardPDescription").hide(800);
     $(".cardCreatePStock").toggle(800);
     $("#formCreatePStock").trigger("reset");
     $("#btnCreatePStock").text("Crear");
+    $('.cardSelect').show();
 
     sessionStorage.removeItem("idStock");
   });
@@ -31,8 +32,8 @@ $(document).ready(function () {
   /* Actualizar procesos */
 
   $(document).on("click", ".updatePStock", function (e) {
-    $(".cardImportPStock").hide(800);
-    $(".cardCreatePStock").show(800);
+    $(".cardImportPStock, .cardSelect").hide(800);
+    $(".cardCreatePStock, .cardPDescription").show(800);
     $("#btnCreatePStock").text("Actualizar");
 
     const row = $(this).closest("tr")[0];
@@ -45,6 +46,8 @@ $(document).ready(function () {
       "selected",
       true
     );
+    $('#referencePName').val(data.reference);
+    $('#productName').val(data.product);
     $("#pMin").val(data.min_term);
     $("#pMax").val(data.max_term);
 

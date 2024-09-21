@@ -90,15 +90,22 @@ if (sizeof($_SESSION) == 0)
                                     <form id="formCreatePStock">
                                         <div class="card-body">
                                             <div class="form-row">
-                                                <div class="col-sm-2 floating-label enable-floating-label show-label" style="margin-bottom:20px">
+                                                <div class="col-sm-2 floating-label enable-floating-label show-label cardSelect" style="margin-bottom:20px">
                                                     <label for="">Referencia</label>
                                                     <select class="form-control refProduct" name="refProduct" id="refProduct"></select>
                                                 </div>
-                                                <div class="col-sm-5 floating-label enable-floating-label show-label" style="margin-bottom:5px">
+                                                <div class="col-sm-5 floating-label enable-floating-label show-label cardSelect" style="margin-bottom:5px">
                                                     <label for="">Producto</label>
                                                     <select class="form-control selectNameProduct" name="selectNameProduct" id="selectNameProduct"></select>
                                                 </div>
-
+                                                <div class="col-sm-2 floating-label enable-floating-label show-label cardPDescription" style="margin-bottom:20px">
+                                                    <label for="referencePName">Referencia</label>
+                                                    <input type="text" class="form-control" id="referencePName" name="referencePName" readonly>
+                                                </div>
+                                                <div class="col-sm-10 floating-label enable-floating-label show-label cardPDescription" style="margin-bottom:20px">
+                                                    <label for="">Producto</label>
+                                                    <input type="text" class="form-control" id="productName" name="productName" readonly>
+                                                </div>
                                                 <div class="col-xs-1 floating-label enable-floating-label show-label" style="margin-bottom:0px">
                                                     <label for="">Tiempo Min Producción</label>
                                                     <input type="number" class="form-control text-center" id="pMin" name="min">
@@ -162,11 +169,11 @@ if (sizeof($_SESSION) == 0)
                                                     <label for="">Materia Prima</label>
                                                     <select class="form-control" name="material" id="material"></select>
                                                 </div>
-                                                <div class="col-sm-2 floating-label enable-floating-label show-label cardDescription" style="margin-bottom:20px">
+                                                <div class="col-sm-2 floating-label enable-floating-label show-label cardRMDescription" style="margin-bottom:20px">
                                                     <label for="refMaterial">Referencia</label>
                                                     <input type="text" class="form-control" id="referenceMName" name="referenceMName" readonly>
                                                 </div>
-                                                <div class="col-sm-10 floating-label enable-floating-label show-label cardDescription" style="margin-bottom:20px">
+                                                <div class="col-sm-10 floating-label enable-floating-label show-label cardRMDescription" style="margin-bottom:20px">
                                                     <label for="">Materia Prima</label>
                                                     <input type="text" class="form-control" id="materialName" name="materialName" readonly>
                                                 </div>
@@ -174,11 +181,6 @@ if (sizeof($_SESSION) == 0)
                                                     <label for="">Proveedores</label>
                                                     <select class="form-control" name="idProvider" id="client"></select>
                                                 </div>
-                                                <!-- <div class="col-sm-4 floating-label enable-floating-label show-label cardDescription" style="margin-bottom:20px; display: none;">
-                                                    <label for="">Proveedores</label>
-                                                    <input type="text" class="form-control" id="providerName" name="providerName" readonly>
-                                                </div> -->
-
                                                 <div class="col-sm-2 floating-label enable-floating-label show-label" style="margin-bottom:0px">
                                                     <label for="">Tiempo Min Despacho (días)</label>
                                                     <input type="number" class="form-control text-center" id="rMMin" name="min">

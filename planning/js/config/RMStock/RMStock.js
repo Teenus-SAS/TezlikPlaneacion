@@ -33,7 +33,7 @@ $(document).ready(function () {
   $("#btnNewRMStock").click(function (e) {
     e.preventDefault();
 
-    $(".cardImportRMStock, .cardDescription").hide(800);
+    $(".cardImportRMStock, .cardRMDescription").hide(800);
     $(".cardCreateRMStock").toggle(800);
     $("#formCreateRMStock").trigger("reset");
     $("#btnCreateRMStock").text("Crear");
@@ -56,7 +56,7 @@ $(document).ready(function () {
 
   $(document).on("click", ".updateRMStock", function (e) {
     $(".cardImportRMStock, .cardSelect").hide(800);
-    $(".cardCreateRMStock, .cardDescription").show(800);
+    $(".cardCreateRMStock, .cardRMDescription").show(800);
     $("#btnCreateRMStock").text("Actualizar");
 
     //obtener data

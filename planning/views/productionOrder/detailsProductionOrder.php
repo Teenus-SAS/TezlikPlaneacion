@@ -289,6 +289,7 @@ if (sizeof($_SESSION) == 0)
 															<tr>
 																<th>No</th>
 																<th>Proceso</th>
+																<th>Maquina</th>
 																<th>Fecha Inicio</th>
 																<th>Fecha Final</th>
 															</tr>

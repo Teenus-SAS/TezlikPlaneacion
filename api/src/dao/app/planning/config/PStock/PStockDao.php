@@ -19,10 +19,10 @@ class PStockDao
     public function findAllStockByCompany($id_company)
     {
         $connection = Connection::getInstance()->getConnection();
-        $stmt = $connection->prepare("SELECT s.id_stock_product, p.id_product, p.reference, p.product, pi.quantity, s.max_term, s.min_term, p.composite, pi.classification
+        $stmt = $connection->prepare("SELECT s.id_stock_product, p.id_product, p.reference, p.product, IFNULL(pi.quantity, 0) AS quantity, s.max_term, s.min_term, p.composite, IFNULL(pi.classification , '') AS classification
                                       FROM inv_stock_products s
                                         INNER JOIN products p ON p.id_product = s.id_product
-                                        INNER JOIN inv_products pi ON pi.id_product = s.id_product
+                                        LEFT JOIN inv_products pi ON pi.id_product = s.id_product
                                       WHERE s.id_company = :id_company");
         $stmt->execute(['id_company' => $id_company]);
 

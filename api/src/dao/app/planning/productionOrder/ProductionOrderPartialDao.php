@@ -20,7 +20,7 @@ class ProductionOrderPartialDao
     {
         $connection = Connection::getInstance()->getConnection();
 
-        $stmt = $connection->prepare("SELECT po.id_part_deliv, po.id_programming, p.id_product, p.reference, p.reference, IFNULL(pi.quantity, 0) AS quantity_product, po.start_date, po.end_date, po.operator, u.firstname, u.lastname, 
+        $stmt = $connection->prepare("SELECT po.id_part_deliv, po.id_programming, p.id_product, p.reference, p.product, IFNULL(pi.quantity, 0) AS quantity_product, po.start_date, po.end_date, po.operator, u.firstname, u.lastname, 
                                              po.waste, po.partial_quantity, po.receive_date, IFNULL(ur.firstname, '') AS firstname_deliver, IFNULL(ur.lastname , '') AS lastname_deliver
                                       FROM prod_order_part_deliv po
                                         INNER JOIN users u ON u.id_user = po.operator

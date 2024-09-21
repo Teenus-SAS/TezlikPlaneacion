@@ -72,6 +72,7 @@ $(document).ready(function () {
             `<tr>
                 <td>1</td>
                 <td>${data.process}</td>
+                <td>${data.machine}</td>
                 <td>${min_date}</td>
                 <td>${max_date}</td>
             </tr>`
