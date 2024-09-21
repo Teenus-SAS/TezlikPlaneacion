@@ -2,9 +2,9 @@ $(document).ready(function () {
   /* Cargue tabla de Máquinas */
 
   tblEmployees = $("#tblEmployees").dataTable({
-    //fixedHeader: true,
-    //scrollY: "600px",
-    //scrollCollapse: true,
+    fixedHeader: true,
+    scrollY: "600px",
+    scrollCollapse: true,
     pageLength: 50,
     ajax: {
       url: "/api/planPayroll",
