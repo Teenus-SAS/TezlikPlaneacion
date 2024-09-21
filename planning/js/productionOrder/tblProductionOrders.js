@@ -145,7 +145,7 @@ $(document).ready(function () {
               <a href="/planning/details-production-order">
                     <i id="${
                       data.id_programming
-                    }" class="mdi mdi-playlist-check" data-toggle='tooltip' title='Ver Orden' style="font-size: 30px;color:black" onclick="seePO()"></i>
+                    }" class="fas fa-eye" data-toggle='tooltip' title='Ver Orden de Producción' style="font-size: 30px;color:black" onclick="seePO()"></i>
                   </a>
             `;
           },
