@@ -1,5 +1,6 @@
 <?php
 
+use TezlikPlaneacion\dao\ClientsDao;
 use TezlikPlaneacion\Dao\CompositeProductsDao;
 use TezlikPlaneacion\Dao\ConversionUnitsDao;
 use TezlikPlaneacion\dao\ConvertDataDao;
@@ -22,6 +23,7 @@ use TezlikPlaneacion\dao\GeneralRMStockDao;
 use TezlikPlaneacion\dao\GeneralSellersDao;
 use TezlikPlaneacion\dao\InventoryDaysDao;
 use TezlikPlaneacion\dao\LastDataDao;
+use TezlikPlaneacion\dao\LicenseCompanyDao;
 use TezlikPlaneacion\Dao\MagnitudesDao;
 use TezlikPlaneacion\dao\MaterialsTypeDao;
 use TezlikPlaneacion\dao\MinimumStockDao;
@@ -32,6 +34,8 @@ use TezlikPlaneacion\dao\RequisitionsDao;
 use TezlikPlaneacion\dao\UnitsDao;
 
 $productsMaterialsDao = new ProductsMaterialsDao();
+$licenseDao = new LicenseCompanyDao();
+$clientsDao = new ClientsDao();
 $conversionUnitsDao = new ConversionUnitsDao();
 $generalProductsMaterialsDao = new GeneralProductsMaterialsDao();
 $compositeProductsDao = new CompositeProductsDao();
@@ -243,6 +247,8 @@ $app->post('/addProductsMaterials', function (Request $request, Response $respon
     $generalPlanCiclesMachinesDao,
     $conversionUnitsDao,
     $explosionMaterialsDao,
+    $clientsDao,
+    $licenseDao,
     $explosionProductsDao,
     $generalExMaterialsDao,
     $generalExProductsDao,
@@ -620,10 +626,27 @@ $app->post('/addProductsMaterials', function (Request $request, Response $respon
                 $data = [];
                 $arr2 = $generalOrdersDao->findLastOrderByNumOrder($products[$i]['num_order']);
 
-                $client = $generalClientsDao->findInternalClient($id_company);
                 $seller = $generalSellersDao->findInternalSeller($id_company);
 
-                if ($client && $seller) {
+                if ($seller) {
+                    $client = $generalClientsDao->findInternalClient($id_company);
+
+                    if (!$client) {
+                        $company = $licenseDao->findLicenseCompany($id_company);
+                        $dataClient = [];
+
+                        $dataClient['nit'] = $company['nit'];
+                        $dataClient['client'] = $company['company'];
+                        $dataClient['address'] = $company['address'];
+                        $dataClient['phone'] = $company['telephone'];
+                        $dataClient['city'] = $company['city'];
+                        $dataClient['type'] = 1;
+
+                        $resolution = $clientsDao->insertClient($dataClient, $id_company);
+
+                        $client = $lastDataDao->findLastInsertedClient();
+                    }
+
                     $data['order'] = $arr2['num_order'];
                     $data['dateOrder'] = date('Y-m-d');
                     $data['minDate'] = '';
@@ -720,6 +743,8 @@ $app->post('/updatePlanProductsMaterials', function (Request $request, Response 
     $generalExProductsDao,
     $inventoryDaysDao,
     $generalRMStockDao,
+    $licenseDao,
+    $clientsDao,
     $compositeProductsDao,
     $generalRequisitionsDao,
     $requisitionsDao,
@@ -807,10 +832,27 @@ $app->post('/updatePlanProductsMaterials', function (Request $request, Response 
                     $data = [];
                     $arr2 = $generalOrdersDao->findLastOrderByNumOrder($products[$i]['num_order']);
 
-                    $client = $generalClientsDao->findInternalClient($id_company);
                     $seller = $generalSellersDao->findInternalSeller($id_company);
 
-                    if ($client && $seller) {
+                    if ($seller) {
+                        $client = $generalClientsDao->findInternalClient($id_company);
+
+                        if (!$client) {
+                            $company = $licenseDao->findLicenseCompany($id_company);
+                            $dataClient = [];
+
+                            $dataClient['nit'] = $company['nit'];
+                            $dataClient['client'] = $company['company'];
+                            $dataClient['address'] = $company['address'];
+                            $dataClient['phone'] = $company['telephone'];
+                            $dataClient['city'] = $company['city'];
+                            $dataClient['type'] = 1;
+
+                            $resolution = $clientsDao->insertClient($dataClient, $id_company);
+
+                            $client = $lastDataDao->findLastInsertedClient();
+                        }
+
                         $data['order'] = $arr2['num_order'];
                         $data['dateOrder'] = date('Y-m-d');
                         $data['minDate'] = '';
@@ -929,6 +971,8 @@ $app->post('/deletePlanProductMaterial', function (Request $request, Response $r
     $inventoryDaysDao,
     $productsDao,
     $explosionMaterialsDao,
+    $licenseDao,
+    $clientsDao,
     $explosionProductsDao,
     $generalExMaterialsDao,
     $generalExProductsDao,
@@ -982,10 +1026,27 @@ $app->post('/deletePlanProductMaterial', function (Request $request, Response $r
                 $data = [];
                 $arr2 = $generalOrdersDao->findLastOrderByNumOrder($products[$i]['num_order']);
 
-                $client = $generalClientsDao->findInternalClient($id_company);
                 $seller = $generalSellersDao->findInternalSeller($id_company);
 
-                if ($client && $seller) {
+                if ($seller) {
+                    $client = $generalClientsDao->findInternalClient($id_company);
+
+                    if (!$client) {
+                        $company = $licenseDao->findLicenseCompany($id_company);
+                        $dataClient = [];
+
+                        $dataClient['nit'] = $company['nit'];
+                        $dataClient['client'] = $company['company'];
+                        $dataClient['address'] = $company['address'];
+                        $dataClient['phone'] = $company['telephone'];
+                        $dataClient['city'] = $company['city'];
+                        $dataClient['type'] = 1;
+
+                        $resolution = $clientsDao->insertClient($dataClient, $id_company);
+
+                        $client = $lastDataDao->findLastInsertedClient();
+                    }
+
                     $data['order'] = $arr2['num_order'];
                     $data['dateOrder'] = date('Y-m-d');
                     $data['minDate'] = '';

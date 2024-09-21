@@ -110,7 +110,7 @@ $(document).ready(function () {
 
         let startDateTime = $('#startDateTime').val();
         let endDateTime = $('#endDateTime').val();
-        let operator = parseInt($('#operator').val());
+        // let operator = parseInt($('#operator').val());
         let waste = parseInt($('#waste').val());
         let quantityProduction = parseInt($('#quantityProduction').val());
 

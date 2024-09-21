@@ -1,14 +1,19 @@
 <?php
 
+use TezlikPlaneacion\dao\ClientsDao;
 use TezlikPlaneacion\dao\GeneralClientsDao;
 use TezlikPlaneacion\dao\GeneralOfficesDao;
 use TezlikPlaneacion\dao\GeneralOrdersDao;
 use TezlikPlaneacion\dao\GeneralProductsDao;
+use TezlikPlaneacion\dao\GeneralProgrammingRoutesDao;
 use TezlikPlaneacion\dao\GeneralSellersDao;
 use TezlikPlaneacion\dao\InventoryDaysDao;
+use TezlikPlaneacion\dao\LastDataDao;
+use TezlikPlaneacion\dao\LicenseCompanyDao;
 use TezlikPlaneacion\dao\OfficesDao;
 use TezlikPlaneacion\dao\OrdersDao;
 use TezlikPlaneacion\dao\ProductsMaterialsDao;
+use TezlikPlaneacion\dao\ProgrammingRoutesDao;
 use TezlikPlaneacion\dao\UsersOfficesDao;
 
 $officesDao = new OfficesDao();
@@ -21,6 +26,11 @@ $productsMaterialsDao = new ProductsMaterialsDao();
 $generalProductsDao = new GeneralProductsDao();
 $inventoryDaysDao = new InventoryDaysDao();
 $usersOfficesDao = new UsersOfficesDao();
+$licenseDao = new LicenseCompanyDao();
+$clientsDao = new ClientsDao();
+$lastDataDao = new LastDataDao();
+$programmingRoutesDao = new ProgrammingRoutesDao();
+$generalProgrammingRoutesDao = new GeneralProgrammingRoutesDao();
 
 use Psr\Http\Message\ResponseInterface as Response;
 use Psr\Http\Message\ServerRequestInterface as Request;
@@ -91,6 +101,11 @@ $app->post('/changeOffices', function (Request $request, Response $response, $ar
     $ordersDao,
     $generalOrdersDao,
     $generalClientsDao,
+    $licenseDao,
+    $clientsDao,
+    $lastDataDao,
+    $programmingRoutesDao,
+    $generalProgrammingRoutesDao,
     $generalSellersDao,
     $productsMaterialsDao,
     $usersOfficesDao,
@@ -117,10 +132,27 @@ $app->post('/changeOffices', function (Request $request, Response $response, $ar
             $data = [];
             $arr2 = $generalOrdersDao->findLastNumOrderByCompany($id_company);
 
-            $client = $generalClientsDao->findInternalClient($id_company);
             $seller = $generalSellersDao->findInternalSeller($id_company);
 
-            if ($client && $seller) {
+            if ($seller) {
+                $client = $generalClientsDao->findInternalClient($id_company);
+
+                if (!$client) {
+                    $company = $licenseDao->findLicenseCompany($id_company);
+                    $dataClient = [];
+
+                    $dataClient['nit'] = $company['nit'];
+                    $dataClient['client'] = $company['company'];
+                    $dataClient['address'] = $company['address'];
+                    $dataClient['phone'] = $company['telephone'];
+                    $dataClient['city'] = $company['city'];
+                    $dataClient['type'] = 1;
+
+                    $resolution = $clientsDao->insertClient($dataClient, $id_company);
+
+                    $client = $lastDataDao->findLastInsertedClient();
+                }
+
                 $data['order'] = $arr2['num_order'];
                 $data['dateOrder'] = date('Y-m-d');
                 $data['minDate'] = '';
@@ -129,51 +161,27 @@ $app->post('/changeOffices', function (Request $request, Response $response, $ar
                 $data['idClient'] = $client['id_client'];
                 $data['idSeller'] = $seller['id_seller'];
                 $data['route'] = 1;
-                // $data['originalQuantity'] = $dataOrder['quantity'] - $dataOrder['stock'];
-                $data['originalQuantity'] =  $dataOrder['stock'] - ($dataOrder['quantity'] - $dataOrder['originalQuantity']);
+                $data['originalQuantity'] = $dataOrder['stock'] - ($dataOrder['quantity'] - $dataOrder['originalQuantity']);
 
-                $resolution = $ordersDao->insertOrderByCompany($data, $id_company);
+                $findOrder = $generalOrdersDao->findLastSameOrder($data);
+                if (!$findOrder) {
+                    $resolution = $ordersDao->insertOrderByCompany($data, $id_company);
+
+                    $lastOrder = $lastDataDao->findLastInsertedOrder($id_company);
+
+                    $programmingRoutes = $generalProgrammingRoutesDao->findProgrammingRoutes($dataOrder['idProduct'], $lastOrder['id_order']);
+
+                    if (!$programmingRoutes) {
+                        $data['idOrder'] = $lastOrder['id_order'];
+                        $data['route'] = 1;
+
+                        $resolution = $programmingRoutesDao->insertProgrammingRoutes($data, $id_company);
+                    }
+                } else {
+                    $data['idOrder'] = $findOrder['id_order'];
+                    $resolution = $ordersDao->updateOrder($data);
+                }
             }
-            // $status = true;
-
-            // // Checkear cantidades
-            // $order = $generalOrdersDao->checkAccumulatedQuantityOrder($dataOrder['idOrder']);
-            // if ($order['status'] != 'En Produccion' && $order['status'] = 'Entregado') {
-
-            //     if ($order['original_quantity'] > $order['accumulated_quantity']) {
-            //         // Ficha tecnica
-            //         $productsMaterials = $productsMaterialsDao->findAllProductsMaterials($dataOrder['idProduct'], $id_company);
-
-            //         if (sizeof($productsMaterials) == 0) {
-            //             $order = $generalOrdersDao->changeStatus($dataOrder['idOrder'], 'Sin Ficha Tecnica');
-            //             $status = false;
-            //         } else {
-            //             foreach ($productsMaterials as $arr) {
-            //                 if ($arr['quantity_material'] <= 0) {
-            //                     $order = $generalOrdersDao->changeStatus($dataOrder['idOrder'], 'Sin Materia Prima');
-            //                     $status = false;
-            //                     break;
-            //                 }
-            //             }
-            //         }
-            //     }
-
-            //     if ($status == true) {
-            //         if ($order['original_quantity'] <= $order['accumulated_quantity']) {
-            //             $generalOrdersDao->changeStatus($dataOrder['idOrder'], 'Despacho');
-            //             $accumulated_quantity = $order['accumulated_quantity'] - $order['original_quantity'];
-            //         } else {
-            //             $accumulated_quantity = $order['accumulated_quantity'];
-            //             // $generalOrdersDao->changeStatus($dataOrder['idOrder'], 'Alistamiento');
-            //         }
-
-            //         $arr = $generalProductsDao->findProductReserved($dataOrder['idProduct']);
-            //         !$arr['reserved'] ? $arr['reserved'] = 0 : $arr;
-            //         $generalProductsDao->updateReservedByProduct($dataOrder['idProduct'], $arr['reserved']);
-
-            //         $generalProductsDao->updateAccumulatedQuantity($dataOrder['idProduct'], $accumulated_quantity, 1);
-            //     }
-            // }
         }
 
         $generalProductsDao->updateAccumulatedQuantity($dataOrder['idProduct'], $dataOrder['quantity'] - $dataOrder['originalQuantity'], 2);

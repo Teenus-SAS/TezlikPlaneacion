@@ -75,16 +75,16 @@ $(document).ready(function () {
             return `<a href="javascript:;" <span id="type-${data.id_client}" class="badge ${badge} changeType">${name}</span></a>`;
           },
         },
-        {
-          title: "",
-          data: null,
-          className: "uniqueClassName dt-head-center",
-          render: (data, type, row) => {
-            return `<input type="checkbox" class="form-control-updated checkClient" id="check-${
-              data.id_client
-            }" ${data.status == 1 ? "checked" : ""}>`;
-          },
-        },
+        // {
+        //   title: "",
+        //   data: null,
+        //   className: "uniqueClassName dt-head-center",
+        //   render: (data, type, row) => {
+        //     return `<input type="checkbox" class="form-control-updated checkClient" id="check-${
+        //       data.id_client
+        //     }" ${data.status == 1 ? "checked" : ""}>`;
+        //   },
+        // },
         {
           title: "Acciones",
           data: "id_client",

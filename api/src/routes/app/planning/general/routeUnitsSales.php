@@ -2,6 +2,7 @@
 
 use TezlikPlaneacion\dao\UnitSalesDao;
 use TezlikPlaneacion\dao\ClassificationDao;
+use TezlikPlaneacion\dao\ClientsDao;
 use TezlikPlaneacion\dao\CompaniesLicenseStatusDao;
 use TezlikPlaneacion\Dao\CompositeProductsDao;
 use TezlikPlaneacion\Dao\ConversionUnitsDao;
@@ -12,18 +13,27 @@ use TezlikPlaneacion\dao\GeneralMaterialsDao;
 use TezlikPlaneacion\dao\GeneralOrdersDao;
 use TezlikPlaneacion\dao\GeneralProductsDao;
 use TezlikPlaneacion\dao\GeneralProductsMaterialsDao;
+use TezlikPlaneacion\dao\GeneralProgrammingRoutesDao;
 use TezlikPlaneacion\dao\GeneralRequisitionsDao;
 use TezlikPlaneacion\dao\GeneralRMStockDao;
 use TezlikPlaneacion\dao\GeneralSellersDao;
 use TezlikPlaneacion\dao\GeneralUnitSalesDao;
 use TezlikPlaneacion\dao\InventoryDaysDao;
+use TezlikPlaneacion\dao\LastDataDao;
+use TezlikPlaneacion\dao\LicenseCompanyDao;
 use TezlikPlaneacion\dao\MinimumStockDao;
 use TezlikPlaneacion\dao\OrdersDao;
 use TezlikPlaneacion\dao\ProductsDao;
 use TezlikPlaneacion\dao\ProductsMaterialsDao;
+use TezlikPlaneacion\dao\ProgrammingRoutesDao;
 use TezlikPlaneacion\dao\RequisitionsDao;
 
 $unitSalesDao = new UnitSalesDao();
+$licenseDao = new LicenseCompanyDao();
+$clientsDao = new ClientsDao();
+$lastDataDao = new LastDataDao();
+$programmingRoutesDao = new ProgrammingRoutesDao();
+$generalProgrammingRoutesDao = new GeneralProgrammingRoutesDao();
 $generalProductsDao = new GeneralProductsDao();
 $generalUnitSalesDao = new GeneralUnitSalesDao();
 $productsDao = new ProductsDao();
@@ -168,6 +178,11 @@ $app->post('/addUnitSales', function (Request $request, Response $response, $arg
     $productsDao,
     $generalProductsDao,
     $generalMaterialDao,
+    $licenseDao,
+    $clientsDao,
+    $lastDataDao,
+    $programmingRoutesDao,
+    $generalProgrammingRoutesDao,
     $ordersDao,
     $productMaterialsDao,
     $explosionMaterialsDao,
@@ -244,10 +259,28 @@ $app->post('/addUnitSales', function (Request $request, Response $response, $arg
                 $data = [];
                 $arr2 = $generalOrdersDao->findLastNumOrderByCompany($id_company);
 
-                $client = $generalClientsDao->findInternalClient($id_company);
                 $seller = $generalSellersDao->findInternalSeller($id_company);
 
-                if ($client && $seller) {
+                if ($seller) {
+                    $client = $generalClientsDao->findInternalClient($id_company);
+
+
+                    if (!$client) {
+                        $company = $licenseDao->findLicenseCompany($id_company);
+                        $dataClient = [];
+
+                        $dataClient['nit'] = $company['nit'];
+                        $dataClient['client'] = $company['company'];
+                        $dataClient['address'] = $company['address'];
+                        $dataClient['phone'] = $company['telephone'];
+                        $dataClient['city'] = $company['city'];
+                        $dataClient['type'] = 1;
+
+                        $resolution = $clientsDao->insertClient($dataClient, $id_company);
+
+                        $client = $lastDataDao->findLastInsertedClient();
+                    }
+
                     $data['order'] = $arr2['num_order'];
                     $data['dateOrder'] = date('Y-m-d');
                     $data['minDate'] = '';
@@ -256,11 +289,26 @@ $app->post('/addUnitSales', function (Request $request, Response $response, $arg
                     $data['idClient'] = $client['id_client'];
                     $data['idSeller'] = $seller['id_seller'];
                     $data['route'] = 1;
-                    // $data['originalQuantity'] = $dataOrder['quantity'] - $dataOrder['stock'];
-                    $data['originalQuantity'] =  abs($product['stock']);
+                    $data['originalQuantity'] = abs($product['stock']);
 
-                    $resolution = $ordersDao->insertOrderByCompany($data, $id_company);
-                    // $generalProductsDao->updateAccumulatedQuantity($dataSale['idProduct'], $product['stock'], 2);
+                    $findOrder = $generalOrdersDao->findLastSameOrder($data);
+                    if (!$findOrder) {
+                        $resolution = $ordersDao->insertOrderByCompany($data, $id_company);
+
+                        $lastOrder = $lastDataDao->findLastInsertedOrder($id_company);
+
+                        $programmingRoutes = $generalProgrammingRoutesDao->findProgrammingRoutes($dataSale['idProduct'], $lastOrder['id_order']);
+
+                        if (!$programmingRoutes) {
+                            $data['idOrder'] = $lastOrder['id_order'];
+                            $data['route'] = 1;
+
+                            $resolution = $programmingRoutesDao->insertProgrammingRoutes($data, $id_company);
+                        }
+                    } else {
+                        $data['idOrder'] = $findOrder['id_order'];
+                        $resolution = $ordersDao->updateOrder($data);
+                    }
                 }
             }
         }
@@ -436,6 +484,11 @@ $app->post('/updateUnitSale', function (Request $request, Response $response, $a
     $generalProductsDao,
     $generalMaterialDao,
     $productMaterialsDao,
+    $licenseDao,
+    $clientsDao,
+    $lastDataDao,
+    $programmingRoutesDao,
+    $generalProgrammingRoutesDao,
     $generalProductsMaterialsDao,
     $conversionUnitsDao,
     $inventoryDaysDao,
@@ -509,10 +562,27 @@ $app->post('/updateUnitSale', function (Request $request, Response $response, $a
                 $data = [];
                 $arr2 = $generalOrdersDao->findLastNumOrderByCompany($id_company);
 
-                $client = $generalClientsDao->findInternalClient($id_company);
                 $seller = $generalSellersDao->findInternalSeller($id_company);
 
-                if ($client && $seller) {
+                if ($seller) {
+                    $client = $generalClientsDao->findInternalClient($id_company);
+
+                    if (!$client) {
+                        $company = $licenseDao->findLicenseCompany($id_company);
+                        $dataClient = [];
+
+                        $dataClient['nit'] = $company['nit'];
+                        $dataClient['client'] = $company['company'];
+                        $dataClient['address'] = $company['address'];
+                        $dataClient['phone'] = $company['telephone'];
+                        $dataClient['city'] = $company['city'];
+                        $dataClient['type'] = 1;
+
+                        $resolution = $clientsDao->insertClient($dataClient, $id_company);
+
+                        $client = $lastDataDao->findLastInsertedClient();
+                    }
+
                     $data['order'] = $arr2['num_order'];
                     $data['dateOrder'] = date('Y-m-d');
                     $data['minDate'] = '';
@@ -521,11 +591,26 @@ $app->post('/updateUnitSale', function (Request $request, Response $response, $a
                     $data['idClient'] = $client['id_client'];
                     $data['idSeller'] = $seller['id_seller'];
                     $data['route'] = 1;
-                    // $data['originalQuantity'] = $dataOrder['quantity'] - $dataOrder['stock'];
-                    $data['originalQuantity'] =  abs($product['stock']);
+                    $data['originalQuantity'] = abs($product['stock']);
 
-                    $resolution = $ordersDao->insertOrderByCompany($data, $id_company);
-                    // $generalProductsDao->updateAccumulatedQuantity($dataSale['idProduct'], $product['stock'], 2);
+                    $findOrder = $generalOrdersDao->findLastSameOrder($data);
+                    if (!$findOrder) {
+                        $resolution = $ordersDao->insertOrderByCompany($data, $id_company);
+
+                        $lastOrder = $lastDataDao->findLastInsertedOrder($id_company);
+
+                        $programmingRoutes = $generalProgrammingRoutesDao->findProgrammingRoutes($dataSale['idProduct'], $lastOrder['id_order']);
+
+                        if (!$programmingRoutes) {
+                            $data['idOrder'] = $lastOrder['id_order'];
+                            $data['route'] = 1;
+
+                            $resolution = $programmingRoutesDao->insertProgrammingRoutes($data, $id_company);
+                        }
+                    } else {
+                        $data['idOrder'] = $findOrder['id_order'];
+                        $resolution = $ordersDao->updateOrder($data);
+                    }
                 }
             }
         }
@@ -626,8 +711,13 @@ $app->post('/deleteUnitSale', function (Request $request, Response $response, $a
     $generalMaterialDao,
     $productsDao,
     $generalProductsDao,
+    $licenseDao,
+    $clientsDao,
     $generalRMStockDao,
     $productMaterialsDao,
+    $lastDataDao,
+    $programmingRoutesDao,
+    $generalProgrammingRoutesDao,
     $generalProductsMaterialsDao,
     $conversionUnitsDao,
     $inventoryDaysDao,
@@ -691,10 +781,28 @@ $app->post('/deleteUnitSale', function (Request $request, Response $response, $a
             $data = [];
             $arr2 = $generalOrdersDao->findLastNumOrderByCompany($id_company);
 
-            $client = $generalClientsDao->findInternalClient($id_company);
             $seller = $generalSellersDao->findInternalSeller($id_company);
 
-            if ($client && $seller) {
+            if ($seller) {
+                $client = $generalClientsDao->findInternalClient($id_company);
+
+
+                if (!$client) {
+                    $company = $licenseDao->findLicenseCompany($id_company);
+                    $dataClient = [];
+
+                    $dataClient['nit'] = $company['nit'];
+                    $dataClient['client'] = $company['company'];
+                    $dataClient['address'] = $company['address'];
+                    $dataClient['phone'] = $company['telephone'];
+                    $dataClient['city'] = $company['city'];
+                    $dataClient['type'] = 1;
+
+                    $resolution = $clientsDao->insertClient($dataClient, $id_company);
+
+                    $client = $lastDataDao->findLastInsertedClient();
+                }
+
                 $data['order'] = $arr2['num_order'];
                 $data['dateOrder'] = date('Y-m-d');
                 $data['minDate'] = '';
@@ -703,11 +811,26 @@ $app->post('/deleteUnitSale', function (Request $request, Response $response, $a
                 $data['idClient'] = $client['id_client'];
                 $data['idSeller'] = $seller['id_seller'];
                 $data['route'] = 1;
-                // $data['originalQuantity'] = $dataOrder['quantity'] - $dataOrder['stock'];
-                $data['originalQuantity'] =  abs($product['stock']);
+                $data['originalQuantity'] = abs($product['stock']);
 
-                $resolution = $ordersDao->insertOrderByCompany($data, $id_company);
-                // $generalProductsDao->updateAccumulatedQuantity($dataSale['idProduct'], $product['stock'], 2);
+                $findOrder = $generalOrdersDao->findLastSameOrder($data);
+                if (!$findOrder) {
+                    $resolution = $ordersDao->insertOrderByCompany($data, $id_company);
+
+                    $lastOrder = $lastDataDao->findLastInsertedOrder($id_company);
+
+                    $programmingRoutes = $generalProgrammingRoutesDao->findProgrammingRoutes($dataSale['idProduct'], $lastOrder['id_order']);
+
+                    if (!$programmingRoutes) {
+                        $data['idOrder'] = $lastOrder['id_order'];
+                        $data['route'] = 1;
+
+                        $resolution = $programmingRoutesDao->insertProgrammingRoutes($data, $id_company);
+                    }
+                } else {
+                    $data['idOrder'] = $findOrder['id_order'];
+                    $resolution = $ordersDao->updateOrder($data);
+                }
             }
         }
     }

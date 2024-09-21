@@ -317,21 +317,16 @@ if (sizeof($_SESSION) == 0)
 														<label for="endDateTime">Finalización</label>
 														<input type="datetime-local" class="form-control text-center" id="endDateTime" name="endDate">
 													</div>
-													<!-- <div class="col-sm-6 floating-label enable-floating-label show-label" style="margin-bottom:20px">
+													<div class="col-sm-6 floating-label enable-floating-label show-label" style="margin-bottom:20px">
 														<label for="operator">Operario</label>
-														<select class="form-control operator" name="operator" id="operator">
-															<option disabled selected>Seleccionar</option>
-															<?php
-															//$id_user = $_SESSION['idUser'];
-															//$name = $_SESSION['name'];
-															//$lastname = $_SESSION['lastname'];
-															?>
-															<option value="<?php //echo $id_user 
-																			?>"><?php //echo "$name $lastname" 
-																				?></option>
-														</select>
-													</div> -->
-													<div class="col-sm-2 floating-label enable-floating-label show-label">
+														<?php
+														$id_user = $_SESSION['idUser'];
+														$name = $_SESSION['name'];
+														$lastname = $_SESSION['lastname'];
+														?>
+														<input type="text" class="form-control" name="operator" id="operator" readonly value="<?php echo "$name $lastname" ?>">
+													</div>
+													<div class=" col-sm-2 floating-label enable-floating-label show-label">
 														<label for="waste">Desperdicio (Und)</label>
 														<input type="number" class="form-control text-center" id="waste" name="waste">
 													</div>

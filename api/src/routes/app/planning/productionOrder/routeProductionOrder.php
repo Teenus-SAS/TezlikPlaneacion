@@ -116,7 +116,10 @@ $app->get('/productionOrderPartial/{id_programming}', function (Request $request
 $app->post('/addOPPartial', function (Request $request, Response $response, $args) use ($productionOrderPartialDao) {
     session_start();
     $id_company = $_SESSION['id_company'];
+    $id_user = $_SESSION['idUser'];
+
     $dataOP = $request->getParsedBody();
+    $dataOP['operator'] = $id_user;
 
     $resolution = $productionOrderPartialDao->insertOPPartialByCompany($dataOP, $id_company);
 
