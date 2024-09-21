@@ -313,18 +313,18 @@ if (sizeof($_SESSION) == 0)
 														<label for="endDateTime">Finalización</label>
 														<input type="datetime-local" class="form-control text-center" id="endDateTime" name="endDate">
 													</div>
-													<div class="col-sm-6 floating-label enable-floating-label show-label" style="margin-bottom:20px">
+													<!-- <div class="col-sm-6 floating-label enable-floating-label show-label" style="margin-bottom:20px">
 														<label for="operator">Operario</label>
 														<select class="form-control operator" name="operator" id="operator">
 															<option disabled selected>Seleccionar</option>
 															<?php
-															$id_user = $_SESSION['idUser'];
-															$name = $_SESSION['name'];
-															$lastname = $_SESSION['lastname'];
+															//$id_user = $_SESSION['idUser'];
+															//$name = $_SESSION['name'];
+															//$lastname = $_SESSION['lastname'];
 															?>
-															<option value="<?php echo $id_user ?>"><?php echo "$name $lastname" ?></option>
+															<option value="<?php //echo $id_user ?>"><?php //echo "$name $lastname" ?></option>
 														</select>
-													</div>
+													</div> -->
 													<div class="col-sm-2 floating-label enable-floating-label show-label">
 														<label for="waste">Desperdicio (Und)</label>
 														<input type="number" class="form-control text-center" id="waste" name="waste">
@@ -365,7 +365,7 @@ if (sizeof($_SESSION) == 0)
 											<form id="formAddOPPArtial">
 												<div class="form-row">
 
-													<div class="col-sm-6 floating-label enable-floating-label show-label" style="margin-bottom:20px">
+													<div class="col-sm-2 floating-label enable-floating-label show-label" style="margin-bottom:20px">
 														<label for="operator">Referencia</label>
 														<select class="form-control " name="" id="">
 															<option disabled selected>Seleccionar</option>
@@ -378,13 +378,8 @@ if (sizeof($_SESSION) == 0)
 														</select>
 													</div>
 
-													<div class="col-sm-3 floating-label enable-floating-label show-label">
+													<div class="col-sm-2 floating-label enable-floating-label show-label">
 														<label for="">Cantidad</label>
-														<input type="number" class="form-control text-center" id="" name="">
-													</div>
-
-													<div class="col-sm-5 floating-label enable-floating-label show-label" style="margin-bottom:20px">
-														<label for="operator">Operario</label>
 														<input type="number" class="form-control text-center" id="" name="">
 													</div>
 
