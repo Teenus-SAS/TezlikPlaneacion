@@ -15,21 +15,22 @@
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels@2.0.0"></script>
 
-<!-- ================== BEGIN PAGE LEVEL JS ================== -->
+<!-- Dragula -->
 <script src="/assets/libs/dragula/dragula.min.js"></script>
-<!-- ================== END PAGE LEVEL JS ================== -->
-<!-- ================== BEGIN PAGE JS ================== -->
 <script src="/assets/js/pages/dragula.init.js"></script>
 <!-- <script src="/assets/js/pages/dragula.init.js"></script> -->
-<!-- page JS -->
+
+<!-- App -->
 <script src="/assets/js/app.js"></script>
 <!-- <script src="/global/js/global/sessionUser.js"></script> -->
 
 <!-- Datatables -->
-<script src="https://cdn.datatables.net/1.11.4/js/jquery.dataTables.min.js"></script>
+<!-- <script src="https://cdn.datatables.net/1.11.4/js/jquery.dataTables.min.js"></script> -->
+ <script src="https://cdn.datatables.net/2.1.7/js/dataTables.min.js"></script>
 <script src="https://cdn.datatables.net/1.11.4/js/dataTables.bootstrap5.min.js"></script>
 <script src="https://cdn.datatables.net/rowgroup/1.2.0/js/dataTables.rowGroup.min.js"></script>
 <script src="https://cdn.datatables.net/rowreorder/1.4.1/js/dataTables.rowReorder.min.js"></script>
+<script src="https://cdn.datatables.net/fixedheader/3.2.2/js/dataTables.fixedHeader.min.js"></script>
 <script src="https://unpkg.com/file-saverjs@latest/FileSaver.min.js"></script>
 <!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/0.19.2/axios.min.js"></script> -->
 <script src="https://unpkg.com/xlsx@latest/dist/xlsx.full.min.js"></script>

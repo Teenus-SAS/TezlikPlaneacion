@@ -2,6 +2,7 @@ $(document).ready(function () {
   /* Cargue tabla de Máquinas */
 
   tblEmployees = $("#tblEmployees").dataTable({
+    fixedHeader: true,
     pageLength: 50,
     ajax: {
       url: "/api/planPayroll",
@@ -55,9 +56,15 @@ $(document).ready(function () {
         className: "uniqueClassName dt-head-center ",
         render: function (data) {
           return `<a href="javascript:;">
-                    <i id="${data.id_plan_payroll}" class="${data.status == 1 ? 'bi bi-person-fill-check' : 'bi bi-person-fill-x'} statusPY" data-toggle='tooltip' title='${data.status == 0 ? 'Activar' : 'Desactivar'} empleado' style="font-size:25px; color: ${data.status == 0 ? '#ff0000' : '#7bb520'};"></i>
+                    <i id="${data.id_plan_payroll}" class="${
+            data.status == 1 ? "bi bi-person-fill-check" : "bi bi-person-fill-x"
+          } statusPY" data-toggle='tooltip' title='${
+            data.status == 0 ? "Activar" : "Desactivar"
+          } empleado' style="font-size:25px; color: ${
+            data.status == 0 ? "#ff0000" : "#7bb520"
+          };"></i>
                   </a>`;
-        }
+        },
       },
       {
         title: "Acciones",
