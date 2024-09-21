@@ -179,7 +179,7 @@ $(document).ready(function () {
     $("#tblProgramming").DataTable({
       headerCallback: function (thead, data, start, end, display) {
         $(thead).find("th").css({
-          "background-color": "#4CAF50" /* Color de fondo */,
+          "background-color": "#386297" /* Color de fondo */,
           color: "white" /* Color del texto */,
           "text-align": "center" /* Centrar el texto */,
           "font-weight": "bold" /* Texto en negrita */,

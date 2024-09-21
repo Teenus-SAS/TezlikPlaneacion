@@ -186,7 +186,7 @@ $(document).ready(function () {
           className: "uniqueClassName dt-head-center",
           render: (data) =>
             data
-              ? `<img src="${data}" alt="" style="width:80px;border-radius:100px">`
+              ? `<img src="${data}" alt="" style="width:30px;border-radius:100px">`
               : "",
         },
         {
