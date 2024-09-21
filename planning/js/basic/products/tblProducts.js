@@ -3,59 +3,61 @@ $(document).ready(function () {
     e.preventDefault();
     const option = this.id;
 
-    let dataProducts = JSON.parse(sessionStorage.getItem('dataProducts'));
-    let dataMaterials = JSON.parse(sessionStorage.getItem('dataMaterials'));
+    let dataProducts = JSON.parse(sessionStorage.getItem("dataProducts"));
+    let dataMaterials = JSON.parse(sessionStorage.getItem("dataMaterials"));
 
     const cards = {
-      'sProducts': {
+      sProducts: {
         show: [".cardProducts"],
         hide: [".cardMaterials", ".cardRawMaterials", ".cardImportMaterials"],
         load: loadTblProduct,
-        data: dataProducts
+        data: dataProducts,
       },
-      'sMaterials': {
+      sMaterials: {
         show: [".cardMaterials"],
         hide: [".cardProducts", ".cardCreateProduct", ".cardImportProducts"],
         load: loadTblMaterials,
-        data: dataMaterials
-      }
+        data: dataMaterials,
+      },
     };
 
     if (cards[option]) {
       const { show, hide, load, data } = cards[option];
 
-      show.forEach(selector => $(selector).show());
-      hide.forEach(selector => $(selector).hide());
+      show.forEach((selector) => $(selector).show());
+      hide.forEach((selector) => $(selector).hide());
 
       load(data);
       inventoryIndicator(data);
     }
 
-    Array.from(document.getElementsByClassName("dataTable")).forEach(table => {
-      table.style.width = "100%";
-      table.firstElementChild.style.width = "100%";
-    });
+    Array.from(document.getElementsByClassName("dataTable")).forEach(
+      (table) => {
+        table.style.width = "100%";
+        table.firstElementChild.style.width = "100%";
+      }
+    );
   });
 
   loadAllData = async () => {
     try {
       const [dataProducts, dataMaterials] = await Promise.all([
-        searchData('/api/products'),
-        searchData('/api/materials')
-      ]); 
+        searchData("/api/products"),
+        searchData("/api/materials"),
+      ]);
 
       let products = dataProducts;
 
-      sessionStorage.setItem('dataProducts', JSON.stringify(dataProducts));
-      sessionStorage.setItem('dataMaterials', JSON.stringify(dataMaterials));
+      sessionStorage.setItem("dataProducts", JSON.stringify(dataProducts));
+      sessionStorage.setItem("dataMaterials", JSON.stringify(dataMaterials));
 
       // if (flag_products_measure == '1') {
-      //   products = products.filter(item => item.id_product_inventory != 0); 
+      //   products = products.filter(item => item.id_product_inventory != 0);
       // }
 
-      const card = document.querySelector('.selectNavigation');
+      const card = document.querySelector(".selectNavigation");
 
-      if (card.classList.contains('active')) {
+      if (card.classList.contains("active")) {
         loadTblProduct(products);
         inventoryIndicator(products);
       } else {
@@ -63,7 +65,7 @@ $(document).ready(function () {
         inventoryIndicator(dataMaterials);
       }
     } catch (error) {
-      console.error('Error loading data:', error);
+      console.error("Error loading data:", error);
     }
   };
 
@@ -72,17 +74,32 @@ $(document).ready(function () {
     let average = 0;
     let concentration = 0;
     let maxQuantity = 0;
-    
-    totalQuantity = data.reduce((acc, obj) => acc + parseFloat(obj.quantity), 0);
-    maxQuantity = Math.max(...data.map(obj => parseFloat(obj.quantity)));
+
+    totalQuantity = data.reduce(
+      (acc, obj) => acc + parseFloat(obj.quantity),
+      0
+    );
+    maxQuantity = Math.max(...data.map((obj) => parseFloat(obj.quantity)));
     average = totalQuantity / data.length;
     concentration = maxQuantity / totalQuantity;
 
     // $('#totalQuantity').html(totalQuantity.toLocaleString('es-CO', { maximumFractionDigits: 0 }));
-    $('#lblTotal').html(` Inv Total: ${totalQuantity.toLocaleString('es-CO', { maximumFractionDigits: 0 })}`);
-    $('#lblAverage').html(` Promedio: ${average.toLocaleString('es-CO', { maximumFractionDigits: 0 })}`);
-    $('#lblConcentration').html(` Concentracion: ${concentration.toLocaleString('es-CO', { maximumFractionDigits: 2 })} %`);
-  }
+    $("#lblTotal").html(
+      ` Inv Total: ${totalQuantity.toLocaleString("es-CO", {
+        maximumFractionDigits: 0,
+      })}`
+    );
+    $("#lblAverage").html(
+      ` Promedio: ${average.toLocaleString("es-CO", {
+        maximumFractionDigits: 0,
+      })}`
+    );
+    $("#lblConcentration").html(
+      ` Concentracion: ${concentration.toLocaleString("es-CO", {
+        maximumFractionDigits: 2,
+      })} %`
+    );
+  };
 
   /* Cargue tabla de Proyectos */
   const loadTblProduct = (data) => {
@@ -98,10 +115,13 @@ $(document).ready(function () {
     tblProducts = tblProductsElement.dataTable({
       destroy: true,
       pageLength: 50,
+      fixedHeader: true,
+      scrollY: "600px",
+      scrollCollapse: true,
       data: data,
       dom: '<"datatable-error-console">frtip',
       language: {
-        url: '/assets/plugins/i18n/Spanish.json',
+        url: "/assets/plugins/i18n/Spanish.json",
       },
       fnInfoCallback: (oSettings, iStart, iEnd, iMax, iTotal, sPre) => {
         if (oSettings.json && oSettings.json.error) {
@@ -110,54 +130,69 @@ $(document).ready(function () {
       },
       columns: [
         {
-          title: 'No.',
+          title: "No.",
           data: null,
-          className: 'uniqueClassName dt-head-center',
+          className: "uniqueClassName dt-head-center",
           render: (data, type, full, meta) => meta.row + 1,
         },
         {
-          title: 'Referencia',
-          data: 'reference',
-          className: 'uniqueClassName dt-head-center',
+          title: "Referencia",
+          data: "reference",
+          className: "uniqueClassName dt-head-center",
         },
         {
-          title: 'Producto',
-          data: 'product',
-          className: 'uniqueClassName dt-head-center',
+          title: "Producto",
+          data: "product",
+          className: "uniqueClassName dt-head-center",
         },
         {
-          title: 'Medida',
-          data: 'abbreviation',
-          className: 'uniqueClassName dt-head-center',
+          title: "Medida",
+          data: "abbreviation",
+          className: "uniqueClassName dt-head-center",
         },
         {
-          title: 'Existencia',
-          data: 'quantity',
-          className: 'uniqueClassName dt-head-center',
-          render: (data) => parseFloat(data).toLocaleString('es-CO', { minimumFractionDigits: 0, maximumFractionDigits: 0 }),
+          title: "Existencia",
+          data: "quantity",
+          className: "uniqueClassName dt-head-center",
+          render: (data) =>
+            parseFloat(data).toLocaleString("es-CO", {
+              minimumFractionDigits: 0,
+              maximumFractionDigits: 0,
+            }),
         },
         {
-          title: 'Stock Min',
-          data: 'minimum_stock',
-          className: 'uniqueClassName dt-head-center',
-          render: (data) => parseFloat(data).toLocaleString('es-CO', { minimumFractionDigits: 0, maximumFractionDigits: 0 }),
+          title: "Stock Min",
+          data: "minimum_stock",
+          className: "uniqueClassName dt-head-center",
+          render: (data) =>
+            parseFloat(data).toLocaleString("es-CO", {
+              minimumFractionDigits: 0,
+              maximumFractionDigits: 0,
+            }),
         },
         {
           title: "Dias Inv",
           data: "days",
           className: "uniqueClassName dt-head-center",
-          render: (data) => parseFloat(data).toLocaleString('es-CO', { minimumFractionDigits: 0, maximumFractionDigits: 0 }),
+          render: (data) =>
+            parseFloat(data).toLocaleString("es-CO", {
+              minimumFractionDigits: 0,
+              maximumFractionDigits: 0,
+            }),
         },
         {
-          title: 'Img',
-          data: 'img',
-          className: 'uniqueClassName dt-head-center',
-          render: (data) => data ? `<img src="${data}" alt="" style="width:80px;border-radius:100px">` : '',
+          title: "Img",
+          data: "img",
+          className: "uniqueClassName dt-head-center",
+          render: (data) =>
+            data
+              ? `<img src="${data}" alt="" style="width:80px;border-radius:100px">`
+              : "",
         },
         {
-          title: 'Acciones',
-          data: 'id_product_inventory',
-          className: 'uniqueClassName dt-head-center',
+          title: "Acciones",
+          data: "id_product_inventory",
+          className: "uniqueClassName dt-head-center",
           render: (data) => `
           <a href="javascript:;">
             <i id="upd-${data}" class="bx bx-edit-alt updateProducts" data-toggle='tooltip' title='Actualizar Producto' style="font-size: 30px;"></i>
@@ -165,38 +200,48 @@ $(document).ready(function () {
         `,
         },
       ],
+      headerCallback: function (thead, data, start, end, display) {
+        $(thead).find("th").css({
+          "background-color": "#386297",
+          color: "white",
+          "text-align": "center",
+          "font-weight": "bold",
+          padding: "10px",
+          border: "1px solid #ddd",
+        });
+      },
       /* <a href="javascript:;">
             <i id="${data}" class="mdi mdi-delete-forever" data-toggle='tooltip' title='Eliminar Producto' style="font-size: 30px;color:red" onclick="deleteProductsFunction()"></i>
           </a> */
       footerCallback: function (row, data, start, end, display) {
-        let quantity = 0; 
-        let minimum_stock = 0; 
-        let days = 0; 
+        let quantity = 0;
+        let minimum_stock = 0;
+        let days = 0;
 
         for (i = 0; i < display.length; i++) {
-          quantity += parseFloat(data[display[i]].quantity); 
-          minimum_stock += parseFloat(data[display[i]].minimum_stock); 
-          days += parseFloat(data[display[i]].days); 
+          quantity += parseFloat(data[display[i]].quantity);
+          minimum_stock += parseFloat(data[display[i]].minimum_stock);
+          days += parseFloat(data[display[i]].days);
         }
 
         $(this.api().column(4).footer()).html(
-          quantity.toLocaleString('es-CO', {
+          quantity.toLocaleString("es-CO", {
             minimumFractionDigits: 0,
             maximumFractionDigits: 0,
           })
-        ); 
+        );
         $(this.api().column(5).footer()).html(
-          minimum_stock.toLocaleString('es-CO', {
+          minimum_stock.toLocaleString("es-CO", {
             minimumFractionDigits: 0,
             maximumFractionDigits: 0,
           })
-        ); 
+        );
         $(this.api().column(6).footer()).html(
-          days.toLocaleString('es-CO', {
+          days.toLocaleString("es-CO", {
             minimumFractionDigits: 0,
             maximumFractionDigits: 0,
           })
-        ); 
+        );
       },
     });
   };
@@ -204,7 +249,10 @@ $(document).ready(function () {
   const formatNumber = (num, locale) => {
     const value = parseFloat(num);
     if (Math.abs(value) < 0.01) {
-      return value.toLocaleString(locale, { minimumFractionDigits: 2, maximumFractionDigits: 9 });
+      return value.toLocaleString(locale, {
+        minimumFractionDigits: 2,
+        maximumFractionDigits: 9,
+      });
     }
     return value.toLocaleString(locale, { maximumFractionDigits: 2 });
   };
