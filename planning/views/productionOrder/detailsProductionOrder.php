@@ -109,6 +109,9 @@ if (sizeof($_SESSION) == 0)
 										</div>
 										<hr>
 										<div class="row">
+											<div class="col-12 mb-3">
+												<h4 class=" font-weight-bold text-dark">1. Información del Pedido</h4>
+											</div>
 											<div class="col-2">
 												<div class="form-group floating-label enable-floating-label show-label">
 													<label for="numberWorkers">Fecha Inicio</label>
@@ -322,7 +325,9 @@ if (sizeof($_SESSION) == 0)
 															//$name = $_SESSION['name'];
 															//$lastname = $_SESSION['lastname'];
 															?>
-															<option value="<?php //echo $id_user ?>"><?php //echo "$name $lastname" ?></option>
+															<option value="<?php //echo $id_user 
+																			?>"><?php //echo "$name $lastname" 
+																				?></option>
 														</select>
 													</div> -->
 													<div class="col-sm-2 floating-label enable-floating-label show-label">
