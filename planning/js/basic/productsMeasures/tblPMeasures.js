@@ -1,12 +1,15 @@
 $(document).ready(function () {
-  flag_products_measure == '1' ? visible = true : visible = false;
-  
+  flag_products_measure == "1" ? (visible = true) : (visible = false);
+
   tblProducts = $("#tblProducts").dataTable({
     destroy: true,
     pageLength: 50,
+    fixedHeader: true,
+    scrollY: "600px",
+    scrollCollapse: true,
     ajax: {
-      url: '/api/productsMeasures',
-      dataSrc: '',
+      url: "/api/productsMeasures",
+      dataSrc: "",
     },
     language: {
       url: "/assets/plugins/i18n/Spanish.json",
@@ -18,13 +21,23 @@ $(document).ready(function () {
         className: "uniqueClassName dt-head-center",
         render: (data) => `
           <a href="javascript:;">
-            <i id="${data.id_product}" class="${data.composite == 0 ? 'bi bi-plus-square-fill' : 'bi bi-dash-square-fill'} composite" data-toggle='tooltip' title='${data.composite == 0 ? 'Agregar' : 'Eliminar'} a producto compuesto' style="font-size:25px; color: #ffaa00;"></i>
+            <i id="${data.id_product}" class="${
+          data.composite == 0
+            ? "bi bi-plus-square-fill"
+            : "bi bi-dash-square-fill"
+        } composite" data-toggle='tooltip' title='${
+          data.composite == 0 ? "Agregar" : "Eliminar"
+        } a producto compuesto' style="font-size:25px; color: #ffaa00;"></i>
           </a>
           <a href="javascript:;">
-            <i id="upd-${data.id_product_measure}" class="bx bx-edit-alt updatePMeasure" data-toggle='tooltip' title='Actualizar Medida' style="font-size: 30px;"></i>
+            <i id="upd-${
+              data.id_product_measure
+            }" class="bx bx-edit-alt updatePMeasure" data-toggle='tooltip' title='Actualizar Medida' style="font-size: 30px;"></i>
           </a>
           <a href="javascript:;">
-            <i id="${data.id_product_measure}" class="mdi mdi-delete-forever" data-toggle='tooltip' title='Eliminar Medida' style="font-size: 30px;color:red" onclick="deletePMeasureFunction()"></i>
+            <i id="${
+              data.id_product_measure
+            }" class="mdi mdi-delete-forever" data-toggle='tooltip' title='Eliminar Medida' style="font-size: 30px;color:red" onclick="deletePMeasureFunction()"></i>
           </a>
         `,
       },
@@ -57,7 +70,7 @@ $(document).ready(function () {
       },
       {
         title: "Tipo",
-        data: 'product_type',
+        data: "product_type",
         visible: visible,
         className: "uniqueClassName dt-head-center",
       },
@@ -132,5 +145,15 @@ $(document).ready(function () {
           }),
       },
     ],
+    headerCallback: function (thead, data, start, end, display) {
+      $(thead).find("th").css({
+        "background-color": "#386297",
+        color: "white",
+        "text-align": "center",
+        "font-weight": "bold",
+        padding: "10px",
+        border: "1px solid #ddd",
+      });
+    },
   });
 });
