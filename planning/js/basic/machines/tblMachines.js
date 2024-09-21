@@ -35,5 +35,15 @@ $(document).ready(function () {
         },
       },
     ],
+    headerCallback: function (thead, data, start, end, display) {
+      $(thead).find("th").css({
+        "background-color": "#386297",
+        color: "white",
+        "text-align": "center",
+        "font-weight": "bold",
+        padding: "10px",
+        border: "1px solid #ddd",
+      });
+    },
   });
 });

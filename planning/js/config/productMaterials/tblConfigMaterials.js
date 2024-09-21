@@ -3,18 +3,20 @@ $(document).ready(function () {
 
   $("#refProduct").change(function (e) {
     e.preventDefault();
-    let id = this.value; 
-    
+    let id = this.value;
+
     $("#selectNameProduct option").removeAttr("selected");
     $(`#selectNameProduct option[value=${id}]`).prop("selected", true);
 
-    let dataProducts = JSON.parse(sessionStorage.getItem('dataProducts'));
-    let compositeProduct = dataProducts.filter(item => item.composite == 1 && item.id_product != this.value); 
+    let dataProducts = JSON.parse(sessionStorage.getItem("dataProducts"));
+    let compositeProduct = dataProducts.filter(
+      (item) => item.composite == 1 && item.id_product != this.value
+    );
 
     populateOptions("#refCompositeProduct", compositeProduct, "reference");
     populateOptions("#compositeProduct", compositeProduct, "product");
 
-    $('.cardAddMaterials').hide(800);
+    $(".cardAddMaterials").hide(800);
     loadAllDataMaterials(id);
     loadTblPlanCiclesMachine(id);
     loadTblRoutes(id);
@@ -23,18 +25,20 @@ $(document).ready(function () {
 
   $("#selectNameProduct").change(function (e) {
     e.preventDefault();
-    let id = this.value; 
-    
+    let id = this.value;
+
     $("#refProduct option").removeAttr("selected");
     $(`#refProduct option[value=${id}]`).prop("selected", true);
 
-    let dataProducts = JSON.parse(sessionStorage.getItem('dataProducts'));
-    let compositeProduct = dataProducts.filter(item => item.composite == 1 && item.id_product != this.value); 
+    let dataProducts = JSON.parse(sessionStorage.getItem("dataProducts"));
+    let compositeProduct = dataProducts.filter(
+      (item) => item.composite == 1 && item.id_product != this.value
+    );
 
     populateOptions("#refCompositeProduct", compositeProduct, "reference");
     populateOptions("#compositeProduct", compositeProduct, "product");
 
-    $('.cardAddMaterials').hide(800);
+    $(".cardAddMaterials").hide(800);
     loadAllDataMaterials(id);
     loadTblPlanCiclesMachine(id);
     loadTblRoutes(id);
@@ -46,16 +50,22 @@ $(document).ready(function () {
     try {
       const [dataProductMaterials, dataCompositeProduct] = await Promise.all([
         searchData(`/api/productsMaterials/${id}`),
-        searchData(`/api/compositeProducts/${id}`)
+        searchData(`/api/compositeProducts/${id}`),
       ]);
 
-      sessionStorage.setItem('dataProductMaterials', JSON.stringify(dataProductMaterials));
-      sessionStorage.setItem('dataCompositeProduct', JSON.stringify(dataCompositeProduct));  
+      sessionStorage.setItem(
+        "dataProductMaterials",
+        JSON.stringify(dataProductMaterials)
+      );
+      sessionStorage.setItem(
+        "dataCompositeProduct",
+        JSON.stringify(dataCompositeProduct)
+      );
       let data = [...dataProductMaterials, ...dataCompositeProduct];
 
       loadTableMaterials(data);
     } catch (error) {
-      console.error('Error loading data:', error);
+      console.error("Error loading data:", error);
     }
   };
 
@@ -108,8 +118,10 @@ $(document).ready(function () {
           title: "Cantidad",
           data: "quantity",
           className: "uniqueClassName dt-head-center",
-          render: function (data) { 
-            return parseFloat(data).toLocaleString('es-CO', { maximumFractionDigits: 8 });
+          render: function (data) {
+            return parseFloat(data).toLocaleString("es-CO", {
+              maximumFractionDigits: 8,
+            });
           },
         },
         {
@@ -117,26 +129,50 @@ $(document).ready(function () {
           data: null,
           className: "uniqueClassName dt-head-center",
           render: function (data) {
-            return `<a href="javascript:;" <i id="${data.id_product_material != 0 ? data.id_product_material : data.id_composite_product}" class="bx bx-edit-alt ${data.id_product_material != 0 ? 'updateMaterials' : 'updateComposite'}" data-toggle='tooltip' title='Actualizar Materia Prima' style="font-size: 30px;"></i></a>
-                        <a href="javascript:;" <i id="${data.id_product_material != 0 ? data.id_product_material : data.id_composite_product}" class="mdi mdi-delete-forever" data-toggle='tooltip' title='Eliminar Materia Prima' style="font-size: 30px;color:red" onclick="deleteMaterial(${data.id_product_material != 0 ? '1' : '2'})"></i></a>`;
+            return `<a href="javascript:;" <i id="${
+              data.id_product_material != 0
+                ? data.id_product_material
+                : data.id_composite_product
+            }" class="bx bx-edit-alt ${
+              data.id_product_material != 0
+                ? "updateMaterials"
+                : "updateComposite"
+            }" data-toggle='tooltip' title='Actualizar Materia Prima' style="font-size: 30px;"></i></a>
+                        <a href="javascript:;" <i id="${
+                          data.id_product_material != 0
+                            ? data.id_product_material
+                            : data.id_composite_product
+                        }" class="mdi mdi-delete-forever" data-toggle='tooltip' title='Eliminar Materia Prima' style="font-size: 30px;color:red" onclick="deleteMaterial(${
+              data.id_product_material != 0 ? "1" : "2"
+            })"></i></a>`;
             // `<a href="javascript:;" <i id="updt-${data}" class="bx bx-edit-alt updateMaterials" data-toggle='tooltip' title='Actualizar Materia Prima' style="font-size: 30px;"></i></a>
             //   <a href="javascript:;" <i id="${data}" class="mdi mdi-delete-forever" data-toggle='tooltip' title='Eliminar Materia Prima' style="font-size: 30px;color:red" onclick="deleteMaterial(${data})"></i></a>`;
           },
         },
       ],
+      headerCallback: function (thead, data, start, end, display) {
+        $(thead).find("th").css({
+          "background-color": "#386297",
+          color: "white",
+          "text-align": "center",
+          "font-weight": "bold",
+          padding: "10px",
+          border: "1px solid #ddd",
+        });
+      },
       footerCallback: function (row, data, start, end, display) {
-        let quantity = 0;  
+        let quantity = 0;
 
         for (i = 0; i < display.length; i++) {
-          quantity += parseFloat(data[display[i]].quantity);  
+          quantity += parseFloat(data[display[i]].quantity);
         }
 
         $(this.api().column(4).footer()).html(
-          quantity.toLocaleString('es-CO', {
+          quantity.toLocaleString("es-CO", {
             minimumFractionDigits: 0,
             maximumFractionDigits: 0,
           })
-        );  
+        );
       },
     });
   };

@@ -8,18 +8,18 @@ $(document).ready(function () {
       $("#tblStore").DataTable().destroy();
       $("#tblStore").empty();
     }
-    $('.cardOC, .cardOP').hide();
+    $(".cardOC, .cardOP").hide();
 
     if (this.id == "receiveOC") {
-      $('.cardOC').show();
+      $(".cardOC").show();
       loadTblStoreMaterial(requisitions);
       $("#btnExportStore").hide();
     } else if (this.id == "deliverOC") {
-      $('.cardOC').show();
+      $(".cardOC").show();
       $("#btnExportStore").show();
       loadTblStoreOrder(store);
-    } else if (this.id == "receiveOP") { 
-      $('.cardOP').show(); 
+    } else if (this.id == "receiveOP") {
+      $(".cardOP").show();
     }
 
     let tables = document.getElementsByClassName("dataTable");
@@ -37,7 +37,7 @@ $(document).ready(function () {
         searchData("/api/store"),
       ]);
 
-      let arr = assignOpToGroups(dataStore, 'id_programming');
+      let arr = assignOpToGroups(dataStore, "id_programming");
 
       if (op == 1) loadTblStoreMaterial(dataRequisitions);
       else loadTblStoreOrder(arr);
@@ -109,12 +109,12 @@ $(document).ready(function () {
             else
               quantity = quantity.toLocaleString("es-CO", {
                 minimumFractionDigits: 2,
-                maximumFractionDigits: 2
+                maximumFractionDigits: 2,
               });
 
             return `${quantity} ${data.abbreviation}`;
           },
-        }, 
+        },
         {
           title: "Orden de Compra",
           data: "purchase_order",
@@ -125,9 +125,12 @@ $(document).ready(function () {
           data: null,
           className: "uniqueClassName dt-head-center",
           render: function (data) {
-            if (!data.admission_date || data.admission_date == "0000-00-00 00:00:00")
+            if (
+              !data.admission_date ||
+              data.admission_date == "0000-00-00 00:00:00"
+            )
               action = `<button class="btn btn-info changeDateMP" id="delivery">Recibir MP</button>`;
-            else { 
+            else {
               action = `Recibido: <br>${data.firstname_deliver} ${data.lastname_deliver}<br>${data.admission_date}
                         <a href="javascript:;">
                           <i id="${data.id_requisition}" class="mdi mdi-playlist-check seeReceiveOC" data-toggle='tooltip' title='Ver Usuarios' style="font-size: 30px;color:black"></i>
@@ -138,6 +141,16 @@ $(document).ready(function () {
           },
         },
       ],
+      headerCallback: function (thead, data, start, end, display) {
+        $(thead).find("th").css({
+          "background-color": "#386297",
+          color: "white",
+          "text-align": "center",
+          "font-weight": "bold",
+          padding: "10px",
+          border: "1px solid #ddd",
+        });
+      },
     });
   };
 
@@ -194,7 +207,7 @@ $(document).ready(function () {
             else
               quantity = quantity.toLocaleString("es-CO", {
                 minimumFractionDigits: 2,
-                maximumFractionDigits: 2
+                maximumFractionDigits: 2,
               });
 
             return `${quantity} ${data.abbreviation}`;
@@ -214,7 +227,7 @@ $(document).ready(function () {
             else
               reserved = reserved.toLocaleString("es-CO", {
                 minimumFractionDigits: 2,
-                maximumFractionDigits: 2
+                maximumFractionDigits: 2,
               });
 
             return reserved;
@@ -230,7 +243,8 @@ $(document).ready(function () {
             const deliver = full.deliver;
             if (pending > 0)
               return `Entregado: ${store}<br><span class="badge badge-warning">Pendiente: ${pending}</span><br>Por Entregar: ${deliver}`;
-            else return `Entregado: ${store}<br>Pendiente: ${pending}<br>Por Entregar: ${deliver}`;
+            else
+              return `Entregado: ${store}<br>Pendiente: ${pending}<br>Por Entregar: ${deliver}`;
           },
         },
         {
@@ -238,7 +252,10 @@ $(document).ready(function () {
           data: null,
           className: "uniqueClassName dt-head-center",
           render: function (data) {
-            if (!data.delivery_date || data.delivery_date == "0000-00-00 00:00:00")
+            if (
+              !data.delivery_date ||
+              data.delivery_date == "0000-00-00 00:00:00"
+            )
               action = `<button class="btn btn-info deliver" id="delivery">Entregar MP</button>`;
             else {
               let fechaHora = new Date(data.delivery_date);
@@ -263,10 +280,20 @@ $(document).ready(function () {
 
             return action;
           },
-        }, 
+        },
       ],
+      headerCallback: function (thead, data, start, end, display) {
+        $(thead).find("th").css({
+          "background-color": "#386297",
+          color: "white",
+          "text-align": "center",
+          "font-weight": "bold",
+          padding: "10px",
+          border: "1px solid #ddd",
+        });
+      },
       rowGroup: {
-        dataSrc: function (row) { 
+        dataSrc: function (row) {
           return `<th class="text-center" colspan="7" style="font-weight: bold;"> No Pedido - ${row.num_order} Orden Produccion - ${row.op} </th>`;
         },
         startRender: function (rows, group) {

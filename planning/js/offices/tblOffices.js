@@ -5,8 +5,7 @@ $(document).ready(function () {
     if (this.id == "deliver") {
       loadTblOffices(pendingStore, true);
       officesIndicators(pendingStore);
-    }
-    else if (this.id == "delivered") {
+    } else if (this.id == "delivered") {
       loadTblOffices(deliveredStore, false);
       officesIndicators(deliveredStore);
     }
@@ -63,18 +62,30 @@ $(document).ready(function () {
     let today = formatDate(new Date());
 
     if (data.length > 0) {
-      let arrCompleted = data.filter(item => item.max_date > today);
-      let arrLate = data.filter(item => item.max_date < today);
+      let arrCompleted = data.filter((item) => item.max_date > today);
+      let arrLate = data.filter((item) => item.max_date < today);
 
       totalQuantity = data.length;
       completed = (arrCompleted.length / totalQuantity) * 100;
       late = (arrLate.length / totalQuantity) * 100;
     }
 
-    $('#lblTotal').html(` Total: ${totalQuantity.toLocaleString('es-CO', { maximumFractionDigits: 0 })}`);
-    $('#lblCompleted').html(` A Tiempo: ${completed.toLocaleString('es-CO', { maximumFractionDigits: 2 })} %`);
-    $('#lblLate').html(` Atrasados: ${late.toLocaleString('es-CO', { maximumFractionDigits: 2 })} %`);
-  }
+    $("#lblTotal").html(
+      ` Total: ${totalQuantity.toLocaleString("es-CO", {
+        maximumFractionDigits: 0,
+      })}`
+    );
+    $("#lblCompleted").html(
+      ` A Tiempo: ${completed.toLocaleString("es-CO", {
+        maximumFractionDigits: 2,
+      })} %`
+    );
+    $("#lblLate").html(
+      ` Atrasados: ${late.toLocaleString("es-CO", {
+        maximumFractionDigits: 2,
+      })} %`
+    );
+  };
 
   /* Cargar pedidos */
   loadTblOffices = (data, visible) => {
@@ -136,11 +147,29 @@ $(document).ready(function () {
             const equal = parsedMaxDate == today;
 
             if (isOverdue)
-              return `<span class="badge badge-info">Mínima: ${moment(minDate).format("DD/MM/YYYY")}</span><br><span class="badge badge-success">Máxima: ${moment(maxDate).format("DD/MM/YYYY")}</span>`;
+              return `<span class="badge badge-info">Mínima: ${moment(
+                minDate
+              ).format(
+                "DD/MM/YYYY"
+              )}</span><br><span class="badge badge-success">Máxima: ${moment(
+                maxDate
+              ).format("DD/MM/YYYY")}</span>`;
             else if (equal)
-              return `<span class="badge badge-info">Mínima: ${moment(minDate).format("DD/MM/YYYY")}</span><br><span class="badge badge-warning">Máxima: ${moment(maxDate).format("DD/MM/YYYY")}</span>`;
+              return `<span class="badge badge-info">Mínima: ${moment(
+                minDate
+              ).format(
+                "DD/MM/YYYY"
+              )}</span><br><span class="badge badge-warning">Máxima: ${moment(
+                maxDate
+              ).format("DD/MM/YYYY")}</span>`;
             else
-              return `<span class="badge badge-info">Mínima: ${moment(minDate).format("DD/MM/YYYY")}</span><br><span class="badge badge-danger">Máxima: ${moment(maxDate).format("DD/MM/YYYY")}</span>`;
+              return `<span class="badge badge-info">Mínima: ${moment(
+                minDate
+              ).format(
+                "DD/MM/YYYY"
+              )}</span><br><span class="badge badge-danger">Máxima: ${moment(
+                maxDate
+              ).format("DD/MM/YYYY")}</span>`;
           },
         },
         {
@@ -165,7 +194,7 @@ $(document).ready(function () {
           data: "quantity",
           className: "uniqueClassName dt-head-center",
           render: $.fn.dataTable.render.number(".", ",", 0),
-        }, 
+        },
         {
           title: "F.Entrega",
           data: null,
@@ -190,6 +219,16 @@ $(document).ready(function () {
         //   },
         // },
       ],
+      headerCallback: function (thead, data, start, end, display) {
+        $(thead).find("th").css({
+          "background-color": "#386297",
+          color: "white",
+          "text-align": "center",
+          "font-weight": "bold",
+          padding: "10px",
+          border: "1px solid #ddd",
+        });
+      },
     });
   };
 

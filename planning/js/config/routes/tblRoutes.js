@@ -21,9 +21,9 @@ $(document).ready(function () {
           },
         },
         {
-            title: 'Proceso',
-            data: 'process',
-            className: 'uniqueClassName dt-head-center',
+          title: "Proceso",
+          data: "process",
+          className: "uniqueClassName dt-head-center",
         },
         {
           title: "Máquina",
@@ -36,6 +36,16 @@ $(document).ready(function () {
           className: "text-center",
         },
       ],
+      headerCallback: function (thead, data, start, end, display) {
+        $(thead).find("th").css({
+          "background-color": "#386297",
+          color: "white",
+          "text-align": "center",
+          "font-weight": "bold",
+          padding: "10px",
+          border: "1px solid #ddd",
+        });
+      },
       drawCallback: function (settings) {
         const recordsTotal = tblRoutes.fnSettings().fnRecordsTotal();
         const recordsDisplay = tblRoutes.fnSettings().fnRecordsDisplay();
@@ -51,7 +61,11 @@ $(document).ready(function () {
               ? `<a href="javascript:;" data-index="${index}"><i class="${index} bi bi-arrow-down-circle-fill move mt-1 ml-1 down" style="color: steelblue;"></i></a>`
               : "";
 
-          $(this).find("td:last-child").html(`<div class="btn-group" id="actionRoute-${index}" role="group" style="color: blue;font-size:30px">${moveUpBtn}${moveDownBtn}</div>`);
+          $(this)
+            .find("td:last-child")
+            .html(
+              `<div class="btn-group" id="actionRoute-${index}" role="group" style="color: blue;font-size:30px">${moveUpBtn}${moveDownBtn}</div>`
+            );
         });
       },
     });

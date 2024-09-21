@@ -1,62 +1,62 @@
 $(document).ready(function () {
   // Mostrar Tabla planeacion maquinas
   loadTblPlanCiclesMachine = (idProduct) => {
-    tblPlanCiclesMachine = $('#tblPlanCiclesMachine').dataTable({
+    tblPlanCiclesMachine = $("#tblPlanCiclesMachine").dataTable({
       destroy: true,
       pageLength: 50,
       ajax: {
         url: `/api/planCiclesMachine/${idProduct}`,
-        dataSrc: '',
+        dataSrc: "",
       },
       language: {
-        url: '/assets/plugins/i18n/Spanish.json',
+        url: "/assets/plugins/i18n/Spanish.json",
       },
       columns: [
         {
-          title: 'No.',
+          title: "No.",
           data: null,
-          className: 'uniqueClassName dt-head-center',
+          className: "uniqueClassName dt-head-center",
           render: function (data, type, full, meta) {
             return meta.row + 1;
           },
         },
         {
-          title: 'Proceso',
-          data: 'process',
-          className: 'text-center',
+          title: "Proceso",
+          data: "process",
+          className: "text-center",
         },
         {
-          title: 'Máquina',
-          data: 'machine',
-          className: 'uniqueClassName dt-head-center',
+          title: "Máquina",
+          data: "machine",
+          className: "uniqueClassName dt-head-center",
         },
         {
-          title: 'Operadores',
-          data: 'employees',
-          className: 'uniqueClassName dt-head-center',
-        }, 
-        {
-          title: 'Und/Hora',
-          data: 'cicles_hour',
-          className: 'text-center',
-          render: $.fn.dataTable.render.number('.', ',', 0),
+          title: "Operadores",
+          data: "employees",
+          className: "uniqueClassName dt-head-center",
         },
         {
-          title: 'Und/Turno',
-          data: 'units_turn',
-          className: 'text-center',
-          render: $.fn.dataTable.render.number('.', ',', 0),
+          title: "Und/Hora",
+          data: "cicles_hour",
+          className: "text-center",
+          render: $.fn.dataTable.render.number(".", ",", 0),
         },
         {
-          title: 'Und/Mes',
-          data: 'units_month',
-          className: 'text-center',
-          render: $.fn.dataTable.render.number('.', ',', 0),
+          title: "Und/Turno",
+          data: "units_turn",
+          className: "text-center",
+          render: $.fn.dataTable.render.number(".", ",", 0),
         },
         {
-          title: 'Acciones',
-          data: 'id_cicles_machine',
-          className: 'uniqueClassName dt-head-center',
+          title: "Und/Mes",
+          data: "units_month",
+          className: "text-center",
+          render: $.fn.dataTable.render.number(".", ",", 0),
+        },
+        {
+          title: "Acciones",
+          data: "id_cicles_machine",
+          className: "uniqueClassName dt-head-center",
           render: function (data) {
             return `
                     <a href="javascript:;" <i id="upd-${data}" class="bx bx-edit-alt updatePCMachine" data-toggle='tooltip' title='Actualizar Maquina' style="font-size: 30px;"></i></a>
@@ -64,38 +64,48 @@ $(document).ready(function () {
           },
         },
       ],
+      headerCallback: function (thead, data, start, end, display) {
+        $(thead).find("th").css({
+          "background-color": "#386297",
+          color: "white",
+          "text-align": "center",
+          "font-weight": "bold",
+          padding: "10px",
+          border: "1px solid #ddd",
+        });
+      },
       footerCallback: function (row, data, start, end, display) {
-        let cicles_hour = 0; 
-        let units_turn = 0; 
-        let units_month = 0; 
+        let cicles_hour = 0;
+        let units_turn = 0;
+        let units_month = 0;
 
         for (i = 0; i < display.length; i++) {
-          cicles_hour += parseFloat(data[display[i]].cicles_hour); 
-          units_turn += parseFloat(data[display[i]].units_turn); 
-          units_month += parseFloat(data[display[i]].units_month); 
+          cicles_hour += parseFloat(data[display[i]].cicles_hour);
+          units_turn += parseFloat(data[display[i]].units_turn);
+          units_month += parseFloat(data[display[i]].units_month);
         }
 
-        $('#lblTotalCicles').html(
-          cicles_hour.toLocaleString('es-CO', {
+        $("#lblTotalCicles").html(
+          cicles_hour.toLocaleString("es-CO", {
             minimumFractionDigits: 0,
             maximumFractionDigits: 0,
           })
-        ); 
-        
-        $('#lblTotalUnitsTurn').html(
-          units_turn.toLocaleString('es-CO', {
-            minimumFractionDigits: 0,
-            maximumFractionDigits: 0,
-          })
-        ); 
+        );
 
-        $('#lblTotalUnitsMonth').html(
-          units_month.toLocaleString('es-CO', {
+        $("#lblTotalUnitsTurn").html(
+          units_turn.toLocaleString("es-CO", {
             minimumFractionDigits: 0,
             maximumFractionDigits: 0,
           })
-        ); 
+        );
+
+        $("#lblTotalUnitsMonth").html(
+          units_month.toLocaleString("es-CO", {
+            minimumFractionDigits: 0,
+            maximumFractionDigits: 0,
+          })
+        );
       },
     });
-  }
+  };
 });

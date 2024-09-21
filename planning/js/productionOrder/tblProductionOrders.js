@@ -1,14 +1,14 @@
 $(document).ready(function () {
   // $('.selectNavigation').hide();
 
-  $('.selectNavigation').click(function (e) {
+  $(".selectNavigation").click(function (e) {
     e.preventDefault();
     let data = [];
 
-    if (this.id == 'processOP')
-      data = JSON.parse(sessionStorage.getItem('dataPOP'));
-    else if (this.id == 'completeOP')
-      data = JSON.parse(sessionStorage.getItem('dataPON'));
+    if (this.id == "processOP")
+      data = JSON.parse(sessionStorage.getItem("dataPOP"));
+    else if (this.id == "completeOP")
+      data = JSON.parse(sessionStorage.getItem("dataPON"));
 
     loadTblProductionOrders(data);
   });
@@ -16,29 +16,30 @@ $(document).ready(function () {
   loadData = async (op) => {
     try {
       const [dataPO, dataFTMaterials] = await Promise.all([
-        searchData('/api/productionOrder'),
-        op == 1 ? searchData('/api/allProductsMaterials') : ''
+        searchData("/api/productionOrder"),
+        op == 1 ? searchData("/api/allProductsMaterials") : "",
       ]);
- 
-      let dataPOP = dataPO.filter(item => item.status == 'EN PRODUCCION');
-      let dataPON = dataPO.filter(item => item.status != 'EN PRODUCCION');
 
-      sessionStorage.setItem('dataPOP', JSON.stringify(dataPOP));
-      sessionStorage.setItem('dataPON', JSON.stringify(dataPON));
-      sessionStorage.setItem('dataOP', JSON.stringify(dataPO));
+      let dataPOP = dataPO.filter((item) => item.status == "EN PRODUCCION");
+      let dataPON = dataPO.filter((item) => item.status != "EN PRODUCCION");
+
+      sessionStorage.setItem("dataPOP", JSON.stringify(dataPOP));
+      sessionStorage.setItem("dataPON", JSON.stringify(dataPON));
+      sessionStorage.setItem("dataOP", JSON.stringify(dataPO));
 
       if (op == 1)
-        sessionStorage.setItem('dataFTMaterials', JSON.stringify(dataFTMaterials));
+        sessionStorage.setItem(
+          "dataFTMaterials",
+          JSON.stringify(dataFTMaterials)
+        );
 
-      let element = document.getElementsByClassName('selectNavigation');
+      let element = document.getElementsByClassName("selectNavigation");
 
-      if (element[1].className.includes('active'))
+      if (element[1].className.includes("active"))
         loadTblProductionOrders(dataPON);
-      else
-        loadTblProductionOrders(dataPOP);
-      
+      else loadTblProductionOrders(dataPOP);
     } catch (error) {
-      console.error('Error loading data:', error);
+      console.error("Error loading data:", error);
     }
   };
 
@@ -131,17 +132,37 @@ $(document).ready(function () {
             // }
             return `
               <a href="javascript:;">
-                    <i id="${data.id_programming}" class="${data.flag_cancel == 0 ? 'bi bi-x-circle-fill' : 'bi bi-check-circle-fill'} changeFlagOP" data-toggle='tooltip' title='${data.flag_cancel == 0 ? 'Anular': 'Aprobar'} Orden de Produccion' style="font-size:25px; color: ${data.flag_cancel == 0 ? '#ff0000' : '#7bb520'};"></i>
+                    <i id="${data.id_programming}" class="${
+              data.flag_cancel == 0
+                ? "bi bi-x-circle-fill"
+                : "bi bi-check-circle-fill"
+            } changeFlagOP" data-toggle='tooltip' title='${
+              data.flag_cancel == 0 ? "Anular" : "Aprobar"
+            } Orden de Produccion' style="font-size:25px; color: ${
+              data.flag_cancel == 0 ? "#ff0000" : "#7bb520"
+            };"></i>
                   </a>
               <a href="/planning/details-production-order">
-                    <i id="${data.id_programming}" class="mdi mdi-playlist-check" data-toggle='tooltip' title='Ver Orden' style="font-size: 30px;color:black" onclick="seePO()"></i>
+                    <i id="${
+                      data.id_programming
+                    }" class="mdi mdi-playlist-check" data-toggle='tooltip' title='Ver Orden' style="font-size: 30px;color:black" onclick="seePO()"></i>
                   </a>
             `;
           },
         },
       ],
+      headerCallback: function (thead, data, start, end, display) {
+        $(thead).find("th").css({
+          "background-color": "#386297",
+          color: "white",
+          "text-align": "center",
+          "font-weight": "bold",
+          padding: "10px",
+          border: "1px solid #ddd",
+        });
+      },
     });
-  }
+  };
 
   loadData(1);
 });
