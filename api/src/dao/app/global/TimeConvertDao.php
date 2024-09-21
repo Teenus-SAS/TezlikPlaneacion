@@ -30,53 +30,25 @@ class TimeConvertDao
 
     public function calculateHourEnd($hourStart, $workShift, $hoursDay)
     {
-        // Separar la parte de la hora y el indicador AM/PM
-        // list($time, $ampm) = explode(' ', $hourStart);
-        // list($hours, $minutes) = explode(':', $time);
+        try {
+            // Convertir la hora de inicio a formato 24 horas para manejarla con DateTime
+            $startDateTime = DateTime::createFromFormat('g:i A', $hourStart);
 
-        // // Convertir horas y minutos a enteros
-        // $hours = (int)$hours;
-        // $minutes = (int)$minutes;
+            // Calcular la cantidad total de horas (hoursDay * workShift)
+            $totalHours = $hoursDay * $workShift;
 
-        // // Convertir la hora a formato de 24 horas
-        // if ($ampm == 'PM' && $hours != 12) {
-        //     $hours += 12;
-        // } elseif ($ampm == 'AM' && $hours == 12) {
-        //     $hours = 0;
-        // }
+            // Crear un objeto DateInterval para sumar las horas
+            $interval = new DateInterval('PT' . $totalHours . 'H');
 
-        // // Calcular la parte decimal de la hora inicial
-        // $initialHourDecimal = $hours + ($minutes / 60);
+            // Sumar las horas al objeto DateTime
+            $startDateTime->add($interval);
 
-        // // Sumar hoursDay
-        // $finalHourDecimal = $initialHourDecimal + $hoursDay;
+            // Formatear la hora final en formato de 12 horas con AM/PM
+            $hourEnd = $startDateTime->format('g:i A');
 
-        // // Obtener horas y minutos finales
-        // $finalHours = (int)$finalHourDecimal;
-        // $finalMinutes = round(($finalHourDecimal - $finalHours) * 60);
-
-        // // Formatear minutos para asegurarse de que tienen dos dígitos
-        // $minutes = (int)$finalMinutes;
-        // $formattedFinalMinutes = str_pad($minutes, 2, '0', STR_PAD_LEFT);
-
-        // // Formatear la hora final en el formato HH.MM
-        // $hourEnd = $finalHours . '.' . $formattedFinalMinutes;
-
-        // Convertir la hora de inicio a formato 24 horas para manejarla con DateTime
-        $startDateTime = DateTime::createFromFormat('g:i A', $hourStart);
-
-        // Calcular la cantidad total de horas (hoursDay * workShift)
-        $totalHours = $hoursDay * $workShift;
-
-        // Crear un objeto DateInterval para sumar las horas
-        $interval = new DateInterval('PT' . $totalHours . 'H');
-
-        // Sumar las horas al objeto DateTime
-        $startDateTime->add($interval);
-
-        // Formatear la hora final en formato de 12 horas con AM/PM
-        $hourEnd = $startDateTime->format('g:i A');
-
-        return $hourEnd;
+            return $hourEnd;
+        } catch (\Exception $e) {
+            return ['info' => true, 'message' => $e->getMessage()];
+        }
     }
 }

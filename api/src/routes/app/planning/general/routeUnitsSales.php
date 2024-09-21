@@ -356,15 +356,15 @@ $app->post('/addUnitSales', function (Request $request, Response $response, $arg
             for ($j = 0; $j < sizeof($materials); $j++) {
                 if (isset($resolution['info'])) break;
                 // Calculo Dias Inventario Materiales  
-                $inventory = $inventoryDaysDao->calcInventoryMaterialDays($materials[$i]['id_material']);
+                $inventory = $inventoryDaysDao->calcInventoryMaterialDays($materials[$j]['id_material']);
                 if (isset($inventory['days']))
-                    $resolution = $inventoryDaysDao->updateInventoryMaterialDays($materials[$i]['id_material'], $inventory['days']);
+                    $resolution = $inventoryDaysDao->updateInventoryMaterialDays($materials[$j]['id_material'], $inventory['days']);
 
                 if (isset($resolution['info'])) break;
-                $arr = $minimumStockDao->calcStockByMaterial($materials[$i]['id_material']);
+                $arr = $minimumStockDao->calcStockByMaterial($materials[$j]['id_material']);
 
                 if (isset($arr['stock']))
-                    $resolution = $generalMaterialDao->updateStockMaterial($materials[$i]['id_material'], $arr['stock']);
+                    $resolution = $generalMaterialDao->updateStockMaterial($materials[$j]['id_material'], $arr['stock']);
             }
 
             if (isset($resolution['info'])) break;

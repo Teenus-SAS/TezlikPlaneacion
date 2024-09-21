@@ -120,6 +120,11 @@ $app->post('/planningMachinesDataValidation', function (Request $request, Respon
                 array_push($debugg, array('error' => true, 'message' => "Fila-$row: El valor es mayor al último día del mes"));
             }
 
+            if (!strpos($planningMachines[$i]['hourStart'], 'AM')) {
+                $row = $i + 2;
+                array_push($debugg, array('error' => true, 'message' => "Fila-$row: Verificar que el formato de la hora de inico sea correcto"));
+            }
+
             // Obtener id maquina
             $findMachine = $machinesDao->findMachine($planningMachines[$i], $id_company);
             if (!$findMachine) {
@@ -203,6 +208,11 @@ $app->post('/addPlanningMachines', function (Request $request, Response $respons
 
             $hourEnd = $timeConvertDao->calculateHourEnd($planningMachines[$i]['hourStart'], $planningMachines[$i]['workShift'], $planningMachines[$i]['hoursDay']);
 
+            if (isset($hourEnd['info'])) {
+                $resolution = $hourEnd;
+                break;
+            }
+
             $planningMachines[$i]['year'] = date('Y');
             $planningMachines[$i]['hourStart'] = date("G.i", strtotime($planningMachines[$i]['hourStart']));
             $planningMachines[$i]['hourEnd'] = date("G.i", strtotime($hourEnd));
@@ -241,8 +251,12 @@ $app->post('/addPlanningMachines', function (Request $request, Response $respons
                 $resolution = $generalPlanCiclesMachinesDao->updateUnits($data);
             }
         }
-        if ($resolution == null) $resp = array('success' => true, 'message' => 'Planeacion de maquina importada correctamente');
-        else $resp = array('error' => true, 'message' => 'Ocurrio un error mientras importaba la información. Intente nuevamente');
+        if ($resolution == null)
+            $resp = array('success' => true, 'message' => 'Planeacion de maquina importada correctamente');
+        else if (isset($resolution['info']))
+            $resp = array('info' => true, 'message' => $resolution['message']);
+        else
+            $resp = array('error' => true, 'message' => 'Ocurrio un error mientras importaba la información. Intente nuevamente');
     }
 
     $response->getBody()->write(json_encode($resp));
