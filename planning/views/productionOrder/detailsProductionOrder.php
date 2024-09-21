@@ -354,6 +354,56 @@ if (sizeof($_SESSION) == 0)
 												</div>
 											</div>
 										</div>
+
+										<div class="cardExcOP">
+											<div class="row py-4">
+												<div class="col-10">
+													<h4 class="font-weight-bold text-dark">6. Devolución Materia Prima No Usada en Producción</h4>
+												</div>
+											</div>
+											<!-- formAddOPPArtial -->
+											<form id="formAddOPPArtial">
+												<div class="form-row">
+
+													<div class="col-sm-2 floating-label enable-floating-label show-label" style="margin-bottom:20px">
+														<label for="operator">Referencia</label>
+														<select class="form-control " name="" id="">
+															<option disabled selected>Seleccionar</option>
+														</select>
+													</div>
+													<div class="col-sm-3 floating-label enable-floating-label show-label" style="margin-bottom:20px">
+														<label for="operator">Materia Prima</label>
+														<select class="form-control " name="" id="">
+															<option disabled selected>Seleccionar</option>
+														</select>
+													</div>
+
+													<div class="col-sm-2 floating-label enable-floating-label show-label">
+														<label for="">Cantidad</label>
+														<input type="number" class="form-control text-center" id="" name="">
+													</div>
+
+													<div class="col-sm-6 floating-label enable-floating-label show-label" style="margin-bottom:20px">
+														<label for="operator">Operario</label>
+														<input type="number" class="form-control text-center" id="" name="">
+													</div>
+
+													<div class="col-sm-2 floating-label enable-floating-label show-label">
+														<button class="btn btn-info mt-1" id="btnDeliverPartialOP">Entregar</button>
+													</div>
+												</div>
+											</form>
+											<div class="row">
+												<div class="col-12">
+													<div class="table-responsive">
+														<table class="fixed-table-loading table table-hover text-center" id="tblPartialsDelivery">
+
+														</table>
+													</div>
+												</div>
+											</div>
+										</div>
+
 									</div>
 								</div>
 							</div>
