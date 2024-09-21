@@ -141,7 +141,7 @@ $(document).ready(function () {
             //color: {
             //text: data.sales ? "text-danger" : "text-danger", // Aplica color según el valor de data.inventory
             //},
-          }); 
+          });
 
           let output = '<div class="stacked-column">';
           for (const permission of permissions) {
@@ -159,7 +159,7 @@ $(document).ready(function () {
         data: null,
         width: "100px",
         render: function (data, type, row) {
-          const permissions = []; 
+          const permissions = [];
 
           permissions.push({
             name: "Usuarios",
@@ -203,7 +203,7 @@ $(document).ready(function () {
               ? "bi bi-check-circle-fill text-success"
               : "bi bi-x-circle-fill text-danger",
             color: { text: "black" },
-          }); 
+          });
 
           permissions.push({
             name: "Pedidos",
@@ -270,6 +270,16 @@ $(document).ready(function () {
         },
       },
     ],
+    headerCallback: function (thead, data, start, end, display) {
+      $(thead).find("th").css({
+        "background-color": "#386297",
+        color: "white",
+        "text-align": "center",
+        "font-weight": "bold",
+        padding: "10px",
+        border: "1px solid #ddd",
+      });
+    },
     columnDefs: [
       {
         targets: [1],
