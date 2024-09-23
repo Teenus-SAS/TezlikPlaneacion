@@ -151,6 +151,8 @@ $app->post('/changeOffices', function (Request $request, Response $response, $ar
                     $resolution = $clientsDao->insertClient($dataClient, $id_company);
 
                     $client = $lastDataDao->findLastInsertedClient();
+
+                    $resolution = $generalClientsDao->changeStatusClient($client['id_client'], 1);
                 }
 
                 $data['order'] = $arr2['num_order'];

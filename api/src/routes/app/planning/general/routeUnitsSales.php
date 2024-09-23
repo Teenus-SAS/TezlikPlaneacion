@@ -279,6 +279,8 @@ $app->post('/addUnitSales', function (Request $request, Response $response, $arg
                         $resolution = $clientsDao->insertClient($dataClient, $id_company);
 
                         $client = $lastDataDao->findLastInsertedClient();
+
+                        $resolution = $generalClientsDao->changeStatusClient($client['id_client'], 1);
                     }
 
                     $data['order'] = $arr2['num_order'];
@@ -581,6 +583,8 @@ $app->post('/updateUnitSale', function (Request $request, Response $response, $a
                         $resolution = $clientsDao->insertClient($dataClient, $id_company);
 
                         $client = $lastDataDao->findLastInsertedClient();
+
+                        $resolution = $generalClientsDao->changeStatusClient($client['id_client'], 1);
                     }
 
                     $data['order'] = $arr2['num_order'];
@@ -801,6 +805,8 @@ $app->post('/deleteUnitSale', function (Request $request, Response $response, $a
                     $resolution = $clientsDao->insertClient($dataClient, $id_company);
 
                     $client = $lastDataDao->findLastInsertedClient();
+
+                    $resolution = $generalClientsDao->changeStatusClient($client['id_client'], 1);
                 }
 
                 $data['order'] = $arr2['num_order'];
