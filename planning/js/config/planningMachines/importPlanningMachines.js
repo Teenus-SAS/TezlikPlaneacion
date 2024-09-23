@@ -55,8 +55,8 @@ $(document).ready(function () {
           // !item.no_trabajadores ? item.no_trabajadores = 0 : item.no_trabajadores;
           !item.total_turno ? item.total_turno = 0 : item.total_turno;
           !item.hora_dia ? item.hora_dia = 0 : item.hora_dia;
-          !item.hora_inicio ? item.hora_inicio = 0 : item.hora_inicio;
-          !item.hora_fin ? item.hora_fin = 0 : item.hora_fin;
+          !item.hora_inicio ? item.hora_inicio = '' : item.hora_inicio;
+          // !item.hora_fin ? item.hora_fin = 0 : item.hora_fin;
           !item.enero ? item.enero = 0 : item.enero;
           !item.febrero ? item.febrero = 0 : item.febrero;
           !item.marzo ? item.marzo = 0 : item.marzo;
@@ -78,7 +78,7 @@ $(document).ready(function () {
             workShift: item.total_turno,
             hoursDay: item.hora_dia,
             hourStart: item.hora_inicio,
-            hourEnd: item.hora_fin,
+            // hourEnd: item.hora_fin,
             january: item.enero,
             february: item.febrero,
             march: item.marzo,

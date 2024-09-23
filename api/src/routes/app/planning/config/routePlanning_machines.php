@@ -127,6 +127,7 @@ $app->post('/planningMachinesDataValidation', function (Request $request, Respon
 
             // Obtener id maquina
             $findMachine = $machinesDao->findMachine($planningMachines[$i], $id_company);
+
             if (!$findMachine) {
                 $row = $i + 2;
                 array_push($debugg, array('error' => true, 'message' => "Fila-$row: Máquina no existe"));

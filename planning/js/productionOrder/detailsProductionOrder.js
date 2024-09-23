@@ -114,9 +114,7 @@ $(document).ready(function () {
         let waste = parseInt($('#waste').val());
         let quantityProduction = parseInt($('#quantityProduction').val());
 
-        let data = operator * quantityProduction;
-
-        if (!startDateTime || startDateTime == '' || !endDateTime || endDateTime == '' || isNaN(data) || data <= 0) {
+        if (!startDateTime || startDateTime == '' || !endDateTime || endDateTime == '' || isNaN(quantityProduction) || quantityProduction <= 0) {
             toastr.error('Ingrese todos los campos');
             return false;
         };
