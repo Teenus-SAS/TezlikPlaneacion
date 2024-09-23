@@ -9,6 +9,7 @@ $(document).ready(function () {
     e.preventDefault();
 
     $("#createPlanMachine").modal("show");
+    $('.cardWarningPM').hide();
     $("#btnCreatePlanMachine").text("Crear");
 
     sessionStorage.removeItem("id_planning_machine");
@@ -52,6 +53,7 @@ $(document).ready(function () {
   //Actualizar Plan maquina
   $(document).on("click", ".updatePMachines", function (e) {
     // Mostrar modal y actualizar botón
+    $('.cardWarningPM').show();
     $("#createPlanMachine").modal("show");
     $("#btnCreatePlanMachine").text("Actualizar");
 
@@ -68,13 +70,7 @@ $(document).ready(function () {
     $(`#typePM`).val(data.type_program_machine).prop("selected", true);
     $("#numberWorkers").val(data.number_workers);
     $("#workShift").val(data.work_shift);
-    $("#hoursDay").val(data.hours_day);
-
-    // Formatear horas
-    /* hourStart = moment(data.hour_start.toFixed(2), ["HH:mm"]).format("h:mm A");
-    hourEnd = moment(data.hour_end.toFixed(2), ["HH:mm"]).format("h:mm A");
-    $("#hourStart").val(hourStart);
-    $("#hourEnd").val(hourEnd); */
+    $("#hoursDay").val(data.hours_day); 
 
     const hourFormat = ["HH:mm"];
     $("#hourStart").val(
