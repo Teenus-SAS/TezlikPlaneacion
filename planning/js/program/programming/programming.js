@@ -703,8 +703,8 @@ $(document).ready(function () {
             type: "POST",
             url: "/api/changeStatusProgramming",
             data: { data: allProgramming },
-            success: function (data) {
-              allTblData = [];
+            success: function (data) { 
+              generalMultiArray = [];
               $(".cardAddOP").hide(800);
 
               message(data);
@@ -772,7 +772,8 @@ $(document).ready(function () {
             url: "/api/saveProgramming",
             data: { data: allTblData },
             success: function (resp) {
-              allTblData = [];
+              generalMultiArray = [];
+              // allTblData = [];
               sessionStorage.clear();
               $(".cardAddOP").show(800);
               message(resp);

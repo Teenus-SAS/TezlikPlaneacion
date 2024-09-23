@@ -363,7 +363,7 @@ if (sizeof($_SESSION) == 0)
 												</div>
 											</div>
 											<!-- formAddOPPArtial -->
-											<form id="formAddOPPArtial">
+											<form id="">
 												<div class="form-row">
 
 													<div class="col-sm-2 floating-label enable-floating-label show-label" style="margin-bottom:20px">
@@ -415,8 +415,8 @@ if (sizeof($_SESSION) == 0)
 		<!-- Page End -->
 
 		<?php include_once dirname(dirname(dirname(__DIR__))) . '/global/partials/scriptsJS.php'; ?>
-		<script src="/planning/js/productionOrder/detailsProductionOrder.js"></script>
 		<script src="/planning/js/productionOrder/opPartial.js"></script>
+		<script src="/planning/js/productionOrder/detailsProductionOrder.js"></script>
 		<script src="/global/js/global/companyData.js"></script>
 		<script src="/global/js/global/printPdf.js"></script>
 </body>

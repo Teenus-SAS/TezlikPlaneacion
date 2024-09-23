@@ -8,6 +8,7 @@ use TezlikPlaneacion\Dao\CompositeProductsDao;
 use TezlikPlaneacion\Dao\ConversionUnitsDao;
 use TezlikPlaneacion\dao\ExplosionMaterialsDao;
 use TezlikPlaneacion\dao\GeneralClientsDao;
+use TezlikPlaneacion\Dao\GeneralCompositeProductsDao;
 use TezlikPlaneacion\dao\GeneralExplosionMaterialsDao;
 use TezlikPlaneacion\dao\GeneralMaterialsDao;
 use TezlikPlaneacion\dao\GeneralOrdersDao;
@@ -43,6 +44,7 @@ $generalMaterialDao = new GeneralMaterialsDao();
 $productMaterialsDao = new ProductsMaterialsDao();
 $compositeProductsDao = new CompositeProductsDao();
 $generalProductsMaterialsDao = new GeneralProductsMaterialsDao();
+$generalCompositeProductsDao = new GeneralCompositeProductsDao();
 $inventoryDaysDao = new InventoryDaysDao();
 $ordersDao = new OrdersDao();
 $generalOrdersDao = new GeneralOrdersDao();
@@ -186,6 +188,7 @@ $app->post('/addUnitSales', function (Request $request, Response $response, $arg
     $ordersDao,
     $productMaterialsDao,
     $explosionMaterialsDao,
+    $generalCompositeProductsDao,
     $generalExMaterialsDao,
     $generalProductsMaterialsDao,
     $compositeProductsDao,
@@ -470,7 +473,21 @@ $app->post('/addUnitSales', function (Request $request, Response $response, $arg
 
                 $inventory = $classificationDao->calcClassificationByProduct($inventory['year_sales'], $id_company);
 
-                $resolution = $classificationDao->updateProductClassification($products[$j]['id_product'], $inventory['classification']);
+                $composite = $generalCompositeProductsDao->findCompositeProductByChild($products[$j]['id_product']);
+                $classification = '';
+
+                if (sizeof($composite) > 0) {
+                    // $inventory = $generalProductsDao->findProductById($composite[0]['id_product']);
+                    $inventory = $classificationDao->calcInventoryABCBYProduct($composite[0]['id_product'], $args['months']);
+                    $inventory = $classificationDao->calcClassificationByProduct($inventory['year_sales'], $id_company);
+                    $classification = $inventory['classification'];
+                } else {
+                    $inventory = $classificationDao->calcInventoryABCBYProduct($products[$j]['id_product'], $args['months']);
+                    $inventory = $classificationDao->calcClassificationByProduct($inventory['year_sales'], $id_company);
+                    $classification = $inventory['classification'];
+                }
+
+                $resolution = $classificationDao->updateProductClassification($products[$j]['id_product'], $classification);
             }
         }
     }
@@ -491,7 +508,7 @@ $app->post('/updateUnitSale', function (Request $request, Response $response, $a
     $lastDataDao,
     $programmingRoutesDao,
     $generalProgrammingRoutesDao,
-    $generalProductsMaterialsDao,
+    $generalCompositeProductsDao,
     $conversionUnitsDao,
     $inventoryDaysDao,
     $compositeProductsDao,
@@ -692,7 +709,21 @@ $app->post('/updateUnitSale', function (Request $request, Response $response, $a
 
                     $inventory = $classificationDao->calcClassificationByProduct($inventory['year_sales'], $id_company);
 
-                    $resolution = $classificationDao->updateProductClassification($products[$i]['id_product'], $inventory['classification']);
+                    $composite = $generalCompositeProductsDao->findCompositeProductByChild($products[$i]['id_product']);
+                    $classification = '';
+
+                    if (sizeof($composite) > 0) {
+                        // $inventory = $generalProductsDao->findProductById($composite[0]['id_product']);
+                        $inventory = $classificationDao->calcInventoryABCBYProduct($composite[0]['id_product'], $args['months']);
+                        $inventory = $classificationDao->calcClassificationByProduct($inventory['year_sales'], $id_company);
+                        $classification = $inventory['classification'];
+                    } else {
+                        $inventory = $classificationDao->calcInventoryABCBYProduct($products[$i]['id_product'], $args['months']);
+                        $inventory = $classificationDao->calcClassificationByProduct($inventory['year_sales'], $id_company);
+                        $classification = $inventory['classification'];
+                    }
+
+                    $resolution = $classificationDao->updateProductClassification($products[$i]['id_product'], $classification);
                 }
             }
         }
@@ -718,6 +749,7 @@ $app->post('/deleteUnitSale', function (Request $request, Response $response, $a
     $licenseDao,
     $clientsDao,
     $generalRMStockDao,
+    $generalCompositeProductsDao,
     $productMaterialsDao,
     $lastDataDao,
     $programmingRoutesDao,
@@ -864,7 +896,21 @@ $app->post('/deleteUnitSale', function (Request $request, Response $response, $a
 
                 $inventory = $classificationDao->calcClassificationByProduct($inventory['year_sales'], $id_company);
 
-                $resolution = $classificationDao->updateProductClassification($products[$i]['id_product'], $inventory['classification']);
+                $composite = $generalCompositeProductsDao->findCompositeProductByChild($products[$i]['id_product']);
+                $classification = '';
+
+                if (sizeof($composite) > 0) {
+                    // $inventory = $generalProductsDao->findProductById($composite[0]['id_product']);
+                    $inventory = $classificationDao->calcInventoryABCBYProduct($composite[0]['id_product'], $args['months']);
+                    $inventory = $classificationDao->calcClassificationByProduct($inventory['year_sales'], $id_company);
+                    $classification = $inventory['classification'];
+                } else {
+                    $inventory = $classificationDao->calcInventoryABCBYProduct($products[$i]['id_product'], $args['months']);
+                    $inventory = $classificationDao->calcClassificationByProduct($inventory['year_sales'], $id_company);
+                    $classification = $inventory['classification'];
+                }
+
+                $resolution = $classificationDao->updateProductClassification($products[$i]['id_product'], $classification);
             }
         }
     }
