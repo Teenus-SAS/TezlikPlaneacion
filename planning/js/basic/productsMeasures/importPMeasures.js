@@ -90,14 +90,14 @@ $(document).ready(function () {
           !item.referencia_producto ? item.referencia_producto = '' : item.referencia_producto;
           !item.producto ? item.producto = '' : item.producto;
           !item.tipo_producto ? item.tipo_producto = '' : item.tipo_producto;
-          !item.ancho ? item.ancho = '' : item.ancho;
-          !item.alto ? item.alto = '' : item.alto;
-          !item.largo ? item.largo = '' : item.largo;
-          !item.largo_util ? item.largo_util = '' : item.largo_util;
-          !item.ancho_total ? item.ancho_total = '' : item.ancho_total;
-          !item.ventanilla ? item.ventanilla = '' : item.ventanilla;
-          !item.tinta ? item.tinta = '' : item.tinta;
-          !item.origen ? item.origen = '' : item.origen;
+          !item.ancho ? item.ancho = 0 : item.ancho;
+          !item.alto ? item.alto = 0 : item.alto;
+          !item.largo ? item.largo = 0 : item.largo;
+          !item.largo_util ? item.largo_util =0 : item.largo_util;
+          !item.ancho_total ? item.ancho_total = 0 : item.ancho_total;
+          !item.ventanilla ? item.ventanilla = 0 : item.ventanilla;
+          !item.tinta ? item.tinta = 0 : item.tinta;
+          !item.origen ? item.origen = 0 : item.origen;
           !item.compuesto ? item.compuesto = '' : item.compuesto;
 
           item.ancho ? width = item.ancho : width;

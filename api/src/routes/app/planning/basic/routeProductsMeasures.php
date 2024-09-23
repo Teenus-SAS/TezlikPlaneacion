@@ -89,7 +89,7 @@ $app->post('/productsMeasuresDataValidation', function (Request $request, Respon
 
                 if ($origin == 'MANUFACTURADO') {
                     if (
-                        empty($products[$i]['width']) || empty($products[$i]['inks']) || empty($products[$i]['high']) || empty($products[$i]['length']) ||
+                        empty($products[$i]['width']) || empty($products[$i]['inks']) || empty($products[$i]['high']) ||
                         empty($products[$i]['usefulLength']) || empty($products[$i]['totalWidth']) || empty($products[$i]['productType'])
                     ) {
                         $row = $i + 2;
@@ -97,15 +97,15 @@ $app->post('/productsMeasuresDataValidation', function (Request $request, Respon
                     }
 
                     if (
-                        empty(trim($products[$i]['width'])) || empty(trim($products[$i]['inks'])) || empty(trim($products[$i]['high'])) || empty(trim($products[$i]['length'])) ||
+                        empty(trim($products[$i]['width'])) || empty(trim($products[$i]['inks'])) || empty(trim($products[$i]['high'])) ||
                         empty(trim($products[$i]['usefulLength'])) || empty(trim($products[$i]['totalWidth'])) || empty(trim($products[$i]['productType']))
                     ) {
                         $row = $i + 2;
                         array_push($debugg, array('error' => true, 'message' => "Campos vacios, fila: $row"));
                     }
 
-                    $validate = floatval($products[$i]['width']) * floatval($products[$i]['high']) * floatval($products[$i]['length']) * floatval($products[$i]['usefulLength']) *
-                        floatval($products[$i]['totalWidth']) * floatval($products[$i]['inks']);
+                    $validate = floatval($products[$i]['width']) * floatval($products[$i]['high']) * floatval($products[$i]['usefulLength']) *
+                        floatval($products[$i]['totalWidth']);
 
                     if (is_nan($validate) || $validate <= 0) {
                         $row = $i + 2;
