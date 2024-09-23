@@ -5,10 +5,12 @@ use TezlikPlaneacion\dao\GeneralProductsDao;
 use TezlikPlaneacion\dao\GeneralProgrammingDao;
 use TezlikPlaneacion\dao\ProductionOrderDao;
 use TezlikPlaneacion\dao\ProductionOrderPartialDao;
+use TezlikPlaneacion\dao\UsersProductionOrderPartialDao;
 
 $generalProgrammingDao = new GeneralProgrammingDao();
 $productionOrderDao = new ProductionOrderDao();
 $productionOrderPartialDao = new ProductionOrderPartialDao();
+$usersProductionOrderPartialDao = new UsersProductionOrderPartialDao();
 $generalOrdersDao = new GeneralOrdersDao();
 $generalProductsDao = new GeneralProductsDao();
 
@@ -134,13 +136,44 @@ $app->post('/addOPPartial', function (Request $request, Response $response, $arg
     return $response->withHeader('Content-Type', 'application/json');
 });
 
+$app->post('/updateOPPartial', function (Request $request, Response $response, $args) use ($productionOrderPartialDao) {
+    $dataOP = $request->getParsedBody();
+
+    $resolution = $productionOrderPartialDao->updateOPPartial($dataOP);
+
+    if ($resolution == null)
+        $resp = ['success' => true, 'message' => 'Orden de producción modificada correctamente'];
+    else if (isset($resolution['info']))
+        $resp = ['info' => true, 'message' => $resolution['message']];
+    else
+        $resp = ['error' => true, 'message' => 'Ocurrio un error al guardar la información. Intente nuevamente'];
+
+    $response->getBody()->write(json_encode($resp));
+    return $response->withHeader('Content-Type', 'application/json');
+});
+
+$app->get('deleteOPPartial/{id_part_deliv}', function (Request $request, Response $response, $args) use ($productionOrderPartialDao) {
+    $resolution = $productionOrderPartialDao->deleteOPPartial($args['id_part_deliv']);
+
+    if ($resolution == null)
+        $resp = ['success' => true, 'message' => 'Orden de producción eliminada correctamente'];
+    else if (isset($resolution['info']))
+        $resp = ['info' => true, 'message' => $resolution['message']];
+    else
+        $resp = ['error' => true, 'message' => 'Ocurrio un error al guardar la información. Intente nuevamente'];
+
+    $response->getBody()->write(json_encode($resp));
+    return $response->withHeader('Content-Type', 'application/json');
+});
+
 $app->post('/saveReceiveOCDate', function (Request $request, Response $response, $args) use (
     $productionOrderPartialDao,
+    $usersProductionOrderPartialDao,
     $generalProductsDao,
 ) {
-    // session_start();
-    // $id_company = $_SESSION['id_company'];
-    // $id_user = $_SESSION['idUser'];
+    session_start();
+    $id_company = $_SESSION['id_company'];
+    $id_user = $_SESSION['idUser'];
 
     $dataOP = $request->getParsedBody();
 
@@ -150,9 +183,9 @@ $app->post('/saveReceiveOCDate', function (Request $request, Response $response,
         $resolution = $generalProductsDao->updateAccumulatedQuantity($dataOP['idProduct'], $dataOP['quantity'], 2);
     }
 
-    // if ($requisition == null) {
-    //     $requisition = $usersRequisitonsDao->saveUserDeliverRequisition($id_company, $dataRequisition['idRequisition'], $id_user);
-    // } 
+    if ($resolution == null) {
+        $resolution = $usersProductionOrderPartialDao->saveUserOPPartial($id_company, $dataOP['idPartDeliv'], $id_user);
+    }
 
     if ($resolution == null)
         $resp = array('success' => true, 'message' => 'Fecha guardada correctamente');
@@ -163,4 +196,10 @@ $app->post('/saveReceiveOCDate', function (Request $request, Response $response,
 
     $response->getBody()->write(json_encode($resp));
     return $response->withStatus(200)->withHeader('Content-Type', 'application/json');
+});
+
+$app->get('/usersOPPartial/{id_part_deliv}', function (Request $request, Response $response, $args) use ($usersProductionOrderPartialDao) {
+    $users = $usersProductionOrderPartialDao->findAllUserOPPartialById($args['id_part_deliv']);
+    $response->getBody()->write(json_encode($users));
+    return $response->withHeader('Content-Type', 'application/json');
 });

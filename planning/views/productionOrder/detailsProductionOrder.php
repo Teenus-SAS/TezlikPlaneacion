@@ -416,6 +416,7 @@ if (sizeof($_SESSION) == 0)
 
 		<?php include_once dirname(dirname(dirname(__DIR__))) . '/global/partials/scriptsJS.php'; ?>
 		<script src="/planning/js/productionOrder/detailsProductionOrder.js"></script>
+		<script src="/planning/js/productionOrder/opPartial.js"></script>
 		<script src="/global/js/global/companyData.js"></script>
 		<script src="/global/js/global/printPdf.js"></script>
 </body>

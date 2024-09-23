@@ -20,14 +20,44 @@ class ProductionOrderPartialDao
     {
         $connection = Connection::getInstance()->getConnection();
 
-        $stmt = $connection->prepare("SELECT po.id_part_deliv, po.id_programming, p.id_product, p.reference, p.product, IFNULL(pi.quantity, 0) AS quantity_product, po.start_date, po.end_date, po.operator, u.firstname, u.lastname, 
-                                             po.waste, po.partial_quantity, po.receive_date, IFNULL(ur.firstname, '') AS firstname_deliver, IFNULL(ur.lastname , '') AS lastname_deliver
+        $stmt = $connection->prepare("SELECT 
+                                        -- Columnas
+                                            po.id_part_deliv, 
+                                            po.id_programming, 
+                                            p.id_product, 
+                                            p.reference, 
+                                            p.product, 
+                                            IFNULL(pi.quantity, 0) AS quantity_product, 
+                                            po.start_date, 
+                                            po.end_date, 
+                                            po.operator, 
+                                            u.firstname, 
+                                            u.lastname, 
+                                            po.waste, 
+                                            po.partial_quantity, 
+                                            po.receive_date, 
+                                            IFNULL(last_user.id_user_receive, 0) AS id_user_receive,
+                                            IFNULL(last_user.firstname_receive, '') AS firstname_receive,
+                                            IFNULL(last_user.lastname_receive, '') AS lastname_receive
                                       FROM prod_order_part_deliv po
                                         INNER JOIN users u ON u.id_user = po.operator
                                         INNER JOIN programming pg ON pg.id_programming = po.id_programming
                                         INNER JOIN products p ON p.id_product = pg.id_product
                                         LEFT JOIN inv_products pi ON pi.id_product = pg.id_product
-                                        LEFT JOIN users ur ON ur.id_user = po.id_user_receive
+                                            -- Subconsulta para obtener el último usuario de entrega
+                                        LEFT JOIN(
+                                            SELECT cur.id_part_deliv,
+                                                curd.id_user AS id_user_receive,
+                                                curd.firstname AS firstname_receive,
+                                                curd.lastname AS lastname_receive
+                                            FROM prod_order_part_deliv_users cur
+                                            INNER JOIN users curd ON curd.id_user = cur.id_user_receive 
+                                            WHERE cur.id_part_deliv = (
+                                                    SELECT MAX(cur_inner.id_part_deliv)
+                                                    FROM prod_order_part_deliv_users cur_inner
+                                                    WHERE cur_inner.id_part_deliv = cur.id_part_deliv
+                                            )
+                                        ) AS last_user ON last_user.id_part_deliv = m.id_part_deliv
                                       WHERE po.id_company = :id_company");
         $stmt->execute([
             'id_company' => $id_company
@@ -74,6 +104,40 @@ class ProductionOrderPartialDao
             ]);
         } catch (\Exception $e) {
             return ['info' => true, 'message' => $e->getMessage()];
+        }
+    }
+
+    public function updateOPPartial($dataProgramming)
+    {
+        try {
+            $connection = Connection::getInstance()->getConnection();
+
+            $stmt = $connection->prepare("UPDATE prod_order_part_deliv SET start_date = :start_date, end_date = :end_date, waste = :waste, partial_quantity = :partial_quantity
+                                          WHERE id_part_deliv = :id_part_deliv");
+            $stmt->execute([
+                'id_part_deliv' => $dataProgramming['idPartDeliv'],
+                'start_date' => $dataProgramming['startDate'],
+                'end_date' => $dataProgramming['endDate'],
+                'waste' => $dataProgramming['waste'],
+                'partial_quantity' => $dataProgramming['partialQuantity']
+            ]);
+        } catch (\Exception $e) {
+            return ['info' => true, 'message' => $e->getMessage()];
+        }
+    }
+
+    public function deleteOPPartial($id_part_deliv)
+    {
+        $connection = Connection::getInstance()->getConnection();
+
+        $stmt = $connection->prepare("SELECT * FROM prod_order_part_deliv WHERE id_part_deliv = :id_part_deliv");
+        $stmt->execute(['id_part_deliv' => $id_part_deliv]);
+        $rows = $stmt->rowCount();
+
+        if ($rows > 0) {
+            $stmt = $connection->prepare("DELETE FROM prod_order_part_deliv WHERE id_part_deliv = :id_part_deliv");
+            $stmt->execute(['id_part_deliv' => $id_part_deliv]);
+            $this->logger->info(__FUNCTION__, array('query' => $stmt->queryString, 'errors' => $stmt->errorInfo()));
         }
     }
 
