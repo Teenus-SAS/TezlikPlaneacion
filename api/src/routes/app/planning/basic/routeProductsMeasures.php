@@ -104,10 +104,10 @@ $app->post('/productsMeasuresDataValidation', function (Request $request, Respon
                         array_push($debugg, array('error' => true, 'message' => "Campos vacios, fila: $row"));
                     }
 
-                    $data = floatval($products[$i]['width']) * floatval($products[$i]['high']) * floatval($products[$i]['length']) * floatval($products[$i]['usefulLength']) *
+                    $validate = floatval($products[$i]['width']) * floatval($products[$i]['high']) * floatval($products[$i]['length']) * floatval($products[$i]['usefulLength']) *
                         floatval($products[$i]['totalWidth']) * floatval($products[$i]['window']) * floatval($products[$i]['inks']);
 
-                    if (is_nan($data) || $data <= 0) {
+                    if (is_nan($validate) || $validate <= 0) {
                         $row = $i + 2;
                         array_push($debugg, array('error' => true, 'message' => "Campos vacios, fila: $row"));
                     }
