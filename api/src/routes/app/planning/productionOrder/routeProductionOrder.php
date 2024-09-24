@@ -152,7 +152,7 @@ $app->post('/updateOPPartial', function (Request $request, Response $response, $
     return $response->withHeader('Content-Type', 'application/json');
 });
 
-$app->get('deleteOPPartial/{id_part_deliv}', function (Request $request, Response $response, $args) use ($productionOrderPartialDao) {
+$app->get('/deleteOPPartial/{id_part_deliv}', function (Request $request, Response $response, $args) use ($productionOrderPartialDao) {
     $resolution = $productionOrderPartialDao->deleteOPPartial($args['id_part_deliv']);
 
     if ($resolution == null)

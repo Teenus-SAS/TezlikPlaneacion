@@ -1,5 +1,5 @@
 $(document).ready(function () {
-    const loadAllDataPO = () => {
+    loadAllDataPO = () => {
         let dataOP = JSON.parse(sessionStorage.getItem('dataOP'));
         let dataFTMaterials = JSON.parse(sessionStorage.getItem('dataFTMaterials'));
         let id_programming = sessionStorage.getItem('id_programming');

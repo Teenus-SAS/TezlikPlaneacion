@@ -82,11 +82,11 @@ $app->post('/updateInventoryABC', function (Request $request, Response $response
 
                 if (sizeof($composite) > 0) {
                     // $inventory = $generalProductsDao->findProductById($composite[0]['id_product']);
-                    $inventory = $classificationDao->calcInventoryABCBYProduct($composite[0]['id_product'], $args['months']);
+                    $inventory = $classificationDao->calcInventoryABCBYProduct($composite[0]['id_product'], $license['months']);
                     $inventory = $classificationDao->calcClassificationByProduct($inventory['year_sales'], $id_company);
                     $classification = $inventory['classification'];
                 } else {
-                    $inventory = $classificationDao->calcInventoryABCBYProduct($products[$i]['id_product'], $args['months']);
+                    $inventory = $classificationDao->calcInventoryABCBYProduct($products[$i]['id_product'], $license['months']);
                     $inventory = $classificationDao->calcClassificationByProduct($inventory['year_sales'], $id_company);
                     $classification = $inventory['classification'];
                 }

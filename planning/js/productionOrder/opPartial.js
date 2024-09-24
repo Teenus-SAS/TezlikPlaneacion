@@ -73,7 +73,7 @@ $(document).ready(function () {
         e.preventDefault();
 
         const idPartDeliv = sessionStorage.getItem("id_part_deliv") || null;
-        const apiUrl = idPartDeliv
+        const apiUrl = !idPartDeliv
             ? "/api/addOPPartial"
             : "/api/updateOPPartial";
 
@@ -98,13 +98,6 @@ $(document).ready(function () {
         $('#endDateTime').val(data.end_date);
         $('#waste').val(data.waste);
         $('#quantityProduction').val(data.partial_quantity);
-
-        $("html, body").animate(
-            {
-                scrollTop: 0,
-            },
-            1000
-        );
     }); 
 
     // Entregas Parciales
