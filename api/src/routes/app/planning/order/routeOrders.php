@@ -598,7 +598,6 @@ $app->post('/addOrder', function (Request $request, Response $response, $args) u
                         $accumulated_quantity = $orders[$i]['accumulated_quantity'] - $orders[$i]['original_quantity'];
                     } else {
                         $accumulated_quantity = $orders[$i]['accumulated_quantity'];
-                        // $generalOrdersDao->changeStatus($orders[$i]['id_order'], 'Alistamiento');
                     }
 
                     if ($orders[$i]['status'] != 'DESPACHO') {
