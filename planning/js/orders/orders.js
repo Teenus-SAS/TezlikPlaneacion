@@ -59,7 +59,7 @@ $(document).ready(function () {
 
     const dataProducts = JSON.parse(sessionStorage.getItem("dataProducts"));
     const arr = dataProducts.find((item) => item.id_product == data.id_product);
-    $("#inptQuantity").val(arr.quantity);
+    $("#inptQuantity").val(arr.accumulated_quantity);
 
     $("#originalQuantity").val(data.original_quantity);
 
