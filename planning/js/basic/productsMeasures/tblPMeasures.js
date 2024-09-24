@@ -125,7 +125,7 @@ $(document).ready(function () {
           }),
       },
       {
-        title: "Ventanilla",
+        title: "Ventanilla/Und x Tamaño",
         data: "window",
         className: "uniqueClassName dt-head-center",
         visible: visible,
