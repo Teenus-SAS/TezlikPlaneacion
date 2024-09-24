@@ -78,8 +78,10 @@ $(document).ready(function () {
             </tr>`
         );
 
-        if (data.flag_cancel == 0)
+        if (data.flag_cancel == 0){
             loadTblPartialsDelivery(id_programming);
+            loadTblOPMaterial(id_programming);
+        }
     };
 
     const formatQuantity = (quantity, abbreviation) => {

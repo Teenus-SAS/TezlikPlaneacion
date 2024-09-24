@@ -362,37 +362,31 @@ if (sizeof($_SESSION) == 0)
 													<h4 class="font-weight-bold text-dark">6. Devolución Materia Prima No Usada en Producción</h4>
 												</div>
 											</div>
-											<!-- formAddOPPArtial -->
-											<form id="">
+											<form id="formAddOPMP">
 												<div class="form-row">
-
 													<div class="col-sm-2 floating-label enable-floating-label show-label" style="margin-bottom:20px">
-														<label for="operator">Referencia</label>
-														<select class="form-control " name="" id="">
-															<option disabled selected>Seleccionar</option>
+														<label for="material">Referencia</label>
+														<select class="form-control " name="refMaterial" id="refMaterial">
 														</select>
 													</div>
 													<div class="col-sm-6 floating-label enable-floating-label show-label" style="margin-bottom:20px">
-														<label for="operator">Materia Prima</label>
-														<select class="form-control " name="" id="">
-															<option disabled selected>Seleccionar</option>
+														<label for="material">Materia Prima</label>
+														<select class="form-control " name="idMaterial" id="material">
 														</select>
 													</div>
-
 													<div class="col-sm-2 floating-label enable-floating-label show-label">
 														<label for="">Cantidad</label>
-														<input type="number" class="form-control text-center" id="" name="">
+														<input type="number" class="form-control text-center" id="quantityMP" name="quantity">
 													</div>
-
 													<div class="col-sm-2 floating-label enable-floating-label show-label">
-														<button class="btn btn-info mt-1" id="btnDeliverPartialOP">Entregar</button>
+														<button class="btn btn-info mt-1" id="btnAddOPMP">Entregar</button>
 													</div>
 												</div>
 											</form>
 											<div class="row">
 												<div class="col-12">
 													<div class="table-responsive">
-														<table class="fixed-table-loading table table-hover text-center" id="tblPartialsDelivery">
+														<table class="fixed-table-loading table table-hover text-center" id="tblOPMaterial">
 
 														</table>
 													</div>
@@ -415,7 +409,12 @@ if (sizeof($_SESSION) == 0)
 		<!-- Page End -->
 
 		<?php include_once dirname(dirname(dirname(__DIR__))) . '/global/partials/scriptsJS.php'; ?>
+		<script>
+			viewRawMaterial = 3;
+		</script>
+		<script src="/planning/js/basic/rawMaterials/configRawMaterials.js"></script>
 		<script src="/planning/js/productionOrder/opPartial.js"></script>
+		<script src="/planning/js/productionOrder/opMaterial.js"></script>
 		<script src="/planning/js/productionOrder/detailsProductionOrder.js"></script>
 		<script src="/global/js/global/companyData.js"></script>
 		<script src="/global/js/global/printPdf.js"></script>

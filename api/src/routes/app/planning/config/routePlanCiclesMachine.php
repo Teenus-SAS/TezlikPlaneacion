@@ -327,6 +327,21 @@ $app->post('/addPlanCiclesMachine', function (Request $request, Response $respon
                     $generalOrdersDao->changeStatus($orders[$i]['id_order'], 5);
                     $status = false;
                 } else {
+                    foreach ($planCicles as $arr) {
+                        // Verificar Maquina Disponible
+                        if ($arr['status'] == 0) {
+                            $generalOrdersDao->changeStatus($orders[$i]['id_order'], 10);
+                            $status = false;
+                            break;
+                        }
+                        // Verificar Empleados
+                        if ($arr['employees'] == 0) {
+                            $generalOrdersDao->changeStatus($orders[$i]['id_order'], 11);
+                            $status = false;
+                            break;
+                        }
+                    }
+                    // Verificar Material
                     foreach ($productsFTM as $arr) {
                         if ($arr['quantity_material'] <= 0) {
                             $generalOrdersDao->changeStatus($orders[$i]['id_order'], 6);
@@ -460,6 +475,21 @@ $app->post('/deletePlanCiclesMachine', function (Request $request, Response $res
                         $generalOrdersDao->changeStatus($orders[$i]['id_order'], 5);
                         $status = false;
                     } else {
+                        foreach ($planCicles as $arr) {
+                            // Verificar Maquina Disponible
+                            if ($arr['status'] == 0) {
+                                $generalOrdersDao->changeStatus($orders[$i]['id_order'], 10);
+                                $status = false;
+                                break;
+                            }
+                            // Verificar Empleados
+                            if ($arr['employees'] == 0) {
+                                $generalOrdersDao->changeStatus($orders[$i]['id_order'], 11);
+                                $status = false;
+                                break;
+                            }
+                        }
+                        // Verificar Material
                         foreach ($productsFTM as $arr) {
                             if ($arr['quantity_material'] <= 0) {
                                 $generalOrdersDao->changeStatus($orders[$i]['id_order'], 6);

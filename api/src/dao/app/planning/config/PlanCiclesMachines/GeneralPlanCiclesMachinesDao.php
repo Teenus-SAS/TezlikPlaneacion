@@ -59,16 +59,31 @@ class GeneralPlanCiclesMachinesDao
     {
         $connection = Connection::getInstance()->getConnection();
 
-        $stmt = $connection->prepare("SELECT pcm.id_cicles_machine, pcm.cicles_hour, pcm.units_turn, pcm.units_month, p.id_product, p.reference, p.product, IFNULL(pc.id_process, 0) AS id_process, IFNULL(pc.process, '') AS process, IFNULL(pcm.id_machine, 0) AS id_machine, 
-                                             IFNULL(m.machine, 'PROCESO MANUAL') AS machine, COUNT(DISTINCT py.id_plan_payroll) AS employees, ROW_NUMBER() OVER () AS route
-                                      FROM machine_cicles pcm
-                                        INNER JOIN products p ON p.id_product = pcm.id_product
-                                        LEFT JOIN machines m ON m.id_machine = pcm.id_machine
-                                        LEFT JOIN process pc ON pc.id_process = pcm.id_process 
-                                        LEFT JOIN payroll py ON py.id_process = pcm.id_process AND py.id_machine = pcm.id_machine AND py.status = 1
-                                      WHERE pcm.id_product = :id_product AND pcm.id_company = :id_company
-                                      GROUP BY pcm.id_cicles_machine
-                                      ORDER BY `pcm`.`route` ASC;");
+        $stmt = $connection->prepare("SELECT
+                                        -- Columnas
+                                            pcm.id_cicles_machine,
+                                            pcm.cicles_hour,
+                                            pcm.units_turn,
+                                            pcm.units_month, 
+                                            IFNULL(pm.status, 0) AS status,
+                                            p.id_product,
+                                            p.reference,
+                                            p.product,
+                                            IFNULL(pc.id_process, 0) AS id_process,
+                                            IFNULL(pc.process, '') AS process,
+                                            IFNULL(pcm.id_machine, 0) AS id_machine,
+                                            IFNULL(m.machine, 'PROCESO MANUAL') AS machine,
+                                            COUNT(DISTINCT py.id_plan_payroll) AS employees,
+                                            ROW_NUMBER() OVER() AS route
+                                    FROM machine_cicles pcm
+                                    INNER JOIN products p ON p.id_product = pcm.id_product
+                                    LEFT JOIN machines m ON m.id_machine = pcm.id_machine
+                                    LEFT JOIN machine_programs pm ON pm.id_machine = pcm.id_machine
+                                    LEFT JOIN process pc ON pc.id_process = pcm.id_process
+                                    LEFT JOIN payroll py ON py.id_process = pcm.id_process AND py.id_machine = pcm.id_machine -- AND py.status = 1
+                                    WHERE pcm.id_product = :id_product AND pcm.id_company = :id_company
+                                    GROUP BY pcm.id_cicles_machine
+                                    ORDER BY `pcm`.`route` ASC;");
         $stmt->execute([
             'id_product' => $id_product,
             'id_company' => $id_company

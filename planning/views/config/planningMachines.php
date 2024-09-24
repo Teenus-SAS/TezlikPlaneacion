@@ -123,7 +123,7 @@ if (sizeof($_SESSION) == 0)
 
     <?php include_once dirname(dirname(dirname(__DIR__))) . '/global/partials/scriptsJS.php'; ?>
     <!-- <script src="/planning/js/users/usersAccess.js"></script> -->
-
+    <script src="/planning/js/basic/rawMaterials/configRawMaterials.js"></script>
     <script src="/planning/js/config/planningMachines/datePicker.js"></script>
     <script src="/planning/js/config/planningMachines/tblPlanningMachines.js"></script>
     <script src="/planning/js/config/planningMachines/planningMachines.js"></script>

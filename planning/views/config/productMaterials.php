@@ -169,12 +169,12 @@ if (sizeof($_SESSION) == 0)
                                                     <select class="form-control" id="units" name="unit"></select>
                                                     <label for="">Unidad</label>
                                                 </div>
-                                                <?php if ($_SESSION['flag_products_measure'] == '1') { ?>
+                                                <!-- < ?php if ($_SESSION['flag_products_measure'] == '1') { ?>
                                                     <div class="col-sm-2 floating-label enable-floating-label show-label inputQuantityCalc" style="margin-bottom:20px">
                                                         <label for="">Gramos/M2</label>
                                                         <input class="form-control calcMWeight text-center" type="number" name="quantityCalc" id="quantityCalc">
                                                     </div>
-                                                <?php } ?>
+                                                < ?php } ?> -->
                                                 <div class="col-sm-2 floating-label enable-floating-label show-label" style="margin-bottom:20px">
                                                     <label for="">Cantidad</label>
                                                     <input class="form-control text-center" type="number" name="quantity" id="quantity">
@@ -244,12 +244,12 @@ if (sizeof($_SESSION) == 0)
                                                     </select>
                                                     <label>Unidad</label>
                                                 </div>
-                                                <?php if ($_SESSION['flag_products_measure'] == '1') { ?>
+                                                <!-- < ?php if ($_SESSION['flag_products_measure'] == '1') { ?>
                                                     <div class="col-sm-2 floating-label enable-floating-label show-label inputQuantityPCalc" style="margin-bottom:20px">
                                                         <label for="">Gramos/M2</label>
                                                         <input class="form-control calcPWeight text-center" type="number" name="quantityCalc" id="quantityPCalc">
                                                     </div>
-                                                <?php } ?>
+                                                < ?php } ?> -->
                                                 <!-- <div class="w-100"></div> -->
                                                 <div class="col-sm-2 floating-label enable-floating-label show-label" style="margin-bottom:20px">
                                                     <label>Cantidad</label>

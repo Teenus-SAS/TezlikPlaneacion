@@ -12,34 +12,34 @@ $(document).ready(function () {
   };
 
   // setSelectsMaterials = (data) => {
-    // const refMaterials = sortFunction(data, "reference");
-    // const materials = sortFunction(data, "material");
+  // const refMaterials = sortFunction(data, "reference");
+  // const materials = sortFunction(data, "material");
 
-    // const $selectRefMaterial = $(`#refMaterial`);
-    // const $selectMaterial = $(`#material`);
+  // const $selectRefMaterial = $(`#refMaterial`);
+  // const $selectMaterial = $(`#material`);
 
-    // // Vaciar el select y agregar la opción por defecto
-    // $selectRefMaterial
-    //   .empty()
-    //   .append(`<option disabled selected>Seleccionar</option>`);
+  // // Vaciar el select y agregar la opción por defecto
+  // $selectRefMaterial
+  //   .empty()
+  //   .append(`<option disabled selected>Seleccionar</option>`);
 
-    // $selectMaterial
-    //   .empty()
-    //   .append(`<option disabled selected>Seleccionar</option>`);
+  // $selectMaterial
+  //   .empty()
+  //   .append(`<option disabled selected>Seleccionar</option>`);
 
-    // // Usar map para optimizar el ciclo de iteración
-    // const optionsRefMaterials = refMaterials.map(
-    //   (value) =>
-    //     `<option value ="${value.id_material}" class="${value.id_material_type}"> ${value.reference} </option>`
-    // );
+  // // Usar map para optimizar el ciclo de iteración
+  // const optionsRefMaterials = refMaterials.map(
+  //   (value) =>
+  //     `<option value ="${value.id_material}" class="${value.id_material_type}"> ${value.reference} </option>`
+  // );
 
-    // const optionsMaterials = materials.map(
-    //   (value) =>
-    //     `<option value ="${value.id_material}" class="${value.id_material_type}"> ${value.material} </option>`
-    // );
+  // const optionsMaterials = materials.map(
+  //   (value) =>
+  //     `<option value ="${value.id_material}" class="${value.id_material_type}"> ${value.material} </option>`
+  // );
 
-    // // Insertar todas las opciones de una vez para mejorar el rendimiento
-    // $selectRefMaterial.append(optionsRefMaterials.join("")); 
+  // // Insertar todas las opciones de una vez para mejorar el rendimiento
+  // $selectRefMaterial.append(optionsRefMaterials.join("")); 
   // };
 
   setSelectsMaterials = (selector, data, property) => {
@@ -57,15 +57,28 @@ $(document).ready(function () {
   loadDataMaterial();
 
   /* Funciones cuando se selecciona una materia prima */
+  $("#refMaterial").change(function (e) {
+    e.preventDefault();
+    let id = this.value;
 
+    $("#material option").prop("selected", function () {
+      return $(this).val() == id;
+    });
+  });
+
+  $("#material").change(function (e) {
+    e.preventDefault();
+    let id = this.value;
+
+    $("#refMaterial option").prop("selected", function () {
+      return $(this).val() == id;
+    });
+  });
+  
   if (viewRawMaterial == 1) {
     $("#refMaterial").change(function (e) {
       e.preventDefault();
       let id = this.value;
-
-      $("#material option").prop("selected", function () {
-        return $(this).val() == id;
-      });
 
       let material_type = parseInt(
         $(this).find("option:selected").attr("class")
@@ -88,10 +101,6 @@ $(document).ready(function () {
     $("#material").change(function (e) {
       e.preventDefault();
       let id = this.value;
-
-      $("#refMaterial option").prop("selected", function () {
-        return $(this).val() == id;
-      });
 
       let material_type = parseInt(
         $(this).find("option:selected").attr("class")
@@ -115,10 +124,6 @@ $(document).ready(function () {
       e.preventDefault();
       let id = this.value;
 
-      $("#material option").prop("selected", function () {
-        return $(this).val() == id;
-      });
-
       let data = JSON.parse(sessionStorage.getItem("dataMaterials"));
       let arr = data.find((item) => item.id_material == id);
       $("#abbreviation").val(arr.abbreviation);
@@ -127,10 +132,6 @@ $(document).ready(function () {
     $("#material").change(function (e) {
       e.preventDefault();
       let id = this.value;
-
-      $("#refMaterial option").prop("selected", function () {
-        return $(this).val() == id;
-      });
 
       let data = JSON.parse(sessionStorage.getItem("dataMaterials"));
       let arr = data.find((item) => item.id_material == id);

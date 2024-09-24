@@ -74,6 +74,8 @@ $(document).ready(function () {
             (data.status == "PROGRAMAR" ||
               data.status == "POR PROCESAR" ||
               data.status == "SIN FICHA TECNICA" ||
+              data.status == "MAQUINA NO DISPONIBLE" ||
+              data.status == "PERSONAL NO DISPONIBLE" ||
               data.status == "SIN MATERIA PRIMA")
               ? (action = `<a href="javascript:;" <i class="bx bx-edit-alt updateOrder" id="${data.id_order}" data-toggle='tooltip' title='Actualizar Pedido' style="font-size: 30px;"></i></a><a href="javascript:;" <i class="mdi mdi-delete-forever" id="${data.id_order}" data-toggle='tooltip' title='Eliminar Pedido' style="font-size: 30px;color:red" onclick="deleteFunction()"></i></a>`)
               : (action = "");
