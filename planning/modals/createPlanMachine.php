@@ -12,9 +12,6 @@
                             <div class="col-md-12 col-lg-12 InputGroup">
                                 <form id="formCreatePlanMachine">
                                     <div class="row mt-5">
-                                        <div class="col-12 col-lg-12 alert alert-warning cardWarningPM" role="alert" style="display: none;">
-                                            El cambio tendra efecto a partir de una nueva planeacion.
-                                        </div>
                                         <div class="col-12 col-lg-12 titlePayroll">
                                             <label for=""><b>Descripción</b></label>
                                         </div>

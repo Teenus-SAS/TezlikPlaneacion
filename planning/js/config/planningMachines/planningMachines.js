@@ -9,7 +9,6 @@ $(document).ready(function () {
     e.preventDefault();
 
     $("#createPlanMachine").modal("show");
-    $('.cardWarningPM').hide();
     $("#btnCreatePlanMachine").text("Crear");
 
     sessionStorage.removeItem("id_planning_machine");
@@ -52,8 +51,7 @@ $(document).ready(function () {
 
   //Actualizar Plan maquina
   $(document).on("click", ".updatePMachines", function (e) {
-    // Mostrar modal y actualizar botón
-    $('.cardWarningPM').show();
+    // Mostrar modal y actualizar botón 
     $("#createPlanMachine").modal("show");
     $("#btnCreatePlanMachine").text("Actualizar");
 
@@ -119,8 +117,9 @@ $(document).ready(function () {
 
     let dataPlanningMachines = new FormData(formCreatePlanMachine);
 
-    if (idProgramMachine)
-      dataPlanningMachines.append("idProgramMachine", idProgramMachine);
+    if (idProgramMachine){
+      dataPlanningMachines.append("idProgramMachine", idProgramMachine); 
+    }
 
     let resp = await sendDataPOST(url, dataPlanningMachines);
 
@@ -207,6 +206,7 @@ $(document).ready(function () {
       $("#createPlanMachine").modal("hide");
       $(".cardImportPlanMachines").hide(800);
       $("#formImportPlanMachines, #formCreatePlanMachine").trigger("reset");
+      $('.cardWarningPM').show();
 
       updateTable();
       toastr.success(message);

@@ -100,6 +100,9 @@ if (sizeof($_SESSION) == 0)
                                         <h5 class="card-title">Máquinas</h5>
                                     </div> -->
                                     <div class="card-body">
+                                        <div class="col-12 col-lg-12 alert alert-warning cardWarningPM" role="alert" style="display: none;">
+                                            El cambio tendra efecto a partir de una nueva planeacion.
+                                        </div>
                                         <div class="table-responsive">
                                             <table class="fixed-table-loading table table-hover" id="tblPlanMachines">
 
