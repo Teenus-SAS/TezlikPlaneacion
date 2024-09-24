@@ -1166,31 +1166,33 @@ $app->post('/calcQuantityFTM', function (Request $request, Response $response, $
     $generalMaterialsDao,
     $generalProductsMaterialsDao
 ) {
-    session_start();
-    $id_company = $_SESSION['id_company'];
+    // session_start();
+    // $id_company = $_SESSION['id_company'];
     $arr = $request->getParsedBody();
 
-    $type = $arr['type'];
+    // $type = $arr['type'];
     $dataMaterial = $generalMaterialsDao->findMaterialById($arr['idMaterial']);
     $dataProduct = $generalProductsDao->findProductById($arr['idProduct']);
     $weight = 0;
 
-    switch ($type) {
-        case '1': // Papel
-            $weight = ((floatval($dataMaterial['grammage']) * floatval($dataProduct['length']) * floatval($dataProduct['total_width'])) / 10000000) / floatval($dataProduct['window']);
+    $dataProduct['window'] > 0 ? $window = floatval($dataProduct['window']) : $window = 1;
 
-            break;
-        default:
-            $quantity = floatval($arr['quantityCalc']);
-            $quantityFTM = 0;
+    $weight = ((floatval($dataMaterial['grammage']) * floatval($dataProduct['length']) * floatval($dataProduct['total_width'])) / 10000000) / $window;
+    // switch ($type) {
+    //     case '1': // Papel
 
-            $dataFTM = $generalProductsMaterialsDao->findProductsMaterialsByCompany($arr, $id_company);
+    //         break;
+    //     default:
+    //         $quantity = floatval($arr['quantityCalc']);
+    //         $quantityFTM = 0;
 
-            if ($dataFTM) $quantityFTM = $dataFTM['quantity'];
+    //         $dataFTM = $generalProductsMaterialsDao->findProductsMaterialsByCompany($arr, $id_company);
 
-            $weight = $quantity * $quantityFTM;
-            break;
-    }
+    //         if ($dataFTM) $quantityFTM = $dataFTM['quantity'];
+
+    //         $weight = $quantity * $quantityFTM;
+    //         break;
+    // }
 
     $resp = ['weight' => $weight];
 
