@@ -169,6 +169,9 @@ $(document).ready(function () {
 
     const messageOPPartial = (data) => {
         const { success, error, info, message } = data;
+
+        sessionStorage.removeItem('id_part_deliv');
+        
         if (success) {
             $("#formAddOPPArtial").trigger("reset");
             toastr.success(message);
