@@ -57,20 +57,44 @@ class GeneralOrdersDao
     {
         $connection = Connection::getInstance()->getConnection();
 
-        $stmt = $connection->prepare("SELECT o.id_order, o.id_client, o.id_product, o.num_order, ps.status, o.date_order, o.original_quantity, p.product, c.client, o.min_date, o.max_date, pi.status_ds, mi.id_material, o.delivery_date, pi.accumulated_quantity, IFNULL(mi.quantity, 0) AS quantity_material,
-                                             IFNULL((SELECT id_programming FROM programming WHERE id_order = o.id_order LIMIT 1), 0) AS programming
-                                      FROM orders o
-                                        INNER JOIN products p ON p.id_product = o.id_product
-                                        LEFT JOIN products_materials pm ON pm.id_product = o.id_product 
-                                        LEFT JOIN inv_materials m ON mi.id_material = pm.id_material
-                                        INNER JOIN inv_products pi ON pi.id_product = o.id_product
-                                        INNER JOIN third_parties c ON c.id_client = o.id_client  
-                                        INNER JOIN orders_status ps ON ps.id_status = o.status
-                                      WHERE 
-                                        o.status_order = 0 
-                                        AND o.id_company = :id_company 
-                                        AND o.status NOT IN (3, 7, 8) 
-                                        AND o.max_date != '0000-00-00' 
+        $stmt = $connection->prepare("SELECT
+                                           -- Columnas
+                                            o.id_order,
+                                            o.id_client,
+                                            o.id_product,
+                                            o.num_order,
+                                            ps.status,
+                                            o.date_order,
+                                            o.original_quantity,
+                                            p.product,
+                                            c.client,
+                                            o.min_date,
+                                            o.max_date,
+                                            pi.status_ds,
+                                            mi.id_material,
+                                            o.delivery_date,
+                                            pi.accumulated_quantity,
+                                            IFNULL(mi.quantity, 0) AS quantity_material,
+                                            IFNULL(
+                                                (
+                                                SELECT
+                                                    id_programming
+                                                FROM
+                                                    programming
+                                                WHERE
+                                                    id_order = o.id_order
+                                                LIMIT 1
+                                            ),
+                                            0
+                                            ) AS programming
+                                        FROM orders o
+                                            INNER JOIN products p ON p.id_product = o.id_product
+                                            LEFT JOIN products_materials pm ON pm.id_product = o.id_product
+                                            LEFT JOIN inv_materials m ON mi.id_material = pm.id_material
+                                            INNER JOIN inv_products PI ON pi.id_product = o.id_product
+                                            INNER JOIN third_parties c ON c.id_client = o.id_client
+                                            INNER JOIN orders_status ps ON ps.id_status = o.status
+                                        WHERE o.status_order = 0 AND o.id_company = :id_company AND o.status NOT IN(3, 7, 8) AND o.max_date != '0000-00-00'
                                         ORDER BY p.id_product ASC");
         $stmt->execute(['id_company' => $id_company]);
 
@@ -100,11 +124,19 @@ class GeneralOrdersDao
     {
         $connection = Connection::getInstance()->getConnection();
 
-        $stmt = $connection->prepare("SELECT o.id_order, o.num_order, o.date_order, o.original_quantity, o.accumulated_quantity, p.product, c.client
-                                      FROM orders o
+        $stmt = $connection->prepare("SELECT
+                                        -- Columnas
+                                            o.id_order,
+                                            o.num_order,
+                                            o.date_order,
+                                            o.original_quantity,
+                                            o.accumulated_quantity,
+                                            p.product,
+                                            c.client
+                                        FROM orders o
                                         INNER JOIN products p ON p.id_product = o.id_product
                                         INNER JOIN third_parties c ON c.id_client = o.id_client
-                                      WHERE o.id_order = :id_order AND o.id_company = :id_company");
+                                        WHERE o.id_order = :id_order AND o.id_company = :id_company");
         $stmt->execute([
             'id_order' => $dataOrder['order'],
             'id_company' => $id_company
