@@ -118,8 +118,8 @@ $app->post('/deliverStore', function (Request $request, Response $response, $arg
     return $response->withStatus(200)->withHeader('Content-Type', 'application/json');
 });
 
-$app->get('/usersStore/{id_material}', function (Request $request, Response $response, $args) use ($usersStoreDao) {
-    $users = $usersStoreDao->findAllUserStoreById($args['id_material']);
+$app->get('/usersStore/{id_programming}/{id_material}', function (Request $request, Response $response, $args) use ($usersStoreDao) {
+    $users = $usersStoreDao->findAllUserStoreById($args['id_programming'], $args['id_material']);
     $response->getBody()->write(json_encode($users));
     return $response->withHeader('Content-Type', 'application/json');
 });

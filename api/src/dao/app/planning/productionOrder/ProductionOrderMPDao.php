@@ -84,6 +84,7 @@ class ProductionOrderMPDao
                                         -- Subconsulta para obtener el último usuario de entrega
                                         LEFT JOIN(
                                             SELECT cur.id_material,
+                                                cur.id_programming,
                                                 curd.id_user AS id_user_delivered,
                                                 curd.firstname AS firstname_delivered,
                                                 curd.lastname AS lastname_delivered
@@ -92,9 +93,10 @@ class ProductionOrderMPDao
                                             WHERE cur.id_material = (
                                                     SELECT MAX(cur_inner.id_material)
                                                     FROM store_users cur_inner
-                                                    WHERE cur_inner.id_material = cur.id_material
+                                                    WHERE cur_inner.id_material = cur.id_material 
+                                                    AND cur_inner.id_programming = cur.id_programming
                                             )
-                                        ) AS last_user ON last_user.id_material = pom.id_material
+                                        ) AS last_user ON last_user.id_material = pom.id_material AND last_user.id_programming = pom.id_programming
                                       WHERE pom.id_programming = :id_programming AND pom.id_company = :id_company");
         $stmt->execute([
             'id_programming' => $id_programming,

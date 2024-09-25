@@ -240,11 +240,25 @@ $(document).ready(function () {
           render: function (data, type, full, meta) {
             const store = full.delivery_store;
             const pending = full.delivery_pending;
-            const deliver = full.deliver;
-            if (pending > 0)
-              return `Entregado: ${store}<br><span class="badge badge-warning">Pendiente: ${pending}</span><br>Por Entregar: ${deliver}`;
-            else
-              return `Entregado: ${store}<br>Pendiente: ${pending}<br>Por Entregar: ${deliver}`;
+            // const deliver = full.deliver;
+            if (pending > 0) {
+              return `Entregado: ${store.toLocaleString("es-CO", {
+                minimumFractionDigits: 2,
+                maximumFractionDigits: 2,
+              })}<br><span class="badge badge-warning">Pendiente: ${pending.toLocaleString("es-CO", {
+                minimumFractionDigits: 2,
+                maximumFractionDigits: 2,
+              })}</span>`;
+            }
+            else {
+              return `Entregado: ${store.toLocaleString("es-CO", {
+                minimumFractionDigits: 2,
+                maximumFractionDigits: 2,
+              })}<br>Pendiente: ${pending.toLocaleString("es-CO", {
+                minimumFractionDigits: 2,
+                maximumFractionDigits: 2,
+              })}`;
+            }
           },
         },
         {

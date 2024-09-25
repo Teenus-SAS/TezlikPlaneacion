@@ -124,8 +124,8 @@ $(document).ready(function () {
     const row = $(this).closest("tr")[0];
     let data = tblStore.fnGetData(row);
     let id_material = data.id_material;
-    let quantity = data.quantity;
-    let reserved = data.reserved1;
+    let quantity = data.quantity.toFixed(2);
+    let reserved = data.reserved1.toFixed(2);
 
     data.delivery_pending == 0 && data.delivery_date == null
       ? (delivery_pending = reserved)
@@ -196,7 +196,7 @@ $(document).ready(function () {
     const row = $(this).closest("tr")[0];
     let data = tblStore.fnGetData(row);
 
-    let users = await searchData(`/api/usersStore/${data.id_material}`);
+    let users = await searchData(`/api/usersStore/${data.id_programming}/${data.id_material}`);
     let rows = '';
 
     for (let i = 0; i < users.length; i++) {

@@ -16,16 +16,44 @@ class UsersStoreDao
         $this->logger->pushHandler(new RotatingFileHandler(Constants::LOGS_PATH . 'querys.log', 20, Logger::DEBUG));
     }
 
-    public function findAllUserStoreById($id_material)
+    public function findAllUserStoreById($id_programming, $id_material)
     {
         $connection = Connection::getInstance()->getConnection();
 
-        $stmt = $connection->prepare("SELECT u.id_user, u.firstname, u.lastname, u.email
-                                      FROM store_users us
-                                      INNER JOIN users u ON u.id_user = us.id_user_delivered
-                                      WHERE us.id_material = :id_material");
+        $stmt = $connection->prepare("SELECT 
+                                        -- Columnas
+                                            pom.id_prod_order_material, 
+                                            pom.id_programming, 
+                                            m.id_material, 
+                                            m.reference, 
+                                            m.material, 
+                                            IFNULL(mi.quantity, 0) AS quantity_material,
+                                            IFNULL(mi.delivery_date, '0000-00-00 00:00:00') AS delivery_date,
+                                            pom.quantity,
+                                            IFNULL(last_user.id_user_delivered, 0) AS id_user_delivered,
+                                            IFNULL(last_user.firstname_delivered, '') AS firstname_delivered,
+                                            IFNULL(last_user.lastname_delivered, '') AS lastname_delivered
+                                      FROM prod_order_materials pom  
+                                        -- Subconsulta para obtener el último usuario de entrega
+                                        LEFT JOIN(
+                                            SELECT cur.id_material,
+                                                cur.id_programming,
+                                                curd.id_user AS id_user_delivered,
+                                                curd.firstname AS firstname_delivered,
+                                                curd.lastname AS lastname_delivered
+                                            FROM store_users cur
+                                            INNER JOIN users curd ON curd.id_user = cur.id_user_delivered 
+                                            WHERE cur.id_material = (
+                                                    SELECT MAX(cur_inner.id_material)
+                                                    FROM store_users cur_inner
+                                                    WHERE cur_inner.id_material = cur.id_material 
+                                                    AND cur_inner.id_programming = cur.id_programming
+                                            )
+                                        ) AS last_user ON last_user.id_material = pom.id_material AND last_user.id_programming = pom.id_programming
+                                      WHERE pom.id_programming = :id_programming AND pom.id_material = :id_material");
         $stmt->execute([
-            'id_material' => $id_material
+            'id_material' => $id_material,
+            'id_programming' => $id_programming
         ]);
         $this->logger->info(__FUNCTION__, array('query' => $stmt->queryString, 'errors' => $stmt->errorInfo()));
         $users = $stmt->fetchAll($connection::FETCH_ASSOC);
