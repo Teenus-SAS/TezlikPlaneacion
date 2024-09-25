@@ -59,7 +59,7 @@ $(document).ready(function () {
                     className: "uniqueClassName dt-head-center",
                     render: function (data) {
                         let action;
-                        if (!data.receive_date || data.receive_date == "0000-00-00 00:00:00") {
+                        if (!data.receive_date || data.receive_date == "0000-00-00") {
                             action = `<a href="javascript:;" <i id="upd-${data.id_part_deliv}" class="bx bx-edit-alt updateOPPartial" data-toggle='tooltip' title='Actualizar Produccion' style="font-size: 30px;"></i></a>
                             <a href="javascript:;" <i id="${data.id_part_deliv}" class="mdi mdi-delete-forever" data-toggle='tooltip' title='Eliminar Produccion' style="font-size: 30px;color:red" onclick="deleteOPPartialFunction()"></i></a>`;
                         }

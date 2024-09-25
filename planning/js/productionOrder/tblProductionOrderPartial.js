@@ -73,7 +73,7 @@ $(document).ready(function () {
                 data: null,
                 className: "uniqueClassName dt-head-center",
                 render: function (data) {
-                    if (!data.receive_date || data.receive_date == "0000-00-00 00:00:00")
+                    if (!data.receive_date || data.receive_date == "0000-00-00")
                         action = `<button class="btn btn-info changeDateOP">Recibir OP</button>`;
                     else {
                         action = `Recibido: <br>${data.firstname_receive} ${data.lastname_receive}<br>${data.receive_date}
