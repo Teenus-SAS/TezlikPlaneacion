@@ -33,6 +33,7 @@ class UsersStoreDao
                                             IFNULL(last_user.id_user_delivered, 0) AS id_user_delivered,
                                             IFNULL(last_user.firstname_delivered, '') AS firstname_delivered,
                                             IFNULL(last_user.lastname_delivered, '') AS lastname_delivered
+                                            IFNULL(last_user.email_delivered, '') AS email_delivered
                                       FROM prod_order_materials pom  
                                         -- Subconsulta para obtener el último usuario de entrega
                                         LEFT JOIN(
@@ -40,7 +41,8 @@ class UsersStoreDao
                                                 cur.id_programming,
                                                 curd.id_user AS id_user_delivered,
                                                 curd.firstname AS firstname_delivered,
-                                                curd.lastname AS lastname_delivered
+                                                curd.lastname AS lastname_delivered,
+                                                curd.email AS email_delivered,
                                             FROM store_users cur
                                             INNER JOIN users curd ON curd.id_user = cur.id_user_delivered 
                                             WHERE cur.id_material = (

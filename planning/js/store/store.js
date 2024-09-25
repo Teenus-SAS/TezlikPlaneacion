@@ -203,9 +203,10 @@ $(document).ready(function () {
       rows +=
         `<tr>
           <td>${i + 1}</td>
-          <td>${users[i].firstname}</td>
-          <td>${users[i].lastname}</td>
-          <td>${users[i].email}</td>
+          <td>${users[i].firstname_delivered}</td>
+          <td>${users[i].lastname_delivered}</td>
+          <td>${users[i].email_delivered}</td>
+          <td>${users[i].quantity}</td>
         </tr>`;
     }
 
@@ -223,6 +224,7 @@ $(document).ready(function () {
                         <th>Nombre</th>
                         <th>Apellido</th>
                         <th>Email</th>
+                        <th>Cantidad Entregada</th>
                       </tr>
                     </thead>
                     <tbody>
