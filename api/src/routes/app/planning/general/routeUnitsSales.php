@@ -295,6 +295,7 @@ $app->post('/addUnitSales', function (Request $request, Response $response, $arg
                     $data['idSeller'] = $seller['id_seller'];
                     $data['route'] = 1;
                     $data['originalQuantity'] = abs($product['stock']);
+                    $data['typeOrder'] = 2;
 
                     $findOrder = $generalOrdersDao->findLastSameOrder($data);
                     if (!$findOrder) {
@@ -610,6 +611,7 @@ $app->post('/updateUnitSale', function (Request $request, Response $response, $a
                 $data['idSeller'] = $seller['id_seller'];
                 $data['route'] = 1;
                 $data['originalQuantity'] = abs($product['stock']);
+                $data['typeOrder'] = 2;
 
                 $findOrder = $generalOrdersDao->findLastSameOrder($data);
                 if (!$findOrder) {
@@ -847,6 +849,7 @@ $app->post('/deleteUnitSale', function (Request $request, Response $response, $a
                 $data['idSeller'] = $seller['id_seller'];
                 $data['route'] = 1;
                 $data['originalQuantity'] = abs($product['stock']);
+                $data['typeOrder'] = 2;
 
                 $findOrder = $generalOrdersDao->findLastSameOrder($data);
                 if (!$findOrder) {

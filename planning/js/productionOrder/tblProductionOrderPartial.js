@@ -74,12 +74,12 @@ $(document).ready(function () {
                 className: "uniqueClassName dt-head-center",
                 render: function (data) {
                     if (!data.receive_date || data.receive_date == "0000-00-00 00:00:00")
-                        action = `<button class="btn btn-info changeDateOC" id="delivery">Recibir OC</button>`;
+                        action = `<button class="btn btn-info changeDateOP" id="delivery">Recibir OP</button>`;
                     else {
                         action = `Recibido: <br>${data.firstname_deliver} ${data.lastname_deliver}<br>${data.receive_date}`;
-                        // <a href="javascript:;">
-                        //   <i id="${data.id_part_deliv}" class="mdi mdi-playlist-check seeReceiveOC" data-toggle='tooltip' title='Ver Usuarios' style="font-size: 30px;color:black"></i>
-                        // </a>`;
+                        `<a href="javascript:;">
+                          <i id="${data.id_part_deliv}" class="mdi mdi-playlist-check seeReceiveOP" data-toggle='tooltip' title='Ver Usuarios' style="font-size: 30px;color:black"></i>
+                        </a>`;
                     }
 
                     return action;
@@ -88,8 +88,8 @@ $(document).ready(function () {
         ],
     });
 
-    // Recibir OC
-    $(document).on("click", ".changeDateOC", function (e) {
+    // Recibir OP
+    $(document).on("click", ".changeDateOP", function (e) {
         e.preventDefault();
 
         let date = new Date().toISOString().split("T")[0];
@@ -99,7 +99,7 @@ $(document).ready(function () {
         bootbox.confirm({
             title: "Ingrese Fecha De Ingreso!",
             message: `<div class="col-sm-12 floating-label enable-floating-label">
-                        <input class="form-control" type="date" name="date" id="dateOC" max="${date}"></input>
+                        <input class="form-control" type="date" name="date" id="dateOP" max="${date}"></input>
                         <label for="date">Fecha</span></label>
                       </div>`,
             buttons: {
@@ -114,7 +114,7 @@ $(document).ready(function () {
             },
             callback: function (result) {
                 if (result) {
-                    let date = $("#dateOC").val();
+                    let date = $("#dateOP").val();
 
                     if (!date) {
                         toastr.error("Ingrese los campos");
@@ -129,13 +129,13 @@ $(document).ready(function () {
 
                     $.ajax({
                         type: "POST",
-                        url: "/api/saveReceiveOCDate",
+                        url: "/api/saveReceiveOPDate",
                         data: form,
                         contentType: false,
                         cache: false,
                         processData: false,
                         success: function (resp) {
-                            messageOC(resp);
+                            messageOP(resp);
                         },
                     });
                 }
@@ -143,7 +143,55 @@ $(document).ready(function () {
         });
     });
 
-    const messageOC = (data) => {
+    $(document).on('click', '.seeReceiveOP', async function (e) {
+    e.preventDefault();
+
+    const row = $(this).closest("tr")[0];
+    let data = tblPartialsDelivery.fnGetData(row);
+
+    let users = await searchData(`/api/usersOPPartial/${data.id_part_deliv}`);
+    let rows = '';
+
+    for (let i = 0; i < users.length; i++) {
+      rows +=
+        `<tr>
+          <td>${i + 1}</td>
+          <td>${users[i].firstname}</td>
+          <td>${users[i].lastname}</td>
+          <td>${users[i].email}</td>
+        </tr>`;
+    }
+
+    // Mostramos el mensaje con Bootbox
+    bootbox.alert({
+      title: 'Usuarios',
+      message: `
+            <div class="container">
+              <div class="col-12">
+                <div class="table-responsive">
+                  <table class="fixed-table-loading table table-hover">
+                    <thead>
+                      <tr>
+                        <th>No</th>
+                        <th>Nombre</th>
+                        <th>Apellido</th>
+                        <th>Email</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      ${rows}
+                    </tbody>
+                  </table>
+                </div>
+              </div> 
+            </div>`,
+      size: 'large',
+      backdrop: true
+    });
+    return false;
+  });
+
+    const messageOP = (data) => {
         const { success, error, info, message } = data;
         if (success) {
             toastr.success(message);

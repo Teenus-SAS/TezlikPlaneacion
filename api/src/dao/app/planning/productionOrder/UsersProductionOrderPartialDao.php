@@ -28,7 +28,7 @@ class UsersProductionOrderPartialDao
             'id_part_deliv' => $id_part_deliv
         ]);
         $this->logger->info(__FUNCTION__, array('query' => $stmt->queryString, 'errors' => $stmt->errorInfo()));
-        $users = $stmt->fetch($connection::FETCH_ASSOC);
+        $users = $stmt->fetchAll($connection::FETCH_ASSOC);
         return $users;
     }
 

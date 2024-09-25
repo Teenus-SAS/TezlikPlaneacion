@@ -57,7 +57,7 @@ class ProductionOrderPartialDao
                                                     FROM prod_order_part_deliv_users cur_inner
                                                     WHERE cur_inner.id_part_deliv = cur.id_part_deliv
                                             )
-                                        ) AS last_user ON last_user.id_part_deliv = m.id_part_deliv
+                                        ) AS last_user ON last_user.id_part_deliv = po.id_part_deliv
                                       WHERE po.id_company = :id_company");
         $stmt->execute([
             'id_company' => $id_company

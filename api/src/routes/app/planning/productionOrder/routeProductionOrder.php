@@ -168,7 +168,7 @@ $app->get('/deleteOPPartial/{id_part_deliv}', function (Request $request, Respon
     return $response->withHeader('Content-Type', 'application/json');
 });
 
-$app->post('/saveReceiveOCDate', function (Request $request, Response $response, $args) use (
+$app->post('/saveReceiveOPDate', function (Request $request, Response $response, $args) use (
     $productionOrderPartialDao,
     $usersProductionOrderPartialDao,
     $generalProductsDao,

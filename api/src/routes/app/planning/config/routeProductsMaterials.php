@@ -673,6 +673,7 @@ $app->post('/addProductsMaterials', function (Request $request, Response $respon
                     $data['idSeller'] = $seller['id_seller'];
                     $data['route'] = 1;
                     $data['originalQuantity'] = abs($products[$i]['available']);
+                    $data['typeOrder'] = 2;
 
                     $findOrder = $generalOrdersDao->findLastSameOrder($data);
                     if (!$findOrder) {
@@ -881,6 +882,7 @@ $app->post('/updatePlanProductsMaterials', function (Request $request, Response 
                         $data['idSeller'] = $seller['id_seller'];
                         $data['route'] = 1;
                         $data['originalQuantity'] = abs($products[$i]['available']);
+                        $data['typeOrder'] = 2;
 
                         $findOrder = $generalOrdersDao->findLastSameOrder($data);
                         if (!$findOrder) {
@@ -1077,6 +1079,7 @@ $app->post('/deletePlanProductMaterial', function (Request $request, Response $r
                     $data['idSeller'] = $seller['id_seller'];
                     $data['route'] = 1;
                     $data['originalQuantity'] = abs($products[$i]['available']);
+                    $data['typeOrder'] = 2;
 
                     $findOrder = $generalOrdersDao->findLastSameOrder($data);
                     if (!$findOrder) {

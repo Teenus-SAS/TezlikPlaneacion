@@ -246,6 +246,7 @@ $app->post('/addOrder', function (Request $request, Response $response, $args) u
         if (!$findOrder) {
             $order = $generalOrdersDao->findLastNumOrderByCompany($id_company);
             $dataOrder['order'] = $order['num_order'];
+            $dataOrder['typeOrder'] = 1;
 
             $resolution = $ordersDao->insertOrderByCompany($dataOrder, $id_company);
 
@@ -330,7 +331,8 @@ $app->post('/addOrder', function (Request $request, Response $response, $args) u
             $findOrder = $generalOrdersDao->findOrder($importOrder[$i], $id_company);
             if (!$findOrder) {
                 $lastOrder = $generalOrdersDao->findLastNumOrderByCompany($id_company);
-                $dataOrder['order'] = $lastOrder['num_order'];
+                $importOrder[$i]['order'] = $lastOrder['num_order'];
+                $importOrder[$i]['typeOrder'] = 1;
 
                 $resolution = $ordersDao->insertOrderByCompany($importOrder[$i], $id_company);
 
@@ -494,6 +496,7 @@ $app->post('/addOrder', function (Request $request, Response $response, $args) u
                     $data['idSeller'] = $seller['id_seller'];
                     $data['route'] = 1;
                     $data['originalQuantity'] = abs($products[$i]['available']);
+                    $data['typeOrder'] = 2;
 
                     $findOrder = $generalOrdersDao->findLastSameOrder($data);
                     if (!$findOrder) {
@@ -792,6 +795,7 @@ $app->post('/updateOrder', function (Request $request, Response $response, $args
                 $data['idSeller'] = $seller['id_seller'];
                 $data['route'] = 1;
                 $data['originalQuantity'] = abs($products[$i]['available']);
+                $data['typeOrder'] = 2;
 
                 $findOrder = $generalOrdersDao->findLastSameOrder($data);
                 if (!$findOrder) {
@@ -1070,6 +1074,7 @@ $app->post('/deleteOrder', function (Request $request, Response $response, $args
                         $data['idSeller'] = $seller['id_seller'];
                         $data['route'] = 1;
                         $data['originalQuantity'] = abs($products[$i]['available']);
+                        $data['typeOrder'] = 2;
 
                         $findOrder = $generalOrdersDao->findLastSameOrder($data);
                         if (!$findOrder) {

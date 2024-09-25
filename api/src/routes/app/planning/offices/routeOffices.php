@@ -164,6 +164,7 @@ $app->post('/changeOffices', function (Request $request, Response $response, $ar
                 $data['idSeller'] = $seller['id_seller'];
                 $data['route'] = 1;
                 $data['originalQuantity'] = $dataOrder['stock'] - ($dataOrder['quantity'] - $dataOrder['originalQuantity']);
+                $data['typeOrder'] = 2;
 
                 $findOrder = $generalOrdersDao->findLastSameOrder($data);
                 if (!$findOrder) {

@@ -10,7 +10,7 @@ $(document).ready(function () {
     bootbox.confirm({
       title: "Ingrese Fecha De Ingreso!",
       message: `<div class="col-sm-12 floating-label enable-floating-label">
-                    <input class="form-control" type="date" name="date" id="dateS" max="${date}"></input>
+                    <input class="form-control" type="date" name="date" id="dateOC" max="${date}"></input>
                     <label for="date">Fecha</span></label>
                 </div>`,
       buttons: {
@@ -25,7 +25,7 @@ $(document).ready(function () {
       },
       callback: function (result) {
         if (result) {
-          let date = $("#dateS").val();
+          let date = $("#dateOC").val();
 
           if (!date) {
             toastr.error("Ingrese los campos");
@@ -66,9 +66,9 @@ $(document).ready(function () {
       rows +=
         `<tr>
           <td>${i + 1}</td>
-          <td>${data[i].firstname}</td>
-          <td>${data[i].lastname}</td>
-          <td>${data[i].email}</td>
+          <td>${users[i].firstname}</td>
+          <td>${users[i].lastname}</td>
+          <td>${users[i].email}</td>
         </tr>`;
     }
 
@@ -203,9 +203,9 @@ $(document).ready(function () {
       rows +=
         `<tr>
           <td>${i + 1}</td>
-          <td>${data[i].firstname}</td>
-          <td>${data[i].lastname}</td>
-          <td>${data[i].email}</td>
+          <td>${users[i].firstname}</td>
+          <td>${users[i].lastname}</td>
+          <td>${users[i].email}</td>
         </tr>`;
     }
 
