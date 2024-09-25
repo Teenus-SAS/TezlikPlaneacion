@@ -22,7 +22,7 @@ class UsersStoreDao
 
         $stmt = $connection->prepare("SELECT u.id_user, u.firstname, u.lastname, u.email
                                       FROM store_users us
-                                      INNER JOIN users u ON u.id_user = us.id_user_deliver
+                                      INNER JOIN users u ON u.id_user = us.id_user_delivered
                                       WHERE us.id_material = :id_material");
         $stmt->execute([
             'id_material' => $id_material
