@@ -72,9 +72,44 @@ class ProductionOrderPartialDao
     {
         $connection = Connection::getInstance()->getConnection();
 
-        $stmt = $connection->prepare("SELECT po.id_part_deliv, po.id_programming, po.start_date, po.end_date, po.operator, u.firstname, u.lastname, po.waste, po.partial_quantity
+        $stmt = $connection->prepare("SELECT 
+                                        -- Columnas
+                                            po.id_part_deliv, 
+                                            po.id_programming, 
+                                            p.id_product, 
+                                            p.reference, 
+                                            p.product, 
+                                            IFNULL(pi.quantity, 0) AS quantity_product, 
+                                            po.start_date, 
+                                            po.end_date, 
+                                            po.operator, 
+                                            u.firstname, 
+                                            u.lastname, 
+                                            po.waste, 
+                                            po.partial_quantity, 
+                                            po.receive_date, 
+                                            IFNULL(last_user.id_user_receive, 0) AS id_user_receive,
+                                            IFNULL(last_user.firstname_receive, '') AS firstname_receive,
+                                            IFNULL(last_user.lastname_receive, '') AS lastname_receive
                                       FROM prod_order_part_deliv po
                                         INNER JOIN users u ON u.id_user = po.operator
+                                        INNER JOIN programming pg ON pg.id_programming = po.id_programming
+                                        INNER JOIN products p ON p.id_product = pg.id_product
+                                        LEFT JOIN inv_products pi ON pi.id_product = pg.id_product
+                                        -- Subconsulta para obtener el último usuario de entrega
+                                        LEFT JOIN(
+                                            SELECT cur.id_part_deliv,
+                                                curd.id_user AS id_user_receive,
+                                                curd.firstname AS firstname_receive,
+                                                curd.lastname AS lastname_receive
+                                            FROM prod_order_part_deliv_users cur
+                                            INNER JOIN users curd ON curd.id_user = cur.id_user_receive 
+                                            WHERE cur.id_part_deliv = (
+                                                    SELECT MAX(cur_inner.id_part_deliv)
+                                                    FROM prod_order_part_deliv_users cur_inner
+                                                    WHERE cur_inner.id_part_deliv = cur.id_part_deliv
+                                            )
+                                        ) AS last_user ON last_user.id_part_deliv = po.id_part_deliv
                                       WHERE po.id_programming = :id_programming AND po.id_company = :id_company");
         $stmt->execute([
             'id_programming' => $id_programming,

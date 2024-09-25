@@ -37,13 +37,32 @@ $(document).ready(function () {
                 },
                 {
                     title: "Acciones",
-                    data: "id_prod_order_material",
+                    data: null,
                     className: "uniqueClassName dt-head-center",
                     render: function (data) {
-                        return `
-                            <a href="javascript:;" <i id="upd-${data}" class="bx bx-edit-alt updateOPMaterial" data-toggle='tooltip' title='Actualizar Material' style="font-size: 30px;"></i></a>
-                            <a href="javascript:;" <i id="${data}" class="mdi mdi-delete-forever" data-toggle='tooltip' title='Eliminar Material' style="font-size: 30px;color:red" onclick="deleteOPMaterialFunction()"></i></a>
-                            `;
+                        let action;
+                        if (!data.delivery_date || data.delivery_date == "0000-00-00 00:00:00") {
+                            action = `<a href="javascript:;" <i id="upd-${data.id_prod_order_material}" class="bx bx-edit-alt updateOPMaterial" data-toggle='tooltip' title='Actualizar Material' style="font-size: 30px;"></i></a>
+                            <a href="javascript:;" <i id="${data.id_prod_order_material}" class="mdi mdi-delete-forever" data-toggle='tooltip' title='Eliminar Material' style="font-size: 30px;color:red" onclick="deleteOPMaterialFunction()"></i></a>`;
+                        }
+                        else {
+                            let fechaHora = new Date(data.delivery_date);
+                            let fechaHoraFormateada =
+                                fechaHora.toLocaleDateString("es-CO", {
+                                    day: "2-digit",
+                                    month: "2-digit",
+                                    year: "numeric",
+                                }) +
+                                "<br>" +
+                                fechaHora.toLocaleTimeString("es-CO", {
+                                    hour: "2-digit",
+                                    minute: "2-digit",
+                                    hour12: true,
+                                });
+
+                            action = `Entregado: ${data.firstname_delivered} ${data.lastname_delivered}<br>${fechaHoraFormateada}`
+                        }
+                        return action;
                     },
                 },
             ],

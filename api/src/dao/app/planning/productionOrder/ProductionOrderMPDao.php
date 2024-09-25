@@ -72,11 +72,29 @@ class ProductionOrderMPDao
                                             m.reference, 
                                             m.material, 
                                             IFNULL(mi.quantity, 0) AS quantity_material,
-                                            pom.quantity 
+                                            IFNULL(mi.delivery_date, '0000-00-00 00:00:00') AS delivery_date,
+                                            pom.quantity,
+                                            IFNULL(last_user.id_user_delivered, 0) AS id_user_delivered,
+                                            IFNULL(last_user.firstname_delivered, '') AS firstname_delivered,
+                                            IFNULL(last_user.lastname_delivered, '') AS lastname_delivered
                                       FROM prod_order_materials pom 
                                         INNER JOIN programming pg ON pg.id_programming = pom.id_programming
                                         INNER JOIN materials m ON m.id_material = pom.id_material
                                         LEFT JOIN inv_materials mi ON mi.id_material = pom.id_material 
+                                        -- Subconsulta para obtener el último usuario de entrega
+                                        LEFT JOIN(
+                                            SELECT cur.id_material,
+                                                curd.id_user AS id_user_delivered,
+                                                curd.firstname AS firstname_delivered,
+                                                curd.lastname AS lastname_delivered
+                                            FROM store_users cur
+                                            INNER JOIN users curd ON curd.id_user = cur.id_user_delivered 
+                                            WHERE cur.id_material = (
+                                                    SELECT MAX(cur_inner.id_material)
+                                                    FROM store_users cur_inner
+                                                    WHERE cur_inner.id_material = cur.id_material
+                                            )
+                                        ) AS last_user ON last_user.id_material = pom.id_material
                                       WHERE pom.id_programming = :id_programming AND pom.id_company = :id_company");
         $stmt->execute([
             'id_programming' => $id_programming,

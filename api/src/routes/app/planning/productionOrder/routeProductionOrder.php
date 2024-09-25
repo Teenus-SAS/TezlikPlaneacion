@@ -207,15 +207,15 @@ $app->get('/usersOPPartial/{id_part_deliv}', function (Request $request, Respons
 });
 
 // Material
-$app->get('/productionOrderMaterial', function (Request $request, Response $response, $args) use ($productionOrderMPDao) {
-    session_start();
-    $id_company = $_SESSION['id_company'];
+// $app->get('/productionOrderMaterial', function (Request $request, Response $response, $args) use ($productionOrderMPDao) {
+//     session_start();
+//     $id_company = $_SESSION['id_company'];
 
-    $productionOrder = $productionOrderMPDao->findAllOPMaterialByCompany($id_company);
+//     $productionOrder = $productionOrderMPDao->findAllOPMaterialByCompany($id_company);
 
-    $response->getBody()->write(json_encode($productionOrder));
-    return $response->withHeader('Content-Type', 'application/json');
-});
+//     $response->getBody()->write(json_encode($productionOrder));
+//     return $response->withHeader('Content-Type', 'application/json');
+// });
 
 $app->get('/productionOrderMaterial/{id_programming}', function (Request $request, Response $response, $args) use ($productionOrderMPDao) {
     session_start();

@@ -55,13 +55,18 @@ $(document).ready(function () {
                 },
                 {
                     title: "Acciones",
-                    data: "id_part_deliv",
+                    data: null,
                     className: "uniqueClassName dt-head-center",
                     render: function (data) {
-                        return `
-                            <a href="javascript:;" <i id="upd-${data}" class="bx bx-edit-alt updateOPPartial" data-toggle='tooltip' title='Actualizar Produccion' style="font-size: 30px;"></i></a>
-                            <a href="javascript:;" <i id="${data}" class="mdi mdi-delete-forever" data-toggle='tooltip' title='Eliminar Produccion' style="font-size: 30px;color:red" onclick="deleteOPPartialFunction()"></i></a>
-                            `;
+                        let action;
+                        if (!data.receive_date || data.receive_date == "0000-00-00 00:00:00") {
+                            action = `<a href="javascript:;" <i id="upd-${data.id_part_deliv}" class="bx bx-edit-alt updateOPPartial" data-toggle='tooltip' title='Actualizar Produccion' style="font-size: 30px;"></i></a>
+                            <a href="javascript:;" <i id="${data.id_part_deliv}" class="mdi mdi-delete-forever" data-toggle='tooltip' title='Eliminar Produccion' style="font-size: 30px;color:red" onclick="deleteOPPartialFunction()"></i></a>`;
+                        }
+                        else {
+                            action = `Recibido: <br>${data.firstname_receive} ${data.lastname_receive}<br>${data.receive_date}`;
+                        }
+                        return action;
                     },
                 },
             ],

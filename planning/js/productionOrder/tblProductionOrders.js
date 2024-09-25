@@ -121,33 +121,20 @@ $(document).ready(function () {
           title: "Acciones",
           data: null,
           className: "uniqueClassName dt-head-center",
-          render: function (data) {
-            // if (data.status == "EN PRODUCCION") {
-            //   return `
-            //     <a href="/planning/details-production-order" <i id="${data.id_programming}" class="mdi mdi-playlist-check" data-toggle='tooltip' title='Ver Orden' style="font-size: 30px;color:black" onclick="seePO()"></i></a>
-            //     <button type="button" id="${data.status}" class="btn btn-sm btn-warning changeStatus" style="font-size: 12px;">Fabricado</button>
-            //   `;
-            // } else {
-            //   return `<a href="/planning/details-production-order" <i id="${data.id_programming}" class="mdi mdi-playlist-check" data-toggle='tooltip' title='Ver Orden' style="font-size: 30px;color:black" onclick="seePO()"></i></a>`;
-            // }
-            return `
-              <a href="javascript:;">
-                    <i id="${data.id_programming}" class="${
-              data.flag_cancel == 0
-                ? "bi bi-x-circle-fill"
-                : "bi bi-check-circle-fill"
-            } changeFlagOP" data-toggle='tooltip' title='${
-              data.flag_cancel == 0 ? "Anular" : "Aprobar"
-            } Orden de Produccion' style="font-size:25px; color: ${
-              data.flag_cancel == 0 ? "#ff0000" : "#7bb520"
-            };"></i>
-                  </a>
-              <a href="/planning/details-production-order">
-                    <i id="${
-                      data.id_programming
-                    }" class="fas fa-eye" data-toggle='tooltip' title='Ver Orden de Producción' style="font-size: 30px;color:black" onclick="seePO()"></i>
-                  </a>
-            `;
+          render: function (data) { 
+            return `<a href="javascript:;">
+                          <i id="${data.id_programming}" 
+                              class="
+                                ${data.flag_cancel == 0 ? "bi bi-x-circle-fill" : "bi bi-check-circle-fill"} changeFlagOP
+                                " 
+                              data-toggle='tooltip'
+                              title='${data.flag_cancel == 0 ? "Anular" : "Aprobar"} Orden de Produccion' 
+                              style="font-size:25px; color: ${data.flag_cancel == 0 ? "#ff0000" : "#7bb520"};"
+                          ></i>
+                        </a>
+                        <a href="/planning/details-production-order">
+                          <i id="${data.id_programming}" class="fas fa-eye" data-toggle='tooltip' title='Ver Orden de Producción' style="font-size: 30px;color:black" onclick="seePO()"></i>
+                        </a>`;
           },
         },
       ],
