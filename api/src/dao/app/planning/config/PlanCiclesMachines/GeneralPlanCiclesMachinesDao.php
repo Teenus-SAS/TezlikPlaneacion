@@ -76,11 +76,11 @@ class GeneralPlanCiclesMachinesDao
                                             COUNT(DISTINCT py.id_plan_payroll) AS employees,
                                             ROW_NUMBER() OVER() AS route
                                     FROM machine_cicles pcm
-                                    INNER JOIN products p ON p.id_product = pcm.id_product
-                                    LEFT JOIN machines m ON m.id_machine = pcm.id_machine
-                                    LEFT JOIN machine_programs pm ON pm.id_machine = pcm.id_machine
-                                    LEFT JOIN process pc ON pc.id_process = pcm.id_process
-                                    LEFT JOIN payroll py ON py.id_process = pcm.id_process AND py.id_machine = pcm.id_machine -- AND py.status = 1
+                                        INNER JOIN products p ON p.id_product = pcm.id_product
+                                        LEFT JOIN machines m ON m.id_machine = pcm.id_machine
+                                        LEFT JOIN machine_programs pm ON pm.id_machine = pcm.id_machine
+                                        LEFT JOIN process pc ON pc.id_process = pcm.id_process
+                                        LEFT JOIN payroll py ON py.id_process = pcm.id_process AND py.id_machine = pcm.id_machine -- AND py.status = 1
                                     WHERE pcm.id_product = :id_product AND pcm.id_company = :id_company
                                     GROUP BY pcm.id_cicles_machine
                                     ORDER BY `pcm`.`route` ASC;");

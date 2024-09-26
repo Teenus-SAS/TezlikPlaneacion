@@ -36,6 +36,7 @@ class StoreDao
         $stmt = $connection->prepare("SELECT
                                         -- Columnas
                                             pg.id_programming,
+                                            pg.num_production,
                                             o.id_order,
                                             o.num_order,
                                             m.id_material,

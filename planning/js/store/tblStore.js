@@ -308,7 +308,7 @@ $(document).ready(function () {
       },
       rowGroup: {
         dataSrc: function (row) {
-          return `<th class="text-center" colspan="7" style="font-weight: bold;"> No Pedido - ${row.num_order} Orden Produccion - ${row.op} </th>`;
+          return `<th class="text-center" colspan="7" style="font-weight: bold;"> No Pedido - ${row.num_order} Orden Produccion - ${row.num_production} </th>`;
         },
         startRender: function (rows, group) {
           return $("<tr/>").append(group);

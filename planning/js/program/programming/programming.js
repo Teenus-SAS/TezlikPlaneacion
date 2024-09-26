@@ -791,12 +791,12 @@ $(document).ready(function () {
         // let allTblData = flattenData(generalMultiArray);
         // sessionStorage.setItem("dataProgramming", JSON.stringify(allTblData));
         hideCardAndResetForm();
-        toastr.success(message);
+        toastr.success(data.message);
         await loadAllDataProgramming();
       } else if (data.error) {
-        toastr.error(message);
+        toastr.error(data.message);
       } else if (data.info) {
-        toastr.info(message);
+        toastr.info(data.message);
       }
     } catch (error) {
       console.error("Error in message function:", error);
