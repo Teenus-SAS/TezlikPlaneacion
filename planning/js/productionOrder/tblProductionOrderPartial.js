@@ -76,16 +76,25 @@ $(document).ready(function () {
                     if (!data.receive_date || data.receive_date == "0000-00-00")
                         action = `<button class="btn btn-info changeDateOP">Recibir OP</button>`;
                     else {
-                        action = `Recibido: <br>${data.firstname_receive} ${data.lastname_receive}<br>${data.receive_date}
-                        <a href="javascript:;">
-                          <i id="${data.id_part_deliv}" class="mdi mdi-playlist-check seeReceiveOP" data-toggle='tooltip' title='Ver Usuarios' style="font-size: 30px;color:black"></i>
-                        </a>`;
+                        action = `Recibido: <br>${data.firstname_receive} ${data.lastname_receive}<br>${data.receive_date}`;
+                        // <a href="javascript:;">
+                        //   <i id="${data.id_part_deliv}" class="mdi mdi-playlist-check seeReceiveOP" data-toggle='tooltip' title='Ver Usuarios' style="font-size: 30px;color:black"></i>
+                        // </a>`;
                     }
 
                     return action;
                 },
             },
         ],
+        rowGroup: {
+            dataSrc: function (row) {
+                return `<th class="text-center" colspan="8" style="font-weight: bold;"> Orden Produccion - ${row.num_production} </th>`;
+            },
+            startRender: function (rows, group) {
+                return $("<tr/>").append(group);
+            },
+            className: "odd",
+        },
     });
 
     // Recibir OP

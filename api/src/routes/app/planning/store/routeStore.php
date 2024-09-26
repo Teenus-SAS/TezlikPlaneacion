@@ -102,7 +102,11 @@ $app->post('/deliverStore', function (Request $request, Response $response, $arg
     }
 
     if ($store == null) {
-        $store = $usersStoreDao->saveUserDeliveredMaterial($id_company, $dataStore['idMaterial'], $id_user);
+        $store = $usersStoreDao->saveUserDeliveredMaterial(
+            $id_company,
+            $id_user,
+            $dataStore
+        );
     }
 
     if ($store == null)

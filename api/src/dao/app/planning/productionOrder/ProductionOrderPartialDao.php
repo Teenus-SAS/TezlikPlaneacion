@@ -22,6 +22,7 @@ class ProductionOrderPartialDao
 
         $stmt = $connection->prepare("SELECT 
                                         -- Columnas
+                                            pg.num_production,
                                             po.id_part_deliv, 
                                             po.id_programming, 
                                             p.id_product, 
@@ -58,7 +59,8 @@ class ProductionOrderPartialDao
                                                     WHERE cur_inner.id_part_deliv = cur.id_part_deliv
                                             )
                                         ) AS last_user ON last_user.id_part_deliv = po.id_part_deliv
-                                      WHERE po.id_company = :id_company");
+                                      WHERE po.id_company = :id_company
+                                      ORDER BY `pg`.`num_production` ASC");
         $stmt->execute([
             'id_company' => $id_company
         ]);

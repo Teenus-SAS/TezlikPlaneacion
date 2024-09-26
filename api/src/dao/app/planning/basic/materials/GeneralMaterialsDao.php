@@ -155,13 +155,10 @@ class GeneralMaterialsDao
         try {
             $connection = Connection::getInstance()->getConnection();
 
-            $stmt = $connection->prepare("UPDATE inv_materials SET quantity = :quantity, delivery_store =  delivery_store + :delivery_store, delivery_pending = :delivery_pending
-                                          WHERE id_material = :id_material");
+            $stmt = $connection->prepare("UPDATE inv_materials SET quantity = :quantity WHERE id_material = :id_material");
             $stmt->execute([
                 'id_material' => $dataMaterial['idMaterial'],
-                'quantity' => $dataMaterial['stored'],
-                'delivery_store' => $dataMaterial['delivered'],
-                'delivery_pending' => $dataMaterial['pending']
+                'quantity' => $dataMaterial['stored']
             ]);
         } catch (\Exception $e) {
             $message = $e->getMessage();

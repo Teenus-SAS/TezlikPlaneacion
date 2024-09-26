@@ -131,10 +131,10 @@ $(document).ready(function () {
             )
               action = `<button class="btn btn-info changeDateMP" id="delivery">Recibir MP</button>`;
             else {
-              action = `Recibido: <br>${data.firstname_deliver} ${data.lastname_deliver}<br>${data.admission_date}
-                        <a href="javascript:;">
-                          <i id="${data.id_requisition}" class="mdi mdi-playlist-check seeReceiveOC" data-toggle='tooltip' title='Ver Usuarios' style="font-size: 30px;color:black"></i>
-                        </a>`;
+              action = `Recibido: <br>${data.firstname_deliver} ${data.lastname_deliver}<br>${data.admission_date}`;
+                        // <a href="javascript:;">
+                        //   <i id="${data.id_requisition}" class="mdi mdi-playlist-check seeReceiveOC" data-toggle='tooltip' title='Ver Usuarios' style="font-size: 30px;color:black"></i>
+                        // </a>`;
             }
 
             return action;
@@ -206,7 +206,7 @@ $(document).ready(function () {
               });
             else
               quantity = quantity.toLocaleString("es-CO", {
-                minimumFractionDigits: 2,
+                minimumFractionDigits: 0,
                 maximumFractionDigits: 2,
               });
 
@@ -243,19 +243,19 @@ $(document).ready(function () {
             // const deliver = full.deliver;
             if (pending > 0) {
               return `Entregado: ${store.toLocaleString("es-CO", {
-                minimumFractionDigits: 2,
+                minimumFractionDigits: 0,
                 maximumFractionDigits: 2,
               })}<br><span class="badge badge-warning">Pendiente: ${pending.toLocaleString("es-CO", {
-                minimumFractionDigits: 2,
+                minimumFractionDigits: 0,
                 maximumFractionDigits: 2,
               })}</span>`;
             }
             else {
               return `Entregado: ${store.toLocaleString("es-CO", {
-                minimumFractionDigits: 2,
+                minimumFractionDigits: 0,
                 maximumFractionDigits: 2,
               })}<br>Pendiente: ${pending.toLocaleString("es-CO", {
-                minimumFractionDigits: 2,
+                minimumFractionDigits: 0,
                 maximumFractionDigits: 2,
               })}`;
             }
@@ -266,9 +266,13 @@ $(document).ready(function () {
           data: null,
           className: "uniqueClassName dt-head-center",
           render: function (data) {
+            // if (
+            //   ( !data.delivery_date ||
+            //     data.delivery_date == "0000-00-00 00:00:00") || 
+            //   data.id_user_delivered == 0
+            // )
             if (
-              !data.delivery_date ||
-              data.delivery_date == "0000-00-00 00:00:00"
+              (data.delivery_store == 0 || data.delivery_pending >= 0) || data.id_user_delivered == 0
             )
               action = `<button class="btn btn-info deliver" id="delivery">Entregar MP</button>`;
             else {

@@ -103,7 +103,7 @@ $(document).ready(function () {
 
   // Entregar MP
 
-  const itemsToRemove = ["idMaterial", "stored", "pending", "delivered"];
+  const itemsToRemove = ["idProgramming", "idMaterial", "stored", "pending", "delivered"];
   itemsToRemove.forEach((item) => sessionStorage.removeItem(item));
 
   /*   sessionStorage.removeItem("idMaterial");
@@ -124,12 +124,11 @@ $(document).ready(function () {
     const row = $(this).closest("tr")[0];
     let data = tblStore.fnGetData(row);
     let id_material = data.id_material;
-    let quantity = data.quantity.toFixed(2);
-    let reserved = data.reserved1.toFixed(2);
+    let id_programming = data.id_programming;
 
-    data.delivery_pending == 0 && data.delivery_date == null
-      ? (delivery_pending = reserved)
-      : (delivery_pending = data.delivery_pending);
+    let quantity = parseFloat(formatNumber(data.quantity));
+
+    let reserved = parseFloat(formatNumber(data.reserved1)); 
 
     bootbox.confirm({
       title: "Entrega Material",
@@ -164,6 +163,7 @@ $(document).ready(function () {
           store <= reserved ? (pending = reserved - store) : (pending = 0);
 
           sessionStorage.setItem("idMaterial", id_material);
+          sessionStorage.setItem("idProgramming", id_programming);
           sessionStorage.setItem("stored", quantity - store);
           sessionStorage.setItem("pending", pending);
           sessionStorage.setItem("delivered", store);
@@ -176,6 +176,7 @@ $(document).ready(function () {
   const saveDeliverMaterial = () => {
     let dataStore = {};
     dataStore["idMaterial"] = sessionStorage.getItem("idMaterial");
+    dataStore["idProgramming"] = sessionStorage.getItem("idProgramming");
     dataStore["stored"] = sessionStorage.getItem("stored");
     dataStore["pending"] = sessionStorage.getItem("pending");
     dataStore["delivered"] = sessionStorage.getItem("delivered");
@@ -188,7 +189,7 @@ $(document).ready(function () {
         message(resp, 2);
       },
     });
-  }; 
+  };
 
   $(document).on('click', '.seeDeliverOC', async function (e) {
     e.preventDefault();
@@ -203,10 +204,15 @@ $(document).ready(function () {
       rows +=
         `<tr>
           <td>${i + 1}</td>
-          <td>${users[i].firstname_delivered}</td>
-          <td>${users[i].lastname_delivered}</td>
-          <td>${users[i].email_delivered}</td>
-          <td>${users[i].quantity}</td>
+          <td>${users[i].firstname}</td>
+          <td>${users[i].lastname}</td>
+          <td>${users[i].email}</td>
+          <td>
+          ${parseFloat(users[i].delivery_store).toLocaleString("es-CO", {
+            minimumFractionDigits: 0,
+            maximumFractionDigits: 2,
+          })}
+          </td>
         </tr>`;
     }
 
@@ -260,4 +266,13 @@ $(document).ready(function () {
     } else if (error) toastr.error(message);
     else if (info) toastr.info(message);
   };
+
+  function formatNumber(num) {
+    // Si el número es un entero, simplemente lo devuelve
+    if (Number.isInteger(num)) {
+      return num.toString();
+    }
+    // Si tiene decimales, devuelve el número con dos decimales
+    return num.toFixed(2);
+  }
 });
