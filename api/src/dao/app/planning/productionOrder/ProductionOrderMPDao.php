@@ -93,8 +93,12 @@ class ProductionOrderMPDao
                                             WHERE cur.id_material = (
                                                     SELECT MAX(cur_inner.id_material)
                                                     FROM store_users cur_inner
-                                                    WHERE cur_inner.id_material = cur.id_material 
-                                                    AND cur_inner.id_programming = cur.id_programming
+                                                    WHERE cur_inner.id_material = cur.id_material
+                                            ) AND
+                                            cur.id_programming = (
+                                                    SELECT MAX(cur_inner.id_material)
+                                                    FROM store_users cur_inner
+                                                    WHERE cur_inner.id_programming = cur.id_programming
                                             )
                                         ) AS last_user ON last_user.id_material = pom.id_material AND last_user.id_programming = pom.id_programming
                                       WHERE pom.id_programming = :id_programming AND pom.id_company = :id_company");
