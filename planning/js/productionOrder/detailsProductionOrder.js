@@ -7,6 +7,14 @@ $(document).ready(function () {
         let data = dataOP.find(item => item.id_programming == id_programming);
         let dataFT = dataFTMaterials.filter(item => item.id_product == data.id_product);
 
+        let flag_op = data.flag_op;
+
+        if (flag_op == 1) {
+            $('#formAddOPPArtial').hide();
+            $('#formAddOPMP').hide();
+            $('#btnCloseOP').hide();
+        }
+
         if (data.flag_cancel == 1) $('.cardExcOP').hide();
         else $('.cardExcOP').show();
 
@@ -53,10 +61,10 @@ $(document).ready(function () {
                 `<tr>
                     <td>${dataFT[i].reference_material}</td>
                     <td>${dataFT[i].material}</td>
-                    <td>${quantity_ftm}</td>
-                    <td>${quantity_total}</td>
+                    <td>${quantity_ftm.toLocaleString('es-CO', { minimumFractionDigits: 0, maximumFractionDigits: 2 })}</td>
+                    <td>${quantity_total.toLocaleString('es-CO', { minimumFractionDigits: 0, maximumFractionDigits: 2 })}</td>
                     <td>${dataFT[i].abbreviation}</td>
-                    <td></td>
+                    <td>${dataFT[i].quantity_requested.toLocaleString('es-CO', { minimumFractionDigits: 0, maximumFractionDigits: 2 })}</td>
                     <td></td> 
                 </tr>`);
         }
@@ -78,9 +86,10 @@ $(document).ready(function () {
             </tr>`
         );
 
-        if (data.flag_cancel == 0){
-            loadTblPartialsDelivery(id_programming);
-            loadTblOPMaterial(id_programming);
+        if (data.flag_cancel == 0) {
+            flag_op == 1 ? visible = false : visible = true;
+            loadTblPartialsDelivery(id_programming, visible);
+            loadTblOPMaterial(id_programming, visible);
         }
     };
 
@@ -105,6 +114,41 @@ $(document).ready(function () {
         
         return quantity;
     };  
+
+    // Cerrar OP
+    $('#btnCloseOP').click(function (e) {
+        e.preventDefault();
+        let id_programming = sessionStorage.getItem('id_programming');
+        
+        bootbox.confirm({
+            title: "Orden de Producción",
+            message: `¿ Está seguro de cerrar esta orden de produccion. ?`,
+            buttons: {
+                confirm: {
+                    label: "Si",
+                    className: "btn-success",
+                },
+                cancel: {
+                    label: "No",
+                    className: "btn-danger",
+                },
+            },
+            callback: function (result) {
+                if (result == true) {
+                    $.get(`/api/changeFlagOP/${id_programming}/1`,
+                        function (resp, textStatus, jqXHR) {
+                            const { success, error, info, message } = resp;
+                            if (success) {
+                                loadAllDataPO();
+                                toastr.success(message); 
+                            } else if (error) toastr.error(message);
+                            else if (info) toastr.info(message);
+                        },
+                    );
+                }
+            },
+        });
+    });
 
     loadAllDataPO();
 });

@@ -79,6 +79,9 @@ if (sizeof($_SESSION) == 0)
 											<div class="col-xs-2 mt-2 mr-2" id="btnPdf">
 												<button class="btn btn-success" onclick="printPDF()">Imprimir PDF</button>
 											</div>
+											<div class="col-xs-2 mt-2 mr-2">
+												<button class="btn btn-warning" id="btnCloseOP">Cerrar Orden de Produccion</button>
+											</div>
 										</div>
 
 										<hr>

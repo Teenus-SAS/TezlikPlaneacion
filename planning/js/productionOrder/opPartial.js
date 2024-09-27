@@ -1,5 +1,5 @@
 $(document).ready(function () {
-    loadTblPartialsDelivery = (id_programming) => {
+    loadTblPartialsDelivery = (id_programming, visible) => {
         tblPartialsDelivery = $('#tblPartialsDelivery').dataTable({
             destroy: true,
             pageLength: 50,
@@ -57,6 +57,7 @@ $(document).ready(function () {
                     title: "Acciones",
                     data: null,
                     className: "uniqueClassName dt-head-center",
+                    visible: visible,
                     render: function (data) {
                         let action;
                         if (!data.receive_date || data.receive_date == "0000-00-00") {

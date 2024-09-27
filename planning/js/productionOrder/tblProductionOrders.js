@@ -44,11 +44,11 @@ $(document).ready(function () {
   };
 
   loadTblProductionOrders = (data) => {
-    if ($.fn.dataTable.isDataTable("#tblProductionOrders")) {
-      $("#tblProductionOrders").DataTable().clear();
-      $("#tblProductionOrders").DataTable().rows.add(data).draw();
-      return;
-    }
+    // if ($.fn.dataTable.isDataTable("#tblProductionOrders")) {
+    //   $("#tblProductionOrders").DataTable().clear();
+    //   $("#tblProductionOrders").DataTable().rows.add(data).draw();
+    //   return;
+    // }
 
     tblProductionOrders = $("#tblProductionOrders").dataTable({
       destroy: true,
@@ -122,7 +122,9 @@ $(document).ready(function () {
           data: null,
           className: "uniqueClassName dt-head-center",
           render: function (data) { 
-            return `<a href="javascript:;">
+            let action = '';
+            if (data.flag_op == 0) {
+              action = `<a href="javascript:;">
                           <i id="${data.id_programming}" 
                               class="
                                 ${data.flag_cancel == 0 ? "bi bi-x-circle-fill" : "bi bi-check-circle-fill"} changeFlagOP
@@ -135,6 +137,13 @@ $(document).ready(function () {
                         <a href="/planning/details-production-order">
                           <i id="${data.id_programming}" class="fas fa-eye" data-toggle='tooltip' title='Ver Orden de Producción' style="font-size: 30px;color:black" onclick="seePO()"></i>
                         </a>`;
+            } else {
+              action = `<a href="/planning/details-production-order">
+                          <i id="${data.id_programming}" class="fas fa-eye" data-toggle='tooltip' title='Ver Orden de Producción' style="font-size: 30px;color:black" onclick="seePO()"></i>
+                        </a>`;
+            }
+            
+            return action;
           },
         },
       ],

@@ -67,7 +67,7 @@ $(document).ready(function () {
       },
       callback: function (result) {
         if (result == true) {
-          $.get(`/api/changeFlagOP/${id_programming}/${flag_cancel == 0 ? '1' : '0'}`,
+          $.get(`/api/changeFlagCancelOP/${id_programming}/${flag_cancel == 0 ? '1' : '0'}`,
             function (resp, textStatus, jqXHR) {
               message(resp);
             },

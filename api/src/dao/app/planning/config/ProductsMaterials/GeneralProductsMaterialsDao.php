@@ -38,18 +38,35 @@ class GeneralProductsMaterialsDao
     public function findAllProductsMaterials($id_company)
     {
         $connection = Connection::getInstance()->getConnection();
-        $stmt = $connection->prepare("SELECT p.id_product, p.reference AS reference_product, p.product, m.id_material, m.reference AS reference_material, 
-                                             m.material, (mi.quantity / pm.quantity_converted) AS quantity, pm.quantity AS quantity_ftm, 'MATERIAL' AS type,
-                                             IFNULL(mg.id_magnitude, 0) AS id_magnitude, IFNULL(mg.magnitude, '') AS magnitude, IFNULL(u.id_unit, 0) AS id_unit, IFNULL(u.unit, '') AS unit, IFNULL(u.abbreviation, '') AS abbreviation
-                                             -- ((m.quantity / pm.quantity) - IFNULL((SELECT SUM(quantity) FROM programming WHERE id_product = pm.id_product), 0)) AS quantity
+        $stmt = $connection->prepare("SELECT
+                                      -- Columnas
+                                            p.id_product,
+                                            p.reference AS reference_product,
+                                            p.product,
+                                            m.id_material,
+                                            m.reference AS reference_material,
+                                            m.material,
+                                            (
+                                                mi.quantity / pm.quantity_converted
+                                            ) AS quantity,
+                                            pm.quantity AS quantity_ftm,
+                                            'MATERIAL' AS TYPE,
+                                            IFNULL(mg.id_magnitude, 0) AS id_magnitude,
+                                            IFNULL(mg.magnitude, '') AS magnitude,
+                                            IFNULL(u.id_unit, 0) AS id_unit,
+                                            IFNULL(u.unit, '') AS unit,
+                                            IFNULL(u.abbreviation, '') AS abbreviation,
+                                            IFNULL(rq.quantity_requested, 0) AS quantity_requested 
+                                            -- ((m.quantity / pm.quantity) - IFNULL((SELECT SUM(quantity) FROM programming WHERE id_product = pm.id_product), 0)) AS quantity
                                       FROM products p
-                                        INNER JOIN products_materials pm ON pm.id_product = p.id_product
-                                        INNER JOIN materials m ON m.id_material = pm.id_material
-                                        INNER JOIN inv_materials mi ON mi.id_material = pm.id_material
-                                        LEFT JOIN admin_units u ON u.id_unit = pm.id_unit
-                                        LEFT JOIN admin_magnitudes mg ON mg.id_magnitude = u.id_magnitude
+                                            INNER JOIN products_materials pm ON pm.id_product = p.id_product
+                                            INNER JOIN materials m ON m.id_material = pm.id_material
+                                            INNER JOIN inv_materials mi ON mi.id_material = pm.id_material
+                                            LEFT JOIN requisitions rq ON rq.id_material = pm.id_material AND rq.admission_date != '0000-00-00 00:00:00'
+                                            LEFT JOIN admin_units u ON u.id_unit = pm.id_unit
+                                            LEFT JOIN admin_magnitudes mg ON mg.id_magnitude = u.id_magnitude
                                       WHERE pm.id_company = :id_company
-                                      ORDER BY m.material ASC");
+                                            ORDER BY m.material ASC");
         $stmt->execute(['id_company' => $id_company]);
         $productsmaterials = $stmt->fetchAll($connection::FETCH_ASSOC);
         $this->logger->notice("products", array('products' => $productsmaterials));

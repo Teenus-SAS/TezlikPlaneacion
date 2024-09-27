@@ -25,6 +25,7 @@ class ProductionOrderDao
                                                 pg.num_production, 
                                                 pg.quantity AS quantity_programming,
                                                 pg.flag_cancel,
+                                                pg.flag_op,
                                                 pg.min_date AS min_date_programming, 
                                                 HOUR(pg.min_date) AS min_hour, 
                                                 pg.max_date AS max_date_programming, 
@@ -77,5 +78,23 @@ class ProductionOrderDao
 
         $programming = $stmt->fetchAll($connection::FETCH_ASSOC);
         return $programming;
+    }
+
+    public function changeflagOPById($id_programming, $flag)
+    {
+        $connection = Connection::getInstance()->getConnection();
+
+        try {
+            $stmt = $connection->prepare("UPDATE programming SET flag_op = :flag_op WHERE id_programming = :id_programming");
+            $stmt->execute([
+                'flag_op' => $flag,
+                'id_programming' => $id_programming
+            ]);
+        } catch (\Exception $e) {
+            $message = $e->getMessage();
+
+            $error = array('info' => true, 'message' => $message);
+            return $error;
+        }
     }
 }
