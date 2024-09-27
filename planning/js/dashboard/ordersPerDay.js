@@ -11,12 +11,6 @@ $(document).ready(function () {
         const totalOrdersType1 = data.map((order) => order.type_order);
         const totalOrdersType2 = data.map((order) => order.total_orders);
 
-        // Ejemplo de llamada a la función
-        /* const days = ["2024-09-25", "2024-09-26"];
-        const totalOrdersType1 = [3, 7]; // Pedidos para type 1 por día
-        const totalOrdersType2 = [4, 5]; // Pedidos para type 2 por día
-        ChartOrdersPerDay(days, totalOrdersType1, totalOrdersType2); */
-
         ChartOrdersPerDay(days, totalOrdersType1, totalOrdersType2);
       });
   }, 1000);
@@ -50,7 +44,7 @@ const ChartOrdersPerDay = (days, totalOrdersType1, totalOrdersType2) => {
       labels: days, // Eje X: días
       datasets: [
         {
-          label: "Type 1 - Pedidos por día", // Línea para el tipo de pedido 1
+          label: "Pedidos Clientes", // Línea para el tipo de pedido 1
           data: totalOrdersType1, // Eje Y: total de órdenes para tipo 1
           borderColor: "rgba(75, 192, 192, 1)",
           backgroundColor: "rgba(75, 192, 192, 0.2)",
@@ -58,7 +52,7 @@ const ChartOrdersPerDay = (days, totalOrdersType1, totalOrdersType2) => {
           tension: 0.1, // Suaviza la curva de la línea
         },
         {
-          label: "Type 2 - Pedidos por día", // Línea para el tipo de pedido 2
+          label: "Pedidos Internos", // Línea para el tipo de pedido 2
           data: totalOrdersType2, // Eje Y: total de órdenes para tipo 2
           borderColor: "rgba(153, 102, 255, 1)",
           backgroundColor: "rgba(153, 102, 255, 0.2)",
@@ -119,8 +113,7 @@ const ChartOrdersPerDay = (days, totalOrdersType1, totalOrdersType2) => {
 };
 
 // Ejemplo de llamada a la función
-const days = ['2024-09-25', '2024-09-26'];
+const days = ["2024-09-25", "2024-09-26"];
 const totalOrdersType1 = [3, 7]; // Pedidos para type 1 por día
 const totalOrdersType2 = [4, 5]; // Pedidos para type 2 por día
 ChartOrdersPerDay(days, totalOrdersType1, totalOrdersType2);
-
