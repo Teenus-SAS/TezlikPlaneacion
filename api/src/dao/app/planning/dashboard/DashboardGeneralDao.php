@@ -140,9 +140,9 @@ class DashboardGeneralDao
         $anio = date('Y'); // Año actual        
 
         $sql = "SELECT 
-                    DATE(date_order) AS order_day,  -- Extrae solo la parte de la fecha (sin hora)
-                    type_order,                     -- Agrupa por el tipo de orden
-                    COUNT(id_order) AS total_orders -- Cuenta el número de órdenes por cada tipo y día
+                    DATE(date_order) AS day,            -- Extrae solo la parte de la fecha (sin hora)
+                    type_order,                         -- Agrupa por el tipo de orden
+                    COUNT(id_order) AS total_orders     -- Cuenta el número de órdenes por cada tipo y día
                 FROM orders
                 WHERE 
                     YEAR(date_order) = YEAR(CURDATE())  -- Año actual
