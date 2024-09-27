@@ -164,7 +164,7 @@ $(document).ready(function () {
 
           sessionStorage.setItem("idMaterial", id_material);
           sessionStorage.setItem("idProgramming", id_programming);
-          sessionStorage.setItem("stored", quantity - store);
+          sessionStorage.setItem("stored", (quantity - store) < 0 ? 0 : (quantity - store));
           sessionStorage.setItem("pending", pending);
           sessionStorage.setItem("delivered", store);
           saveDeliverMaterial();
