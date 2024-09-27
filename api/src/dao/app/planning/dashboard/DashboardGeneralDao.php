@@ -139,14 +139,21 @@ class DashboardGeneralDao
         $mes = date('m'); // Mes actual
         $anio = date('Y'); // Año actual        
 
-        $sql = "SELECT DATE(date_order) AS day, COUNT(*) AS total_orders
+        $sql = "SELECT 
+                    DATE(date_order) AS order_day,  -- Extrae solo la parte de la fecha (sin hora)
+                    type_order,                     -- Agrupa por el tipo de orden
+                    COUNT(id_order) AS total_orders -- Cuenta el número de órdenes por cada tipo y día
                 FROM orders
                 WHERE 
-                    MONTH(date_order) = $mes  -- Reemplaza <mes> por el número del mes que deseas filtrar (Ej: 8 para agosto)
-                    AND YEAR(date_order) = $anio  -- Reemplaza <año> por el año que deseas filtrar
+                    YEAR(date_order) = YEAR(CURDATE())  -- Año actual
+                    AND MONTH(date_order) = MONTH(CURDATE())  -- Mes actual
                     AND id_company = :id_company
-                GROUP BY DATE(date_order)
-                ORDER BY DATE(date_order) ASC";
+                GROUP BY 
+                    DATE(date_order),                    -- Agrupa por día
+                    type_order
+                ORDER BY 
+                    DATE(date_order),                    -- Ordena por día
+                    type_order;";
         $stmt = $connection->prepare($sql);
         $stmt->execute(['id_company' => $id_company]);
         $orderxDay = $stmt->fetchAll($connection::FETCH_ASSOC);
