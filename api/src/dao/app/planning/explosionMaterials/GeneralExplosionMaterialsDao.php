@@ -31,19 +31,63 @@ class GeneralExplosionMaterialsDao
     {
         $connection = Connection::getInstance()->getConnection();
 
-        $stmt = $connection->prepare("SELECT pi.id_product, o.id_order, o.num_order, pm.id_product_material, SUM(IFNULL(pi.quantity, 0)) AS quantity_product, mi.id_material, mi.quantity AS quantity_material,
-                                         mi.transit, (o.original_quantity * pm.quantity_converted) AS need, mi.minimum_stock
+        $stmt = $connection->prepare("SELECT
+                                        -- Columnas
+                                            pi.id_product,
+                                            o.id_order,
+                                            o.num_order,
+                                            pm.id_product_material,
+                                            SUM(IFNULL(pi.quantity, 0)) AS quantity_product,
+                                            mi.id_material,
+                                            mi.quantity AS quantity_material,
+                                            mi.transit,
+                                            (o.original_quantity * pm.quantity_converted) AS need,
+                                            mi.minimum_stock
+                                        FROM products p
+                                            INNER JOIN inv_products pi ON pi.id_product = p.id_product
+                                            INNER JOIN products_materials pm ON pm.id_product = p.id_product
+                                            INNER JOIN inv_materials mi ON mi.id_material = pm.id_material
+                                            INNER JOIN orders o ON o.id_product = p.id_product
+                                            LEFT JOIN requisitions r ON r.id_material = pm.id_material
+                                            LEFT JOIN programming pg ON pg.id_order = o.id_order
+                                        WHERE p.id_company = :id_company AND o.status IN(1, 4, 5, 6)
+                                        GROUP BY pm.id_product_material, o.id_order");
+        $stmt->execute(['id_company' => $id_company]);
+
+        $this->logger->info(__FUNCTION__, array('query' => $stmt->queryString, 'errors' => $stmt->errorInfo()));
+
+        $materials = $stmt->fetchAll($connection::FETCH_ASSOC);
+
+        $this->logger->notice("pedidos", array('pedidos' => $materials));
+        return $materials;
+    }
+
+    public function findAllChildrenMaterialsConsolidaded($id_company)
+    {
+        $connection = Connection::getInstance()->getConnection();
+
+        $stmt = $connection->prepare("SELECT
+                                        -- Columnas
+                                            o.id_order,
+                                            o.num_order,
+                                            pi.id_product, 
+                                            pm.id_product_material,
+                                            SUM(IFNULL(pi.quantity, 0)) AS quantity_product,
+                                            mi.id_material,
+                                            mi.quantity AS quantity_material,
+                                            mi.transit,
+                                            (expp.need * pm.quantity_converted) AS need,
+                                            mi.minimum_stock
                                       FROM products p
                                         INNER JOIN inv_products pi ON pi.id_product = p.id_product
                                         INNER JOIN products_materials pm ON pm.id_product = p.id_product
-                                        INNER JOIN inv_materials mi ON mi.id_material = pm.id_material 
-                                        INNER JOIN orders o ON o.id_product = p.id_product
+                                        INNER JOIN inv_materials mi ON mi.id_material = pm.id_material
+                                        INNER JOIN plan_explosions_products expp ON expp.id_product = p.id_product
                                         LEFT JOIN requisitions r ON r.id_material = pm.id_material
-                                        LEFT JOIN programming pg ON pg.id_order = o.id_order
-                                      WHERE p.id_company = :id_company AND o.status IN (1,4,5,6)
-                                      GROUP BY pm.id_product_material, o.id_order");
+                                        INNER JOIN orders o ON o.id_product = p.id_product
+                                      WHERE p.id_company = :id_company
+                                        GROUP BY pm.id_product_material");
         $stmt->execute(['id_company' => $id_company]);
-
         $this->logger->info(__FUNCTION__, array('query' => $stmt->queryString, 'errors' => $stmt->errorInfo()));
 
         $materials = $stmt->fetchAll($connection::FETCH_ASSOC);

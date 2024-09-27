@@ -41,7 +41,7 @@ class GeneralExplosionProductsDao
                                             IFNULL(cpi.quantity, 0) AS quantity_material, 
                                             u.abbreviation, 
                                             (o.original_quantity * cp.quantity) AS need, 
-                                            IFNULL(cpi.minimum_stock, 0) AS minimum_stock 
+                                            IFNULL(cpi.minimum_stock, 0) AS minimum_stock
                                             -- p.reference AS reference_material,  p.product AS material
                                   FROM products_composite cp
                                     LEFT JOIN inv_products pi ON pi.id_product = cp.id_product
@@ -61,20 +61,30 @@ class GeneralExplosionProductsDao
         return $materials;
     }
 
-    public function findAllCompositeConsolidatedByProduct($id_product)
+    public function findAllChildrenCompositeConsolidaded($id_company)
     {
         $connection = Connection::getInstance()->getConnection();
 
-        $stmt = $connection->prepare("SELECT cp.id_product, o.id_order, cp.id_composite_product, SUM(pi.quantity) AS quantity_product, cpi.quantity AS quantity_material, u.abbreviation, (o.original_quantity * cpi.quantity) AS need, pi.minimum_stock
-                                      FROM products_composite cp
-                                        LEFT JOIN inv_products pi ON pi.id_product = cp.id_product
-                                        LEFT JOIN inv_products cpi ON cpi.id_product = cp.id_child_product 
-                                        INNER JOIN admin_units u ON u.id_unit = cp.id_unit
-                                        INNER JOIN orders o ON o.id_product = cp.id_product
-                                      WHERE cp.id_product = :id_product AND o.status IN (1,4,5,6)
-                                      GROUP BY cp.id_composite_product, o.id_order");
-        $stmt->execute(['id_product' => $id_product]);
-
+        $stmt = $connection->prepare("SELECT 
+                                            -- Columnas
+                                                o.id_order,
+                                                o.num_order,
+                                                cp.id_product, 
+                                                cp.id_child_product, 
+                                                SUM(IFNULL(pi.quantity, 0)) AS quantity_product, 
+                                                IFNULL(cpi.quantity, 0) AS quantity_material, 
+                                                u.abbreviation, 
+                                                (expo.need * cp.quantity) AS need, 
+                                                IFNULL(cpi.minimum_stock, 0) AS minimum_stock
+                                        FROM products_composite cp
+                                            LEFT JOIN inv_products pi ON pi.id_product = cp.id_product
+                                            LEFT JOIN inv_products cpi ON cpi.id_product = cp.id_child_product
+                                            INNER JOIN admin_units u ON u.id_unit = cp.id_unit
+                                            INNER JOIN plan_explosions_products expo ON expo.id_product = cp.id_product
+                                            INNER JOIN orders o ON o.id_product = cp.id_product
+                                        WHERE cp.id_company = :id_company
+                                        GROUP BY cp.id_composite_product");
+        $stmt->execute(['id_company' => $id_company]);
         $this->logger->info(__FUNCTION__, array('query' => $stmt->queryString, 'errors' => $stmt->errorInfo()));
 
         $materials = $stmt->fetchAll($connection::FETCH_ASSOC);
@@ -82,7 +92,6 @@ class GeneralExplosionProductsDao
         $this->logger->notice("pedidos", array('pedidos' => $materials));
         return $materials;
     }
-
 
     public function setDataEXComposite($products)
     {
@@ -114,7 +123,7 @@ class GeneralExplosionProductsDao
                         'need' => $arr['need'],
                         'minimum_stock' => $arr['minimum_stock'],
                         'transit' => 0,
-                        'available' => $arr['quantity_material'] - $arr['minimum_stock'] - $arr['need'],
+                        'available' => $arr['quantity_material'] - $arr['minimum_stock'] - $arr['need']
                     );
                 }
             }
