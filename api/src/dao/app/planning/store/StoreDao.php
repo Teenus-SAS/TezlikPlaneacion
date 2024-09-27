@@ -104,10 +104,10 @@ class StoreDao
                                             -- Nueva subconsulta para evitar duplicados en la suma de reserved1
                                                 IFNULL(IF(
                                                     -- Subconsulta para obtener el valor de delivery_pending
-                                                    (SELECT MIN(stu_sub.delivery_pending)
+                                                    IFNULL((SELECT MIN(stu_sub.delivery_pending)
                                                     FROM store_users stu_sub
                                                     WHERE stu_sub.id_programming = pg.id_programming
-                                                    AND stu_sub.id_material = m.id_material) = 0,
+                                                    AND stu_sub.id_material = m.id_material), 0) = 0,
                                                     -- Si delivery_pending es 0, calcular la suma de quantity * pm.quantity
                                                     IFNULL((
                                                         SELECT SUM(DISTINCT pg_inner.quantity * pm_inner.quantity)
