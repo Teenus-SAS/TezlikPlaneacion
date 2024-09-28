@@ -393,8 +393,10 @@ if (sizeof($_SESSION) == 0)
 												</div>
 											</div>
 										</div>
-										<div class="col-xs-2 mt-2 mr-2">
-											<button class="btn btn-warning" id="btnCloseOP">Cerrar Orden de Produccion</button>
+										<div class="row">
+											<div class="col-sm-12 mt-4">
+												<button class="btn btn-warning w-100 d-block" id="btnCloseOP">Cerrar Orden de Producción</button>
+											</div>
 										</div>
 									</div>
 								</div>
