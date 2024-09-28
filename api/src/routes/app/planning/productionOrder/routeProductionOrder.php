@@ -39,39 +39,54 @@ $app->post('/changeStatusOP', function (Request $request, Response $response, $a
     $dataOP = $request->getParsedBody();
 
     $result = $generalOrdersDao->changeStatus($dataOP['idOrder'], 8);
-    $generalProductsDao->updateAccumulatedQuantity($dataOP['idProduct'], $dataOP['quantity'], 2);
 
-    // Cambiar estado pedidos
-    $orders = $generalOrdersDao->findAllOrdersByCompany($id_company);
+    if ($result == null) {
+        $generalProductsDao->updateAccumulatedQuantity($dataOP['idProduct'], $dataOP['quantity'], 2);
 
-    for ($i = 0; $i < sizeof($orders); $i++) {
-        // Checkear cantidades
-        // $order = $generalOrdersDao->checkAccumulatedQuantityOrder($orders[$i]['id_order']);
-        if (
-            $orders[$i]['status'] != 'EN PRODUCCION' && /* $orders[$i]['status'] != 'PROGRAMADO' &&*/ $orders[$i]['status'] != 'FABRICADO' &&
-            $orders[$i]['status'] != 'DESPACHO' && $orders[$i]['status'] != 'SIN MATERIA PRIMA' && $orders[$i]['status'] != 'SIN FICHA TECNICA'
-        ) {
-            if ($orders[$i]['original_quantity'] <= $orders[$i]['accumulated_quantity']) {
-                $generalOrdersDao->changeStatus($orders[$i]['id_order'], 2);
-                $accumulated_quantity = $orders[$i]['accumulated_quantity'] - $orders[$i]['original_quantity'];
-            } else {
-                $accumulated_quantity = $orders[$i]['accumulated_quantity'];
+        // Cambiar estado pedidos
+        $orders = $generalOrdersDao->findAllOrdersByCompany($id_company);
+
+        for ($i = 0; $i < sizeof($orders); $i++) {
+            // Checkear cantidades
+            // $order = $generalOrdersDao->checkAccumulatedQuantityOrder($orders[$i]['id_order']);
+            if (
+                $orders[$i]['status'] != 'EN PRODUCCION' && /* $orders[$i]['status'] != 'PROGRAMADO' &&*/ $orders[$i]['status'] != 'FABRICADO' &&
+                $orders[$i]['status'] != 'DESPACHO' && $orders[$i]['status'] != 'SIN MATERIA PRIMA' && $orders[$i]['status'] != 'SIN FICHA TECNICA'
+            ) {
+                if ($orders[$i]['original_quantity'] <= $orders[$i]['accumulated_quantity']) {
+                    $generalOrdersDao->changeStatus($orders[$i]['id_order'], 2);
+                    $accumulated_quantity = $orders[$i]['accumulated_quantity'] - $orders[$i]['original_quantity'];
+                } else {
+                    $accumulated_quantity = $orders[$i]['accumulated_quantity'];
+                }
+
+                if ($orders[$i]['status'] != 'DESPACHO') {
+                    $date = Date('Y-m-d');
+
+                    $generalOrdersDao->updateOfficeDate($orders[$i]['id_order'], $date);
+                }
+
+                $arr = $generalProductsDao->findProductReserved($orders[$i]['id_product']);
+                !isset($arr['reserved']) ? $arr['reserved'] = 0 : $arr;
+                $generalProductsDao->updateReservedByProduct($orders[$i]['id_product'], $arr['reserved']);
+
+                $generalProductsDao->updateAccumulatedQuantity($orders[$i]['id_product'], $accumulated_quantity, 1);
             }
 
-            if ($orders[$i]['status'] != 'DESPACHO') {
-                $date = Date('Y-m-d');
+            // Pedidos automaticos
+            if ($orders[$i]['status'] == 'FABRICADO') {
+                $chOrders = $generalOrdersDao->findAllChildrenOrders($orders[$i]['num_order']);
 
-                $generalOrdersDao->updateOfficeDate($orders[$i]['id_order'], $date);
+                foreach ($chOrders as $arr) {
+                    $result = $generalOrdersDao->changeStatus($arr['id_order'], 12);
+                }
             }
-
-            $arr = $generalProductsDao->findProductReserved($orders[$i]['id_product']);
-            !isset($arr['reserved']) ? $arr['reserved'] = 0 : $arr;
-            $generalProductsDao->updateReservedByProduct($orders[$i]['id_product'], $arr['reserved']);
-
-            $generalProductsDao->updateAccumulatedQuantity($orders[$i]['id_product'], $accumulated_quantity, 1);
         }
     }
 
+    // if ($result == null){
+    //     $orders = $generalOrdersDao-
+    // }
     if ($result == null)
         $resp = array('success' => true, 'message' => 'Programa de producción eliminado correctamente');
     else if (isset($result['info']))

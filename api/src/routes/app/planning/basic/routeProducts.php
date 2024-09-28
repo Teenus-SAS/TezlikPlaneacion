@@ -39,6 +39,7 @@ $compositeProductsDao = new CompositeProductsDao();
 
 use Psr\Http\Message\ResponseInterface as Response;
 use Psr\Http\Message\ServerRequestInterface as Request;
+use Symfony\Component\Dotenv\Exception\FormatException;
 
 /* Consulta todos */
 
@@ -440,6 +441,15 @@ $app->post('/addProduct', function (Request $request, Response $response, $args)
                         $generalMaterialsDao->updateReservedMaterial($arr['id_material'], $k['reserved']);
                     }
                 }
+
+                // Pedidos automaticos
+                if ($orders[$i]['status'] == 'FABRICADO') {
+                    $chOrders = $generalOrdersDao->findAllChildrenOrders($orders[$i]['num_order']);
+
+                    foreach ($chOrders as $arr) {
+                        $resolution = $generalOrdersDao->changeStatus($arr['id_order'], 12);
+                    }
+                }
             }
         }
     }
@@ -469,7 +479,7 @@ $app->post('/updatePlanProduct', function (Request $request, Response $response,
     $dataProduct = $request->getParsedBody();
     $resolution = null;
 
-    $status = true;
+    // $status = true;
 
     // if ($flag_products_measure == '0') {
     //     $products = $generalProductsDao->findProductByReferenceOrName($dataProduct, $id_company);
@@ -488,7 +498,7 @@ $app->post('/updatePlanProduct', function (Request $request, Response $response,
     //         $resp = array('info' => true, 'message' => 'El producto ya existe en la base de datos. Ingrese uno nuevo');
     // }
 
-    if ($resolution == null && $status == true) {
+    if ($resolution == null) {
         if (sizeof($_FILES) > 0)
             $resolution = $FilesDao->imageProduct($dataProduct['idProduct'], $id_company);
 
@@ -627,9 +637,6 @@ $app->post('/updatePlanProduct', function (Request $request, Response $response,
                         $programming = $generalProgrammingDao->findProgrammingByOrder($orders[$i]['id_order']);
                         if (sizeof($programming) > 0) {
                             $generalOrdersDao->changeStatus($orders[$i]['id_order'], 4);
-
-                            // $productsMaterials = $productsMaterialsDao->findAllProductsMaterials($orders[$i]['id_product'], $id_company);
-
                         }
                     }
 
@@ -639,7 +646,19 @@ $app->post('/updatePlanProduct', function (Request $request, Response $response,
                         $generalMaterialsDao->updateReservedMaterial($arr['id_material'], $k['reserved']);
                     }
                 }
+
+                // Pedidos automaticos
+                if ($orders[$i]['status'] == 'FABRICADO') {
+                    $chOrders = $generalOrdersDao->findAllChildrenOrders($orders[$i]['num_order']);
+
+                    foreach ($chOrders as $arr) {
+                        $resolution = $generalOrdersDao->changeStatus($arr['id_order'], 12);
+                    }
+                }
             }
+        }
+
+        if ($resolution == null) {
         }
 
         // Calcular Dias inventario
@@ -648,7 +667,7 @@ $app->post('/updatePlanProduct', function (Request $request, Response $response,
 
             !isset($inventory['days']) ? $days = 0 : $days = $inventory['days'];
 
-            $products = $inventoryDaysDao->updateInventoryProductDays($dataProduct['idProduct'], $days);
+            $resolution = $inventoryDaysDao->updateInventoryProductDays($dataProduct['idProduct'], $days);
         }
 
         if ($resolution == null)

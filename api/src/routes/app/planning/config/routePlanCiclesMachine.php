@@ -384,6 +384,15 @@ $app->post('/addPlanCiclesMachine', function (Request $request, Response $respon
                 $generalMaterialsDao->updateReservedMaterial($arr['id_material'], $k['reserved']);
             }
         }
+
+        // Pedidos automaticos
+        if ($orders[$i]['status'] == 'FABRICADO') {
+            $chOrders = $generalOrdersDao->findAllChildrenOrders($orders[$i]['num_order']);
+
+            foreach ($chOrders as $arr) {
+                $resolution = $generalOrdersDao->changeStatus($arr['id_order'], 12);
+            }
+        }
     }
 
     $response->getBody()->write(json_encode($resp, JSON_NUMERIC_CHECK));
@@ -466,6 +475,7 @@ $app->post('/deletePlanCiclesMachine', function (Request $request, Response $res
             $productsMaterials = $productsMaterialsDao->findAllProductsMaterials($orders[$i]['id_product'], $id_company);
             $compositeProducts = $compositeProductsDao->findAllCompositeProductsByIdProduct($orders[$i]['id_product'], $id_company);
             $productsFTM = array_merge($productsMaterials, $compositeProducts);
+
             $planCicles = $generalPlanCiclesMachinesDao->findAllPlanCiclesMachineByProduct($orders[$i]['id_product'], $id_company);
 
             if ($orders[$i]['status'] != 'EN PRODUCCION' && /* $orders[$i]['status'] != 'PROGRAMADO' &&*/ $orders[$i]['status'] != 'FABRICADO' && $orders[$i]['status'] != 'DESPACHO') {
@@ -530,6 +540,15 @@ $app->post('/deletePlanCiclesMachine', function (Request $request, Response $res
                     $k = $generalMaterialsDao->findReservedMaterial($arr['id_material']);
                     !isset($k['reserved']) ? $k['reserved'] = 0 : $k;
                     $generalMaterialsDao->updateReservedMaterial($arr['id_material'], $k['reserved']);
+                }
+            }
+
+            // Pedidos automaticos
+            if ($orders[$i]['status'] == 'FABRICADO') {
+                $chOrders = $generalOrdersDao->findAllChildrenOrders($orders[$i]['num_order']);
+
+                foreach ($chOrders as $arr) {
+                    $resolution = $generalOrdersDao->changeStatus($arr['id_order'], 12);
                 }
             }
         }

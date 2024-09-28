@@ -55,21 +55,34 @@ $app->post('/invMoldDataValidation', function (Request $request, Response $respo
         $update = 0;
 
         $molds = $dataMold['importInvMold'];
+        $dataImportInvMold = [];
+        $debugg = [];
 
         for ($i = 0; $i < sizeof($molds); $i++) {
             if (
-                empty($molds[$i]['referenceMold']) || empty($molds[$i]['mold']) || empty($molds[$i]['assemblyTime']) ||
-                empty($molds[$i]['assemblyProduction']) || empty($molds[$i]['cavity']) || empty($molds[$i]['cavityAvailable'])
+                empty($molds[$i]['referenceMold']) || empty($molds[$i]['mold']) || empty($molds[$i]['cavityTotal']) || empty($molds[$i]['cavityAvailable']) ||
+                empty($molds[$i]['blowsTotal']) || empty($molds[$i]['available']) || empty($molds[$i]['cicleHour'])
             ) {
-                $i = $i + 2;
-                $dataImportInvMold = array('error' => true, 'message' => "Campos vacios. Fila: {$i}");
-                break;
+                $row = $i + 2;
+                array_push($debugg, array('error' => true, 'message' => "Campos vacios. Fila: {$row}"));
+                // break;
             }
-            if ($molds[$i]['cavity'] < $molds[$i]['cavityAvailable']) {
-                $i = $i + 2;
-                $dataImportInvMold = array('error' => true, 'message' => "N° de cavidades disponibles mayor a N° de cavidades. Fila: {$i}");
-                break;
-            } else {
+
+            if (
+                empty(trim($molds[$i]['referenceMold'])) || empty(trim($molds[$i]['mold'])) || empty(trim($molds[$i]['cavityTotal'])) || empty(trim($molds[$i]['cavityAvailable'])) ||
+                empty(trim($molds[$i]['blowsTotal'])) || empty(trim($molds[$i]['available'])) || empty(trim($molds[$i]['cicleHour']))
+            ) {
+                $row = $i + 2;
+                array_push($debugg, array('error' => true, 'message' => "Campos vacios. Fila: {$row}"));
+                // break;
+            }
+
+            if ($molds[$i]['cavityTotal'] < $molds[$i]['cavityAvailable']) {
+                $row = $i + 2;
+                array_push($debugg, array('error' => true, 'message' => "N° de cavidades disponibles mayor a N° de cavidades. Fila: {$row}"));
+            }   // break;
+
+            if (sizeof($debugg) == 0) {
                 $findMold = $invMoldsDao->findInvMold($molds[$i], $id_company);
                 !$findMold ? $insert = $insert + 1 : $update = $update + 1;
                 $dataImportInvMold['insert'] = $insert;
@@ -79,7 +92,10 @@ $app->post('/invMoldDataValidation', function (Request $request, Response $respo
     } else
         $dataImportInvMold = array('error' => true, 'message' => 'El archivo se encuentra vacio. Intente nuevamente');
 
-    $response->getBody()->write(json_encode($dataImportInvMold, JSON_NUMERIC_CHECK));
+    $data['import'] = $dataImportInvMold;
+    $data['debugg'] = $debugg;
+
+    $response->getBody()->write(json_encode($data, JSON_NUMERIC_CHECK));
     return $response->withHeader('Content-Type', 'application/json');
 });
 
@@ -91,7 +107,7 @@ $app->post('/addMold', function (Request $request, Response $response, $args) us
     $dataMolds = sizeof($dataMold);
 
     if ($dataMolds > 1) {
-        $dataMold = $convertDataDao->strReplaceMold($dataMold);
+        // $dataMold = $convertDataDao->strReplaceMold($dataMold);
         $invMolds = $invMoldsDao->insertInvMoldByCompany($dataMold, $id_company);
 
         if ($invMolds == null)
@@ -106,7 +122,7 @@ $app->post('/addMold', function (Request $request, Response $response, $args) us
         for ($i = 0; $i < sizeof($molds); $i++) {
             $findMold = $invMoldsDao->findInvMold($molds[$i], $id_company);
 
-            $molds[$i] = $convertDataDao->strReplaceMold($molds[$i]);
+            // $molds[$i] = $convertDataDao->strReplaceMold($molds[$i]);
 
             if (!$findMold) $resolution = $invMoldsDao->insertInvMoldByCompany($molds[$i], $id_company);
             else {
@@ -126,22 +142,15 @@ $app->post('/addMold', function (Request $request, Response $response, $args) us
 $app->post('/updateMold', function (Request $request, Response $response, $args) use ($invMoldsDao, $convertDataDao) {
     $dataMold = $request->getParsedBody();
 
-    if (
-        empty($dataMold['referenceMold']) || empty($dataMold['mold']) || empty($dataMold['assemblyTime']) || empty($dataMold['idMold']) ||
-        empty($dataMold['assemblyProduction']) || empty($dataMold['cavity'] || empty($dataMold['cavityAvailable']))
-    ) {
-        $resp = array('error' => true, 'message' => 'Ingrese todos los datos a actualizar');
-    } else {
-        $dataMold = $convertDataDao->strReplaceMold($dataMold);
-        $invMolds = $invMoldsDao->updateInvMold($dataMold);
+    $invMolds = $invMoldsDao->updateInvMold($dataMold);
 
-        if ($invMolds == null)
-            $resp = array('success' => true, 'message' => 'Molde modificado correctamente');
-        else if (isset($invMolds['info']))
-            $resp = array('info' => true, 'message' => $invMolds['message']);
-        else
-            $resp = array('error' => true, 'message' => 'Ocurrio un error mientras modificaba la información. Intente nuevamente');
-    }
+    if ($invMolds == null)
+        $resp = array('success' => true, 'message' => 'Molde modificado correctamente');
+    else if (isset($invMolds['info']))
+        $resp = array('info' => true, 'message' => $invMolds['message']);
+    else
+        $resp = array('error' => true, 'message' => 'Ocurrio un error mientras modificaba la información. Intente nuevamente');
+
     $response->getBody()->write(json_encode($resp));
     return $response->withStatus(200)->withHeader('Content-Type', 'application/json');
 });

@@ -866,6 +866,15 @@ $app->post('/addProductsMaterials', function (Request $request, Response $respon
                     $generalMaterialsDao->updateReservedMaterial($arr['id_material'], $k['reserved']);
                 }
             }
+
+            // Pedidos automaticos
+            if ($orders[$i]['status'] == 'FABRICADO') {
+                $chOrders = $generalOrdersDao->findAllChildrenOrders($orders[$i]['num_order']);
+
+                foreach ($chOrders as $arr) {
+                    $resolution = $generalOrdersDao->changeStatus($arr['id_order'], 12);
+                }
+            }
         }
     }
 

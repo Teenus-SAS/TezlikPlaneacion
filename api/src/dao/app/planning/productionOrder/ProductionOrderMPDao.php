@@ -29,27 +29,10 @@ class ProductionOrderMPDao
                                             m.material, 
                                             IFNULL(mi.quantity, 0) AS quantity_material,
                                             pom.quantity
-                                            -- IFNULL(last_user.id_user_receive, 0) AS id_user_receive,
-                                            -- IFNULL(last_user.firstname_receive, '') AS firstname_receive,
-                                            -- IFNULL(last_user.lastname_receive, '') AS lastname_receive
                                       FROM prod_order_materials pom 
                                         INNER JOIN programming pg ON pg.id_programming = pom.id_programming
                                         INNER JOIN materials m ON m.id_material = pom.id_material
-                                        LEFT JOIN inv_materials mi ON mi.id_material = pom.id_material
-                                            -- Subconsulta para obtener el último usuario de entrega
-                                        -- LEFT JOIN(
-                                        --     SELECT cur.id_prod_order_material,
-                                        --         curd.id_user AS id_user_receive,
-                                        --         curd.firstname AS firstname_receive,
-                                        --         curd.lastname AS lastname_receive
-                                        --     FROM prod_order_materials_users cur
-                                        --     INNER JOIN users curd ON curd.id_user = cur.id_user_receive 
-                                        --     WHERE cur.id_prod_order_material = (
-                                        --             SELECT MAX(cur_inner.id_prod_order_material)
-                                        --             FROM prod_order_materials_users cur_inner
-                                        --             WHERE cur_inner.id_prod_order_material = cur.id_prod_order_material
-                                        --     )
-                                        -- ) AS last_user ON last_user.id_prod_order_material = m.id_prod_order_material
+                                        LEFT JOIN inv_materials mi ON mi.id_material = pom.id_material 
                                       WHERE pom.id_company = :id_company");
         $stmt->execute([
             'id_company' => $id_company
@@ -161,22 +144,4 @@ class ProductionOrderMPDao
             $this->logger->info(__FUNCTION__, array('query' => $stmt->queryString, 'errors' => $stmt->errorInfo()));
         }
     }
-
-    // public function updateDateReceive($dataProgramming)
-    // {
-    //     $connection = Connection::getInstance()->getConnection();
-
-    //     try {
-    //         $stmt = $connection->prepare("UPDATE prod_order_materials SET receive_date = :receive_date WHERE id_prod_order_material = :id_prod_order_material");
-    //         $stmt->execute([
-    //             'id_prod_order_material' => $dataProgramming['idPartDeliv'],
-    //             'receive_date' => $dataProgramming['date'],
-    //         ]);
-    //         $this->logger->info(__FUNCTION__, array('query' => $stmt->queryString, 'errors' => $stmt->errorInfo()));
-    //     } catch (\Exception $e) {
-    //         $message = $e->getMessage();
-    //         $error = array('info' => true, 'message' => $message);
-    //         return $error;
-    //     }
-    // }
 }

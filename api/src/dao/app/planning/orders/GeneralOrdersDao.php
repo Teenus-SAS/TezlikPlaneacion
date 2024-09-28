@@ -21,7 +21,7 @@ class GeneralOrdersDao
         $connection = Connection::getInstance()->getConnection();
 
         $stmt = $connection->prepare("SELECT 
-                                            -- columnas
+                                            -- Columnas
                                                 o.id_order, 
                                                 o.id_client, 
                                                 o.id_product, 
@@ -45,6 +45,20 @@ class GeneralOrdersDao
                                       WHERE o.status_order = 0 AND o.id_company = :id_company AND o.status NOT IN (3)
                                       ORDER BY o.status ASC");
         $stmt->execute(['id_company' => $id_company]);
+
+        $this->logger->info(__FUNCTION__, array('query' => $stmt->queryString, 'errors' => $stmt->errorInfo()));
+
+        $orders = $stmt->fetchAll($connection::FETCH_ASSOC);
+        $this->logger->notice("pedidos", array('pedidos' => $orders));
+        return $orders;
+    }
+
+    public function findAllChildrenOrders($num_order)
+    {
+        $connection = Connection::getInstance()->getConnection();
+
+        $stmt = $connection->prepare("SELECT * FROM `orders` WHERE num_order LIKE '$num_order-%'");
+        $stmt->execute();
 
         $this->logger->info(__FUNCTION__, array('query' => $stmt->queryString, 'errors' => $stmt->errorInfo()));
 

@@ -444,6 +444,15 @@ $app->post('/addMaterials', function (Request $request, Response $response, $arg
                     $generalMaterialsDao->updateReservedMaterial($arr['id_material'], $k['reserved']);
                 }
             }
+
+            // Pedidos automaticos
+            if ($orders[$i]['status'] == 'FABRICADO') {
+                $chOrders = $generalOrdersDao->findAllChildrenOrders($orders[$i]['num_order']);
+
+                foreach ($chOrders as $arr) {
+                    $resolution = $generalOrdersDao->changeStatus($arr['id_order'], 12);
+                }
+            }
         }
         if ($resolution == null)
             $resp = array('success' => true, 'message' => 'Materia Prima Importada correctamente');
@@ -752,6 +761,15 @@ $app->post('/updateMaterials', function (Request $request, Response $response, $
                         !isset($k['reserved']) ? $k['reserved'] = 0 : $k;
                         $generalMaterialsDao->updateReservedMaterial($arr['id_material'], $k['reserved']);
                     }
+                }
+            }
+
+            // Pedidos automaticos
+            if ($orders[$i]['status'] == 'FABRICADO') {
+                $chOrders = $generalOrdersDao->findAllChildrenOrders($orders[$i]['num_order']);
+
+                foreach ($chOrders as $arr) {
+                    $resolution = $generalOrdersDao->changeStatus($arr['id_order'], 12);
                 }
             }
         }

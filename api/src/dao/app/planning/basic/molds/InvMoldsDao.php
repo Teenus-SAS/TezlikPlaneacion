@@ -50,16 +50,40 @@ class InvMoldsDao
         $connection = Connection::getInstance()->getConnection();
 
         try {
-            $stmt = $connection->prepare("INSERT INTO inv_molds (reference, mold, id_company, assembly_time, assembly_production, cavity, cavity_available)
-                                          VALUES (:reference, :mold, :id_company, :assembly_time, :assembly_production, :cavity, :cavity_available)");
+            $stmt = $connection->prepare("INSERT INTO inv_molds 
+                                            (
+                                                reference, 
+                                                mold, 
+                                                id_company, 
+                                                cavity_total,
+                                                cavity_available,
+                                                blows_total,
+                                                available,
+                                                cicle_hour,
+                                                status
+                                            )
+                                          VALUES 
+                                            (
+                                                :reference, 
+                                                :mold, 
+                                                :id_company, 
+                                                :cavity_total,
+                                                :cavity_available,
+                                                :blows_total,
+                                                :available,
+                                                :cicle_hour,
+                                                :status
+                                            )");
             $stmt->execute([
                 'reference' => $dataMold['referenceMold'],
                 'mold' => strtoupper(trim($dataMold['mold'])),
                 'id_company' => $id_company,
-                'assembly_time' => $dataMold['assemblyTime'],
-                'assembly_production' => $dataMold['assemblyProduction'],
-                'cavity' => $dataMold['cavity'],
-                'cavity_available' => $dataMold['cavityAvailable']
+                'cavity_total' => $dataMold['cavityTotal'],
+                'cavity_available' => $dataMold['cavityAvailable'],
+                'blows_total' => $dataMold['blowsTotal'],
+                'available' => $dataMold['available'],
+                'cicle_hour' => $dataMold['cicleHour'],
+                'status' => 1
             ]);
             $this->logger->info(__FUNCTION__, array('query' => $stmt->queryString, 'errors' => $stmt->errorInfo()));
         } catch (\Exception $e) {
@@ -76,16 +100,24 @@ class InvMoldsDao
         $connection = Connection::getInstance()->getConnection();
 
         try {
-            $stmt = $connection->prepare("UPDATE inv_molds SET reference = :reference, mold = :mold, assembly_time = :assembly_time, assembly_production = :assembly_production, cavity = :cavity, cavity_available = :cavity_available
+            $stmt = $connection->prepare("UPDATE inv_molds SET 
+                                            reference = :reference,
+                                            mold = :mold, 
+                                            cavity_total = :cavity_total,
+                                            cavity_available = :cavity_available,
+                                            blows_total = :blows_total,
+                                            available = :available,
+                                            cicle_hour = :cicle_hour
                                           WHERE id_mold = :id_mold");
             $stmt->execute([
                 'id_mold' => $dataMold['idMold'],
                 'reference' => $dataMold['referenceMold'],
                 'mold' => strtoupper(trim($dataMold['mold'])),
-                'assembly_time' => $dataMold['assemblyTime'],
-                'assembly_production' => $dataMold['assemblyProduction'],
-                'cavity' => $dataMold['cavity'],
-                'cavity_available' => $dataMold['cavityAvailable']
+                'cavity_total' => $dataMold['cavityTotal'],
+                'cavity_available' => $dataMold['cavityAvailable'],
+                'blows_total' => $dataMold['blowsTotal'],
+                'available' => $dataMold['available'],
+                'cicle_hour' => $dataMold['cicleHour'],
             ]);
             $this->logger->info(__FUNCTION__, array('query' => $stmt->queryString, 'errors' => $stmt->errorInfo()));
         } catch (\Exception $e) {
