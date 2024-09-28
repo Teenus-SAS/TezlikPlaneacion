@@ -220,7 +220,7 @@ $(document).ready(function () {
   });
 
   const checkDataRequisition = async (url, idRequisition) => {
-    const material = $("#materialName").val();
+    const material = $("#material").val();
     const provider = $("#client").val();
     const applicationDate = $("#applicationDate").val();
     const deliveryDate = $("#deliveryDate").val();
