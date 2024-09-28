@@ -453,9 +453,6 @@ if (sizeof($_SESSION) == 0)
     <script src="/planning/js/dashboard/deliveryOnTime.js"></script>
     <script src="/planning/js/dashboard/inventoryProductsABC.js"></script>
     <script src="/planning/js/dashboard/quantityOrdersClients.js"></script>
-    <!-- <script>
-        sessionStorage.removeItem('dataProgramming');
-    </script> -->
     <!-- <script src="/planning/js/users/usersAccess.js"></script> -->
 
     <!-- <script src="/global/js/global/loadContent.js"></script> -->

@@ -787,9 +787,7 @@ $(document).ready(function () {
   /* Mensaje de exito */
   const message = async (data) => {
     try {
-      if (data.success) {
-        // let allTblData = flattenData(generalMultiArray);
-        // sessionStorage.setItem("dataProgramming", JSON.stringify(allTblData));
+      if (data.success) { 
         hideCardAndResetForm();
         toastr.success(data.message);
         await loadAllDataProgramming();
@@ -807,24 +805,8 @@ $(document).ready(function () {
   const hideCardAndResetForm = () => {
     $(".cardCreateProgramming").hide(800);
     $("#formCreateProgramming").trigger("reset");
-  };
+  }; 
 
-  // Función para aplanar el array
-  // flattenData = (data) => {
-  //   const flattened = [];
-
-  //   data.forEach((sim) => {
-  //     Object.values(sim).forEach((processes) => {
-  //       processes.forEach((process) => {
-  //         Object.values(process).forEach((items) => {
-  //           flattened.push(...items);
-  //         });
-  //       });
-  //     });
-  //   });
-
-  //   return flattened;
-  // };
   // Función para aplanar el array considerando id_machine
   flattenData = (data) => {
     const flattened = [];

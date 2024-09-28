@@ -41,13 +41,7 @@ $(document).ready(function () {
                 title: 'Producto',
                 data: 'product',
                 className: 'uniqueClassName dt-head-center',
-            },
-            // {
-            //   title: 'Existencia',
-            //   data: 'quantity',
-            //   className: 'uniqueClassName dt-head-center',
-            //   render: (data) => parseFloat(data).toLocaleString('es-CO', { minimumFractionDigits: 0, maximumFractionDigits: 0 }),
-            // },
+            }, 
             {
                 title: 'Operador',
                 data: null,

@@ -11,42 +11,87 @@ $(document).ready(function () {
     }
   });
 
+  // loadAllData = async (op, min_date, max_date) => {
+  //   try {
+  //     const [dataActualOffices, dataOffices] = await Promise.all([
+  //       searchData("/api/actualOffices"),
+  //       op == 3 ? searchData(`/api/offices/${min_date}/${max_date}`) : null,
+  //     ]);
+
+  //     let card = document.getElementsByClassName("selectNavigation");
+
+  //     if (card[0].className.includes("active")) pending = 1;
+  //     else pending = 0;
+
+  //     pendingStore = dataActualOffices.filter(
+  //       (item) => item.status !== "ENTREGADO"
+  //     );
+  //     deliveredStore = dataActualOffices.filter(
+  //       (item) => item.status === "ENTREGADO"
+  //     );
+
+  //     let visible = true;
+  //     if (op === 1) dataToLoad = pendingStore;
+  //     else if (op === 2) {
+  //       dataToLoad = deliveredStore;
+  //       visible = false;
+  //     } else {
+  //       if (pending == 1)
+  //         dataToLoad = dataOffices.filter(
+  //           (item) => item.status !== "ENTREGADO"
+  //         );
+  //       else
+  //         dataToLoad = dataOffices.filter(
+  //           (item) => item.status === "ENTREGADO"
+  //         );
+  //     }
+
+  //     if (dataToLoad) {
+  //       loadTblOffices(dataToLoad, visible);
+  //       officesIndicators(dataToLoad);
+  //     }
+  //   } catch (error) {
+  //     console.error("Error loading data:", error);
+  //   }
+  // };
   loadAllData = async (op, min_date, max_date) => {
     try {
+      // Cargar los datos de forma condicional con Promise.all
       const [dataActualOffices, dataOffices] = await Promise.all([
         searchData("/api/actualOffices"),
-        op == 3 ? searchData(`/api/offices/${min_date}/${max_date}`) : null,
+        op === 3 ? searchData(`/api/offices/${min_date}/${max_date}`) : Promise.resolve(null),
       ]);
 
-      let card = document.getElementsByClassName("selectNavigation");
+      // Detectar si la pestaña "pendientes" está activa
+      const isPendingActive = document
+        .getElementsByClassName("selectNavigation")[0]
+        .className.includes("active");
+      const pending = isPendingActive ? 1 : 0;
 
-      if (card[0].className.includes("active")) pending = 1;
-      else pending = 0;
+      // Filtrar datos según el estado
+      const pendingStore = dataActualOffices.filter(item => item.status !== "ENTREGADO");
+      const deliveredStore = dataActualOffices.filter(item => item.status === "ENTREGADO");
 
-      pendingStore = dataActualOffices.filter(
-        (item) => item.status !== "ENTREGADO"
-      );
-      deliveredStore = dataActualOffices.filter(
-        (item) => item.status === "ENTREGADO"
-      );
-
+      // Definir los datos a cargar y la visibilidad de la columna
+      let dataToLoad = [];
       let visible = true;
-      if (op === 1) dataToLoad = pendingStore;
-      else if (op === 2) {
+
+      if (op === 1) {
+        // Cargar datos pendientes
+        dataToLoad = pendingStore;
+      } else if (op === 2) {
+        // Cargar datos entregados
         dataToLoad = deliveredStore;
         visible = false;
-      } else {
-        if (pending == 1)
-          dataToLoad = dataOffices.filter(
-            (item) => item.status !== "ENTREGADO"
-          );
-        else
-          dataToLoad = dataOffices.filter(
-            (item) => item.status === "ENTREGADO"
-          );
+      } else if (op === 3 && dataOffices) {
+        // Filtrar los datos según el estado y la pestaña activa
+        dataToLoad = pending
+          ? dataOffices.filter(item => item.status !== "ENTREGADO")
+          : dataOffices.filter(item => item.status === "ENTREGADO");
       }
 
-      if (dataToLoad) {
+      // Si hay datos para cargar, actualizar la tabla y los indicadores
+      if (dataToLoad && dataToLoad.length > 0) {
         loadTblOffices(dataToLoad, visible);
         officesIndicators(dataToLoad);
       }
@@ -87,16 +132,17 @@ $(document).ready(function () {
     );
   };
 
-  /* Cargar pedidos */
-  loadTblOffices = (data, visible) => {
-    // if ($.fn.dataTable.isDataTable("#tblOffices")) {
-    //   $("#tblOffices").DataTable().clear();
-    //   $('#tblOffices').DataTable().column(8).visible(visible);
-    //   $('#tblOffices').DataTable().column(10).visible(visible);
-    //   $("#tblOffices").DataTable().rows.add(data).draw();
-    //   return;
-    // }
+  // Cargar Despachos
+  const loadTblOffices = (data, visible) => {
+    if ($.fn.dataTable.isDataTable("#tblOffices")) {
+      // Si ya existe, solo actualizamos los datos y columnas visibles
+      $("#tblOffices").DataTable().clear();
+      $('#tblOffices').DataTable().column(8).visible(visible); // Columna "Existencias"
+      $("#tblOffices").DataTable().rows.add(data).draw();
+      return;
+    }
 
+    // Inicializar tabla si no existe
     tblOffices = $("#tblOffices").dataTable({
       destroy: true,
       pageLength: 50,
@@ -123,7 +169,6 @@ $(document).ready(function () {
           data: "num_order",
           className: "uniqueClassName dt-head-center",
         },
-
         {
           title: "Cliente",
           data: "client",
@@ -133,43 +178,19 @@ $(document).ready(function () {
           title: "Fechas",
           data: null,
           className: "uniqueClassName dt-head-center",
-          render: function (data, type, full, meta) {
-            const minDate = full.min_date;
-            const maxDate = full.max_date;
-            // Convierte la fecha mínima a un objeto Date
-            const parsedMaxDate = new Date(maxDate);
+          render: function (data, type, full) {
+            const minDate = moment(full.min_date).format("DD/MM/YYYY");
+            const maxDate = moment(full.max_date).format("DD/MM/YYYY");
+            const today = moment().format("YYYY-MM-DD");
 
-            // Obtiene la fecha del sistema
-            const today = new Date();
+            let badgeClass = "badge-success"; // Por defecto
+            if (full.max_date < today) badgeClass = "badge-danger"; // Vencido
+            else if (full.max_date === today) badgeClass = "badge-warning"; // Hoy
 
-            // Compara las fechas
-            const isOverdue = parsedMaxDate > today;
-            const equal = parsedMaxDate == today;
-
-            if (isOverdue)
-              return `<span class="badge badge-info">Mínima: ${moment(
-                minDate
-              ).format(
-                "DD/MM/YYYY"
-              )}</span><br><span class="badge badge-success">Máxima: ${moment(
-                maxDate
-              ).format("DD/MM/YYYY")}</span>`;
-            else if (equal)
-              return `<span class="badge badge-info">Mínima: ${moment(
-                minDate
-              ).format(
-                "DD/MM/YYYY"
-              )}</span><br><span class="badge badge-warning">Máxima: ${moment(
-                maxDate
-              ).format("DD/MM/YYYY")}</span>`;
-            else
-              return `<span class="badge badge-info">Mínima: ${moment(
-                minDate
-              ).format(
-                "DD/MM/YYYY"
-              )}</span><br><span class="badge badge-danger">Máxima: ${moment(
-                maxDate
-              ).format("DD/MM/YYYY")}</span>`;
+            return `
+            <span class="badge badge-info">Mínima: ${minDate}</span><br>
+            <span class="badge ${badgeClass}">Máxima: ${maxDate}</span>
+          `;
           },
         },
         {
@@ -200,26 +221,13 @@ $(document).ready(function () {
           data: null,
           className: "uniqueClassName dt-head-center",
           render: function (data) {
-            data.status == "DESPACHO"
-              ? (action = `<button class="btn btn-info changeDate" id="${data.id_order}" name="${data.id_order}">Entregar</button>`)
-              : (action = `${data.firstname_order} ${data.lastname_order}<br>${data.delivery_date}`);
-
-            return action;
+            return data.status === "DESPACHO"
+              ? `<button class="btn btn-info changeDate" id="${data.id_order}" name="${data.id_order}">Entregar</button>`
+              : `${data.firstname_order} ${data.lastname_order}<br>${data.delivery_date}`;
           },
         },
-        // {
-        //   title: "Cancelar",
-        //   data: null,
-        //   className: "uniqueClassName dt-head-center",
-        //   visible: visible,
-        //   render: function (data) {
-        //     return data.status == "DESPACHO"
-        //       ? `<a href="javascript:;" <i class="fas fa-times cancelOrder" id="${data.id_order}" data-toggle='tooltip' title='Cancelar DESPACHO' style="font-size: 30px;color:red;"></i></a>`
-        //       : "";
-        //   },
-        // },
       ],
-      headerCallback: function (thead, data, start, end, display) {
+      headerCallback: function (thead) {
         $(thead).find("th").css({
           "background-color": "#386297",
           color: "white",

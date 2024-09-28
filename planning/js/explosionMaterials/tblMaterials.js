@@ -1,4 +1,14 @@
 $(document).ready(function () {
+  // Función para formatear números
+  const formatNumber = (value, abbreviation) => {
+    let number = parseFloat(value);
+    if (abbreviation === "UND") {
+      return number.toLocaleString("es-CO", { maximumFractionDigits: 0 });
+    } else {
+      return number.toLocaleString("es-CO", { minimumFractionDigits: 2 });
+    }
+  };
+  
   tblMaterials = $("#tblMaterials").dataTable({
     destroy: true,
     pageLength: 50,
@@ -17,12 +27,7 @@ $(document).ready(function () {
         render: function (data, type, full, meta) {
           return meta.row + 1;
         },
-      },
-      // {
-      //   title: "Pedido",
-      //   data: "num_order",
-      //   className: "uniqueClassName dt-head-center",
-      // },
+      }, 
       {
         title: "Referencia",
         data: "reference_material",
@@ -42,73 +47,25 @@ $(document).ready(function () {
         title: "Inventario",
         data: null,
         className: "uniqueClassName dt-head-center",
-        render: function (data) {
-          let quantity = parseFloat(data.quantity_material);
-
-          if (data.abbreviation === "UND")
-            quantity = quantity.toLocaleString("es-CO", {
-              maximumFractionDigits: 0,
-            });
-          else
-            quantity = quantity.toLocaleString("es-CO", {
-              minimumFractionDigits: 2,
-            });
-
-          return quantity;
-        },
+        render: (data) => formatNumber(data.quantity_material, data.abbreviation),
       },
       {
         title: "Stock Min",
         data: null,
         className: "uniqueClassName dt-head-center",
-        render: function (data) {
-          let minimum_stock = parseFloat(data.minimum_stock);
-
-          if (data.abbreviation === "UND")
-            minimum_stock = minimum_stock.toLocaleString("es-CO", {
-              maximumFractionDigits: 0,
-            });
-          else
-            minimum_stock = minimum_stock.toLocaleString("es-CO", {
-              minimumFractionDigits: 2,
-            });
-
-          return minimum_stock;
-        },
+        render: (data) => formatNumber(data.minimum_stock, data.abbreviation),
       },
       {
         title: "En Transito",
         data: null,
         className: "uniqueClassName dt-head-center",
-        render: function (data) {
-          let transit = parseFloat(data.transit);
-
-          if (data.abbreviation === "UND")
-            transit = transit.toLocaleString("es-CO", {
-              maximumFractionDigits: 0,
-            });
-          else
-            transit = transit.toLocaleString("es-CO", {
-              minimumFractionDigits: 2,
-            });
-
-          return transit;
-        },
+        render: (data) => formatNumber(data.transit, data.abbreviation),
       },
       {
         title: "Necesidad",
         data: null,
         className: "uniqueClassName dt-head-center",
-        render: function (data) {
-          let need = parseFloat(data.need);
-
-          if (data.abbreviation === "UND")
-            need = need.toLocaleString("es-CO", { maximumFractionDigits: 0 });
-          else
-            need = need.toLocaleString("es-CO", { minimumFractionDigits: 2 });
-
-          return need;
-        },
+        render: (data) => formatNumber(data.need, data.abbreviation),
       },
       {
         title: "Disponible",
@@ -140,5 +97,5 @@ $(document).ready(function () {
         border: "1px solid #ddd",
       });
     },
-  });
+  }); 
 });
