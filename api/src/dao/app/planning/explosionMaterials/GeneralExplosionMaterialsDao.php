@@ -48,8 +48,8 @@ class GeneralExplosionMaterialsDao
                                             INNER JOIN products_materials pm ON pm.id_product = p.id_product
                                             INNER JOIN inv_materials mi ON mi.id_material = pm.id_material
                                             INNER JOIN orders o ON o.id_product = p.id_product
-                                            LEFT JOIN requisitions r ON r.id_material = pm.id_material
-                                            LEFT JOIN programming pg ON pg.id_order = o.id_order
+                                           -- LEFT JOIN requisitions r ON r.id_material = pm.id_material
+                                           -- LEFT JOIN programming pg ON pg.id_order = o.id_order
                                         WHERE p.id_company = :id_company AND o.status IN(1, 4, 5, 6)
                                         GROUP BY pm.id_product_material, o.id_order");
         $stmt->execute(['id_company' => $id_company]);
@@ -83,7 +83,7 @@ class GeneralExplosionMaterialsDao
                                         INNER JOIN products_materials pm ON pm.id_product = p.id_product
                                         INNER JOIN inv_materials mi ON mi.id_material = pm.id_material
                                         INNER JOIN plan_explosions_products expp ON expp.id_product = p.id_product
-                                        LEFT JOIN requisitions r ON r.id_material = pm.id_material
+                                       -- LEFT JOIN requisitions r ON r.id_material = pm.id_material
                                         INNER JOIN orders o ON o.id_product = p.id_product
                                       WHERE p.id_company = :id_company
                                         GROUP BY pm.id_product_material");

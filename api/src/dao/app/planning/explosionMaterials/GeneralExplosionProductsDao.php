@@ -43,14 +43,14 @@ class GeneralExplosionProductsDao
                                             (o.original_quantity * cp.quantity) AS need, 
                                             IFNULL(cpi.minimum_stock, 0) AS minimum_stock
                                             -- p.reference AS reference_material,  p.product AS material
-                                  FROM products_composite cp
-                                    LEFT JOIN inv_products pi ON pi.id_product = cp.id_product
-                                    LEFT JOIN inv_products cpi ON cpi.id_product = cp.id_child_product
-                                    -- LEFT JOIN products p ON p.id_product = cp.id_child_product
-                                    INNER JOIN admin_units u ON u.id_unit = cp.id_unit
-                                    INNER JOIN orders o ON o.id_product = cp.id_product
-                                  WHERE cp.id_company = :id_company AND o.status IN (1,4,5,6)
-                                  GROUP BY cp.id_composite_product, o.id_order");
+                                        FROM products_composite cp
+                                            LEFT JOIN inv_products pi ON pi.id_product = cp.id_product
+                                            LEFT JOIN inv_products cpi ON cpi.id_product = cp.id_child_product
+                                            -- LEFT JOIN products p ON p.id_product = cp.id_child_product
+                                            INNER JOIN admin_units u ON u.id_unit = cp.id_unit
+                                            INNER JOIN orders o ON o.id_product = cp.id_product
+                                        WHERE cp.id_company = :id_company AND o.status IN (1,4,5,6)
+                                        GROUP BY cp.id_composite_product, o.id_order");
         $stmt->execute(['id_company' => $id_company]);
 
         $this->logger->info(__FUNCTION__, array('query' => $stmt->queryString, 'errors' => $stmt->errorInfo()));
