@@ -131,12 +131,12 @@ $(document).ready(function () {
     let reserved = parseFloat(formatNumber(data.reserved1)); 
 
     bootbox.confirm({
-      title: `<div style="border-bottom: 1px solid #dee2e6; padding-bottom: 10px;">Entrega Material</div>`,
+      title: `<div style="border-bottom: 1px solid #6c757d;">Entregar Materia Prima</div>`,
       message: `
-        <div style="border-bottom: 1px solid #dee2e6; padding-bottom: 10px; margin-bottom: 15px;"> 
-          <div class="col-sm-6 floating-label enable-floating-label show-label">
+        <div style="border-bottom: 1px solid #6c757d;"> 
+          <div class="col-sm-12 text-center mb-3 floating-label enable-floating-label show-label">
               <label for="quantity">Cantidad a Entregar</label>
-              <input type="number" class="form-control text-center" id="quantity" name="quantity">
+              <input type="number" class="form-control text-center" id="quantity" name="quantity" style="max-width: 50%; margin: 0 auto;">
           </div>
         </div>
     `,
