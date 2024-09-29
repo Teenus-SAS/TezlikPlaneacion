@@ -29,6 +29,11 @@ const ChartOrdersPerDay = (data) => {
     return order ? order.total_orders : 0;
   });
 
+  // Calcular la tercera línea con la suma de type_order 1 y 2
+  const totalOrders = uniqueDays.map(
+    (day, index) => ordersType1[index] + ordersType2[index]
+  );
+
   // Crear el gráfico de líneas con Chart.js
   const ctx = document.getElementById("chartOrdersxDay").getContext("2d");
   const ordersChart = new Chart(ctx, {
@@ -51,6 +56,15 @@ const ChartOrdersPerDay = (data) => {
           backgroundColor: "rgba(99, 255, 221, 0.2)",
           fill: false,
           tension: 0.1, // Suaviza la curva de la línea
+        },
+        {
+          label: "Total Pedidos (Tipo 1 + Tipo 2)",
+          data: totalOrders, // Eje Y: Suma de los pedidos tipo 1 y 2 por día
+          borderColor: "rgba(0, 200, 255, 1)", // Azul claro (línea)
+          backgroundColor: "rgba(0, 200, 255, 0.2)", // Azul claro (relleno)
+          fill: false,
+          tension: 0.1, // Suaviza la curva de la línea
+          borderDash: [5, 5], // Línea punteada para diferenciarla
         },
       ],
     },
