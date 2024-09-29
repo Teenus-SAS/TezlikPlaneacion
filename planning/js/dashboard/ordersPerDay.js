@@ -5,64 +5,67 @@ $(document).ready(function () {
       .then((data) => {
         //Parsea los datos
         data = JSON.parse(data);
-
-        // Extraer los días y las órdenes en dos arreglos
-        const days = data.map((order) => order.day);
-        const totalOrdersType1 = data.map((order) => order.type_order);
-        const totalOrdersType2 = data.map((order) => order.total_orders);
-
-        ChartOrdersPerDay(days, totalOrdersType1, totalOrdersType2);
+        ChartOrdersPerDay(data);
       });
   }, 1000);
-
-  /* Colors */
-  dynamicColors = () => {
-    let letters = "0123456789ABCDEF".split("");
-    let color = "#";
-
-    for (var i = 0; i < 6; i++)
-      color += letters[Math.floor(Math.random() * 16)];
-    return color;
-  };
-
-  getRandomColor = (a) => {
-    let color = [];
-    for (i = 0; i < a; i++) color.push(dynamicColors());
-    return color;
-  };
 });
 
-const ChartOrdersPerDay = (days, totalOrdersType1, totalOrdersType2) => {
-  // Obtener el valor máximo del conjunto de datos combinados de ambas series
-  const maxOrder = Math.max(...totalOrdersType1, ...totalOrdersType2);
+const ChartOrdersPerDay = (data) => {
+  // Datos proporcionados
+  const data = [
+    { day: "2024-09-26", type_order: 1, total_orders: 1 },
+    { day: "2024-09-26", type_order: 2, total_orders: 3 },
+    { day: "2024-09-27", type_order: 1, total_orders: 1 },
+    { day: "2024-09-28", type_order: 1, total_orders: 1 },
+    { day: "2024-09-28", type_order: 2, total_orders: 2 },
+  ];
 
-  // Crear el gráfico de líneas
-  const ctx = document.getElementById("chartOrdersxDay").getContext("2d");
+  // Obtener las fechas únicas para las etiquetas del eje X
+  const uniqueDays = [...new Set(data.map((item) => item.day))];
+
+  // Agrupar los datos por type_order 1 y 2 para las dos líneas
+  const ordersType1 = uniqueDays.map((day) => {
+    const order = data.find(
+      (item) => item.day === day && item.type_order === 1
+    );
+    return order ? order.total_orders : 0;
+  });
+
+  const ordersType2 = uniqueDays.map((day) => {
+    const order = data.find(
+      (item) => item.day === day && item.type_order === 2
+    );
+    return order ? order.total_orders : 0;
+  });
+
+  // Crear el gráfico de líneas con Chart.js
+  const ctx = document.getElementById("ordersChart").getContext("2d");
   const ordersChart = new Chart(ctx, {
     type: "line",
     data: {
-      labels: days, // Eje X: días
+      labels: uniqueDays, // Eje X: días únicos
       datasets: [
         {
-          label: "Pedidos Clientes", // Línea para el tipo de pedido 1
-          data: totalOrdersType1, // Eje Y: total de órdenes para tipo 1
+          label: "Pedidos Tipo 1",
+          data: ordersType1, // Eje Y: Pedidos tipo 1 por día
           borderColor: "rgba(75, 192, 192, 1)",
           backgroundColor: "rgba(75, 192, 192, 0.2)",
-          fill: true, // Para llenar el área bajo la línea
+          fill: false,
           tension: 0.1, // Suaviza la curva de la línea
         },
         {
-          label: "Pedidos Internos", // Línea para el tipo de pedido 2
-          data: totalOrdersType2, // Eje Y: total de órdenes para tipo 2
-          borderColor: "rgba(153, 102, 255, 1)",
-          backgroundColor: "rgba(153, 102, 255, 0.2)",
-          fill: true, // Para llenar el área bajo la línea
+          label: "Pedidos Tipo 2",
+          data: ordersType2, // Eje Y: Pedidos tipo 2 por día
+          borderColor: "rgba(255, 99, 132, 1)",
+          backgroundColor: "rgba(255, 99, 132, 0.2)",
+          fill: false,
           tension: 0.1, // Suaviza la curva de la línea
         },
       ],
     },
     options: {
-      maintainAspectRatio: false, // Para usar el tamaño del contenedor y no mantener el ratio
+      responsive: true,
+      maintainAspectRatio: false,
       scales: {
         x: {
           title: {
@@ -72,43 +75,23 @@ const ChartOrdersPerDay = (days, totalOrdersType1, totalOrdersType2) => {
         },
         y: {
           beginAtZero: true,
-          max: maxOrder + 1, // Ajusta el eje Y a un punto por encima del dato máximo
           title: {
             display: true,
-            text: "Pedidos",
+            text: "Cantidad de Pedidos",
           },
         },
       },
       plugins: {
         legend: {
-          display: true, // Mostrar la leyenda para identificar cada serie
-        },
-        datalabels: {
-          display: true, // Habilitar las etiquetas de datos en cada punto
-          color: "black",
-          anchor: "end", // Anclar la etiqueta al final del punto
-          align: "top", // Alinear la etiqueta por encima del punto
-          font: {
-            size: 12,
-          },
-          formatter: function (value) {
-            // Personalizar el formato de las etiquetas
-            return value.toFixed(0); // Mostrar el valor como entero
-          },
+          display: true,
+          position: "top",
         },
         tooltip: {
-          mode: "index", // Asegurarse de que solo se muestre una tooltip por punto
-          intersect: false, // Permite mostrar la tooltip incluso si el cursor no está exactamente sobre el punto
-          callbacks: {
-            label: function (context) {
-              // Personalizar el formato de la tooltip
-              return "Pedidos: " + context.parsed.y.toFixed(0);
-            },
-          },
+          mode: "index",
+          intersect: false,
         },
       },
     },
-    plugins: [ChartDataLabels], // Añadir el plugin de etiquetas
   });
 };
 
