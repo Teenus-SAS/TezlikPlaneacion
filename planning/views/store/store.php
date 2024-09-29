@@ -121,7 +121,7 @@ if (sizeof($_SESSION) == 0)
                                     </li>
                                     <li class="nav-item">
                                         <a class="nav-link selectNavigation" id="deliverOC" data-toggle="pill" href="javascript:;" role="tab" aria-controls="pills-activity" aria-selected="true">
-                                            <i class="fas fa-flatbed mr-1"></i>Ordenes de Producción (Entregar)
+                                            <i class="fas fa-dolly-flatbed mr-1"></i>Ordenes de Producción (Entregar)
                                         </a>
                                     </li>
                                     <li class="nav-item">
