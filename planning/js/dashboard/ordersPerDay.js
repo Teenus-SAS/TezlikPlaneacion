@@ -113,7 +113,7 @@ const ChartOrdersPerDay = (days, totalOrdersType1, totalOrdersType2) => {
 };
 
 // Ejemplo de llamada a la función
-const days = ["2024-09-25", "2024-09-26"];
+/* const days = ["2024-09-25", "2024-09-26"];
 const totalOrdersType1 = [3, 7]; // Pedidos para type 1 por día
 const totalOrdersType2 = [4, 5]; // Pedidos para type 2 por día
-ChartOrdersPerDay(days, totalOrdersType1, totalOrdersType2);
+ChartOrdersPerDay(days, totalOrdersType1, totalOrdersType2); */
