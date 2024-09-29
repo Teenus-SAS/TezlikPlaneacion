@@ -23,8 +23,6 @@ const indicatorsGlobal = async () => {
     const formattedValues = {
       productsOutStock: formatPercentage(productsOutStock),
       mpOutStock: formatPercentage(percentageMPLowStock),
-      orders_clients: formatPercentage(orders_clients),
-      orders_internalClients: formatPercentage(orders_internalClients),
       ordersNoProgramed: formatPercentage(ordersNoProgramed),
       totalOrdersNoProgrammed: formatPercentage(totalOrdersNoProgrammed),
       OrdersNoMP: formatPercentage(OrdersNoMP),
@@ -39,9 +37,7 @@ const indicatorsGlobal = async () => {
     $("#mpOutStock").text(`${response.totalMPLowStock}`);
     $("#mpPercentageOutStock").text(`${formattedValues.mpOutStock}%`);
 
-    $("#ordersActive").text(
-      `${formattedValues.orders_clients} / ${formattedValues.orders_internalClients}`
-    );
+    $("#ordersActive").text(`${orders_clients} / ${orders_internalClients}`);
 
     $("#ordersNoProgramed").text(`${formattedValues.totalOrdersNoProgrammed}`);
     $("#percentOrdersNoProgramed").text(
