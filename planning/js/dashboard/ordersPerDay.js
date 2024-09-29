@@ -42,7 +42,7 @@ const ChartOrdersPerDay = (data) => {
       labels: uniqueDays, // Eje X: días únicos
       datasets: [
         {
-          label: "Pedidos Clientes",
+          label: "Clientes",
           data: ordersType1, // Eje Y: Pedidos tipo 1 por día
           borderColor: "rgba(138, 43, 226, 1)",
           backgroundColor: "rgba(138, 43, 226, 0.2)",
@@ -50,7 +50,7 @@ const ChartOrdersPerDay = (data) => {
           tension: 0.1, // Suaviza la curva de la línea
         },
         {
-          label: "Pedidos Internos",
+          label: "Internos",
           data: ordersType2, // Eje Y: Pedidos tipo 2 por día
           borderColor: "rgba(255, 205, 86, 1)",
           backgroundColor: "rgba(255, 205, 86, 0.2)",
@@ -58,7 +58,7 @@ const ChartOrdersPerDay = (data) => {
           tension: 0.1, // Suaviza la curva de la línea
         },
         {
-          label: "Total Pedidos (Tipo 1 + Tipo 2)",
+          label: "Total",
           data: totalOrders, 
           borderColor: "rgba(75, 192, 192, 1)", 
           backgroundColor: "rgba(75, 192, 192, 0.2)", 
