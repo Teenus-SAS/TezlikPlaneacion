@@ -39,7 +39,7 @@ const ChartOrdersPerDay = (data) => {
         {
           label: "Pedidos Clientes",
           data: ordersType1, // Eje Y: Pedidos tipo 1 por día
-          borderColor: "'rgba(0, 123, 255, 1)",
+          borderColor: "rgba(0, 123, 255, 1)",
           backgroundColor: "rgba(0, 123, 255, 0.2)",
           fill: false,
           tension: 0.1, // Suaviza la curva de la línea
