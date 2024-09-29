@@ -7,7 +7,8 @@ const indicatorsGlobal = async () => {
     const {
       productsOutStock,
       percentageMPLowStock,
-      ordersActive,
+      orders_clients,
+      orders_internalClients,
       ordersNoProgramed,
       totalOrdersNoProgrammed,
       OrdersNoMP,
