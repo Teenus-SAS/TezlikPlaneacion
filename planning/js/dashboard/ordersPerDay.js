@@ -41,7 +41,7 @@ const ChartOrdersPerDay = (data) => {
           data: ordersType1, // Eje Y: Pedidos tipo 1 por día
           borderColor: "rgba(75, 192, 192, 1)",
           backgroundColor: "rgba(75, 192, 192, 0.2)",
-          fill: true,
+          fill: false,
           tension: 0.1, // Suaviza la curva de la línea
         },
         {
@@ -49,7 +49,7 @@ const ChartOrdersPerDay = (data) => {
           data: ordersType2, // Eje Y: Pedidos tipo 2 por día
           borderColor: "rgba(99, 255, 221, 1)",
           backgroundColor: "rgba(99, 255, 221, 0.2)",
-          fill: true,
+          fill: false,
           tension: 0.1, // Suaviza la curva de la línea
         },
       ],
