@@ -300,6 +300,9 @@ if (sizeof($_SESSION) == 0)
 												</div>
 											</div>
 										</div>
+
+										<hr>
+
 										<div class="cardExcOP">
 											<div class="row py-4">
 												<div class="col-10">
@@ -356,6 +359,8 @@ if (sizeof($_SESSION) == 0)
 											</div>
 										</div>
 
+										<hr>
+
 										<div class="cardExcOP">
 											<div class="row py-4">
 												<div class="col-10">
@@ -393,6 +398,9 @@ if (sizeof($_SESSION) == 0)
 												</div>
 											</div>
 										</div>
+
+										<hr>
+
 										<div class="row">
 											<div class="col-sm-12 mt-4">
 												<button class="btn btn-warning w-100 d-block" id="btnCloseOP"><b>CERRAR ORDE DE PRODUCCIÓN</b></button>
