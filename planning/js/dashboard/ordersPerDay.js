@@ -11,19 +11,10 @@ $(document).ready(function () {
 });
 
 const ChartOrdersPerDay = (data) => {
-  // Datos proporcionados
-  data = [
-    { day: "2024-09-26", type_order: 1, total_orders: 1 },
-    { day: "2024-09-26", type_order: 2, total_orders: 3 },
-    { day: "2024-09-27", type_order: 1, total_orders: 1 },
-    { day: "2024-09-28", type_order: 1, total_orders: 1 },
-    { day: "2024-09-28", type_order: 2, total_orders: 2 },
-  ];
-
-  // Obtener las fechas únicas para las etiquetas del eje X
+  // Fechas únicas etiquetas eje X
   const uniqueDays = [...new Set(data.map((item) => item.day))];
 
-  // Agrupar los datos por type_order 1 y 2 para las dos líneas
+  // Agrupar datos por tipo de orden
   const ordersType1 = uniqueDays.map((day) => {
     const order = data.find(
       (item) => item.day === day && item.type_order === 1
@@ -46,19 +37,19 @@ const ChartOrdersPerDay = (data) => {
       labels: uniqueDays, // Eje X: días únicos
       datasets: [
         {
-          label: "Pedidos Tipo 1",
+          label: "Pedidos Clientes",
           data: ordersType1, // Eje Y: Pedidos tipo 1 por día
           borderColor: "rgba(75, 192, 192, 1)",
           backgroundColor: "rgba(75, 192, 192, 0.2)",
-          fill: false,
+          fill: true,
           tension: 0.1, // Suaviza la curva de la línea
         },
         {
-          label: "Pedidos Tipo 2",
+          label: "Pedidos Internos",
           data: ordersType2, // Eje Y: Pedidos tipo 2 por día
-          borderColor: "rgba(255, 99, 132, 1)",
-          backgroundColor: "rgba(255, 99, 132, 0.2)",
-          fill: false,
+          borderColor: "rgba(99, 255, 221, 1)",
+          backgroundColor: "rgba(99, 255, 221, 0.2)",
+          fill: true,
           tension: 0.1, // Suaviza la curva de la línea
         },
       ],
