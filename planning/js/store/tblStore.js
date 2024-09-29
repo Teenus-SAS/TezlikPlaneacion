@@ -192,7 +192,7 @@ $(document).ready(function () {
         });
       },
       rowGroup: {
-        dataSrc: (row) => `<th class="text-center" colspan="7" style="font-weight: bold;"> No Pedido - ${row.num_order} Orden Producción - ${row.num_production} </th>`,
+        dataSrc: (row) => `<th class="text-center" colspan="7" style="font-weight: bold;"> No Pedido (${row.num_order}) - Orden Producción (${row.num_production}) </th>`,
         startRender: (rows, group) => $("<tr/>").append(group),
         className: "odd",
       },

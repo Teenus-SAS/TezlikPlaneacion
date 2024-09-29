@@ -49,6 +49,27 @@ class GeneralProgrammingDao
     public function findAllProgrammingByCompany($id_company)
     {
         $connection = Connection::getInstance()->getConnection();
+        /* $sql="SELECT pg.id_programming, o.id_order, o.num_order, o.date_order, o.original_quantity AS quantity_order, 
+                        o.accumulated_quantity, pg.quantity AS quantity_programming, p.id_product, p.reference, p.product, 
+                        m.id_machine, m.machine, c.client, pg.min_date, HOUR(pg.min_date) AS min_hour, pm.hour_start, pg.max_date, 
+                        HOUR(pg.max_date) AS max_hour, ( 
+                            SELECT IFNULL((1 * cm.quantity / cpm.quantity),0) 
+                            FROM products_materials cpm
+                            INNER JOIN inv_materials cm ON
+                                cm.id_material = cpm.id_material
+                            WHERE
+                                cpm.id_product = pg.id_product
+                            ORDER BY
+                                IFNULL((1*cm.quantity/cpm.quantity), 0) ASC
+                            LIMIT 1
+                        ) AS quantity_mp, pg.status
+                FROM programming pg
+                    INNER JOIN orders o ON o.id_order = pg.id_order
+                    INNER JOIN products p ON p.id_product = pg.id_product
+                    INNER JOIN machines m ON m.id_machine = pg.id_machine
+                    INNER JOIN third_parties c ON c.id_client = o.id_client
+                    INNER JOIN machine_programs pm ON pm.id_machine = pg.id_machine
+                WHERE pg.id_company = 3 AND pg.status = 1"; */
         $sql = "SELECT pg.id_programming, o.id_order, o.num_order, o.date_order, o.original_quantity AS quantity_order, 
                         o.accumulated_quantity, pg.quantity AS quantity_programming, p.id_product, p.reference, p.product, 
                         m.id_machine, m.machine, c.client, pg.min_date, HOUR(pg.min_date) AS min_hour, pm.hour_start, 
@@ -77,29 +98,10 @@ class GeneralProgrammingDao
     public function findAllProgrammingByMachine($id_machine, $id_company)
     {
         $connection = Connection::getInstance()->getConnection();
-        $sql = "SELECT
-                    pg.id_programming,
-                    o.id_order,
-                    o.num_order,
-                    o.date_order,
-                    o.original_quantity AS quantity_order,
-                    o.accumulated_quantity,
-                    pg.quantity AS quantity_programming,
-                    p.id_product,
-                    p.reference,
-                    p.product,
-                    m.id_machine,
-                    m.machine,
-                    c.client,
-                    pg.min_date,
-                    HOUR(pg.min_date) AS min_hour,
-                    pm.hour_start,
-                    pg.max_date,
-                    HOUR(pg.max_date) AS max_hour,
-                    subquery.quantity_mp,
-                    pc.id_process,
-                    pc.process,
-                    pg.status
+        $sql = "SELECT pg.id_programming, o.id_order, o.num_order, o.date_order, o.original_quantity AS quantity_order,
+                    o.accumulated_quantity, pg.quantity AS quantity_programming, p.id_product, p.reference, p.product,
+                    m.id_machine, m.machine, c.client, pg.min_date, HOUR(pg.min_date) AS min_hour, pm.hour_start, pg.max_date,
+                    HOUR(pg.max_date) AS max_hour, subquery.quantity_mp, pc.id_process, pc.process, pg.status
                 FROM programming pg
                     INNER JOIN orders o ON o.id_order = pg.id_order
                     INNER JOIN products p ON p.id_product = pg.id_product
@@ -118,9 +120,7 @@ class GeneralProgrammingDao
                         GROUP BY cpm.id_product
                     ) AS subquery ON subquery.id_product = pg.id_product
                 WHERE 
-                    pg.id_machine = :id_machine AND 
-                    pg.id_company = :id_company AND 
-                    pg.status = 0;";
+                    pg.id_machine = :id_machine AND pg.id_company = :id_company AND pg.status = 0;";
         /* $sql = "SELECT
                     pg.id_programming,
                         o.id_order,
