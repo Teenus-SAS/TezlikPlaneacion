@@ -63,7 +63,12 @@ class DashboardGeneralDao
     public function findAllActiveOrders($id_company)
     {
         $connection = Connection::getInstance()->getConnection();
-        $sql = "SELECT COUNT(*) AS ordersActive FROM `orders` WHERE status <> 3 AND id_company = :id_company";
+        $sql = "SELECT 
+                    SUM(CASE WHEN type_order = 1 THEN 1 ELSE 0 END) AS orders_clients, 
+                    SUM(CASE WHEN type_order = 2 THEN 1 ELSE 0 END) AS orders_internalClients
+                FROM `orders` 
+                WHERE status <> 3 
+                    AND id_company = :id_company;";
         $stmt = $connection->prepare($sql);
         $stmt->execute(['id_company' => $id_company]);
         $percent = $stmt->fetch($connection::FETCH_ASSOC);
