@@ -48,14 +48,19 @@ $(document).ready(function () {
       console.error("Error loading data:", error);
     }
   };
- 
+
   // Función para formatear cantidades
   const formatQuantity = (quantity, abbreviation) => {
     quantity = parseFloat(quantity);
     if (abbreviation === "UND") {
-      return Math.floor(quantity).toLocaleString("es-CO", { maximumFractionDigits: 0 });
+      return Math.floor(quantity).toLocaleString("es-CO", {
+        maximumFractionDigits: 0,
+      });
     }
-    return quantity.toLocaleString("es-CO", { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+    return quantity.toLocaleString("es-CO", {
+      minimumFractionDigits: 2,
+      maximumFractionDigits: 2,
+    });
   };
 
   // Función para construir las acciones para recibir material
@@ -68,7 +73,12 @@ $(document).ready(function () {
 
   // Función para cargar la tabla de materiales a recibir
   const loadTblStoreMaterial = async (data) => {
-    data = data.filter(item => item.application_date !== "0000-00-00" && item.delivery_date !== "0000-00-00" && item.purchase_order !== "");
+    data = data.filter(
+      (item) =>
+        item.application_date !== "0000-00-00" &&
+        item.delivery_date !== "0000-00-00" &&
+        item.purchase_order !== ""
+    );
 
     if ($.fn.dataTable.isDataTable("#tblStore")) {
       $("#tblStore").DataTable().clear().rows.add(data).draw();
@@ -87,16 +97,35 @@ $(document).ready(function () {
           className: "uniqueClassName dt-head-center",
           render: (data, type, full, meta) => meta.row + 1,
         },
-        { title: "Referencia", data: "reference", className: "uniqueClassName dt-head-center" },
-        { title: "Materia Prima", data: "material", className: "uniqueClassName dt-head-center" },
-        { title: "Proveedor", data: "provider", className: "uniqueClassName dt-head-center" },
+        {
+          title: "Referencia",
+          data: "reference",
+          className: "uniqueClassName dt-head-center",
+        },
+        {
+          title: "Materia Prima",
+          data: "material",
+          className: "uniqueClassName dt-head-center",
+        },
+        {
+          title: "Proveedor",
+          data: "provider",
+          className: "uniqueClassName dt-head-center",
+        },
         {
           title: "Cantidad a Recibir",
           data: null,
           className: "uniqueClassName dt-head-center",
-          render: (data) => `${formatQuantity(data.quantity_requested, data.abbreviation)} ${data.abbreviation}`,
+          render: (data) =>
+            `${formatQuantity(data.quantity_requested, data.abbreviation)} ${
+              data.abbreviation
+            }`,
         },
-        { title: "Orden de Compra", data: "purchase_order", className: "uniqueClassName dt-head-center" },
+        {
+          title: "Orden de Compra",
+          data: "purchase_order",
+          className: "uniqueClassName dt-head-center",
+        },
         {
           title: "Acción",
           data: null,
@@ -119,12 +148,24 @@ $(document).ready(function () {
 
   // Función para construir las acciones para entregar material
   const buildDeliverAction = (data) => {
-    if ((data.delivery_store === 0 || data.delivery_pending >= 0) || data.id_user_delivered === 0) {
+    if (
+      data.delivery_store === 0 ||
+      data.delivery_pending >= 0 ||
+      data.id_user_delivered === 0
+    ) {
       return `<button class="btn btn-info deliver" id="delivery">Entregar MP</button>`;
     }
 
     let fechaHora = new Date(data.delivery_date);
-    let fechaHoraFormateada = `${fechaHora.toLocaleDateString("es-CO", { day: "2-digit", month: "2-digit", year: "numeric" })}<br>${fechaHora.toLocaleTimeString("es-CO", { hour: "2-digit", minute: "2-digit", hour12: true })}`;
+    let fechaHoraFormateada = `${fechaHora.toLocaleDateString("es-CO", {
+      day: "2-digit",
+      month: "2-digit",
+      year: "numeric",
+    })}<br>${fechaHora.toLocaleTimeString("es-CO", {
+      hour: "2-digit",
+      minute: "2-digit",
+      hour12: true,
+    })}`;
 
     return `Entregado: ${data.firstname_delivered} ${data.lastname_delivered}<br>${fechaHoraFormateada}
     <a href="javascript:;">
@@ -146,29 +187,54 @@ $(document).ready(function () {
           className: "uniqueClassName dt-head-center",
           render: (data, type, full, meta) => meta.row + 1,
         },
-        { title: "No Pedido", data: "num_order", className: "uniqueClassName dt-head-center", visible: false },
-        { title: "Referencia", data: "reference", className: "uniqueClassName dt-head-center" },
-        { title: "Materia Prima", data: "material", className: "uniqueClassName dt-head-center" },
+        {
+          title: "No Pedido",
+          data: "num_order",
+          className: "uniqueClassName dt-head-center",
+          visible: false,
+        },
+        {
+          title: "Referencia",
+          data: "reference",
+          className: "uniqueClassName dt-head-center",
+        },
+        {
+          title: "Materia Prima",
+          data: "material",
+          className: "uniqueClassName dt-head-center",
+        },
         {
           title: "Existencias",
           data: null,
           className: "uniqueClassName dt-head-center",
-          render: (data) => `${formatQuantity(data.quantity, data.abbreviation)} ${data.abbreviation}`,
+          render: (data) =>
+            `${formatQuantity(data.quantity, data.abbreviation)} ${
+              data.abbreviation
+            }`,
         },
         {
           title: "Cantidad a Entregar",
           data: null,
           className: "uniqueClassName dt-head-center",
-          render: (data) => formatQuantity(data.reserved, data.abbreviation),
+          render: (data) =>
+            `${formatQuantity(data.reserved, data.abbreviation)} ${
+              data.abbreviation
+            }`,
         },
         {
           title: "Estado Entregas",
           data: null,
           className: "uniqueClassName dt-head-center",
           render: (data) => {
-            const store = parseFloat(data.delivery_store).toLocaleString("es-CO", { minimumFractionDigits: 0, maximumFractionDigits: 2 });
-            const pending = parseFloat(data.delivery_pending).toLocaleString("es-CO", { minimumFractionDigits: 0, maximumFractionDigits: 2 });
-          
+            const store = parseFloat(data.delivery_store).toLocaleString(
+              "es-CO",
+              { minimumFractionDigits: 0, maximumFractionDigits: 2 }
+            );
+            const pending = parseFloat(data.delivery_pending).toLocaleString(
+              "es-CO",
+              { minimumFractionDigits: 0, maximumFractionDigits: 2 }
+            );
+
             return pending > 0
               ? `Entregado: ${store}<br><span class="badge badge-warning">Pendiente: ${pending}</span>`
               : `Entregado: ${store}<br>Pendiente: ${pending}`;
@@ -192,7 +258,8 @@ $(document).ready(function () {
         });
       },
       rowGroup: {
-        dataSrc: (row) => `<th class="text-center" colspan="7" style="font-weight: bold;"> Orden Producción (${row.num_production}) - No Pedido (${row.num_order}) </th>`,
+        dataSrc: (row) =>
+          `<th class="text-center" colspan="7" style="font-weight: bold;"> Orden Producción (${row.num_production}) - No Pedido (${row.num_order}) </th>`,
         startRender: (rows, group) => $("<tr/>").append(group),
         className: "odd",
       },
