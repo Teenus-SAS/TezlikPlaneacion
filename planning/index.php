@@ -104,6 +104,27 @@ if (sizeof($_SESSION) == 0)
                                     <div class="card-body">
                                         <div class="media align-items-center">
                                             <div class="media-body">
+                                                <span class="text-muted text-uppercase font-size-12 font-weight-bold">Pedidos Activos</span>
+                                                <h2 class="mb-0 mt-1 text-warning">
+                                                    <span id="ordersActive"></span>
+                                                    <span class="text-info" id="ordersActive" style="font-size: 0.6em; vertical-align: middle;"></span>
+                                                </h2>
+                                            </div>
+                                            <div class="text-center">
+                                                <div id="t-rev"></div>
+                                                <span class="text-warning font-weight-bold font-size-13">
+                                                    <i class='fa fa-list-ol fs-lg'></i>
+                                                </span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-auto">
+                                <div class="card">
+                                    <div class="card-body">
+                                        <div class="media align-items-center">
+                                            <div class="media-body">
                                                 <span class="text-muted text-uppercase font-size-12 font-weight-bold">Pedidos No Programados</span>
                                                 <h2 class="mb-0 mt-1 text-warning">
                                                     <span id="ordersNoProgramed"></span>

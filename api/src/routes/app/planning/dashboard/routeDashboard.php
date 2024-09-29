@@ -28,10 +28,11 @@ $app->get('/dashboardIndicators', function (Request $request, Response $response
 
     $prodOutStock = $dashboardGeneralDao->findProductsOutOfStock($id_company); //Obtener porcentaje productos sin stock
     $mpOutOfStock = $dashboardGeneralDao->findMPOutOfStock($id_company); //Obtener porcentaje MP sin stock
+    $ordersActive = $dashboardGeneralDao->findAllActiveOrders($id_company);    //Obtener porcentaje pedidos sin programar
     $ordersNoProgram = $dashboardGeneralDao->findOrdersNoProgramm($id_company);    //Obtener porcentaje pedidos sin programar
     $OrdersNoMP = $dashboardGeneralDao->findOrdersNoMP($id_company); //Obtener porcentaje pedidos sin MP
     $ordersDelivered = $dashboardGeneralDao->findOrdersDelivered($id_company); //Obtener porcentaje pedidos en Despacho
-    $indicators = array_merge($prodOutStock, $mpOutOfStock, $ordersNoProgram, $OrdersNoMP, $ordersDelivered); //Consolidar
+    $indicators = array_merge($prodOutStock, $mpOutOfStock, $ordersActive, $ordersNoProgram, $OrdersNoMP, $ordersDelivered); //Consolidar
 
     //Enviar respuesta
     $response->getBody()->write(json_encode($indicators, JSON_NUMERIC_CHECK));
