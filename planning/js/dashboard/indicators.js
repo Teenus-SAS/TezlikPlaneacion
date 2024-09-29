@@ -37,7 +37,8 @@ const indicatorsGlobal = async () => {
     $("#mpOutStock").text(`${response.totalMPLowStock}`);
     $("#mpPercentageOutStock").text(`${formattedValues.mpOutStock}%`);
 
-    $("#ordersActive").text(`${orders_clients} / ${orders_internalClients}`);
+    $("#ordersActive").text(`${orders_clients}`);
+    $("#ordersInternal").text(`${orders_internalClients}`);
 
     $("#ordersNoProgramed").text(`${formattedValues.totalOrdersNoProgrammed}`);
     $("#percentOrdersNoProgramed").text(
