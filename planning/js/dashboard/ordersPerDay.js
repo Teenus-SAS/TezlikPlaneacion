@@ -12,7 +12,7 @@ $(document).ready(function () {
 
 const ChartOrdersPerDay = (data) => {
   // Datos proporcionados
-  const data = [
+  data = [
     { day: "2024-09-26", type_order: 1, total_orders: 1 },
     { day: "2024-09-26", type_order: 2, total_orders: 3 },
     { day: "2024-09-27", type_order: 1, total_orders: 1 },
