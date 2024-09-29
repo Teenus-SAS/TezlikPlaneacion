@@ -141,7 +141,7 @@ if (sizeof($_SESSION) == 0)
                                     </div>
                                 </div>
                             </div>
-                            <div class="col-auto">
+                            <!-- <div class="col-auto">
                                 <div class="card">
                                     <div class="card-body">
                                         <div class="media align-items-center">
@@ -158,7 +158,7 @@ if (sizeof($_SESSION) == 0)
                                         </div>
                                     </div>
                                 </div>
-                            </div>
+                            </div> -->
                             <div class="col-auto">
                                 <div class="card">
                                     <div class="card-body">
