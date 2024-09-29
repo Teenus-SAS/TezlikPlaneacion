@@ -39,7 +39,7 @@ const ChartOrdersPerDay = (data) => {
   });
 
   // Crear el gráfico de líneas con Chart.js
-  const ctx = document.getElementById("ordersChart").getContext("2d");
+  const ctx = document.getElementById("chartOrdersxDay").getContext("2d");
   const ordersChart = new Chart(ctx, {
     type: "line",
     data: {
