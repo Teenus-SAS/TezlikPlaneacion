@@ -44,26 +44,26 @@ const ChartOrdersPerDay = (data) => {
         {
           label: "Pedidos Clientes",
           data: ordersType1, // Eje Y: Pedidos tipo 1 por día
-          borderColor: "rgba(0, 123, 255, 1)",
-          backgroundColor: "rgba(0, 123, 255, 0.2)",
+          borderColor: "rgba(138, 43, 226, 1)",
+          backgroundColor: "rgba(138, 43, 226, 0.2)",
           fill: false,
           tension: 0.1, // Suaviza la curva de la línea
         },
         {
           label: "Pedidos Internos",
           data: ordersType2, // Eje Y: Pedidos tipo 2 por día
-          borderColor: "rgba(99, 255, 221, 1)",
-          backgroundColor: "rgba(99, 255, 221, 0.2)",
+          borderColor: "rgba(255, 205, 86, 1)",
+          backgroundColor: "rgba(255, 205, 86, 0.2)",
           fill: false,
           tension: 0.1, // Suaviza la curva de la línea
         },
         {
           label: "Total Pedidos (Tipo 1 + Tipo 2)",
-          data: totalOrders, // Eje Y: Suma de los pedidos tipo 1 y 2 por día
-          borderColor: "rgba(0, 200, 255, 1)", // Azul claro (línea)
-          backgroundColor: "rgba(0, 200, 255, 0.2)", // Azul claro (relleno)
+          data: totalOrders, 
+          borderColor: "rgba(75, 192, 192, 1)", 
+          backgroundColor: "rgba(75, 192, 192, 0.2)", 
           fill: false,
-          tension: 0.1, // Suaviza la curva de la línea
+          tension: 0.1,
           borderDash: [5, 5], // Línea punteada para diferenciarla
         },
       ],
