@@ -106,7 +106,7 @@ if (sizeof($_SESSION) == 0)
                                             <div class="media-body">
                                                 <span class="text-muted text-uppercase font-size-12 font-weight-bold">Pedidos Activos</span>
                                                 <h2 class="mb-0 mt-1 text-warning">
-                                                    <span id="ordersActive" style="color:rgba(138, 43, 226, 1)"></span>
+                                                    <span id="ordersActive" style="color:rgba(138, 43, 226, 1);font-size: 0.4em;"></span>
                                                     <span class="text-info" style="color:rgba(138, 43, 226, 1) !important" id="ordersActive" style="font-size: 0.4em;">clientes</span>
                                                     <span id="ordersInternal"></span>
                                                     <span class="text-warning" id="ordersInternal" style="font-size: 0.4em;">internos</span>
