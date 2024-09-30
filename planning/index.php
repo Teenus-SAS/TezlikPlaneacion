@@ -105,17 +105,26 @@ if (sizeof($_SESSION) == 0)
                                         <div class="media align-items-center">
                                             <div class="media-body">
                                                 <span class="text-muted text-uppercase font-size-12 font-weight-bold">Pedidos Activos</span>
-                                                <h2 class="mb-0 mt-1 text-warning">
-                                                    <span id="ordersActive"></span>
-                                                    <span class="text-info" id="ordersActive" style="font-size: 0.6em; vertical-align: middle;">
-                                                        clientes
-                                                    </span>
-                                                    <span class="text-muted" style="font-size: 0.6em; vertical-align: middle;"> / </span>
-                                                    <span id="ordersInternal"></span>
-                                                    <span class="text-info" id="ordersInternal" style="font-size: 0.6em; vertical-align: middle;">
-                                                        internos
-                                                    </span>
-                                                </h2>
+                                                <div class="d-flex justify-content-center align-items-center">
+                                                    <!-- Columna para Clientes -->
+                                                    <div class="mx-2">
+                                                        <h2 class="mb-0 mt-1 text-warning">
+                                                            <span id="ordersActive"></span>
+                                                        </h2>
+                                                        <span class="text-info font-size-10" style="display: block;">clientes</span>
+                                                    </div>
+                                                    <!-- Separador -->
+                                                    <div class="mx-2">
+                                                        <span class="text-muted font-size-14" style="vertical-align: middle;">/</span>
+                                                    </div>
+                                                    <!-- Columna para Internos -->
+                                                    <div class="mx-2">
+                                                        <h2 class="mb-0 mt-1 text-warning">
+                                                            <span id="ordersInternal"></span>
+                                                        </h2>
+                                                        <span class="text-info font-size-10" style="display: block;">internos</span>
+                                                    </div>
+                                                </div>
                                             </div>
                                             <div class="text-center">
                                                 <div id="t-rev"></div>
