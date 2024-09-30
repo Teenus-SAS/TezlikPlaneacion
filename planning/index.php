@@ -120,7 +120,7 @@ if (sizeof($_SESSION) == 0)
                                             <div class="text-center">
                                                 <div id="t-rev"></div>
                                                 <span class="text-warning font-weight-bold font-size-13">
-                                                    <i class='fa fa-list-ol fs-lg'></i>
+                                                    <i class='fas fa-file-alt fs-lg'></i>
                                                 </span>
                                             </div>
                                         </div>
