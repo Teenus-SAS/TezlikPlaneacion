@@ -55,14 +55,12 @@ class GeneralProductsMaterialsDao
                                             IFNULL(mg.magnitude, '') AS magnitude,
                                             IFNULL(u.id_unit, 0) AS id_unit,
                                             IFNULL(u.unit, '') AS unit,
-                                            IFNULL(u.abbreviation, '') AS abbreviation,
-                                            IFNULL(rq.quantity_requested, 0) AS quantity_requested 
+                                            IFNULL(u.abbreviation, '') AS abbreviation
                                             -- ((m.quantity / pm.quantity) - IFNULL((SELECT SUM(quantity) FROM programming WHERE id_product = pm.id_product), 0)) AS quantity
                                       FROM products p
                                             INNER JOIN products_materials pm ON pm.id_product = p.id_product
                                             INNER JOIN materials m ON m.id_material = pm.id_material
                                             INNER JOIN inv_materials mi ON mi.id_material = pm.id_material
-                                            LEFT JOIN requisitions rq ON rq.id_material = pm.id_material AND rq.admission_date != '0000-00-00 00:00:00'
                                             LEFT JOIN admin_units u ON u.id_unit = pm.id_unit
                                             LEFT JOIN admin_magnitudes mg ON mg.id_magnitude = u.id_magnitude
                                       WHERE pm.id_company = :id_company

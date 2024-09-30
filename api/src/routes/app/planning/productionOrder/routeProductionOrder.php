@@ -126,11 +126,15 @@ $app->get('/changeFlagOP/{id_programming}/{flag}', function (Request $request, R
     return $response->withStatus(200)->withHeader('Content-Type', 'application/json');
 });
 
-$app->get('/productionOrderPartial', function (Request $request, Response $response, $args) use ($productionOrderPartialDao) {
+$app->get('/productionOrderPartial', function (Request $request, Response $response, $args) use (
+    $productionOrderPartialDao,
+    $productionOrderMPDao
+) {
     session_start();
     $id_company = $_SESSION['id_company'];
 
     $productionOrder = $productionOrderPartialDao->findAllOPPartialBycompany($id_company);
+    // $materials = $productionOrderMPDao->findAllOPMaterialByCompany($id_company);
 
     $response->getBody()->write(json_encode($productionOrder));
     return $response->withHeader('Content-Type', 'application/json');

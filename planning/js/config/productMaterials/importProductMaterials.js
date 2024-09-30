@@ -33,13 +33,9 @@ $(document).ready(function () {
 
     importFile(selectedFile)
       .then((data) => {
-        const expectedHeaders = ['referencia_producto', 'producto', 'referencia_material', 'material', 'tipo_material', 'magnitud', 'unidad', 'cantidad', 'tipo'];
+        const expectedHeaders = ['referencia_producto', 'producto', 'referencia_material', 'material', 'magnitud', 'unidad', 'tipo'];
         const actualHeaders = Object.keys(data[0]);
-
-        if (flag_products_measure == '0') {
-          expectedHeaders.splice(4, 1);
-        }
-
+ 
         const missingHeaders = expectedHeaders.filter(
           (header) => !actualHeaders.includes(header)
         );
@@ -60,8 +56,7 @@ $(document).ready(function () {
           !item.referencia_material ? item.referencia_material = '' : item.referencia_material;
           !item.material ? item.material = '' : item.material;
           !item.magnitud ? item.magnitud = '' : item.magnitud;
-          !item.unidad ? item.unidad = '' : item.unidad;
-          !item.cantidad ? item.cantidad = 0 : item.cantidad;
+          !item.unidad ? item.unidad = '' : item.unidad; 
           !item.tipo ? item.tipo = '' : item.tipo;
 
           return {
@@ -71,8 +66,7 @@ $(document).ready(function () {
             nameRawMaterial: item.material,
             materialType: item.tipo_material,
             magnitude: item.magnitud,
-            unit: item.unidad,
-            quantity: item.cantidad,
+            unit: item.unidad, 
             type: item.tipo,
           };
         });
@@ -193,10 +187,10 @@ $(document).ready(function () {
   $("#btnDownloadImportsProductsMaterials").click(function (e) {
     e.preventDefault();
  
-    if (flag_products_measure == '1')
-      url = 'assets/formatsXlsx/Productos_Materias(bolsas).xlsx';
-    else
-      url = 'assets/formatsXlsx/Productos_Materias.xlsx';
+    // if (flag_products_measure == '1')
+    //   url = 'assets/formatsXlsx/Productos_Materias(bolsas).xlsx';
+    // else
+    let url = 'assets/formatsXlsx/Productos_Materias.xlsx';
 
     let newFileName = 'Productos_Materias.xlsx';
 
