@@ -92,10 +92,7 @@ $(document).ready(function () {
     if (viewOrders) {
       const dataProducts = JSON.parse(sessionStorage.getItem("dataProducts"));
       const data = dataProducts.find((item) => item.id_product == id);
-
-      let quantity = parseFloat(data.accumulated_quantity) - parseFloat(data.reserved);
-
-      viewOrders.value = quantity.toLocaleString('es-CO', { minimumFractionDigits: 0, maximumFractionDigits: 2 });
+      viewOrders.value = data.accumulated_quantity.toLocaleString('es-CO', { minimumFractionDigits: 0, maximumFractionDigits: 2 });
     }
   });
 
@@ -111,10 +108,7 @@ $(document).ready(function () {
     if (viewOrders) {
       const dataProducts = JSON.parse(sessionStorage.getItem("dataProducts"));
       const data = dataProducts.find((item) => item.id_product == id);
-
-      let quantity = parseFloat(data.accumulated_quantity) - parseFloat(data.reserved);
-
-      viewOrders.value = quantity.toLocaleString('es-CO', { minimumFractionDigits: 0, maximumFractionDigits: 2 });
+      viewOrders.value = data.accumulated_quantity.toLocaleString('es-CO', { minimumFractionDigits: 0, maximumFractionDigits: 2 });
     }
   });
 
