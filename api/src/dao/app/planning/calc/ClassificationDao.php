@@ -21,12 +21,39 @@ class ClassificationDao
         $connection = Connection::getInstance()->getConnection();
 
         // Calcular rotación, ventas al año y promedio unidades 
-        $stmt = $connection->prepare("SELECT ((IF(IFNULL(u.jan, 0) > 0, 1, 0) + IF(IFNULL(u.feb, 0) > 0, 1, 0) + IF(IFNULL(u.mar, 0) > 0, 1, 0) + IF(IFNULL(u.apr, 0) > 0, 1, 0) + 
-                                               IF(IFNULL(u.may, 0) > 0, 1, 0) + IF(IFNULL(u.jun, 0) > 0, 1, 0) + IF(IFNULL(u.jul, 0) > 0, 1, 0) + IF(IFNULL(u.aug, 0) > 0, 1, 0) + 
-                                               IF(IFNULL(u.sept, 0) > 0, 1, 0) + IF(IFNULL(u.oct, 0) > 0, 1, 0) + IF(IFNULL(u.nov, 0) > 0, 1, 0) + IF(IFNULL(u.dece, 0) > 0, 1, 0)) / :cant_months) AS year_sales                                             
-                                      FROM products p
-                                      LEFT JOIN sales_by_units u ON u.id_product = p.id_product
-                                      WHERE p.id_product = :id_product");
+        $stmt = $connection->prepare("SELECT
+                                            (
+                                                (
+                                                    IF(IFNULL(u.jan, 0) > 0,
+                                                    1,
+                                                    0) + IF(IFNULL(u.feb, 0) > 0,
+                                                    1,
+                                                    0) + IF(IFNULL(u.mar, 0) > 0,
+                                                    1,
+                                                    0) + IF(IFNULL(u.apr, 0) > 0,
+                                                    1,
+                                                    0) + IF(IFNULL(u.may, 0) > 0,
+                                                    1,
+                                                    0) + IF(IFNULL(u.jun, 0) > 0,
+                                                    1,
+                                                    0) + IF(IFNULL(u.jul, 0) > 0,
+                                                    1,
+                                                    0) + IF(IFNULL(u.aug, 0) > 0,
+                                                    1,
+                                                    0) + IF(IFNULL(u.sept, 0) > 0,
+                                                    1,
+                                                    0) + IF(IFNULL(u.oct, 0) > 0,
+                                                    1,
+                                                    0) + IF(IFNULL(u.nov, 0) > 0,
+                                                    1,
+                                                    0) + IF(IFNULL(u.dece, 0) > 0,
+                                                    1,
+                                                    0)
+                                                ) / :cant_months
+                                            ) AS year_sales
+                                        FROM products p
+                                        LEFT JOIN sales_by_units u ON u.id_product = p.id_product
+                                        WHERE p.id_product = :id_product");
         $stmt->execute([
             'cant_months' => $months,
             'id_product' => $id_product

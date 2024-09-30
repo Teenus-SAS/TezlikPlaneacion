@@ -72,7 +72,7 @@ class GeneralCompositeProductsDao
         $stmt = $connection->prepare("SELECT cp.id_product, cp.id_child_product, cp.quantity, pi.classification
                                       FROM products_composite cp
                                       INNER JOIN products p ON p.id_product = cp.id_child_product
-                                      INNER JOIN inv_products pi ON pi.id_product = p.id_product
+                                      INNER JOIN inv_products pi ON pi.id_product = cp.id_product
                                       WHERE cp.id_child_product = :id_child_product
                                       GROUP BY cp.id_product
                                       ORDER BY pi.classification ASC;");

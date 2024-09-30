@@ -73,9 +73,9 @@ $app->post('/updateInventoryABC', function (Request $request, Response $response
 
             for ($i = 0; $i < sizeof($products); $i++) {
                 if (isset($resolution)) break;
-                $inventory = $classificationDao->calcInventoryABCBYProduct($products[$i]['id_product'], $license['months']);
+                // $inventory = $classificationDao->calcInventoryABCBYProduct($products[$i]['id_product'], $license['months']);
 
-                $inventory = $classificationDao->calcClassificationByProduct($inventory['year_sales'], $id_company);
+                // $inventory = $classificationDao->calcClassificationByProduct($inventory['year_sales'], $id_company);
 
                 $composite = $generalCompositeProductsDao->findCompositeProductByChild($products[$i]['id_product']);
                 $classification = '';

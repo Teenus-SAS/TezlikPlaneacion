@@ -59,7 +59,7 @@ $(document).ready(function () {
 
     const dataProducts = JSON.parse(sessionStorage.getItem("dataProducts"));
     const arr = dataProducts.find((item) => item.id_product == data.id_product);
-    $("#inptQuantity").val(arr.accumulated_quantity);
+    $("#inptQuantity").val(arr.accumulated_quantity.toLocaleString('es-CO', { minimumFractionDigits: 0, maximumFractionDigits: 2 }));
 
     $("#originalQuantity").val(data.original_quantity);
 
@@ -78,6 +78,7 @@ $(document).ready(function () {
     let idProduct = parseFloat($("#refProduct").val());
     let idClient = parseFloat($("#client").val());
     let seller = parseFloat($("#seller").val());
+    // let accumulated_quantity = parseFloat($('#inptQuantity').val().replace(".", ""));
     let originalQuantity = parseFloat($("#originalQuantity").val());
 
     let data = idProduct * idClient * originalQuantity * seller;
@@ -113,6 +114,11 @@ $(document).ready(function () {
       toastr.error("Fecha por debajo de la fecha actual");
       return false;
     }
+
+    // if (originalQuantity > accumulated_quantity) {
+    //   toastr.error("Inventario de producto por debajo de");
+    //   return false;
+    // }
 
     let dataOrder = new FormData(formCreateOrder);
 

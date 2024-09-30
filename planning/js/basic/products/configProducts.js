@@ -108,7 +108,10 @@ $(document).ready(function () {
     if (viewOrders) {
       const dataProducts = JSON.parse(sessionStorage.getItem("dataProducts"));
       const data = dataProducts.find((item) => item.id_product == id);
-      viewOrders.value = data.quantity;
+
+      let quantity = parseFloat(data.accumulated_quantity) - parseFloat(data.reserved);
+
+      viewOrders.value = quantity.toLocaleString('es-CO', { minimumFractionDigits: 0, maximumFractionDigits: 2 });
     }
   });
 

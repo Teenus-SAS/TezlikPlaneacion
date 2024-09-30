@@ -470,9 +470,9 @@ $app->post('/addUnitSales', function (Request $request, Response $response, $arg
 
             for ($j = 0; $j < sizeof($products); $j++) {
                 if (isset($resolution['info'])) break;
-                $inventory = $classificationDao->calcInventoryABCBYProduct($products[$j]['id_product'], $license['months']);
+                // $inventory = $classificationDao->calcInventoryABCBYProduct($products[$j]['id_product'], $license['months']);
 
-                $inventory = $classificationDao->calcClassificationByProduct($inventory['year_sales'], $id_company);
+                // $inventory = $classificationDao->calcClassificationByProduct($inventory['year_sales'], $id_company);
 
                 $composite = $generalCompositeProductsDao->findCompositeProductByChild($products[$j]['id_product']);
                 $classification = '';
@@ -704,15 +704,11 @@ $app->post('/updateUnitSale', function (Request $request, Response $response, $a
 
             for ($i = 0; $i < sizeof($products); $i++) {
                 if (isset($resolution['info'])) break;
-                $inventory = $classificationDao->calcInventoryABCBYProduct($products[$i]['id_product'], $license['months']);
-
-                $inventory = $classificationDao->calcClassificationByProduct($inventory['year_sales'], $id_company);
 
                 $composite = $generalCompositeProductsDao->findCompositeProductByChild($products[$i]['id_product']);
                 $classification = '';
 
                 if (sizeof($composite) > 0) {
-                    // $inventory = $generalProductsDao->findProductById($composite[0]['id_product']);
                     $inventory = $classificationDao->calcInventoryABCBYProduct($composite[0]['id_product'], $license['months']);
                     $inventory = $classificationDao->calcClassificationByProduct($inventory['year_sales'], $id_company);
                     $classification = $inventory['classification'];
@@ -892,9 +888,9 @@ $app->post('/deleteUnitSale', function (Request $request, Response $response, $a
 
             for ($i = 0; $i < sizeof($products); $i++) {
                 if (isset($resolution['info'])) break;
-                $inventory = $classificationDao->calcInventoryABCBYProduct($products[$i]['id_product'], $license['months']);
+                // $inventory = $classificationDao->calcInventoryABCBYProduct($products[$i]['id_product'], $license['months']);
 
-                $inventory = $classificationDao->calcClassificationByProduct($inventory['year_sales'], $id_company);
+                // $inventory = $classificationDao->calcClassificationByProduct($inventory['year_sales'], $id_company);
 
                 $composite = $generalCompositeProductsDao->findCompositeProductByChild($products[$i]['id_product']);
                 $classification = '';
