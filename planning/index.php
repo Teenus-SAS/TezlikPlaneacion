@@ -107,12 +107,12 @@ if (sizeof($_SESSION) == 0)
                                                 <span class="text-muted text-uppercase font-size-12 font-weight-bold">Pedidos Activos</span>
                                                 <h2 class="mb-0 mt-1 text-warning">
                                                     <span id="ordersActive"></span>
-                                                    <span class="text-info" id="ordersActive" style="font-size: 0.6em; vertical-align: middle;">
+                                                    <span class="text-info" id="ordersActive" style="font-size: 0.4em; vertical-align: middle;">
                                                         clientes
                                                     </span>
                                                     <span class="text-muted" style="font-size: 0.6em; vertical-align: middle;"> / </span>
                                                     <span id="ordersInternal"></span>
-                                                    <span class="text-info" id="ordersInternal" style="font-size: 0.6em; vertical-align: middle;">
+                                                    <span class="text-info" id="ordersInternal" style="font-size: 0.4em; vertical-align: middle;">
                                                         internos
                                                     </span>
                                                 </h2>
