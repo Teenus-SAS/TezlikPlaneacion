@@ -55,6 +55,16 @@ $app->get('/store', function (Request $request, Response $response, $args) use (
     return $response->withHeader('Content-Type', 'application/json');
 });
 
+$app->get('/allStore', function (Request $request, Response $response, $args) use ($usersStoreDao) {
+    session_start();
+    $id_company = $_SESSION['id_company'];
+
+    $store = $usersStoreDao->findAllStoreByCompany($id_company);
+
+    $response->getBody()->write(json_encode($store));
+    return $response->withHeader('Content-Type', 'application/json');
+});
+
 $app->post('/deliverStore', function (Request $request, Response $response, $args) use (
     $storeDao,
     $autenticationDao,

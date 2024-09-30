@@ -7,7 +7,7 @@ $(document).ready(function () {
     let dataMaterials = JSON.stringify(data);
     sessionStorage.setItem("dataMaterials", dataMaterials);
 
-    let btnDeliverPartialOP = $('#btnDeliverPartialOP');
+    let btnDeliverPartialOP = document.getElementById('btnDeliverPartialOP');
 
     if (btnDeliverPartialOP) {
       let id_programming = sessionStorage.getItem('id_programming');

@@ -2,6 +2,7 @@ $(document).ready(function () {
     loadAllDataPO = () => {
         let dataOP = JSON.parse(sessionStorage.getItem('dataOP'));
         let dataFTMaterials = JSON.parse(sessionStorage.getItem('dataFTMaterials'));
+        let allStore = JSON.parse(sessionStorage.getItem('dataAllStore'));
         let id_programming = sessionStorage.getItem('id_programming');
 
         let data = dataOP.find(item => item.id_programming == id_programming);
@@ -57,6 +58,18 @@ $(document).ready(function () {
             let quantity_total = parseFloat(dataFT[i].quantity_ftm) * parseFloat(data.quantity_order);
             quantity_total = formatQuantity(quantity_total, dataFT[i].abbreviation);
 
+            let store = allStore.filter(item => item.id_programming == id_programming && item.id_material == dataFT[i].id_material);
+
+            let recieve = 0;
+            let pending = 0;
+
+            store.foreach(item => {
+                recieve += item.delivery_store;
+                pending -= item.delivery_pending;
+            });
+
+            pending < 0 ? pending = 0 : pending;
+
             body.insertAdjacentHTML('beforeend',
                 `<tr>
                     <td>${dataFT[i].reference_material}</td>
@@ -64,8 +77,8 @@ $(document).ready(function () {
                     <td>${quantity_ftm.toLocaleString('es-CO', { minimumFractionDigits: 0, maximumFractionDigits: 2 })}</td>
                     <td>${quantity_total.toLocaleString('es-CO', { minimumFractionDigits: 0, maximumFractionDigits: 2 })}</td>
                     <td>${dataFT[i].abbreviation}</td>
-                    <td>${dataFT[i].quantity_requested.toLocaleString('es-CO', { minimumFractionDigits: 0, maximumFractionDigits: 2 })}</td>
-                    <td></td> 
+                    <td>${recieve.toLocaleString('es-CO', { minimumFractionDigits: 0, maximumFractionDigits: 2 })}</td>
+                    <td>${pending.toLocaleString('es-CO', { minimumFractionDigits: 0, maximumFractionDigits: 2 })}</td> 
                 </tr>`);
         }
         

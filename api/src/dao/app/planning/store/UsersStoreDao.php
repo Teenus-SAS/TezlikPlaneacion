@@ -16,6 +16,20 @@ class UsersStoreDao
         $this->logger->pushHandler(new RotatingFileHandler(Constants::LOGS_PATH . 'querys.log', 20, Logger::DEBUG));
     }
 
+    public function findAllStoreByCompany($id_company)
+    {
+        $connection = Connection::getInstance()->getConnection();
+
+        $stmt = $connection->prepare("SELECT * FROM store_users 
+                                      WHERE id_company = :id_company");
+        $stmt->execute([
+            'id_company' => $id_company
+        ]);
+        $this->logger->info(__FUNCTION__, array('query' => $stmt->queryString, 'errors' => $stmt->errorInfo()));
+        $store = $stmt->fetchAll($connection::FETCH_ASSOC);
+        return $store;
+    }
+
     public function findAllUserStoreById($id_programming, $id_material)
     {
         $connection = Connection::getInstance()->getConnection();

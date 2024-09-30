@@ -220,16 +220,16 @@ $(document).ready(function () {
   });
 
   const checkDataRequisition = async (url, idRequisition) => {
-    const material = $("#material").val();
-    const provider = $("#client").val();
+    const material = parseInt($("#material").val());
+    const provider = parseInt($("#client").val());
     const applicationDate = $("#applicationDate").val();
     const deliveryDate = $("#deliveryDate").val();
     // const quan = $('#requiredQuantity').val();
-    const r_quan = $("#requestedQuantity").val();
+    const r_quan = parseFloat($("#requestedQuantity").val());
 
     const data = r_quan * material * provider;
 
-    if (!data) {
+    if (isNaN(data) || data <= 0) {
       toastr.error("Ingrese todos los campos");
       return false;
     }

@@ -15,9 +15,10 @@ $(document).ready(function () {
 
   loadData = async (op) => {
     try {
-      const [dataPO, dataFTMaterials] = await Promise.all([
+      const [dataPO, dataFTMaterials, dataStore] = await Promise.all([
         searchData("/api/productionOrder"),
         op == 1 ? searchData("/api/allProductsMaterials") : "",
+        op == 1 ? searchData("/api/allStore") : "",
       ]);
 
       let dataPOP = dataPO.filter((item) => item.status == "EN PRODUCCION");
@@ -27,11 +28,13 @@ $(document).ready(function () {
       sessionStorage.setItem("dataPON", JSON.stringify(dataPON));
       sessionStorage.setItem("dataOP", JSON.stringify(dataPO));
 
-      if (op == 1)
+      if (op == 1) {
         sessionStorage.setItem(
           "dataFTMaterials",
           JSON.stringify(dataFTMaterials)
         );
+        sessionStorage.setItem("dataAllStore", JSON.stringify(dataStore));
+      }
 
       let element = document.getElementsByClassName("selectNavigation");
 
