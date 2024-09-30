@@ -109,7 +109,7 @@ if (sizeof($_SESSION) == 0)
                                                     <span id="ordersActive" style="color:rgba(138, 43, 226, 1)"></span>
                                                     <span class="text-info" style="font-size: 0.4em;color:rgba(138, 43, 226, 1) !important" id="ordersActive">clientes</span>
                                                     <span id="ordersInternal"></span>
-                                                    <span class="text-warning" id="ordersInternal" style="font-size: 0.4em;">internos</span>
+                                                    <span class="text-warning mr-2" id="ordersInternal" style="font-size: 0.4em;">internos</span>
                                                 </h2>
                                             </div>
                                             <div class="text-center">
