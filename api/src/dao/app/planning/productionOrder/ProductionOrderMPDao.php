@@ -20,7 +20,7 @@ class ProductionOrderMPDao
     {
         $connection = Connection::getInstance()->getConnection();
 
-        $stmt = $connection->prepare("SELECT 
+        /* SELECT 
                                         -- Columnas
                                             pom.id_prod_order_material, 
                                             pom.id_programming, 
@@ -33,7 +33,41 @@ class ProductionOrderMPDao
                                         INNER JOIN programming pg ON pg.id_programming = pom.id_programming
                                         INNER JOIN materials m ON m.id_material = pom.id_material
                                         LEFT JOIN inv_materials mi ON mi.id_material = pom.id_material 
-                                      WHERE pom.id_company = :id_company");
+                                      WHERE pom.id_company = :id_company*/
+
+        $stmt = $connection->prepare("SELECT 
+                                        -- Columnas
+                                            pg.num_production,
+                                            pom.id_prod_order_material, 
+                                            pom.id_programming, 
+                                            m.id_material, 
+                                            m.reference, 
+                                            m.material, 
+                                            IFNULL(mi.quantity, 0) AS quantity_material, 
+                                            pom.quantity,
+                                            IFNULL(last_user.id_user_receive, 0) AS id_user_receive,
+                                            IFNULL(last_user.firstname_receive, '') AS firstname_receive,
+                                            IFNULL(last_user.lastname_receive, '') AS lastname_receive
+                                      FROM prod_order_materials pom
+                                        INNER JOIN materials m ON m.id_material = pom.id_material
+                                        LEFT JOIN inv_materials mi ON mi.id_material = pom.id_material
+                                        INNER JOIN programming pg ON pg.id_programming = pom.id_programming
+                                        -- Subconsulta para obtener el último usuario de entrega
+                                        LEFT JOIN(
+                                            SELECT cur.id_prod_order_material,
+                                                curd.id_user AS id_user_receive,
+                                                curd.firstname AS firstname_receive,
+                                                curd.lastname AS lastname_receive
+                                            FROM prod_order_materials_users cur
+                                            INNER JOIN users curd ON curd.id_user = cur.id_user_receive 
+                                            WHERE cur.id_prod_order_material = (
+                                                    SELECT MAX(cur_inner.id_prod_order_material)
+                                                    FROM prod_order_materials_users cur_inner
+                                                    WHERE cur_inner.id_prod_order_material = cur.id_prod_order_material
+                                            )
+                                        ) AS last_user ON last_user.id_prod_order_material = pom.id_prod_order_material
+                                      WHERE pom.id_company = :id_company
+                                      ORDER BY `pg`.`num_production` ASC");
         $stmt->execute([
             'id_company' => $id_company
         ]);

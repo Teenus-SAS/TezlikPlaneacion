@@ -154,6 +154,9 @@ if (sizeof($_SESSION) == 0)
                                             <table class="fixed-table-loading table table-hover" id="tblPartialsDelivery">
 
                                             </table>
+                                            <table class="fixed-table-loading table table-hover" id="tblPartialsDeliveryMP">
+
+                                            </table>
                                         </div>
                                     </div>
                                 </div>
