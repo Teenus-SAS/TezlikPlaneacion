@@ -160,15 +160,17 @@ class DashboardGeneralDao
                     COUNT(id_order) AS total_orders     -- Cuenta el número de órdenes por cada tipo y día
                 FROM orders
                 WHERE 
-                    YEAR(date_order) = YEAR(CURDATE())  -- Año actual
-                    AND MONTH(date_order) = MONTH(CURDATE())  -- Mes actual
-                    AND id_company = :id_company
+                    -- YEAR(date_order) = YEAR(CURDATE())  -- Año actual
+                    -- AND MONTH(date_order) = MONTH(CURDATE())  -- Mes actual
+                    -- AND 
+                    id_company = :id_company
                 GROUP BY 
                     DATE(date_order),                    -- Agrupa por día
                     type_order
                 ORDER BY 
                     DATE(date_order),                    -- Ordena por día
-                    type_order;";
+                    type_order
+                LIMIT 10;";
         $stmt = $connection->prepare($sql);
         $stmt->execute(['id_company' => $id_company]);
         $orderxDay = $stmt->fetchAll($connection::FETCH_ASSOC);
