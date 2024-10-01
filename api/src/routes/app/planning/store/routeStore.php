@@ -100,7 +100,7 @@ $app->post('/deliverStore', function (Request $request, Response $response, $arg
 
     $store = $storeDao->saveDelivery($dataStore, 1);
     if ($store == null) {
-        $store = $generalMaterialsDao->updateStoreMaterial($dataStore);
+        $store = $generalMaterialsDao->updateQuantityMaterial($dataStore['idMaterial'], $dataStore['stored']);
 
         if ($dataStore['pending'] == 0) {
             date_default_timezone_set('America/Bogota');

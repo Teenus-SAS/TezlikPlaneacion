@@ -210,7 +210,7 @@ $(document).ready(function () {
         $("#tblPartialsDeliveryPT").DataTable().ajax.reload();
     } 
 
-    // Productos
+    // Materiales
     tblPartialsDeliveryMP = $('#tblPartialsDeliveryMP').dataTable({
         destroy: true,
         pageLength: 50,
@@ -231,61 +231,34 @@ $(document).ready(function () {
                 },
             },
             {
-                title: "Fechas",
-                data: null,
-                className: "uniqueClassName dt-head-center",
-                width: "200px",
-                render: function (data, type, full, meta) {
-                    const start_date = full.start_date;
-                    const end_date = full.end_date;
-
-                    return `Inicio: ${moment(start_date).format(
-                        "DD/MM/YYYY HH:mm A"
-                    )}<br>Fin: ${moment(end_date).format("DD/MM/YYYY HH:mm A")}`;
-                },
-            },
-            {
                 title: 'Referencia',
                 data: 'reference',
                 className: 'uniqueClassName dt-head-center',
             },
             {
-                title: 'Producto',
-                data: 'product',
+                title: 'Material',
+                data: 'material',
                 className: 'uniqueClassName dt-head-center',
             },
             {
-                title: 'Operador',
-                data: null,
-                className: 'uniqueClassName dt-head-center',
-                render: function (data) {
-                    return `${data.firstname} ${data.lastname}`;
-                }
-            },
-            {
-                title: 'Desperdicio',
-                data: 'waste',
+                title: 'Cantidad',
+                data: 'quantity',
                 className: 'uniqueClassName dt-head-center',
                 render: $.fn.dataTable.render.number('.', ',', 0, ''),
             },
             {
-                title: 'Cantidad Entregada',
-                data: 'partial_quantity',
-                className: 'uniqueClassName dt-head-center',
-                render: $.fn.dataTable.render.number('.', ',', 0, ''),
-            },
-            {
-                title: "Acción",
+                title: "Acciones",
                 data: null,
                 className: "uniqueClassName dt-head-center",
+                visible: visible,
                 render: function (data) {
                     if (!data.receive_date || data.receive_date == "0000-00-00")
-                        action = `<button class="btn btn-info changeDateOPPT">Recibir OP</button>`;
+                        action = `<button class="btn btn-info changeDateOPMP">Aceptar MP</button>`;
                     else {
-                        action = `Recibido: <br>${data.firstname_receive} ${data.lastname_receive}<br>${data.receive_date}`; 
+                        action = `Recibido: <br>${data.firstname_receive} ${data.lastname_receive}<br>${data.receive_date}`;
                     }
 
-                    return action;
+                    return action;  
                 },
             },
         ],
@@ -311,7 +284,7 @@ $(document).ready(function () {
         bootbox.confirm({
             title: "Ingrese Fecha De Ingreso!",
             message: `<div class="col-sm-12 floating-label enable-floating-label">
-                        <input class="form-control" type="date" name="date" id="dateOPPT" max="${date}"></input>
+                        <input class="form-control" type="date" name="date" id="dateOPMP" max="${date}"></input>
                         <label for="date">Fecha</span></label>
                       </div>`,
             buttons: {
@@ -326,7 +299,7 @@ $(document).ready(function () {
             },
             callback: function (result) {
                 if (result) {
-                    let date = $("#dateOPPT").val();
+                    let date = $("#dateOPMP").val();
 
                     if (!date) {
                         toastr.error("Ingrese los campos");
@@ -334,20 +307,20 @@ $(document).ready(function () {
                     }
 
                     let form = new FormData();
-                    form.append("idPartDeliv", data.id_part_deliv);
-                    form.append("idProduct", data.id_product);
-                    form.append("quantity", parseFloat(data.quantity_product) + parseFloat(data.partial_quantity));
+                    form.append("idOPM", data.id_prod_order_material);
+                    form.append("idMaterial", data.id_material);
+                    form.append("quantity", parseFloat(data.quantity_material) - parseFloat(data.quantity));
                     form.append("date", date);
 
                     $.ajax({
                         type: "POST",
-                        url: "/api/saveReceiveOPDate",
+                        url: "/api/saveReceiveOPMPDate",
                         data: form,
                         contentType: false,
                         cache: false,
                         processData: false,
                         success: function (resp) {
-                            messageOPPT(resp);
+                            messageOPMP(resp);
                         },
                     });
                 }
@@ -355,53 +328,53 @@ $(document).ready(function () {
         });
     });
 
-    $(document).on('click', '.seeReceiveOPMP', async function (e) {
-        e.preventDefault();
+    // $(document).on('click', '.seeReceiveOPMP', async function (e) {
+    //     e.preventDefault();
 
-        const row = $(this).closest("tr")[0];
-        let data = tblPartials1Delivery.fnGetData(row);
+    //     const row = $(this).closest("tr")[0];
+    //     let data = tblPartials1Delivery.fnGetData(row);
 
-        let users = await searchData(`/api/usersOPPartial/${data.id_part_deliv}`);
-        let rows = '';
+    //     let users = await searchData(`/api/usersOPPartial/${data.id_part_deliv}`);
+    //     let rows = '';
 
-        for (let i = 0; i < users.length; i++) {
-            rows +=
-                `<tr>
-          <td>${i + 1}</td>
-          <td>${users[i].firstname}</td>
-          <td>${users[i].lastname}</td>
-          <td>${users[i].email}</td>
-        </tr>`;
-        }
+    //     for (let i = 0; i < users.length; i++) {
+    //         rows +=
+    //             `<tr>
+    //       <td>${i + 1}</td>
+    //       <td>${users[i].firstname}</td>
+    //       <td>${users[i].lastname}</td>
+    //       <td>${users[i].email}</td>
+    //     </tr>`;
+    //     }
 
-        // Mostramos el mensaje con Bootbox
-        bootbox.alert({
-            title: 'Usuarios',
-            message: `
-            <div class="container">
-              <div class="col-12">
-                <div class="table-responsive">
-                  <table class="fixed-table-loading table table-hover">
-                    <thead>
-                      <tr>
-                        <th>No</th>
-                        <th>Nombre</th>
-                        <th>Apellido</th>
-                        <th>Email</th>
-                      </tr>
-                    </thead>
-                    <tbody>
-                      ${rows}
-                    </tbody>
-                  </table>
-                </div>
-              </div> 
-            </div>`,
-            size: 'large',
-            backdrop: true
-        });
-        return false;
-    });
+    //     // Mostramos el mensaje con Bootbox
+    //     bootbox.alert({
+    //         title: 'Usuarios',
+    //         message: `
+    //         <div class="container">
+    //           <div class="col-12">
+    //             <div class="table-responsive">
+    //               <table class="fixed-table-loading table table-hover">
+    //                 <thead>
+    //                   <tr>
+    //                     <th>No</th>
+    //                     <th>Nombre</th>
+    //                     <th>Apellido</th>
+    //                     <th>Email</th>
+    //                   </tr>
+    //                 </thead>
+    //                 <tbody>
+    //                   ${rows}
+    //                 </tbody>
+    //               </table>
+    //             </div>
+    //           </div> 
+    //         </div>`,
+    //         size: 'large',
+    //         backdrop: true
+    //     });
+    //     return false;
+    // });
 
     const messageOPMP = (data) => {
         const { success, error, info, message } = data;
@@ -414,7 +387,7 @@ $(document).ready(function () {
     };
 
     function updateTableMP() {
-        $("#tblPartialsDeliveryPT").DataTable().clear();
-        $("#tblPartialsDeliveryPT").DataTable().ajax.reload();
+        $("#tblPartialsDeliveryMP").DataTable().clear();
+        $("#tblPartialsDeliveryMP").DataTable().ajax.reload();
     }
 });

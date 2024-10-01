@@ -1,11 +1,13 @@
 <?php
 
+use TezlikPlaneacion\dao\GeneralMaterialsDao;
 use TezlikPlaneacion\dao\GeneralOrdersDao;
 use TezlikPlaneacion\dao\GeneralProductsDao;
 use TezlikPlaneacion\dao\GeneralProgrammingDao;
 use TezlikPlaneacion\dao\ProductionOrderDao;
 use TezlikPlaneacion\dao\ProductionOrderMPDao;
 use TezlikPlaneacion\dao\ProductionOrderPartialDao;
+use TezlikPlaneacion\dao\UsersProductionOrderMPDao;
 use TezlikPlaneacion\dao\UsersProductionOrderPartialDao;
 
 $generalProgrammingDao = new GeneralProgrammingDao();
@@ -13,8 +15,10 @@ $productionOrderDao = new ProductionOrderDao();
 $productionOrderPartialDao = new ProductionOrderPartialDao();
 $productionOrderMPDao = new ProductionOrderMPDao();
 $usersProductionOrderPartialDao = new UsersProductionOrderPartialDao();
+$usersProductionOrderMPDao = new UsersProductionOrderMPDao();
 $generalOrdersDao = new GeneralOrdersDao();
 $generalProductsDao = new GeneralProductsDao();
+$generalMaterialsDao = new GeneralMaterialsDao();
 
 use Psr\Http\Message\ResponseInterface as Response;
 use Psr\Http\Message\ServerRequestInterface as Request;
@@ -198,7 +202,7 @@ $app->get('/deleteOPPartial/{id_part_deliv}', function (Request $request, Respon
     return $response->withHeader('Content-Type', 'application/json');
 });
 
-$app->post('/saveReceiveOPMPDate', function (Request $request, Response $response, $args) use (
+$app->post('/saveReceiveOPPTDate', function (Request $request, Response $response, $args) use (
     $productionOrderPartialDao,
     $usersProductionOrderPartialDao,
     $generalProductsDao,
@@ -229,7 +233,7 @@ $app->post('/saveReceiveOPMPDate', function (Request $request, Response $respons
     $response->getBody()->write(json_encode($resp));
     return $response->withStatus(200)->withHeader('Content-Type', 'application/json');
 });
-/*
+
 $app->get('/usersOPPT/{id_part_deliv}', function (Request $request, Response $response, $args) use ($usersProductionOrderPartialDao) {
     $users = $usersProductionOrderPartialDao->findAllUserOPPartialById($args['id_part_deliv']);
     $response->getBody()->write(json_encode($users));
@@ -259,10 +263,8 @@ $app->get('/productionOrderMaterial/{id_programming}', function (Request $reques
 $app->post('/addOPMaterial', function (Request $request, Response $response, $args) use ($productionOrderMPDao) {
     session_start();
     $id_company = $_SESSION['id_company'];
-    // $id_user = $_SESSION['idUser'];
 
     $dataOP = $request->getParsedBody();
-    // $dataOP['operator'] = $id_user;
 
     $resolution = $productionOrderMPDao->insertOPMaterialByCompany($dataOP, $id_company);
 
@@ -310,9 +312,9 @@ $app->get('/deleteOPMaterial/{id_prod_order_material}', function (Request $reque
 });
 
 $app->post('/saveReceiveOPMPDate', function (Request $request, Response $response, $args) use (
-    $productionOrderPartialDao,
-    $usersProductionOrderPartialDao,
-    $generalProductsDao,
+    $productionOrderMPDao,
+    $usersProductionOrderMPDao,
+    $generalMaterialsDao,
 ) {
     session_start();
     $id_company = $_SESSION['id_company'];
@@ -320,14 +322,14 @@ $app->post('/saveReceiveOPMPDate', function (Request $request, Response $respons
 
     $dataOP = $request->getParsedBody();
 
-    $resolution = $productionOrderPartialDao->updateDateReceive($dataOP);
+    $resolution = $productionOrderMPDao->updateDateReceive($dataOP);
 
     if ($resolution == null) {
-        $resolution = $generalProductsDao->updateAccumulatedQuantity($dataOP['idProduct'], $dataOP['quantity'], 2);
+        $resolution = $generalMaterialsDao->updateQuantityMaterial($dataOP['idMaterial'], $dataOP['quantity']);
     }
 
     if ($resolution == null) {
-        $resolution = $usersProductionOrderPartialDao->saveUserOPPartial($id_company, $dataOP['idPartDeliv'], $id_user);
+        $resolution = $usersProductionOrderMPDao->saveUserOPMP($id_company, $dataOP['idOPM'], $id_user);
     }
 
     if ($resolution == null)
@@ -341,8 +343,10 @@ $app->post('/saveReceiveOPMPDate', function (Request $request, Response $respons
     return $response->withStatus(200)->withHeader('Content-Type', 'application/json');
 });
 
-$app->get('/usersOPMP/{id_part_deliv}', function (Request $request, Response $response, $args) use ($usersProductionOrderPartialDao) {
-    $users = $usersProductionOrderPartialDao->findAllUserOPPartialById($args['id_part_deliv']);
+$app->get('/usersOPMP/{id_prod_order_material_user}', function (Request $request, Response $response, $args) use (
+    $usersProductionOrderMPDao
+) {
+    $users = $usersProductionOrderMPDao->findAllUserOPMPById($args['id_prod_order_material_user']);
     $response->getBody()->write(json_encode($users));
     return $response->withHeader('Content-Type', 'application/json');
-});*/
+});
