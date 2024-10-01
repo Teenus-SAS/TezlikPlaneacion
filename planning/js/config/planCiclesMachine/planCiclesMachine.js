@@ -129,6 +129,26 @@ $(document).ready(function () {
     else if (info) toastr.info(message);
   };
 
+  $(document).on('click', '.alternateMachine', function () {
+    // Obtener el ID del elemento
+    const id_cicles_machine = $(this).attr("id").split("-")[1]; 
+    // sessionStorage.setItem("id_cicles_machine", id_cicles_machine);
+
+    //obtener data
+    const row = $(this).closest("tr")[0];
+    const data = tblPlanCiclesMachine.fnGetData(row);
+
+
+    //animacion desplazamiento
+    $("html, body").animate(
+      {
+        scrollTop: 0,
+      },
+      1000
+    );
+  });
+  
+
   /* Actualizar tabla */
   function updateTable() {
     $("#tblPlanCiclesMachine").DataTable().clear();

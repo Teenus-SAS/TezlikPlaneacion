@@ -62,8 +62,8 @@ $(document).ready(function () {
 
             let recieve = 0;
             let pending = 0;
-
-            store.foreach(item => {
+ 
+            store.forEach(item => {
                 recieve += item.delivery_store;
                 pending -= item.delivery_pending;
             });

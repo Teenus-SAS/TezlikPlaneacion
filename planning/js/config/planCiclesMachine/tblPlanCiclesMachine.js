@@ -55,12 +55,13 @@ $(document).ready(function () {
         },
         {
           title: "Acciones",
-          data: "id_cicles_machine",
+          data: null,
           className: "uniqueClassName dt-head-center",
           render: function (data) {
             return `
-                    <a href="javascript:;" <i id="upd-${data}" class="bx bx-edit-alt updatePCMachine" data-toggle='tooltip' title='Actualizar Maquina' style="font-size: 30px;"></i></a>
-                    <a href="javascript:;" <i id="${data}" class="mdi mdi-delete-forever" data-toggle='tooltip' title='Eliminar Maquina' style="font-size: 30px;color:red" onclick="deleteMachine()"></i></a>`;
+                    <a href="javascript:;" <i id="upd-${data.id_cicles_machine}" class="bx bx-edit-alt updatePCMachine" data-toggle='tooltip' title='Actualizar Maquina' style="font-size: 30px;"></i></a>
+                    <a href="javascript:;" <i id="ext-${data.id_alternate_machine}" class="bx bx-edit-alt alternateMachine" data-toggle='tooltip' title='Maquina Externa' style="font-size: 30px;"></i></a>
+                    <a href="javascript:;" <i id="${data.id_cicles_machine }" class="mdi mdi-delete-forever" data-toggle='tooltip' title='Eliminar Maquina' style="font-size: 30px;color:red" onclick="deleteMachine()"></i></a>`;
           },
         },
       ],
