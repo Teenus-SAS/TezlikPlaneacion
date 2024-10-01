@@ -250,7 +250,7 @@ $(document).ready(function () {
                 title: "Acciones",
                 data: null,
                 className: "uniqueClassName dt-head-center",
-                visible: visible,
+                // visible: visible,
                 render: function (data) {
                     if (!data.receive_date || data.receive_date == "0000-00-00")
                         action = `<button class="btn btn-info changeDateOPMP">Aceptar MP</button>`;
