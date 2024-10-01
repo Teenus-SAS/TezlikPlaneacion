@@ -59,35 +59,18 @@ class AlternalMachineDao
 
 
         try {
-            $stmt = $connection->prepare("UPDATE machine_cicles SET id_product = :id_product, id_process = :id_process, id_machine = :id_machine, cicles_hour = :cicles_hour 
+            $stmt = $connection->prepare("UPDATE alternate_machines SET id_process = :id_process, cicles_hour = :cicles_hour
                                           WHERE id_cicles_machine = :id_cicles_machine");
             $stmt->execute([
-                'id_cicles_machine' => $dataCiclesMachine['idCiclesMachine'],
-                'id_product' => $dataCiclesMachine['idProduct'],
+                'id_cicles_machine' => $dataCiclesMachine['idCicleMachine'],
                 'id_process' => $dataCiclesMachine['idProcess'],
-                'id_machine' => $dataCiclesMachine['idMachine'],
-                'cicles_hour' => $ciclesHour
+                'cicles_hour' => $dataCiclesMachine['ciclesHour']
             ]);
             $this->logger->info(__FUNCTION__, array('query' => $stmt->queryString, 'errors' => $stmt->errorInfo()));
         } catch (\Exception $e) {
             $message = $e->getMessage();
             $error = array('info' => true, 'message' => $message);
             return $error;
-        }
-    }
-
-    public function deletePlanCiclesMachine($id_cicles_machine)
-    {
-        $connection = Connection::getInstance()->getConnection();
-
-        $stmt = $connection->prepare("SELECT * FROM machine_cicles WHERE id_cicles_machine = :id_cicles_machine");
-        $stmt->execute(['id_cicles_machine' => $id_cicles_machine]);
-        $rows = $stmt->rowCount();
-
-        if ($rows > 0) {
-            $stmt = $connection->prepare("DELETE FROM machine_cicles WHERE id_cicles_machine = :id_cicles_machine");
-            $stmt->execute(['id_cicles_machine' => $id_cicles_machine]);
-            $this->logger->info(__FUNCTION__, array('query' => $stmt->queryString, 'errors' => $stmt->errorInfo()));
         }
     }
 }

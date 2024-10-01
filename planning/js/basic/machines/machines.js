@@ -81,9 +81,9 @@ $(document).ready(function () {
 
   /* Verificar datos */
   const checkDataMachines = async (url, idMachine) => {
-    let Machine = $("#machine").val();
+    let machine = $("#machine").val();
 
-    if (!Machine.trim()) {
+    if (!machine.trim()) {
       toastr.error("Ingrese todos los campos");
       return false;
     }

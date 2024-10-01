@@ -205,6 +205,7 @@ if (sizeof($_SESSION) == 0)
 																<th>Unidad</th>
 																<th>Recibido</th>
 																<th>Pendiente</th>
+																<th></th>
 															</tr>
 														</thead>
 														<tbody id="tblPOMaterialsBody">

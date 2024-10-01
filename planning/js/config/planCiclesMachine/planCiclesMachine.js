@@ -130,6 +130,7 @@ $(document).ready(function () {
   };
 
   $(document).on('click', '.alternateMachine', function () {
+    $('#btnCreatePlanCiclesMachine').html('');
     // Obtener el ID del elemento
     const id_cicles_machine = $(this).attr("id").split("-")[1]; 
     // sessionStorage.setItem("id_cicles_machine", id_cicles_machine);

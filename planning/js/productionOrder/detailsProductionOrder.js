@@ -64,8 +64,8 @@ $(document).ready(function () {
             let pending = 0;
  
             store.forEach(item => {
-                recieve += item.delivery_store;
-                pending -= item.delivery_pending;
+                recieve += parseFloat(item.delivery_store);
+                item.delivery_pending == 0 ? pending = 0 : pending += parseFloat(item.delivery_pending);
             });
 
             pending < 0 ? pending = 0 : pending;
@@ -79,6 +79,10 @@ $(document).ready(function () {
                     <td>${dataFT[i].abbreviation}</td>
                     <td>${recieve.toLocaleString('es-CO', { minimumFractionDigits: 0, maximumFractionDigits: 2 })}</td>
                     <td>${pending.toLocaleString('es-CO', { minimumFractionDigits: 0, maximumFractionDigits: 2 })}</td> 
+                    <td>
+                        ${recieve > 0 ?
+                            `<button class="btn btn-info acceptMaterial" id="accept-${dataFT[i].id_material}">Aceptar MP</button>` : ''}    
+                    </td>
                 </tr>`);
         }
         
@@ -105,6 +109,59 @@ $(document).ready(function () {
             loadTblOPMaterial(id_programming, visible);
         }
     };
+
+    $(document).on('click', '.acceptMaterial', function () {
+        // Obtener el ID del elemento
+        let date = new Date().toISOString().split("T")[0];
+        
+        const idMaterial = $(this).attr("id").split("-")[1];
+
+        bootbox.confirm({
+            title: "Ingrese Fecha De Ingreso!",
+            message: `<div class="col-sm-12 floating-label enable-floating-label">
+                        <input class="form-control" type="date" name="date" id="dateOPMP" max="${date}"></input>
+                        <label for="date">Fecha</span></label>
+                      </div>`,
+            buttons: {
+                confirm: {
+                    label: "Guardar",
+                    className: "btn-success",
+                },
+                cancel: {
+                    label: "Cancelar",
+                    className: "btn-danger",
+                },
+            },
+            callback: function (result) {
+                if (result) {
+                    let date = $("#dateOPMP").val();
+
+                    if (!date) {
+                        toastr.error("Ingrese los campos");
+                        return false;
+                    }
+
+                    // let form = new FormData();
+                    // form.append("idOPM", data.id_prod_order_material);
+                    // form.append("idMaterial", data.id_material);
+                    // form.append("quantity", parseFloat(data.quantity_material) - parseFloat(data.quantity));
+                    // form.append("date", date);
+
+                    // $.ajax({
+                    //     type: "POST",
+                    //     url: "/api/saveReceiveOPMPDate",
+                    //     data: form,
+                    //     contentType: false,
+                    //     cache: false,
+                    //     processData: false,
+                    //     success: function (resp) {
+                    //         messageOPMP(resp);
+                    //     },
+                    // });
+                }
+            },
+        });
+    });
 
     const formatQuantity = (quantity, abbreviation) => {
         quantity = parseFloat(quantity);

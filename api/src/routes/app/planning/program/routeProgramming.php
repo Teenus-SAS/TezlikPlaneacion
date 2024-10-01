@@ -274,7 +274,7 @@ $app->post('/saveProgramming', function (Request $request, Response $response, $
         if (sizeof($productsFTM) == 0 || sizeof($planCicles) == 0) {
             $generalOrdersDao->changeStatus($programmings[$i]['id_order'], 5);
         } else {
-            foreach ($productsFTM as $k) {
+            foreach ($productsMaterials as $k) {
                 if (isset($result['info'])) break;
 
                 $j = $generalMaterialsDao->findReservedMaterial($k['id_material']);
