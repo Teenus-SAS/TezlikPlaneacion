@@ -55,7 +55,7 @@ $(document).ready(function () {
         
         for (let i = 0; i < dataFT.length; i++) {
             let quantity_ftm = formatQuantity(dataFT[i].quantity_ftm, dataFT[i].abbreviation); 
-            let quantity_total = parseFloat(dataFT[i].quantity_ftm) * parseFloat(data.quantity_order);
+            let quantity_total = parseFloat(dataFT[i].quantity_ftm) * parseFloat(data.quantity_programming);
             quantity_total = formatQuantity(quantity_total, dataFT[i].abbreviation);
 
             let store = allStore.filter(item => item.id_programming == id_programming && item.id_material == dataFT[i].id_material);
