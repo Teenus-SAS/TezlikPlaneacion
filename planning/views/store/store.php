@@ -151,7 +151,7 @@ if (sizeof($_SESSION) == 0)
                                             </div>
                                         </div>
                                         <div class="tab-pane cardOP" style="display: none;" role="tabpanel" aria-labelledby="pills-projects-tab">
-                                            <table class="fixed-table-loading table table-hover" id="tblPartialsDelivery">
+                                            <table class="fixed-table-loading table table-hover" id="tblPartialsDeliveryPT">
 
                                             </table>
                                             <table class="fixed-table-loading table table-hover" id="tblPartialsDeliveryMP">
