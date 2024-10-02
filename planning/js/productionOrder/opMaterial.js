@@ -61,7 +61,7 @@ $(document).ready(function () {
                                     hour12: true,
                                 });
 
-                            action = `Entregado: ${data.firstname_delivered} ${data.lastname_delivered}<br>${fechaHoraFormateada}`
+                            action = `Entregado: ${data.firstname_receive} ${data.lastname_receive}<br>${fechaHoraFormateada}`
                         }
                         return action;
                     },
