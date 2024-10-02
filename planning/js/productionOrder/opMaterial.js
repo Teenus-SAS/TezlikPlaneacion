@@ -42,12 +42,12 @@ $(document).ready(function () {
                     visible: visible,
                     render: function (data) {
                         let action;
-                        if (!data.delivery_date || data.delivery_date == "0000-00-00 00:00:00") {
+                        if (!data.receive_date || data.receive_date == "0000-00-00") {
                             action = `<a href="javascript:;" <i id="upd-${data.id_prod_order_material}" class="bx bx-edit-alt updateOPMaterial" data-toggle='tooltip' title='Actualizar Material' style="font-size: 30px;"></i></a>
                             <a href="javascript:;" <i id="${data.id_prod_order_material}" class="mdi mdi-delete-forever" data-toggle='tooltip' title='Eliminar Material' style="font-size: 30px;color:red" onclick="deleteOPMaterialFunction()"></i></a>`;
                         }
                         else {
-                            let fechaHora = new Date(data.delivery_date);
+                            let fechaHora = new Date(data.receive_date);
                             let fechaHoraFormateada =
                                 fechaHora.toLocaleDateString("es-CO", {
                                     day: "2-digit",
