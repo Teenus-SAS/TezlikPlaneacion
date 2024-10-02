@@ -37,7 +37,7 @@ class UsersProductionOrderMPDao
         $connection = Connection::getInstance()->getConnection();
 
         try {
-            $stmt = $connection->prepare("INSERT INTO prod_order_part_deliv_users (id_company, id_prod_order_material, id_user_receive)
+            $stmt = $connection->prepare("INSERT INTO prod_order_materials_users (id_company, id_prod_order_material, id_user_receive)
                                           VALUES (:id_company, :id_prod_order_material, :id_user_receive)");
             $stmt->execute([
                 'id_company' => $id_company,
