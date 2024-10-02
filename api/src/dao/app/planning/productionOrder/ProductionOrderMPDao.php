@@ -46,10 +46,14 @@ class ProductionOrderMPDao
                                             IFNULL(mi.quantity, 0) AS quantity_material, 
                                             pom.quantity,
                                             pom.receive_date,
+                                            u.id_user,
+                                            u.firstname,
+                                            u.lastname,
                                             IFNULL(last_user.id_user_receive, 0) AS id_user_receive,
                                             IFNULL(last_user.firstname_receive, '') AS firstname_receive,
                                             IFNULL(last_user.lastname_receive, '') AS lastname_receive
                                       FROM prod_order_materials pom
+                                        INNER JOIN users u ON u.id_user = pom.operator
                                         INNER JOIN materials m ON m.id_material = pom.id_material
                                         LEFT JOIN inv_materials mi ON mi.id_material = pom.id_material
                                         INNER JOIN programming pg ON pg.id_programming = pom.id_programming
@@ -93,10 +97,14 @@ class ProductionOrderMPDao
                                             IFNULL(mi.quantity, 0) AS quantity_material, 
                                             pom.quantity,
                                             pom.receive_date,
+                                            u.id_user,
+                                            u.firstname,
+                                            u.lastname,
                                             IFNULL(last_user.id_user_receive, 0) AS id_user_receive,
                                             IFNULL(last_user.firstname_receive, '') AS firstname_receive,
                                             IFNULL(last_user.lastname_receive, '') AS lastname_receive
                                       FROM prod_order_materials pom
+                                        INNER JOIN users u ON u.id_user = pom.operator
                                         INNER JOIN materials m ON m.id_material = pom.id_material
                                         LEFT JOIN inv_materials mi ON mi.id_material = pom.id_material
                                         INNER JOIN programming pg ON pg.id_programming = pom.id_programming
@@ -131,12 +139,13 @@ class ProductionOrderMPDao
         try {
             $connection = Connection::getInstance()->getConnection();
 
-            $stmt = $connection->prepare("INSERT INTO prod_order_materials (id_company, id_programming, id_material, quantity)
-                                          VALUES (:id_company, :id_programming, :id_material, :quantity)");
+            $stmt = $connection->prepare("INSERT INTO prod_order_materials (id_company, id_programming, id_material, operator, quantity)
+                                          VALUES (:id_company, :id_programming, :operator, :id_material, :quantity)");
             $stmt->execute([
                 'id_company' => $id_company,
                 'id_programming' => $dataProgramming['idProgramming'],
                 'id_material' => $dataProgramming['idMaterial'],
+                'operator' => $dataProgramming['operator'],
                 'quantity' => $dataProgramming['quantity']
             ]);
         } catch (\Exception $e) {

@@ -30,6 +30,14 @@ $(document).ready(function () {
                     className: 'uniqueClassName dt-head-center', 
                 },
                 {
+                    title: "Operador",
+                    data: null,
+                    className: "uniqueClassName dt-head-center",
+                    render: function (data) {
+                        return `${data.firstname} ${data.lastname}`;
+                    },
+                },
+                {
                     title: 'Cantidad',
                     data: 'quantity',
                     className: 'uniqueClassName dt-head-center',
@@ -53,15 +61,9 @@ $(document).ready(function () {
                                     day: "2-digit",
                                     month: "2-digit",
                                     year: "numeric",
-                                }) +
-                                "<br>" +
-                                fechaHora.toLocaleTimeString("es-CO", {
-                                    hour: "2-digit",
-                                    minute: "2-digit",
-                                    hour12: true,
                                 });
 
-                            action = `Entregado: ${data.firstname_receive} ${data.lastname_receive}<br>${fechaHoraFormateada}`
+                            action = `Recibido: ${data.firstname_receive} ${data.lastname_receive}<br>${fechaHoraFormateada}`
                         }
                         return action;
                     },

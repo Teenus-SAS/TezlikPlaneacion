@@ -263,8 +263,10 @@ $app->get('/productionOrderMaterial/{id_programming}', function (Request $reques
 $app->post('/addOPMaterial', function (Request $request, Response $response, $args) use ($productionOrderMPDao) {
     session_start();
     $id_company = $_SESSION['id_company'];
+    $id_user = $_SESSION['idUser'];
 
     $dataOP = $request->getParsedBody();
+    $dataOP['operator'] = $id_user;
 
     $resolution = $productionOrderMPDao->insertOPMaterialByCompany($dataOP, $id_company);
 
