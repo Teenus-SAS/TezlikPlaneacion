@@ -45,6 +45,7 @@ class ProductionOrderMPDao
                                             m.material, 
                                             IFNULL(mi.quantity, 0) AS quantity_material, 
                                             pom.quantity,
+                                            pom.receive_date,
                                             IFNULL(last_user.id_user_receive, 0) AS id_user_receive,
                                             IFNULL(last_user.firstname_receive, '') AS firstname_receive,
                                             IFNULL(last_user.lastname_receive, '') AS lastname_receive
