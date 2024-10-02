@@ -20,13 +20,32 @@ class PlanCiclesMachineDao
     {
         $connection = Connection::getInstance()->getConnection();
 
-        $stmt = $connection->prepare("SELECT pcm.id_cicles_machine, pcm.id_product, p.reference, p.product, pcm.id_process, IFNULL(pc.process, '') AS process, pcm.id_machine, 
-                                             m.machine, pcm.cicles_hour, pcm.units_turn, pcm.units_month, pcm.route
+        $stmt = $connection->prepare("SELECT
+                                        -- Columnas
+                                            pcm.id_cicles_machine,
+                                            pcm.id_product,
+                                            p.reference,
+                                            p.product,
+                                            pcm.id_process,
+                                            IFNULL(pc.process, '') AS process,
+                                            pcm.id_machine,
+                                            m.machine,
+                                            pcm.cicles_hour,
+                                            pcm.units_turn,
+                                            pcm.units_month,
+                                            pcm.route,
+                                            IFNULL(am.id_alternate_machine, 0) AS id_alternate_machine,
+                                            IFNULL(am.id_machine, 0) AS id_alternate_machine,
+                                            IFNULL(am.cicles_hour, 0) AS alternate_cicles_hour,
+                                            IFNULL(am.units_turn, 0) AS alternate_units_turn,
+                                            IFNULL(am.units_month, 0) AS alternate_units_month
                                       FROM machine_cicles pcm
-                                       INNER JOIN machines m ON m.id_machine = pcm.id_machine
-                                       INNER JOIN products p ON p.id_product = pcm.id_product
-                                       LEFT JOIN process pc ON pc.id_process = pcm.id_process
-                                      WHERE pcm.id_company = :id_company ORDER BY pcm.route ASC");
+                                        INNER JOIN machines m ON m.id_machine = pcm.id_machine
+                                        INNER JOIN products p ON p.id_product = pcm.id_product
+                                        LEFT JOIN process pc ON pc.id_process = pcm.id_process
+                                        LEFT JOIN alternate_machines am ON am.id_cicles_machine = pcm.id_cicles_machine
+                                      WHERE pcm.id_company = :id_company
+                                      ORDER BY pcm.route ASC");
         $stmt->execute(['id_company' => $id_company]);
         $planCiclesMachines = $stmt->fetchAll($connection::FETCH_ASSOC);
         return $planCiclesMachines;

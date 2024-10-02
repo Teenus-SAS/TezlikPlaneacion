@@ -304,6 +304,43 @@ if (sizeof($_SESSION) == 0)
                     </div>
                 </div>
 
+                <!-- Maquina alterna -->
+                <div class="page-content-wrapper mt--45 mb-5 cardSaveAlternalMachine cardGeneral">
+                    <div class="container-fluid">
+                        <div class="row">
+                            <div class="col-12">
+                                <div class="card">
+                                    <div class="card-body">
+                                        <form id="formSaveAlternalMachine">
+                                            <div class="form-row">
+                                                <div class="col-sm-4 floating-label enable-floating-label show-label" style="margin-bottom:0px">
+                                                    <select class="form-control idMachine" name="idMachine" id="idMachine1"></select>
+                                                    <label for="">Maquina</label>
+                                                </div>
+                                                <div class="col-sm-2 floating-label enable-floating-label show-label" style="margin-bottom:0px">
+                                                    <input type="number" class="form-control text-center" name="ciclesHour" id="ciclesHour1">
+                                                    <label for="">Ciclo x Hora</label>
+                                                </div>
+                                                <div class="col-sm-2 floating-label enable-floating-label show-label inputsAlternalUnds" style="margin-bottom:0px">
+                                                    <input type="text" class="form-control text-center" name="unitsTurn" id="unitsTurn" readonly>
+                                                    <label for="">Und/Turno</label>
+                                                </div>
+                                                <div class="col-sm-2 floating-label enable-floating-label show-label inputsAlternalUnds" style="margin-bottom:0px">
+                                                    <input type="text" class="form-control text-center" name="unitsMonth" id="unitsMonth" readonly>
+                                                    <label for="">Und/Mes</label>
+                                                </div>
+                                                <div class="col-sm mt-1">
+                                                    <button class="btn btn-success" id="btnSaveAlternalMachine">Guardar</button>
+                                                </div>
+                                            </div>
+                                        </form>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
                 <div class="page-content-wrapper mt--45 mb-5 cardImportPlanCiclesMachine cardGeneral">
                     <div class="container-fluid">
                         <div class="row">

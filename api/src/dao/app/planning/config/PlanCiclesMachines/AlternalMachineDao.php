@@ -32,16 +32,27 @@ class AlternalMachineDao
     //     return $planCiclesMachines;
     // }
 
+    public function findAlternalMachine($id_cicles_machine)
+    {
+        $connection = Connection::getInstance()->getConnection();
+
+        $stmt = $connection->prepare("SELECT * FROM alternate_machines
+                                      WHERE id_cicles_machine = :id_cicles_machine");
+        $stmt->execute(['id_cicles_machine' => $id_cicles_machine]);
+        $machine = $stmt->fetch($connection::FETCH_ASSOC);
+        return $machine;
+    }
+
     public function addPlanCiclesMachines($dataCiclesMachine, $id_company)
     {
         $connection = Connection::getInstance()->getConnection();
 
         try {
-            $stmt = $connection->prepare("INSERT INTO alternate_machines (id_company, id_cicles_machine, id_process, cicles_hour) 
-                                          VALUES (:id_company, :id_cicles_machine, :id_process, :cicles_hour)");
+            $stmt = $connection->prepare("INSERT INTO alternate_machines (id_company, id_cicles_machine, id_machine, cicles_hour) 
+                                          VALUES (:id_company, :id_cicles_machine, :id_machine, :cicles_hour)");
             $stmt->execute([
-                'id_process' => $dataCiclesMachine['idProcess'],
-                'id_cicles_machine' => $dataCiclesMachine['idCicleMachine'],
+                'id_machine' => $dataCiclesMachine['idMachine'],
+                'id_cicles_machine' => $dataCiclesMachine['idCiclesMachine'],
                 'id_company' => $id_company,
                 'cicles_hour' => $dataCiclesMachine['ciclesHour']
             ]);
@@ -57,13 +68,12 @@ class AlternalMachineDao
     {
         $connection = Connection::getInstance()->getConnection();
 
-
         try {
-            $stmt = $connection->prepare("UPDATE alternate_machines SET id_process = :id_process, cicles_hour = :cicles_hour
+            $stmt = $connection->prepare("UPDATE alternate_machines SET id_machine = :id_machine, cicles_hour = :cicles_hour
                                           WHERE id_cicles_machine = :id_cicles_machine");
             $stmt->execute([
-                'id_cicles_machine' => $dataCiclesMachine['idCicleMachine'],
-                'id_process' => $dataCiclesMachine['idProcess'],
+                'id_cicles_machine' => $dataCiclesMachine['idCiclesMachine'],
+                'id_machine' => $dataCiclesMachine['idMachine'],
                 'cicles_hour' => $dataCiclesMachine['ciclesHour']
             ]);
             $this->logger->info(__FUNCTION__, array('query' => $stmt->queryString, 'errors' => $stmt->errorInfo()));
@@ -71,6 +81,22 @@ class AlternalMachineDao
             $message = $e->getMessage();
             $error = array('info' => true, 'message' => $message);
             return $error;
+        }
+    }
+
+    public function updateUnits($dataCiclesMachine)
+    {
+        try {
+            $connection = Connection::getInstance()->getConnection();
+            $stmt = $connection->prepare("UPDATE alternate_machines SET units_turn = :units_turn, units_month = :units_month
+                                          WHERE id_cicles_machine = :id_cicles_machine");
+            $stmt->execute([
+                'units_turn' => $dataCiclesMachine['units_turn'],
+                'units_month' => $dataCiclesMachine['units_month'],
+                'id_cicles_machine' => $dataCiclesMachine['idCiclesMachine']
+            ]);
+        } catch (\Exception $e) {
+            return array('info' => true, 'message' => $e->getMessage());
         }
     }
 }

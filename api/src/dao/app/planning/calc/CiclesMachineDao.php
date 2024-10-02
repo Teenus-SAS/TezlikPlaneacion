@@ -60,4 +60,49 @@ class CiclesMachineDao
         $machine = $stmt->fetch($connection::FETCH_ASSOC);
         return $machine;
     }
+
+    public function calcUnitsTurnAlternal($id_cicles_machine)
+    {
+        $connection = Connection::getInstance()->getConnection();
+
+        $stmt = $connection->prepare("SELECT (am.cicles_hour * IFNULL(pm.hours_day, 0)) AS units_turn
+                                      FROM alternate_machines am
+                                        LEFT JOIN machine_programs pm ON pm.id_machine = am.id_machine
+                                      WHERE am.id_cicles_machine = :id_cicles_machine");
+        $stmt->execute([
+            'id_cicles_machine' => $id_cicles_machine
+        ]);
+        $machine = $stmt->fetch($connection::FETCH_ASSOC);
+        return $machine;
+    }
+
+    public function calcUnitsMonthAlternal($data, $op)
+    {
+        $connection = Connection::getInstance()->getConnection();
+
+        if ($op == 1) {
+            $stmt = $connection->prepare("SELECT IFNULL(am.units_turn * IFNULL((SELECT CASE MONTH(CURDATE())
+                                                WHEN 1 THEN january WHEN 2 THEN february WHEN 3 THEN march WHEN 4 THEN april WHEN 5 THEN may
+                                                WHEN 6 THEN june WHEN 7 THEN july WHEN 8 THEN august WHEN 9 THEN september WHEN 11 THEN november
+                                                WHEN 12 THEN december END AS current_month_value FROM machine_programs WHERE id_machine = am.id_machine), 0), 0) AS units_month
+                                      FROM alternate_machines am
+                                      WHERE am.id_cicles_machine = :id_cicles_machine");
+            $stmt->execute([
+                'id_cicles_machine' => $data['idCiclesMachine']
+            ]);
+        } else {
+            $stmt = $connection->prepare("SELECT IFNULL(:units_turn * IFNULL((SELECT CASE MONTH(CURDATE())
+                                                WHEN 1 THEN january WHEN 2 THEN february WHEN 3 THEN march WHEN 4 THEN april WHEN 5 THEN may
+                                                WHEN 6 THEN june WHEN 7 THEN july WHEN 8 THEN august WHEN 9 THEN september WHEN 11 THEN november
+                                                WHEN 12 THEN december END AS current_month_value FROM machine_programs WHERE id_machine = am.id_machine), 0), 0) AS units_month
+                                      FROM alternate_machines am
+                                      WHERE am.id_cicles_machine = :id_cicles_machine");
+            $stmt->execute([
+                'id_cicles_machine' => $data['idCiclesMachine'],
+                'units_turn' => $data['units_turn']
+            ]);
+        }
+        $machine = $stmt->fetch($connection::FETCH_ASSOC);
+        return $machine;
+    }
 }

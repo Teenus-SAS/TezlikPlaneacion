@@ -1,5 +1,6 @@
 <?php
 
+use TezlikPlaneacion\dao\AlternalMachineDao;
 use TezlikPlaneacion\dao\CiclesMachineDao;
 use TezlikPlaneacion\Dao\CompositeProductsDao;
 use TezlikPlaneacion\dao\GeneralMachinesDao;
@@ -30,6 +31,7 @@ $generalOrdersDao = new GeneralOrdersDao();
 $generalProgrammingDao = new GeneralProgrammingDao();
 $generalMaterialsDao = new GeneralMaterialsDao();
 $productsMaterialsDao = new ProductsMaterialsDao();
+$alternalMachineDao = new AlternalMachineDao();
 $compositeProductsDao = new CompositeProductsDao();
 
 use Psr\Http\Message\ResponseInterface as Response;
@@ -154,6 +156,7 @@ $app->post('/addPlanCiclesMachine', function (Request $request, Response $respon
     $planCiclesMachineDao,
     $generalPlanCiclesMachinesDao,
     $ciclesMachinesDao,
+    $alternalMachineDao,
     $generalProgrammingDao,
     $generalMaterialsDao,
     $lastDataDao,
@@ -584,6 +587,45 @@ $app->post('/saveRoute', function (Request $request, Response $response, $args) 
         $resp = array('info' => true, 'message' => $resolution['message']);
     else
         $resp = array('error' => true, 'message' => 'No se pudo modificar la información. Intente nuevamente');
+
+    $response->getBody()->write(json_encode($resp, JSON_NUMERIC_CHECK));
+    return $response->withHeader('Content-Type', 'application/json');
+});
+
+$app->post('/saveAlternalMachine', function (Request $request, Response $response, $args) use (
+    $alternalMachineDao,
+    $ciclesMachinesDao
+) {
+    session_start();
+    $id_company = $_SESSION['id_company'];
+    $dataPlanCiclesMachine = $request->getParsedBody();
+
+    $findAlternalMachine = $alternalMachineDao->findAlternalMachine($dataPlanCiclesMachine['idCiclesMachine']);
+    $resolution = null;
+
+    if (!$findAlternalMachine)
+        $resolution = $alternalMachineDao->addPlanCiclesMachines($dataPlanCiclesMachine, $id_company);
+    else
+        $resolution = $alternalMachineDao->updatePlanCiclesMachine($dataPlanCiclesMachine);
+
+    if ($resolution == null) {
+        // Calcular unidades
+        $arr = $ciclesMachinesDao->calcUnitsTurnAlternal($dataPlanCiclesMachine['idCiclesMachine']);
+        $data['units_turn'] = $arr['units_turn'];
+        $data['idCiclesMachine'] = $dataPlanCiclesMachine['idCiclesMachine'];
+
+        $arr = $ciclesMachinesDao->calcUnitsMonthAlternal($data, 2);
+        $data['units_month'] = $arr['units_month'];
+
+        $resolution = $alternalMachineDao->updateUnits($data);
+    }
+
+    if ($resolution == null)
+        $resp = array('success' => true, 'message' => 'Maquina alterna guardada correctamente');
+    else if (isset($resolution['info']))
+        $resp = array('info' => true, 'message' => $resolution['message']);
+    else
+        $resp = array('error' => true, 'message' => 'No se pudo guardar la información. Intente nuevamente');
 
     $response->getBody()->write(json_encode($resp, JSON_NUMERIC_CHECK));
     return $response->withHeader('Content-Type', 'application/json');
