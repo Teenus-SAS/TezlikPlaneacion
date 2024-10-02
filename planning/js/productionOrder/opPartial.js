@@ -45,7 +45,13 @@ $(document).ready(function () {
           title: "Desperdicio",
           data: "waste",
           className: "uniqueClassName dt-head-center",
-          render: $.fn.dataTable.render.number(".", ",", 0, ""),
+          render: function (data, type, row) {
+            // Utiliza DataTable render para el formato del número y después concatena " UND"
+            const formattedNumber = $.fn.dataTable.render
+              .number(".", ",", 0, "")
+              .display(data);
+            return `${formattedNumber} Und`;
+          },
         },
         {
           title: "Cantidad Entregada",
@@ -56,7 +62,7 @@ $(document).ready(function () {
             const formattedNumber = $.fn.dataTable.render
               .number(".", ",", 0, "")
               .display(data);
-            return `${formattedNumber} UND`;
+            return `${formattedNumber} Und`;
           },
         },
         {
