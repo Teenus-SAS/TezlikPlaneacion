@@ -140,7 +140,7 @@ class ProductionOrderMPDao
             $connection = Connection::getInstance()->getConnection();
 
             $stmt = $connection->prepare("INSERT INTO prod_order_materials (id_company, id_programming, id_material, operator, quantity)
-                                          VALUES (:id_company, :id_programming, :operator, :id_material, :quantity)");
+                                          VALUES (:id_company, :id_programming, :id_material, :operator, :quantity)");
             $stmt->execute([
                 'id_company' => $id_company,
                 'id_programming' => $dataProgramming['idProgramming'],
