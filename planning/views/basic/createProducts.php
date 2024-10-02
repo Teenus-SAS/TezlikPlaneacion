@@ -215,11 +215,11 @@ if (sizeof($_SESSION) == 0)
                                             <div class="form-row">
                                                 <div class="col-sm-2 floating-label enable-floating-label show-label" style="margin-bottom:20px">
                                                     <label for="">Magnitud</label>
-                                                    <select class="form-control" id="magnitudes" name="magnitude"></select>
+                                                    <select class="form-control magnitudes" id="magnitudes" name="magnitude"></select>
                                                 </div>
                                                 <div class="col-sm-2 floating-label enable-floating-label show-label" style="margin-bottom:20px">
                                                     <label for="">Unidad</label>
-                                                    <select class="form-control" id="units" name="unit">
+                                                    <select class="form-control units" id="units" name="unit">
                                                         <option disabled selected>Seleccionar</option>
                                                     </select>
                                                 </div>

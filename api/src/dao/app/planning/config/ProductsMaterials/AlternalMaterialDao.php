@@ -6,7 +6,7 @@ use TezlikPlaneacion\Constants\Constants;
 use Monolog\Handler\RotatingFileHandler;
 use Monolog\Logger;
 
-class AlternalMachineDao
+class AlternalMaterialDao
 {
     private $logger;
 
@@ -20,7 +20,7 @@ class AlternalMachineDao
     // {
     //     $connection = Connection::getInstance()->getConnection();
 
-    //     $stmt = $connection->prepare("SELECT pcm.id_cicles_machine, pcm.id_product, p.reference, p.product, pcm.id_process, IFNULL(pc.process, '') AS process, pcm.id_machine, 
+    //     $stmt = $connection->prepare("SELECT pcm.id_product_material, pcm.id_product, p.reference, p.product, pcm.id_process, IFNULL(pc.process, '') AS process, pcm.id_machine, 
     //                                          m.machine, pcm.cicles_hour, pcm.units_turn, pcm.units_month, pcm.route
     //                                   FROM machine_cicles pcm
     //                                    INNER JOIN machines m ON m.id_machine = pcm.id_machine
@@ -32,29 +32,30 @@ class AlternalMachineDao
     //     return $planCiclesMachines;
     // }
 
-    public function findAlternalMachine($id_cicles_machine)
+    public function findAlternalMaterial($id_product_material)
     {
         $connection = Connection::getInstance()->getConnection();
 
-        $stmt = $connection->prepare("SELECT * FROM alternal_machines
-                                      WHERE id_cicles_machine = :id_cicles_machine");
-        $stmt->execute(['id_cicles_machine' => $id_cicles_machine]);
+        $stmt = $connection->prepare("SELECT * FROM alternal_material
+                                      WHERE id_product_material = :id_product_material");
+        $stmt->execute(['id_product_material' => $id_product_material]);
         $machine = $stmt->fetch($connection::FETCH_ASSOC);
         return $machine;
     }
 
-    public function addAlternalMachines($dataCiclesMachine, $id_company)
+    public function addAlternalMaterial($dataAMaterials, $id_company)
     {
         $connection = Connection::getInstance()->getConnection();
 
         try {
-            $stmt = $connection->prepare("INSERT INTO alternal_machines (id_company, id_cicles_machine, id_machine, cicles_hour) 
-                                          VALUES (:id_company, :id_cicles_machine, :id_machine, :cicles_hour)");
+            $stmt = $connection->prepare("INSERT INTO alternal_material (id_company, id_product_material, id_material, id_unit, quantity) 
+                                          VALUES (:id_company, :id_product_material, :id_material, :id_unit, :quantity)");
             $stmt->execute([
-                'id_machine' => $dataCiclesMachine['idMachine'],
-                'id_cicles_machine' => $dataCiclesMachine['idCiclesMachine'],
                 'id_company' => $id_company,
-                'cicles_hour' => $dataCiclesMachine['ciclesHour']
+                'id_product_material' => $dataAMaterials['idProductMaterial'],
+                'id_material' => $dataAMaterials['idMaterial'],
+                'id_unit' => $dataAMaterials['idUnit'],
+                'quantity' => $dataAMaterials['quantity']
             ]);
             $this->logger->info(__FUNCTION__, array('query' => $stmt->queryString, 'errors' => $stmt->errorInfo()));
         } catch (\Exception $e) {
@@ -64,17 +65,18 @@ class AlternalMachineDao
         }
     }
 
-    public function updateAlternalMachine($dataCiclesMachine)
+    public function updateAlternalMaterial($dataAMaterials)
     {
         $connection = Connection::getInstance()->getConnection();
 
         try {
-            $stmt = $connection->prepare("UPDATE alternal_machines SET id_machine = :id_machine, cicles_hour = :cicles_hour
-                                          WHERE id_cicles_machine = :id_cicles_machine");
+            $stmt = $connection->prepare("UPDATE alternal_material SET id_material = :id_material, id_unit = :id_unit, quantity = :quantity
+                                          WHERE id_product_material = :id_product_material");
             $stmt->execute([
-                'id_cicles_machine' => $dataCiclesMachine['idCiclesMachine'],
-                'id_machine' => $dataCiclesMachine['idMachine'],
-                'cicles_hour' => $dataCiclesMachine['ciclesHour']
+                'id_product_material' => $dataAMaterials['idProductMaterial'],
+                'id_material' => $dataAMaterials['idMaterial'],
+                'id_unit' => $dataAMaterials['idUnit'],
+                'quantity' => $dataAMaterials['quantity']
             ]);
             $this->logger->info(__FUNCTION__, array('query' => $stmt->queryString, 'errors' => $stmt->errorInfo()));
         } catch (\Exception $e) {
@@ -84,16 +86,15 @@ class AlternalMachineDao
         }
     }
 
-    public function updateUnits($dataCiclesMachine)
+    public function saveQuantityConverted($id_product_material, $quantity)
     {
         try {
             $connection = Connection::getInstance()->getConnection();
-            $stmt = $connection->prepare("UPDATE alternal_machines SET units_turn = :units_turn, units_month = :units_month
-                                          WHERE id_cicles_machine = :id_cicles_machine");
+            $stmt = $connection->prepare("UPDATE alternal_material SET quantity_converted = :quantity_converted
+                                          WHERE id_product_material = :id_product_material");
             $stmt->execute([
-                'units_turn' => $dataCiclesMachine['units_turn'],
-                'units_month' => $dataCiclesMachine['units_month'],
-                'id_cicles_machine' => $dataCiclesMachine['idCiclesMachine']
+                'id_product_material' => $id_product_material,
+                'quantity_converted' => $quantity
             ]);
         } catch (\Exception $e) {
             return array('info' => true, 'message' => $e->getMessage());

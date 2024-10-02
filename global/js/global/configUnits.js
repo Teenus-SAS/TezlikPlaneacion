@@ -16,7 +16,7 @@ $(document).ready(function () {
     let dataPMaterials = dataUnits.filter(item => item.id_magnitude == id_magnitude);
     // let dataPMaterials = await searchData(`/api/units/${id_magnitude}`);
 
-    let $select = $(`#units`);
+    let $select = $(`.units`);
     $select.empty();
 
     $select.append(`<option disabled selected>Seleccionar</option>`);

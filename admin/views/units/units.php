@@ -67,7 +67,7 @@ if (sizeof($_SESSION) == 0)
                                             <div class="form-row">
                                                 <div class="col-sm-4">
                                                     <label>Magnitud</label>
-                                                    <select class="form-control" name="magnitude" id="magnitudes"></select>
+                                                    <select class="form-control magnitudes" name="magnitude" id="magnitudes"></select>
                                                 </div>
                                                 <div class="col-sm-4">
                                                     <label for="">Unidad</label>

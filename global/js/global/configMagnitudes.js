@@ -3,7 +3,7 @@ $(document).ready(function () {
   loadDataMagnitudes = async () => {
     let data = await searchData('/api/magnitudes');
 
-    let $select = $('#magnitudes');
+    let $select = $('.magnitudes');
     $select.empty();
     $select.append(`<option disabled selected>Seleccionar</option>`);
     $.each(data, function (i, value) {

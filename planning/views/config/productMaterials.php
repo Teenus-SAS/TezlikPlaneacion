@@ -166,21 +166,53 @@ if (sizeof($_SESSION) == 0)
                                                     <select class="form-control calcMWeight" name="material" id="material"></select>
                                                 </div>
                                                 <div class="col-sm-2 floating-label enable-floating-label show-label" style="margin-bottom:5px">
-                                                    <select class="form-control" id="units" name="unit"></select>
+                                                    <select class="form-control units" id="units" name="unit"></select>
                                                     <label for="">Unidad</label>
                                                 </div>
-                                                <!-- < ?php if ($_SESSION['flag_products_measure'] == '1') { ?>
-                                                    <div class="col-sm-2 floating-label enable-floating-label show-label inputQuantityCalc" style="margin-bottom:20px">
-                                                        <label for="">Gramos/M2</label>
-                                                        <input class="form-control calcMWeight text-center" type="number" name="quantityCalc" id="quantityCalc">
-                                                    </div>
-                                                < ?php } ?> -->
                                                 <div class="col-sm-2 floating-label enable-floating-label show-label" style="margin-bottom:20px">
                                                     <label for="">Cantidad</label>
                                                     <input class="form-control text-center" type="number" name="quantity" id="quantity">
                                                 </div>
                                                 <div class="col-xs-1 mt-1">
                                                     <button class="btn btn-success" id="btnAddMaterials">Adicionar Materia Prima</button>
+                                                </div>
+                                            </div>
+                                        </form>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Material Alterno -->
+                <!-- Maquina alterna -->
+                <div class="page-content-wrapper mt--45 mb-5 cardSaveAlternalMaterial cardGeneral">
+                    <div class="container-fluid">
+                        <div class="row">
+                            <div class="col-12">
+                                <div class="card">
+                                    <div class="card-body">
+                                        <form id="formSaveAlternalMaterial">
+                                            <div class="form-row">
+                                                <div class="col-sm-2 floating-label enable-floating-label show-label" style="margin-bottom:20px">
+                                                    <label for="">Referencia</label>
+                                                    <select class="form-control calcMWeight" name="refMaterial" id="aRefMaterial"></select>
+                                                </div>
+                                                <div class="col-sm-6 floating-label enable-floating-label show-label" style="margin-bottom:20px">
+                                                    <label for="">Materia Prima</label>
+                                                    <select class="form-control calcMWeight" name="material" id="aMaterial"></select>
+                                                </div>
+                                                <div class="col-sm-2 floating-label enable-floating-label show-label" style="margin-bottom:5px">
+                                                    <select class="form-control units" id="aUnits" name="units"></select>
+                                                    <label for="">Unidad</label>
+                                                </div>
+                                                <div class="col-sm-2 floating-label enable-floating-label show-label" style="margin-bottom:20px">
+                                                    <label for="">Cantidad</label>
+                                                    <input class="form-control text-center" type="number" name="quantity" id="aQuantity">
+                                                </div>
+                                                <div class="col-sm mt-1">
+                                                    <button class="btn btn-success" id="btnSaveAlternalMaterial">Guardar</button>
                                                 </div>
                                             </div>
                                         </form>

@@ -144,7 +144,9 @@ $(document).ready(function () {
                             : data.id_composite_product
                         }" class="mdi mdi-delete-forever" data-toggle='tooltip' title='Eliminar Materia Prima' style="font-size: 30px;color:red" onclick="deleteMaterial(${
               data.id_product_material != 0 ? "1" : "2"
-            })"></i></a>`;
+              })"></i></a>
+              <a href="javascript:;" <i id="ext-${data.id_product_material}" class="bx bi bi-sliders alternalMaterial" data-toggle='tooltip' title='Material Externo' style="font-size: 30px;color:#d36e17;"></i></a>
+            `;
             // `<a href="javascript:;" <i id="updt-${data}" class="bx bx-edit-alt updateMaterials" data-toggle='tooltip' title='Actualizar Materia Prima' style="font-size: 30px;"></i></a>
             //   <a href="javascript:;" <i id="${data}" class="mdi mdi-delete-forever" data-toggle='tooltip' title='Eliminar Materia Prima' style="font-size: 30px;color:red" onclick="deleteMaterial(${data})"></i></a>`;
           },

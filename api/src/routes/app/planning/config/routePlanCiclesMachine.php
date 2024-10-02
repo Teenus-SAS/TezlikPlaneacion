@@ -604,9 +604,9 @@ $app->post('/saveAlternalMachine', function (Request $request, Response $respons
     $resolution = null;
 
     if (!$findAlternalMachine)
-        $resolution = $alternalMachineDao->addPlanCiclesMachines($dataPlanCiclesMachine, $id_company);
+        $resolution = $alternalMachineDao->addAlternalMachines($dataPlanCiclesMachine, $id_company);
     else
-        $resolution = $alternalMachineDao->updatePlanCiclesMachine($dataPlanCiclesMachine);
+        $resolution = $alternalMachineDao->updateAlternalMachine($dataPlanCiclesMachine);
 
     if ($resolution == null) {
         // Calcular unidades

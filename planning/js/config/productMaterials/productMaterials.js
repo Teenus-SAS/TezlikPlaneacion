@@ -58,42 +58,68 @@ $(document).ready(function () {
     const dataM = dataMaterials.filter((item) => item.id_material_type == type);
 
     setSelectsMaterials('#refMaterial', dataM, 'reference');
-    setSelectsMaterials('#material', dataM, 'material'); 
+    setSelectsMaterials('#material', dataM, 'material');
 
     if (type != "1") $(".inputQuantityCalc").show();
   });
 
-  if (flag_products_measure == "1") {
-    $("#quantity").prop("readonly", true);
+  // if (flag_products_measure == "1") {
+  $("#quantity").prop("readonly", true);
 
-    $(document).on("change keyup", ".calcMWeight", async function () {
-      const idProduct = parseInt($("#selectNameProduct").val());
-      const idMaterial = parseInt($("#refMaterial").val());
-      const type = parseInt($("#materialType").val());
+  $(document).on("change keyup", ".calcMWeight", async function () {
+    const idProduct = parseInt($("#selectNameProduct").val());
+    const idMaterial = parseInt($("#refMaterial").val());
+    const type = parseInt($("#materialType").val());
 
-      const validate = idProduct * idMaterial * type;
+    const validate = idProduct * idMaterial * type;
 
-      if (!validate) return false;
+    if (!validate) return false;
 
-      let quantity = parseFloat($("#quantityCalc").val());
+    let quantity = parseFloat($("#quantityCalc").val());
 
-      isNaN(quantity) ? (quantity = 0) : quantity;
+    isNaN(quantity) ? (quantity = 0) : quantity;
 
-      $.ajax({
-        type: "POST",
-        url: "/api/calcQuantityFTM",
-        data: {
-          idProduct: idProduct,
-          idMaterial: idMaterial,
-          type: type,
-          quantityCalc: quantity,
-        },
-        success: function (resp) {
-          $("#quantity").val(resp.weight);
-        },
-      });
+    $.ajax({
+      type: "POST",
+      url: "/api/calcQuantityFTM",
+      data: {
+        idProduct: idProduct,
+        idMaterial: idMaterial,
+        type: type,
+        quantityCalc: quantity,
+      },
+      success: function (resp) {
+        $("#quantity").val(resp.weight);
+      },
     });
-  }
+  });
+  // }
+
+  $(document).on("change keyup", ".calcAMWeight", async function () {
+    const idProduct = parseInt($("#selectNameProduct").val());
+    const idMaterial = parseInt($("#aMaterial").val());
+    // const type = parseInt($("#materialType").val());
+
+    const validate = idProduct * idMaterial;
+
+    if (!validate) return false;
+
+    // let quantity = parseFloat($("#quantityCalc").val());
+
+    // isNaN(quantity) ? (quantity = 0) : quantity;
+
+    $.ajax({
+      type: "POST",
+      url: "/api/calcQuantityFTM",
+      data: {
+        idProduct: idProduct,
+        idMaterial: idMaterial,
+      },
+      success: function (resp) {
+        $("#aQuantity").val(resp.weight);
+      },
+    });
+  });
 
   $(".cardAddMaterials").hide();
 
@@ -145,7 +171,7 @@ $(document).ready(function () {
     let row = $(this).closest("tr")[0];
     let data = tblConfigMaterials.fnGetData(row);
 
-    sessionStorage.setItem("id_product_material", data.id_product_material);
+    sessionStorage.setItem("id_product_material", id_product_material);
 
     $(`#refMaterial option[value=${data.id_material}]`).prop("selected", true);
     $(`#material option[value=${data.id_material}]`).prop("selected", true);
@@ -269,9 +295,8 @@ $(document).ready(function () {
 
     bootbox.confirm({
       title: "Eliminar",
-      message: `Está seguro de eliminar ${
-        op == "1" ? "esta Materia prima" : "este Producto Compuesto"
-      }? Esta acción no se puede reversar.`,
+      message: `Está seguro de eliminar ${op == "1" ? "esta Materia prima" : "este Producto Compuesto"
+        }? Esta acción no se puede reversar.`,
       buttons: {
         confirm: {
           label: "Si",
@@ -291,6 +316,74 @@ $(document).ready(function () {
       },
     });
   };
+
+  // Maquina alterna
+  $(document).on('click', '.alternalMachine', function () {
+    $('#formSaveAlternalMachine').trigger('reset');
+    $(".cardCreatePlanCiclesMachine").hide(800);
+    $('.cardSaveAlternalMachine').show(800);
+    $('.inputsAlternalUnds').hide();
+
+    // Obtener el ID del elemento
+    const id_cicles_machine = $(this).attr("id").split("-")[1];
+    sessionStorage.setItem("id_cicles_machine", id_cicles_machine);
+
+    //obtener data
+    const row = $(this).closest("tr")[0];
+    const data = tblPlanCiclesMachine.fnGetData(row);
+
+    if (data.id_alternal_machine != 0) {
+      $('.inputsAlternalUnds').show();
+
+      $(`#idMachine1 option[value=${data.id_alternal_machine}]`).prop("selected", true);
+      $('#ciclesHour1').val(data.alternal_cicles_hour);
+      $('#unitsTurn').val(parseFloat(data.alternal_units_turn).toLocaleString('es-CO', {
+        minimumFractionDigits: 0, maximumFractionDigits: 2
+      }));
+      $('#unitsMonth').val(parseFloat(data.alternal_units_month).toLocaleString('es-CO', {
+        minimumFractionDigits: 0, maximumFractionDigits: 2
+      }));
+    }
+
+
+    //animacion desplazamiento
+    $("html, body").animate(
+      {
+        scrollTop: 0,
+      },
+      1000
+    );
+  });
+
+  $("#btnSaveAlternalMachine").click(async function (e) {
+    e.preventDefault();
+ 
+    const idMachine = parseInt($("#idMachine").val());
+    const idMachine1 = parseInt($("#idMachine1").val());
+    const ciclesHour = $("#ciclesHour1").val();
+
+    let data = idMachine * ciclesHour;
+
+    if (!data || isNaN(idMachine)) {
+      toastr.error("Ingrese todos los campos");
+      return false;
+    }
+
+    if (idMachine == idMachine1) {
+      toastr.error("Seleccione una maquina diferente");
+      return false;
+    }
+
+    let idCiclesMachine = sessionStorage.getItem('id_cicles_machine');
+
+    let dataPlanCiclesMachine = new FormData(formSaveAlternalMachine);
+ 
+    dataPlanCiclesMachine.append("idCiclesMachine", idCiclesMachine);
+
+    let resp = await sendDataPOST('/api/saveAlternalMachine', dataPlanCiclesMachine);
+
+    messageMachine(resp);
+  });
 
   /* Mensaje de exito */
 

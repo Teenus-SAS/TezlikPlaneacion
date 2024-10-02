@@ -95,7 +95,7 @@ $(document).ready(function () {
   }; 
 
   // Maquina alterna
-  $(document).on('click', '.alternateMachine', function () {
+  $(document).on('click', '.alternalMachine', function () {
     $('#formSaveAlternalMachine').trigger('reset');
     $(".cardCreatePlanCiclesMachine").hide(800);
     $('.cardSaveAlternalMachine').show(800);
@@ -108,16 +108,17 @@ $(document).ready(function () {
     //obtener data
     const row = $(this).closest("tr")[0];
     const data = tblPlanCiclesMachine.fnGetData(row);
+    $(`#idMachine option[value=${data.id_machine}]`).prop("selected", true);
 
-    if (data.id_alternate_machine != 0) {
+    if (data.id_alternal_machine != 0) {
       $('.inputsAlternalUnds').show();
 
-      $(`#idMachine1 option[value=${data.id_alternate_machine}]`).prop("selected", true);
-      $('#ciclesHour1').val(data.alternate_cicles_hour);
-      $('#unitsTurn').val(parseFloat(data.alternate_units_turn).toLocaleString('es-CO', {
+      $(`#idMachine1 option[value=${data.id_alternal_machine}]`).prop("selected", true);
+      $('#ciclesHour1').val(data.alternal_cicles_hour);
+      $('#unitsTurn').val(parseFloat(data.alternal_units_turn).toLocaleString('es-CO', {
         minimumFractionDigits: 0, maximumFractionDigits: 2
       }));
-      $('#unitsMonth').val(parseFloat(data.alternate_units_month).toLocaleString('es-CO', {
+      $('#unitsMonth').val(parseFloat(data.alternal_units_month).toLocaleString('es-CO', {
         minimumFractionDigits: 0, maximumFractionDigits: 2
       }));
     }  
@@ -160,7 +161,7 @@ $(document).ready(function () {
     let resp = await sendDataPOST('/api/saveAlternalMachine', dataPlanCiclesMachine);
 
     messageMachine(resp);
-  }); 
+  });
 
   /* Mensaje de exito */
   messageMachine = (data) => {

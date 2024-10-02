@@ -78,11 +78,11 @@ if (sizeof($_SESSION) == 0)
                                             </div>
                                             <div class="form-row">
                                                 <div class="col-sm-3 floating-label enable-floating-label show-label" style="margin-bottom:20px">
-                                                    <select class="form-control" id="magnitudes" name="magnitude"></select>
+                                                    <select class="form-control magnitudes" id="magnitudes" name="magnitude"></select>
                                                     <label for="">Magnitud</label>
                                                 </div>
                                                 <div class="col-sm-3 floating-label enable-floating-label show-label" style="margin-bottom:20px">
-                                                    <select class="form-control" id="units" name="unit">
+                                                    <select class="form-control units" id="units" name="unit">
                                                         <option disabled selected>Seleccionar</option>
                                                     </select>
                                                     <label for="">Unidad</label>
@@ -144,7 +144,6 @@ if (sizeof($_SESSION) == 0)
 
                                             </table>
                                         </div>
-
                                     </div>
                                 </div>
                             </div>

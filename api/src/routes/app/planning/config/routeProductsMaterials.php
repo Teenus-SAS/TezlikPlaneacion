@@ -1,5 +1,6 @@
 <?php
 
+use TezlikPlaneacion\dao\AlternalMaterialDao;
 use TezlikPlaneacion\dao\ClientsDao;
 use TezlikPlaneacion\Dao\CompositeProductsDao;
 use TezlikPlaneacion\Dao\ConversionUnitsDao;
@@ -67,6 +68,7 @@ $ordersDao = new OrdersDao();
 $lastDataDao = new LastDataDao();
 $programmingRoutesDao = new ProgrammingRoutesDao();
 $generalProgrammingRoutesDao = new GeneralProgrammingRoutesDao();
+$alternalMaterialDao = new AlternalMaterialDao();
 
 use Psr\Http\Message\ResponseInterface as Response;
 use Psr\Http\Message\ServerRequestInterface as Request;
@@ -301,22 +303,6 @@ $app->post('/addProductsMaterials', function (Request $request, Response $respon
                     if (isset($arr['stock']))
                         $resolution = $generalMaterialsDao->updateStockMaterial($arr['id_material'], $k['stock']);
                 }
-
-                // if ($resolution == null) {
-                //     $compositeProducts = $compositeProductsDao->findAllCompositeProductsByIdProduct($dataProductMaterial['idProduct'], $id_company);
-
-                //     foreach ($compositeProducts as $k) {
-                //         $product = $minimumStockDao->calcStockByProduct($k['id_child_product']);
-
-                //         $arr = $minimumStockDao->calcStockByComposite($k['id_child_product']);
-
-                //         if (isset($arr['stock']) && isset($product['stock'])) {
-                //             $stock = $product['stock'] + $arr['stock'];
-
-                //             $resolution = $generalProductsDao->updateStockByProduct($k['id_child_product'], $stock);
-                //         }
-                //     }
-                // }
             }
 
             if ($resolution == null)
@@ -1556,6 +1542,66 @@ $app->post('/calcQuantityFTM', function (Request $request, Response $response, $
     // }
 
     $resp = ['weight' => $weight];
+
+    $response->getBody()->write(json_encode($resp, JSON_NUMERIC_CHECK));
+    return $response->withHeader('Content-Type', 'application/json');
+});
+
+$app->post('/saveAlternalMaterial', function (Request $request, Response $response, $args) use (
+    $alternalMaterialDao,
+    $productsMaterialsDao,
+    $inventoryDaysDao,
+    $generalMaterialsDao,
+    $conversionUnitsDao,
+    $generalProductsMaterialsDao,
+    $minimumStockDao
+) {
+    session_start();
+    $id_company = $_SESSION['id_company'];
+    $dataProductMaterial = $request->getParsedBody();
+
+    $findAlternalMaterial = $alternalMaterialDao->findAlternalMaterial($dataProductMaterial['idProductMaterial']);
+    $resolution = null;
+
+    if (!$findAlternalMaterial)
+        $resolution = $alternalMaterialDao->addAlternalMaterial($dataProductMaterial, $id_company);
+    else
+        $resolution = $alternalMaterialDao->updateAlternalMaterial($dataProductMaterial);
+
+    if ($resolution == null) {
+        // Consultar todos los datos del producto
+        $products = $productsMaterialsDao->findAllProductsMaterials($dataProductMaterial['idProduct'], $id_company);
+
+        foreach ($products as $arr) {
+            // Calculo Dias Inventario Materiales  
+            $inventory = $inventoryDaysDao->calcInventoryMaterialDays($arr['id_material']);
+            if (isset($inventory['days']))
+                $resolution = $inventoryDaysDao->updateInventoryMaterialDays($arr['id_material'], $inventory['days']);
+
+            if (isset($resolution['info'])) break;
+
+            // Obtener materia prima
+            $material = $generalMaterialsDao->findMaterialAndUnits($arr['id_material'], $id_company);
+
+            // Convertir unidades
+            $quantity = $conversionUnitsDao->convertUnits($material, $arr, $arr['quantity']);
+
+            // Guardar Unidad convertida
+            $alternalMaterialDao->saveQuantityConverted($arr['id_product_material'], $quantity);
+
+            $k = $minimumStockDao->calcStockByMaterial($arr['id_material']);
+
+            if (isset($arr['stock']))
+                $resolution = $generalMaterialsDao->updateStockMaterial($arr['id_material'], $k['stock']);
+        }
+    }
+
+    if ($resolution == null)
+        $resp = array('success' => true, 'message' => 'Material alterna guardada correctamente');
+    else if (isset($resolution['info']))
+        $resp = array('info' => true, 'message' => $resolution['message']);
+    else
+        $resp = array('error' => true, 'message' => 'No se pudo guardar la información. Intente nuevamente');
 
     $response->getBody()->write(json_encode($resp, JSON_NUMERIC_CHECK));
     return $response->withHeader('Content-Type', 'application/json');
