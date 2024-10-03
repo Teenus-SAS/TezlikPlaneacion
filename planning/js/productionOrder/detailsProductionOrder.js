@@ -13,7 +13,8 @@ $(document).ready(function () {
         if (flag_op == 1) {
             $('#formAddOPPArtial').hide();
             $('#formAddOPMP').hide();
-            $('#btnCloseOP').hide();
+            $('.cardCloseOP').hide();
+            $('#thActions').hide();
         }
 
         if (data.flag_cancel == 1) $('.cardExcOP').hide();
@@ -51,6 +52,7 @@ $(document).ready(function () {
         $('#window').val(data.window);
 
         // Datatable Materiales 
+        $('#tblPOMaterialsBody').empty();
         let body = document.getElementById('tblPOMaterialsBody');
         
         for (let i = 0; i < dataFT.length; i++) {
@@ -79,14 +81,16 @@ $(document).ready(function () {
                     <td>${dataFT[i].abbreviation}</td>
                     <td>${recieve.toLocaleString('es-CO', { minimumFractionDigits: 0, maximumFractionDigits: 2 })}</td>
                     <td>${pending.toLocaleString('es-CO', { minimumFractionDigits: 0, maximumFractionDigits: 2 })}</td> 
-                    <td>
-                        ${recieve > 0 ?
+                    ${flag_op == 0 ?
+                        `<td>
+                            ${recieve > 0 ?
                             `<button class="btn btn-info acceptMaterial" id="accept-${dataFT[i].id_material}">Aceptar MP</button>` : ''}    
-                    </td>
+                        </td>` : ''}
                 </tr>`);
         }
         
         // Procesos
+        $('#tblPOProcessBody').empty();
         body = document.getElementById('tblPOProcessBody');
 
         min_date = moment(data.min_date_programming).format("DD/MM/YYYY HH:mm A");

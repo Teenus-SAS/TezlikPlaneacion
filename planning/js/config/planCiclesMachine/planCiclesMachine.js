@@ -58,8 +58,29 @@ $(document).ready(function () {
     );
   }); 
 
-  // Eliminar plan ciclo maquina
+  const checkPlanCiclesMachine = async (url, idCiclesMachine) => {
+    let idProcess = parseInt($('#idProcess').val());
+    let idMachine = parseInt($('#idMachine').val());
+    let ciclesHour = parseInt($('#ciclesHour').val());
 
+    let data = idProcess * idMachine * ciclesHour;
+
+    if (isNaN(data) || data <= 0) {
+      toastr.error('Ingrese todos los campos');
+      return false;
+    }
+
+    let dataPlanCiclesMachine = new FormData(formSaveAlternalMachine);
+ 
+    if (idCiclesMachine)
+      dataPlanCiclesMachine.append("idCiclesMachine", idCiclesMachine);
+
+    let resp = await sendDataPOST(url, dataPlanCiclesMachine);
+
+    messageMachine(resp);
+  }
+
+  // Eliminar plan ciclo maquina
   deleteMachine = () => {
     const row = $(this.activeElement).closest("tr")[0];
     let data = tblPlanCiclesMachine.fnGetData(row);

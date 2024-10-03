@@ -37,7 +37,7 @@ class PlanCiclesMachineDao
                                            -- IFNULL(am.id_alternal_machine, 0) AS id_alternal_machine,
                                             IFNULL(am.id_machine, 0) AS id_alternal_machine,
                                             IFNULL(am.cicles_hour, 0) AS alternal_cicles_hour,
-                                            IFNULL(amm.machine, '') AS alterna_machine,
+                                            IFNULL(amm.machine, '') AS alternal_machine,
                                             IFNULL(am.units_turn, 0) AS alternal_units_turn,
                                             IFNULL(am.units_month, 0) AS alternal_units_month
                                       FROM machine_cicles pcm

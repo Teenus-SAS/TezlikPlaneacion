@@ -31,6 +31,18 @@ $(document).ready(function () {
           className: "uniqueClassName dt-head-center",
         },
         {
+          title: "Maquina Alterna",
+          data: null,
+          className: "uniqueClassName dt-head-center",
+          render: function (data) {
+            return `<a href="javascript:;">
+                    <i id="${data.id_alternal_machine}" class="${data.id_alternal_machine != 0 ? "bi bi-person-fill-check" : "bi bi-person-fill-x"
+              }" data-toggle='tooltip' title='${data.alternal_machine}' style="font-size:25px; color: ${data.id_alternal_machine == 0 ? "#ff0000" : "#7bb520"
+              };"></i>
+                  </a>`;
+          }
+        },
+        {
           title: "Operadores",
           data: "employees",
           className: "uniqueClassName dt-head-center",

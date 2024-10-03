@@ -544,6 +544,7 @@ $(document).ready(function () {
 
 
     // Cargar selects de maquinas por pedidos programados
+    $('#quantityMP').html('');
     loadDataMachinesProgramming(uniqueArray);
     checkProcessMachines(allTblData);
     loadTblProgramming(allTblData, 1);

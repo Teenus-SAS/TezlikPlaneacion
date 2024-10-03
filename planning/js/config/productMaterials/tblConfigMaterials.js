@@ -115,8 +115,8 @@ $(document).ready(function () {
           className: "uniqueClassName dt-head-center",
           render: function (data) {
             return `<a href="javascript:;">
-                    <i id="${data.id_alternal_unit}" class="${data.id_alternal_unit != 0 ? "bi bi-person-fill-check" : "bi bi-person-fill-x"
-              } checkAlternalMachine" data-toggle='tooltip' style="font-size:25px; color: ${data.id_alternal_unit == 0 ? "#ff0000" : "#7bb520"
+                    <i id="${data.id_alternal_material}" class="${data.id_alternal_material != 0 ? "bi bi-person-fill-check" : "bi bi-person-fill-x"
+              }" data-toggle='tooltip' title='${data.alternal_material}' style="font-size:25px; color: ${data.id_alternal_material == 0 ? "#ff0000" : "#7bb520"
               };"></i>
                   </a>`;
           }

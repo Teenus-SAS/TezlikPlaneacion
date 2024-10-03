@@ -55,6 +55,7 @@ class ProductsMaterialsDao
                                             -- IFNULL(am.id_alternal_material, 0) AS id_alternal_material,
                                             IFNULL(am.id_material, 0) AS id_alternal_material,
                                             IFNULL(am.id_unit, 0) AS id_alternal_unit,
+                                            IFNULL(amm.material, '') AS alternal_material,
                                             IFNULL(am.quantity, 0) AS alternal_quantity,
                                             IFNULL(am.quantity_converted, 0) AS alternal_quantity_converted,
                                             IFNULL(au.unit, '') AS alternal_unit,
@@ -67,6 +68,7 @@ class ProductsMaterialsDao
                                           LEFT JOIN admin_units u ON u.id_unit = pm.id_unit
                                           LEFT JOIN admin_magnitudes mg ON mg.id_magnitude = u.id_magnitude
                                           LEFT JOIN alternal_materials am ON am.id_product_material = pm.id_product_material
+                                          LEFT JOIN materials amm ON amm.id_material = am.id_material
                                           LEFT JOIN admin_units au ON au.id_unit = am.id_unit
                                           LEFT JOIN admin_magnitudes amg ON amg.id_magnitude = au.id_magnitude
                                       WHERE pm.id_product = :id_product AND pm.id_company = :id_company

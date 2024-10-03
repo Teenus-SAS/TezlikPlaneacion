@@ -77,6 +77,7 @@ class GeneralPlanCiclesMachinesDao
                                             ROW_NUMBER() OVER() AS route,
                                             IFNULL(am.id_alternal_machine, 0) AS id_alternal_machine,
                                             IFNULL(am.id_machine, 0) AS id_alternal_machine,
+                                            IFNULL(amm.machine, '') AS alternal_machine,
                                             IFNULL(am.cicles_hour, 0) AS alternal_cicles_hour,
                                             IFNULL(am.units_turn, 0) AS alternal_units_turn,
                                             IFNULL(am.units_month, 0) AS alternal_units_month
@@ -87,6 +88,7 @@ class GeneralPlanCiclesMachinesDao
                                         LEFT JOIN process pc ON pc.id_process = pcm.id_process
                                         LEFT JOIN payroll py ON py.id_process = pcm.id_process AND py.id_machine = pcm.id_machine -- AND py.status = 1
                                         LEFT JOIN alternal_machines am ON am.id_cicles_machine = pcm.id_cicles_machine
+                                        LEFT JOIN machines amm ON amm.id_machine = am.id_machine
                                     WHERE pcm.id_product = :id_product AND pcm.id_company = :id_company
                                     GROUP BY pcm.id_cicles_machine
                                     ORDER BY `pcm`.`route` ASC;");

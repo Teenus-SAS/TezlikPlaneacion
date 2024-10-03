@@ -172,7 +172,7 @@ $app->post('/addPayroll', function (Request $request, Response $response, $args)
 
             if (isset($resolution['info'])) break;
 
-            $payroll[$i]['active'] == 'SI' ? $payroll[$i]['status'] = 1 : $payroll[$i]['status'] = 0;
+            strtoupper(trim($payroll[$i]['active'])) == 'SI' ? $payroll[$i]['status'] = 1 : $payroll[$i]['status'] = 0;
             $resolution = $generalPayrollDao->changeStatusPayroll($payroll[$i]['idPayroll'], $payroll[$i]['status']);
 
             if (isset($resolution['info'])) break;

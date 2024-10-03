@@ -205,7 +205,7 @@ if (sizeof($_SESSION) == 0)
 																<th>Unidad</th>
 																<th>Recibido</th>
 																<th>Pendiente</th>
-																<th></th>
+																<th id="thActions"></th>
 															</tr>
 														</thead>
 														<tbody id="tblPOMaterialsBody">
@@ -411,7 +411,7 @@ if (sizeof($_SESSION) == 0)
 
 										<hr>
 
-										<div class="row">
+										<div class="row cardCloseOP">
 											<div class="col-sm-12 mt-4">
 												<button class="btn btn-warning w-100 d-block" id="btnCloseOP"><b>CERRAR ORDEN DE PRODUCCIÓN</b></button>
 											</div>
