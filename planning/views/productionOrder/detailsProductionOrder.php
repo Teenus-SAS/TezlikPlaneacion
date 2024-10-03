@@ -413,7 +413,7 @@ if (sizeof($_SESSION) == 0)
 
 										<div class="row">
 											<div class="col-sm-12 mt-4">
-												<button class="btn btn-warning w-100 d-block" id="btnCloseOP"><b>CERRAR ORDE DE PRODUCCIÓN</b></button>
+												<button class="btn btn-warning w-100 d-block" id="btnCloseOP"><b>CERRAR ORDEN DE PRODUCCIÓN</b></button>
 											</div>
 										</div>
 									</div>
