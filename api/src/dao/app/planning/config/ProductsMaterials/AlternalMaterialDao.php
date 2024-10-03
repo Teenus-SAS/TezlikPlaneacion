@@ -36,7 +36,7 @@ class AlternalMaterialDao
     {
         $connection = Connection::getInstance()->getConnection();
 
-        $stmt = $connection->prepare("SELECT * FROM alternal_material
+        $stmt = $connection->prepare("SELECT * FROM alternal_materials
                                       WHERE id_product_material = :id_product_material");
         $stmt->execute(['id_product_material' => $id_product_material]);
         $machine = $stmt->fetch($connection::FETCH_ASSOC);
@@ -48,7 +48,7 @@ class AlternalMaterialDao
         $connection = Connection::getInstance()->getConnection();
 
         try {
-            $stmt = $connection->prepare("INSERT INTO alternal_material (id_company, id_product_material, id_material, id_unit, quantity) 
+            $stmt = $connection->prepare("INSERT INTO alternal_materials (id_company, id_product_material, id_material, id_unit, quantity) 
                                           VALUES (:id_company, :id_product_material, :id_material, :id_unit, :quantity)");
             $stmt->execute([
                 'id_company' => $id_company,
@@ -70,7 +70,7 @@ class AlternalMaterialDao
         $connection = Connection::getInstance()->getConnection();
 
         try {
-            $stmt = $connection->prepare("UPDATE alternal_material SET id_material = :id_material, id_unit = :id_unit, quantity = :quantity
+            $stmt = $connection->prepare("UPDATE alternal_materials SET id_material = :id_material, id_unit = :id_unit, quantity = :quantity
                                           WHERE id_product_material = :id_product_material");
             $stmt->execute([
                 'id_product_material' => $dataAMaterials['idProductMaterial'],
@@ -90,7 +90,7 @@ class AlternalMaterialDao
     {
         try {
             $connection = Connection::getInstance()->getConnection();
-            $stmt = $connection->prepare("UPDATE alternal_material SET quantity_converted = :quantity_converted
+            $stmt = $connection->prepare("UPDATE alternal_materials SET quantity_converted = :quantity_converted
                                           WHERE id_product_material = :id_product_material");
             $stmt->execute([
                 'id_product_material' => $id_product_material,

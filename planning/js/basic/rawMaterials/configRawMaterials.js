@@ -20,8 +20,8 @@ $(document).ready(function () {
         .map((item) => ({ ...item, reference: item.reference_material }));
     }
 
-    setSelectsMaterials('#refMaterial', data, 'reference');
-    setSelectsMaterials('#material', data, 'material');
+    setSelectsMaterials('.refMaterial', data, 'reference');
+    setSelectsMaterials('.material', data, 'material');
   };
 
   // setSelectsMaterials = (data) => {
@@ -70,26 +70,26 @@ $(document).ready(function () {
   loadDataMaterial();
 
   /* Funciones cuando se selecciona una materia prima */
-  $("#refMaterial").change(function (e) {
+  $(".refMaterial").change(function (e) {
     e.preventDefault();
     let id = this.value;
 
-    $("#material option").prop("selected", function () {
+    $(".material option").prop("selected", function () {
       return $(this).val() == id;
     });
   });
 
-  $("#material").change(function (e) {
+  $(".material").change(function (e) {
     e.preventDefault();
     let id = this.value;
 
-    $("#refMaterial option").prop("selected", function () {
+    $(".refMaterial option").prop("selected", function () {
       return $(this).val() == id;
     });
   });
   
   if (viewRawMaterial == 1) {
-    $("#refMaterial").change(function (e) {
+    $(".refMaterial").change(function (e) {
       e.preventDefault();
       let id = this.value;
 
@@ -103,7 +103,7 @@ $(document).ready(function () {
       let arr = data.find((item) => item.id_material == id);
 
       if (flag_products_measure == "1") {
-        let $select = $(`#units`);
+        let $select = $(`.units`);
         $select.empty().append(`<option disabled>Seleccionar</option>`);
         $select.append(
           `<option value ='${arr.id_unit}' selected> ${arr.unit} </option>`
@@ -111,7 +111,7 @@ $(document).ready(function () {
       } else loadUnitsByMagnitude(arr, 2);
     });
 
-    $("#material").change(function (e) {
+    $(".material").change(function (e) {
       e.preventDefault();
       let id = this.value;
 
@@ -125,7 +125,7 @@ $(document).ready(function () {
       let arr = data.find((item) => item.id_material == id);
 
       if (flag_products_measure == "1") {
-        let $select = $(`#units`);
+        let $select = $(`.units`);
         $select.empty().append(`<option disabled>Seleccionar</option>`);
         $select.append(
           `<option value ='${arr.id_unit}' selected> ${arr.unit} </option>`

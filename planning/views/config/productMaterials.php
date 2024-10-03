@@ -159,11 +159,11 @@ if (sizeof($_SESSION) == 0)
                                                 <?php } ?>
                                                 <div class="col-sm-2 floating-label enable-floating-label show-label" style="margin-bottom:20px">
                                                     <label for="">Referencia</label>
-                                                    <select class="form-control calcMWeight" name="refMaterial" id="refMaterial"></select>
+                                                    <select class="form-control refMaterial calcMWeight" name="refMaterial" id="refMaterial"></select>
                                                 </div>
                                                 <div class="col-sm-6 floating-label enable-floating-label show-label" style="margin-bottom:20px">
                                                     <label for="">Materia Prima</label>
-                                                    <select class="form-control calcMWeight" name="material" id="material"></select>
+                                                    <select class="form-control material calcMWeight" name="material" id="material"></select>
                                                 </div>
                                                 <div class="col-sm-2 floating-label enable-floating-label show-label" style="margin-bottom:5px">
                                                     <select class="form-control units" id="units" name="unit"></select>
@@ -197,19 +197,19 @@ if (sizeof($_SESSION) == 0)
                                             <div class="form-row">
                                                 <div class="col-sm-2 floating-label enable-floating-label show-label" style="margin-bottom:20px">
                                                     <label for="">Referencia</label>
-                                                    <select class="form-control calcMWeight" name="refMaterial" id="aRefMaterial"></select>
+                                                    <select class="form-control refMaterial calcAMWeight" name="idMaterial" id="aRefMaterial"></select>
                                                 </div>
                                                 <div class="col-sm-6 floating-label enable-floating-label show-label" style="margin-bottom:20px">
                                                     <label for="">Materia Prima</label>
-                                                    <select class="form-control calcMWeight" name="material" id="aMaterial"></select>
+                                                    <select class="form-control material calcAMWeight" name="material" id="aMaterial"></select>
                                                 </div>
                                                 <div class="col-sm-2 floating-label enable-floating-label show-label" style="margin-bottom:5px">
-                                                    <select class="form-control units" id="aUnits" name="units"></select>
+                                                    <select class="form-control units" id="aUnits" name="idUnit"></select>
                                                     <label for="">Unidad</label>
                                                 </div>
                                                 <div class="col-sm-2 floating-label enable-floating-label show-label" style="margin-bottom:20px">
                                                     <label for="">Cantidad</label>
-                                                    <input class="form-control text-center" type="number" name="quantity" id="aQuantity">
+                                                    <input class="form-control text-center" type="text" name="quantity" id="aQuantity">
                                                 </div>
                                                 <div class="col-sm mt-1">
                                                     <button class="btn btn-success" id="btnSaveAlternalMaterial">Guardar</button>
