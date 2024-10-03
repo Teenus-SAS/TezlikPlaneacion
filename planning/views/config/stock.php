@@ -163,11 +163,11 @@ if (sizeof($_SESSION) == 0)
                                             <div class="form-row">
                                                 <div class="col-sm-2 floating-label enable-floating-label show-label cardSelect" style="margin-bottom:20px">
                                                     <label for="refMaterial">Referencia</label>
-                                                    <select class="form-control" name="refMaterial" id="refMaterial"></select>
+                                                    <select class="form-control refMaterial" name="refMaterial" id="refMaterial"></select>
                                                 </div>
                                                 <div class="col-sm-10 floating-label enable-floating-label show-label cardSelect" style="margin-bottom:20px">
                                                     <label for="">Materia Prima</label>
-                                                    <select class="form-control" name="material" id="material"></select>
+                                                    <select class="form-control material" name="material" id="material"></select>
                                                 </div>
                                                 <div class="col-sm-2 floating-label enable-floating-label show-label cardRMDescription" style="margin-bottom:20px">
                                                     <label for="refMaterial">Referencia</label>

@@ -372,12 +372,12 @@ if (sizeof($_SESSION) == 0)
 												<div class="form-row">
 													<div class="col-sm-2 floating-label enable-floating-label show-label" style="margin-bottom:20px">
 														<label for="material">Referencia</label>
-														<select class="form-control" name="refMaterial" id="refMaterial">
+														<select class="form-control refMaterial" name="refMaterial" id="refMaterial">
 														</select>
 													</div>
 													<div class="col-sm-7 floating-label enable-floating-label show-label" style="margin-bottom:20px">
 														<label for="material">Materia Prima</label>
-														<select class="form-control" name="idMaterial" id="material">
+														<select class="form-control material" name="idMaterial" id="material">
 														</select>
 													</div>
 													<!-- <div class="col-sm-6 floating-label enable-floating-label show-label" style="margin-bottom:20px">
