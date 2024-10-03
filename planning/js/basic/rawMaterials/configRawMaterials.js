@@ -70,20 +70,38 @@ $(document).ready(function () {
   loadDataMaterial();
 
   /* Funciones cuando se selecciona una materia prima */
-  $(".refMaterial").change(function (e) {
+  $("#refMaterial").change(function (e) {
     e.preventDefault();
     let id = this.value;
 
-    $(".material option").prop("selected", function () {
+    $("#material option").prop("selected", function () {
       return $(this).val() == id;
     });
   });
 
-  $(".material").change(function (e) {
+  $("#material").change(function (e) {
     e.preventDefault();
     let id = this.value;
 
-    $(".refMaterial option").prop("selected", function () {
+    $("#refMaterial option").prop("selected", function () {
+      return $(this).val() == id;
+    });
+  });
+
+  $("#aRefMaterial").change(function (e) {
+    e.preventDefault();
+    let id = this.value;
+
+    $("#aMaterial option").prop("selected", function () {
+      return $(this).val() == id;
+    });
+  });
+
+  $("#aMaterial").change(function (e) {
+    e.preventDefault();
+    let id = this.value;
+
+    $("#aRefMaterial option").prop("selected", function () {
       return $(this).val() == id;
     });
   });
