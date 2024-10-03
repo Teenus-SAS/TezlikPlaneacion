@@ -192,7 +192,7 @@ $(document).ready(function () {
         
         bootbox.confirm({
             title: "Orden de Producción",
-            message: `¿ Está seguro de cerrar esta orden de produccion. ?`,
+            message: `¿Está seguro de cerrar esta orden de produccion? Esta acción no se puede reversar`,
             buttons: {
                 confirm: {
                     label: "Si",
