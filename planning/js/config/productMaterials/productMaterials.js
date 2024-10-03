@@ -360,11 +360,10 @@ $(document).ready(function () {
   });
 
   /* Mensaje de exito */
-
   messageMaterial = (data) => {
     const { success, error, info, message } = data;
     if (success) {
-      $(".cardImport, .cardAddMaterials, .cardAddNewProduct").hide(800);
+      $(".cardImport, .cardAddMaterials, .cardAddNewProduct, .cardSaveAlternalMaterial").hide(800);
       $("#formImport, #formSaveAlternalMaterial, #formAddMaterials").trigger("reset");
 
       const idProduct = $("#selectNameProduct").val();
