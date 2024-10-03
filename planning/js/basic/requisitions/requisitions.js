@@ -134,7 +134,9 @@ $(document).ready(function () {
     sessionStorage.setItem("id_requisition", data.id_requisition);
 
     // Seleccionar los valores correspondientes en los campos
-    $(`#refMaterial, #material`).val(data.id_material).prop("selected", true);
+    $(`#refMaterial option[value=${data.id_material}]`).prop("selected", true);
+    $(`#material option[value=${data.id_material}]`).prop("selected", true);
+ 
     $("#referenceMName").val(data.reference);
     $("#materialName").val(data.material);
 
