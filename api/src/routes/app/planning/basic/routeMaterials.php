@@ -380,7 +380,8 @@ $app->post('/addMaterials', function (Request $request, Response $response, $arg
                     // Ficha tecnica
 
                     if (sizeof($productsFTM) == 0 || sizeof($planCicles) == 0) {
-                        $generalOrdersDao->changeStatus($orders[$i]['id_order'], 5);
+                        $orders[$i]['origin'] == 1 ? $status = 13 : $status = 5;
+                        $generalOrdersDao->changeStatus($orders[$i]['id_order'], $status);
                         $status = false;
                     } else {
                         foreach ($planCicles as $arr) {
@@ -700,7 +701,9 @@ $app->post('/updateMaterials', function (Request $request, Response $response, $
                 if ($orders[$i]['original_quantity'] > $orders[$i]['accumulated_quantity']) {
 
                     if (sizeof($productsFTM) == 0 || sizeof($planCicles) == 0) {
-                        $generalOrdersDao->changeStatus($orders[$i]['id_order'], 5);
+                        $orders[$i]['origin'] == 1 ? $status = 13 : $status = 5;
+
+                        $generalOrdersDao->changeStatus($orders[$i]['id_order'], $status);
                         $status = false;
                     } else {
                         foreach ($planCicles as $arr) {

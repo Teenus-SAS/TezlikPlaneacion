@@ -24,7 +24,8 @@ class MachinesDao
                                    LEFT JOIN machine_cicles pcm ON pcm.id_machine = m.id_machine 
                                    LEFT JOIN payroll py ON py.id_machine = m.id_machine AND py.status = 1
                                   WHERE m.id_company = :id_company
-                                  GROUP BY m.id_machine;");
+                                  GROUP BY m.id_machine
+                                  ORDER BY `m`.`machine`");
     $stmt->execute(['id_company' => $id_company]);
 
     $this->logger->info(__FUNCTION__, array('query' => $stmt->queryString, 'errors' => $stmt->errorInfo()));

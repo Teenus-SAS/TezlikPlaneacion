@@ -30,6 +30,7 @@ class GeneralOrdersDao
                                                 o.date_order, 
                                                 o.original_quantity, 
                                                 p.product, 
+                                                p.origin,
                                                 c.client, 
                                                 o.min_date, 
                                                 o.max_date, 

@@ -57,7 +57,7 @@ if (sizeof($_SESSION) == 0)
                                 </div>
                             </div>
                         </div>
-                        <?php if ($_SESSION['flag_products_measure'] == '1') { ?>
+                        <!-- < ?php if ($_SESSION['flag_products_measure'] == '1') { ?>
                             <div class="row align-items-center cardPTypes" style="display: none;">
                                 <div class="col-sm-5 col-xl-6">
                                     <div class="page-title">
@@ -76,7 +76,7 @@ if (sizeof($_SESSION) == 0)
                                     </div>
                                 </div>
                             </div>
-                        <?php } ?>
+                        < ?php } ?> -->
                     </div>
                 </div>
 
@@ -246,13 +246,13 @@ if (sizeof($_SESSION) == 0)
                                             <i class="bi bi-diagram-3 mr-1"></i>Productos
                                         </a>
                                     </li>
-                                    <?php if ($_SESSION['flag_products_measure'] == '1') { ?>
+                                    <!-- < ?php if ($_SESSION['flag_products_measure'] == '1') { ?>
                                         <li class="nav-item">
                                             <a class="nav-link selectNavigation" id="link-productsType" data-toggle="pill" href="javascript:;" role="tab" aria-controls="pills-activity" aria-selected="true">
                                                 <i class="fas fa-cogs mr-1"></i>Tipos Producto
                                             </a>
                                         </li>
-                                    <?php } ?>
+                                    < ?php } ?> -->
                                 </ul>
                             </div>
                         </div>
@@ -265,11 +265,11 @@ if (sizeof($_SESSION) == 0)
 
                                             </table>
                                         </div>
-                                        <div class="table-responsive tab-pane cardPTypes" style="display: none;">
+                                        <!-- <div class="table-responsive tab-pane cardPTypes" style="display: none;">
                                             <table class="fixed-table-loading table table-hover" id="tblProductsType">
 
                                             </table>
-                                        </div>
+                                        </div> -->
                                     </div>
                                 </div>
                             </div>

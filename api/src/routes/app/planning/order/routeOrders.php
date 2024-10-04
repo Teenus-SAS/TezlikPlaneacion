@@ -705,7 +705,8 @@ $app->post('/addOrder', function (Request $request, Response $response, $args) u
                     $planCicles = $generalPlanCiclesMachinesDao->findAllPlanCiclesMachineByProduct($orders[$i]['id_product'], $id_company);
 
                     if (sizeof($productsFTM) == 0 || sizeof($planCicles) == 0) {
-                        $generalOrdersDao->changeStatus($orders[$i]['id_order'], 5);
+                        $orders[$i]['origin'] == 1 ? $status = 13 : $status = 5;
+                        $generalOrdersDao->changeStatus($orders[$i]['id_order'], $status);
                         $status = false;
                     } else {
                         foreach ($planCicles as $arr) {
@@ -1140,7 +1141,8 @@ $app->post('/updateOrder', function (Request $request, Response $response, $args
                     $planCicles = $generalPlanCiclesMachinesDao->findAllPlanCiclesMachineByProduct($orders[$i]['id_product'], $id_company);
 
                     if (sizeof($productsFTM) == 0 || sizeof($planCicles) == 0) {
-                        $generalOrdersDao->changeStatus($orders[$i]['id_order'], 5);
+                        $orders[$i]['origin'] == 1 ? $status = 13 : $status = 5;
+                        $generalOrdersDao->changeStatus($orders[$i]['id_order'], $status);
                         $status = false;
                     } else {
                         foreach ($planCicles as $arr) {

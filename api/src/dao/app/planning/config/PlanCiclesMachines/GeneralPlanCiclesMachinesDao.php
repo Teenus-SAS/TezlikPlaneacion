@@ -45,7 +45,7 @@ class GeneralPlanCiclesMachinesDao
     {
         $connection = Connection::getInstance()->getConnection();
 
-        $stmt = $connection->prepare("SELECT *  FROM machine_cicles
+        $stmt = $connection->prepare("SELECT * FROM machine_cicles
                                       WHERE id_machine = :id_machine AND id_company = :id_company");
         $stmt->execute([
             'id_machine' => $id_machine,
