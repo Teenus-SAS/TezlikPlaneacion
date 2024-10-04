@@ -166,6 +166,8 @@ $(document).ready(function () {
       }
     }
 
+    let data = 1 * prodOrigin;
+
     if (prodOrigin == 2) {
       if (idProductType === 1) {
         width = parseFloat($("#width").val());
@@ -179,17 +181,15 @@ $(document).ready(function () {
         totalWidth = parseFloat($("#totalWidth").val());
         window = parseFloat($("#window").val());
       }
-    }
+      let inks = parseFloat($("#inks").val());
 
-    let inks = parseFloat($("#inks").val());
-    let data = 1 * prodOrigin;
-
-    if (flag_products_measure == "1" && idProductType == "1") {
-      data *= idProductType * width * high * length * usefulLength * totalWidth;
-      if (prodOrigin == "2" && productType == "CAJA") data *= window;
-    } else if (flag_products_measure == "1" && idProductType == "2") {
-      data *= idProductType * length * totalWidth;
-    }
+      if (flag_products_measure == "1" && idProductType == "1") {
+        data *= idProductType * width * high * length * usefulLength * totalWidth;
+        if (prodOrigin == "2" && productType == "CAJA") data *= window;
+      } else if (flag_products_measure == "1" && idProductType == "2") {
+        data *= idProductType * length * totalWidth;
+      }
+    }     
 
     if (!ref.trim() || !prod.trim() || isNaN(data) || data <= 0) {
       toastr.error("Ingrese todos los campos");
