@@ -37,7 +37,7 @@ $(document).ready(function () {
 
     importFile(selectedFile)
       .then((data) => {
-        const expectedHeaders = ['referencia_producto', 'producto', 'proceso', 'maquina', 'ciclo_hora'];
+        const expectedHeaders = ['referencia_producto', 'producto', 'proceso', 'maquina', 'ciclo_hora', 'maquina_alterna', 'ciclo_hora_alterna'];
         const actualHeaders = Object.keys(data[0]);
 
         const missingHeaders = expectedHeaders.filter(header => !actualHeaders.includes(header));
@@ -55,6 +55,8 @@ $(document).ready(function () {
           !item.producto ? item.producto = '' : item.producto;
           !item.maquina ? item.maquina = '' : item.maquina;
           !item.ciclo_hora ? item.ciclo_hora = '' : item.ciclo_hora;
+          !item.maquina_alterna ? item.maquina_alterna = '' : item.maquina_alterna;
+          !item.ciclo_hora_alterna ? item.ciclo_hora_alterna = '' : item.ciclo_hora_alterna;
 
           return {
             referenceProduct: item.referencia_producto,
@@ -62,6 +64,8 @@ $(document).ready(function () {
             process: item.proceso,
             machine: item.maquina,
             ciclesHour: item.ciclo_hora,
+            alternalMachine: item.maquina_alterna,
+            alternalCiclesHour: item.ciclo_hora_alterna,
           };
         });
         checkCiclesMachine(planCiclesMachineToImport);

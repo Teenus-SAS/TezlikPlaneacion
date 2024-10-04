@@ -59,6 +59,7 @@ $(document).ready(function () {
   }); 
 
   const checkPlanCiclesMachine = async (url, idCiclesMachine) => {
+    let idProduct = parseInt($('#selectNameProduct').val());
     let idProcess = parseInt($('#idProcess').val());
     let idMachine = parseInt($('#idMachine').val());
     let ciclesHour = parseInt($('#ciclesHour').val());
@@ -70,8 +71,9 @@ $(document).ready(function () {
       return false;
     }
 
-    let dataPlanCiclesMachine = new FormData(formSaveAlternalMachine);
+    let dataPlanCiclesMachine = new FormData(formCreatePlanCiclesMachine);
  
+    dataPlanCiclesMachine.append("idProduct", idProduct);
     if (idCiclesMachine)
       dataPlanCiclesMachine.append("idCiclesMachine", idCiclesMachine);
 

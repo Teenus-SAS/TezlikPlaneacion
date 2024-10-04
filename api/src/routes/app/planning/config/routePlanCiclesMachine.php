@@ -134,6 +134,17 @@ $app->post('/planCiclesMachineDataValidation', function (Request $request, Respo
                 } else $planCiclesMachine[$i]['idMachine'] = $findMachine['id_machine'];
             }
 
+            if (!empty(trim($planCiclesMachine[$i]['alternalMachine'])) || !empty(trim($planCiclesMachine[$i]['alternalCiclesHour']))) {
+                $arr = [];
+                $arr['machine'] = $planCiclesMachine[$i]['alternalMachine'];
+
+                $findMachine = $machinesDao->findMachine($arr, $id_company);
+                if (!$findMachine) {
+                    $row = $i + 2;
+                    array_push($debugg, array('error' => true, 'message' => "Fila-$row: Máquina no Existe"));
+                }
+            }
+
             if (sizeof($debugg) == 0) {
                 $findPlanCiclesMachine = $generalPlanCiclesMachinesDao->findPlansCiclesMachine($planCiclesMachine[$i], $id_company);
 
@@ -306,9 +317,42 @@ $app->post('/addPlanCiclesMachine', function (Request $request, Response $respon
             $data['units_month'] = $arr['units_month'];
 
             $resolution = $generalPlanCiclesMachinesDao->updateUnits($data);
+            if (isset($resolution)) break;
+
+            if (!empty(trim($planCiclesMachine[$i]['alternalMachine'])) || !empty(trim($planCiclesMachine[$i]['alternalCiclesHour']))) {
+                $planCiclesMachine[$i]['ciclesHour'] = $planCiclesMachine[$i]['alternalCiclesHour'];
+
+                $arr = [];
+                $arr['machine'] = $planCiclesMachine[$i]['alternalMachine'];
+
+                $findMachine = $machinesDao->findMachine($arr, $id_company);
+                $planCiclesMachine[$i]['idMachine'] = $arr['id_machine'];
+
+                $findAlternalMachine = $alternalMachineDao->findAlternalMachine($planCiclesMachine[$i]['idCiclesMachine']);
+
+                if (!$findAlternalMachine)
+                    $resolution = $alternalMachineDao->addAlternalMachines($planCiclesMachine[$i], $id_company);
+                else
+                    $resolution = $alternalMachineDao->updateAlternalMachine($planCiclesMachine[$i]);
+
+                if (isset($resolution)) break;
+
+                // Calcular unidades
+                $arr = $ciclesMachinesDao->calcUnitsTurnAlternal($planCiclesMachine[$i]['idCiclesMachine']);
+                $data['units_turn'] = $arr['units_turn'];
+                $data['idCiclesMachine'] = $planCiclesMachine[$i]['idCiclesMachine'];
+
+                $arr = $ciclesMachinesDao->calcUnitsMonthAlternal($data, 2);
+                $data['units_month'] = $arr['units_month'];
+
+                $resolution = $alternalMachineDao->updateUnits($data);
+            }
         }
 
-        if ($resolution == null) $resp = array('success' => true, 'message' => 'Plan ciclos de maquina importado correctamente');
+        if ($resolution == null)
+            $resp = array('success' => true, 'message' => 'Plan ciclos de maquina importado correctamente');
+        else if (isset($resolution['info']))
+            $resp = array('info' => true, 'message' => $resolution['message']);
         else $resp = array('error' => true, 'message' => 'Ocurrio un error al importar los ciclos de maquina. Intente nuevamente');
     }
 

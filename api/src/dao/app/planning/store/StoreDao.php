@@ -187,7 +187,7 @@ class StoreDao
                                             last_user.id_user_delivered,
                                             last_user.firstname_delivered,
                                             last_user.lastname_delivered
-                                        ORDER BY pg.num_production ASC;");
+                                        ORDER BY pg.num_production, mi.delivery_date ASC;");
         $stmt->execute(['id_company' => $id_company]);
 
         $this->logger->info(__FUNCTION__, array('query' => $stmt->queryString, 'errors' => $stmt->errorInfo()));
