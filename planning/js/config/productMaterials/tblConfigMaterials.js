@@ -110,18 +110,6 @@ $(document).ready(function () {
           className: "uniqueClassName dt-head-center",
         },
         {
-          title: "Materia Prima Alterna",
-          data: null,
-          className: "uniqueClassName dt-head-center",
-          render: function (data) {
-            return `<a href="javascript:;">
-                    <i id="${data.id_alternal_material}" class="${data.id_alternal_material != 0 ? "bi bi-person-fill-check" : "bi bi-person-fill-x"
-              }" data-toggle='tooltip' title='${data.alternal_material}' style="font-size:25px; color: ${data.id_alternal_material == 0 ? "#ff0000" : "#7bb520"
-              };"></i>
-                  </a>`;
-          }
-        },
-        {
           title: "Unidad",
           data: "abbreviation",
           className: "uniqueClassName dt-head-center",
@@ -134,6 +122,24 @@ $(document).ready(function () {
             return parseFloat(data).toLocaleString("es-CO", {
               maximumFractionDigits: 8,
             });
+          },
+        },
+        {
+          title: "Materia Prima Alterna",
+          data: null,
+          className: "uniqueClassName dt-head-center",
+          render: function (data) {
+            return `<a href="javascript:;">
+                    <i id="${data.id_alternal_material}" class="${
+              data.id_alternal_material != 0
+                ? "fas fa-check-square"
+                : "fa fa-window-close"
+            }" data-toggle='tooltip' title='${
+              data.alternal_material
+            }' style="font-size:25px; color: ${
+              data.id_alternal_material == 0 ? "#ff0000" : "#7bb520"
+            };"></i>
+                  </a>`;
           },
         },
         {
@@ -156,8 +162,10 @@ $(document).ready(function () {
                             : data.id_composite_product
                         }" class="mdi mdi-delete-forever" data-toggle='tooltip' title='Eliminar Materia Prima' style="font-size: 30px;color:red" onclick="deleteMaterial(${
               data.id_product_material != 0 ? "1" : "2"
-              })"></i></a>
-              <a href="javascript:;" <i id="ext-${data.id_product_material}" class="bx bi bi-sliders alternalMaterial" data-toggle='tooltip' title='Material Externo' style="font-size: 30px;color:#d36e17;"></i></a>
+            })"></i></a>
+              <a href="javascript:;" <i id="ext-${
+                data.id_product_material
+              }" class="bx bi bi-sliders alternalMaterial" data-toggle='tooltip' title='Materia Prima Alterna' style="font-size: 30px;color:#d36e17;"></i></a>
             `;
           },
         },

@@ -31,18 +31,6 @@ $(document).ready(function () {
           className: "uniqueClassName dt-head-center",
         },
         {
-          title: "Maquina Alterna",
-          data: null,
-          className: "uniqueClassName dt-head-center",
-          render: function (data) {
-            return `<a href="javascript:;">
-                    <i id="${data.id_alternal_machine}" class="${data.id_alternal_machine != 0 ? "bi bi-person-fill-check" : "bi bi-person-fill-x"
-              }" data-toggle='tooltip' title='${data.alternal_machine}' style="font-size:25px; color: ${data.id_alternal_machine == 0 ? "#ff0000" : "#7bb520"
-              };"></i>
-                  </a>`;
-          }
-        },
-        {
           title: "Operadores",
           data: "employees",
           className: "uniqueClassName dt-head-center",
@@ -66,14 +54,32 @@ $(document).ready(function () {
           render: $.fn.dataTable.render.number(".", ",", 0),
         },
         {
+          title: "Maquina Alterna",
+          data: null,
+          className: "uniqueClassName dt-head-center",
+          render: function (data) {
+            return `<a href="javascript:;">
+                    <i id="${data.id_alternal_machine}" class="${
+              data.id_alternal_machine != 0
+                ? "fas fa-check-square"
+                : "fa fa-window-close"
+            }" data-toggle='tooltip' title='${
+              data.alternal_machine
+            }' style="font-size:25px; color: ${
+              data.id_alternal_machine == 0 ? "#ff0000" : "#7bb520"
+            };"></i>
+                  </a>`;
+          },
+        },
+        {
           title: "Acciones",
           data: null,
           className: "uniqueClassName dt-head-center",
           render: function (data) {
             return `
                     <a href="javascript:;" <i id="upd-${data.id_cicles_machine}" class="bx bx-edit-alt updatePCMachine" data-toggle='tooltip' title='Actualizar Maquina' style="font-size: 30px;"></i></a>
-                    <a href="javascript:;" <i id="ext-${data.id_cicles_machine}" class="bx bi bi-sliders alternalMachine" data-toggle='tooltip' title='Maquina Externa' style="font-size: 30px;color:#d36e17;"></i></a>
-                    <a href="javascript:;" <i id="${data.id_cicles_machine }" class="mdi mdi-delete-forever" data-toggle='tooltip' title='Eliminar Maquina' style="font-size: 30px;color:red" onclick="deleteMachine()"></i></a>`;
+                    <a href="javascript:;" <i id="ext-${data.id_cicles_machine}" class="bx bi bi-sliders alternalMachine" data-toggle='tooltip' title='Maquina Alterna' style="font-size: 30px;color:#d36e17;"></i></a>
+                    <a href="javascript:;" <i id="${data.id_cicles_machine}" class="mdi mdi-delete-forever" data-toggle='tooltip' title='Eliminar Maquina' style="font-size: 30px;color:red" onclick="deleteMachine()"></i></a>`;
           },
         },
       ],
