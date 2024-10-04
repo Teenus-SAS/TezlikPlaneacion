@@ -60,7 +60,7 @@ class ProductionOrderPartialDao
                                             )
                                         ) AS last_user ON last_user.id_part_deliv = po.id_part_deliv
                                       WHERE po.id_company = :id_company
-                                      ORDER BY `pg`.`num_production` ASC");
+                                      ORDER BY `pg`.`num_production`, `po`.`receive_date` ASC");
         $stmt->execute([
             'id_company' => $id_company
         ]);
