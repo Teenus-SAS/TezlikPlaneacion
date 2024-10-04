@@ -69,8 +69,8 @@ $(document).ready(function () {
       const pending = isPendingActive ? 1 : 0;
 
       // Filtrar datos según el estado
-      const pendingStore = dataActualOffices.filter(item => item.status !== "ENTREGADO");
-      const deliveredStore = dataActualOffices.filter(item => item.status === "ENTREGADO");
+      pendingStore = dataActualOffices.filter(item => item.status !== "ENTREGADO");
+      deliveredStore = dataActualOffices.filter(item => item.status === "ENTREGADO");
 
       // Definir los datos a cargar y la visibilidad de la columna
       let dataToLoad = [];

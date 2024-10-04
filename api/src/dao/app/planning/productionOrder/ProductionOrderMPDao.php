@@ -96,6 +96,7 @@ class ProductionOrderMPDao
                                             m.material, 
                                             IFNULL(mi.quantity, 0) AS quantity_material, 
                                             pom.quantity,
+                                            pom.creation_date,
                                             pom.receive_date,
                                             u.id_user,
                                             u.firstname,

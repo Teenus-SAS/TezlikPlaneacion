@@ -66,6 +66,15 @@ $(document).ready(function () {
           },
         },
         {
+          title: "Fecha Creacion",
+          data: 'creation_date',
+          className: "uniqueClassName dt-head-center",
+          width: "200px",
+          render: function (data, type, full, meta) { 
+            return moment(data).format("DD/MM/YYYY HH:mm A");
+          },
+        },
+        {
           title: "Acciones",
           data: null,
           className: "uniqueClassName dt-head-center",

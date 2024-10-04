@@ -47,6 +47,7 @@ $(document).ready(function () {
       return false;
     }
 
+    $('#quantityMP').html('');
     $(".date, .cardFormProgramming2").hide();
     $("#refProduct, #selectNameProduct, #idMachine, #idProcess").empty();
     $(".cardCreateProgramming").toggle(800);

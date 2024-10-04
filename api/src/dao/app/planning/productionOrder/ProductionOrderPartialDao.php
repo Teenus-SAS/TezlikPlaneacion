@@ -89,6 +89,7 @@ class ProductionOrderPartialDao
                                             u.lastname, 
                                             po.waste, 
                                             po.partial_quantity, 
+                                            po.creation_date,
                                             po.receive_date, 
                                             IFNULL(last_user.id_user_receive, 0) AS id_user_receive,
                                             IFNULL(last_user.firstname_receive, '') AS firstname_receive,
