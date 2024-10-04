@@ -72,7 +72,7 @@ class ProductionOrderMPDao
                                             )
                                         ) AS last_user ON last_user.id_prod_order_material = pom.id_prod_order_material
                                       WHERE pom.id_company = :id_company
-                                      ORDER BY `pg`.`num_production`, `pom`.`receive_date` ASC");
+                                      ORDER BY `pg`.`num_production`, `pom`.`receive_date` DESC");
         $stmt->execute([
             'id_company' => $id_company
         ]);
