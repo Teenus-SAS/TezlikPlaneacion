@@ -166,17 +166,19 @@ $(document).ready(function () {
       }
     }
 
-    if (idProductType === 1) {
-      width = parseFloat($("#width").val());
-      high = parseFloat($("#high").val());
-      length = parseFloat($("#length").val());
-      usefulLength = parseFloat($("#usefulLength").val());
-      totalWidth = parseFloat($("#totalWidth").val());
-      window = parseFloat($("#window").val());
-    } else {
-      length = parseFloat($("#length").val());
-      totalWidth = parseFloat($("#totalWidth").val());
-      window = parseFloat($("#window").val());
+    if (prodOrigin == 2) {
+      if (idProductType === 1) {
+        width = parseFloat($("#width").val());
+        high = parseFloat($("#high").val());
+        length = parseFloat($("#length").val());
+        usefulLength = parseFloat($("#usefulLength").val());
+        totalWidth = parseFloat($("#totalWidth").val());
+        window = parseFloat($("#window").val());
+      } else {
+        length = parseFloat($("#length").val());
+        totalWidth = parseFloat($("#totalWidth").val());
+        window = parseFloat($("#window").val());
+      }
     }
 
     let inks = parseFloat($("#inks").val());

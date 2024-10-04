@@ -200,6 +200,14 @@ $(document).ready(function () {
     // Cerrar OP
     $('#btnCloseOP').click(function (e) {
         e.preventDefault();
+        let dataOPP = tblPartialsDelivery.DataTable().rows().data().toArray();
+        let dataOPM = tblOPMaterial.DataTable().rows().data().toArray();
+
+        if (dataOPP.length == 0 || dataOPM.length == 0) {
+            toastr.error('Ejecucion produccion o devolucion de materiales sin datos');
+            return false;
+        }
+
         let id_programming = sessionStorage.getItem('id_programming');
         
         bootbox.confirm({
@@ -225,7 +233,7 @@ $(document).ready(function () {
                 }
             },
         });
-    }); 
+    });
 
     loadAllDataPO();
 
