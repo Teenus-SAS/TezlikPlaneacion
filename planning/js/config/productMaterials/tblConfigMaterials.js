@@ -165,7 +165,7 @@ $(document).ready(function () {
             })"></i></a>
               <a href="javascript:;" <i id="ext-${
                 data.id_product_material
-              }" class="bx bi bi-sliders alternalMaterial" data-toggle='tooltip' title='Material Externo' style="font-size: 30px;color:#d36e17;"></i></a>
+              }" class="bx bi bi-sliders alternalMaterial" data-toggle='tooltip' title='Materia Prima Alterna' style="font-size: 30px;color:#d36e17;"></i></a>
             `;
           },
         },
