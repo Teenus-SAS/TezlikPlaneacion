@@ -61,8 +61,8 @@ $(document).ready(function () {
             return `<a href="javascript:;">
                     <i id="${data.id_alternal_machine}" class="${
               data.id_alternal_machine != 0
-                ? "fa fa-check-square-o"
-                : "fa fa-close"
+                ? "fas fa-check-square"
+                : "fa fa-window-close"
             }" data-toggle='tooltip' title='${
               data.alternal_machine
             }' style="font-size:25px; color: ${
