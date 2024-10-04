@@ -145,10 +145,18 @@ $(document).ready(function () {
                         return false;
                     }
 
+                    let store = allStore.filter(item => item.id_programming == id_programming && item.id_material == idMaterial);
+
+                    let recieve = 0; 
+ 
+                    store.forEach(item => {
+                        recieve += parseFloat(item.delivery_store); 
+                    });
+
                     // let form = new FormData();
                     // form.append("idOPM", data.id_prod_order_material);
-                    // form.append("idMaterial", data.id_material);
-                    // form.append("quantity", parseFloat(data.quantity_material) - parseFloat(data.quantity));
+                    // form.append("idMaterial", idMaterial);
+                    // form.append("quantity", recieve);
                     // form.append("date", date);
 
                     // $.ajax({
@@ -159,7 +167,7 @@ $(document).ready(function () {
                     //     cache: false,
                     //     processData: false,
                     //     success: function (resp) {
-                    //         messageOPMP(resp);
+                    //         messagePOD(resp);
                     //     },
                     // });
                 }
@@ -211,18 +219,22 @@ $(document).ready(function () {
                 if (result == true) {
                     $.get(`/api/changeFlagOP/${id_programming}/1`,
                         function (resp, textStatus, jqXHR) {
-                            const { success, error, info, message } = resp;
-                            if (success) {
-                                loadAllDataPO();
-                                toastr.success(message); 
-                            } else if (error) toastr.error(message);
-                            else if (info) toastr.info(message);
+                            messagePOD(resp);
                         },
                     );
                 }
             },
         });
-    });
+    }); 
 
     loadAllDataPO();
+
+    messagePOD = async (data) => {
+        const { success, error, info, message } = data;
+        if (success) {
+            loadAllDataPO();
+            toastr.success(message);
+        } else if (error) toastr.error(message);
+        else if (info) toastr.info(message);
+    };
 });

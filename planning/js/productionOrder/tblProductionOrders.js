@@ -21,8 +21,8 @@ $(document).ready(function () {
         op == 1 ? searchData("/api/allStore") : "",
       ]);
 
-      let dataPOP = dataPO.filter((item) => item.status == "EN PRODUCCION");
-      let dataPON = dataPO.filter((item) => item.status != "EN PRODUCCION");
+      let dataPOP = dataPO.filter((item) => item.flag_op == 0);
+      let dataPON = dataPO.filter((item) => item.flag_op == 1);
 
       sessionStorage.setItem("dataPOP", JSON.stringify(dataPOP));
       sessionStorage.setItem("dataPON", JSON.stringify(dataPON));

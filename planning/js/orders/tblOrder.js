@@ -175,7 +175,7 @@ $(document).ready(function () {
       "MAQUINA NO DISPONIBLE": "badge-danger",
       "PERSONAL NO DISPONIBLE": "badge-danger",
       "DESPACHO": "badge-info",
-      "EN PRODUCCION": "badge-primary",
+      "EN PRODUCCION": "badge-warning",
     };
     return statusBadgeMap[status] || "badge-light";
   };
