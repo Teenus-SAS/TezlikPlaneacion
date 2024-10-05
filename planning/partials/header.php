@@ -172,7 +172,7 @@
                                                         </ul>
                                                         </div>
 
-                                                        <?php if ($_SESSION['planning_user'] == 0 && $_SESSION['orders_type'] == 0) { ?>
+                                                        <?php if ($_SESSION['planning_user'] == 0) { ?>
                                                             <div class="col-md-2" id="navPlanAdmin" style="display: none;">
                                                             <?php } else { ?>
                                                                 <div class="col-md-2" id="navPlanAdmin">

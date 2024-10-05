@@ -5,14 +5,18 @@ use TezlikPlaneacion\dao\GeneralClientsDao;
 use TezlikPlaneacion\dao\GeneralExplosionMaterialsDao;
 use TezlikPlaneacion\dao\GeneralMaterialsDao;
 use TezlikPlaneacion\dao\GeneralRequisitionsMaterialsDao;
+use TezlikPlaneacion\dao\GeneralRequisitionsProductsDao;
 use TezlikPlaneacion\dao\GeneralRMStockDao;
 use TezlikPlaneacion\dao\LastDataDao;
 use TezlikPlaneacion\dao\RequisitionsMaterialsDao;
+use TezlikPlaneacion\dao\RequisitionsproductsDao;
 use TezlikPlaneacion\dao\TransitMaterialsDao;
 use TezlikPlaneacion\dao\UsersRequisitionsDao;
 
 $requisitionsMaterialsDao = new RequisitionsMaterialsDao();
+$requisitionsProductsDao = new RequisitionsproductsDao();
 $generalRequisitionsMaterialsDao = new GeneralRequisitionsMaterialsDao();
+$generalRequisitionsProductsDao = new GeneralRequisitionsProductsDao();
 $usersRequisitonsDao = new UsersRequisitionsDao();
 $transitMaterialsDao = new TransitMaterialsDao();
 $generalMaterialsDao = new GeneralMaterialsDao();
@@ -25,10 +29,18 @@ $lastDataDao = new LastDataDao();
 use Psr\Http\Message\ResponseInterface as Response;
 use Psr\Http\Message\ServerRequestInterface as Request;
 
-$app->get('/requisitions', function (Request $request, Response $response, $args) use ($generalRequisitionsMaterialsDao) {
+$app->get('/requisitions', function (Request $request, Response $response, $args) use (
+    $generalRequisitionsMaterialsDao,
+    $generalRequisitionsProductsDao
+) {
     session_start();
     $id_company = $_SESSION['id_company'];
-    $requisitions = $generalRequisitionsMaterialsDao->findAllActualRequisitionByCompany($id_company);
+
+    $materials = $generalRequisitionsMaterialsDao->findAllActualRequisitionByCompany($id_company);
+    $products = $generalRequisitionsProductsDao->findAllActualRequisitionByCompany($id_company);
+
+    $requisitions = array_merge($materials, $products);
+
     $response->getBody()->write(json_encode($requisitions, JSON_NUMERIC_CHECK));
     return $response->withHeader('Content-Type', 'application/json');
 });
@@ -41,11 +53,18 @@ $app->get('/requisitionsMaterials', function (Request $request, Response $respon
     return $response->withHeader('Content-Type', 'application/json');
 });
 
-$app->get('/requisitions/{min_date}/{max_date}', function (Request $request, Response $response, $args) use ($generalRequisitionsMaterialsDao) {
+$app->get('/requisitions/{min_date}/{max_date}', function (Request $request, Response $response, $args) use (
+    $generalRequisitionsMaterialsDao,
+    $generalRequisitionsProductsDao
+) {
     session_start();
     $id_company = $_SESSION['id_company'];
 
-    $requisitions = $generalRequisitionsMaterialsDao->findAllMinAndMaxRequisitionByCompany($args['min_date'], $args['max_date'], $id_company);
+    $materials = $generalRequisitionsMaterialsDao->findAllMinAndMaxRequisitionByCompany($args['min_date'], $args['max_date'], $id_company);
+    $products = $generalRequisitionsProductsDao->findAllMinAndMaxRequisitionByCompany($args['min_date'], $args['max_date'], $id_company);
+
+    $requisitions = array_merge($materials, $products);
+
     $response->getBody()->write(json_encode($requisitions, JSON_NUMERIC_CHECK));
     return $response->withHeader('Content-Type', 'application/json');
 });
@@ -237,6 +256,7 @@ $app->post('/addRequisition', function (Request $request, Response $response, $a
 
 $app->post('/updateRequisition', function (Request $request, Response $response, $args) use (
     $requisitionsMaterialsDao,
+    $requisitionsProductsDao,
     $transitMaterialsDao,
     $generalRequisitionsMaterialsDao
 ) {
@@ -247,18 +267,21 @@ $app->post('/updateRequisition', function (Request $request, Response $response,
     if (!isset($dataRequisition['idUser']))
         $dataRequisition['idUser'] = $id_user;
 
-    // $requisition = $generalRequisitionsDao->findRequisition($dataRequisition, $id_company);
-    // !is_array($requisition) ? $data['id_requisition'] = 0 : $data = $requisition;
+    $requisition = null;
 
-    // if ($data['id_requisition'] == $dataRequisition['idRequisition'] || $data['id_requisition'] == 0) {
-    $requisition = $requisitionsMaterialsDao->updateRequisitionManual($dataRequisition);
+    if (isset($dataRequisition['idMaterial'])) {
+        $requisition = $requisitionsMaterialsDao->updateRequisitionManual($dataRequisition);
 
-    if ($requisition == null) {
-        $material = $transitMaterialsDao->calcQuantityTransitByMaterial($dataRequisition['idMaterial']);
+        if ($requisition == null) {
+            $material = $transitMaterialsDao->calcQuantityTransitByMaterial($dataRequisition['idMaterial']);
 
-        if (isset($material['transit']))
-            $requisition = $transitMaterialsDao->updateQuantityTransitByMaterial($dataRequisition['idMaterial'], $material['transit']);
+            if (isset($material['transit']))
+                $requisition = $transitMaterialsDao->updateQuantityTransitByMaterial($dataRequisition['idMaterial'], $material['transit']);
+        }
     }
+
+    if (isset($dataRequisition['idProduct']))
+        $requisition = $requisitionsProductsDao->updateRequisitionManual($dataRequisition);
 
     if ($requisition == null)
         $resp = array('success' => true, 'message' => 'Requisicion modificada correctamente');
@@ -293,7 +316,7 @@ $app->post('/saveAdmissionDate', function (Request $request, Response $response,
     }
 
     if ($requisition == null) {
-        $requisition = $usersRequisitonsDao->saveUserDeliverRequisition($id_company, $dataRequisition['idRequisition'], $id_user);
+        $requisition = $usersRequisitonsDao->saveUserDeliverRequisitionMaterial($id_company, $dataRequisition['idRequisition'], $id_user);
     }
 
     if ($requisition == null) {
@@ -316,22 +339,36 @@ $app->post('/saveAdmissionDate', function (Request $request, Response $response,
 
 $app->post('/deleteRequisition', function (Request $request, Response $response, $args) use (
     $requisitionsMaterialsDao,
+    $requisitionsProductsDao,
     $generalRequisitionsMaterialsDao,
+    $generalRequisitionsProductsDao,
     $transitMaterialsDao
 ) {
 
     $dataRequisition = $request->getParsedBody();
 
-    if ($dataRequisition['op'] == 1) {
-        $requisitions = $requisitionsMaterialsDao->deleteRequisition($dataRequisition['idRequisition']);
-    } else {
-        $requisitions = $generalRequisitionsMaterialsDao->clearDataRequisition($dataRequisition['idRequisition']);
+    $requisitions = null;
 
-        if ($requisitions == null) {
-            $material = $transitMaterialsDao->calcQuantityTransitByMaterial($dataRequisition['idMaterial']);
+    if (isset($dataRequisition['idMaterial'])) {
+        if ($dataRequisition['op'] == 1) {
+            $requisitions = $requisitionsMaterialsDao->deleteRequisition($dataRequisition['idRequisition']);
+        } else {
+            $requisitions = $generalRequisitionsMaterialsDao->clearDataRequisition($dataRequisition['idRequisition']);
 
-            if (isset($material['transit']))
-                $requisitions = $transitMaterialsDao->updateQuantityTransitByMaterial($dataRequisition['idMaterial'], $material['transit']);
+            if ($requisitions == null) {
+                $material = $transitMaterialsDao->calcQuantityTransitByMaterial($dataRequisition['idMaterial']);
+
+                if (isset($material['transit']))
+                    $requisitions = $transitMaterialsDao->updateQuantityTransitByMaterial($dataRequisition['idMaterial'], $material['transit']);
+            }
+        }
+    }
+
+    if (isset($dataRequisition['idProduct'])) {
+        if ($dataRequisition['op'] == 1) {
+            $requisitions = $requisitionsProductsDao->deleteRequisition($dataRequisition['idRequisition']);
+        } else {
+            $requisitions = $generalRequisitionsProductsDao->clearDataRequisition($dataRequisition['idRequisition']);
         }
     }
 
@@ -345,7 +382,7 @@ $app->post('/deleteRequisition', function (Request $request, Response $response,
 });
 
 $app->get('/usersRequisitions/{id_requisition}', function (Request $request, Response $response, $args) use ($usersRequisitonsDao) {
-    $users = $usersRequisitonsDao->findAllUsersRequesitionsById($args['id_requisition']);
+    $users = $usersRequisitonsDao->findAllUsersRequesitionsMaterialsById($args['id_requisition']);
     $response->getBody()->write(json_encode($users));
     return $response->withHeader('Content-Type', 'application/json');
 });
