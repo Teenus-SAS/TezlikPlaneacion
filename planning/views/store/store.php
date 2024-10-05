@@ -43,7 +43,7 @@ if (sizeof($_SESSION) == 0)
                         <div class="row align-items-center">
                             <div class="col-sm-5 col-xl-6">
                                 <div class="page-title">
-                                    <h3 class="mb-1 font-weight-bold text-dark">Almacen</h3>
+                                    <h3 class="mb-1 font-weight-bold text-dark">Almacén</h3>
                                     <ol class="breadcrumb mb-3 mb-md-0">
                                         <li class="breadcrumb-item active">Entrega y Recibido de Materia Prima y Producto Terminado</li>
                                     </ol>
@@ -58,59 +58,10 @@ if (sizeof($_SESSION) == 0)
                     </div>
                 </div>
 
-                <!-- <div class="page-content-wrapper mt--45 mb-5 cardAddDelivery">
-                    <div class="container-fluid">
-                        <div class="row">
-                            <div class="col-12">
-                                <div class="card">
-                                    <form id="formAddDelivery">
-                                        <div class="card-body">
-                                            <div class="form-row">
-                                                <div class="col-sm-2 floating-label enable-floating-label show-label" style="margin-bottom:0px">
-                                                    <label for="">Cantidad a Entregar</label>
-                                                    <input type="text" class="form-control text-center" id="quantity" name="quantity">
-                                                </div>
-                                                <div class="col-sm mt-1">
-                                                    <button class="btn btn-success" id="btnAddDelivery">Guardar</button>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </form>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div> -->
-
-                <!-- <div class="page-content-wrapper mt--45 mb-5 cardImportProcess">
-                    <div class="container-fluid">
-                        <div class="row">
-                            <form class="col-12" id="formImportProcess" enctype="multipart/form-data">
-                                <div class="card">
-                                    <div class="card-body pt-3">
-                                        <div class="form-row">
-                                            <div class="col-sm-6 floating-label enable-floating-label show-label drag-area" style="margin-bottom:10px!important">
-                                                <input class="form-control" type="file" id="fileProcess" accept=".xls,.xlsx">
-                                                <label for="formFile" class="form-label"> Importar Process</label>
-                                            </div>
-                                            <div class="col-xs-2" style="margin-top:7px">
-                                                <button type="text" class="btn btn-success" id="btnImportProcess">Importar</button>
-                                            </div>
-                                            <div class="col-xs-2" style="margin-top:7px">
-                                                <button type="text" class="btn btn-info" id="btnDownloadImportsProcess">Descarga Formato</button>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </form>
-                        </div>
-                    </div>
-                </div> -->
-
-                <!-- page content -->
+                <!-- Page content -->
                 <div class="page-content-wrapper mt--45">
                     <div class="container-fluid">
-                        <!-- Row 5 -->
+                        <!-- Tabs -->
                         <div class="row">
                             <div class="col-12">
                                 <ul class="nav nav-tabs" id="pills-tab" role="tablist">
@@ -126,38 +77,51 @@ if (sizeof($_SESSION) == 0)
                                     </li>
                                     <li class="nav-item">
                                         <a class="nav-link selectNavigation" id="receiveOP" data-toggle="pill" href="javascript:;" role="tab" aria-controls="pills-projects" aria-selected="false">
-                                            <i class="fas fa-dolly-flatbed mr-1"></i>Ordenes de Produccion (Recibir)
+                                            <i class="fas fa-dolly-flatbed mr-1"></i>Ordenes de Producción (Recibir)
                                         </a>
                                     </li>
-                                    <!-- <li class="nav-item">
-                                        <a class="nav-link selectNavigation" id="deliverOP" data-toggle="pill" href="javascript:;" role="tab" aria-controls="pills-projects" aria-selected="false">
-                                            <i class="	fas fa-clipboard-list mr-1"></i>Ordenes de Produccion (Entregar)
-                                        </a>
-                                    </li> -->
                                 </ul>
-
-
                             </div>
                         </div>
+
+                        <!-- Content -->
                         <div class="row">
                             <div class="col-12">
                                 <div class="card">
                                     <div class="card-body">
                                         <div class="tab-pane cardOC" role="tabpanel" aria-labelledby="pills-activity-tab">
                                             <div class="table-responsive">
-                                                <table class="fixed-table-loading table table-hover" id="tblStore">
-
-                                                </table>
+                                                <table class="fixed-table-loading table table-hover" id="tblStore"></table>
                                             </div>
                                         </div>
-                                        <div class="tab-pane cardOP" style="display: none;" role="tabpanel" aria-labelledby="pills-projects-tab">
-                                            <table class="fixed-table-loading table table-hover" id="tblPartialsDeliveryPT">
 
-                                            </table>
-                                            <table class="fixed-table-loading table table-hover" id="tblPartialsDeliveryMP">
+                                        <!-- Pestaña Ordenes de Producción (Recibir) con sub-pestañas -->
+                                        <div class="tab-pane cardOP" id="tabReceiveOP" style="display: none;" role="tabpanel" aria-labelledby="pills-projects-tab">
+                                            <!-- Sub-pestañas para Productos Terminados y Devolución Materia Prima -->
+                                            <ul class="nav nav-tabs" id="subTabReceiveOP" role="tablist">
+                                                <li class="nav-item">
+                                                    <a class="nav-link active" id="tabPT" data-toggle="pill" href="#panePT" role="tab" aria-controls="panePT" aria-selected="true">
+                                                        Productos Terminados
+                                                    </a>
+                                                </li>
+                                                <li class="nav-item">
+                                                    <a class="nav-link" id="tabMP" data-toggle="pill" href="#paneMP" role="tab" aria-controls="paneMP" aria-selected="false">
+                                                        Devolución Materia Prima
+                                                    </a>
+                                                </li>
+                                            </ul>
 
-                                            </table>
-                                        </div>
+                                            <!-- Contenido de las sub-pestañas -->
+                                            <div class="tab-content mt-3">
+                                                <div class="tab-pane fade show active" id="panePT" role="tabpanel" aria-labelledby="tabPT">
+                                                    <table class="fixed-table-loading table table-hover" id="tblPartialsDeliveryPT"></table>
+                                                </div>
+                                                <div class="tab-pane fade" id="paneMP" role="tabpanel" aria-labelledby="tabMP">
+                                                    <table class="fixed-table-loading table table-hover" id="tblPartialsDeliveryMP"></table>
+                                                </div>
+                                            </div>
+                                        </div> <!-- /tab-pane cardOP -->
+
                                     </div>
                                 </div>
                             </div>
@@ -166,7 +130,6 @@ if (sizeof($_SESSION) == 0)
                 </div>
             </div>
         </div>
-        <!-- Main content end -->
 
         <!-- Footer -->
         <?php include_once dirname(dirname(dirname(__DIR__))) . '/global/partials/footer.php'; ?>
@@ -174,12 +137,11 @@ if (sizeof($_SESSION) == 0)
     <!-- Page End -->
 
     <?php include_once dirname(dirname(dirname(__DIR__))) . '/global/partials/scriptsJS.php'; ?>
-
     <script src="/planning/js/store/tblStore.js"></script>
     <script src="/planning/js/store/store.js"></script>
     <script src="/planning/js/store/exportStore.js"></script>
     <script src="/planning/js/productionOrder/tblProductionOrderPartial.js"></script>
-
 </body>
+
 
 </html>
