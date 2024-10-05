@@ -174,9 +174,9 @@ $(document).ready(function () {
       "SIN MATERIA PRIMA": "badge-danger",
       "MAQUINA NO DISPONIBLE": "badge-danger",
       "PERSONAL NO DISPONIBLE": "badge-danger",
-      DESPACHO: "badge-secondary",
+      DESPACHO: "badge-info",
       "EN PRODUCCION": "badge-warning",
-      FINALIZADO: "badge-info",
+      FINALIZADO: "badge-primary",
     };
     return statusBadgeMap[status] || "badge-light";
   };
