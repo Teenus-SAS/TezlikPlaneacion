@@ -18,27 +18,11 @@ $(document).ready(function () {
     // Mostrar la sección correspondiente según la opción seleccionada
     $(sections[option] || "").show();
 
-    /*  switch (option) {
-      case "link-products":
-        $(".cardPMeasure").show();
-        break;
-      case "link-productsType":
-        $(".cardPTypes").show();
-        break;
-    } */
-
     // Ajustar el tamaño de todas las tablas con clase 'dataTable'
     $(".dataTable")
       .css({ width: "100%" })
       .children("thead")
       .css({ width: "100%" });
-
-    /*   let tables = document.getElementsByClassName("dataTable");
-
-    for (let table of tables) {
-      table.style.width = "100%";
-      table.firstElementChild.style.width = "100%";
-    } */
   });
 
   /* Ocultar panel crear producto */
