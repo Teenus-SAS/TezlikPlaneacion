@@ -907,16 +907,20 @@ $(document).ready(function () {
                   <table class="fixed-table-loading table table-hover">
                     <thead>
                       <tr>
-                        <th>Referencia</th>
-                        <th>Descripción</th>
-                        <th>Cantidad Disponible</th>
+                        <th class="text-center">Referencia</th>
+                        <th class="text-center">Descripción</th>
+                        <th class="text-center">Cantidad Disponible</th>
                       </tr>
                     </thead>
                     <tbody>
                       <tr>
-                        <td>${productsMaterials[0].reference_material}</td>
-                        <td>${productsMaterials[0].material}</td>
-                        <td>${Math.floor(
+                        <td class="text-center">${
+                          productsMaterials[0].reference_material
+                        }</td>
+                        <td class="text-center">${
+                          productsMaterials[0].material
+                        }</td>
+                        <td class="text-center">${Math.floor(
                           productsMaterials[0].quantity
                         ).toLocaleString("es-CO", {
                           maximumFractionDigits: 0,
