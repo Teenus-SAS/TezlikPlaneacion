@@ -12,6 +12,8 @@ $(document).ready(function () {
     $(
       ".cardPMeasure, .cardCreatePMeasure, .cardImportPMeasure, .cardPTypes, .cardCreatePType"
     ).hide();
+    //Ocultar el Tipo de Producto
+    $(".cardSelect").hide();
 
     // Mostrar la sección correspondiente según la opción seleccionada
     $(sections[option] || "").show();
@@ -61,6 +63,7 @@ $(document).ready(function () {
   $("#prodOrigin").change(function (e) {
     e.preventDefault();
     const option = this.value;
+    $(".cardSelect").show(800);
     $(".inputsMeasures").toggle(option === "2", 800);
 
     if ($("#idProductType").val() !== "Seleccionar") {
@@ -86,7 +89,10 @@ $(document).ready(function () {
           ? "Und x Tamaño"
           : "Ventanilla"
       );
-    } else $(".inputsMeasures").hide(800);
+    } else {
+      $(".inputsMeasures").hide(800);
+      $(".cardSelect").hide();
+    }
   });
 
   /* Crear producto */
@@ -159,7 +165,7 @@ $(document).ready(function () {
     const prod = $("#product").val().trim();
     let width, high, length, usefulLength, totalWidth, window;
 
-    if (flag_products_measure == '1') {
+    if (flag_products_measure == "1") {
       if (isNaN(idProductType) || idProductType <= 0) {
         toastr.error("Ingrese todos los campos");
         return false;
@@ -184,12 +190,13 @@ $(document).ready(function () {
       let inks = parseFloat($("#inks").val());
 
       if (flag_products_measure == "1" && idProductType == "1") {
-        data *= idProductType * width * high * length * usefulLength * totalWidth;
+        data *=
+          idProductType * width * high * length * usefulLength * totalWidth;
         if (prodOrigin == "2" && productType == "CAJA") data *= window;
       } else if (flag_products_measure == "1" && idProductType == "2") {
         data *= idProductType * length * totalWidth;
       }
-    }     
+    }
 
     if (!ref.trim() || !prod.trim() || isNaN(data) || data <= 0) {
       toastr.error("Ingrese todos los campos");
