@@ -12,8 +12,6 @@ $(document).ready(function () {
     $(
       ".cardPMeasure, .cardCreatePMeasure, .cardImportPMeasure, .cardPTypes, .cardCreatePType"
     ).hide();
-    //Ocultar el Tipo de Producto
-    //$(".cardSelect").hide();
 
     // Mostrar la sección correspondiente según la opción seleccionada
     $(sections[option] || "").show();
@@ -47,12 +45,14 @@ $(document).ready(function () {
   $("#prodOrigin").change(function (e) {
     e.preventDefault();
     const option = this.value;
-    $(".cardSelect").show(800);
+    
+    //Ocultar o Mostrar el input de tipo
+    if (option === 1) $(".productType").hide(800);
+    else $(".productType").show(800);
+    
     $(".inputsMeasures").toggle(option === "2", 800);
-
-    if ($("#idProductType").val() !== "Seleccionar") {
+    if ($("#idProductType").val() !== "Seleccionar")
       $("#idProductType").change();
-    }
   });
 
   // Select type Product
@@ -75,7 +75,6 @@ $(document).ready(function () {
       );
     } else {
       $(".inputsMeasures").hide(800);
-      $(".cardSelect").hide();
     }
   });
 

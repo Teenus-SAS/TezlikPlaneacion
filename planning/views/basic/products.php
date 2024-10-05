@@ -98,7 +98,7 @@ if (sizeof($_SESSION) == 0)
                                                     </select>
                                                 </div>
                                                 <?php if ($_SESSION['flag_products_measure'] == '1') { ?>
-                                                    <div class="col-sm-2 floating-label enable-floating-label show- mb-3 label cardSelect">
+                                                    <div class="col-sm-2 floating-label enable-floating-label show- mb-3 label cardSelect productType">
                                                         <label for="idProductType">Tipo</label>
                                                         <select class="form-control" name="idProductType" id="idProductType">
                                                         </select>
