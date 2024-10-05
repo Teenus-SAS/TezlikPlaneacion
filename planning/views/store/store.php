@@ -78,7 +78,7 @@ if (sizeof($_SESSION) == 0)
                                 </ul>
 
                                 <!-- Contenido de las pestañas principales -->
-                                <div class="tab-content mt-3" id="mainTabContent">
+                                <div class="tab-content m-0 pt-0" id="mainTabContent">
                                     <!-- Ordenes de Compra -->
                                     <div class="tab-pane fade show active" id="paneOC" role="tabpanel" aria-labelledby="tabOC">
                                         <div class="card">
@@ -93,9 +93,9 @@ if (sizeof($_SESSION) == 0)
                                     <!-- Ordenes de Producción -->
                                     <div class="tab-pane fade" id="paneOP" role="tabpanel" aria-labelledby="tabOP">
                                         <div class="card">
-                                            <div class="card-body">
+                                            <div class="card-body p-0">
                                                 <!-- Sub-pestañas para Ordenes de Producción -->
-                                                <ul class="nav nav-tabs" id="subTabOP" role="tablist">
+                                                <ul class="nav nav-tabs mt-3" id="subTabOP" role="tablist">
                                                     <li class="nav-item">
                                                         <a class="nav-link active" id="subTabReceiveOP" data-toggle="pill" href="#paneReceiveOP" role="tab" aria-controls="paneReceiveOP" aria-selected="true">
                                                             Recibir
