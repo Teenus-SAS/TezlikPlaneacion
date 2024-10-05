@@ -47,7 +47,7 @@ $(document).ready(function () {
     const option = this.value;
     
     //Ocultar o Mostrar el input de tipo
-    if (option === 1) $(".productType").hide(800);
+    if (option === "1") $(".productType").hide(800);
     else $(".productType").show(800);
     
     $(".inputsMeasures").toggle(option === "2", 800);
