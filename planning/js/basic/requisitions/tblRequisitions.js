@@ -291,11 +291,23 @@ $(document).ready(function () {
   loadAllData(1, null, null);
 
   function renderRequisitionStatus(data, type, full, meta) {
-    let badge = "";
+    /* let badge = "";
     if (data == "Pendiente") badge = "badge-info";
     else if (data == "Proceso") badge = "badge-warning";
     else if (data == "Retrasada") badge = "badge-danger";
     else if (data == "Recibido") badge = "badge-success";
+
+    return `<span class="badge ${badge}">${data}</span>`; */
+
+    const badgeClasses = {
+      Pendiente: "badge-info",
+      Proceso: "badge-warning",
+      Retrasada: "badge-danger",
+      Recibido: "badge-success",
+    };
+
+    // Utiliza el mapeo para seleccionar la clase, con un valor por defecto si `data` no coincide
+    const badge = badgeClasses[data] || "badge-secondary";
 
     return `<span class="badge ${badge}">${data}</span>`;
   }
