@@ -1,38 +1,41 @@
 $(document).ready(function () {
   /* Cargue tabla de Categorias */
 
-  tblCategories = $('#tblCategories').dataTable({
+  tblCategories = $("#tblCategories").dataTable({
+    fixedHeader: true,
+    scrollY: "400px",
+    scrollCollapse: true,
     pageLength: 50,
     ajax: {
-      url: '/api/categories',
-      dataSrc: '',
+      url: "/api/categories",
+      dataSrc: "",
     },
     language: {
-      url: '/assets/plugins/i18n/Spanish.json',
+      url: "/assets/plugins/i18n/Spanish.json",
     },
     columns: [
       {
-        title: 'No.',
+        title: "No.",
         data: null,
-        className: 'uniqueClassName dt-head-center',
+        className: "uniqueClassName dt-head-center",
         render: function (data, type, full, meta) {
           return meta.row + 1;
         },
       },
       {
-        title: 'Categoría',
-        data: 'category',
-        className: 'uniqueClassName dt-head-center',
+        title: "Categoría",
+        data: "category",
+        className: "uniqueClassName dt-head-center",
       },
       {
-        title: 'Tipo Categoría',
-        data: 'type_category',
-        className: 'uniqueClassName dt-head-center',
+        title: "Tipo Categoría",
+        data: "type_category",
+        className: "uniqueClassName dt-head-center",
       },
       {
-        title: 'Acciones',
-        data: 'id_category',
-        className: 'uniqueClassName dt-head-center',
+        title: "Acciones",
+        data: "id_category",
+        className: "uniqueClassName dt-head-center",
         render: function (data) {
           return `
                   <a href="javascript:;" <i id="${data}" class="bx bx-edit-alt updateCategory" data-toggle='tooltip' title='Actualizar Categoría' style="font-size: 30px;"></i></a>

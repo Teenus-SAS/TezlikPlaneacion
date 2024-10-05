@@ -10,6 +10,9 @@ $(document).ready(function () {
     }
 
     tblRawMaterials = $("#tblRawMaterials").dataTable({
+      fixedHeader: true,
+      scrollY: "400px",
+      scrollCollapse: true,
       pageLength: 50,
       data: data,
       language: {

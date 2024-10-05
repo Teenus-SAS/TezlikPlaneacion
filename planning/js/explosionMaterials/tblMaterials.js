@@ -8,8 +8,11 @@ $(document).ready(function () {
       return number.toLocaleString("es-CO", { minimumFractionDigits: 2 });
     }
   };
-  
+
   tblMaterials = $("#tblMaterials").dataTable({
+    fixedHeader: true,
+    scrollY: "400px",
+    scrollCollapse: true,
     destroy: true,
     pageLength: 50,
     ajax: {
@@ -27,7 +30,7 @@ $(document).ready(function () {
         render: function (data, type, full, meta) {
           return meta.row + 1;
         },
-      }, 
+      },
       {
         title: "Referencia",
         data: "reference_material",
@@ -47,7 +50,8 @@ $(document).ready(function () {
         title: "Inventario",
         data: null,
         className: "uniqueClassName dt-head-center",
-        render: (data) => formatNumber(data.quantity_material, data.abbreviation),
+        render: (data) =>
+          formatNumber(data.quantity_material, data.abbreviation),
       },
       {
         title: "Stock Min",
@@ -97,5 +101,5 @@ $(document).ready(function () {
         border: "1px solid #ddd",
       });
     },
-  }); 
+  });
 });

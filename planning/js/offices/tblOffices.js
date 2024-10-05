@@ -59,7 +59,9 @@ $(document).ready(function () {
       // Cargar los datos de forma condicional con Promise.all
       const [dataActualOffices, dataOffices] = await Promise.all([
         searchData("/api/actualOffices"),
-        op === 3 ? searchData(`/api/offices/${min_date}/${max_date}`) : Promise.resolve(null),
+        op === 3
+          ? searchData(`/api/offices/${min_date}/${max_date}`)
+          : Promise.resolve(null),
       ]);
 
       // Detectar si la pestaña "pendientes" está activa
@@ -69,8 +71,12 @@ $(document).ready(function () {
       const pending = isPendingActive ? 1 : 0;
 
       // Filtrar datos según el estado
-      pendingStore = dataActualOffices.filter(item => item.status !== "ENTREGADO");
-      deliveredStore = dataActualOffices.filter(item => item.status === "ENTREGADO");
+      pendingStore = dataActualOffices.filter(
+        (item) => item.status !== "ENTREGADO"
+      );
+      deliveredStore = dataActualOffices.filter(
+        (item) => item.status === "ENTREGADO"
+      );
 
       // Definir los datos a cargar y la visibilidad de la columna
       let dataToLoad = [];
@@ -86,8 +92,8 @@ $(document).ready(function () {
       } else if (op === 3 && dataOffices) {
         // Filtrar los datos según el estado y la pestaña activa
         dataToLoad = pending
-          ? dataOffices.filter(item => item.status !== "ENTREGADO")
-          : dataOffices.filter(item => item.status === "ENTREGADO");
+          ? dataOffices.filter((item) => item.status !== "ENTREGADO")
+          : dataOffices.filter((item) => item.status === "ENTREGADO");
       }
 
       // Si hay datos para cargar, actualizar la tabla y los indicadores
@@ -137,13 +143,16 @@ $(document).ready(function () {
     if ($.fn.dataTable.isDataTable("#tblOffices")) {
       // Si ya existe, solo actualizamos los datos y columnas visibles
       $("#tblOffices").DataTable().clear();
-      $('#tblOffices').DataTable().column(8).visible(visible); // Columna "Existencias"
+      $("#tblOffices").DataTable().column(8).visible(visible); // Columna "Existencias"
       $("#tblOffices").DataTable().rows.add(data).draw();
       return;
     }
 
     // Inicializar tabla si no existe
     tblOffices = $("#tblOffices").dataTable({
+      fixedHeader: true,
+      scrollY: "400px",
+      scrollCollapse: true,
       destroy: true,
       pageLength: 50,
       data: data,

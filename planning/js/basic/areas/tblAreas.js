@@ -2,6 +2,9 @@ $(document).ready(function () {
   /* Cargue tabla de Máquinas */
 
   tblAreas = $("#tblAreas").dataTable({
+    fixedHeader: true,
+    scrollY: "400px",
+    scrollCollapse: true,
     pageLength: 50,
     ajax: {
       url: "/api/planAreas",

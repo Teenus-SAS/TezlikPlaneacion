@@ -151,6 +151,9 @@ $(document).ready(function () {
     }
 
     tblInventories = $("#tblInventories").dataTable({
+      fixedHeader: true,
+      scrollY: "400px",
+      scrollCollapse: true,
       pageLength: 50,
       fixedHeader: true,
       scrollY: "400px",

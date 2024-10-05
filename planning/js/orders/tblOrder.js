@@ -169,14 +169,14 @@ $(document).ready(function () {
   // Función para mapear los estados a clases de badges
   const getStatusBadge = (status) => {
     const statusBadgeMap = {
-      "ENTREGADO": "badge-success",
+      ENTREGADO: "badge-success",
       "SIN FICHA TECNICA": "badge-danger",
       "SIN MATERIA PRIMA": "badge-danger",
       "MAQUINA NO DISPONIBLE": "badge-danger",
       "PERSONAL NO DISPONIBLE": "badge-danger",
-      "DESPACHO": "badge-secondary",
+      DESPACHO: "badge-secondary",
       "EN PRODUCCION": "badge-warning",
-      "FINALIZADO": "badge-info",
+      FINALIZADO: "badge-info",
     };
     return statusBadgeMap[status] || "badge-light";
   };
@@ -184,20 +184,26 @@ $(document).ready(function () {
   // Función para mapear las clasificaciones a badges
   const getClassificationBadge = (classification) => {
     const classificationBadgeMap = {
-      "A": "badge-success",
-      "B": "badge-info",
-      "C": "badge-danger",
+      A: "badge-success",
+      B: "badge-info",
+      C: "badge-danger",
     };
     return classificationBadgeMap[classification] || "";
   };
 
   // Función para construir las acciones
   const buildActions = (data) => {
-    if (!data.delivery_date && [
-      "PROGRAMAR", "POR PROCESAR", "SIN FICHA TECNICA",
-      "MAQUINA NO DISPONIBLE", "PERSONAL NO DISPONIBLE",
-      "SIN MATERIA PRIMA"
-    ].includes(data.status)) {
+    if (
+      !data.delivery_date &&
+      [
+        "PROGRAMAR",
+        "POR PROCESAR",
+        "SIN FICHA TECNICA",
+        "MAQUINA NO DISPONIBLE",
+        "PERSONAL NO DISPONIBLE",
+        "SIN MATERIA PRIMA",
+      ].includes(data.status)
+    ) {
       return `
       <a href="javascript:;" class="updateOrder" id="${data.id_order}" data-toggle="tooltip" title="Actualizar Pedido" style="font-size: 30px;">
         <i class="bx bx-edit-alt"></i>
@@ -212,6 +218,9 @@ $(document).ready(function () {
   // Función para cargar pedidos
   const loadTblOrders = (data) => {
     tblOrder = $("#tblOrder").dataTable({
+      fixedHeader: true,
+      scrollY: "400px",
+      scrollCollapse: true,
       destroy: true,
       data: data,
       language: { url: "/assets/plugins/i18n/Spanish.json" },
@@ -228,36 +237,64 @@ $(document).ready(function () {
           className: "uniqueClassName dt-head-center",
           render: (data) => buildActions(data),
         },
-        { title: "Fecha", data: "date_order", className: "uniqueClassName dt-head-center" },
-        { title: "Pedido", data: "num_order", className: "uniqueClassName dt-head-center" },
+        {
+          title: "Fecha",
+          data: "date_order",
+          className: "uniqueClassName dt-head-center",
+        },
+        {
+          title: "Pedido",
+          data: "num_order",
+          className: "uniqueClassName dt-head-center",
+        },
         {
           title: "Vendedor",
           data: null,
           className: "uniqueClassName dt-head-center",
           render: (data) => `${data.firstname} ${data.lastname}`,
         },
-        { title: "Cliente", data: "client", className: "uniqueClassName dt-head-center" },
-        { title: "Referencia", data: "reference", className: "uniqueClassName dt-head-center" },
-        { title: "Producto", data: "product", className: "uniqueClassName dt-head-center" },
+        {
+          title: "Cliente",
+          data: "client",
+          className: "uniqueClassName dt-head-center",
+        },
+        {
+          title: "Referencia",
+          data: "reference",
+          className: "uniqueClassName dt-head-center",
+        },
+        {
+          title: "Producto",
+          data: "product",
+          className: "uniqueClassName dt-head-center",
+        },
         {
           title: "Cantidad Requerida",
           data: "original_quantity",
           className: "uniqueClassName dt-head-center",
           render: $.fn.dataTable.render.number(".", ",", 0, ""),
         },
-        { title: "F.Maxima", data: "max_date", className: "uniqueClassName dt-head-center" },
+        {
+          title: "F.Maxima",
+          data: "max_date",
+          className: "uniqueClassName dt-head-center",
+        },
         {
           title: "Estado",
           data: "status",
           className: "uniqueClassName dt-head-center",
-          render: (data) => `<span class="badge ${getStatusBadge(data)}">${data}</span>`,
+          render: (data) =>
+            `<span class="badge ${getStatusBadge(data)}">${data}</span>`,
         },
         {
           title: "Inventario ABC",
           data: null,
           className: "uniqueClassName dt-head-center",
           visible: data["visible"],
-          render: (data) => `<span class="badge ${getClassificationBadge(data.classification)}" style="font-size: large;">${data.classification}</span>`,
+          render: (data) =>
+            `<span class="badge ${getClassificationBadge(
+              data.classification
+            )}" style="font-size: large;">${data.classification}</span>`,
         },
       ],
       headerCallback: (thead) => {

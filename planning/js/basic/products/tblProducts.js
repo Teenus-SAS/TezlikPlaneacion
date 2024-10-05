@@ -116,7 +116,7 @@ $(document).ready(function () {
       destroy: true,
       pageLength: 50,
       fixedHeader: true,
-      scrollY: "600px",
+      scrollY: "400px",
       scrollCollapse: true,
       data: data,
       dom: '<"datatable-error-console">frtip',

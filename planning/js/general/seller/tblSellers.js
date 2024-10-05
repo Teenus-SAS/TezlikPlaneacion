@@ -9,6 +9,9 @@ $(document).ready(function () {
 
   const loadTblSellers = (data) => {
     tblSellers = $("#tblSellers").dataTable({
+      fixedHeader: true,
+      scrollY: "400px",
+      scrollCollapse: true,
       destroy: true,
       pageLength: 50,
       data: data,

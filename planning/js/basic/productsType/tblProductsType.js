@@ -2,6 +2,9 @@ $(document).ready(function () {
   /* Cargue tabla de Máquinas */
   loadTblProductType = (data) => {
     tblProductsType = $("#tblProductsType").dataTable({
+      fixedHeader: true,
+      scrollY: "400px",
+      scrollCollapse: true,
       destroy: true,
       pageLength: 50,
       data: data,
@@ -34,5 +37,5 @@ $(document).ready(function () {
         },
       ],
     });
-  }
+  };
 });

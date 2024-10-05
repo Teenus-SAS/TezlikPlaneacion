@@ -10,6 +10,9 @@ $(document).ready(function () {
 
   // Mostrar Tabla planeacion maquinas
   tblPlanMachines = $("#tblPlanMachines").dataTable({
+    fixedHeader: true,
+    scrollY: "400px",
+    scrollCollapse: true,
     pageLength: 50,
     ajax: {
       url: "/api/planningMachines",

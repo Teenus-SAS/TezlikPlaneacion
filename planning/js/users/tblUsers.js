@@ -2,6 +2,9 @@ $(document).ready(function () {
   /* Cargue tabla de Proyectos */
 
   tblUsers = $("#tblUsers").dataTable({
+    fixedHeader: true,
+    scrollY: "400px",
+    scrollCollapse: true,
     pageLength: 50,
     ajax: {
       url: "/api/planningUsersAccess",

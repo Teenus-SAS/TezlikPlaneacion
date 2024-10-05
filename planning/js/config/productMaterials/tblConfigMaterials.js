@@ -71,6 +71,9 @@ $(document).ready(function () {
 
   const loadTableMaterials = (data) => {
     tblConfigMaterials = $("#tblConfigMaterials").dataTable({
+      fixedHeader: true,
+      scrollY: "400px",
+      scrollCollapse: true,
       destroy: true,
       pageLength: 50,
       data: data,

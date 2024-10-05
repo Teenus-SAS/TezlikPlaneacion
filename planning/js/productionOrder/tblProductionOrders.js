@@ -46,7 +46,7 @@ $(document).ready(function () {
     }
   };
 
-  // const loadTblProductionOrders = (data) => { 
+  // const loadTblProductionOrders = (data) => {
   //   tblProductionOrders = $("#tblProductionOrders").dataTable({
   //     destroy: true,
   //     pageLength: 50,
@@ -118,16 +118,16 @@ $(document).ready(function () {
   //         title: "Acciones",
   //         data: null,
   //         className: "uniqueClassName dt-head-center",
-  //         render: function (data) { 
+  //         render: function (data) {
   //           let action = '';
   //           if (data.flag_op == 0) {
   //             action = `<a href="javascript:;">
-  //                         <i id="${data.id_programming}" 
+  //                         <i id="${data.id_programming}"
   //                             class="
   //                               ${data.flag_cancel == 0 ? "bi bi-x-circle-fill" : "bi bi-check-circle-fill"} changeFlagOP
-  //                               " 
+  //                               "
   //                             data-toggle='tooltip'
-  //                             title='${data.flag_cancel == 0 ? "Anular" : "Aprobar"} Orden de Produccion' 
+  //                             title='${data.flag_cancel == 0 ? "Anular" : "Aprobar"} Orden de Produccion'
   //                             style="font-size:25px; color: ${data.flag_cancel == 0 ? "#ff0000" : "#7bb520"};"
   //                         ></i>
   //                       </a>
@@ -139,7 +139,7 @@ $(document).ready(function () {
   //                         <i id="${data.id_programming}" class="fas fa-eye" data-toggle='tooltip' title='Ver Orden de Producción' style="font-size: 30px;color:black" onclick="seePO()"></i>
   //                       </a>`;
   //           }
-            
+
   //           return action;
   //         },
   //       },
@@ -163,14 +163,24 @@ $(document).ready(function () {
       return `
       <a href="javascript:;">
         <i id="${data.id_programming}" 
-           class="${data.flag_cancel == 0 ? "bi bi-x-circle-fill" : "bi bi-check-circle-fill"} changeFlagOP" 
+           class="${
+             data.flag_cancel == 0
+               ? "bi bi-x-circle-fill"
+               : "bi bi-check-circle-fill"
+           } changeFlagOP" 
            data-toggle="tooltip" 
-           title="${data.flag_cancel == 0 ? "Anular" : "Aprobar"} Orden de Produccion" 
-           style="font-size:25px; color:${data.flag_cancel == 0 ? "#ff0000" : "#7bb520"};">
+           title="${
+             data.flag_cancel == 0 ? "Anular" : "Aprobar"
+           } Orden de Produccion" 
+           style="font-size:25px; color:${
+             data.flag_cancel == 0 ? "#ff0000" : "#7bb520"
+           };">
         </i>
       </a>
       <a href="/planning/details-production-order">
-        <i id="${data.id_programming}" class="fas fa-eye" data-toggle="tooltip" title="Ver Orden de Producción" style="font-size:30px;color:black" onclick="seePO()"></i>
+        <i id="${
+          data.id_programming
+        }" class="fas fa-eye" data-toggle="tooltip" title="Ver Orden de Producción" style="font-size:30px;color:black" onclick="seePO()"></i>
       </a>`;
     }
     return `
@@ -182,12 +192,17 @@ $(document).ready(function () {
   // Función para formatear fechas
   const formatDateRange = (minDate, maxDate) => {
     const format = "DD/MM/YYYY HH:mm A";
-    return `Inicio: ${moment(minDate).format(format)}<br>Fin: ${moment(maxDate).format(format)}`;
+    return `Inicio: ${moment(minDate).format(format)}<br>Fin: ${moment(
+      maxDate
+    ).format(format)}`;
   };
 
   // Función para cargar pedidos de producción
   const loadTblProductionOrders = (data) => {
     tblProductionOrders = $("#tblProductionOrders").dataTable({
+      fixedHeader: true,
+      scrollY: "400px",
+      scrollCollapse: true,
       destroy: true,
       pageLength: 50,
       data: data,
@@ -199,23 +214,48 @@ $(document).ready(function () {
           className: "uniqueClassName dt-head-center",
           render: (data, type, full, meta) => meta.row + 1,
         },
-        { title: "OP", data: "num_production", className: "uniqueClassName dt-head-center" },
-        { title: "Referencia", data: "reference", className: "uniqueClassName dt-head-center" },
-        { title: "Producto", data: "product", className: "uniqueClassName dt-head-center" },
-        { title: "Maquina", data: "machine", className: "uniqueClassName dt-head-center" },
+        {
+          title: "OP",
+          data: "num_production",
+          className: "uniqueClassName dt-head-center",
+        },
+        {
+          title: "Referencia",
+          data: "reference",
+          className: "uniqueClassName dt-head-center",
+        },
+        {
+          title: "Producto",
+          data: "product",
+          className: "uniqueClassName dt-head-center",
+        },
+        {
+          title: "Maquina",
+          data: "machine",
+          className: "uniqueClassName dt-head-center",
+        },
         {
           title: "Cantidades",
           data: null,
           className: "uniqueClassName dt-head-center",
-          render: (data) => `Pedido: ${data.quantity_order}<br>Fabricar: ${data.quantity_programming}`,
+          render: (data) =>
+            `Pedido: ${data.quantity_order}<br>Fabricar: ${data.quantity_programming}`,
         },
-        { title: "Cliente", data: "client", className: "uniqueClassName dt-head-center" },
+        {
+          title: "Cliente",
+          data: "client",
+          className: "uniqueClassName dt-head-center",
+        },
         {
           title: "Fechas",
           data: null,
           className: "uniqueClassName dt-head-center",
           width: "200px",
-          render: (data) => formatDateRange(data.min_date_programming, data.max_date_programming),
+          render: (data) =>
+            formatDateRange(
+              data.min_date_programming,
+              data.max_date_programming
+            ),
         },
         {
           title: "Acciones",

@@ -16,6 +16,9 @@ $(document).ready(function () {
 
   // Cargar tabla de Ventas
   tblSales = $("#tblSales").dataTable({
+    fixedHeader: true,
+    scrollY: "400px",
+    scrollCollapse: true,
     pageLength: 50,
     ajax: {
       url: "/api/unitSales",
