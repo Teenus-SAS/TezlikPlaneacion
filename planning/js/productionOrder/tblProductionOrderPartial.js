@@ -88,6 +88,16 @@ $(document).ready(function () {
         },
       },
     ],
+    headerCallback: (thead) => {
+      $(thead).find("th").css({
+        "background-color": "#386297",
+        color: "white",
+        "text-align": "center",
+        "font-weight": "bold",
+        padding: "10px",
+        border: "1px solid #ddd",
+      });
+    },
     rowGroup: {
       dataSrc: function (row) {
         return `<th class="text-center" colspan="8" style="font-weight: bold;"> Orden Produccion - ${row.num_production} </th>`;
@@ -277,6 +287,16 @@ $(document).ready(function () {
         },
       },
     ],
+    headerCallback: (thead) => {
+      $(thead).find("th").css({
+        "background-color": "#386297",
+        color: "white",
+        "text-align": "center",
+        "font-weight": "bold",
+        padding: "10px",
+        border: "1px solid #ddd",
+      });
+    },
     rowGroup: {
       dataSrc: function (row) {
         return `<th class="text-center" colspan="8" style="font-weight: bold;"> Orden Produccion - ${row.num_production} </th>`;
