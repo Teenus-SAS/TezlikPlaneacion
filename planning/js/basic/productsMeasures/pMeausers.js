@@ -47,12 +47,14 @@ $(document).ready(function () {
     const option = this.value;
 
     // Mostrar u ocultar el input de tipo
-    $(".productType").toggle(option !== "1", 400);
+    if (option === "1") $(".productType").slideUp(400);
+    else $(".productType").slideDown(400);
 
-    // Mostrar u ocultar las medidas 
-    $(".inputsMeasures").toggle(option === "2", 400);
+    // Mostrar u ocultar las medidas
+    if (option === "2") $(".inputsMeasures").slideDown(400);
+    else $(".inputsMeasures").slideUp(400);
 
-    // Si el valor del tipo de producto no es "Seleccionar", se dispara el evento `change`
+    // Si el valor del tipo de producto no es "Seleccionar", dispara el evento `change`
     $("#idProductType").val() !== "Seleccionar" &&
       $("#idProductType").trigger("change");
   });
