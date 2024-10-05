@@ -45,14 +45,16 @@ $(document).ready(function () {
   $("#prodOrigin").change(function (e) {
     e.preventDefault();
     const option = this.value;
-    
-    //Ocultar o Mostrar el input de tipo
-    if (option === "1") $(".productType").hide(400);
-    else $(".productType").show(400);
-    
-    $(".inputsMeasures").toggle(option === "2", 800);
-    if ($("#idProductType").val() !== "Seleccionar")
-      $("#idProductType").change();
+
+    // Mostrar u ocultar el input de tipo
+    $(".productType").toggle(option !== "1", 400);
+
+    // Mostrar u ocultar las medidas 
+    $(".inputsMeasures").toggle(option === "2", 400);
+
+    // Si el valor del tipo de producto no es "Seleccionar", se dispara el evento `change`
+    $("#idProductType").val() !== "Seleccionar" &&
+      $("#idProductType").trigger("change");
   });
 
   // Select type Product
