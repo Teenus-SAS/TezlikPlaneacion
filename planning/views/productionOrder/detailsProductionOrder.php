@@ -216,8 +216,8 @@ if (sizeof($_SESSION) == 0)
 										</div>
 										<hr>
 
-										<?php if ($_SESSION['flag_products_measure'] == 1) { ?>
-											<div class="row py-4">
+										<?php //if ($_SESSION['flag_products_measure'] == 1) { ?>
+<!-- 											<div class="row py-4">
 												<div class="col-12 mb-3">
 													<h5 class="font-weight-bold text-dark">3. Acabados Especiales</h5>
 												</div>
@@ -274,8 +274,8 @@ if (sizeof($_SESSION) == 0)
 													<input type="number" class="form-control text-center" id="window" readonly>
 												</div>
 											</div>
-											<hr>
-										<?php } ?>
+											<hr> -->
+										<?php //} ?>
 
 										<div class="row py-4">
 											<div class="col-10">
