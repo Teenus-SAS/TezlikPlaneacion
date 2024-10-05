@@ -47,12 +47,12 @@ $(document).ready(function () {
     const option = this.value;
 
     // Mostrar u ocultar el input de tipo
-    if (option === "1") $(".productType").slideUp(400);
-    else $(".productType").slideDown(400);
+    if (option === "1") $(".productType").hide(400);
+    else $(".productType").show(400);
 
     // Mostrar u ocultar las medidas
-    if (option === "2") $(".inputsMeasures").slideDown(400);
-    else $(".inputsMeasures").slideUp(400);
+    if (option === "2") $(".inputsMeasures").show(400);
+    else $(".inputsMeasures").hide(400);
 
     // Si el valor del tipo de producto no es "Seleccionar", dispara el evento `change`
     $("#idProductType").val() !== "Seleccionar" &&
