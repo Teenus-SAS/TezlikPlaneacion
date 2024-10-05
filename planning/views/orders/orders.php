@@ -147,7 +147,7 @@ if (sizeof($_SESSION) == 0)
                                                 </div>
                                                 <div class="col-sm-5 floating-label enable-floating-label show- mb-3 label">
                                                     <label for="">Cliente</label>
-                                                    <select class="form-control" name="idClient" id="client"></select>
+                                                    <select class="form-control client" name="idClient" id="client"></select>
                                                 </div>
                                                 <div class="col-sm-5 floating-label enable-floating-label show- mb-3 label">
                                                     <label for="">Vendedor</label>

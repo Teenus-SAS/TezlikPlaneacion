@@ -159,13 +159,13 @@ if (sizeof($_SESSION) == 0)
                     </div>
                 </div>
 
-                <div class="page-content-wrapper mt--45 mb-5 cardAddRequisitions">
+                <div class="page-content-wrapper mt--45 mb-5 cardAddRequisitionsMaterials">
                     <div class="container-fluid">
                         <div class="row">
                             <div class="col-12">
                                 <div class="card">
                                     <div class="card-body">
-                                        <form id="formAddRequisition">
+                                        <form id="formAddRequisitionMaterials">
                                             <div class="form-row">
                                                 <div class="col-sm-3 floating-label enable-floating-label show- mb-3 label cardSelect">
                                                     <label for="refMaterial">Referencia</label>
@@ -185,7 +185,7 @@ if (sizeof($_SESSION) == 0)
                                                 </div>
                                                 <div class="col-sm-8 floating-label enable-floating-label show- mb-3 label">
                                                     <label for="">Proveedor</label>
-                                                    <select class="form-control" name="idProvider" id="client"></select>
+                                                    <select class="form-control client" name="idProvider" id="clientMP"></select>
                                                 </div>
                                                 <div class="col-sm-2 floating-label enable-floating-label show- mb-3 label">
                                                     <label for="">Cantidad Min Venta</label>
@@ -197,27 +197,96 @@ if (sizeof($_SESSION) == 0)
                                                 </div>
                                                 <div class="col-sm-2 floating-label enable-floating-label show-label mt-2">
                                                     <label for="">Fecha Solicitud</label>
-                                                    <input class="form-control" type="date" name="applicationDate" id="applicationDate" min="<?php echo date('Y-m-d'); ?>">
+                                                    <input class="form-control" type="date" name="applicationDate" id="applicationDateMP" min="<?php echo date('Y-m-d'); ?>">
                                                 </div>
                                                 <div class="col-sm-2 floating-label enable-floating-label show-label mt-2">
                                                     <label for="">Fecha Entrega</label>
-                                                    <input class="form-control" type="date" name="deliveryDate" id="deliveryDate">
+                                                    <input class="form-control" type="date" name="deliveryDate" id="deliveryDateMP">
                                                 </div>
                                                 <!-- <div class="w-100"></div> -->
                                                 <div class="col-sm-2 cardRequired floating-label enable-floating-label show-label mt-2">
                                                     <label for="">Cantidad Requerida</label>
-                                                    <input class="form-control text-center" type="text" name="requiredQuantity" id="requiredQuantity" readonly>
+                                                    <input class="form-control text-center" type="text" name="requiredQuantity" id="requiredQuantityMP" readonly>
                                                 </div>
                                                 <div class="col-sm-2 floating-label enable-floating-label show-label mt-2">
                                                     <label for="">Cantidad Solicitada</label>
-                                                    <input class="form-control text-center" type="number" name="requestedQuantity" id="requestedQuantity">
+                                                    <input class="form-control text-center" type="number" name="requestedQuantity" id="requestedQuantityMP">
                                                 </div>
                                                 <div class="col-sm-2 floating-label enable-floating-label show-label mt-2">
                                                     <label for="">Orden de Compra</label>
-                                                    <input class="form-control text-center" type="text" name="purchaseOrder" id="purchaseOrder">
+                                                    <input class="form-control text-center" type="text" name="purchaseOrder" id="purchaseOrderMP">
                                                 </div>
                                                 <div class="col-sm" style="margin-top:12px">
-                                                    <button class="btn btn-success" id="btnAddRequisition">Asignar</button>
+                                                    <button class="btn btn-success" id="btnAddRequisitionMP">Asignar</button>
+                                                </div>
+                                            </div>
+                                        </form>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="page-content-wrapper mt--45 mb-5 cardAddRequisitionsProducts">
+                    <div class="container-fluid">
+                        <div class="row">
+                            <div class="col-12">
+                                <div class="card">
+                                    <div class="card-body">
+                                        <form id="formAddRequisitionProducts">
+                                            <div class="form-row">
+                                                <div class="col-sm-3 floating-label enable-floating-label show- mb-3 label cardSelect">
+                                                    <label for="refProduct">Referencia</label>
+                                                    <select class="form-control" name="refProduct" id="refProduct"></select>
+                                                </div>
+                                                <div class="col-sm-9 floating-label enable-floating-label show- mb-3 label cardSelect">
+                                                    <label for="selectNameProduct">Producto</label>
+                                                    <select class="form-control" name="idProduct" id="selectNameProduct"></select>
+                                                </div>
+                                                <div class="col-sm-2 floating-label enable-floating-label show-label cardDescription" style="margin-bottom:20px">
+                                                    <label for="refProduct">Referencia</label>
+                                                    <input type="text" class="form-control" id="referencePName" name="referencePName" readonly>
+                                                </div>
+                                                <div class="col-sm-10 floating-label enable-floating-label show-label cardDescription" style="margin-bottom:20px">
+                                                    <label for="selectNameProduct">Producto</label>
+                                                    <input type="text" class="form-control" id="productName" name="productName" readonly>
+                                                </div>
+                                                <div class="col-sm-8 floating-label enable-floating-label show- mb-3 label">
+                                                    <label for="">Proveedor</label>
+                                                    <select class="form-control client" name="idProvider" id="clientPT"></select>
+                                                </div>
+                                                <!-- <div class="col-sm-2 floating-label enable-floating-label show- mb-3 label">
+                                                    <label for="">Cantidad Min Venta</label>
+                                                    <input class="form-control text-center" type="text" id="rMQuantity" readonly>
+                                                </div> -->
+                                                <div class="col-sm-2 floating-label enable-floating-label show- mb-3 label">
+                                                    <label for="">Tiempo Prom Entrega (días)</label>
+                                                    <input class="form-control text-center" type="number" id="ptAverage" readonly>
+                                                </div>
+                                                <div class="col-sm-2 floating-label enable-floating-label show-label mt-2">
+                                                    <label for="">Fecha Solicitud</label>
+                                                    <input class="form-control" type="date" name="applicationDate" id="applicationDatePT" min="<?php echo date('Y-m-d'); ?>">
+                                                </div>
+                                                <div class="col-sm-2 floating-label enable-floating-label show-label mt-2">
+                                                    <label for="">Fecha Entrega</label>
+                                                    <input class="form-control" type="date" name="deliveryDate" id="deliveryDatePT">
+                                                </div>
+                                                <!-- <div class="w-100"></div> -->
+                                                <div class="col-sm-2 cardRequired floating-label enable-floating-label show-label mt-2">
+                                                    <label for="">Cantidad Requerida</label>
+                                                    <input class="form-control text-center" type="text" name="requiredQuantity" id="requiredQuantityPT" readonly>
+                                                </div>
+                                                <div class="col-sm-2 floating-label enable-floating-label show-label mt-2">
+                                                    <label for="">Cantidad Solicitada</label>
+                                                    <input class="form-control text-center" type="number" name="requestedQuantity" id="requestedQuantityPT">
+                                                </div>
+                                                <div class="col-sm-2 floating-label enable-floating-label show-label mt-2">
+                                                    <label for="">Orden de Compra</label>
+                                                    <input class="form-control text-center" type="text" name="purchaseOrder" id="purchaseOrderPT">
+                                                </div>
+                                                <div class="col-sm" style="margin-top:12px">
+                                                    <button class="btn btn-success" id="btnAddRequisitionPT">Asignar</button>
                                                 </div>
                                             </div>
                                         </form>

@@ -2,7 +2,7 @@ $(document).ready(function () {
   // Mostrar Tabla planeacion maquinas
   loadTblRoutes = (idProduct) => {
     tblRoutes = $("#tblRoutes").dataTable({
-      fixedHeader: true,
+      // fixedHeader: true,
       scrollY: "400px",
       scrollCollapse: true,
       destroy: true,

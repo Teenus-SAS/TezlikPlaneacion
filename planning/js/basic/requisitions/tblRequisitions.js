@@ -12,17 +12,19 @@ $(document).ready(function () {
 
   loadAllData = async (op, min_date, max_date) => {
     try {
-      const [dataRequisitions, dataStock, dateRequisitions] = await Promise.all(
+      const [dataRequisitions, dataMPStock, dataPTStock, dateRequisitions] = await Promise.all(
         [
           searchData("/api/requisitions"),
           searchData("/api/rMStock"),
+          searchData("/api/pStock"),
           op == 3
             ? searchData(`/api/requisitions/${min_date}/${max_date}`)
             : null,
         ]
       );
 
-      sessionStorage.setItem("stock", JSON.stringify(dataStock));
+      sessionStorage.setItem("MPStock", JSON.stringify(dataMPStock));
+      sessionStorage.setItem("PTStock", JSON.stringify(dataPTStock));
 
       let card = document.getElementsByClassName("selectNavigation");
 
@@ -315,17 +317,25 @@ $(document).ready(function () {
   function renderRequisitionActions(data, visible) {
     let action = "";
     if (data.status != "Recibido" && data.status != "Proceso") {
-      action = `<a href="javascript:;" <i id="upd-${
-        data.id_requisition_material
-      }" class="fas fa-caret-square-right updateRequisition" data-toggle='tooltip' title='Ejecutar Requisicion' style="font-size: 30px;"></i></a>
-              <a href="javascript:;" <i id="${
-                data.id_requisition_material
-              }" class="mdi mdi-delete-forever" data-toggle='tooltip' title='Eliminar Requisicion' style="font-size: 30px;color:red" onclick="deleteFunction(${
+      let id, className1, className2;
+
+      if (!data.id_requisition_material) { 
+        id = data.id_requisition_product;
+        className1 = 'id_requisition_product';
+        className2 = 'updateRequisitionProduct';
+      } else {
+        id = data.id_requisition_material;
+        className1 = 'id_requisition_material';        
+        className2 = 'updateRequisitionMaterial';        
+      }
+
+      action = `<a href="javascript:;" <i id="upd-${id}" class="fas fa-caret-square-right ${className2}" data-toggle='tooltip' title='Ejecutar Requisicion' style="font-size: 30px;"></i></a>
+              <a href="javascript:;" <i id="${id}" class="mdi mdi-delete-forever" data-toggle='tooltip' title='Eliminar Requisicion' style="font-size: 30px;color:red" onclick="deleteFunction(${
         visible == true ? "2" : "1"
-      })"></i></a>`;
+      }, ${className1})"></i></a>`;
     } else if (data.status == "Proceso") {
-      action = `<a href="javascript:;" <i id="upd-${data.id_requisition_material}" class="bx bx-edit-alt updateRequisition" data-toggle='tooltip' title='Editar Requisicion' style="font-size: 30px;"></i></a>
-              <a href="javascript:;" <i id="${data.id_requisition_material}" class="bi bi-x-circle-fill" data-toggle='tooltip' title='Cancelar Requisicion' style="font-size: 30px;color:red" onclick="cancelRQFunction()"></i></a>`;
+      action = `<a href="javascript:;" <i id="upd-${id}" class="bx bx-edit-alt ${className2}" data-toggle='tooltip' title='Editar Requisicion' style="font-size: 30px;"></i></a>
+              <a href="javascript:;" <i id="${id}" class="bi bi-x-circle-fill" data-toggle='tooltip' title='Cancelar Requisicion' style="font-size: 30px;color:red" onclick="cancelRQFunction(${className1})"></i></a>`;
     } else {
       action = data.admission_date;
     }

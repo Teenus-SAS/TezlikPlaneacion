@@ -19,10 +19,24 @@ class PStockDao
     public function findAllStockByCompany($id_company)
     {
         $connection = Connection::getInstance()->getConnection();
-        $stmt = $connection->prepare("SELECT s.id_stock_product, p.id_product, p.reference, p.product, IFNULL(pi.quantity, 0) AS quantity, s.max_term, s.min_term, p.composite, IFNULL(pi.classification , '') AS classification
+        $stmt = $connection->prepare("SELECT
+                                            s.id_stock_product,
+                                            p.id_product,
+                                            p.reference,
+                                            p.product,
+                                            IFNULL(pi.quantity, 0) AS quantity,
+                                            s.max_term,
+                                            s.min_term,
+                                            (s.max_term - s.min_term) AS average,
+                                            -- IFNULL(s.id_provider, 0) AS id_provider,
+                                            -- IFNULL(c.id_client, '') AS id_client,
+                                            -- IFNULL(c.client, '') AS client,
+                                            p.composite,
+                                            IFNULL(pi.classification, '') AS classification
                                       FROM inv_stock_products s
-                                        INNER JOIN products p ON p.id_product = s.id_product
-                                        LEFT JOIN inv_products pi ON pi.id_product = s.id_product
+                                          INNER JOIN products p ON p.id_product = s.id_product
+                                          LEFT JOIN inv_products pi ON pi.id_product = s.id_product
+                                         -- LEFT JOIN third_parties c ON c.id_client = s.id_provider
                                       WHERE s.id_company = :id_company");
         $stmt->execute(['id_company' => $id_company]);
 

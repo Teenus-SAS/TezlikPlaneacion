@@ -1,8 +1,9 @@
 $(document).ready(function () {
   // Mostrar Tabla planeacion maquinas
-  loadTblPlanCiclesMachine = (idProduct) => {
+  loadTblPlanCiclesMachine = (idProduct) => { 
     tblPlanCiclesMachine = $("#tblPlanCiclesMachine").dataTable({
-      fixedHeader: true,
+      autoWidth: false, 
+      // fixedHeader: true,
       scrollY: "400px",
       scrollCollapse: true,
       destroy: true,

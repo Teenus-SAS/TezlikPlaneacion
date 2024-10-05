@@ -18,9 +18,9 @@ $(document).ready(function () {
 
     for (let i = 0; i < tables.length; i++) {
       let attr = tables[i];
-      attr.style.width = "100%";
+      attr.style.width = "1217.55px";
       attr = tables[i].firstElementChild;
-      attr.style.width = "100%";
+      attr.style.width = "1217.55px";
     }
   });
 

@@ -71,7 +71,7 @@
                                         </div>
                                         <div class="col-12 col-lg-4">
                                             <div class="input-group floating-label enable-floating-label show-label date">
-                                                <select id="client" name="idClient" class="form-control"></select>
+                                                <select id="client" name="idClient" class="form-control client"></select>
                                                 <label for="">Cliente<span class="text-danger">*</span></label>
                                                 <div class="validation-error d-none font-size-13">Requerido</div>
                                             </div>

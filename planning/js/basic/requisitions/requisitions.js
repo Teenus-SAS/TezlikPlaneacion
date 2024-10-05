@@ -1,30 +1,31 @@
 $(document).ready(function () {
   /* Ocultar panel crear producto */
 
-  $(".cardAddRequisitions").hide();
+  $(".cardAddRequisitionsMaterials").hide();
+  $(".cardAddRequisitionsProducts").hide();
 
   /* Abrir panel crear producto */
-
+  // Materiales
   $("#btnNewRequisition").click(function (e) {
     e.preventDefault();
 
     $(".cardImportRequisitions, .cardDescription, .cardRequired").hide(800);
     $(".cardTableConfigMaterials, .cardSelect").show(800);
-    $(".cardAddRequisitions").toggle(800);
-    $("#btnAddRequisition").text("Asignar");
-    document.getElementById("requestedQuantity").readOnly = false;
+    $(".cardAddRequisitionsMaterials").toggle(800);
+    $("#btnAddRequisitionMP").text("Asignar");
+    document.getElementById("requestedQuantityMP").readOnly = false;
 
-    sessionStorage.removeItem("id_requisition_material");
+    sessionStorage.removeItem("id_requisition");
 
-    $("#formAddRequisition").trigger("reset");
+    $("#formAddRequisitionMaterials").trigger("reset");
   });
 
   /* Adicionar nueva materia prima */
 
-  $("#btnAddRequisition").click(function (e) {
+  $("#btnAddRequisitionMP").click(function (e) {
     e.preventDefault();
 
-    const idRequisition = sessionStorage.getItem("id_requisition_material") || null;
+    const idRequisition = sessionStorage.getItem("id_requisition") || null;
     const apiUrl = idRequisition
       ? "/api/updateRequisition"
       : "/api/addRequisition";
@@ -67,15 +68,15 @@ $(document).ready(function () {
   function handleMaterialChange(event) {
     event.preventDefault();
 
-    $("#client option").removeAttr("selected");
-    $(`#client option[value='0']`).prop("selected", true);
+    $("#clientMP option").removeAttr("selected");
+    $(`#clientMP option[value='0']`).prop("selected", true);
     $("#rMQuantity").val("");
     $("#rMAverage").val("");
 
-    let dataStock = JSON.parse(sessionStorage.getItem("stock"));
+    let dataStock = JSON.parse(sessionStorage.getItem("MPStock"));
     let arr = dataStock.filter((item) => item.id_material == this.value);
 
-    setInputClient(arr);
+    setInputClient(arr, 'clientMP');
 
     if (arr.length == 1) updateClientSelection(arr[0]);
     else if (arr.length > 1) {
@@ -92,7 +93,7 @@ $(document).ready(function () {
   }
 
   function updateClientSelection(item, isMultiple = false) {
-    $(`#client option[value=${item.id_provider}]`).prop("selected", true);
+    $(`#clientMP option[value=${item.id_provider}]`).prop("selected", true);
     $("#rMQuantity").val(`${item.min_quantity} ${item.abbreviation}`);
     $("#rMAverage").val(
       isMultiple
@@ -104,11 +105,11 @@ $(document).ready(function () {
   $("#refMaterial").change(handleMaterialChange);
   $("#material").change(handleMaterialChange);
 
-  $("#client").change(function (e) {
+  $("#clientMP").change(function (e) {
     e.preventDefault();
     let id_material = $("#material").val();
 
-    let dataStock = JSON.parse(sessionStorage.getItem("stock"));
+    let dataStock = JSON.parse(sessionStorage.getItem("MPStock"));
     let arr = dataStock.find(
       (item) =>
         item.id_material == id_material && item.id_provider == this.value
@@ -122,23 +123,23 @@ $(document).ready(function () {
 
   /* Actualizar productos materials */
 
-  $(document).on("click", ".updateRequisition", async function (e) {
-    $(".cardImportRequisitions, .cardSelect").hide(800);
-    $(".cardAddRequisitions, .cardRequired, .cardDescription").show(800);
-    $("#btnAddRequisition").text("Actualizar");
+  $(document).on("click", ".updateRequisitionMaterial", async function (e) {
+    $(".cardImportRequisitions, .cardSelect, .cardAddRequisitionsProducts").hide(800);
+    $(".cardAddRequisitionsMaterials, .cardRequired, .cardDescription").show(800);
+    $("#btnAddRequisitionMP").text("Actualizar");
 
     //Obtener data
     const row = $(this).closest("tr")[0];
     const data = tblRequisitions.fnGetData(row);
 
-    sessionStorage.setItem("id_requisition_material", data.id_requisition_material);
+    sessionStorage.setItem("id_requisition", data.id_requisition_material);
 
     // Seleccionar los valores correspondientes en los campos
     $(`#refMaterial option[value=${data.id_material}]`).prop("selected", true);
     $(`#material option[value=${data.id_material}]`).prop("selected", true);
  
     $("#referenceMName").val(data.reference);
-    $("#materialName").val(data.material);
+    $("#materialName").val(data.description);
 
     // Validación y asignación de fechas
     ["application_date", "delivery_date", "purchase_order"].forEach((field) => {
@@ -154,13 +155,13 @@ $(document).ready(function () {
       }
     }); 
 
-    let dataStock = JSON.parse(sessionStorage.getItem("stock"));
+    let dataStock = JSON.parse(sessionStorage.getItem("MPStock"));
     let arr = dataStock.filter((item) => item.id_material == data.id_material);
 
-    setInputClient(arr);
+    setInputClient(arr, 'clientMP');
 
     // Selección del cliente
-    $(`#client option[value=${data.id_provider}]`).prop("selected", true);
+    $(`#clientMP option[value=${data.id_provider}]`).prop("selected", true);
 
     // Lógica para cantidades mínimas y promedio
     if (arr.length == 1 && data.id_provider != 0) {
@@ -199,7 +200,7 @@ $(document).ready(function () {
         });
 
     //Asignacion
-    $("#requiredQuantity").val(`${quantity_required} ${data.abbreviation}`);
+    $("#requiredQuantityMP").val(`${quantity_required} ${data.abbreviation}`);
 
     let quantity_requested = data.quantity_requested;
 
@@ -210,7 +211,7 @@ $(document).ready(function () {
         : data.quantity_requested;
 
     //Asignacion
-    $("#requestedQuantity").val(quantity_requested);
+    $("#requestedQuantityMP").val(quantity_requested);
 
     // Animación de desplazamiento
     $("html, body").animate(
@@ -219,15 +220,15 @@ $(document).ready(function () {
       },
       1000
     );
-  });
+  }); 
 
   const checkDataRequisition = async (url, idRequisition) => {
     const material = parseInt($("#material").val());
-    const provider = parseInt($("#client").val());
-    const applicationDate = $("#applicationDate").val();
-    const deliveryDate = $("#deliveryDate").val();
+    const provider = parseInt($("#clientMP").val());
+    const applicationDate = $("#applicationDateMP").val();
+    const deliveryDate = $("#deliveryDatePT").val();
     // const quan = $('#requiredQuantity').val();
-    const r_quan = parseFloat($("#requestedQuantity").val());
+    const r_quan = parseFloat($("#requestedQuantityMP").val());
 
     const data = r_quan * material * provider;
 
@@ -248,23 +249,84 @@ $(document).ready(function () {
       return false;
     }
 
-    let dataRequisition = new FormData(formAddRequisition);
+    let dataRequisition = new FormData(formAddRequisitionMaterials);
     if (idRequisition) dataRequisition.append("idRequisition", idRequisition);
     let resp = await sendDataPOST(url, dataRequisition);
 
     message(resp);
   };
 
-  /* Eliminar materia prima */
+  // $(document).on("click", ".changeDate", function (e) {
+  //   e.preventDefault();
 
-  deleteFunction = (op) => {
+  //   const date = new Date().toISOString().split("T")[0];
+
+  //   //obtener data
+  //   const row = $(this).closest("tr")[0];
+  //   const data = tblRequisitions.fnGetData(row);
+
+  //   bootbox.confirm({
+  //     title: "Ingrese Fecha De Ingreso!",
+  //     message: `<div class="col-sm-12 floating-label enable-floating-label">
+  //                       <input class="form-control" type="date" name="date" id="date" max="${date}"></input>
+  //                       <label for="date">Fecha</span></label>
+  //                     </div>`,
+  //     buttons: {
+  //       confirm: {
+  //         label: "Agregar",
+  //         className: "btn-success",
+  //       },
+  //       cancel: {
+  //         label: "Cancelar",
+  //         className: "btn-danger",
+  //       },
+  //     },
+  //     callback: function (result) {
+  //       if (result) {
+  //         let date = $("#date").val();
+
+  //         if (!date) {
+  //           toastr.error("Ingrese los campos");
+  //           return false;
+  //         }
+
+  //         let form = new FormData();
+  //         form.append("idRequisition", data.id_requisition_material);
+  //         form.append("idMaterial", data.id_material);
+  //         form.append("date", date);
+
+  //         $.ajax({
+  //           type: "POST",
+  //           url: "/api/saveAdmissionDate",
+  //           data: form,
+  //           contentType: false,
+  //           cache: false,
+  //           processData: false,
+  //           success: function (resp) {
+  //             message(resp);
+  //           },
+  //         });
+  //       }
+  //     },
+  //   });
+  // });
+  
+  /* Eliminar materia prima */
+  deleteFunction = (op, id) => {
     //obtener data
     const row = $(this.activeElement).closest("tr")[0];
     const data = tblRequisitions.fnGetData(row);
 
     let dataRequisition = {};
-    dataRequisition["idRequisition"] = data.id_requisition_material;
-    dataRequisition["idMaterial"] = data.id_material;
+
+    if (id == 'id_requisition_material') {
+      dataRequisition["idRequisition"] = data.id_requisition_material;
+      dataRequisition["idMaterial"] = data.id_material;
+    } else {
+      dataRequisition["idRequisition"] = data.id_requisition_product;
+      dataRequisition["idProduct"] = data.id_product;
+    }
+
     dataRequisition["op"] = op;
 
     bootbox.confirm({
@@ -296,14 +358,21 @@ $(document).ready(function () {
   };
 
   /* Cancelar Compra */
-  cancelRQFunction = () => {
+  cancelRQFunction = (id) => {
     //obtener data
     const row = $(this.activeElement).closest("tr")[0];
     const data = tblRequisitions.fnGetData(row);
 
     let dataRequisition = {};
-    dataRequisition["idRequisition"] = data.id_requisition_material;
-    dataRequisition["idMaterial"] = data.id_material;
+    
+    if (id == 'id_requisition_material') {
+      dataRequisition["idRequisition"] = data.id_requisition_material;
+      dataRequisition["idMaterial"] = data.id_material;      
+    } else {
+      dataRequisition["idRequisition"] = data.id_requisition_product;
+      dataRequisition["idProduct"] = data.id_product;      
+    }
+
     dataRequisition["idUser"] = 0;
     dataRequisition["idProvider"] = data.id_provider;
     dataRequisition["applicationDate"] = '0000-00-00';
@@ -339,59 +408,179 @@ $(document).ready(function () {
     });
   };
 
-  $(document).on("click", ".changeDate", function (e) {
+  // Productos
+  // function handleProductChange(event) {
+  //   event.preventDefault();
+
+  //   $("#clientPT option").removeAttr("selected");
+  //   $(`#clientPT option[value='0']`).prop("selected", true); 
+  //   $("#ptAverage").val("");
+
+  //   let dataStock = JSON.parse(sessionStorage.getItem("PTStock"));
+  //   let arr = dataStock.filter((item) => item.id_material == this.value);
+
+  //   setInputClient(arr, 'clientPT');
+
+  //   if (arr.length == 1) updateClientPTSelection(arr[0]);
+  //   else if (arr.length > 1) {
+  //     arr.sort((a, b) => a.average - b.average);
+
+  //     updateClientPTSelection(arr[0], true);
+  //   }
+  // }
+
+  // function updateClientPTSelection(item, isMultiple = false) {
+  //   $(`#clientPT option[value=${item.id_provider}]`).prop("selected", true);
+  //   $("#ptAverage").val(
+  //     isMultiple
+  //       ? parseFloat(item.max_term) - parseFloat(item.min_term)
+  //       : item.average
+  //   );
+  // }
+
+  // $("#refMaterial").change(handleMaterialChange);
+  // $("#material").change(handleMaterialChange);
+
+  $("#clientPT").change(function (e) {
+    e.preventDefault();
+    let id_product = $("#refProduct").val();
+
+    let dataStock = JSON.parse(sessionStorage.getItem("PTStock"));
+    let arr = dataStock.find(
+      (item) =>
+        item.id_product == id_product && item.id_provider == this.value
+    );
+
+    if (arr) { 
+      $("#ptAverage").val(arr.average);
+    }
+  });
+
+  $('#btnAddRequisitionPT').click(async function (e) { 
     e.preventDefault();
 
-    const date = new Date().toISOString().split("T")[0];
+    const product = parseInt($("#refProduct").val());
+    const provider = parseInt($("#clientPT").val());
+    const applicationDate = $("#applicationDatePT").val();
+    const deliveryDate = $("#deliveryDatePT").val();
+    // const quan = $('#requiredQuantity').val();
+    const r_quan = parseFloat($("#requestedQuantityPT").val());
 
-    //obtener data
+    const data = r_quan * product * provider;
+
+    if (isNaN(data) || data <= 0) {
+      toastr.error("Ingrese todos los campos");
+      return false;
+    }
+
+    if (!applicationDate && !deliveryDate) {
+      toastr.error("Ingrese todos los campos");
+      return false;
+    }
+
+    if (applicationDate > deliveryDate) {
+      toastr.error(
+        "Ingrese una fecha de solicitud menor a la fecha de entrega"
+      );
+      return false;
+    }
+
+    let dataRequisition = new FormData(formAddRequisitionProducts);
+    if (idRequisition) dataRequisition.append("idRequisition", idRequisition);
+    let resp = await sendDataPOST('/api/updateRequisition', dataRequisition);
+
+    message(resp);    
+  });
+
+  $(document).on("click", ".updateRequisitionProduct", async function (e) {
+    $(".cardImportRequisitions, .cardSelect, .cardAddRequisitionsMaterials").hide(800);
+    $(".cardAddRequisitionsProducts, .cardRequired, .cardDescription").show(800);
+    $("#btnAddRequisitionPT").text("Actualizar");
+
+    //Obtener data
     const row = $(this).closest("tr")[0];
     const data = tblRequisitions.fnGetData(row);
 
-    bootbox.confirm({
-      title: "Ingrese Fecha De Ingreso!",
-      message: `<div class="col-sm-12 floating-label enable-floating-label">
-                        <input class="form-control" type="date" name="date" id="date" max="${date}"></input>
-                        <label for="date">Fecha</span></label>
-                      </div>`,
-      buttons: {
-        confirm: {
-          label: "Agregar",
-          className: "btn-success",
-        },
-        cancel: {
-          label: "Cancelar",
-          className: "btn-danger",
-        },
+    sessionStorage.setItem("id_requisition", data.id_requisition_product);
+
+    // Seleccionar los valores correspondientes en los campos
+    $('#refProduct').append(`<option value='${data.id_product}'> ${data.reference} </option>`);
+    $('#selectNameProduct').append(`<option value =${data.id_product}> ${data.product} </option>`);
+ 
+    $("#referencePName").val(data.reference);
+    $("#productName").val(data.description);
+
+    // Validación y asignación de fechas
+    ["application_date", "delivery_date", "purchase_order"].forEach((field) => {
+      if (data[field] && data[field] !== "0000-00-00") {
+        $(
+          `#${field
+            .split("_")
+            .map((word, index) =>
+              index === 0 ? word : word[0].toUpperCase() + word.slice(1)
+            )
+            .join("")}`
+        ).val(data[field]);
+      }
+    }); 
+
+    let dataStock = JSON.parse(sessionStorage.getItem("PTStock"));
+    let arr = dataStock.filter((item) => item.id_product == data.id_product);
+
+    setInputClient(arr, 'clientPT');
+
+    // Selección del cliente
+    $(`#clientPT option[value=${data.id_provider}]`).prop("selected", true);
+
+    // Lógica para cantidades mínimas y promedio
+    if (arr.length == 1 && data.id_provider != 0) {
+      $("#ptAverage").val(arr[0].average);
+    } else if (arr.length > 1) {
+      arr = arr.sort((a, b) => a.average - b.average);
+ 
+      $("#rMAverage").val(
+        parseFloat(arr[0].max_term) - parseFloat(arr[0].min_term)
+      );
+    }
+
+    // Formateo de cantidad requerida
+    let quantity_required = parseFloat(data.quantity_required).toLocaleString(
+      "es-CO",
+      { minimumFractionDigits: 2, maximumFractionDigits: 2 }
+    );
+
+    // Formateo de cantidad requerida
+    quantity_required =
+      data.abbreviation === "UND"
+        ? data.quantity_required = data.quantity_required.toLocaleString("es-CO", {
+          maximumFractionDigits: 0,
+        })
+        : data.quantity_required = data.quantity_required.toLocaleString("es-CO", {
+          minimumFractionDigits: 2,
+          maximumFractionDigits: 2,
+        });
+
+    //Asignacion
+    $("#requiredQuantityPT").val(`${quantity_required} ${data.abbreviation}`);
+
+    let quantity_requested = data.quantity_requested;
+
+    // Formateo de cantidad solicitada
+    quantity_requested =
+      data.abbreviation === "UND"
+        ? Math.floor(data.quantity_requested)
+        : data.quantity_requested;
+
+    //Asignacion
+    $("#requestedQuantityPT").val(quantity_requested);
+
+    // Animación de desplazamiento
+    $("html, body").animate(
+      {
+        scrollTop: 0,
       },
-      callback: function (result) {
-        if (result) {
-          let date = $("#date").val();
-
-          if (!date) {
-            toastr.error("Ingrese los campos");
-            return false;
-          }
-
-          let form = new FormData();
-          form.append("idRequisition", data.id_requisition_material);
-          form.append("idMaterial", data.id_material);
-          form.append("date", date);
-
-          $.ajax({
-            type: "POST",
-            url: "/api/saveAdmissionDate",
-            data: form,
-            contentType: false,
-            cache: false,
-            processData: false,
-            success: function (resp) {
-              message(resp);
-            },
-          });
-        }
-      },
-    });
+      1000
+    );
   });
 
   /* Mensaje de exito */
@@ -399,8 +588,8 @@ $(document).ready(function () {
   message = (data) => {
     const { success, error, info, message } = data;
     if (success) {
-      $(".cardImportRequisitions, .cardAddRequisitions").hide(800);
-      $("#formImportRequisitions, #formAddRequisition").trigger("reset");
+      $(".cardImportRequisitions, .cardAddRequisitionsMaterials, .cardAddRequisitionsProducts").hide(800);
+      $("#formImportRequisitions, #formAddRequisitionMaterials, #formAddRequisitionProducts").trigger("reset");
 
       loadAllData(null, null, null);
       toastr.success(message);

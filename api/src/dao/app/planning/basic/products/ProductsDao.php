@@ -59,6 +59,8 @@ class ProductsDao
   {
     $connection = Connection::getInstance()->getConnection();
 
+    !isset($dataProduct['idProductType']) ? $dataProduct['idProductType'] = 0 : $dataProduct;
+
     try {
       $stmt = $connection->prepare("INSERT INTO products (id_company, id_product_type, reference, product, origin) 
                                       VALUES(:id_company, :id_product_type, :reference, :product, :origin)");
@@ -84,6 +86,8 @@ class ProductsDao
   public function updateProductByCompany($dataProduct, $id_company)
   {
     $connection = Connection::getInstance()->getConnection();
+
+    !isset($dataProduct['idProductType']) ? $dataProduct['idProductType'] = 0 : $dataProduct;
 
     try {
       $stmt = $connection->prepare("UPDATE products SET id_product_type = :id_product_type, reference = :reference, product = :product, origin = :origin

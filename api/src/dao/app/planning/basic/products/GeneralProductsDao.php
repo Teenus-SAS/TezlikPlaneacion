@@ -174,6 +174,23 @@ class GeneralProductsDao
         return $findProduct;
     }
 
+    public function calcProductRecieved($id_product)
+    {
+        $connection = Connection::getInstance()->getConnection();
+
+        $stmt = $connection->prepare("SELECT IFNULL((pi.quantity + IFNULL(r.quantity_requested, 0)), 0) AS quantity
+                                      FROM products p
+                                        INNER JOIN inv_products pi ON pi.id_product = p.id_product
+                                        LEFT JOIN requisitions_products r ON r.id_product = p.id_product AND r.application_date != '0000-00-00' AND r.delivery_date != '0000-00-00'
+                                        AND r.purchase_order != ''
+                                      WHERE p.id_product = :id_product");
+        $stmt->execute([
+            'id_product' => $id_product,
+        ]);
+        $material = $stmt->fetch($connection::FETCH_ASSOC);
+        return $material;
+    }
+
     public function updateAccumulatedQuantity($id_product, $accumulated_quantity, $op)
     {
         $connection = Connection::getInstance()->getConnection();

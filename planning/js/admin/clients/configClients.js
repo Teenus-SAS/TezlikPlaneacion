@@ -7,7 +7,7 @@ $(document).ready(function () {
     else
       data = data.filter(item => item.type_client == 2);
     
-    let $select = $(`#client`);
+    let $select = $(`.client`);
     $select.empty();
 
     $select.append(`<option disabled selected value='0'>Seleccionar</option>`);
@@ -18,8 +18,8 @@ $(document).ready(function () {
     });
   };
 
-  setInputClient = async (data) => {
-    let $select = $(`#client`);
+  setInputClient = async (data, element) => {
+    let $select = $(`#${element}`);
     $select.empty();
 
     $select.append(`<option disabled selected value='0'>Seleccionar</option>`);

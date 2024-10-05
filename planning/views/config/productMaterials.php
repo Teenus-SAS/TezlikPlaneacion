@@ -474,7 +474,7 @@ if (sizeof($_SESSION) == 0)
                                     <div class="tab-pane cardProductsMaterials cardGeneral">
                                         <div class="card-body">
                                             <div class="table-responsive">
-                                                <table class="fixed-table-loading table table-hover text-center" id="tblConfigMaterials" name="tblConfigMaterials">
+                                                <table class="fixed-table-loading table table-hover" id="tblConfigMaterials">
                                                     <tfoot>
                                                         <tr>
                                                             <td></td>
@@ -492,7 +492,7 @@ if (sizeof($_SESSION) == 0)
                                     <div class="tab-pane cardPlanCicles cardGeneral" style="display: none;">
                                         <div class="card-body">
                                             <div class="table-responsive">
-                                                <table class="fixed-table-loading table table-hover text-center" id="tblPlanCiclesMachine" name="tblPlanCiclesMachine">
+                                                <table class="fixed-table-loading table table-hover" id="tblPlanCiclesMachine">
                                                     <tfoot>
                                                         <tr>
                                                             <td></td>
@@ -512,7 +512,7 @@ if (sizeof($_SESSION) == 0)
                                     <div class="tab-pane cardRoutes cardGeneral" style="display: none;">
                                         <div class="card-body">
                                             <div class="table-responsive">
-                                                <table class="fixed-table-loading table table-hover text-center" id="tblRoutes" name="tblRoutes">
+                                                <table class="fixed-table-loading table table-hover" id="tblRoutes">
 
                                                 </table>
                                             </div>
@@ -521,7 +521,7 @@ if (sizeof($_SESSION) == 0)
                                     <div class="tab-pane cardPlans cardGeneral" style="display: none;">
                                         <div class="card-body">
                                             <div class="table-responsive">
-                                                <table class="fixed-table-loading table table-hover text-center" id="tblPlans" name="tblPlans">
+                                                <table class="fixed-table-loading table table-hover" id="tblPlans">
 
                                                 </table>
                                             </div>

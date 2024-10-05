@@ -4,6 +4,7 @@ use TezlikPlaneacion\dao\ExplosionMaterialsDao;
 use TezlikPlaneacion\dao\GeneralClientsDao;
 use TezlikPlaneacion\dao\GeneralExplosionMaterialsDao;
 use TezlikPlaneacion\dao\GeneralMaterialsDao;
+use TezlikPlaneacion\dao\GeneralProductsDao;
 use TezlikPlaneacion\dao\GeneralRequisitionsMaterialsDao;
 use TezlikPlaneacion\dao\GeneralRequisitionsProductsDao;
 use TezlikPlaneacion\dao\GeneralRMStockDao;
@@ -20,6 +21,7 @@ $generalRequisitionsProductsDao = new GeneralRequisitionsProductsDao();
 $usersRequisitonsDao = new UsersRequisitionsDao();
 $transitMaterialsDao = new TransitMaterialsDao();
 $generalMaterialsDao = new GeneralMaterialsDao();
+$generalProductsDao = new GeneralProductsDao();
 $generalClientsDao = new GeneralClientsDao();
 $explosionMaterialsDao = new ExplosionMaterialsDao();
 $generalExMaterialsDao = new GeneralExplosionMaterialsDao();
@@ -297,7 +299,9 @@ $app->post('/updateRequisition', function (Request $request, Response $response,
 
 $app->post('/saveAdmissionDate', function (Request $request, Response $response, $args) use (
     $generalRequisitionsMaterialsDao,
+    $generalRequisitionsProductsDao,
     $generalMaterialsDao,
+    $generalProductsDao,
     $transitMaterialsDao,
     $usersRequisitonsDao
 ) {
@@ -307,6 +311,9 @@ $app->post('/saveAdmissionDate', function (Request $request, Response $response,
 
     $dataRequisition = $request->getParsedBody();
 
+    $requisition = null;
+
+    // if (isset($dataRequisition['idMaterial'])) {
     $requisition = $generalRequisitionsMaterialsDao->updateDateRequisition($dataRequisition);
 
     if ($requisition == null) {
@@ -325,6 +332,19 @@ $app->post('/saveAdmissionDate', function (Request $request, Response $response,
         // if (isset($material['transit']))
         $requisition = $transitMaterialsDao->updateQuantityTransitByMaterial($dataRequisition['idMaterial'], 0);
     }
+    // } else {
+    //     $requisition = $generalRequisitionsProductsDao->updateDateRequisition($dataRequisition);
+
+    //     if ($requisition == null) {
+    //         $product = $generalProductsDao->calcProductRecieved($dataRequisition['idProduct']);
+
+    //         $requisition = $generalProductsDao->updateAccumulatedQuantity($dataRequisition['idProduct'], $product['quantity'], 2);
+    //     }
+
+    //     if ($requisition == null) {
+    //         $requisition = $usersRequisitonsDao->saveUserDeliverRequisitionproduct($id_company, $dataRequisition['idRequisition'], $id_user);
+    //     }
+    // }
 
     if ($requisition == null)
         $resp = array('success' => true, 'message' => 'Fecha guardada correctamente');

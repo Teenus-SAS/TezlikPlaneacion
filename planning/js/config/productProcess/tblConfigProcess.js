@@ -19,7 +19,7 @@ $(document).ready(function () {
 
   const loadtableProcess = (idProduct) => {
     tblConfigProcess = $("#tblConfigProcess").dataTable({
-      fixedHeader: true,
+      // fixedHeader: true,
       scrollY: "400px",
       scrollCollapse: true,
       destroy: true,
