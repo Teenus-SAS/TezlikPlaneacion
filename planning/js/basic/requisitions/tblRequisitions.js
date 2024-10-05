@@ -175,7 +175,7 @@ $(document).ready(function () {
         },
         {
           title: "Descripción",
-          data: "material",
+          data: "description",
           className: "uniqueClassName dt-head-center",
         },
         {
