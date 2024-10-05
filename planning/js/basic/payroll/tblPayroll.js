@@ -3,7 +3,7 @@ $(document).ready(function () {
 
   tblEmployees = $("#tblEmployees").dataTable({
     fixedHeader: true,
-    scrollY: "600px",
+    scrollY: "400px",
     scrollCollapse: true,
     pageLength: 50,
     ajax: {
