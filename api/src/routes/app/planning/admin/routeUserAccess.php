@@ -81,7 +81,7 @@ $app->post('/updatePlanningUserAccess', function (Request $request, Response $re
     // }
 
     /* Modificar accesos */
-    $generalUAccessDao->setGeneralAccess($dataUserAccess['id_user']);
+    $generalUAccessDao->setGeneralAccess($dataUserAccess['idUser']);
 
     if ($userAccess == null)
         $resp = array('success' => true, 'message' => 'Acceso de usuario actualizado correctamente');

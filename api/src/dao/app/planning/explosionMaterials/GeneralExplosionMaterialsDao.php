@@ -107,7 +107,7 @@ class GeneralExplosionMaterialsDao
                                         INNER JOIN products_materials pm ON pm.id_product = p.id_product
                                         INNER JOIN inv_materials mi ON mi.id_material = pm.id_material 
                                         INNER JOIN orders o ON o.id_product = p.id_product
-                                        LEFT JOIN requisitions r ON r.id_material = pm.id_material
+                                        LEFT JOIN requisitions_materials r ON r.id_material = pm.id_material
                                         LEFT JOIN programming pg ON pg.id_order = o.id_order
                                       WHERE p.id_product = :id_product AND o.status IN (1,4,5,6)
                                       GROUP BY pm.id_product_material, o.id_order");
@@ -131,7 +131,7 @@ class GeneralExplosionMaterialsDao
                                         INNER JOIN products_materials pm ON pm.id_material = mi.id_material
                                         INNER JOIN inv_products pi ON pi.id_product = pm.id_product  
                                         INNER JOIN orders o ON o.id_product = pm.id_product
-                                        LEFT JOIN requisitions r ON r.id_material = mi.id_material
+                                        LEFT JOIN requisitions_materials r ON r.id_material = mi.id_material
                                         LEFT JOIN programming pg ON pg.id_order = o.id_order
                                       WHERE mi.id_material = :id_material AND o.status IN (1,4,5,6)
                                       GROUP BY pm.id_product_material, o.id_order");

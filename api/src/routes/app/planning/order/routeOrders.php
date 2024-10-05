@@ -15,7 +15,7 @@ use TezlikPlaneacion\dao\GeneralOrderTypesDao;
 use TezlikPlaneacion\dao\GeneralPlanCiclesMachinesDao;
 use TezlikPlaneacion\dao\GeneralProductsDao;
 use TezlikPlaneacion\dao\GeneralProgrammingRoutesDao;
-use TezlikPlaneacion\dao\GeneralRequisitionsDao;
+use TezlikPlaneacion\dao\GeneralRequisitionsMaterialsDao;
 use TezlikPlaneacion\dao\GeneralRMStockDao;
 use TezlikPlaneacion\dao\GeneralSellersDao;
 use TezlikPlaneacion\dao\LastDataDao;
@@ -24,7 +24,7 @@ use TezlikPlaneacion\dao\MallasDao;
 use TezlikPlaneacion\dao\OrdersDao;
 use TezlikPlaneacion\dao\ProductsMaterialsDao;
 use TezlikPlaneacion\dao\ProgrammingRoutesDao;
-use TezlikPlaneacion\dao\RequisitionsDao;
+use TezlikPlaneacion\dao\RequisitionsMaterialsDao;
 
 $ordersDao = new OrdersDao();
 $generalOrdersDao = new GeneralOrdersDao();
@@ -50,8 +50,8 @@ $explosionMaterialsDao = new ExplosionMaterialsDao();
 $explosionProductsDao = new ExplosionProductsdao();
 $generalExProductsDao = new GeneralExplosionProductsDao();
 $generalExMaterialsDao = new GeneralExplosionMaterialsDao();
-$generalRequisitionsDao = new GeneralRequisitionsDao();
-$requisitionsDao = new RequisitionsDao();
+$generalRequisitionsMaterialsDao = new GeneralRequisitionsMaterialsDao();
+$RequisitionsMaterialsDao = new RequisitionsMaterialsDao();
 $filterDataDao = new FilterDataDao();
 
 use Psr\Http\Message\ResponseInterface as Response;
@@ -225,8 +225,8 @@ $app->post('/addOrder', function (Request $request, Response $response, $args) u
     $explosionProductsDao,
     $generalExMaterialsDao,
     $generalExProductsDao,
-    $generalRequisitionsDao,
-    $requisitionsDao,
+    $generalRequisitionsMaterialsDao,
+    $requisitionsMaterialsDao,
     $programmingRoutesDao,
     $generalProgrammingRoutesDao
 ) {
@@ -635,13 +635,13 @@ $app->post('/addOrder', function (Request $request, Response $response, $args) u
                     $data['purchaseOrder'] = '';
                     $data['requestedQuantity'] = 0;
 
-                    $requisition = $generalRequisitionsDao->findRequisitionByApplicationDate($materials[$i]['id_material']);
+                    $requisition = $generalRequisitionsMaterialsDao->findRequisitionByApplicationDate($materials[$i]['id_material']);
 
                     if (!$requisition)
-                        $generalRequisitionsDao->insertRequisitionAutoByCompany($data, $id_company);
+                        $generalRequisitionsMaterialsDao->insertRequisitionAutoByCompany($data, $id_company);
                     else {
-                        $data['idRequisition'] = $requisition['id_requisition'];
-                        $generalRequisitionsDao->updateRequisitionAuto($data);
+                        $data['idRequisition'] = $requisition['id_requisition_material'];
+                        $generalRequisitionsMaterialsDao->updateRequisitionAuto($data);
                     }
                 }
             }
@@ -677,13 +677,13 @@ $app->post('/addOrder', function (Request $request, Response $response, $args) u
                     $data['purchaseOrder'] = '';
                     $data['requestedQuantity'] = 0;
 
-                    $requisition = $generalRequisitionsDao->findRequisitionByApplicationDate($materials[$i]['id_material']);
+                    $requisition = $generalRequisitionsMaterialsDao->findRequisitionByApplicationDate($materials[$i]['id_material']);
 
                     if (!$requisition)
-                        $generalRequisitionsDao->insertRequisitionAutoByCompany($data, $id_company);
+                        $generalRequisitionsMaterialsDao->insertRequisitionAutoByCompany($data, $id_company);
                     else {
-                        $data['idRequisition'] = $requisition['id_requisition'];
-                        $generalRequisitionsDao->updateRequisitionAuto($data);
+                        $data['idRequisition'] = $requisition['id_requisition_material'];
+                        $generalRequisitionsMaterialsDao->updateRequisitionAuto($data);
                     }
                 }
             }
@@ -814,8 +814,8 @@ $app->post('/updateOrder', function (Request $request, Response $response, $args
     $generalExMaterialsDao,
     $programmingRoutesDao,
     $generalProgrammingRoutesDao,
-    $requisitionsDao,
-    $generalRequisitionsDao,
+    $requisitionsMaterialsDao,
+    $generalRequisitionsMaterialsDao,
     $productsMaterialsDao,
     $compositeProductsDao
 ) {
@@ -1069,13 +1069,13 @@ $app->post('/updateOrder', function (Request $request, Response $response, $args
                     $data['purchaseOrder'] = '';
                     $data['requestedQuantity'] = 0;
 
-                    $requisition = $generalRequisitionsDao->findRequisitionByApplicationDate($materials[$i]['id_material']);
+                    $requisition = $generalRequisitionsMaterialsDao->findRequisitionByApplicationDate($materials[$i]['id_material']);
 
                     if (!$requisition)
-                        $generalRequisitionsDao->insertRequisitionAutoByCompany($data, $id_company);
+                        $generalRequisitionsMaterialsDao->insertRequisitionAutoByCompany($data, $id_company);
                     else {
-                        $data['idRequisition'] = $requisition['id_requisition'];
-                        $generalRequisitionsDao->updateRequisitionAuto($data);
+                        $data['idRequisition'] = $requisition['id_requisition_material'];
+                        $generalRequisitionsMaterialsDao->updateRequisitionAuto($data);
                     }
                 }
             }
@@ -1111,13 +1111,13 @@ $app->post('/updateOrder', function (Request $request, Response $response, $args
                     $data['purchaseOrder'] = '';
                     $data['requestedQuantity'] = 0;
 
-                    $requisition = $generalRequisitionsDao->findRequisitionByApplicationDate($materials[$i]['id_material']);
+                    $requisition = $generalRequisitionsMaterialsDao->findRequisitionByApplicationDate($materials[$i]['id_material']);
 
                     if (!$requisition)
-                        $generalRequisitionsDao->insertRequisitionAutoByCompany($data, $id_company);
+                        $generalRequisitionsMaterialsDao->insertRequisitionAutoByCompany($data, $id_company);
                     else {
-                        $data['idRequisition'] = $requisition['id_requisition'];
-                        $generalRequisitionsDao->updateRequisitionAuto($data);
+                        $data['idRequisition'] = $requisition['id_requisition_material'];
+                        $generalRequisitionsMaterialsDao->updateRequisitionAuto($data);
                     }
                 }
             }
@@ -1278,8 +1278,8 @@ $app->post('/deleteOrder', function (Request $request, Response $response, $args
     $programmingRoutesDao,
     $generalProgrammingRoutesDao,
     $lastDataDao,
-    $generalRequisitionsDao,
-    $requisitionsDao
+    $generalRequisitionsMaterialsDao,
+    $requisitionsMaterialsDao
 ) {
     session_start();
     $id_company = $_SESSION['id_company'];
@@ -1292,7 +1292,7 @@ $app->post('/deleteOrder', function (Request $request, Response $response, $args
     if ($resolution == null) {
         // Si solo hay un pedido el cual se va a eliminar, entonces borra todos los requerimientos pendientes
         if (sizeof($orders) == 1) {
-            $generalRequisitionsDao->deleteAllRequisitionPending();
+            $generalRequisitionsMaterialsDao->deleteAllRequisitionPending();
         } else {
             $cicle = true;
 
@@ -1482,13 +1482,13 @@ $app->post('/deleteOrder', function (Request $request, Response $response, $args
                         $data['purchaseOrder'] = '';
                         $data['requestedQuantity'] = 0;
 
-                        $requisition = $generalRequisitionsDao->findRequisitionByApplicationDate($materials[$i]['id_material']);
+                        $requisition = $generalRequisitionsMaterialsDao->findRequisitionByApplicationDate($materials[$i]['id_material']);
 
                         if (!$requisition)
-                            $generalRequisitionsDao->insertRequisitionAutoByCompany($data, $id_company);
+                            $generalRequisitionsMaterialsDao->insertRequisitionAutoByCompany($data, $id_company);
                         else {
-                            $data['idRequisition'] = $requisition['id_requisition'];
-                            $generalRequisitionsDao->updateRequisitionAuto($data);
+                            $data['idRequisition'] = $requisition['id_requisition_material'];
+                            $generalRequisitionsMaterialsDao->updateRequisitionAuto($data);
                         }
                     }
                 }
@@ -1524,13 +1524,13 @@ $app->post('/deleteOrder', function (Request $request, Response $response, $args
                         $data['purchaseOrder'] = '';
                         $data['requestedQuantity'] = 0;
 
-                        $requisition = $generalRequisitionsDao->findRequisitionByApplicationDate($materials[$i]['id_material']);
+                        $requisition = $generalRequisitionsMaterialsDao->findRequisitionByApplicationDate($materials[$i]['id_material']);
 
                         if (!$requisition)
-                            $generalRequisitionsDao->insertRequisitionAutoByCompany($data, $id_company);
+                            $generalRequisitionsMaterialsDao->insertRequisitionAutoByCompany($data, $id_company);
                         else {
-                            $data['idRequisition'] = $requisition['id_requisition'];
-                            $generalRequisitionsDao->updateRequisitionAuto($data);
+                            $data['idRequisition'] = $requisition['id_requisition_material'];
+                            $generalRequisitionsMaterialsDao->updateRequisitionAuto($data);
                         }
                     }
                 }

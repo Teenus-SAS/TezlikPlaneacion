@@ -33,7 +33,7 @@ $(document).ready(function () {
   loadAllData = async (op) => {
     try {
       const [dataRequisitions, dataStore] = await Promise.all([
-        searchData("/api/requisitions"),
+        searchData("/api/requisitionsMaterials"),
         searchData("/api/store"),
       ]);
 

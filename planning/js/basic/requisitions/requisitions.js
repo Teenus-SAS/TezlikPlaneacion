@@ -14,7 +14,7 @@ $(document).ready(function () {
     $("#btnAddRequisition").text("Asignar");
     document.getElementById("requestedQuantity").readOnly = false;
 
-    sessionStorage.removeItem("id_requisition");
+    sessionStorage.removeItem("id_requisition_material");
 
     $("#formAddRequisition").trigger("reset");
   });
@@ -24,7 +24,7 @@ $(document).ready(function () {
   $("#btnAddRequisition").click(function (e) {
     e.preventDefault();
 
-    const idRequisition = sessionStorage.getItem("id_requisition") || null;
+    const idRequisition = sessionStorage.getItem("id_requisition_material") || null;
     const apiUrl = idRequisition
       ? "/api/updateRequisition"
       : "/api/addRequisition";
@@ -131,7 +131,7 @@ $(document).ready(function () {
     const row = $(this).closest("tr")[0];
     const data = tblRequisitions.fnGetData(row);
 
-    sessionStorage.setItem("id_requisition", data.id_requisition);
+    sessionStorage.setItem("id_requisition_material", data.id_requisition_material);
 
     // Seleccionar los valores correspondientes en los campos
     $(`#refMaterial option[value=${data.id_material}]`).prop("selected", true);
@@ -263,7 +263,7 @@ $(document).ready(function () {
     const data = tblRequisitions.fnGetData(row);
 
     let dataRequisition = {};
-    dataRequisition["idRequisition"] = data.id_requisition;
+    dataRequisition["idRequisition"] = data.id_requisition_material;
     dataRequisition["idMaterial"] = data.id_material;
     dataRequisition["op"] = op;
 
@@ -302,7 +302,7 @@ $(document).ready(function () {
     const data = tblRequisitions.fnGetData(row);
 
     let dataRequisition = {};
-    dataRequisition["idRequisition"] = data.id_requisition;
+    dataRequisition["idRequisition"] = data.id_requisition_material;
     dataRequisition["idMaterial"] = data.id_material;
     dataRequisition["idUser"] = 0;
     dataRequisition["idProvider"] = data.id_provider;
@@ -374,7 +374,7 @@ $(document).ready(function () {
           }
 
           let form = new FormData();
-          form.append("idRequisition", data.id_requisition);
+          form.append("idRequisition", data.id_requisition_material);
           form.append("idMaterial", data.id_material);
           form.append("date", date);
 

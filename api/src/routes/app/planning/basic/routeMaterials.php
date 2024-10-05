@@ -11,7 +11,7 @@ use TezlikPlaneacion\dao\GeneralPlanCiclesMachinesDao;
 use TezlikPlaneacion\dao\GeneralProductsDao;
 use TezlikPlaneacion\dao\GeneralProductsMaterialsDao;
 use TezlikPlaneacion\dao\GeneralProgrammingDao;
-use TezlikPlaneacion\dao\GeneralRequisitionsDao;
+use TezlikPlaneacion\dao\GeneralRequisitionsMaterialsDao;
 use TezlikPlaneacion\dao\GeneralRMStockDao;
 use TezlikPlaneacion\dao\InventoryDaysDao;
 use TezlikPlaneacion\dao\LastDataDao;
@@ -21,7 +21,7 @@ use TezlikPlaneacion\dao\MaterialsInventoryDao;
 use TezlikPlaneacion\dao\MaterialsTypeDao;
 use TezlikPlaneacion\dao\MinimumStockDao;
 use TezlikPlaneacion\dao\ProductsMaterialsDao;
-use TezlikPlaneacion\dao\RequisitionsDao;
+use TezlikPlaneacion\dao\RequisitionsMaterialsDao;
 use TezlikPlaneacion\dao\UnitsDao;
 
 $materialsDao = new MaterialsDao();
@@ -46,8 +46,8 @@ $lastDataDao = new LastDataDao();
 $explosionMaterialsDao = new ExplosionMaterialsDao();
 $generalExMaterialsDao = new GeneralExplosionMaterialsDao();
 $generalRMStockDao = new GeneralRMStockDao();
-$generalRequisitionsDao = new GeneralRequisitionsDao();
-$requisitionsDao = new RequisitionsDao();
+$generalRequisitionsMaterialsDao = new GeneralRequisitionsMaterialsDao();
+$requisitionsMaterialsDao = new RequisitionsMaterialsDao();
 
 use Psr\Http\Message\ResponseInterface as Response;
 use Psr\Http\Message\ServerRequestInterface as Request;
@@ -485,8 +485,8 @@ $app->post('/updateMaterials', function (Request $request, Response $response, $
     $explosionMaterialsDao,
     $generalExMaterialsDao,
     $generalRMStockDao,
-    $generalRequisitionsDao,
-    $requisitionsDao
+    $generalRequisitionsMaterialsDao,
+    $requisitionsMaterialsDao
 ) {
     session_start();
     $dataMaterial = $request->getParsedBody();
@@ -607,13 +607,13 @@ $app->post('/updateMaterials', function (Request $request, Response $response, $
                     $data['purchaseOrder'] = '';
                     $data['requestedQuantity'] = 0;
 
-                    $requisition = $generalRequisitionsDao->findRequisitionByApplicationDate($materials[$i]['id_material']);
+                    $requisition = $generalRequisitionsMaterialsDao->findRequisitionByApplicationDate($materials[$i]['id_material']);
 
                     if (!$requisition)
-                        $generalRequisitionsDao->insertRequisitionAutoByCompany($data, $id_company);
+                        $generalRequisitionsMaterialsDao->insertRequisitionAutoByCompany($data, $id_company);
                     else {
-                        $data['idRequisition'] = $requisition['id_requisition'];
-                        $generalRequisitionsDao->updateRequisitionAuto($data);
+                        $data['idRequisition'] = $requisition['id_requisition_material'];
+                        $generalRequisitionsMaterialsDao->updateRequisitionAuto($data);
                     }
                 }
             }

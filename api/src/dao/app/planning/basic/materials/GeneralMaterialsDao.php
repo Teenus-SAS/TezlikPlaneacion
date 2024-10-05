@@ -123,7 +123,7 @@ class GeneralMaterialsDao
         $stmt = $connection->prepare("SELECT IFNULL((mi.quantity + IFNULL(r.quantity_requested, 0)), 0) AS quantity
                                       FROM materials m
                                         INNER JOIN inv_materials mi ON mi.id_material = m.id_material
-                                        LEFT JOIN requisitions r ON r.id_material = m.id_material AND r.application_date != '0000-00-00' AND r.delivery_date != '0000-00-00'
+                                        LEFT JOIN requisitions_materials r ON r.id_material = m.id_material AND r.application_date != '0000-00-00' AND r.delivery_date != '0000-00-00'
                                         AND r.purchase_order != ''
                                       WHERE m.id_material = :id_material");
         $stmt->execute([

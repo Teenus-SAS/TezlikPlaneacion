@@ -130,7 +130,7 @@ $(document).ready(function () {
     id_user = sessionStorage.getItem("id_user");
 
     dataUser = {};
-    dataUser["id_user"] = id_user;
+    dataUser["idUser"] = id_user;
     dataUser["nameUser"] = $("#nameUser").val();
     dataUser["lastnameUser"] = $("#lastnameUser").val();
     dataUser["emailUser"] = $("#emailUser").val();
@@ -191,7 +191,7 @@ $(document).ready(function () {
     let id_user = data.id_user;
     let programsMachine = data.programs_machine;
     dataUser = {};
-    dataUser["id_user"] = id_user;
+    dataUser["idUser"] = id_user;
     dataUser["programsMachine"] = programsMachine;
 
     bootbox.confirm({

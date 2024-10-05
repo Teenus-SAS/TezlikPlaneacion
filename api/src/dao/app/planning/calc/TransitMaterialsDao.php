@@ -30,7 +30,7 @@ class TransitMaterialsDao
                                                 END
                                             ), 0) AS transit
                                           FROM materials m
-                                          LEFT JOIN requisitions r ON r.id_material = m.id_material
+                                          LEFT JOIN requisitions_materials r ON r.id_material = m.id_material
                                           WHERE m.id_material = :id_material");
             $stmt->execute([
                 'id_material' => $id_material

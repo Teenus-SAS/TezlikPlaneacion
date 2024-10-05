@@ -74,7 +74,7 @@ class DashboardGeneralDao
         $percent = $stmt->fetch($connection::FETCH_ASSOC);
         return $percent;
     }
-    
+
     public function findOrdersNoProgramm($id_company)
     {
         $connection = Connection::getInstance()->getConnection();
@@ -139,7 +139,7 @@ class DashboardGeneralDao
                     SUM(CASE WHEN application_date <> '0000-00-00' THEN 1 ELSE 0 END) AS requisiciones_cumplidas,
                     ROUND((SUM(CASE WHEN application_date <> '0000-00-00' THEN 1 ELSE 0 END) / COUNT(*) * 100), 2) AS participacion
                 FROM
-                    requisitions
+                    requisitions_materials
                 WHERE id_company = :id_company;";
         $stmt = $connection->prepare($sql);
         $stmt->execute(['id_company' => $id_company]);

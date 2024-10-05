@@ -7,11 +7,11 @@ use TezlikPlaneacion\dao\GeneralExplosionMaterialsDao;
 use TezlikPlaneacion\dao\GeneralMaterialsDao;
 use TezlikPlaneacion\dao\GeneralProductsDao;
 use TezlikPlaneacion\dao\GeneralProductsMaterialsDao;
-use TezlikPlaneacion\dao\GeneralRequisitionsDao;
+use TezlikPlaneacion\dao\GeneralRequisitionsMaterialsDao;
 use TezlikPlaneacion\dao\GeneralRMStockDao;
 use TezlikPlaneacion\dao\MinimumStockDao;
 use TezlikPlaneacion\dao\ProductsMaterialsDao;
-use TezlikPlaneacion\dao\RequisitionsDao;
+use TezlikPlaneacion\dao\RequisitionsMaterialsDao;
 use TezlikPlaneacion\dao\RMStockDao;
 
 $stockDao = new RMStockDao();
@@ -27,8 +27,8 @@ $explosionMaterialsDao = new ExplosionMaterialsDao();
 $generalExMaterialsDao = new GeneralExplosionMaterialsDao();
 $conversionUnitsDao = new ConversionUnitsDao();
 $generalRMStockDao = new GeneralRMStockDao();
-$requisitionsDao = new RequisitionsDao();
-$generalRequisitionsDao = new GeneralRequisitionsDao();
+$requisitionsMaterialsDao = new RequisitionsMaterialsDao();
+$generalRequisitionsMaterialsDao = new GeneralRequisitionsMaterialsDao();
 
 use Psr\Http\Message\ResponseInterface as Response;
 use Psr\Http\Message\ServerRequestInterface as Request;
@@ -162,8 +162,8 @@ $app->post('/addRMStock', function (Request $request, Response $response, $args)
     $explosionMaterialsDao,
     $generalExMaterialsDao,
     $generalRMStockDao,
-    $requisitionsDao,
-    $generalRequisitionsDao
+    $requisitionsMaterialsDao,
+    $generalRequisitionsMaterialsDao
 ) {
     session_start();
     $dataStock = $request->getParsedBody();
@@ -216,13 +216,13 @@ $app->post('/addRMStock', function (Request $request, Response $response, $args)
                         $data['purchaseOrder'] = '';
                         $data['requestedQuantity'] = 0;
 
-                        $requisition = $generalRequisitionsDao->findRequisitionByApplicationDate($materials[$i]['id_material']);
+                        $requisition = $generalRequisitionsMaterialsDao->findRequisitionByApplicationDate($materials[$i]['id_material']);
 
                         if (!$requisition)
-                            $generalRequisitionsDao->insertRequisitionAutoByCompany($data, $id_company);
+                            $generalRequisitionsMaterialsDao->insertRequisitionAutoByCompany($data, $id_company);
                         else {
-                            $data['idRequisition'] = $requisition['id_requisition'];
-                            $generalRequisitionsDao->updateRequisitionAuto($data);
+                            $data['idRequisition'] = $requisition['id_requisition_material'];
+                            $generalRequisitionsMaterialsDao->updateRequisitionAuto($data);
                         }
                     }
                 }
@@ -322,8 +322,8 @@ $app->post('/updateRMStock', function (Request $request, Response $response, $ar
     $explosionMaterialsDao,
     $generalExMaterialsDao,
     $generalRMStockDao,
-    $requisitionsDao,
-    $generalRequisitionsDao
+    $requisitionsMaterialsDao,
+    $generalRequisitionsMaterialsDao
 ) {
     session_start();
 
@@ -376,13 +376,13 @@ $app->post('/updateRMStock', function (Request $request, Response $response, $ar
                     $data['purchaseOrder'] = '';
                     $data['requestedQuantity'] = 0;
 
-                    $requisition = $generalRequisitionsDao->findRequisitionByApplicationDate($materials[$i]['id_material']);
+                    $requisition = $generalRequisitionsMaterialsDao->findRequisitionByApplicationDate($materials[$i]['id_material']);
 
                     if (!$requisition)
-                        $generalRequisitionsDao->insertRequisitionAutoByCompany($data, $id_company);
+                        $generalRequisitionsMaterialsDao->insertRequisitionAutoByCompany($data, $id_company);
                     else {
-                        $data['idRequisition'] = $requisition['id_requisition'];
-                        $generalRequisitionsDao->updateRequisitionAuto($data);
+                        $data['idRequisition'] = $requisition['id_requisition_material'];
+                        $generalRequisitionsMaterialsDao->updateRequisitionAuto($data);
                     }
                 }
             }

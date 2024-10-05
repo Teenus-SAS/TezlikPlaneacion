@@ -15,7 +15,7 @@ use TezlikPlaneacion\dao\GeneralOrdersDao;
 use TezlikPlaneacion\dao\GeneralProductsDao;
 use TezlikPlaneacion\dao\GeneralProductsMaterialsDao;
 use TezlikPlaneacion\dao\GeneralProgrammingRoutesDao;
-use TezlikPlaneacion\dao\GeneralRequisitionsDao;
+use TezlikPlaneacion\dao\GeneralRequisitionsMaterialsDao;
 use TezlikPlaneacion\dao\GeneralRMStockDao;
 use TezlikPlaneacion\dao\GeneralSellersDao;
 use TezlikPlaneacion\dao\GeneralUnitSalesDao;
@@ -27,7 +27,7 @@ use TezlikPlaneacion\dao\OrdersDao;
 use TezlikPlaneacion\dao\ProductsDao;
 use TezlikPlaneacion\dao\ProductsMaterialsDao;
 use TezlikPlaneacion\dao\ProgrammingRoutesDao;
-use TezlikPlaneacion\dao\RequisitionsDao;
+use TezlikPlaneacion\dao\RequisitionsMaterialsDao;
 
 $unitSalesDao = new UnitSalesDao();
 $licenseDao = new LicenseCompanyDao();
@@ -51,8 +51,8 @@ $generalOrdersDao = new GeneralOrdersDao();
 $generalClientsDao = new GeneralClientsDao();
 $generalSellersDao = new GeneralSellersDao();
 $companiesLicenseDao = new CompaniesLicenseStatusDao();
-$requisitionsDao = new RequisitionsDao();
-$generalRequisitionsDao = new GeneralRequisitionsDao();
+$requisitionsMaterialsDao = new RequisitionsMaterialsDao();
+$generalRequisitionsMaterialsDao = new GeneralRequisitionsMaterialsDao();
 $conversionUnitsDao = new ConversionUnitsDao();
 $generalRMStockDao = new GeneralRMStockDao();
 $explosionMaterialsDao = new ExplosionMaterialsDao();
@@ -200,8 +200,8 @@ $app->post('/addUnitSales', function (Request $request, Response $response, $arg
     $generalOrdersDao,
     $generalClientsDao,
     $generalSellersDao,
-    $requisitionsDao,
-    $generalRequisitionsDao,
+    $requisitionsMaterialsDao,
+    $generalRequisitionsMaterialsDao,
     $conversionUnitsDao
 ) {
     session_start();
@@ -358,13 +358,13 @@ $app->post('/addUnitSales', function (Request $request, Response $response, $arg
                     $data['purchaseOrder'] = '';
                     $data['requestedQuantity'] = 0;
 
-                    $requisition = $generalRequisitionsDao->findRequisitionByApplicationDate($materials[$i]['id_material']);
+                    $requisition = $generalRequisitionsMaterialsDao->findRequisitionByApplicationDate($materials[$i]['id_material']);
 
                     if (!$requisition)
-                        $generalRequisitionsDao->insertRequisitionAutoByCompany($data, $id_company);
+                        $generalRequisitionsMaterialsDao->insertRequisitionAutoByCompany($data, $id_company);
                     else {
-                        $data['idRequisition'] = $requisition['id_requisition'];
-                        $generalRequisitionsDao->updateRequisitionAuto($data);
+                        $data['idRequisition'] = $requisition['id_requisition_material'];
+                        $generalRequisitionsMaterialsDao->updateRequisitionAuto($data);
                     }
                 }
             }
@@ -522,8 +522,8 @@ $app->post('/updateUnitSale', function (Request $request, Response $response, $a
     $generalClientsDao,
     $generalSellersDao,
     $ordersDao,
-    $requisitionsDao,
-    $generalRequisitionsDao
+    $requisitionsMaterialsDao,
+    $generalRequisitionsMaterialsDao
 ) {
     session_start();
     $id_company = $_SESSION['id_company'];
@@ -674,13 +674,13 @@ $app->post('/updateUnitSale', function (Request $request, Response $response, $a
                 $data['purchaseOrder'] = '';
                 $data['requestedQuantity'] = 0;
 
-                $requisition = $generalRequisitionsDao->findRequisitionByApplicationDate($materials[$i]['id_material']);
+                $requisition = $generalRequisitionsMaterialsDao->findRequisitionByApplicationDate($materials[$i]['id_material']);
 
                 if (!$requisition)
-                    $generalRequisitionsDao->insertRequisitionAutoByCompany($data, $id_company);
+                    $generalRequisitionsMaterialsDao->insertRequisitionAutoByCompany($data, $id_company);
                 else {
-                    $data['idRequisition'] = $requisition['id_requisition'];
-                    $generalRequisitionsDao->updateRequisitionAuto($data);
+                    $data['idRequisition'] = $requisition['id_requisition_material'];
+                    $generalRequisitionsMaterialsDao->updateRequisitionAuto($data);
                 }
             }
         }
@@ -758,8 +758,8 @@ $app->post('/deleteUnitSale', function (Request $request, Response $response, $a
     $generalOrdersDao,
     $generalClientsDao,
     $generalSellersDao,
-    $requisitionsDao,
-    $generalRequisitionsDao,
+    $requisitionsMaterialsDao,
+    $generalRequisitionsMaterialsDao,
     $compositeProductsDao
 ) {
     session_start();

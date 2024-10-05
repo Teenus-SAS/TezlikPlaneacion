@@ -6,7 +6,7 @@ use TezlikPlaneacion\Constants\Constants;
 use Monolog\Handler\RotatingFileHandler;
 use Monolog\Logger;
 
-class GeneralRequisitionsDao
+class GeneralRequisitionsMaterialsDao
 {
     private $logger;
 
@@ -33,7 +33,7 @@ class GeneralRequisitionsDao
         //                               ORDER BY r.admission_date ASC");
         $stmt = $connection->prepare("SELECT 
                                         -- Columnas
-                                            r.id_requisition, 
+                                            r.id_requisition_material, 
                                             r.num_order,
                                             r.id_material, 
                                             m.reference, 
@@ -55,7 +55,7 @@ class GeneralRequisitionsDao
                                             IFNULL(last_user.firstname_deliver, '') AS firstname_deliver, 
                                             IFNULL(last_user.lastname_deliver, '') AS lastname_deliver
                                       FROM 
-                                            requisitions r
+                                            requisitions_materials r
                                             INNER JOIN materials m ON m.id_material = r.id_material 
                                             INNER JOIN admin_units cu ON cu.id_unit = m.unit
                                             LEFT JOIN third_parties c ON c.id_client = r.id_provider
@@ -70,7 +70,7 @@ class GeneralRequisitionsDao
                                                     FROM requisitions_users cur_inner
                                                     WHERE cur_inner.id_requisition = cur.id_requisition
                                                 )
-                                            ) AS last_user ON last_user.id_requisition = r.id_requisition
+                                            ) AS last_user ON last_user.id_requisition = r.id_requisition_material
                                       WHERE r.id_company = :id_company AND (r.admission_date IS NULL OR MONTH(r.admission_date) = MONTH(CURRENT_DATE))
                                       ORDER BY r.admission_date ASC");
         $stmt->execute(['id_company' => $id_company]);
@@ -84,10 +84,10 @@ class GeneralRequisitionsDao
     public function findAllMinAndMaxRequisitionByCompany($min_date, $max_date, $id_company)
     {
         $connection = Connection::getInstance()->getConnection();
-        $stmt = $connection->prepare("SELECT r.id_requisition, r.num_order, r.id_material, m.reference, m.material, r.creation_date, r.application_date, r.delivery_date, r.quantity_requested, r.quantity_required, 
+        $stmt = $connection->prepare("SELECT r.id_requisition_material, r.num_order, r.id_material, m.reference, m.material, r.creation_date, r.application_date, r.delivery_date, r.quantity_requested, r.quantity_required, 
                                              r.purchase_order, r.admission_date, cu.abbreviation, IFNULL(r.id_provider, 0) AS id_provider, IFNULL(c.client, '') AS provider,
                                              IFNULL(ur.id_user, 0) AS id_user_requisition, IFNULL(ur.firstname, '') AS firstname_requisition, IFNULL(ur.lastname, '') AS lastname_requisition
-                                      FROM requisitions r
+                                      FROM requisitions_materials r
                                         INNER JOIN materials m ON m.id_material = r.id_material
                                         INNER JOIN admin_units cu ON cu.id_unit = m.unit
                                         LEFT JOIN third_parties c ON c.id_client = r.id_provider
@@ -110,7 +110,7 @@ class GeneralRequisitionsDao
     {
         $connection = Connection::getInstance()->getConnection();
 
-        $stmt = $connection->prepare("SELECT * FROM requisitions 
+        $stmt = $connection->prepare("SELECT * FROM requisitions_materials
                                       WHERE id_material = :id_material 
                                       AND id_provider = :id_provicer
                                       AND application_date = '0000-00-00'
@@ -129,7 +129,7 @@ class GeneralRequisitionsDao
     {
         $connection = Connection::getInstance()->getConnection();
 
-        $stmt = $connection->prepare("SELECT * FROM requisitions WHERE id_material = :id_material AND application_date = '0000-00-00'");
+        $stmt = $connection->prepare("SELECT * FROM requisitions_materials WHERE id_material = :id_material AND application_date = '0000-00-00'");
         $stmt->execute([
             'id_material' => $id_material
         ]);
@@ -144,7 +144,7 @@ class GeneralRequisitionsDao
         $connection = Connection::getInstance()->getConnection();
 
         try {
-            $stmt = $connection->prepare("INSERT INTO requisitions (id_company, num_order, id_material, id_provider, application_date, delivery_date, quantity_required, purchase_order) 
+            $stmt = $connection->prepare("INSERT INTO requisitions_materials (id_company, num_order, id_material, id_provider, application_date, delivery_date, quantity_required, purchase_order) 
                                           VALUES (:id_company, :num_order, :id_material, :id_provider, :application_date, :delivery_date, :quantity_required, :purchase_order)");
             $stmt->execute([
                 'id_company' => $id_company,
@@ -170,9 +170,9 @@ class GeneralRequisitionsDao
         $connection = Connection::getInstance()->getConnection();
 
         try {
-            $stmt = $connection->prepare("UPDATE requisitions SET num_order = :num_order, id_material = :id_material, id_provider = :id_provider, application_date = :application_date, 
+            $stmt = $connection->prepare("UPDATE requisitions_materials SET num_order = :num_order, id_material = :id_material, id_provider = :id_provider, application_date = :application_date, 
                                                                   delivery_date = :delivery_date, quantity_required = :quantity_required, purchase_order = :purchase_order
-                                    WHERE id_requisition = :id_requisition");
+                                    WHERE id_requisition_material = :id_requisition");
             $stmt->execute([
                 'id_requisition' => $dataRequisition['idRequisition'],
                 'num_order' => $dataRequisition['numOrder'],
@@ -196,7 +196,7 @@ class GeneralRequisitionsDao
         $connection = Connection::getInstance()->getConnection();
 
         try {
-            $stmt = $connection->prepare("UPDATE requisitions SET admission_date = :admission_date WHERE id_requisition = :id_requisition");
+            $stmt = $connection->prepare("UPDATE requisitions_materials SET admission_date = :admission_date WHERE id_requisition_material = :id_requisition");
             $stmt->execute([
                 'id_requisition' => $dataRequisition['idRequisition'],
                 'admission_date' => $dataRequisition['date'],
@@ -214,8 +214,8 @@ class GeneralRequisitionsDao
         $connection = Connection::getInstance()->getConnection();
 
         try {
-            $stmt = $connection->prepare("UPDATE requisitions SET application_date = '0000-00-00', delivery_date = '0000-00-00', quantity_requested = 0, purchase_order = '', id_user_requisition = 0
-                                          WHERE id_requisition = :id_requisition");
+            $stmt = $connection->prepare("UPDATE requisitions_materials SET application_date = '0000-00-00', delivery_date = '0000-00-00', quantity_requested = 0, purchase_order = '', id_user_requisition = 0
+                                          WHERE id_requisition_material = :id_requisition");
             $stmt->execute([
                 'id_requisition' => $id_requisition,
             ]);
@@ -231,7 +231,7 @@ class GeneralRequisitionsDao
     {
         $connection = Connection::getInstance()->getConnection();
 
-        $stmt = $connection->prepare("DELETE FROM requisitions 
+        $stmt = $connection->prepare("DELETE FROM requisitions_materials
                                       WHERE application_date = '0000-00-00' AND delivery_date = '0000-00-00' AND purchase_order = ''");
         $stmt->execute();
         $this->logger->info(__FUNCTION__, array('query' => $stmt->queryString, 'errors' => $stmt->errorInfo()));

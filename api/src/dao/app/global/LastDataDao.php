@@ -93,7 +93,7 @@ class LastDataDao
     public function lastInsertedRequisitionId($id_company)
     {
         $connection = Connection::getInstance()->getConnection();
-        $sql = "SELECT MAX(id_requisition) AS id_requisition FROM requisitions WHERE id_company = :id_company";
+        $sql = "SELECT MAX(id_requisition_material) AS id_requisition_material FROM requisitions_materials WHERE id_company = :id_company";
         $query = $connection->prepare($sql);
         $query->execute(['id_company' => $id_company]);
         $material = $query->fetch($connection::FETCH_ASSOC);

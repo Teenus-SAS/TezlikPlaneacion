@@ -128,16 +128,26 @@ class UserAccessDao
                                                       )
                                         ");
             $stmt->execute([
-                'id_user' => $dataUser['id_user'],                                      'inventory_abc' => $dataUser['inventoryABC'],
-                'create_product' => $dataUser['planningCreateProduct'],                 'client' => $dataUser['client'],
-                'create_material' => $dataUser['planningCreateMaterial'],               'user' => $dataUser['plannigUser'],
-                'create_machine' => $dataUser['planningCreateMachine'],                 'inventory' => $dataUser['inventory'],
-                'requisition' => $dataUser['requisition'],                              'plan_order' => $dataUser['order'],
-                'products_material' => $dataUser['planningProductsMaterial'],           'program' => $dataUser['program'],
-                'programs_machine' => $dataUser['programsMachine'],                     'explosion_of_material' => $dataUser['explosionOfMaterial'],
-                'cicles_machine' => $dataUser['ciclesMachine'],                         'office' => $dataUser['office'],
-                'stock' => $dataUser['stock'],                                          'production_order' => $dataUser['productionOrder'],
-                'sale' => $dataUser['sale'],                                            'store' => $dataUser['store'],
+                'id_user' => $dataUser['idUser'],
+                'inventory_abc' => $dataUser['inventoryABC'],
+                'create_product' => $dataUser['planningCreateProduct'],
+                'client' => $dataUser['client'],
+                'create_material' => $dataUser['planningCreateMaterial'],
+                'user' => $dataUser['plannigUser'],
+                'create_machine' => $dataUser['planningCreateMachine'],
+                'inventory' => $dataUser['inventory'],
+                'requisition' => $dataUser['requisition'],
+                'plan_order' => $dataUser['order'],
+                'products_material' => $dataUser['planningProductsMaterial'],
+                'program' => $dataUser['program'],
+                'programs_machine' => $dataUser['programsMachine'],
+                'explosion_of_material' => $dataUser['explosionOfMaterial'],
+                'cicles_machine' => $dataUser['ciclesMachine'],
+                'office' => $dataUser['office'],
+                'stock' => $dataUser['stock'],
+                'production_order' => $dataUser['productionOrder'],
+                'sale' => $dataUser['sale'],
+                'store' => $dataUser['store'],
             ]);
             $this->logger->info(__FUNCTION__, array('query' => $stmt->queryString, 'errors' => $stmt->errorInfo()));
         } catch (\Exception $e) {
@@ -188,16 +198,26 @@ class UserAccessDao
                                                             store = :store
                                               WHERE id_user = :id_user");
                 $stmt->execute([
-                    'id_user' => $dataUser['id_user'],                                      'inventory_abc' => $dataUser['inventoryABC'],
-                    'create_product' => $dataUser['planningCreateProduct'],                 'client' => $dataUser['client'],
-                    'create_material' => $dataUser['planningCreateMaterial'],               'user' => $dataUser['plannigUser'],
-                    'create_machine' => $dataUser['planningCreateMachine'],                 'inventory' => $dataUser['inventory'],
-                    'requisition' => $dataUser['requisition'],                              'plan_order' => $dataUser['order'],
-                    'products_material' => $dataUser['planningProductsMaterial'],           'program' => $dataUser['program'],
-                    'programs_machine' => $dataUser['programsMachine'],                     'explosion_of_material' => $dataUser['explosionOfMaterial'],
-                    'cicles_machine' => $dataUser['ciclesMachine'],                         'office' => $dataUser['office'],
-                    'stock' => $dataUser['stock'],                                          'production_order' => $dataUser['productionOrder'],
-                    'sale' => $dataUser['sale'],                                            'store' => $dataUser['store'],
+                    'id_user' => $dataUser['idUser'],
+                    'inventory_abc' => $dataUser['inventoryABC'],
+                    'create_product' => $dataUser['planningCreateProduct'],
+                    'client' => $dataUser['client'],
+                    'create_material' => $dataUser['planningCreateMaterial'],
+                    'user' => $dataUser['plannigUser'],
+                    'create_machine' => $dataUser['planningCreateMachine'],
+                    'inventory' => $dataUser['inventory'],
+                    'requisition' => $dataUser['requisition'],
+                    'plan_order' => $dataUser['order'],
+                    'products_material' => $dataUser['planningProductsMaterial'],
+                    'program' => $dataUser['program'],
+                    'programs_machine' => $dataUser['programsMachine'],
+                    'explosion_of_material' => $dataUser['explosionOfMaterial'],
+                    'cicles_machine' => $dataUser['ciclesMachine'],
+                    'office' => $dataUser['office'],
+                    'stock' => $dataUser['stock'],
+                    'production_order' => $dataUser['productionOrder'],
+                    'sale' => $dataUser['sale'],
+                    'store' => $dataUser['store'],
                 ]);
                 $this->logger->info(__FUNCTION__, array('query' => $stmt->queryString, 'errors' => $stmt->errorInfo()));
             } catch (\Exception $e) {
@@ -214,7 +234,7 @@ class UserAccessDao
     {
         $connection = Connection::getInstance()->getConnection();
         $stmt = $connection->prepare("DELETE FROM users_access WHERE id_user = :id_user");
-        $stmt->execute(['id_user' => $dataUser['id_user']]);
+        $stmt->execute(['id_user' => $dataUser['idUser']]);
         $this->logger->info(__FUNCTION__, array('query' => $stmt->queryString, 'errors' => $stmt->errorInfo()));
     }
 }

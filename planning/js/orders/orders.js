@@ -110,9 +110,16 @@ $(document).ready(function () {
     //let date = new Date().toISOString().split("T")[0];
     let date = new Date().toLocaleDateString("en-CA");
 
-    if (minDate < date || maxDate < date || dateOrder < date) {
+    if (minDate < date || maxDate < date) {
       toastr.error("Fecha por debajo de la fecha actual");
       return false;
+    }
+
+    if (idOrder) {
+      if (dateOrder < date) {
+        toastr.error("Fecha por debajo de la fecha actual");
+        return false;
+      }
     }
 
     // if (originalQuantity > accumulated_quantity) {
