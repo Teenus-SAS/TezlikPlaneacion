@@ -13,7 +13,7 @@ $(document).ready(function () {
       ".cardPMeasure, .cardCreatePMeasure, .cardImportPMeasure, .cardPTypes, .cardCreatePType"
     ).hide();
     //Ocultar el Tipo de Producto
-    $(".cardSelect").hide();
+    //$(".cardSelect").hide();
 
     // Mostrar la sección correspondiente según la opción seleccionada
     $(sections[option] || "").show();
