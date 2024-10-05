@@ -61,87 +61,71 @@ if (sizeof($_SESSION) == 0)
                 <!-- Page content -->
                 <div class="page-content-wrapper mt--45">
                     <div class="container-fluid">
-                        <!-- Pestañas principales -->
+                        <!-- Tabs -->
                         <div class="row">
                             <div class="col-12">
-                                <ul class="nav nav-tabs" id="mainTabs" role="tablist">
+                                <ul class="nav nav-tabs" id="pills-tab" role="tablist">
                                     <li class="nav-item">
-                                        <a class="nav-link active" id="tabOC" data-toggle="pill" href="#paneOC" role="tab" aria-controls="paneOC" aria-selected="true">
+                                        <a class="nav-link active selectNavigation" id="receiveOC" data-toggle="pill" href="javascript:;" role="tab" aria-controls="pills-activity" aria-selected="true">
                                             <i class="fas fa-dolly mr-1"></i>Ordenes de Compra
                                         </a>
                                     </li>
                                     <li class="nav-item">
-                                        <a class="nav-link" id="tabOP" data-toggle="pill" href="#paneOP" role="tab" aria-controls="paneOP" aria-selected="false">
+                                        <a class="nav-link selectNavigation" id="deliverOC" data-toggle="pill" href="javascript:;" role="tab" aria-controls="pills-activity" aria-selected="true">
                                             <i class="fas fa-dolly-flatbed mr-1"></i>Ordenes de Producción
                                         </a>
                                     </li>
+                                    <li class="nav-item">
+                                        <a class="nav-link selectNavigation" id="receiveOP" data-toggle="pill" href="javascript:;" role="tab" aria-controls="pills-projects" aria-selected="false">
+                                            <i class="fas fa-dolly-flatbed mr-1"></i>Ordenes de Producción (Recibir)
+                                        </a>
+                                    </li>
                                 </ul>
+                            </div>
+                        </div>
 
-                                <!-- Contenido de las pestañas principales -->
-                                <div class="tab-content mt-3" id="mainTabContent">
-                                    <!-- Ordenes de Compra -->
-                                    <div class="tab-pane fade show active" id="paneOC" role="tabpanel" aria-labelledby="tabOC">
-                                        <div class="table-responsive">
-                                            <table class="fixed-table-loading table table-hover" id="tblStore"></table>
+                        <!-- Content -->
+                        <div class="row">
+                            <div class="col-12">
+                                <div class="card">
+                                    <div class="card-body">
+                                        <div class="tab-pane cardOC" role="tabpanel" aria-labelledby="pills-activity-tab">
+                                            <div class="table-responsive">
+                                                <table class="fixed-table-loading table table-hover" id="tblStore"></table>
+                                            </div>
                                         </div>
-                                    </div>
 
-                                    <!-- Ordenes de Producción -->
-                                    <div class="tab-pane fade" id="paneOP" role="tabpanel" aria-labelledby="tabOP">
-                                        <!-- Sub-pestañas para Ordenes de Producción -->
-                                        <ul class="nav nav-tabs" id="subTabOP" role="tablist">
-                                            <li class="nav-item">
-                                                <a class="nav-link active" id="subTabReceiveOP" data-toggle="pill" href="#paneReceiveOP" role="tab" aria-controls="paneReceiveOP" aria-selected="true">
-                                                    Recibir
-                                                </a>
-                                            </li>
-                                            <li class="nav-item">
-                                                <a class="nav-link" id="subTabDeliverOP" data-toggle="pill" href="#paneDeliverOP" role="tab" aria-controls="paneDeliverOP" aria-selected="false">
-                                                    Entregar
-                                                </a>
-                                            </li>
-                                        </ul>
+                                        <!-- Pestaña Ordenes de Producción (Recibir) con sub-pestañas -->
+                                        <div class="tab-pane cardOP" id="tabReceiveOP" style="display: none;" role="tabpanel" aria-labelledby="pills-projects-tab">
+                                            <!-- Sub-pestañas para Productos Terminados y Devolución Materia Prima -->
+                                            <ul class="nav nav-tabs" id="subTabReceiveOP" role="tablist">
+                                                <li class="nav-item">
+                                                    <a class="nav-link active" id="tabPT" data-toggle="pill" href="#panePT" role="tab" aria-controls="panePT" aria-selected="true">
+                                                        Productos Terminados
+                                                    </a>
+                                                </li>
+                                                <li class="nav-item">
+                                                    <a class="nav-link" id="tabMP" data-toggle="pill" href="#paneMP" role="tab" aria-controls="paneMP" aria-selected="false">
+                                                        Devolución Materia Prima
+                                                    </a>
+                                                </li>
+                                            </ul>
 
-                                        <!-- Contenido de las sub-pestañas de Ordenes de Producción -->
-                                        <div class="tab-content mt-3" id="subTabOPContent">
-                                            <!-- Recibir -->
-                                            <div class="tab-pane fade show active" id="paneReceiveOP" role="tabpanel" aria-labelledby="subTabReceiveOP">
-                                                <div class="table-responsive">
-                                                    <table class="fixed-table-loading table table-hover" id="tblStore"></table>
+                                            <!-- Contenido de las sub-pestañas -->
+                                            <div class="tab-content mt-3">
+                                                <div class="tab-pane fade show active" id="panePT" role="tabpanel" aria-labelledby="tabPT">
+                                                    <table class="fixed-table-loading table table-hover" id="tblPartialsDeliveryPT"></table>
+                                                </div>
+                                                <div class="tab-pane fade" id="paneMP" role="tabpanel" aria-labelledby="tabMP">
+                                                    <table class="fixed-table-loading table table-hover" id="tblPartialsDeliveryMP"></table>
                                                 </div>
                                             </div>
+                                        </div> <!-- /tab-pane cardOP -->
 
-                                            <!-- Entregar -->
-                                            <div class="tab-pane fade" id="paneDeliverOP" role="tabpanel" aria-labelledby="subTabDeliverOP">
-                                                <!-- Sub-pestañas para Entregar -->
-                                                <ul class="nav nav-tabs" id="subTabDeliver" role="tablist">
-                                                    <li class="nav-item">
-                                                        <a class="nav-link active" id="subTabPT" data-toggle="pill" href="#panePT" role="tab" aria-controls="panePT" aria-selected="true">
-                                                            Productos Terminados
-                                                        </a>
-                                                    </li>
-                                                    <li class="nav-item">
-                                                        <a class="nav-link" id="subTabMP" data-toggle="pill" href="#paneMP" role="tab" aria-controls="paneMP" aria-selected="false">
-                                                            Devolución Materia Prima
-                                                        </a>
-                                                    </li>
-                                                </ul>
-
-                                                <!-- Contenido de las sub-pestañas de Entregar -->
-                                                <div class="tab-content mt-3">
-                                                    <div class="tab-pane fade show active" id="panePT" role="tabpanel" aria-labelledby="subTabPT">
-                                                        <table class="fixed-table-loading table table-hover" id="tblPartialsDeliveryPT"></table>
-                                                    </div>
-                                                    <div class="tab-pane fade" id="paneMP" role="tabpanel" aria-labelledby="subTabMP">
-                                                        <table class="fixed-table-loading table table-hover" id="tblPartialsDeliveryMP"></table>
-                                                    </div>
-                                                </div>
-                                            </div> <!-- /paneDeliverOP -->
-                                        </div> <!-- /subTabOPContent -->
-                                    </div> <!-- /paneOP -->
-                                </div> <!-- /mainTabContent -->
-                            </div> <!-- /col-12 -->
-                        </div> <!-- /row -->
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -158,7 +142,6 @@ if (sizeof($_SESSION) == 0)
     <script src="/planning/js/store/exportStore.js"></script>
     <script src="/planning/js/productionOrder/tblProductionOrderPartial.js"></script>
 </body>
-
 
 
 </html>
