@@ -2,7 +2,10 @@ $(document).ready(function () {
   loadTblPartialsDelivery = (id_programming, visible) => {
     tblPartialsDelivery = $("#tblPartialsDelivery").dataTable({
       destroy: true,
-      pageLength: 50,
+      dom: "t",
+      paging: false,
+      info: false,
+      searching: false,
       ajax: {
         url: `/api/productionOrderPartial/${id_programming}`,
         dataSrc: "",
@@ -67,10 +70,10 @@ $(document).ready(function () {
         },
         {
           title: "Fecha Creacion",
-          data: 'creation_date',
+          data: "creation_date",
           className: "uniqueClassName dt-head-center",
           width: "200px",
-          render: function (data, type, full, meta) { 
+          render: function (data, type, full, meta) {
             return moment(data).format("DD/MM/YYYY HH:mm A");
           },
         },

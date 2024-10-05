@@ -107,8 +107,8 @@ if (sizeof($_SESSION) == 0)
 												</div>
 											</div>
 										</div>
-										<hr>
-										<div class="row">
+										<hr class="m-0">
+										<div class="row mt-3">
 											<div class="col-12 mb-3">
 												<h4 class=" font-weight-bold text-dark">1. Información del Pedido</h4>
 											</div>
@@ -140,11 +140,11 @@ if (sizeof($_SESSION) == 0)
 											</div>
 
 										</div>
-										<hr>
+										<hr class="m-0">
 
 										<div class="row py-4">
 											<div class="col-10 mb-3">
-												<h4 class=" font-weight-bold text-dark">1. Información del Producto</h4>
+												<h4 class=" font-weight-bold text-dark">2. Información del Producto</h4>
 											</div>
 											<div class="col-4">
 												<div class="form-group floating-label enable-floating-label show-label">
@@ -186,10 +186,10 @@ if (sizeof($_SESSION) == 0)
 												</div>
 											<?php } ?>
 										</div>
-										<hr>
+										<hr class="m-0">
 										<div class="row py-4">
 											<div class="col-10">
-												<h4 class="font-weight-bold text-dark">2. Materiales y Componentes</h4>
+												<h4 class="font-weight-bold text-dark">3. Materiales y Componentes</h4>
 											</div>
 										</div>
 										<div class="row">
@@ -214,10 +214,10 @@ if (sizeof($_SESSION) == 0)
 												</div>
 											</div>
 										</div>
-										<hr>
+										<hr class="m-0">
 
-										<?php if ($_SESSION['flag_products_measure'] == 1) { ?>
-											<div class="row py-4">
+										<?php //if ($_SESSION['flag_products_measure'] == 1) { ?>
+<!-- 											<div class="row py-4">
 												<div class="col-12 mb-3">
 													<h5 class="font-weight-bold text-dark">3. Acabados Especiales</h5>
 												</div>
@@ -274,8 +274,8 @@ if (sizeof($_SESSION) == 0)
 													<input type="number" class="form-control text-center" id="window" readonly>
 												</div>
 											</div>
-											<hr>
-										<?php } ?>
+											<hr> -->
+										<?php //} ?>
 
 										<div class="row py-4">
 											<div class="col-10">
@@ -302,7 +302,7 @@ if (sizeof($_SESSION) == 0)
 											</div>
 										</div>
 
-										<hr>
+										<hr class="m-0">
 
 										<div class="cardExcOP">
 											<div class="row py-4">
@@ -360,7 +360,7 @@ if (sizeof($_SESSION) == 0)
 											</div>
 										</div>
 
-										<hr>
+										<hr class="m-0">
 
 										<div class="cardExcOP">
 											<div class="row py-4">
@@ -409,7 +409,7 @@ if (sizeof($_SESSION) == 0)
 											</div>
 										</div>
 
-										<hr>
+										<hr class="m-0">
 
 										<div class="row cardCloseOP">
 											<div class="col-sm-12 mt-4">

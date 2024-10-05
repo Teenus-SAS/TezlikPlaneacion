@@ -203,8 +203,11 @@ $(document).ready(function () {
       fixedHeader: true,
       scrollY: "400px",
       scrollCollapse: true,
+      dom: "t",
+      paging: false,
+      info: false,
+      searching: false,
       destroy: true,
-      pageLength: 50,
       data: data,
       language: { url: "/assets/plugins/i18n/Spanish.json" },
       columns: [

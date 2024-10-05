@@ -4,6 +4,10 @@ $(document).ready(function () {
     fixedHeader: true,
     scrollY: "400px",
     scrollCollapse: true,
+    dom: "t",
+    paging: false,
+    info: false,
+    searching: false,
     destroy: true,
     pageLength: 50,
     ajax: {
@@ -84,6 +88,16 @@ $(document).ready(function () {
         },
       },
     ],
+    headerCallback: (thead) => {
+      $(thead).find("th").css({
+        "background-color": "#386297",
+        color: "white",
+        "text-align": "center",
+        "font-weight": "bold",
+        padding: "10px",
+        border: "1px solid #ddd",
+      });
+    },
     rowGroup: {
       dataSrc: function (row) {
         return `<th class="text-center" colspan="8" style="font-weight: bold;"> Orden Produccion - ${row.num_production} </th>`;
@@ -219,6 +233,10 @@ $(document).ready(function () {
 
   // Materiales
   tblPartialsDeliveryMP = $("#tblPartialsDeliveryMP").dataTable({
+    dom: "t",
+    paging: false,
+    info: false,
+    searching: false,
     destroy: true,
     pageLength: 50,
     ajax: {
@@ -269,6 +287,16 @@ $(document).ready(function () {
         },
       },
     ],
+    headerCallback: (thead) => {
+      $(thead).find("th").css({
+        "background-color": "#386297",
+        color: "white",
+        "text-align": "center",
+        "font-weight": "bold",
+        padding: "10px",
+        border: "1px solid #ddd",
+      });
+    },
     rowGroup: {
       dataSrc: function (row) {
         return `<th class="text-center" colspan="8" style="font-weight: bold;"> Orden Produccion - ${row.num_production} </th>`;
