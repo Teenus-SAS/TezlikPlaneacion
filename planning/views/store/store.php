@@ -95,7 +95,7 @@ if (sizeof($_SESSION) == 0)
                                         <div class="card">
                                             <div class="card-body p-0">
                                                 <!-- Sub-pestañas para Ordenes de Producción -->
-                                                <ul class="nav nav-tabs mt-3" id="subTabOP" role="tablist">
+                                                <ul class="nav nav-tabs mt-3 ml-3" id="subTabOP" role="tablist">
                                                     <li class="nav-item">
                                                         <a class="nav-link active" id="subTabReceiveOP" data-toggle="pill" href="#paneReceiveOP" role="tab" aria-controls="paneReceiveOP" aria-selected="true">
                                                             Recibir
