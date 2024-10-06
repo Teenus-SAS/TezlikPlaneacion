@@ -425,6 +425,11 @@ $(document).ready(function () {
   //     return false;
   // });
 
+  setTimeout(function () {
+    tblPartialsDeliveryPT.columns.adjust().draw();
+    tblPartialsDeliveryMP.adjust().draw();
+  }, 500);
+
   const messageOPMP = (data) => {
     const { success, error, info, message } = data;
     if (success) {
