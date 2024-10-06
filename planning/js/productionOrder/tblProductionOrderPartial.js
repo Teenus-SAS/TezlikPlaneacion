@@ -2,6 +2,7 @@ $(document).ready(function () {
   // Productos
   tblPartialsDeliveryPT = $("#tblPartialsDeliveryPT").dataTable({
     fixedHeader: true,
+    autoWidth: true,
     scrollY: "400px",
     scrollCollapse: true,
     destroy: true,
