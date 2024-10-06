@@ -4,10 +4,6 @@ $(document).ready(function () {
     fixedHeader: true,
     scrollY: "400px",
     scrollCollapse: true,
-    dom: "t",
-    paging: false,
-    info: false,
-    searching: false,
     destroy: true,
     pageLength: 50,
     ajax: {
@@ -233,10 +229,6 @@ $(document).ready(function () {
 
   // Materiales
   tblPartialsDeliveryMP = $("#tblPartialsDeliveryMP").dataTable({
-    dom: "t",
-    paging: false,
-    info: false,
-    searching: false,
     destroy: true,
     pageLength: 50,
     ajax: {
