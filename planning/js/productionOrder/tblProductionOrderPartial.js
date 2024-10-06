@@ -1,12 +1,13 @@
 $(document).ready(function () {
   // Productos
   tblPartialsDeliveryPT = $("#tblPartialsDeliveryPT").dataTable({
-    fixedHeader: true,
     autoWidth: true,
-    scrollY: "400px",
+    fixedHeader: true,
     scrollCollapse: true,
+    scrollY: "400px",
     destroy: true,
     pageLength: 50,
+
     ajax: {
       url: `/api/productionOrderPartial`,
       dataSrc: "",
@@ -230,6 +231,10 @@ $(document).ready(function () {
 
   // Materiales
   tblPartialsDeliveryMP = $("#tblPartialsDeliveryMP").dataTable({
+    autoWidth: true,
+    fixedHeader: true,
+    scrollCollapse: true,
+    scrollY: "400px",
     destroy: true,
     pageLength: 50,
     ajax: {
