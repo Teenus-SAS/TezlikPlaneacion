@@ -428,7 +428,7 @@ $(document).ready(function () {
   setTimeout(function () {
     tblPartialsDeliveryPT.columns.adjust().draw();
     tblPartialsDeliveryMP.adjust().draw();
-  }, 500);
+  }, 1000);
 
   const messageOPMP = (data) => {
     const { success, error, info, message } = data;
