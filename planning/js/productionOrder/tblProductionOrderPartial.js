@@ -425,11 +425,15 @@ $(document).ready(function () {
   //     return false;
   // });
 
-  var table = $("#tblPartialsDeliveryPT").DataTable();
-  table.columns.adjust().draw();
+  if ($.fn.DataTable.isDataTable("#tblPartialsDeliveryPT")) {
+    var table = $("#tblPartialsDeliveryPT").DataTable();
+    table.columns.adjust().draw();
+  } else {
+    console.log("La tabla #tblPartialsDeliveryPT aún no ha sido inicializada.");
+  }
 
-  var table = $("#tblPartialsDeliveryMP").DataTable();
-  table.columns.adjust().draw();
+  /*  var table = $("#tblPartialsDeliveryMP").DataTable();
+  table.columns.adjust().draw(); */
 
   const messageOPMP = (data) => {
     const { success, error, info, message } = data;
