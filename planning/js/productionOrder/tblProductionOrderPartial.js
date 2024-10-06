@@ -5,6 +5,7 @@ $(document).ready(function () {
     fixedHeader: true,
     scrollCollapse: true,
     scrollY: "400px",
+    scrollX: true,
     destroy: true,
     pageLength: 50,
 
@@ -235,6 +236,7 @@ $(document).ready(function () {
     fixedHeader: true,
     scrollCollapse: true,
     scrollY: "400px",
+    scrollX: true,
     destroy: true,
     pageLength: 50,
     ajax: {
