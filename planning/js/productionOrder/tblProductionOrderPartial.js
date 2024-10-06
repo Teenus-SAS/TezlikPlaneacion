@@ -9,6 +9,11 @@ $(document).ready(function () {
     destroy: true,
     pageLength: 50,
 
+    fixedColumns: {
+      leftColumns: 1,
+      rightColumns: 1,
+    },
+
     ajax: {
       url: `/api/productionOrderPartial`,
       dataSrc: "",
@@ -239,6 +244,12 @@ $(document).ready(function () {
     scrollX: true,
     destroy: true,
     pageLength: 50,
+
+    fixedColumns: {
+      leftColumns: 1,
+      rightColumns: 1,
+    },
+
     ajax: {
       url: `/api/productionOrderMaterial`,
       dataSrc: "",
