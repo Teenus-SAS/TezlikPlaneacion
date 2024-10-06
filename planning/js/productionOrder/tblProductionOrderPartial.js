@@ -1,11 +1,11 @@
 $(document).ready(function () {
   // Productos
   tblPartialsDeliveryPT = $("#tblPartialsDeliveryPT").dataTable({
-    autoWidth: true,
+    /* autoWidth: true,
     fixedHeader: true,
     scrollCollapse: true,
     scrollY: "400px",
-    scrollX: true,
+    scrollX: true, */
     destroy: true,
     pageLength: 50,
 
@@ -237,11 +237,11 @@ $(document).ready(function () {
 
   // Materiales
   tblPartialsDeliveryMP = $("#tblPartialsDeliveryMP").dataTable({
-    autoWidth: true,
+    /* autoWidth: true,
     fixedHeader: true,
     scrollCollapse: true,
     scrollY: "400px",
-    scrollX: true,
+    scrollX: true, */
     destroy: true,
     pageLength: 50,
 
@@ -424,11 +424,6 @@ $(document).ready(function () {
   //     });
   //     return false;
   // });
-
-  setTimeout(function () {
-    tblPartialsDeliveryPT.columns.adjust().draw();
-    tblPartialsDeliveryMP.adjust().draw();
-  }, 1000);
 
   const messageOPMP = (data) => {
     const { success, error, info, message } = data;
