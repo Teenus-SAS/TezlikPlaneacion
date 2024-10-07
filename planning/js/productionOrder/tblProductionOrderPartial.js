@@ -1,14 +1,9 @@
 $(document).ready(function () {
   // Productos
   tblPartialsDeliveryPT = $("#tblPartialsDeliveryPT").dataTable({
-    /* autoWidth: true,
-    fixedHeader: true,
-    scrollCollapse: true,
-    scrollY: "400px",
-    scrollX: true, */
+    autoWidth: false,
     destroy: true,
     pageLength: 50,
-
     fixedColumns: {
       leftColumns: 1,
       rightColumns: 1,
@@ -237,14 +232,9 @@ $(document).ready(function () {
 
   // Materiales
   tblPartialsDeliveryMP = $("#tblPartialsDeliveryMP").dataTable({
-    /* autoWidth: true,
-    fixedHeader: true,
-    scrollCollapse: true,
-    scrollY: "400px",
-    scrollX: true, */
+    autoWidth: false,
     destroy: true,
     pageLength: 50,
-
     fixedColumns: {
       leftColumns: 1,
       rightColumns: 1,
@@ -439,4 +429,10 @@ $(document).ready(function () {
     $("#tblPartialsDeliveryMP").DataTable().clear();
     $("#tblPartialsDeliveryMP").DataTable().ajax.reload();
   }
+
+  // Ajuste de columnas y redibujado tras la inicialización
+  setTimeout(function () {
+    tblPartialsDeliveryMP.columns.adjust().draw();
+    tblPartialsDeliveryPT.columns.adjust().draw();
+  }, 500);
 });
