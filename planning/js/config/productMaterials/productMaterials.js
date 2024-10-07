@@ -79,19 +79,26 @@ $(document).ready(function () {
 
       isNaN(quantity) ? (quantity = 0) : quantity;
 
-      $.ajax({
-        type: "POST",
-        url: "/api/calcQuantityFTM",
-        data: {
-          idProduct: idProduct,
-          idMaterial: idMaterial,
-          type: type,
-          quantityCalc: quantity,
-        },
-        success: function (resp) {
-          $("#quantity").val(resp.weight);
-        },
-      });
+      let dataProduct = JSON.parse(sessionStorage.getItem('dataProducts'));
+      let data = dataProduct.find(item => item.id_product == idProduct);
+
+      if (data.origin == 2) {
+        $.ajax({
+          type: "POST",
+          url: "/api/calcQuantityFTM",
+          data: {
+            idProduct: idProduct,
+            idMaterial: idMaterial,
+            type: type,
+            quantityCalc: quantity,
+          },
+          success: function (resp) {
+            $("#quantity").val(resp.weight);
+          },
+        });
+      } else {
+        $("#quantity").prop("readonly", false);        
+      }
     });
 
     $("#aQuantity").prop("readonly", true);
@@ -99,15 +106,15 @@ $(document).ready(function () {
     $(document).on("change keyup", ".calcAMWeight", async function () {
       const idProduct = parseInt($("#selectNameProduct").val());
       const idMaterial = parseInt($("#aMaterial").val());
-      // const type = parseInt($("#materialType").val());
+      const type = parseInt($("#materialType").val());
 
       const validate = idProduct * idMaterial;
 
       if (!validate) return false;
 
-      // let quantity = parseFloat($("#quantityCalc").val());
+      let quantity = parseFloat($("#quantityCalc").val());
 
-      // isNaN(quantity) ? (quantity = 0) : quantity;
+      isNaN(quantity) ? (quantity = 0) : quantity;
 
       $.ajax({
         type: "POST",

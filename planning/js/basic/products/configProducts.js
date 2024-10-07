@@ -5,7 +5,7 @@ $(document).ready(function () {
       sessionStorage.setItem("dataProducts", JSON.stringify(data));
 
       let viewCreateProduct = document.getElementById("pQuantity");
-      let viewFTProduct = document.getElementById("btnAddMaterials");
+      // let viewFTProduct = document.getElementById("btnAddMaterials");
 
       if (viewCreateProduct && flag_products_measure === "1")
         data = data.filter((item) => item.id_product_inventory == 0);
