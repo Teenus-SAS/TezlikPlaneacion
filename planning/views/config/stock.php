@@ -179,7 +179,7 @@ if (sizeof($_SESSION) == 0)
                                                 </div>
                                                 <div class="col-sm-4 floating-label enable-floating-label show-label" style="margin-bottom:20px">
                                                     <label for="">Proveedores</label>
-                                                    <select class="form-control" name="idProvider" id="client"></select>
+                                                    <select class="form-control client" name="idProvider" id="client"></select>
                                                 </div>
                                                 <div class="col-sm-2 floating-label enable-floating-label show-label" style="margin-bottom:0px">
                                                     <label for="">Tiempo Min Despacho (días)</label>

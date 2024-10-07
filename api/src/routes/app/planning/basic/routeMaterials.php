@@ -4,6 +4,7 @@ use TezlikPlaneacion\Dao\CompositeProductsDao;
 use TezlikPlaneacion\Dao\ConversionUnitsDao;
 use TezlikPlaneacion\dao\ExplosionMaterialsDao;
 use TezlikPlaneacion\dao\FilterDataDao;
+use TezlikPlaneacion\dao\GeneralClientsDao;
 use TezlikPlaneacion\dao\GeneralExplosionMaterialsDao;
 use TezlikPlaneacion\dao\GeneralMaterialsDao;
 use TezlikPlaneacion\dao\GeneralOrdersDao;
@@ -12,6 +13,7 @@ use TezlikPlaneacion\dao\GeneralProductsDao;
 use TezlikPlaneacion\dao\GeneralProductsMaterialsDao;
 use TezlikPlaneacion\dao\GeneralProgrammingDao;
 use TezlikPlaneacion\dao\GeneralRequisitionsMaterialsDao;
+use TezlikPlaneacion\dao\GeneralRequisitionsProductsDao;
 use TezlikPlaneacion\dao\GeneralRMStockDao;
 use TezlikPlaneacion\dao\InventoryDaysDao;
 use TezlikPlaneacion\dao\LastDataDao;
@@ -31,6 +33,7 @@ $materialsInventoryDao = new MaterialsInventoryDao();
 $magnitudesDao = new MagnitudesDao();
 $unitsDao = new UnitsDao();
 $generalOrdersDao = new GeneralOrdersDao();
+$generalClientsDao = new GeneralClientsDao();
 $inventoryDaysDao = new InventoryDaysDao();
 $productsMaterialsDao = new ProductsMaterialsDao();
 $compositeProductsDao = new CompositeProductsDao();
@@ -47,6 +50,7 @@ $explosionMaterialsDao = new ExplosionMaterialsDao();
 $generalExMaterialsDao = new GeneralExplosionMaterialsDao();
 $generalRMStockDao = new GeneralRMStockDao();
 $generalRequisitionsMaterialsDao = new GeneralRequisitionsMaterialsDao();
+$generalRequisitionsProductsDao = new GeneralRequisitionsProductsDao();
 $requisitionsMaterialsDao = new RequisitionsMaterialsDao();
 
 use Psr\Http\Message\ResponseInterface as Response;
@@ -207,12 +211,14 @@ $app->post('/addMaterials', function (Request $request, Response $response, $arg
     $inventoryDaysDao,
     $generalProductsMaterialsDao,
     $productsDao,
+    $generalClientsDao,
     $generalProgrammingDao,
     $generalPlanCiclesMachinesDao,
     $generalMaterialsDao,
     $materialsInventoryDao,
     $magnitudesDao,
     $unitsDao,
+    $generalRequisitionsProductsDao,
     $generalProductsDao,
     $conversionUnitsDao,
     $minimumStockDao,
@@ -448,6 +454,32 @@ $app->post('/addMaterials', function (Request $request, Response $response, $arg
             } else if ($orders[$i]['origin'] == 1) {
                 if ($orders[$i]['original_quantity'] > $orders[$i]['accumulated_quantity']) {
                     $resolution = $generalOrdersDao->changeStatus($orders[$i]['id_order'], 13);
+
+                    $data = [];
+                    $data['idProduct'] = $orders[$i]['id_product'];
+
+                    $provider = $generalClientsDao->findInternalClient($id_company);
+
+                    $id_provider = 0;
+
+                    if ($provider) $id_provider = $provider['id_provider'];
+
+                    $data['idProvider'] = $id_provider;
+                    $data['numOrder'] = $orders[$i]['num_order'];
+                    $data['applicationDate'] = '';
+                    $data['deliveryDate'] = '';
+                    $data['requiredQuantity'] = $orders[$i]['original_quantity'];
+                    $data['purchaseOrder'] = '';
+                    $data['requestedQuantity'] = 0;
+
+                    $requisition = $generalRequisitionsProductsDao->findRequisitionByApplicationDate($orders[$i]['id_product']);
+
+                    if (!$requisition)
+                        $generalRequisitionsProductsDao->insertRequisitionAutoByCompany($data, $id_company);
+                    else {
+                        $data['idRequisition'] = $requisition['id_requisition_product'];
+                        $generalRequisitionsProductsDao->updateRequisitionAuto($data);
+                    }
                 }
             }
 
