@@ -698,98 +698,98 @@ $app->post('/addOrder', function (Request $request, Response $response, $args) u
             $status = true;
             // Checkear cantidades
             // $order = $generalOrdersDao->checkAccumulatedQuantityOrder($orders[$i]['id_order']);
-            if ($orders[$i]['origin'] == 2) {
-                if ($orders[$i]['status'] != 'EN PRODUCCION' && /* $orders[$i]['status'] != 'PROGRAMADO'&& */  $orders[$i]['status'] != 'FABRICADO' && $orders[$i]['status'] != 'DESPACHO') {
-                    if ($orders[$i]['original_quantity'] > $orders[$i]['accumulated_quantity']) {
-                        // Ficha tecnica 
-                        $productsMaterials = $productsMaterialsDao->findAllProductsMaterials($orders[$i]['id_product'], $id_company);
-                        $compositeProducts = $compositeProductsDao->findAllCompositeProductsByIdProduct($orders[$i]['id_product'], $id_company);
-                        $productsFTM = array_merge($productsMaterials, $compositeProducts);
+            // if ($orders[$i]['origin'] == 2) {
+            if ($orders[$i]['status'] != 'EN PRODUCCION' && /* $orders[$i]['status'] != 'PROGRAMADO'&& */  $orders[$i]['status'] != 'FABRICADO' && $orders[$i]['status'] != 'DESPACHO') {
+                if ($orders[$i]['original_quantity'] > $orders[$i]['accumulated_quantity']) {
+                    // Ficha tecnica 
+                    $productsMaterials = $productsMaterialsDao->findAllProductsMaterials($orders[$i]['id_product'], $id_company);
+                    $compositeProducts = $compositeProductsDao->findAllCompositeProductsByIdProduct($orders[$i]['id_product'], $id_company);
+                    $productsFTM = array_merge($productsMaterials, $compositeProducts);
 
-                        $planCicles = $generalPlanCiclesMachinesDao->findAllPlanCiclesMachineByProduct($orders[$i]['id_product'], $id_company);
+                    $planCicles = $generalPlanCiclesMachinesDao->findAllPlanCiclesMachineByProduct($orders[$i]['id_product'], $id_company);
 
-                        if (sizeof($productsFTM) == 0 || sizeof($planCicles) == 0) {
-                            $generalOrdersDao->changeStatus($orders[$i]['id_order'], 5);
-                            $status = false;
-                        } else {
-                            foreach ($planCicles as $arr) {
-                                // Verificar Maquina Disponible
-                                if ($arr['status'] == 0) {
-                                    $generalOrdersDao->changeStatus($orders[$i]['id_order'], 10);
-                                    $status = false;
-                                    break;
-                                }
-                                // Verificar Empleados
-                                if ($arr['employees'] == 0) {
-                                    $generalOrdersDao->changeStatus($orders[$i]['id_order'], 11);
-                                    $status = false;
-                                    break;
-                                }
+                    if (sizeof($productsFTM) == 0 || sizeof($planCicles) == 0) {
+                        $generalOrdersDao->changeStatus($orders[$i]['id_order'], 5);
+                        $status = false;
+                    } else {
+                        foreach ($planCicles as $arr) {
+                            // Verificar Maquina Disponible
+                            if ($arr['status'] == 0) {
+                                $generalOrdersDao->changeStatus($orders[$i]['id_order'], 10);
+                                $status = false;
+                                break;
                             }
-
-                            // Verificar Materia Prima
-                            foreach ($productsFTM as $arr) {
-                                if ($arr['quantity_material'] <= 0) {
-                                    $generalOrdersDao->changeStatus($orders[$i]['id_order'], 6);
-                                    $status = false;
-                                    break;
-                                }
+                            // Verificar Empleados
+                            if ($arr['employees'] == 0) {
+                                $generalOrdersDao->changeStatus($orders[$i]['id_order'], 11);
+                                $status = false;
+                                break;
                             }
                         }
-                    }
 
-                    if ($status == true) {
-                        if ($orders[$i]['original_quantity'] <= $orders[$i]['accumulated_quantity']) {
-                            $generalOrdersDao->changeStatus($orders[$i]['id_order'], 2);
-                            $accumulated_quantity = $orders[$i]['accumulated_quantity'] - $orders[$i]['original_quantity'];
-                        } else {
-                            $accumulated_quantity = $orders[$i]['accumulated_quantity'];
+                        // Verificar Materia Prima
+                        foreach ($productsFTM as $arr) {
+                            if ($arr['quantity_material'] <= 0) {
+                                $generalOrdersDao->changeStatus($orders[$i]['id_order'], 6);
+                                $status = false;
+                                break;
+                            }
                         }
-
-                        if ($orders[$i]['status'] != 'DESPACHO') {
-                            $date = date('Y-m-d');
-
-                            $generalOrdersDao->updateOfficeDate($orders[$i]['id_order'], $date);
-                        }
-
-                        $arr = $generalProductsDao->findProductReserved($orders[$i]['id_product']);
-                        !isset($arr['reserved']) ? $arr['reserved'] = 0 : $arr;
-                        $generalProductsDao->updateReservedByProduct($orders[$i]['id_product'], $arr['reserved']);
-
-                        $generalProductsDao->updateAccumulatedQuantity($orders[$i]['id_product'], $accumulated_quantity, 1);
                     }
                 }
-            } else if ($orders[$i]['origin'] == 1) {
-                if ($orders[$i]['original_quantity'] > $orders[$i]['accumulated_quantity']) {
-                    $resolution = $generalOrdersDao->changeStatus($orders[$i]['id_order'], 13);
 
-                    $data = [];
-                    $data['idProduct'] = $orders[$i]['id_product'];
-
-                    $provider = $generalClientsDao->findInternalClient($id_company);
-
-                    $id_provider = 0;
-
-                    if ($provider) $id_provider = $provider['id_provider'];
-
-                    $data['idProvider'] = $id_provider;
-                    $data['numOrder'] = $orders[$i]['num_order'];
-                    $data['applicationDate'] = '';
-                    $data['deliveryDate'] = '';
-                    $data['requiredQuantity'] = $orders[$i]['original_quantity'];
-                    $data['purchaseOrder'] = '';
-                    $data['requestedQuantity'] = 0;
-
-                    $requisition = $generalRequisitionsProductsDao->findRequisitionByApplicationDate($orders[$i]['id_product']);
-
-                    if (!$requisition)
-                        $generalRequisitionsProductsDao->insertRequisitionAutoByCompany($data, $id_company);
-                    else {
-                        $data['idRequisition'] = $requisition['id_requisition_product'];
-                        $generalRequisitionsProductsDao->updateRequisitionAuto($data);
+                if ($status == true) {
+                    if ($orders[$i]['original_quantity'] <= $orders[$i]['accumulated_quantity']) {
+                        $generalOrdersDao->changeStatus($orders[$i]['id_order'], 2);
+                        $accumulated_quantity = $orders[$i]['accumulated_quantity'] - $orders[$i]['original_quantity'];
+                    } else {
+                        $accumulated_quantity = $orders[$i]['accumulated_quantity'];
                     }
+
+                    if ($orders[$i]['status'] != 'DESPACHO') {
+                        $date = date('Y-m-d');
+
+                        $generalOrdersDao->updateOfficeDate($orders[$i]['id_order'], $date);
+                    }
+
+                    $arr = $generalProductsDao->findProductReserved($orders[$i]['id_product']);
+                    !isset($arr['reserved']) ? $arr['reserved'] = 0 : $arr;
+                    $generalProductsDao->updateReservedByProduct($orders[$i]['id_product'], $arr['reserved']);
+
+                    $generalProductsDao->updateAccumulatedQuantity($orders[$i]['id_product'], $accumulated_quantity, 1);
                 }
             }
+            // } else if ($orders[$i]['origin'] == 1) {
+            //     if ($orders[$i]['original_quantity'] > $orders[$i]['accumulated_quantity']) {
+            //         $resolution = $generalOrdersDao->changeStatus($orders[$i]['id_order'], 13);
+
+            //         $data = [];
+            //         $data['idProduct'] = $orders[$i]['id_product'];
+
+            //         $provider = $generalClientsDao->findInternalClient($id_company);
+
+            //         $id_provider = 0;
+
+            //         if ($provider) $id_provider = $provider['id_provider'];
+
+            //         $data['idProvider'] = $id_provider;
+            //         $data['numOrder'] = $orders[$i]['num_order'];
+            //         $data['applicationDate'] = '';
+            //         $data['deliveryDate'] = '';
+            //         $data['requiredQuantity'] = $orders[$i]['original_quantity'];
+            //         $data['purchaseOrder'] = '';
+            //         $data['requestedQuantity'] = 0;
+
+            //         $requisition = $generalRequisitionsProductsDao->findRequisitionByApplicationDate($orders[$i]['id_product']);
+
+            //         if (!$requisition)
+            //             $generalRequisitionsProductsDao->insertRequisitionAutoByCompany($data, $id_company);
+            //         else {
+            //             $data['idRequisition'] = $requisition['id_requisition_product'];
+            //             $generalRequisitionsProductsDao->updateRequisitionAuto($data);
+            //         }
+            //     }
+            // }
 
             // Pedidos automaticos
             if ($orders[$i]['status'] == 'FABRICADO') {
@@ -1166,98 +1166,98 @@ $app->post('/updateOrder', function (Request $request, Response $response, $args
             $status = true;
             // Checkear cantidades
             // $order = $generalOrdersDao->checkAccumulatedQuantityOrder($orders[$i]['id_order']);
-            if ($orders[$i]['origin'] == 2) {
-                if ($orders[$i]['status'] != 'EN PRODUCCION' && /* $orders[$i]['status'] != 'PROGRAMADO' &&*/ $orders[$i]['status'] != 'FABRICADO' && $orders[$i]['status'] != 'DESPACHO') {
-                    if ($orders[$i]['original_quantity'] > $orders[$i]['accumulated_quantity']) {
-                        // Ficha tecnica 
-                        $productsMaterials = $productsMaterialsDao->findAllProductsMaterials($orders[$i]['id_product'], $id_company);
-                        $compositeProducts = $compositeProductsDao->findAllCompositeProductsByIdProduct($orders[$i]['id_product'], $id_company);
-                        $productsFTM = array_merge($productsMaterials, $compositeProducts);
+            // if ($orders[$i]['origin'] == 2) {
+            if ($orders[$i]['status'] != 'EN PRODUCCION' && /* $orders[$i]['status'] != 'PROGRAMADO' &&*/ $orders[$i]['status'] != 'FABRICADO' && $orders[$i]['status'] != 'DESPACHO') {
+                if ($orders[$i]['original_quantity'] > $orders[$i]['accumulated_quantity']) {
+                    // Ficha tecnica 
+                    $productsMaterials = $productsMaterialsDao->findAllProductsMaterials($orders[$i]['id_product'], $id_company);
+                    $compositeProducts = $compositeProductsDao->findAllCompositeProductsByIdProduct($orders[$i]['id_product'], $id_company);
+                    $productsFTM = array_merge($productsMaterials, $compositeProducts);
 
-                        $planCicles = $generalPlanCiclesMachinesDao->findAllPlanCiclesMachineByProduct($orders[$i]['id_product'], $id_company);
+                    $planCicles = $generalPlanCiclesMachinesDao->findAllPlanCiclesMachineByProduct($orders[$i]['id_product'], $id_company);
 
-                        if (sizeof($productsFTM) == 0 || sizeof($planCicles) == 0) {
-                            $generalOrdersDao->changeStatus($orders[$i]['id_order'], 5);
-                            $status = false;
-                        } else {
-                            foreach ($planCicles as $arr) {
-                                // Verificar Maquina Disponible
-                                if ($arr['status'] == 0) {
-                                    $generalOrdersDao->changeStatus($orders[$i]['id_order'], 10);
-                                    $status = false;
-                                    break;
-                                }
-                                // Verificar Empleados
-                                if ($arr['employees'] == 0) {
-                                    $generalOrdersDao->changeStatus($orders[$i]['id_order'], 11);
-                                    $status = false;
-                                    break;
-                                }
+                    if (sizeof($productsFTM) == 0 || sizeof($planCicles) == 0) {
+                        $generalOrdersDao->changeStatus($orders[$i]['id_order'], 5);
+                        $status = false;
+                    } else {
+                        foreach ($planCicles as $arr) {
+                            // Verificar Maquina Disponible
+                            if ($arr['status'] == 0) {
+                                $generalOrdersDao->changeStatus($orders[$i]['id_order'], 10);
+                                $status = false;
+                                break;
                             }
-                            // Verificar Material
-                            foreach ($productsFTM as $arr) {
-                                if ($arr['quantity_material'] <= 0) {
-                                    $generalOrdersDao->changeStatus($orders[$i]['id_order'], 6);
-                                    $status = false;
-                                    break;
-                                }
+                            // Verificar Empleados
+                            if ($arr['employees'] == 0) {
+                                $generalOrdersDao->changeStatus($orders[$i]['id_order'], 11);
+                                $status = false;
+                                break;
                             }
                         }
-                    }
-
-                    if ($status == true) {
-                        if ($orders[$i]['original_quantity'] <= $orders[$i]['accumulated_quantity']) {
-                            $generalOrdersDao->changeStatus($orders[$i]['id_order'], 2);
-                            $accumulated_quantity = $orders[$i]['accumulated_quantity'] - $orders[$i]['original_quantity'];
-                        } else {
-                            $accumulated_quantity = $orders[$i]['accumulated_quantity'];
-                            // $generalOrdersDao->changeStatus($orders[$i]['id_order'], 'Alistamiento');
+                        // Verificar Material
+                        foreach ($productsFTM as $arr) {
+                            if ($arr['quantity_material'] <= 0) {
+                                $generalOrdersDao->changeStatus($orders[$i]['id_order'], 6);
+                                $status = false;
+                                break;
+                            }
                         }
-
-                        if ($orders[$i]['status'] != 'DESPACHO') {
-                            $date = date('Y-m-d');
-
-                            $generalOrdersDao->updateOfficeDate($orders[$i]['id_order'], $date);
-                        }
-
-                        $arr = $generalProductsDao->findProductReserved($orders[$i]['id_product']);
-                        !isset($arr['reserved']) ? $arr['reserved'] = 0 : $arr;
-                        $generalProductsDao->updateReservedByProduct($orders[$i]['id_product'], $arr['reserved']);
-
-                        $generalProductsDao->updateAccumulatedQuantity($orders[$i]['id_product'], $accumulated_quantity, 1);
                     }
                 }
-            } else if ($orders[$i]['origin'] == 1) {
-                if ($orders[$i]['original_quantity'] > $orders[$i]['accumulated_quantity']) {
-                    $resolution = $generalOrdersDao->changeStatus($orders[$i]['id_order'], 13);
 
-                    $data = [];
-                    $data['idProduct'] = $orders[$i]['id_product'];
-
-                    $provider = $generalClientsDao->findInternalClient($id_company);
-
-                    $id_provider = 0;
-
-                    if ($provider) $id_provider = $provider['id_provider'];
-
-                    $data['idProvider'] = $id_provider;
-                    $data['numOrder'] = $orders[$i]['num_order'];
-                    $data['applicationDate'] = '';
-                    $data['deliveryDate'] = '';
-                    $data['requiredQuantity'] = $orders[$i]['original_quantity'];
-                    $data['purchaseOrder'] = '';
-                    $data['requestedQuantity'] = 0;
-
-                    $requisition = $generalRequisitionsProductsDao->findRequisitionByApplicationDate($orders[$i]['id_product']);
-
-                    if (!$requisition)
-                        $generalRequisitionsProductsDao->insertRequisitionAutoByCompany($data, $id_company);
-                    else {
-                        $data['idRequisition'] = $requisition['id_requisition_product'];
-                        $generalRequisitionsProductsDao->updateRequisitionAuto($data);
+                if ($status == true) {
+                    if ($orders[$i]['original_quantity'] <= $orders[$i]['accumulated_quantity']) {
+                        $generalOrdersDao->changeStatus($orders[$i]['id_order'], 2);
+                        $accumulated_quantity = $orders[$i]['accumulated_quantity'] - $orders[$i]['original_quantity'];
+                    } else {
+                        $accumulated_quantity = $orders[$i]['accumulated_quantity'];
+                        // $generalOrdersDao->changeStatus($orders[$i]['id_order'], 'Alistamiento');
                     }
+
+                    if ($orders[$i]['status'] != 'DESPACHO') {
+                        $date = date('Y-m-d');
+
+                        $generalOrdersDao->updateOfficeDate($orders[$i]['id_order'], $date);
+                    }
+
+                    $arr = $generalProductsDao->findProductReserved($orders[$i]['id_product']);
+                    !isset($arr['reserved']) ? $arr['reserved'] = 0 : $arr;
+                    $generalProductsDao->updateReservedByProduct($orders[$i]['id_product'], $arr['reserved']);
+
+                    $generalProductsDao->updateAccumulatedQuantity($orders[$i]['id_product'], $accumulated_quantity, 1);
                 }
             }
+            // } else if ($orders[$i]['origin'] == 1) {
+            //     if ($orders[$i]['original_quantity'] > $orders[$i]['accumulated_quantity']) {
+            //         $resolution = $generalOrdersDao->changeStatus($orders[$i]['id_order'], 13);
+
+            //         $data = [];
+            //         $data['idProduct'] = $orders[$i]['id_product'];
+
+            //         $provider = $generalClientsDao->findInternalClient($id_company);
+
+            //         $id_provider = 0;
+
+            //         if ($provider) $id_provider = $provider['id_provider'];
+
+            //         $data['idProvider'] = $id_provider;
+            //         $data['numOrder'] = $orders[$i]['num_order'];
+            //         $data['applicationDate'] = '';
+            //         $data['deliveryDate'] = '';
+            //         $data['requiredQuantity'] = $orders[$i]['original_quantity'];
+            //         $data['purchaseOrder'] = '';
+            //         $data['requestedQuantity'] = 0;
+
+            //         $requisition = $generalRequisitionsProductsDao->findRequisitionByApplicationDate($orders[$i]['id_product']);
+
+            //         if (!$requisition)
+            //             $generalRequisitionsProductsDao->insertRequisitionAutoByCompany($data, $id_company);
+            //         else {
+            //             $data['idRequisition'] = $requisition['id_requisition_product'];
+            //             $generalRequisitionsProductsDao->updateRequisitionAuto($data);
+            //         }
+            //     }
+            // }
 
             // Pedidos automaticos
             if ($orders[$i]['status'] == 'FABRICADO') {

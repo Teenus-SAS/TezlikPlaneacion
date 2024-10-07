@@ -14,9 +14,9 @@ $(document).ready(function () {
       populateOptions("#refCompositeProduct", compositeProduct, "reference");
       populateOptions("#compositeProduct", compositeProduct, "product");
       
-      if (viewFTProduct) {
-        data = data.filter((item) => item.origin == 2);
-      }
+      // if (viewFTProduct) {
+      //   data = data.filter((item) => item.origin == 2);
+      // }
       populateSelect('#refProduct', data, 'reference');
       populateSelect('#selectNameProduct', data, 'product');
     },
