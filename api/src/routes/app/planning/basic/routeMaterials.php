@@ -514,6 +514,7 @@ $app->post('/updateMaterials', function (Request $request, Response $response, $
     $generalPlanCiclesMachinesDao,
     $productsDao,
     $productsMaterialsDao,
+    $generalClientsDao,
     $compositeProductsDao,
     $generalProductsMaterialsDao,
     $generalProgrammingDao,
@@ -523,6 +524,7 @@ $app->post('/updateMaterials', function (Request $request, Response $response, $
     $generalExMaterialsDao,
     $generalRMStockDao,
     $generalRequisitionsMaterialsDao,
+    $generalRequisitionsProductsDao,
     $requisitionsMaterialsDao
 ) {
     session_start();
@@ -805,6 +807,32 @@ $app->post('/updateMaterials', function (Request $request, Response $response, $
             } else if ($orders[$i]['origin'] == 1) {
                 if ($orders[$i]['original_quantity'] > $orders[$i]['accumulated_quantity']) {
                     $resolution = $generalOrdersDao->changeStatus($orders[$i]['id_order'], 13);
+
+                    $data = [];
+                    $data['idProduct'] = $orders[$i]['id_product'];
+
+                    $provider = $generalClientsDao->findInternalClient($id_company);
+
+                    $id_provider = 0;
+
+                    if ($provider) $id_provider = $provider['id_provider'];
+
+                    $data['idProvider'] = $id_provider;
+                    $data['numOrder'] = $orders[$i]['num_order'];
+                    $data['applicationDate'] = '';
+                    $data['deliveryDate'] = '';
+                    $data['requiredQuantity'] = $orders[$i]['original_quantity'];
+                    $data['purchaseOrder'] = '';
+                    $data['requestedQuantity'] = 0;
+
+                    $requisition = $generalRequisitionsProductsDao->findRequisitionByApplicationDate($orders[$i]['id_product']);
+
+                    if (!$requisition)
+                        $generalRequisitionsProductsDao->insertRequisitionAutoByCompany($data, $id_company);
+                    else {
+                        $data['idRequisition'] = $requisition['id_requisition_product'];
+                        $generalRequisitionsProductsDao->updateRequisitionAuto($data);
+                    }
                 }
             }
 

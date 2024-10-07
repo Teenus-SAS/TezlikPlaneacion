@@ -3,6 +3,7 @@
 use TezlikPlaneacion\dao\AlternalMachineDao;
 use TezlikPlaneacion\dao\CiclesMachineDao;
 use TezlikPlaneacion\Dao\CompositeProductsDao;
+use TezlikPlaneacion\dao\GeneralClientsDao;
 use TezlikPlaneacion\dao\GeneralMachinesDao;
 use TezlikPlaneacion\dao\GeneralMaterialsDao;
 use TezlikPlaneacion\dao\GeneralOrdersDao;
@@ -11,6 +12,7 @@ use TezlikPlaneacion\dao\GeneralProcessDao;
 use TezlikPlaneacion\dao\GeneralProductsDao;
 use TezlikPlaneacion\dao\GeneralProgrammingDao;
 use TezlikPlaneacion\dao\GeneralProgrammingRoutesDao;
+use TezlikPlaneacion\dao\GeneralRequisitionsProductsDao;
 use TezlikPlaneacion\dao\LastDataDao;
 use TezlikPlaneacion\dao\LotsProductsDao;
 use TezlikPlaneacion\dao\PlanCiclesMachineDao;
@@ -33,6 +35,8 @@ $generalMaterialsDao = new GeneralMaterialsDao();
 $productsMaterialsDao = new ProductsMaterialsDao();
 $alternalMachineDao = new AlternalMachineDao();
 $compositeProductsDao = new CompositeProductsDao();
+$generalRequisitionsProductsDao = new GeneralRequisitionsProductsDao();
+$generalClientsDao = new GeneralClientsDao();
 
 use Psr\Http\Message\ResponseInterface as Response;
 use Psr\Http\Message\ServerRequestInterface as Request;
@@ -173,6 +177,8 @@ $app->post('/addPlanCiclesMachine', function (Request $request, Response $respon
     $lastDataDao,
     $productsDao,
     $processDao,
+    $generalClientsDao,
+    $generalRequisitionsProductsDao,
     $machinesDao,
     $generalOrdersDao,
     $productsMaterialsDao,
@@ -435,6 +441,32 @@ $app->post('/addPlanCiclesMachine', function (Request $request, Response $respon
         } else if ($orders[$i]['origin'] == 1) {
             if ($orders[$i]['original_quantity'] > $orders[$i]['accumulated_quantity']) {
                 $resolution = $generalOrdersDao->changeStatus($orders[$i]['id_order'], 13);
+
+                $data = [];
+                $data['idProduct'] = $orders[$i]['id_product'];
+
+                $provider = $generalClientsDao->findInternalClient($id_company);
+
+                $id_provider = 0;
+
+                if ($provider) $id_provider = $provider['id_provider'];
+
+                $data['idProvider'] = $id_provider;
+                $data['numOrder'] = $orders[$i]['num_order'];
+                $data['applicationDate'] = '';
+                $data['deliveryDate'] = '';
+                $data['requiredQuantity'] = $orders[$i]['original_quantity'];
+                $data['purchaseOrder'] = '';
+                $data['requestedQuantity'] = 0;
+
+                $requisition = $generalRequisitionsProductsDao->findRequisitionByApplicationDate($orders[$i]['id_product']);
+
+                if (!$requisition)
+                    $generalRequisitionsProductsDao->insertRequisitionAutoByCompany($data, $id_company);
+                else {
+                    $data['idRequisition'] = $requisition['id_requisition_product'];
+                    $generalRequisitionsProductsDao->updateRequisitionAuto($data);
+                }
             }
         }
 
@@ -495,6 +527,8 @@ $app->post('/deletePlanCiclesMachine', function (Request $request, Response $res
     $productsMaterialsDao,
     $compositeProductsDao,
     $productsDao,
+    $generalClientsDao,
+    $generalRequisitionsProductsDao,
     $generalMaterialsDao,
     $generalProgrammingDao
 ) {
@@ -599,6 +633,32 @@ $app->post('/deletePlanCiclesMachine', function (Request $request, Response $res
             } else if ($orders[$i]['origin'] == 1) {
                 if ($orders[$i]['original_quantity'] > $orders[$i]['accumulated_quantity']) {
                     $resolution = $generalOrdersDao->changeStatus($orders[$i]['id_order'], 13);
+
+                    $data = [];
+                    $data['idProduct'] = $orders[$i]['id_product'];
+
+                    $provider = $generalClientsDao->findInternalClient($id_company);
+
+                    $id_provider = 0;
+
+                    if ($provider) $id_provider = $provider['id_provider'];
+
+                    $data['idProvider'] = $id_provider;
+                    $data['numOrder'] = $orders[$i]['num_order'];
+                    $data['applicationDate'] = '';
+                    $data['deliveryDate'] = '';
+                    $data['requiredQuantity'] = $orders[$i]['original_quantity'];
+                    $data['purchaseOrder'] = '';
+                    $data['requestedQuantity'] = 0;
+
+                    $requisition = $generalRequisitionsProductsDao->findRequisitionByApplicationDate($orders[$i]['id_product']);
+
+                    if (!$requisition)
+                        $generalRequisitionsProductsDao->insertRequisitionAutoByCompany($data, $id_company);
+                    else {
+                        $data['idRequisition'] = $requisition['id_requisition_product'];
+                        $generalRequisitionsProductsDao->updateRequisitionAuto($data);
+                    }
                 }
             }
             // Pedidos automaticos
