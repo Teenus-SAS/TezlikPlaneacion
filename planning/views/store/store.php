@@ -98,18 +98,18 @@ if (sizeof($_SESSION) == 0)
                                                 <ul class="nav nav-tabs mt-3 ml-3" id="subTabOP" role="tablist">
                                                     <li class="nav-item">
                                                         <a class="nav-link active" id="subTabReceiveOP" data-toggle="pill" href="#paneReceiveOP" role="tab" aria-controls="paneReceiveOP" aria-selected="true">
-                                                            Recibir
+                                                            Entregar
                                                         </a>
                                                     </li>
                                                     <li class="nav-item">
                                                         <a class="nav-link" id="subTabDeliverOP" data-toggle="pill" href="#paneDeliverOP" role="tab" aria-controls="paneDeliverOP" aria-selected="false">
-                                                            Entregar
+                                                            Recibir
                                                         </a>
                                                     </li>
                                                 </ul>
 
                                                 <!-- Contenido de las sub-pestañas de Ordenes de Producción -->
-                                                <div class="tab-content mt-3" id="subTabOPContent">
+                                                <div class="tab-content" id="subTabOPContent">
                                                     <!-- Recibir -->
                                                     <div class="tab-pane fade show active" id="paneReceiveOP" role="tabpanel" aria-labelledby="subTabReceiveOP">
                                                         <div class="card">
