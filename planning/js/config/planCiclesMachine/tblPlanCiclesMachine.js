@@ -1,6 +1,6 @@
 $(document).ready(function () {
   // Mostrar Tabla planeacion maquinas
-  loadTblPlanCiclesMachine = (idProduct) => {
+  loadTblPlanCiclesMachine = (idProduct, visible) => {
     tblPlanCiclesMachine = $("#tblPlanCiclesMachine").dataTable({
       autoWidth: true,
       fixedHeader: true,
@@ -62,6 +62,7 @@ $(document).ready(function () {
           title: "Maquina Alterna",
           data: null,
           className: "uniqueClassName dt-head-center",
+          visible: visible,
           render: function (data) {
             return `<a href="javascript:;">
                     <i id="${data.id_alternal_machine}" class="${
@@ -81,10 +82,18 @@ $(document).ready(function () {
           data: null,
           className: "uniqueClassName dt-head-center",
           render: function (data) {
-            return `
-                    <a href="javascript:;" <i id="upd-${data.id_cicles_machine}" class="bx bx-edit-alt updatePCMachine" data-toggle='tooltip' title='Actualizar Maquina' style="font-size: 30px;"></i></a>
-                    <a href="javascript:;" <i id="ext-${data.id_cicles_machine}" class="bx bi bi-sliders alternalMachine" data-toggle='tooltip' title='Maquina Alterna' style="font-size: 30px;color:#d36e17;"></i></a>
-                    <a href="javascript:;" <i id="${data.id_cicles_machine}" class="mdi mdi-delete-forever" data-toggle='tooltip' title='Eliminar Maquina' style="font-size: 30px;color:red" onclick="deleteMachine()"></i></a>`;
+            let action;
+
+            if (visible == true) {
+              action = `<a href="javascript:;" <i id="upd-${data.id_cicles_machine}" class="bx bx-edit-alt updatePCMachine" data-toggle='tooltip' title='Actualizar Maquina' style="font-size: 30px;"></i></a>
+                        <a href="javascript:;" <i id="ext-${data.id_cicles_machine}" class="bx bi bi-sliders alternalMachine" data-toggle='tooltip' title='Maquina Alterna' style="font-size: 30px;color:#d36e17;"></i></a>
+                        <a href="javascript:;" <i id="${data.id_cicles_machine}" class="mdi mdi-delete-forever" data-toggle='tooltip' title='Eliminar Maquina' style="font-size: 30px;color:red" onclick="deleteMachine()"></i></a>`;
+            } else {
+              action = `<a href="javascript:;" <i id="upd-${data.id_cicles_machine}" class="bx bx-edit-alt updatePCMachine" data-toggle='tooltip' title='Actualizar Maquina' style="font-size: 30px;"></i></a>
+                        <a href="javascript:;" <i id="${data.id_cicles_machine}" class="mdi mdi-delete-forever" data-toggle='tooltip' title='Eliminar Maquina' style="font-size: 30px;color:red" onclick="deleteMachine()"></i></a>`;
+            }
+
+            return action;
           },
         },
       ],

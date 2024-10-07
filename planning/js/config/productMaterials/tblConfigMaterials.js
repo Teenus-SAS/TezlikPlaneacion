@@ -4,6 +4,10 @@ $(document).ready(function () {
   $("#refProduct").change(function (e) {
     e.preventDefault();
     let id = this.value;
+    var composite = parseInt($(this).find("option:selected").attr("class"));
+    let visible;
+
+    composite == 1 ? visible = false : visible = true;
 
     $("#selectNameProduct option").removeAttr("selected");
     $(`#selectNameProduct option[value=${id}]`).prop("selected", true);
@@ -17,8 +21,8 @@ $(document).ready(function () {
     populateOptions("#compositeProduct", compositeProduct, "product");
 
     $(".cardAddMaterials").hide(800);
-    loadAllDataMaterials(id);
-    loadTblPlanCiclesMachine(id);
+    loadAllDataMaterials(id, visible);
+    loadTblPlanCiclesMachine(id, visible);
     loadTblRoutes(id);
     loadTblProductPlans(id);
   });
@@ -26,6 +30,10 @@ $(document).ready(function () {
   $("#selectNameProduct").change(function (e) {
     e.preventDefault();
     let id = this.value;
+    var composite = parseInt($(this).find("option:selected").attr("class"));
+    let visible;
+
+    composite == 1 ? visible = false : visible = true;
 
     $("#refProduct option").removeAttr("selected");
     $(`#refProduct option[value=${id}]`).prop("selected", true);
@@ -39,14 +47,14 @@ $(document).ready(function () {
     populateOptions("#compositeProduct", compositeProduct, "product");
 
     $(".cardAddMaterials").hide(800);
-    loadAllDataMaterials(id);
-    loadTblPlanCiclesMachine(id);
+    loadAllDataMaterials(id, visible);
+    loadTblPlanCiclesMachine(id, visible);
     loadTblRoutes(id);
     loadTblProductPlans(id);
   });
 
   /* Cargue tabla de Productos Materiales */
-  loadAllDataMaterials = async (id) => {
+  loadAllDataMaterials = async (id, visible) => {
     try {
       const [dataProductMaterials, dataCompositeProduct] = await Promise.all([
         searchData(`/api/productsMaterials/${id}`),
@@ -63,13 +71,13 @@ $(document).ready(function () {
       );
       let data = [...dataProductMaterials, ...dataCompositeProduct];
 
-      loadTableMaterials(data);
+      loadTableMaterials(data, visible);
     } catch (error) {
       console.error("Error loading data:", error);
     }
   };
 
-  const loadTableMaterials = (data) => {
+  const loadTableMaterials = (data, visible) => {
     tblConfigMaterials = $("#tblConfigMaterials").dataTable({
       fixedHeader: true,
       scrollY: "400px",
@@ -131,6 +139,7 @@ $(document).ready(function () {
           title: "Materia Prima Alterna",
           data: null,
           className: "uniqueClassName dt-head-center",
+          visible: visible,
           render: function (data) {
             return `<a href="javascript:;">
                     <i id="${data.id_alternal_material}" class="${
@@ -150,7 +159,10 @@ $(document).ready(function () {
           data: null,
           className: "uniqueClassName dt-head-center",
           render: function (data) {
-            return `<a href="javascript:;" <i id="${
+            let action;
+
+            if (visible == true) {
+              action = `<a href="javascript:;" <i id="${
               data.id_product_material != 0
                 ? data.id_product_material
                 : data.id_composite_product
@@ -170,6 +182,26 @@ $(document).ready(function () {
                 data.id_product_material
               }" class="bx bi bi-sliders alternalMaterial" data-toggle='tooltip' title='Materia Prima Alterna' style="font-size: 30px;color:#d36e17;"></i></a>
             `;
+            } else {
+              action = `<a href="javascript:;" <i id="${
+              data.id_product_material != 0
+                ? data.id_product_material
+                : data.id_composite_product
+            }" class="bx bx-edit-alt ${
+              data.id_product_material != 0
+                ? "updateMaterials"
+                : "updateComposite"
+            }" data-toggle='tooltip' title='Actualizar Materia Prima' style="font-size: 30px;"></i></a>
+                        <a href="javascript:;" <i id="${
+                          data.id_product_material != 0
+                            ? data.id_product_material
+                            : data.id_composite_product
+                        }" class="mdi mdi-delete-forever" data-toggle='tooltip' title='Eliminar Materia Prima' style="font-size: 30px;color:red" onclick="deleteMaterial(${
+              data.id_product_material != 0 ? "1" : "2"
+            })"></i></a>`;
+            }
+
+            return action;
           },
         },
       ],
