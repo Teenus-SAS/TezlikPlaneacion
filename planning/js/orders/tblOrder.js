@@ -202,6 +202,7 @@ $(document).ready(function () {
         "MAQUINA NO DISPONIBLE",
         "PERSONAL NO DISPONIBLE",
         "SIN MATERIA PRIMA",
+        "SIN PRODUCTOS",
       ].includes(data.status)
     ) {
       return `
