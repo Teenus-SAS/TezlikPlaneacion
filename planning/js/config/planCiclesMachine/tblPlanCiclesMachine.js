@@ -2,7 +2,7 @@ $(document).ready(function () {
   // Mostrar Tabla planeacion maquinas
   loadTblPlanCiclesMachine = (idProduct, visible) => {
     tblPlanCiclesMachine = $("#tblPlanCiclesMachine").dataTable({
-      autoWidth: true,
+      autoWidth: false,
       fixedHeader: true,
       scrollCollapse: true,
       scrollY: "400px",

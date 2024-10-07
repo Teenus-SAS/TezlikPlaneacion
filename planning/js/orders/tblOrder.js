@@ -174,6 +174,7 @@ $(document).ready(function () {
       "SIN MATERIA PRIMA": "badge-danger",
       "MAQUINA NO DISPONIBLE": "badge-danger",
       "PERSONAL NO DISPONIBLE": "badge-danger",
+      "SIN PRODUCTOS": "badge-danger",
       DESPACHO: "badge-info",
       "EN PRODUCCION": "badge-warning",
       FINALIZADO: "badge-primary",
@@ -202,6 +203,7 @@ $(document).ready(function () {
         "MAQUINA NO DISPONIBLE",
         "PERSONAL NO DISPONIBLE",
         "SIN MATERIA PRIMA",
+        "SIN PRODUCTOS",
       ].includes(data.status)
     ) {
       return `
