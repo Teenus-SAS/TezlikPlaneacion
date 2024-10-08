@@ -185,53 +185,51 @@ if (sizeof($_SESSION) == 0)
 													<input type="number" class="form-control text-center" id="window" readonly>
 												</div>
 
-												<!-- Link a Plano Mecánico -->
-												<div class="d-flex justify-content-around">
-													<div class="col-sm-12">
-														<a href="/assets/plano_mecanico" class="form-control text-center" id="link1" style="display: inline-block;">Plano Mecánico</a>
-													</div>
+												<!-- Link a Planos-->
 
-													<div class="col-sm-1"></div>
-
-													<div class="col-sm-12">
-														<a href="/assets/plano_montaje" class="form-control text-center" id="link2" style="display: inline-block;">Plano Montaje</a>
-													</div>
+												<div class="col-sm-6">
+													<a href="/assets/plano_mecanico" class="form-control text-center" id="link1" style="display: inline-block;"><b>Plano Mecánico</b></a>
 												</div>
-											<?php } ?>
+
+												<div class="col-sm-6">
+													<a href="/assets/plano_montaje" class="form-control text-center" id="link2" style="display: inline-block;"><b>Plano Montaje</b></a>
+												</div>
 										</div>
-										<hr class="m-0">
-										<div class="row py-4">
-											<div class="col-10">
-												<h4 class="font-weight-bold text-dark">3. Materiales y Componentes</h4>
+									<?php } ?>
+									</div>
+									<hr class="m-0">
+									<div class="row py-4">
+										<div class="col-10">
+											<h4 class="font-weight-bold text-dark">3. Materiales y Componentes</h4>
+										</div>
+									</div>
+									<div class="row">
+										<div class="col-12">
+											<div class="table-responsive">
+												<table class="fixed-table-loading table table-hover text-center">
+													<thead class="thead-light">
+														<tr>
+															<th>Código</th>
+															<th>Descripción</th>
+															<th>Cantidad x Unidad</th>
+															<th>Cantidad Total</th>
+															<th>Unidad</th>
+															<th>Recibido</th>
+															<th>Pendiente</th>
+															<th id="thActions"></th>
+														</tr>
+													</thead>
+													<tbody id="tblPOMaterialsBody">
+													</tbody>
+												</table>
 											</div>
 										</div>
-										<div class="row">
-											<div class="col-12">
-												<div class="table-responsive">
-													<table class="fixed-table-loading table table-hover text-center">
-														<thead class="thead-light">
-															<tr>
-																<th>Código</th>
-																<th>Descripción</th>
-																<th>Cantidad x Unidad</th>
-																<th>Cantidad Total</th>
-																<th>Unidad</th>
-																<th>Recibido</th>
-																<th>Pendiente</th>
-																<th id="thActions"></th>
-															</tr>
-														</thead>
-														<tbody id="tblPOMaterialsBody">
-														</tbody>
-													</table>
-												</div>
-											</div>
-										</div>
-										<hr class="m-0">
+									</div>
+									<hr class="m-0">
 
-										<?php //if ($_SESSION['flag_products_measure'] == 1) { 
-										?>
-										<!-- 											<div class="row py-4">
+									<?php //if ($_SESSION['flag_products_measure'] == 1) { 
+									?>
+									<!-- 											<div class="row py-4">
 												<div class="col-12 mb-3">
 													<h5 class="font-weight-bold text-dark">3. Acabados Especiales</h5>
 												</div>
@@ -289,54 +287,113 @@ if (sizeof($_SESSION) == 0)
 												</div>
 											</div>
 											<hr> -->
-										<?php //} 
-										?>
+									<?php //} 
+									?>
 
-										<div class="row py-4">
-											<div class="col-10">
-												<h4 class="font-weight-bold text-dark">4. Proceso de Producción</h4>
+									<div class="row py-4">
+										<div class="col-10">
+											<h4 class="font-weight-bold text-dark">4. Proceso de Producción</h4>
+										</div>
+									</div>
+									<div class="row">
+										<div class="col-12">
+											<div class="table-responsive">
+												<table class="fixed-table-loading table table-hover">
+													<thead class="thead-light">
+														<tr>
+															<th>No</th>
+															<th>Proceso</th>
+															<th>Maquina</th>
+															<th>Fecha Inicio</th>
+															<th>Fecha Final</th>
+														</tr>
+													</thead>
+													<tbody id="tblPOProcessBody">
+													</tbody>
+												</table>
 											</div>
 										</div>
+									</div>
+
+									<hr class="m-0">
+
+									<div class="cardExcOP">
+										<div class="row py-4">
+											<div class="col-10">
+												<h4 class="font-weight-bold text-dark">5. Ejecución Producción</h4>
+											</div>
+										</div>
+										<!-- formAddOPPArtial -->
+										<form id="formAddOPPArtial">
+											<div class="form-row">
+												<div class="col-sm-3 floating-label enable-floating-label show-label">
+													<label for="startDateTime">Inicio</label>
+													<input type="datetime-local" class="form-control text-center" id="startDateTime" name="startDate">
+												</div>
+												<div class="col-sm-3 floating-label enable-floating-label show-label">
+													<label for="endDateTime">Finalización</label>
+													<input type="datetime-local" class="form-control text-center" id="endDateTime" name="endDate">
+												</div>
+												<!-- <div class="col-sm-6 floating-label enable-floating-label show-label" style="margin-bottom:20px">
+														<label for="operator">Operario</label>
+														<?php
+														//$id_user = $_SESSION['idUser'];
+														//$name = $_SESSION['name'];
+														//$lastname = $_SESSION['lastname'];
+														?>
+														<input type="text" class="form-control" name="operator" id="operator" readonly value="<?php echo "$name $lastname" ?>">
+													</div> -->
+												<div class=" col-sm-2 floating-label enable-floating-label show-label">
+													<label for="waste">Averias (Und)</label>
+													<input type="number" class="form-control text-center" id="waste" name="waste">
+												</div>
+												<div class="col-sm-2 floating-label enable-floating-label show-label">
+													<label for="quantityProduction">Total (Und)</label>
+													<input type="number" class="form-control text-center" id="quantityProduction" name="partialQuantity">
+												</div>
+												<?php if ($_SESSION['flag_products_measure'] == 1) { ?>
+													<div class="col-sm-2 floating-label enable-floating-label show-label">
+														<label for="quantityKgProduction">Cantidad (Kg)</label>
+														<input type="number" class="form-control text-center" id="quantityKgProduction" name="quantityKgProduction">
+													</div>
+												<?php } ?>
+												<div class="col-sm-2 floating-label enable-floating-label show-label">
+													<button class="btn btn-info mt-1" id="btnDeliverPartialOP">Entregar</button>
+												</div>
+											</div>
+										</form>
 										<div class="row">
 											<div class="col-12">
 												<div class="table-responsive">
-													<table class="fixed-table-loading table table-hover">
-														<thead class="thead-light">
-															<tr>
-																<th>No</th>
-																<th>Proceso</th>
-																<th>Maquina</th>
-																<th>Fecha Inicio</th>
-																<th>Fecha Final</th>
-															</tr>
-														</thead>
-														<tbody id="tblPOProcessBody">
-														</tbody>
+													<table class="fixed-table-loading table table-hover text-center" id="tblPartialsDelivery">
+
 													</table>
 												</div>
 											</div>
 										</div>
+									</div>
 
-										<hr class="m-0">
+									<hr class="m-0">
 
-										<div class="cardExcOP">
-											<div class="row py-4">
-												<div class="col-10">
-													<h4 class="font-weight-bold text-dark">5. Ejecución Producción</h4>
-												</div>
+									<div class="cardExcOP">
+										<div class="row py-4">
+											<div class="col-10">
+												<h4 class="font-weight-bold text-dark">6. Devolución Materia Prima No Usada en Producción</h4>
 											</div>
-											<!-- formAddOPPArtial -->
-											<form id="formAddOPPArtial">
-												<div class="form-row">
-													<div class="col-sm-3 floating-label enable-floating-label show-label">
-														<label for="startDateTime">Inicio</label>
-														<input type="datetime-local" class="form-control text-center" id="startDateTime" name="startDate">
-													</div>
-													<div class="col-sm-3 floating-label enable-floating-label show-label">
-														<label for="endDateTime">Finalización</label>
-														<input type="datetime-local" class="form-control text-center" id="endDateTime" name="endDate">
-													</div>
-													<!-- <div class="col-sm-6 floating-label enable-floating-label show-label" style="margin-bottom:20px">
+										</div>
+										<form id="formAddOPMP">
+											<div class="form-row">
+												<div class="col-sm-2 floating-label enable-floating-label show-label" style="margin-bottom:20px">
+													<label for="material">Referencia</label>
+													<select class="form-control refMaterial" name="refMaterial" id="refMaterial">
+													</select>
+												</div>
+												<div class="col-sm-7 floating-label enable-floating-label show-label" style="margin-bottom:20px">
+													<label for="material">Materia Prima</label>
+													<select class="form-control material" name="idMaterial" id="material">
+													</select>
+												</div>
+												<!-- <div class="col-sm-6 floating-label enable-floating-label show-label" style="margin-bottom:20px">
 														<label for="operator">Operario</label>
 														<?php
 														//$id_user = $_SESSION['idUser'];
@@ -345,91 +402,31 @@ if (sizeof($_SESSION) == 0)
 														?>
 														<input type="text" class="form-control" name="operator" id="operator" readonly value="<?php echo "$name $lastname" ?>">
 													</div> -->
-													<div class=" col-sm-2 floating-label enable-floating-label show-label">
-														<label for="waste">Averias (Und)</label>
-														<input type="number" class="form-control text-center" id="waste" name="waste">
-													</div>
-													<div class="col-sm-2 floating-label enable-floating-label show-label">
-														<label for="quantityProduction">Total (Und)</label>
-														<input type="number" class="form-control text-center" id="quantityProduction" name="partialQuantity">
-													</div>
-													<?php if ($_SESSION['flag_products_measure'] == 1) { ?>
-														<div class="col-sm-2 floating-label enable-floating-label show-label">
-															<label for="quantityKgProduction">Cantidad (Kg)</label>
-															<input type="number" class="form-control text-center" id="quantityKgProduction" name="quantityKgProduction">
-														</div>
-													<?php } ?>
-													<div class="col-sm-2 floating-label enable-floating-label show-label">
-														<button class="btn btn-info mt-1" id="btnDeliverPartialOP">Entregar</button>
-													</div>
+												<div class="col-sm-2 floating-label enable-floating-label show-label">
+													<label for="">Cantidad</label>
+													<input type="number" class="form-control text-center" id="quantityMP" name="quantity">
 												</div>
-											</form>
-											<div class="row">
-												<div class="col-12">
-													<div class="table-responsive">
-														<table class="fixed-table-loading table table-hover text-center" id="tblPartialsDelivery">
+												<div class="col-sm-1 floating-label enable-floating-label show-label">
+													<button class="btn btn-info mt-1" id="btnAddOPMP">Entregar</button>
+												</div>
+											</div>
+										</form>
+										<div class="row">
+											<div class="col-12">
+												<div class="table-responsive">
+													<table class="fixed-table-loading table table-hover text-center" id="tblOPMaterial">
 
-														</table>
-													</div>
+													</table>
 												</div>
 											</div>
 										</div>
+									</div>
 
-										<hr class="m-0">
+									<hr class="m-0">
 
-										<div class="cardExcOP">
-											<div class="row py-4">
-												<div class="col-10">
-													<h4 class="font-weight-bold text-dark">6. Devolución Materia Prima No Usada en Producción</h4>
-												</div>
-											</div>
-											<form id="formAddOPMP">
-												<div class="form-row">
-													<div class="col-sm-2 floating-label enable-floating-label show-label" style="margin-bottom:20px">
-														<label for="material">Referencia</label>
-														<select class="form-control refMaterial" name="refMaterial" id="refMaterial">
-														</select>
-													</div>
-													<div class="col-sm-7 floating-label enable-floating-label show-label" style="margin-bottom:20px">
-														<label for="material">Materia Prima</label>
-														<select class="form-control material" name="idMaterial" id="material">
-														</select>
-													</div>
-													<!-- <div class="col-sm-6 floating-label enable-floating-label show-label" style="margin-bottom:20px">
-														<label for="operator">Operario</label>
-														<?php
-														//$id_user = $_SESSION['idUser'];
-														//$name = $_SESSION['name'];
-														//$lastname = $_SESSION['lastname'];
-														?>
-														<input type="text" class="form-control" name="operator" id="operator" readonly value="<?php echo "$name $lastname" ?>">
-													</div> -->
-													<div class="col-sm-2 floating-label enable-floating-label show-label">
-														<label for="">Cantidad</label>
-														<input type="number" class="form-control text-center" id="quantityMP" name="quantity">
-													</div>
-													<div class="col-sm-1 floating-label enable-floating-label show-label">
-														<button class="btn btn-info mt-1" id="btnAddOPMP">Entregar</button>
-													</div>
-												</div>
-											</form>
-											<div class="row">
-												<div class="col-12">
-													<div class="table-responsive">
-														<table class="fixed-table-loading table table-hover text-center" id="tblOPMaterial">
-
-														</table>
-													</div>
-												</div>
-											</div>
-										</div>
-
-										<hr class="m-0">
-
-										<div class="row cardCloseOP">
-											<div class="col-sm-12 mt-4">
-												<button class="btn btn-warning w-100 d-block" id="btnCloseOP"><b>CERRAR ORDEN DE PRODUCCIÓN</b></button>
-											</div>
+									<div class="row cardCloseOP">
+										<div class="col-sm-12 mt-4">
+											<button class="btn btn-warning w-100 d-block" id="btnCloseOP"><b>CERRAR ORDEN DE PRODUCCIÓN</b></button>
 										</div>
 									</div>
 								</div>
@@ -437,24 +434,25 @@ if (sizeof($_SESSION) == 0)
 						</div>
 					</div>
 				</div>
-				<!-- Main content end -->
-
-				<!-- Footer -->
 			</div>
-			<?php include_once  dirname(dirname(dirname(__DIR__))) . '/global/partials/footer.php'; ?>
-		</div>
-		<!-- Page End -->
+			<!-- Main content end -->
 
-		<?php include_once dirname(dirname(dirname(__DIR__))) . '/global/partials/scriptsJS.php'; ?>
-		<script>
-			viewRawMaterial = 3;
-		</script>
-		<script src="/planning/js/basic/rawMaterials/configRawMaterials.js"></script>
-		<script src="/planning/js/productionOrder/opPartial.js"></script>
-		<script src="/planning/js/productionOrder/opMaterial.js"></script>
-		<script src="/planning/js/productionOrder/detailsProductionOrder.js"></script>
-		<script src="/global/js/global/companyData.js"></script>
-		<script src="/global/js/global/printPdf.js"></script>
+			<!-- Footer -->
+		</div>
+		<?php include_once  dirname(dirname(dirname(__DIR__))) . '/global/partials/footer.php'; ?>
+	</div>
+	<!-- Page End -->
+
+	<?php include_once dirname(dirname(dirname(__DIR__))) . '/global/partials/scriptsJS.php'; ?>
+	<script>
+		viewRawMaterial = 3;
+	</script>
+	<script src="/planning/js/basic/rawMaterials/configRawMaterials.js"></script>
+	<script src="/planning/js/productionOrder/opPartial.js"></script>
+	<script src="/planning/js/productionOrder/opMaterial.js"></script>
+	<script src="/planning/js/productionOrder/detailsProductionOrder.js"></script>
+	<script src="/global/js/global/companyData.js"></script>
+	<script src="/global/js/global/printPdf.js"></script>
 </body>
 
 </html>
