@@ -374,7 +374,7 @@ $app->post('/addPlanningMachines', function (Request $request, Response $respons
 
                     $id_provider = 0;
 
-                    if ($provider) $id_provider = $provider['id_provider'];
+                    if (isset($provider['id_provider'])) $id_provider = $provider['id_provider'];
 
                     $data['idProvider'] = $id_provider;
                     $data['numOrder'] = $orders[$i]['num_order'];
@@ -580,7 +580,7 @@ $app->get('/deletePlanningMachines/{id_program_machine}/{id}', function (Request
 
                     $id_provider = 0;
 
-                    if ($provider) $id_provider = $provider['id_provider'];
+                    if (isset($provider['id_provider'])) $id_provider = $provider['id_provider'];
 
                     $data['idProvider'] = $id_provider;
                     $data['numOrder'] = $orders[$i]['num_order'];
@@ -725,7 +725,7 @@ $app->get('/changeStatusPMachine/{id_program_machine}/{status}', function (Reque
 
                     $id_provider = 0;
 
-                    if ($provider) $id_provider = $provider['id_provider'];
+                    if (isset($provider['id_provider'])) $id_provider = $provider['id_provider'];
 
                     $data['idProvider'] = $id_provider;
                     $data['numOrder'] = $orders[$i]['num_order'];

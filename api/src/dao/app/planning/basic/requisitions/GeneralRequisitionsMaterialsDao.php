@@ -229,6 +229,24 @@ class GeneralRequisitionsMaterialsDao
         }
     }
 
+    public function saveProviderRQ($dataRequisition)
+    {
+        $connection = Connection::getInstance()->getConnection();
+
+        try {
+            $stmt = $connection->prepare("UPDATE requisitions_materials SET id_provider = :id_provider WHERE id_requisition_material = :id_requisition");
+            $stmt->execute([
+                'id_requisition' => $dataRequisition['idRequisition'],
+                'id_provider' => $dataRequisition['idProvider'],
+            ]);
+            $this->logger->info(__FUNCTION__, array('query' => $stmt->queryString, 'errors' => $stmt->errorInfo()));
+        } catch (\Exception $e) {
+            $message = $e->getMessage();
+            $error = array('info' => true, 'message' => $message);
+            return $error;
+        }
+    }
+
     public function clearDataRequisition($id_requisition)
     {
         $connection = Connection::getInstance()->getConnection();

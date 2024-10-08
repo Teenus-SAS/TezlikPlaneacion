@@ -11,66 +11,18 @@ $(document).ready(function () {
     }
   });
 
-  // loadAllData = async (op, min_date, max_date) => {
-  //   try {
-  //     const [dataActualOffices, dataOffices] = await Promise.all([
-  //       searchData("/api/actualOffices"),
-  //       op == 3 ? searchData(`/api/offices/${min_date}/${max_date}`) : null,
-  //     ]);
-
-  //     let card = document.getElementsByClassName("selectNavigation");
-
-  //     if (card[0].className.includes("active")) pending = 1;
-  //     else pending = 0;
-
-  //     pendingStore = dataActualOffices.filter(
-  //       (item) => item.status !== "ENTREGADO"
-  //     );
-  //     deliveredStore = dataActualOffices.filter(
-  //       (item) => item.status === "ENTREGADO"
-  //     );
-
-  //     let visible = true;
-  //     if (op === 1) dataToLoad = pendingStore;
-  //     else if (op === 2) {
-  //       dataToLoad = deliveredStore;
-  //       visible = false;
-  //     } else {
-  //       if (pending == 1)
-  //         dataToLoad = dataOffices.filter(
-  //           (item) => item.status !== "ENTREGADO"
-  //         );
-  //       else
-  //         dataToLoad = dataOffices.filter(
-  //           (item) => item.status === "ENTREGADO"
-  //         );
-  //     }
-
-  //     if (dataToLoad) {
-  //       loadTblOffices(dataToLoad, visible);
-  //       officesIndicators(dataToLoad);
-  //     }
-  //   } catch (error) {
-  //     console.error("Error loading data:", error);
-  //   }
-  // };
   loadAllData = async (op, min_date, max_date) => {
     try {
-      // Cargar los datos de forma condicional con Promise.all
       const [dataActualOffices, dataOffices] = await Promise.all([
         searchData("/api/actualOffices"),
-        op === 3
-          ? searchData(`/api/offices/${min_date}/${max_date}`)
-          : Promise.resolve(null),
+        op == 3 ? searchData(`/api/offices/${min_date}/${max_date}`) : null,
       ]);
 
-      // Detectar si la pestaña "pendientes" está activa
-      const isPendingActive = document
-        .getElementsByClassName("selectNavigation")[0]
-        .className.includes("active");
-      const pending = isPendingActive ? 1 : 0;
+      let card = document.getElementsByClassName("selectNavigation");
 
-      // Filtrar datos según el estado
+      if (card[0].className.includes("active")) pending = 1;
+      else pending = 0;
+
       pendingStore = dataActualOffices.filter(
         (item) => item.status !== "ENTREGADO"
       );
@@ -78,26 +30,23 @@ $(document).ready(function () {
         (item) => item.status === "ENTREGADO"
       );
 
-      // Definir los datos a cargar y la visibilidad de la columna
-      let dataToLoad = [];
       let visible = true;
-
-      if (op === 1) {
-        // Cargar datos pendientes
-        dataToLoad = pendingStore;
-      } else if (op === 2) {
-        // Cargar datos entregados
+      if (op === 1) dataToLoad = pendingStore;
+      else if (op === 2) {
         dataToLoad = deliveredStore;
         visible = false;
-      } else if (op === 3 && dataOffices) {
-        // Filtrar los datos según el estado y la pestaña activa
-        dataToLoad = pending
-          ? dataOffices.filter((item) => item.status !== "ENTREGADO")
-          : dataOffices.filter((item) => item.status === "ENTREGADO");
+      } else {
+        if (pending == 1)
+          dataToLoad = dataOffices.filter(
+            (item) => item.status !== "ENTREGADO"
+          );
+        else
+          dataToLoad = dataOffices.filter(
+            (item) => item.status === "ENTREGADO"
+          );
       }
 
-      // Si hay datos para cargar, actualizar la tabla y los indicadores
-      if (dataToLoad && dataToLoad.length > 0) {
+      if (dataToLoad) {
         loadTblOffices(dataToLoad, visible);
         officesIndicators(dataToLoad);
       }
@@ -105,6 +54,57 @@ $(document).ready(function () {
       console.error("Error loading data:", error);
     }
   };
+  // loadAllData = async (op, min_date, max_date) => {
+  //   try {
+  //     // Cargar los datos de forma condicional con Promise.all
+  //     const [dataActualOffices, dataOffices] = await Promise.all([
+  //       searchData("/api/actualOffices"),
+  //       op === 3
+  //         ? searchData(`/api/offices/${min_date}/${max_date}`)
+  //         : Promise.resolve(null),
+  //     ]);
+
+  //     // Detectar si la pestaña "pendientes" está activa
+  //     const isPendingActive = document
+  //       .getElementsByClassName("selectNavigation")[0]
+  //       .className.includes("active");
+  //     const pending = isPendingActive ? 1 : 0;
+
+  //     // Filtrar datos según el estado
+  //     pendingStore = dataActualOffices.filter(
+  //       (item) => item.status !== "ENTREGADO"
+  //     );
+  //     deliveredStore = dataActualOffices.filter(
+  //       (item) => item.status === "ENTREGADO"
+  //     );
+
+  //     // Definir los datos a cargar y la visibilidad de la columna
+  //     let dataToLoad = [];
+  //     let visible = true;
+
+  //     if (op === 1) {
+  //       // Cargar datos pendientes
+  //       dataToLoad = pendingStore;
+  //     } else if (op === 2) {
+  //       // Cargar datos entregados
+  //       dataToLoad = deliveredStore;
+  //       visible = false;
+  //     } else if (op === 3 && dataOffices) {
+  //       // Filtrar los datos según el estado y la pestaña activa
+  //       dataToLoad = pending
+  //         ? dataOffices.filter((item) => item.status !== "ENTREGADO")
+  //         : dataOffices.filter((item) => item.status === "ENTREGADO");
+  //     }
+
+  //     // Si hay datos para cargar, actualizar la tabla y los indicadores
+  //     if (dataToLoad && dataToLoad.length > 0) {
+  //       loadTblOffices(dataToLoad, visible);
+  //       officesIndicators(dataToLoad);
+  //     }
+  //   } catch (error) {
+  //     console.error("Error loading data:", error);
+  //   }
+  // };
 
   const officesIndicators = (data) => {
     let totalQuantity = 0;

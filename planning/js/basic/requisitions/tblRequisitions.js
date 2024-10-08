@@ -323,7 +323,7 @@ $(document).ready(function () {
       action = `<div style="display: flex; align-items: center; justify-content: center; height: 100%;">
                   <span id="upd-${id}" class="badge badge-warning ${className2} btn-action"
                         style="cursor: pointer; font-size: 12px; margin-right: 5px;" 
-                        data-toggle='tooltip' title='Ejecutar Requisición' onclick="executeRequisition('${id}')">
+                        data-toggle='tooltip' title='Ejecutar Requisición'">
                     Ejecutar
                   </span>
                   <a href="javascript:;" <i id="${id}" class="mdi mdi-delete-forever" data-toggle='tooltip' title='Eliminar Requisicion' style="font-size: 30px;color:red" onclick="deleteFunction(${

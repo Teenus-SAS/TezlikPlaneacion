@@ -232,7 +232,7 @@ $app->post('/addRequisition', function (Request $request, Response $response, $a
 
             $id_provider = 0;
 
-            if ($provider) $id_provider = $provider['id_provider'];
+            if (isset($provider['id_provider'])) $id_provider = $provider['id_provider'];
 
             $data['numOrder'] = $materials[$i]['num_order'];
             $data['idProvider'] = $id_provider;

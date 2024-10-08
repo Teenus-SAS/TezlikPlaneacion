@@ -184,6 +184,20 @@ $app->post('/addRMStock', function (Request $request, Response $response, $args)
             }
 
             if ($resolution == null) {
+                $data = [];
+
+                $data['idProvider'] = 0;
+                $data['idMaterial'] = $dataStock['idMaterial'];
+
+                $material = $generalRequisitionsMaterialsDao->findRequisition($data, $id_company);
+
+                if ($material) {
+                    $data['idRequisition'] = $material['id_requisition_material'];
+                    $resolution = $generalRequisitionsMaterialsDao->saveProviderRQ($data);
+                }
+            }
+
+            if ($resolution == null) {
                 $arr = $generalExMaterialsDao->findAllMaterialsConsolidatedByMaterial($dataStock['idMaterial']);
 
                 $materials = $generalExMaterialsDao->setDataEXMaterials($arr);
@@ -206,7 +220,7 @@ $app->post('/addRMStock', function (Request $request, Response $response, $args)
 
                         $id_provider = 0;
 
-                        if ($provider) $id_provider = $provider['id_provider'];
+                        if (isset($provider['id_provider'])) $id_provider = $provider['id_provider'];
 
                         $data['idProvider'] = $id_provider;
                         $data['numOrder'] = $materials[$i]['num_order'];
@@ -280,9 +294,23 @@ $app->post('/addRMStock', function (Request $request, Response $response, $args)
             if ($status == true)
                 $findStock = $generalStockDao->findstock($stock[$i], $id_company);
 
-            if (!$findStock)
+            if (!$findStock) {
                 $resolution = $stockDao->insertStockByCompany($stock[$i], $id_company);
-            else {
+
+                if (isset($resolution['info'])) break;
+
+                $data = [];
+
+                $data['idProvider'] = 0;
+                $data['idMaterial'] = $stock[$i]['idMaterial'];
+
+                $material = $generalRequisitionsMaterialsDao->findRequisition($data, $id_company);
+
+                if ($material) {
+                    $data['idRequisition'] = $material['id_requisition_material'];
+                    $resolution = $generalRequisitionsMaterialsDao->saveProviderRQ($data);
+                }
+            } else {
                 !isset($stock[$i]['idStock']) ? $stock[$i]['idStock'] = $findStock['id_stock_material'] : $stock;
 
                 $resolution = $stockDao->updateStock($stock[$i]);
@@ -366,7 +394,7 @@ $app->post('/updateRMStock', function (Request $request, Response $response, $ar
 
                     $id_provider = 0;
 
-                    if ($provider) $id_provider = $provider['id_provider'];
+                    if (isset($provider['id_provider'])) $id_provider = $provider['id_provider'];
 
                     $data['idProvider'] = $id_provider;
                     $data['numOrder'] = $materials[$i]['num_order'];

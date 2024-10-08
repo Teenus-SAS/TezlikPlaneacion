@@ -694,7 +694,7 @@ $app->post('/addProductsMaterials', function (Request $request, Response $respon
 
                     $id_provider = 0;
 
-                    if ($provider) $id_provider = $provider['id_provider'];
+                    if (isset($provider['id_provider'])) $id_provider = $provider['id_provider'];
 
                     $data['idProvider'] = $id_provider;
                     $data['numOrder'] = $materials[$i]['num_order'];
@@ -736,7 +736,7 @@ $app->post('/addProductsMaterials', function (Request $request, Response $respon
 
                     $id_provider = 0;
 
-                    if ($provider) $id_provider = $provider['id_provider'];
+                    if (isset($provider['id_provider'])) $id_provider = $provider['id_provider'];
 
                     $data['idProvider'] = $id_provider;
                     $data['numOrder'] = $materials[$i]['num_order'];
@@ -847,7 +847,7 @@ $app->post('/addProductsMaterials', function (Request $request, Response $respon
 
                     $id_provider = 0;
 
-                    if ($provider) $id_provider = $provider['id_provider'];
+                    if (isset($provider['id_provider'])) $id_provider = $provider['id_provider'];
 
                     $data['idProvider'] = $id_provider;
                     $data['numOrder'] = $orders[$i]['num_order'];
@@ -1142,7 +1142,7 @@ $app->post('/updatePlanProductsMaterials', function (Request $request, Response 
 
                         $id_provider = 0;
 
-                        if ($provider) $id_provider = $provider['id_provider'];
+                        if (isset($provider['id_provider'])) $id_provider = $provider['id_provider'];
 
                         $data['idProvider'] = $id_provider;
                         $data['numOrder'] = $materials[$i]['num_order'];
@@ -1184,7 +1184,7 @@ $app->post('/updatePlanProductsMaterials', function (Request $request, Response 
 
                         $id_provider = 0;
 
-                        if ($provider) $id_provider = $provider['id_provider'];
+                        if (isset($provider['id_provider'])) $id_provider = $provider['id_provider'];
 
                         $data['idProvider'] = $id_provider;
                         $data['numOrder'] = $materials[$i]['num_order'];
@@ -1453,7 +1453,7 @@ $app->post('/deletePlanProductMaterial', function (Request $request, Response $r
 
                     $id_provider = 0;
 
-                    if ($provider) $id_provider = $provider['id_provider'];
+                    if (isset($provider['id_provider'])) $id_provider = $provider['id_provider'];
 
                     $data['idProvider'] = $id_provider;
                     $data['numOrder'] = $materials[$i]['num_order'];
@@ -1495,7 +1495,7 @@ $app->post('/deletePlanProductMaterial', function (Request $request, Response $r
 
                     $id_provider = 0;
 
-                    if ($provider) $id_provider = $provider['id_provider'];
+                    if (isset($provider['id_provider'])) $id_provider = $provider['id_provider'];
 
                     $data['idProvider'] = $id_provider;
                     $data['numOrder'] = $materials[$i]['num_order'];

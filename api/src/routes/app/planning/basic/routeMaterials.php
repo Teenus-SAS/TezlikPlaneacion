@@ -462,7 +462,7 @@ $app->post('/addMaterials', function (Request $request, Response $response, $arg
 
                     $id_provider = 0;
 
-                    if ($provider) $id_provider = $provider['id_provider'];
+                    if (isset($provider['id_provider'])) $id_provider = $provider['id_provider'];
 
                     $data['idProvider'] = $id_provider;
                     $data['numOrder'] = $orders[$i]['num_order'];
@@ -635,7 +635,7 @@ $app->post('/updateMaterials', function (Request $request, Response $response, $
 
                     $id_provider = 0;
 
-                    if ($provider) $id_provider = $provider['id_provider'];
+                    if (isset($provider['id_provider'])) $id_provider = $provider['id_provider'];
 
                     $data['idProvider'] = $id_provider;
 
@@ -815,7 +815,7 @@ $app->post('/updateMaterials', function (Request $request, Response $response, $
 
                     $id_provider = 0;
 
-                    if ($provider) $id_provider = $provider['id_provider'];
+                    if (isset($provider['id_provider'])) $id_provider = $provider['id_provider'];
 
                     $data['idProvider'] = $id_provider;
                     $data['numOrder'] = $orders[$i]['num_order'];
