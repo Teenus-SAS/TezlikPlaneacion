@@ -115,12 +115,12 @@ $(document).ready(function () {
       return false;
     }
 
-    if (idOrder) {
-      if (dateOrder < date) {
-        toastr.error("Fecha por debajo de la fecha actual");
-        return false;
-      }
-    }
+    // if (idOrder) {
+    //   if (dateOrder < date) {
+    //     toastr.error("Fecha por debajo de la fecha actual");
+    //     return false;
+    //   }
+    // }
 
     // if (originalQuantity > accumulated_quantity) {
     //   toastr.error("Inventario de producto por debajo de");
