@@ -328,14 +328,12 @@ if (sizeof($_SESSION) == 0)
                                 <ul class="nav nav-tabs" id="pills-tab" role="tablist">
                                     <li class="nav-item">
                                         <a class="nav-link active selectNavigation" id="pending" data-toggle="pill" href="javascript:;" role="tab" aria-controls="pills-activity" aria-selected="true">
-                                            <span class="badge badge-warning">
-                                                <i class="bi bi-clock-history mr-1"></i>Pendiente
-                                            </span>
+                                            <i class="bi bi-clock-history mr-1" id="pending-icon"></i>Pendiente
                                         </a>
                                     </li>
                                     <li class="nav-item">
                                         <a class="nav-link selectNavigation" id="done" data-toggle="pill" href="javascript:;" role="tab" aria-controls="pills-projects" aria-selected="false">
-                                            <i class="bi bi-check-square-fill mr-1"></i>Ejecutado
+                                            <i class="bi bi-check-square-fill mr-1" id="done-icon"></i>Ejecutado
                                         </a>
                                     </li>
                                 </ul>
