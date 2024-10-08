@@ -249,7 +249,7 @@ $(document).ready(function () {
         {
           title: "Acciones",
           data: null,
-          className: "uniqueClassName dt-head-center",
+          className: "uniqueClassName dt-head-center p-0",
           visible: (data) => (data.status != "Recibido" ? true : false),
           render: (data) => renderRequisitionActions(data, visible),
         },
@@ -321,8 +321,8 @@ $(document).ready(function () {
       }
 
       action = `<div style="display: flex; align-items: center; justify-content: center; height: 100%;">
-                  <span id="upd-${id}" class="badge badge-info ${className2} btn-action"
-                        style="cursor: pointer; font-size: 14px; margin-right: 5px;" 
+                  <span id="upd-${id}" class="badge badge-warning ${className2} btn-action"
+                        style="cursor: pointer; font-size: 12px; margin-right: 5px;" 
                         data-toggle='tooltip' title='Ejecutar Requisición' onclick="executeRequisition('${id}')">
                     Ejecutar
                   </span>
