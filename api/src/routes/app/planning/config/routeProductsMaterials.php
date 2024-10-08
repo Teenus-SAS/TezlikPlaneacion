@@ -916,9 +916,9 @@ $app->post('/updatePlanProductsMaterials', function (Request $request, Response 
     $dataProductMaterial = $request->getParsedBody();
 
     $productMaterials = $generalProductsMaterialsDao->findProductMaterial($dataProductMaterial, $id_company);
-    !is_array($productMaterials) ? $data['id_productMaterial'] = 0 : $data = $productMaterials;
+    !is_array($productMaterials) ? $data['id_product_material'] = 0 : $data = $productMaterials;
 
-    if ($data['id_product_material'] == $dataProductMaterial['idProductMaterial'] || $data['id_productMaterial'] == 0) {
+    if ($data['id_product_material'] == $dataProductMaterial['idProductMaterial'] || $data['id_product_material'] == 0) {
         // $dataProductMaterial = $convertDataDao->strReplaceProductsMaterials($dataProductMaterial);
         $resolution = $productsMaterialsDao->updateProductsMaterials($dataProductMaterial);
 
