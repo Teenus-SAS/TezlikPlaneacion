@@ -4,12 +4,14 @@ use TezlikPlaneacion\Dao\GeneralCompositeProductsDao;
 use TezlikPlaneacion\dao\GeneralPMeasuresDao;
 use TezlikPlaneacion\dao\GeneralProductsDao;
 use TezlikPlaneacion\dao\LastDataDao;
+use TezlikPlaneacion\dao\MaterialsDao;
 use TezlikPlaneacion\dao\ProductsDao;
 use TezlikPlaneacion\dao\ProductsInventoryDao;
 use TezlikPlaneacion\dao\ProductsMeasuresDao;
 use TezlikPlaneacion\dao\ProductsTypeDao;
 
 $productsMeasuresDao = new ProductsMeasuresDao();
+$materialsDao = new MaterialsDao();
 $generalPMeasuresDao = new GeneralPMeasuresDao();
 $productsTypeDao = new ProductsTypeDao();
 $productsInventoryDao = new ProductsInventoryDao();
@@ -168,6 +170,7 @@ $app->post('/productsMeasuresDataValidation', function (Request $request, Respon
 
 $app->post('/addProductMeasure', function (Request $request, Response $response, $args) use (
     $productsMeasuresDao,
+    $materialsDao,
     $lastDataDao,
     $productsInventoryDao,
     $productsTypeDao,
@@ -188,6 +191,16 @@ $app->post('/addProductMeasure', function (Request $request, Response $response,
 
         if (!$findProduct) {
             $resolution = $productsDao->insertProductByCompany($dataProduct, $id_company);
+
+            if ($resolution == null && $dataProduct['origin'] == 1) {
+                $data = [];
+                $data['idMaterialType'] = 0;
+                $data['refRawMaterial'] = $dataProduct['referenceProduct'];
+                $data['nameRawMaterial'] = $dataProduct['product'];
+                $data['unit'] = 12;
+
+                $resolution = $materialsDao->insertMaterialsByCompany($data, $id_company);
+            }
 
             if ($resolution == null) {
                 $lastData = $lastDataDao->lastInsertedProductId($id_company);

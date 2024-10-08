@@ -119,6 +119,7 @@ $(document).ready(function () {
   /* Cargue tabla de Productos Materiales */
   loadTblRequisitions = (data, visible) => {
     tblRequisitions = $("#tblRequisitions").dataTable({
+      destroy: true,
       fixedHeader: true,
       scrollY: "400px",
       scrollCollapse: true,

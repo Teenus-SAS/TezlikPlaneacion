@@ -39,11 +39,11 @@ $app->get('/requisitions', function (Request $request, Response $response, $args
     $id_company = $_SESSION['id_company'];
 
     $materials = $generalRequisitionsMaterialsDao->findAllActualRequisitionByCompany($id_company);
-    $products = $generalRequisitionsProductsDao->findAllActualRequisitionByCompany($id_company);
+    // $products = $generalRequisitionsProductsDao->findAllActualRequisitionByCompany($id_company);
 
-    $requisitions = array_merge($materials, $products);
+    // $requisitions = array_merge($materials, $products);
 
-    $response->getBody()->write(json_encode($requisitions, JSON_NUMERIC_CHECK));
+    $response->getBody()->write(json_encode($materials, JSON_NUMERIC_CHECK));
     return $response->withHeader('Content-Type', 'application/json');
 });
 
