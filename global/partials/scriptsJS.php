@@ -71,3 +71,4 @@
 <!-- <script src="/global/js/global/number.js"></script> -->
 <script src="/global/js/global/lastText.js"></script>
 <script src="/global/js/global/convertDate.js"></script>
+<script src="/global/js/global/updateColorIcon.js"></script>
