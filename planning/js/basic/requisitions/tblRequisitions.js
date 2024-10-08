@@ -321,9 +321,11 @@ $(document).ready(function () {
       }
 
       action = `<div style="display: flex; align-items: center; justify-content: center; height: 100%;">
-                  <button id="upd-${id}" class="${className2} btn btn-primary" style="font-size: 14px; margin-right: 5px;" data-toggle='tooltip' title='Ejecutar Requisición'>
+                  <span id="upd-${id}" class="${className2} btn-action" 
+                        style="padding: 5px 10px; background-color: #007bff; color: white; border-radius: 5px; cursor: pointer; font-size: 14px; margin-right: 5px;" 
+                        data-toggle='tooltip' title='Ejecutar Requisición' onclick="executeRequisition('${id}')">
                     Ejecutar
-                  </button>
+                  </span>
                   <a href="javascript:;" <i id="${id}" class="mdi mdi-delete-forever" data-toggle='tooltip' title='Eliminar Requisicion' style="font-size: 30px;color:red" onclick="deleteFunction(${
         visible == true ? "2" : "1"
       }, ${className1})"></i></a>
