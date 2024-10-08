@@ -1,8 +1,8 @@
 $(document).ready(function () {
   // Productos
   tblPartialsDeliveryPT = $("#tblPartialsDeliveryPT").dataTable({
-    autoWidth: false,
     destroy: true,
+    autoWidth: false,
     pageLength: 50,
     fixedColumns: {
       leftColumns: 1,

@@ -86,10 +86,11 @@ $(document).ready(function () {
     }
 
     tblStore = $("#tblStore").dataTable({
+      destroy: true,
+      autoWidth: false,
       fixedHeader: true,
       scrollY: "400px",
       scrollCollapse: true,
-      destroy: true,
       pageLength: 50,
       data: data,
       language: { url: "/assets/plugins/i18n/Spanish.json" },
