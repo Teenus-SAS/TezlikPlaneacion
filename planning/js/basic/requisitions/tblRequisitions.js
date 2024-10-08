@@ -344,16 +344,17 @@ $(document).ready(function () {
   const pendingIcon = document.getElementById("pending-icon");
   const doneIcon = document.getElementById("done-icon");
 
-  // Agregar event listeners para cambiar los colores de los iconos al cambiar de pestaña
+
   pendingTab.addEventListener("click", () => {
-    // Cambiar color del icono de pendiente a amarillo y el de ejecutado a transparente
-    pendingIcon.style.color = "yellow";
-    doneIcon.style.color = "transparent";
+    pendingIcon.style.color = "red";
+    doneIcon.style.color = "gray";
   });
 
   doneTab.addEventListener("click", () => {
     // Cambiar color del icono de pendiente a transparente y el de ejecutado a verde
-    pendingIcon.style.color = "transparent";
+    pendingIcon.style.color = "gray";
     doneIcon.style.color = "green";
   });
+
+
 });
