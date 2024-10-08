@@ -226,7 +226,7 @@ $(document).ready(function () {
     const material = parseInt($("#material").val());
     const provider = parseInt($("#clientMP").val());
     const applicationDate = $("#applicationDateMP").val();
-    const deliveryDate = $("#deliveryDateMP").val();
+    const deliveryDate = $("#deliveryDatePT").val();
     // const quan = $('#requiredQuantity').val();
     const r_quan = parseFloat($("#requestedQuantityMP").val());
 
