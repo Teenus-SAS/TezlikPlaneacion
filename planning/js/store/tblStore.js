@@ -2,19 +2,22 @@ $(document).ready(function () {
   $("#btnExportStore").hide();
 
   $(".selectNavigation").click(function (e) {
-    e.preventDefault(); 
-    
+    e.preventDefault();
+
+    if ($.fn.dataTable.isDataTable("#tblStore")) {
+      $("#tblStore").DataTable().destroy();
+      $("#tblStore").empty();
+    }
     $(".cardOC, .cardOP").hide();
 
     if (this.id == "receiveOC") {
       $(".cardOC").show();
-      loadTblReceiveOC(requisitions);
+      loadTblStoreMaterial(requisitions);
       $("#btnExportStore").hide();
-      // } else if (this.id == "deliverOC") {
-      //   $(".cardOC").show();
-      //   $("#btnExportStore").show();
-      //   loadtblDeliverOC(store);
-      // }
+    } else if (this.id == "deliverOC") {
+      $(".cardOC").show();
+      $("#btnExportStore").show();
+      loadTblStoreOrder(store);
     } else if (this.id == "receiveOP") {
       $(".cardOP").show();
     }
@@ -36,11 +39,8 @@ $(document).ready(function () {
 
       let arr = assignOpToGroups(dataStore, "id_programming");
 
-      // if (op == 1)
-        
-      //   else
-      loadTblReceiveOC(dataRequisitions);
-      loadtblDeliverOC(arr);
+      if (op == 1) loadTblStoreMaterial(dataRequisitions);
+      else loadTblStoreOrder(arr);
 
       requisitions = dataRequisitions;
       store = arr;
@@ -72,7 +72,7 @@ $(document).ready(function () {
   };
 
   // Función para cargar la tabla de materiales a recibir
-  const loadTblReceiveOC = async (data) => {
+  const loadTblStoreMaterial = async (data) => {
     data = data.filter(
       (item) =>
         item.application_date !== "0000-00-00" &&
@@ -80,12 +80,12 @@ $(document).ready(function () {
         item.purchase_order !== ""
     );
 
-    if ($.fn.dataTable.isDataTable("#tblReceiveOC")) {
-      $("#tblReceiveOC").DataTable().clear().rows.add(data).draw();
+    if ($.fn.dataTable.isDataTable("#tblStore")) {
+      $("#tblStore").DataTable().clear().rows.add(data).draw();
       return;
     }
 
-    tblReceiveOC = $("#tblReceiveOC").dataTable({
+    tblStore = $("#tblStore").dataTable({
       fixedHeader: true,
       scrollY: "400px",
       scrollCollapse: true,
@@ -177,8 +177,8 @@ $(document).ready(function () {
   };
 
   // Función para cargar la tabla de órdenes de almacén
-  const loadtblDeliverOC = (data) => {
-    tblDeliverOC = $("#tblDeliverOC").dataTable({
+  const loadTblStoreOrder = (data) => {
+    tblStore = $("#tblStore").dataTable({
       destroy: true,
       pageLength: 50,
       data: data,

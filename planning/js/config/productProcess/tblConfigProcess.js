@@ -19,10 +19,11 @@ $(document).ready(function () {
 
   const loadtableProcess = (idProduct) => {
     tblConfigProcess = $("#tblConfigProcess").dataTable({
-      // fixedHeader: true,
-      scrollY: "400px",
-      scrollCollapse: true,
       destroy: true,
+      autoWidth: false,
+      // fixedHeader: true,
+      scrollCollapse: true,
+      scrollY: "400px",
       pageLength: 50,
       ajax: {
         url: `/api/productsProcess/${idProduct}`,
