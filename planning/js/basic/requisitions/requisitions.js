@@ -312,20 +312,20 @@ $(document).ready(function () {
   // });
   
   /* Eliminar materia prima */
-  deleteFunction = (op, id) => {
+  deleteFunction = () => {
     //obtener data
     const row = $(this.activeElement).closest("tr")[0];
     const data = tblRequisitions.fnGetData(row);
 
     let dataRequisition = {};
 
-    if (id == 'id_requisition_material') {
+    // if (id == 'id_requisition_material') {
       dataRequisition["idRequisition"] = data.id_requisition_material;
       dataRequisition["idMaterial"] = data.id_material;
-    } else {
-      dataRequisition["idRequisition"] = data.id_requisition_product;
-      dataRequisition["idProduct"] = data.id_product;
-    }
+    // } else {
+    //   dataRequisition["idRequisition"] = data.id_requisition_product;
+    //   dataRequisition["idProduct"] = data.id_product;
+    // }
 
     dataRequisition["op"] = op;
 
@@ -358,20 +358,20 @@ $(document).ready(function () {
   };
 
   /* Cancelar Compra */
-  cancelRQFunction = (id) => {
+  cancelRQFunction = () => {
     //obtener data
     const row = $(this.activeElement).closest("tr")[0];
     const data = tblRequisitions.fnGetData(row);
 
     let dataRequisition = {};
     
-    if (id == 'id_requisition_material') {
+    // if (id == 'id_requisition_material') {
       dataRequisition["idRequisition"] = data.id_requisition_material;
       dataRequisition["idMaterial"] = data.id_material;      
-    } else {
-      dataRequisition["idRequisition"] = data.id_requisition_product;
-      dataRequisition["idProduct"] = data.id_product;      
-    }
+    // } else {
+    //   dataRequisition["idRequisition"] = data.id_requisition_product;
+    //   dataRequisition["idProduct"] = data.id_product;      
+    // }
 
     dataRequisition["idUser"] = 0;
     dataRequisition["idProvider"] = data.id_provider;

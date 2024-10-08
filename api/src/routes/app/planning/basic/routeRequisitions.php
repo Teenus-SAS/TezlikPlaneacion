@@ -271,19 +271,19 @@ $app->post('/updateRequisition', function (Request $request, Response $response,
 
     $requisition = null;
 
-    if (isset($dataRequisition['idMaterial'])) {
-        $requisition = $requisitionsMaterialsDao->updateRequisitionManual($dataRequisition);
+    // if (isset($dataRequisition['idMaterial'])) {
+    $requisition = $requisitionsMaterialsDao->updateRequisitionManual($dataRequisition);
 
-        if ($requisition == null) {
-            $material = $transitMaterialsDao->calcQuantityTransitByMaterial($dataRequisition['idMaterial']);
+    if ($requisition == null) {
+        $material = $transitMaterialsDao->calcQuantityTransitByMaterial($dataRequisition['idMaterial']);
 
-            if (isset($material['transit']))
-                $requisition = $transitMaterialsDao->updateQuantityTransitByMaterial($dataRequisition['idMaterial'], $material['transit']);
-        }
+        if (isset($material['transit']))
+            $requisition = $transitMaterialsDao->updateQuantityTransitByMaterial($dataRequisition['idMaterial'], $material['transit']);
     }
+    // }
 
-    if (isset($dataRequisition['idProduct']))
-        $requisition = $requisitionsProductsDao->updateRequisitionManual($dataRequisition);
+    // if (isset($dataRequisition['idProduct']))
+    //     $requisition = $requisitionsProductsDao->updateRequisitionManual($dataRequisition);
 
     if ($requisition == null)
         $resp = array('success' => true, 'message' => 'Requisicion modificada correctamente');
@@ -369,28 +369,28 @@ $app->post('/deleteRequisition', function (Request $request, Response $response,
 
     $requisitions = null;
 
-    if (isset($dataRequisition['idMaterial'])) {
-        if ($dataRequisition['op'] == 1) {
-            $requisitions = $requisitionsMaterialsDao->deleteRequisition($dataRequisition['idRequisition']);
-        } else {
-            $requisitions = $generalRequisitionsMaterialsDao->clearDataRequisition($dataRequisition['idRequisition']);
+    // if (isset($dataRequisition['idMaterial'])) {
+    if ($dataRequisition['op'] == 1) {
+        $requisitions = $requisitionsMaterialsDao->deleteRequisition($dataRequisition['idRequisition']);
+    } else {
+        $requisitions = $generalRequisitionsMaterialsDao->clearDataRequisition($dataRequisition['idRequisition']);
 
-            if ($requisitions == null) {
-                $material = $transitMaterialsDao->calcQuantityTransitByMaterial($dataRequisition['idMaterial']);
+        if ($requisitions == null) {
+            $material = $transitMaterialsDao->calcQuantityTransitByMaterial($dataRequisition['idMaterial']);
 
-                if (isset($material['transit']))
-                    $requisitions = $transitMaterialsDao->updateQuantityTransitByMaterial($dataRequisition['idMaterial'], $material['transit']);
-            }
+            if (isset($material['transit']))
+                $requisitions = $transitMaterialsDao->updateQuantityTransitByMaterial($dataRequisition['idMaterial'], $material['transit']);
         }
     }
+    // }
 
-    if (isset($dataRequisition['idProduct'])) {
-        if ($dataRequisition['op'] == 1) {
-            $requisitions = $requisitionsProductsDao->deleteRequisition($dataRequisition['idRequisition']);
-        } else {
-            $requisitions = $generalRequisitionsProductsDao->clearDataRequisition($dataRequisition['idRequisition']);
-        }
-    }
+    // if (isset($dataRequisition['idProduct'])) {
+    //     if ($dataRequisition['op'] == 1) {
+    //         $requisitions = $requisitionsProductsDao->deleteRequisition($dataRequisition['idRequisition']);
+    //     } else {
+    //         $requisitions = $generalRequisitionsProductsDao->clearDataRequisition($dataRequisition['idRequisition']);
+    //     }
+    // }
 
     if ($requisitions == null)
         $resp = array('success' => true, 'message' => 'Requisicion eliminada correctamente');

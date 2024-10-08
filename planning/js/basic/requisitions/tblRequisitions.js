@@ -118,8 +118,7 @@ $(document).ready(function () {
 
   /* Cargue tabla de Productos Materiales */
   loadTblRequisitions = (data, visible) => {
-    tblRequisitions = $("#tblRequisitions").dataTable({
-      destroy: true,
+    tblRequisitions = $("#tblRequisitions").dataTable({ 
       fixedHeader: true,
       scrollY: "400px",
       scrollCollapse: true,
@@ -308,32 +307,19 @@ $(document).ready(function () {
 
   function renderRequisitionActions(data, visible) {
     let action = "";
-    if (data.status != "Recibido" && data.status != "Proceso") {
-      let id, className1, className2;
-
-      if (!data.id_requisition_material) {
-        id = data.id_requisition_product;
-        className1 = "id_requisition_product";
-        className2 = "updateRequisitionProduct";
-      } else {
-        id = data.id_requisition_material;
-        className1 = "id_requisition_material";
-        className2 = "updateRequisitionMaterial";
-      }
-
+    if (data.status != "Recibido" && data.status != "Proceso") { 
       action = `<div style="display: flex; align-items: center; justify-content: center; height: 100%;">
-                  <span id="upd-${id}" class="badge badge-warning ${className2} btn-action"
+                  <span id="upd-${data.id_requisition_material}" class="badge badge-warning updateRequisitionMaterial btn-action"
                         style="cursor: pointer; font-size: 12px; margin-right: 5px;" 
                         data-toggle='tooltip' title='Ejecutar Requisición'">
                     Ejecutar
                   </span>
-                  <a href="javascript:;" <i id="${id}" class="mdi mdi-delete-forever" data-toggle='tooltip' title='Eliminar Requisicion' style="font-size: 30px;color:red" onclick="deleteFunction(${
-        visible == true ? "2" : "1"
-      }, ${className1})"></i></a>
+                  <a href="javascript:;" <i id="${data.id_requisition_material}" class="mdi mdi-delete-forever" data-toggle='tooltip' title='Eliminar Requisicion' style="font-size: 30px;color:red" onclick="deleteFunction(${
+                  visible == true ? "2" : "1"})"></i></a>
                 </div>`;
     } else if (data.status == "Proceso") {
-      action = `<a href="javascript:;" <i id="upd-${id}" class="bx bx-edit-alt ${className2}" data-toggle='tooltip' title='Editar Requisicion' style="font-size: 30px;"></i></a>
-              <a href="javascript:;" <i id="${id}" class="bi bi-x-circle-fill" data-toggle='tooltip' title='Cancelar Requisicion' style="font-size: 30px;color:red" onclick="cancelRQFunction(${className1})"></i></a>`;
+      action = `<a href="javascript:;" <i id="upd-${data.id_requisition_material}" class="bx bx-edit-alt updateRequisitionMaterial" data-toggle='tooltip' title='Editar Requisicion' style="font-size: 30px;"></i></a>
+              <a href="javascript:;" <i id="${data.id_requisition_material}" class="bi bi-x-circle-fill" data-toggle='tooltip' title='Cancelar Requisicion' style="font-size: 30px;color:red" onclick="cancelRQFunction()"></i></a>`;
     } else {
       action = data.admission_date;
     }
