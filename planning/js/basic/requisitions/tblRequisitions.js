@@ -12,16 +12,15 @@ $(document).ready(function () {
 
   loadAllData = async (op, min_date, max_date) => {
     try {
-      const [dataRequisitions, dataMPStock, dataPTStock, dateRequisitions] = await Promise.all(
-        [
+      const [dataRequisitions, dataMPStock, dataPTStock, dateRequisitions] =
+        await Promise.all([
           searchData("/api/requisitions"),
           searchData("/api/rMStock"),
           searchData("/api/pStock"),
           op == 3
             ? searchData(`/api/requisitions/${min_date}/${max_date}`)
             : null,
-        ]
-      );
+        ]);
 
       sessionStorage.setItem("MPStock", JSON.stringify(dataMPStock));
       sessionStorage.setItem("PTStock", JSON.stringify(dataPTStock));
@@ -293,14 +292,6 @@ $(document).ready(function () {
   loadAllData(1, null, null);
 
   function renderRequisitionStatus(data, type, full, meta) {
-    /* let badge = "";
-    if (data == "Pendiente") badge = "badge-info";
-    else if (data == "Proceso") badge = "badge-warning";
-    else if (data == "Retrasada") badge = "badge-danger";
-    else if (data == "Recibido") badge = "badge-success";
-
-    return `<span class="badge ${badge}">${data}</span>`; */
-
     const badgeClasses = {
       Pendiente: "badge-info",
       Proceso: "badge-warning",
@@ -308,7 +299,7 @@ $(document).ready(function () {
       Recibido: "badge-success",
     };
 
-    // Utiliza el mapeo para seleccionar la clase, con un valor por defecto si `data` no coincide
+    // seleccionar la clase
     const badge = badgeClasses[data] || "badge-secondary";
 
     return `<span class="badge ${badge}">${data}</span>`;
@@ -319,18 +310,18 @@ $(document).ready(function () {
     if (data.status != "Recibido" && data.status != "Proceso") {
       let id, className1, className2;
 
-      if (!data.id_requisition_material) { 
+      if (!data.id_requisition_material) {
         id = data.id_requisition_product;
-        className1 = 'id_requisition_product';
-        className2 = 'updateRequisitionProduct';
+        className1 = "id_requisition_product";
+        className2 = "updateRequisitionProduct";
       } else {
         id = data.id_requisition_material;
-        className1 = 'id_requisition_material';        
-        className2 = 'updateRequisitionMaterial';        
+        className1 = "id_requisition_material";
+        className2 = "updateRequisitionMaterial";
       }
 
-      action = `<a href="javascript:;" <i id="upd-${id}" class="fas fa-caret-square-right ${className2}" data-toggle='tooltip' title='Ejecutar Requisicion' style="font-size: 30px;"></i></a>
-              <a href="javascript:;" <i id="${id}" class="mdi mdi-delete-forever" data-toggle='tooltip' title='Eliminar Requisicion' style="font-size: 30px;color:red" onclick="deleteFunction(${
+      action = `<button id="upd-${id}" class="${className2} btn btn-success" style="font-size: 14px; margin-right: 5px;" data-toggle='tooltip' title='Ejecutar Compra'>Ejecutar</button>
+                <a href="javascript:;" <i id="${id}" class="mdi mdi-delete-forever" data-toggle='tooltip' title='Eliminar Requisicion' style="font-size: 30px;color:red" onclick="deleteFunction(${
         visible == true ? "2" : "1"
       }, ${className1})"></i></a>`;
     } else if (data.status == "Proceso") {
