@@ -187,21 +187,14 @@ if (sizeof($_SESSION) == 0)
 
 												<!-- Link a Plano Mecánico -->
 												<div class="d-flex justify-content-around">
-
-													<div class="col-sm-2 floating-label enable-floating-label show-label">
-														<label for="link1">Plano Mecánico</label>
-														<a href="/assets/plano_mecanico" class="form-control text-center" id="link1" style="display: inline-block;">
-															Plano Mecánico
-														</a>
+													<div class="col-sm-12">
+														<a href="/assets/plano_mecanico" class="form-control text-center" id="link1" style="display: inline-block;">Plano Mecánico</a>
 													</div>
 
 													<div class="col-sm-1"></div>
 
-													<div class="col-sm-2 floating-label enable-floating-label show-label">
-														<label for="link2">Plano Montaje</label>
-														<a href="/assets/plano_montaje" class="form-control text-center" id="link2" style="display: inline-block;">
-															Plano Montaje
-														</a>
+													<div class="col-sm-12">
+														<a href="/assets/plano_montaje" class="form-control text-center" id="link2" style="display: inline-block;">Plano Montaje</a>
 													</div>
 												</div>
 											<?php } ?>
