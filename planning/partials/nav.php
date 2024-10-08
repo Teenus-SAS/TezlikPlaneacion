@@ -5,7 +5,7 @@
                 <ul class="navbar-nav mr-auto">
                     <li class="nav-item active">
                         <a class="nav-link" href="/planning">
-                            <i class="bi bi-bar-chart-line-fill mr-1"></i> Dashboards
+                            <i class="bi bi-bar-chart-line-fill mr-1" id="dashboard-icon"></i> Dashboards
                             <i class="bx bx-chevron-down"></i>
                         </a>
                     </li>
@@ -16,7 +16,7 @@
                         <li class="nav-item planInventories" style="display: none;">
                         <?php } ?>
                         <a class="nav-link" href="/planning/inventory">
-                            <i class="bx bxs-box mr-1"></i> Inventarios
+                            <i class="bx bxs-box mr-1" id="inventory-icon"></i> Inventarios
                             <i class="bx bx-chevron-down"></i>
                         </a>
                         </li>
@@ -26,7 +26,7 @@
                             <li class="nav-link planRequisitions" style="display: none;">
                             <?php } ?>
                             <a class="nav-link" href="/planning/requisitions">
-                                <i class="fas fa-shopping-cart mr-1"></i>Compras
+                                <i class="fas fa-shopping-cart mr-1" id="requisitions-icon"></i>Compras
                                 <i class="bx bx-chevron-down"></i>
                             </a>
                             </li>
@@ -37,7 +37,7 @@
                                 <li class="nav-item planOrders" style="display: none;">
                                 <?php } ?>
                                 <a class="nav-link" href="/planning/orders">
-                                    <i class="fas fa-clipboard-check mr-1"></i>Pedidos
+                                    <i class="fas fa-clipboard-check mr-1" id="orders-icon"></i>Pedidos
                                     <i class="bx bx-chevron-down"></i>
                                 </a>
                                 </li>
@@ -48,7 +48,7 @@
                                     <li class="nav-item dropdown planPrograms" style="display: none;">
                                     <?php } ?>
                                     <a class="nav-link" href="/planning/programming">
-                                        <i class="bx bxs-customize mr-1"></i>Programar Producción
+                                        <i class="bx bxs-customize mr-1" id="programming-icon"></i>Programar Producción
                                         <i class="bx bx-chevron-down"></i>
                                     </a>
                                     <!-- <a class="nav-link dropdown-toggle" href="javascript:void(0)" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
@@ -73,7 +73,7 @@
                                         <li class="nav-item planExplosionMaterials" style="display: none;">
                                         <?php } ?>
                                         <a class="nav-link" href="/planning/explosion-materials">
-                                            <i class="fas fa-bahai mr-1"></i>Explosión MP<i class="bx bx-chevron-down"></i>
+                                            <i class="fas fa-bahai mr-1" id="explosion-icon"></i>Explosión MP<i class="bx bx-chevron-down"></i>
                                         </a>
                                         </li>
 
@@ -84,7 +84,7 @@
                                             <li class="nav-item planProductionOrder" style="display: none;">
                                             <?php } ?>
                                             <a class="nav-link" href="/planning/production-order">
-                                                <i class="fas fa-tasks mr-1"></i>OP<i class="bx bx-chevron-down"></i>
+                                                <i class="fas fa-tasks mr-1" id="production-order-icon"></i>OP<i class="bx bx-chevron-down"></i>
                                             </a>
                                             </li>
 
@@ -94,7 +94,7 @@
                                                 <li class="nav-item planOffices" style="display: none;">
                                                 <?php } ?>
                                                 <a class="nav-link" href="/planning/store">
-                                                    <i class="fas fa-warehouse mr-1"></i>Almacen<i class="bx bx-chevron-down"></i>
+                                                    <i class="fas fa-warehouse mr-1" id="store-icon"></i>Almacen<i class="bx bx-chevron-down"></i>
                                                 </a>
                                                 </li>
 
@@ -104,7 +104,7 @@
                                                     <li class="nav-item planStore" style="display: none;">
                                                     <?php } ?>
                                                     <a class="nav-link" href="/planning/offices">
-                                                        <i class="fas fa-truck mr-1"></i>Despachos<i class="bx bx-chevron-down"></i>
+                                                        <i class="fas fa-truck mr-1" id="offices-icon"></i>Despachos<i class="bx bx-chevron-down"></i>
                                                     </a>
 
                                                     </li>

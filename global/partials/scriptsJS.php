@@ -26,7 +26,7 @@
 
 <!-- Datatables -->
 <script src="https://cdn.datatables.net/1.11.4/js/jquery.dataTables.min.js"></script>
- <!-- <script src="https://cdn.datatables.net/2.1.7/js/dataTables.min.js"></script> -->
+<!-- <script src="https://cdn.datatables.net/2.1.7/js/dataTables.min.js"></script> -->
 <script src="https://cdn.datatables.net/1.11.4/js/dataTables.bootstrap5.min.js"></script>
 <script src="https://cdn.datatables.net/rowgroup/1.2.0/js/dataTables.rowGroup.min.js"></script>
 <script src="https://cdn.datatables.net/rowreorder/1.4.1/js/dataTables.rowReorder.min.js"></script>
@@ -71,3 +71,59 @@
 <!-- <script src="/global/js/global/number.js"></script> -->
 <script src="/global/js/global/lastText.js"></script>
 <script src="/global/js/global/convertDate.js"></script>
+
+<script>
+    // Seleccionar todos los enlaces y sus respectivos iconos
+    const links = [{
+            link: document.getElementById("dashboard-link"),
+            icon: document.getElementById("dashboard-icon")
+        },
+        {
+            link: document.getElementById("inventory-link"),
+            icon: document.getElementById("inventory-icon")
+        },
+        {
+            link: document.getElementById("requisitions-link"),
+            icon: document.getElementById("requisitions-icon")
+        },
+        {
+            link: document.getElementById("orders-link"),
+            icon: document.getElementById("orders-icon")
+        },
+        {
+            link: document.getElementById("programming-link"),
+            icon: document.getElementById("programming-icon")
+        },
+        {
+            link: document.getElementById("explosion-link"),
+            icon: document.getElementById("explosion-icon")
+        },
+        {
+            link: document.getElementById("production-order-link"),
+            icon: document.getElementById("production-order-icon")
+        },
+        {
+            link: document.getElementById("store-link"),
+            icon: document.getElementById("store-icon")
+        },
+        {
+            link: document.getElementById("offices-link"),
+            icon: document.getElementById("offices-icon")
+        }
+    ];
+
+    // Agregar evento click a cada enlace
+    links.forEach((item) => {
+        item.link.addEventListener("click", () => {
+            // Cambiar el color del ícono seleccionado
+            item.icon.style.color = "yellow"; // Cambia el color del icono del enlace seleccionado
+
+            // Cambiar el color de los demás iconos a su color original (gris)
+            links.forEach((resetItem) => {
+                if (resetItem !== item) {
+                    resetItem.icon.style.color = ""; // Restablecer color predeterminado
+                }
+            });
+        });
+    });
+</script>
