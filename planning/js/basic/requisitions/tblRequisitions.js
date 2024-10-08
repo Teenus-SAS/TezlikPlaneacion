@@ -320,10 +320,14 @@ $(document).ready(function () {
         className2 = "updateRequisitionMaterial";
       }
 
-      action = `<button id="upd-${id}" class="${className2} btn btn-success" style="font-size: 14px; margin-right: 5px;" data-toggle='tooltip' title='Ejecutar Compra'>Ejecutar</button>
-                <a href="javascript:;" <i id="${id}" class="mdi mdi-delete-forever" data-toggle='tooltip' title='Eliminar Requisicion' style="font-size: 30px;color:red" onclick="deleteFunction(${
+      action = `<div style="display: flex; align-items: center; justify-content: center; height: 100%;">
+                  <button id="upd-${id}" class="${className2} btn btn-primary" style="font-size: 14px; margin-right: 5px;" data-toggle='tooltip' title='Ejecutar Requisición'>
+                    Ejecutar
+                  </button>
+                  <a href="javascript:;" <i id="${id}" class="mdi mdi-delete-forever" data-toggle='tooltip' title='Eliminar Requisicion' style="font-size: 30px;color:red" onclick="deleteFunction(${
         visible == true ? "2" : "1"
-      }, ${className1})"></i></a>`;
+      }, ${className1})"></i></a>
+                </div>`;
     } else if (data.status == "Proceso") {
       action = `<a href="javascript:;" <i id="upd-${id}" class="bx bx-edit-alt ${className2}" data-toggle='tooltip' title='Editar Requisicion' style="font-size: 30px;"></i></a>
               <a href="javascript:;" <i id="${id}" class="bi bi-x-circle-fill" data-toggle='tooltip' title='Cancelar Requisicion' style="font-size: 30px;color:red" onclick="cancelRQFunction(${className1})"></i></a>`;
