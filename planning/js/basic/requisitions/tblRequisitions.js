@@ -321,8 +321,8 @@ $(document).ready(function () {
       }
 
       action = `<div style="display: flex; align-items: center; justify-content: center; height: 100%;">
-                  <span id="upd-${id}" class="${className2} btn-action" 
-                        style="padding: 5px 10px; background-color: #007bff; color: white; border-radius: 5px; cursor: pointer; font-size: 14px; margin-right: 5px;" 
+                  <span id="upd-${id}" class="badge badge-info ${className2} btn-action"
+                        style="cursor: pointer; font-size: 14px; margin-right: 5px;" 
                         data-toggle='tooltip' title='Ejecutar Requisición' onclick="executeRequisition('${id}')">
                     Ejecutar
                   </span>
