@@ -5,6 +5,7 @@ use TezlikPlaneacion\dao\GeneralPMeasuresDao;
 use TezlikPlaneacion\dao\GeneralProductsDao;
 use TezlikPlaneacion\dao\LastDataDao;
 use TezlikPlaneacion\dao\MaterialsDao;
+use TezlikPlaneacion\dao\MaterialsInventoryDao;
 use TezlikPlaneacion\dao\ProductsDao;
 use TezlikPlaneacion\dao\ProductsInventoryDao;
 use TezlikPlaneacion\dao\ProductsMeasuresDao;
@@ -12,6 +13,7 @@ use TezlikPlaneacion\dao\ProductsTypeDao;
 
 $productsMeasuresDao = new ProductsMeasuresDao();
 $materialsDao = new MaterialsDao();
+$materialsInventoryDao = new MaterialsInventoryDao();
 $generalPMeasuresDao = new GeneralPMeasuresDao();
 $productsTypeDao = new ProductsTypeDao();
 $productsInventoryDao = new ProductsInventoryDao();
@@ -175,6 +177,7 @@ $app->post('/addProductMeasure', function (Request $request, Response $response,
     $productsInventoryDao,
     $productsTypeDao,
     $productsDao,
+    $materialsInventoryDao,
     $generalPMeasuresDao,
     $generalProductsDao
 ) {
@@ -200,6 +203,13 @@ $app->post('/addProductMeasure', function (Request $request, Response $response,
                 $data['unit'] = 12;
 
                 $resolution = $materialsDao->insertMaterialsByCompany($data, $id_company);
+
+                if ($resolution == null) {
+                    $lastData = $lastDataDao->lastInsertedMaterialId($id_company);
+                    $dataMaterial['idMaterial'] = $lastData['id_material'];
+
+                    $resolution = $materialsInventoryDao->insertMaterialInventory($dataMaterial, $id_company);
+                }
             }
 
             if ($resolution == null) {

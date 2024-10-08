@@ -215,6 +215,21 @@ $app->post('/addProduct', function (Request $request, Response $response, $args)
         } else
             $resp = array('info' => true, 'message' => 'El producto ya existe en la base de datos. Ingrese uno nuevo');
 
+        if ($resolution == null && $dataProduct['origin'] == 1) {
+            $product = $generalProductsDao->findProductById($dataProduct['idProduct']);
+
+            if ($product) {
+                $data = [];
+                $data['refRawMaterial'] = $product['reference'];
+                $data['nameRawMaterial'] = $product['product'];
+
+                $material = $generalMaterialsDao->findMaterial($data, $id_company);
+
+                if ($material)
+                    $resolution = $generalMaterialsDao->updateQuantityMaterial($material['id_material'], $dataProduct['quantity']);
+            }
+        }
+
         if (sizeof($resp) == 0) {
             if ($resolution == null) {
                 if (sizeof($_FILES) > 0) $FilesDao->imageProduct($dataProduct['idProduct'], $id_company);
@@ -237,15 +252,6 @@ $app->post('/addProduct', function (Request $request, Response $response, $args)
             if (isset($resolution['info'])) break;
             $product = $generalProductsDao->findProduct($products[$i], $id_company);
 
-            // if ($flag_products_measure == '1') {
-            //     // Obtener tipo producto
-            //     $productType = $productsTypeDao->findProductsType($products[$i], $id_company);
-
-            //     $products[$i]['idProductType'] = $productType['id_product_type'];
-            // } else
-            //     $products[$i]['idProductType'] = 0;
-
-            // if ($flag_products_measure == '1') { // Bolsas
             $products[$i]['idProduct'] = $product['id_product'];
 
             $productIn = $generalProductsDao->findProductInventory($products[$i]['idProduct'], $id_company);
@@ -256,23 +262,24 @@ $app->post('/addProduct', function (Request $request, Response $response, $args)
                 $resolution = $productsInventoryDao->updateProductsInventory($products[$i]);
                 if (isset($resolution['info'])) break;
             }
-            // } else {
-            //     if (!$product) {
-            //         $resolution = $productsDao->insertProductByCompany($products[$i], $id_company);
+            $product = $generalProductsDao->findProduct($products[$i], $id_company);
 
-            //         $lastProductId = $lastDataDao->lastInsertedProductId($id_company);
-            //         $products[$i]['idProduct'] = $lastProductId['id_product'];
+            if (isset($resolution['info'])) break;
 
-            //         if (isset($resolution['info'])) break;
+            if ($resolution == null && $product['origin'] == 1) {
+                $product = $generalProductsDao->findProductById($products[$i]['idProduct']);
 
-            //         $resolution = $productsInventoryDao->insertProductsInventory($products[$i], $id_company);
-            //     } else {
-            //         $products[$i]['idProduct'] = $product['id_product'];
-            //         $resolution = $productsDao->updateProductByCompany($products[$i], $id_company);
+                if ($product) {
+                    $data = [];
+                    $data['refRawMaterial'] = $product['reference'];
+                    $data['nameRawMaterial'] = $product['product'];
 
-            //         $resolution = $productsInventoryDao->updateProductsInventory($products[$i]);
-            //     }
-            // }
+                    $material = $generalMaterialsDao->findMaterial($data, $id_company);
+
+                    if ($material)
+                        $resolution = $generalMaterialsDao->updateQuantityMaterial($material['id_material'], $dataProduct['quantity']);
+                }
+            }
 
             if (isset($resolution['info'])) break;
 
@@ -546,6 +553,21 @@ $app->post('/updatePlanProduct', function (Request $request, Response $response,
             $resolution = $productsInventoryDao->updateProductsInventory($dataProduct);
             $resolution = $generalProductsDao->updateAccumulatedQuantityGeneral($id_company);
             $resolution = $generalProductsDao->updateAccumulatedQuantity($dataProduct['idProduct'], $dataProduct['quantity'], 1);
+        }
+
+        if ($resolution == null && $dataProduct['origin'] == 1) {
+            $product = $generalProductsDao->findProductById($dataProduct['idProduct']);
+
+            if ($product) {
+                $data = [];
+                $data['refRawMaterial'] = $product['reference'];
+                $data['nameRawMaterial'] = $product['product'];
+
+                $material = $generalMaterialsDao->findMaterial($data, $id_company);
+
+                if ($material)
+                    $resolution = $generalMaterialsDao->updateQuantityMaterial($material['id_material'], $dataProduct['quantity']);
+            }
         }
         // Cambiar estado pedidos
         // $allOrders = $generalOrdersDao->findAllOrdersWithMaterialsByCompany($id_company);

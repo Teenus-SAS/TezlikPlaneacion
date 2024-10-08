@@ -175,8 +175,8 @@ $(document).ready(function () {
           className: "uniqueClassName dt-head-center",
         },
         {
-          title: "Descripción",
-          data: "description",
+          title: "Material",
+          data: "material",
           className: "uniqueClassName dt-head-center",
         },
         {

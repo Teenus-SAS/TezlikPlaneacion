@@ -17,8 +17,6 @@ $(document).ready(function () {
   // $("#btnNewProduct").click(async function (e) {
   //   e.preventDefault();
 
-  //   let dataProducts = JSON.parse(sessionStorage.getItem("dataProducts"));
-
   //await setSelectsProducts(dataProducts);
   //$(".cardCreateProduct").toggle(800);
   //$(".cardImportProducts").hide(800);
@@ -92,7 +90,7 @@ $(document).ready(function () {
     if (quantity < 0 || !idProduct) {
       toastr.error("Ingrese una cantidad válida.");
       return false;
-  }
+    }
 
     /* let data = idProduct * quantity;
 
@@ -106,11 +104,11 @@ $(document).ready(function () {
     let dataProduct = new FormData(formCreateProduct);
     dataProduct.append("img", imageProd);
 
+    let dataProducts = JSON.parse(sessionStorage.getItem("dataProducts"));
+    let arr = dataProducts.find((item) => item.id_product == idProduct);
+    dataProduct.append("origin", arr.origin);
+
     if (idProductInventory != "" || idProductInventory != null) {
-      let dataProducts = JSON.parse(sessionStorage.getItem("dataProducts"));
-
-      let arr = dataProducts.find((item) => item.id_product == idProduct);
-
       if (quantity < parseFloat(arr.reserved)) {
         toastr.error("Existencias con menor cantidad de las reservadas");
         return false;
@@ -118,6 +116,7 @@ $(document).ready(function () {
 
       dataProduct.append("idProductInventory", idProductInventory);
     }
+
     dataProduct.append("idProduct", idProduct);
 
     let resp = await sendDataPOST(url, dataProduct);

@@ -162,7 +162,7 @@ $(document).ready(function () {
             let action;
 
             if (visible == true) {
-              action = `<a href="javascript:;" <i id="${
+              action = `<a href="javascript:;" <i id="updt-${
               data.id_product_material != 0
                 ? data.id_product_material
                 : data.id_composite_product

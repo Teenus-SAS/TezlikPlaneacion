@@ -26,7 +26,7 @@ class GeneralRequisitionsMaterialsDao
                                             r.num_order,
                                             r.id_material, 
                                             m.reference, 
-                                            m.material AS description, 
+                                            m.material, 
                                             r.creation_date, 
                                             r.application_date, 
                                             r.delivery_date, 
@@ -132,7 +132,7 @@ class GeneralRequisitionsMaterialsDao
 
         $stmt = $connection->prepare("SELECT * FROM requisitions_materials
                                       WHERE id_material = :id_material 
-                                      AND id_provider = :id_provicer
+                                      AND id_provider = :id_provider
                                       AND application_date = '0000-00-00'
                                       AND id_company = :id_company");
         $stmt->execute([

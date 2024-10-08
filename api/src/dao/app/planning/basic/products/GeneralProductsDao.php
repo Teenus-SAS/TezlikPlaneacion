@@ -72,12 +72,20 @@ class GeneralProductsDao
     {
         $connection = Connection::getInstance()->getConnection();
 
-        $stmt = $connection->prepare("SELECT p.composite, pi.classification, IFNULL(pm.length, 0) AS length, IFNULL(pm.total_width, 0) AS total_width, IFNULL(pm.window, 0) AS window
+        $stmt = $connection->prepare("SELECT
+                                        -- Columnas
+                                            p.reference,
+                                            p.product,
+                                            p.composite,
+                                            pi.classification,
+                                            IFNULL(pm.length, 0) AS length,
+                                            IFNULL(pm.total_width, 0) AS total_width,
+                                            IFNULL(pm.window, 0) AS window
                                       FROM products p
-                                      LEFT JOIN inv_products pi ON pi.id_product = p.id_product
-                                      LEFT JOIN products_measures pm ON pm.id_product = p.id_product
-                                      WHERE p.id_product = :id_product
-                                      ORDER BY pi.classification ASC");
+                                        LEFT JOIN inv_products PI ON pi.id_product = p.id_product
+                                        LEFT JOIN products_measures pm ON pm.id_product = p.id_product
+                                        WHERE p.id_product = :id_product
+                                        ORDER BY pi.classification ASC;");
         $stmt->execute([
             'id_product' => $id_product
         ]);
