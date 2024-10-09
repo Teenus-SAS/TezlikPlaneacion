@@ -207,6 +207,7 @@ $app->post('/addProductMeasure', function (Request $request, Response $response,
                 if ($resolution == null) {
                     $lastData = $lastDataDao->lastInsertedMaterialId($id_company);
                     $dataMaterial['idMaterial'] = $lastData['id_material'];
+                    $dataMaterial['quantity'] = 0;
 
                     $resolution = $materialsInventoryDao->insertMaterialInventory($dataMaterial, $id_company);
                 }
