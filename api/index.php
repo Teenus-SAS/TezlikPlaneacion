@@ -111,6 +111,8 @@ require_once('../api/src/routes/app/planning/offices/routeOffices.php');
 // Explosion de Materiales
 require_once('../api/src/routes/app/planning/explosionMaterials/routeExplosionMaterial.php');
 require_once('../api/src/routes/app/planning/productionOrder/routeProductionOrder.php');
+require_once('../api/src/routes/app/planning/productionOrder/routeOPProducts.php');
+require_once('../api/src/routes/app/planning/productionOrder/routeOPMaterials.php');
 require_once('../api/src/routes/app/planning/store/routeStore.php');
 
 $app->run();

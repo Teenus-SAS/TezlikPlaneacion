@@ -16,13 +16,13 @@ class MaterialsComponentsUsersDao
         $this->logger->pushHandler(new RotatingFileHandler(Constants::LOGS_PATH . 'querys.log', 20, Logger::DEBUG));
     }
 
-    public function insertMaterialComponentUser($data, $id_company)
+    public function insertMaterialComponentUser($data, $id_user, $id_company)
     {
         $connection = Connection::getInstance()->getConnection();
 
         try {
-            $stmt = $connection->prepare("INSERT INTO materials_components_users (id_company, id_programming, id_material, quantity)
-                                          VALUES (:id_company, :id_programming, :id_material, :quantity)");
+            $stmt = $connection->prepare("INSERT INTO materials_components_users (id_company, id_programming, id_material, quantity, id_user_accept)
+                                          VALUES (:id_company, :id_programming, :id_material, :quantity, :id_user_accept)");
             $stmt->execute([
                 'id_company' => $id_company,
                 'id_programming' => $data['idProgramming'],

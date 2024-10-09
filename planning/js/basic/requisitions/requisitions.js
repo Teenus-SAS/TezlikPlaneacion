@@ -139,7 +139,7 @@ $(document).ready(function () {
     $(`#material option[value=${data.id_material}]`).prop("selected", true);
  
     $("#referenceMName").val(data.reference);
-    $("#materialName").val(data.description);
+    $("#materialName").val(data.material);
 
     // Validación y asignación de fechas
     ["application_date", "delivery_date", "purchase_order"].forEach((field) => {
@@ -441,147 +441,147 @@ $(document).ready(function () {
   // $("#refMaterial").change(handleMaterialChange);
   // $("#material").change(handleMaterialChange);
 
-  $("#clientPT").change(function (e) {
-    e.preventDefault();
-    let id_product = $("#refProduct").val();
+  // $("#clientPT").change(function (e) {
+  //   e.preventDefault();
+  //   let id_product = $("#refProduct").val();
 
-    let dataStock = JSON.parse(sessionStorage.getItem("PTStock"));
-    let arr = dataStock.find(
-      (item) =>
-        item.id_product == id_product && item.id_provider == this.value
-    );
+  //   let dataStock = JSON.parse(sessionStorage.getItem("PTStock"));
+  //   let arr = dataStock.find(
+  //     (item) =>
+  //       item.id_product == id_product && item.id_provider == this.value
+  //   );
 
-    if (arr) { 
-      $("#ptAverage").val(arr.average);
-    }
-  });
+  //   if (arr) { 
+  //     $("#ptAverage").val(arr.average);
+  //   }
+  // });
 
-  $('#btnAddRequisitionPT').click(async function (e) { 
-    e.preventDefault();
+  // $('#btnAddRequisitionPT').click(async function (e) { 
+  //   e.preventDefault();
 
-    const product = parseInt($("#refProduct").val());
-    const provider = parseInt($("#clientPT").val());
-    const applicationDate = $("#applicationDatePT").val();
-    const deliveryDate = $("#deliveryDatePT").val();
-    // const quan = $('#requiredQuantity').val();
-    const r_quan = parseFloat($("#requestedQuantityPT").val());
+  //   const product = parseInt($("#refProduct").val());
+  //   const provider = parseInt($("#clientPT").val());
+  //   const applicationDate = $("#applicationDatePT").val();
+  //   const deliveryDate = $("#deliveryDatePT").val();
+  //   // const quan = $('#requiredQuantity').val();
+  //   const r_quan = parseFloat($("#requestedQuantityPT").val());
 
-    const data = r_quan * product * provider;
+  //   const data = r_quan * product * provider;
 
-    if (isNaN(data) || data <= 0) {
-      toastr.error("Ingrese todos los campos");
-      return false;
-    }
+  //   if (isNaN(data) || data <= 0) {
+  //     toastr.error("Ingrese todos los campos");
+  //     return false;
+  //   }
 
-    if (!applicationDate && !deliveryDate) {
-      toastr.error("Ingrese todos los campos");
-      return false;
-    }
+  //   if (!applicationDate && !deliveryDate) {
+  //     toastr.error("Ingrese todos los campos");
+  //     return false;
+  //   }
 
-    if (applicationDate > deliveryDate) {
-      toastr.error(
-        "Ingrese una fecha de solicitud menor a la fecha de entrega"
-      );
-      return false;
-    }
+  //   if (applicationDate > deliveryDate) {
+  //     toastr.error(
+  //       "Ingrese una fecha de solicitud menor a la fecha de entrega"
+  //     );
+  //     return false;
+  //   }
 
-    let dataRequisition = new FormData(formAddRequisitionProducts);
-    if (idRequisition) dataRequisition.append("idRequisition", idRequisition);
-    let resp = await sendDataPOST('/api/updateRequisition', dataRequisition);
+  //   let dataRequisition = new FormData(formAddRequisitionProducts);
+  //   if (idRequisition) dataRequisition.append("idRequisition", idRequisition);
+  //   let resp = await sendDataPOST('/api/updateRequisition', dataRequisition);
 
-    message(resp);    
-  });
+  //   message(resp);    
+  // });
 
-  $(document).on("click", ".updateRequisitionProduct", async function (e) {
-    $(".cardImportRequisitions, .cardSelect, .cardAddRequisitionsMaterials").hide(800);
-    $(".cardAddRequisitionsProducts, .cardRequired, .cardDescription").show(800);
-    $("#btnAddRequisitionPT").text("Actualizar");
+  // $(document).on("click", ".updateRequisitionProduct", async function (e) {
+  //   $(".cardImportRequisitions, .cardSelect, .cardAddRequisitionsMaterials").hide(800);
+  //   $(".cardAddRequisitionsProducts, .cardRequired, .cardDescription").show(800);
+  //   $("#btnAddRequisitionPT").text("Actualizar");
 
-    //Obtener data
-    const row = $(this).closest("tr")[0];
-    const data = tblRequisitions.fnGetData(row);
+  //   //Obtener data
+  //   const row = $(this).closest("tr")[0];
+  //   const data = tblRequisitions.fnGetData(row);
 
-    sessionStorage.setItem("id_requisition", data.id_requisition_product);
+  //   sessionStorage.setItem("id_requisition", data.id_requisition_product);
 
-    // Seleccionar los valores correspondientes en los campos
-    $('#refProduct').append(`<option value='${data.id_product}'> ${data.reference} </option>`);
-    $('#selectNameProduct').append(`<option value =${data.id_product}> ${data.product} </option>`);
+  //   // Seleccionar los valores correspondientes en los campos
+  //   $('#refProduct').append(`<option value='${data.id_product}'> ${data.reference} </option>`);
+  //   $('#selectNameProduct').append(`<option value =${data.id_product}> ${data.product} </option>`);
  
-    $("#referencePName").val(data.reference);
-    $("#productName").val(data.description);
+  //   $("#referencePName").val(data.reference);
+  //   $("#productName").val(data.description);
 
-    // Validación y asignación de fechas
-    ["application_date", "delivery_date", "purchase_order"].forEach((field) => {
-      if (data[field] && data[field] !== "0000-00-00") {
-        $(
-          `#${field
-            .split("_")
-            .map((word, index) =>
-              index === 0 ? word : word[0].toUpperCase() + word.slice(1)
-            )
-            .join("")}`
-        ).val(data[field]);
-      }
-    }); 
+  //   // Validación y asignación de fechas
+  //   ["application_date", "delivery_date", "purchase_order"].forEach((field) => {
+  //     if (data[field] && data[field] !== "0000-00-00") {
+  //       $(
+  //         `#${field
+  //           .split("_")
+  //           .map((word, index) =>
+  //             index === 0 ? word : word[0].toUpperCase() + word.slice(1)
+  //           )
+  //           .join("")}`
+  //       ).val(data[field]);
+  //     }
+  //   }); 
 
-    let dataStock = JSON.parse(sessionStorage.getItem("PTStock"));
-    let arr = dataStock.filter((item) => item.id_product == data.id_product);
+  //   let dataStock = JSON.parse(sessionStorage.getItem("PTStock"));
+  //   let arr = dataStock.filter((item) => item.id_product == data.id_product);
 
-    setInputClient(arr, 'clientPT');
+  //   setInputClient(arr, 'clientPT');
 
-    // Selección del cliente
-    $(`#clientPT option[value=${data.id_provider}]`).prop("selected", true);
+  //   // Selección del cliente
+  //   $(`#clientPT option[value=${data.id_provider}]`).prop("selected", true);
 
-    // Lógica para cantidades mínimas y promedio
-    if (arr.length == 1 && data.id_provider != 0) {
-      $("#ptAverage").val(arr[0].average);
-    } else if (arr.length > 1) {
-      arr = arr.sort((a, b) => a.average - b.average);
+  //   // Lógica para cantidades mínimas y promedio
+  //   if (arr.length == 1 && data.id_provider != 0) {
+  //     $("#ptAverage").val(arr[0].average);
+  //   } else if (arr.length > 1) {
+  //     arr = arr.sort((a, b) => a.average - b.average);
  
-      $("#rMAverage").val(
-        parseFloat(arr[0].max_term) - parseFloat(arr[0].min_term)
-      );
-    }
+  //     $("#rMAverage").val(
+  //       parseFloat(arr[0].max_term) - parseFloat(arr[0].min_term)
+  //     );
+  //   }
 
-    // Formateo de cantidad requerida
-    let quantity_required = parseFloat(data.quantity_required).toLocaleString(
-      "es-CO",
-      { minimumFractionDigits: 2, maximumFractionDigits: 2 }
-    );
+  //   // Formateo de cantidad requerida
+  //   let quantity_required = parseFloat(data.quantity_required).toLocaleString(
+  //     "es-CO",
+  //     { minimumFractionDigits: 2, maximumFractionDigits: 2 }
+  //   );
 
-    // Formateo de cantidad requerida
-    quantity_required =
-      data.abbreviation === "UND"
-        ? data.quantity_required = data.quantity_required.toLocaleString("es-CO", {
-          maximumFractionDigits: 0,
-        })
-        : data.quantity_required = data.quantity_required.toLocaleString("es-CO", {
-          minimumFractionDigits: 2,
-          maximumFractionDigits: 2,
-        });
+  //   // Formateo de cantidad requerida
+  //   quantity_required =
+  //     data.abbreviation === "UND"
+  //       ? data.quantity_required = data.quantity_required.toLocaleString("es-CO", {
+  //         maximumFractionDigits: 0,
+  //       })
+  //       : data.quantity_required = data.quantity_required.toLocaleString("es-CO", {
+  //         minimumFractionDigits: 2,
+  //         maximumFractionDigits: 2,
+  //       });
 
-    //Asignacion
-    $("#requiredQuantityPT").val(`${quantity_required} ${data.abbreviation}`);
+  //   //Asignacion
+  //   $("#requiredQuantityPT").val(`${quantity_required} ${data.abbreviation}`);
 
-    let quantity_requested = data.quantity_requested;
+  //   let quantity_requested = data.quantity_requested;
 
-    // Formateo de cantidad solicitada
-    quantity_requested =
-      data.abbreviation === "UND"
-        ? Math.floor(data.quantity_requested)
-        : data.quantity_requested;
+  //   // Formateo de cantidad solicitada
+  //   quantity_requested =
+  //     data.abbreviation === "UND"
+  //       ? Math.floor(data.quantity_requested)
+  //       : data.quantity_requested;
 
-    //Asignacion
-    $("#requestedQuantityPT").val(quantity_requested);
+  //   //Asignacion
+  //   $("#requestedQuantityPT").val(quantity_requested);
 
-    // Animación de desplazamiento
-    $("html, body").animate(
-      {
-        scrollTop: 0,
-      },
-      1000
-    );
-  });
+  //   // Animación de desplazamiento
+  //   $("html, body").animate(
+  //     {
+  //       scrollTop: 0,
+  //     },
+  //     1000
+  //   );
+  // });
 
   /* Mensaje de exito */
 
