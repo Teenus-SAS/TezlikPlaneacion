@@ -344,11 +344,11 @@ if (sizeof($_SESSION) == 0)
 														<input type="text" class="form-control" name="operator" id="operator" readonly value="<?php echo "$name $lastname" ?>">
 													</div> -->
 													<div class=" col-sm-2 floating-label enable-floating-label show-label">
-														<label for="waste">Averias (Und)</label>
+														<label for="waste">Unidades Defectuosas</label>
 														<input type="number" class="form-control text-center" id="waste" name="waste">
 													</div>
 													<div class="col-sm-2 floating-label enable-floating-label show-label">
-														<label for="quantityProduction">Total (Und)</label>
+														<label for="quantityProduction">Unidades Producidas</label>
 														<input type="number" class="form-control text-center" id="quantityProduction" name="partialQuantity">
 													</div>
 													<?php if ($_SESSION['flag_products_measure'] == 1) { ?>

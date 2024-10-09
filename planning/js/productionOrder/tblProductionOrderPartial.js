@@ -58,7 +58,7 @@ $(document).ready(function () {
         },
       },
       {
-        title: "Desperdicio",
+        title: "Unidades Defectuosas",
         data: "waste",
         className: "uniqueClassName dt-head-center",
         render: $.fn.dataTable.render.number(".", ",", 0, ""),
