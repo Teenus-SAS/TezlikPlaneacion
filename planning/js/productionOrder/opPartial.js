@@ -121,6 +121,11 @@ $(document).ready(function () {
         localStorage.setItem("totalDefectiveUnits", totalDefectiveUnits);
         localStorage.setItem("totalDeliveredQuantity", totalDeliveredQuantity);
       },
+      // Evento que se ejecuta cuando la tabla ha sido completamente inicializada
+      initComplete: function () {
+        // Establecer una bandera en localStorage para indicar que el DataTable está listo
+        localStorage.setItem("dataTableReady", "true");
+      },
     });
   };
 
