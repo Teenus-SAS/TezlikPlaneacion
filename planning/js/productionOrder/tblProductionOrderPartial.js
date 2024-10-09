@@ -307,19 +307,6 @@ $(document).ready(function () {
         return $("<tr/>").append(group);
       },
       className: "odd",
-    }, footerCallback: function (row, data, start, end, display) {
-      let totalDefectiveUnits = 0;
-      let totalDeliveredQuantity = 0;
-  
-      // Calcular la suma de las columnas específicas
-      data.forEach(function (rowData) {
-        totalDefectiveUnits += parseFloat(rowData.defective_units || 0);
-        totalDeliveredQuantity += parseFloat(rowData.delivered_quantity || 0);
-      });
-  
-      // Mostrar el total en el pie de la tabla
-      $(this.api().column(3).footer()).html(totalDefectiveUnits);
-      $(this.api().column(4).footer()).html(totalDeliveredQuantity);
     },
   });
 
