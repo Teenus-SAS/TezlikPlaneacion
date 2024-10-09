@@ -1,3 +1,3 @@
 $(document).ready(function () {
-    let number = tblPartialsDeliveryMP
+  const quality = totalDefectiveUnits / totalDeliveredQuantity;
 });
