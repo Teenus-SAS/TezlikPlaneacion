@@ -257,7 +257,7 @@ $(document).ready(function () {
   };
   
   /* Eliminar materia prima */
-  deleteFunction = () => {
+  deleteFunction = (op) => {
     //obtener data
     const row = $(this.activeElement).closest("tr")[0];
     const data = tblRequisitions.fnGetData(row);
