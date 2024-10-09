@@ -95,18 +95,27 @@ $(document).ready(function () {
         },
       ],
       footerCallback: function (row, data, start, end, display) {
-        let totalDefectiveUnits = 0;
-        let totalDeliveredQuantity = 0;
+        // Calcular totales de columnas específicas
+        let totalWaste = 0;
+        let totalQuantity = 0;
 
-        // Calcular la suma de las columnas específicas
-        data.forEach(function (rowData) {
-          totalDefectiveUnits += parseFloat(rowData.waste || 0);
-          totalDeliveredQuantity += parseFloat(rowData.partial_quantity || 0);
+        // Iterar a través de todas las filas visibles para sumar los valores de columnas
+        data.forEach(function (row) {
+          totalWaste += parseFloat(row.waste) || 0; // Suma de unidades defectuosas
+          totalQuantity += parseFloat(row.partial_quantity) || 0; // Suma de cantidad entregada
         });
 
-        // Mostrar el total en el pie de la tabla
-        $(this.api().column(3).footer()).html(totalDefectiveUnits);
-        $(this.api().column(4).footer()).html(totalDeliveredQuantity);
+        // Actualizar el contenido del footer con los totales calculados
+        $(this.api().column(3).footer()).html(
+          `${$.fn.dataTable.render
+            .number(".", ",", 0, "")
+            .display(totalWaste)} Und`
+        );
+        $(this.api().column(4).footer()).html(
+          `${$.fn.dataTable.render
+            .number(".", ",", 0, "")
+            .display(totalQuantity)} Und`
+        );
       },
     });
   };

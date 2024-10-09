@@ -367,7 +367,15 @@ if (sizeof($_SESSION) == 0)
 												<div class="col-12">
 													<div class="table-responsive">
 														<table class="fixed-table-loading table table-hover text-center" id="tblPartialsDelivery">
-
+															<tfoot>
+																<tr>
+																	<th colspan="3">Totales:</th>
+																	<th class="uniqueClassName dt-head-center"></th>
+																	<th class="uniqueClassName dt-head-center"></th>
+																	<th></th>
+																	<th></th>
+																</tr>
+															</tfoot>
 														</table>
 													</div>
 												</div>
