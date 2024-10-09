@@ -117,11 +117,11 @@ $(document).ready(function () {
             .number(".", ",", 0, "")
             .display(totalDeliveredQuantity)} Und`
         );
+        // Retorna el DataTable creado y los valores calculados
+        localStorage.setItem("totalDefectiveUnits", totalDefectiveUnits);
+        localStorage.setItem("totalDeliveredQuantity", totalDeliveredQuantity);
       },
     });
-    // Retorna el DataTable creado y los valores calculados
-    localStorage.setItem("totalDefectiveUnits", totalDefectiveUnits);
-    localStorage.setItem("totalDeliveredQuantity", totalDeliveredQuantity);
   };
 
   /* Crear OP Parcial */
