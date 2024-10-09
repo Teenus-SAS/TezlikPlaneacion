@@ -343,7 +343,7 @@ $(document).ready(function () {
                       ${createActionIcon(data.id_requisition_material, "bi bi-x-circle-fill", "Cancelar Requisicion", "color:red", "onclick='cancelRQFunction()'")}`;
         break;
       case "Retrasada":
-        action = createActionIcon(data.id_requisition_material, "bi bi-x-circle-fill", "Cancelar Requisicion", "color:red", "onclick='cancelRQFunction()'");
+        action = createActionIcon(data.id_requisition_material, "mdi mdi-delete-forever", "Eliminar Requisicion", "color:red", `onclick="deleteFunction(${visible ? "2" : "1"})"`);
         break;
       default:
         action = `<div style="display: flex; align-items: center; justify-content: center; height: 100%;">
