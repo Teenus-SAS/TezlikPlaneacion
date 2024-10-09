@@ -153,7 +153,7 @@ $(document).ready(function () {
             .join("")}`
         ).val(data[field]);
       }
-    }); 
+    });
 
     let dataStock = JSON.parse(sessionStorage.getItem("MPStock"));
     let arr = dataStock.filter((item) => item.id_material == data.id_material);
@@ -220,7 +220,7 @@ $(document).ready(function () {
       },
       1000
     );
-  }); 
+  });
 
   const checkDataRequisition = async (url, idRequisition) => {
     const material = parseInt($("#material").val());
@@ -255,61 +255,6 @@ $(document).ready(function () {
 
     message(resp);
   };
-
-  // $(document).on("click", ".changeDate", function (e) {
-  //   e.preventDefault();
-
-  //   const date = new Date().toISOString().split("T")[0];
-
-  //   //obtener data
-  //   const row = $(this).closest("tr")[0];
-  //   const data = tblRequisitions.fnGetData(row);
-
-  //   bootbox.confirm({
-  //     title: "Ingrese Fecha De Ingreso!",
-  //     message: `<div class="col-sm-12 floating-label enable-floating-label">
-  //                       <input class="form-control" type="date" name="date" id="date" max="${date}"></input>
-  //                       <label for="date">Fecha</span></label>
-  //                     </div>`,
-  //     buttons: {
-  //       confirm: {
-  //         label: "Agregar",
-  //         className: "btn-success",
-  //       },
-  //       cancel: {
-  //         label: "Cancelar",
-  //         className: "btn-danger",
-  //       },
-  //     },
-  //     callback: function (result) {
-  //       if (result) {
-  //         let date = $("#date").val();
-
-  //         if (!date) {
-  //           toastr.error("Ingrese los campos");
-  //           return false;
-  //         }
-
-  //         let form = new FormData();
-  //         form.append("idRequisition", data.id_requisition_material);
-  //         form.append("idMaterial", data.id_material);
-  //         form.append("date", date);
-
-  //         $.ajax({
-  //           type: "POST",
-  //           url: "/api/saveAdmissionDate",
-  //           data: form,
-  //           contentType: false,
-  //           cache: false,
-  //           processData: false,
-  //           success: function (resp) {
-  //             message(resp);
-  //           },
-  //         });
-  //       }
-  //     },
-  //   });
-  // });
   
   /* Eliminar materia prima */
   deleteFunction = () => {
@@ -318,14 +263,9 @@ $(document).ready(function () {
     const data = tblRequisitions.fnGetData(row);
 
     let dataRequisition = {};
-
-    // if (id == 'id_requisition_material') {
-      dataRequisition["idRequisition"] = data.id_requisition_material;
-      dataRequisition["idMaterial"] = data.id_material;
-    // } else {
-    //   dataRequisition["idRequisition"] = data.id_requisition_product;
-    //   dataRequisition["idProduct"] = data.id_product;
-    // }
+ 
+    dataRequisition["idRequisition"] = data.id_requisition_material;
+    dataRequisition["idMaterial"] = data.id_material;
 
     dataRequisition["op"] = op;
 
@@ -364,14 +304,9 @@ $(document).ready(function () {
     const data = tblRequisitions.fnGetData(row);
 
     let dataRequisition = {};
-    
-    // if (id == 'id_requisition_material') {
-      dataRequisition["idRequisition"] = data.id_requisition_material;
-      dataRequisition["idMaterial"] = data.id_material;      
-    // } else {
-    //   dataRequisition["idRequisition"] = data.id_requisition_product;
-    //   dataRequisition["idProduct"] = data.id_product;      
-    // }
+     
+    dataRequisition["idRequisition"] = data.id_requisition_material;
+    dataRequisition["idMaterial"] = data.id_material;
 
     dataRequisition["idUser"] = 0;
     dataRequisition["idProvider"] = data.id_provider;
@@ -408,183 +343,7 @@ $(document).ready(function () {
     });
   };
 
-  // Productos
-  // function handleProductChange(event) {
-  //   event.preventDefault();
-
-  //   $("#clientPT option").removeAttr("selected");
-  //   $(`#clientPT option[value='0']`).prop("selected", true); 
-  //   $("#ptAverage").val("");
-
-  //   let dataStock = JSON.parse(sessionStorage.getItem("PTStock"));
-  //   let arr = dataStock.filter((item) => item.id_material == this.value);
-
-  //   setInputClient(arr, 'clientPT');
-
-  //   if (arr.length == 1) updateClientPTSelection(arr[0]);
-  //   else if (arr.length > 1) {
-  //     arr.sort((a, b) => a.average - b.average);
-
-  //     updateClientPTSelection(arr[0], true);
-  //   }
-  // }
-
-  // function updateClientPTSelection(item, isMultiple = false) {
-  //   $(`#clientPT option[value=${item.id_provider}]`).prop("selected", true);
-  //   $("#ptAverage").val(
-  //     isMultiple
-  //       ? parseFloat(item.max_term) - parseFloat(item.min_term)
-  //       : item.average
-  //   );
-  // }
-
-  // $("#refMaterial").change(handleMaterialChange);
-  // $("#material").change(handleMaterialChange);
-
-  // $("#clientPT").change(function (e) {
-  //   e.preventDefault();
-  //   let id_product = $("#refProduct").val();
-
-  //   let dataStock = JSON.parse(sessionStorage.getItem("PTStock"));
-  //   let arr = dataStock.find(
-  //     (item) =>
-  //       item.id_product == id_product && item.id_provider == this.value
-  //   );
-
-  //   if (arr) { 
-  //     $("#ptAverage").val(arr.average);
-  //   }
-  // });
-
-  // $('#btnAddRequisitionPT').click(async function (e) { 
-  //   e.preventDefault();
-
-  //   const product = parseInt($("#refProduct").val());
-  //   const provider = parseInt($("#clientPT").val());
-  //   const applicationDate = $("#applicationDatePT").val();
-  //   const deliveryDate = $("#deliveryDatePT").val();
-  //   // const quan = $('#requiredQuantity').val();
-  //   const r_quan = parseFloat($("#requestedQuantityPT").val());
-
-  //   const data = r_quan * product * provider;
-
-  //   if (isNaN(data) || data <= 0) {
-  //     toastr.error("Ingrese todos los campos");
-  //     return false;
-  //   }
-
-  //   if (!applicationDate && !deliveryDate) {
-  //     toastr.error("Ingrese todos los campos");
-  //     return false;
-  //   }
-
-  //   if (applicationDate > deliveryDate) {
-  //     toastr.error(
-  //       "Ingrese una fecha de solicitud menor a la fecha de entrega"
-  //     );
-  //     return false;
-  //   }
-
-  //   let dataRequisition = new FormData(formAddRequisitionProducts);
-  //   if (idRequisition) dataRequisition.append("idRequisition", idRequisition);
-  //   let resp = await sendDataPOST('/api/updateRequisition', dataRequisition);
-
-  //   message(resp);    
-  // });
-
-  // $(document).on("click", ".updateRequisitionProduct", async function (e) {
-  //   $(".cardImportRequisitions, .cardSelect, .cardAddRequisitionsMaterials").hide(800);
-  //   $(".cardAddRequisitionsProducts, .cardRequired, .cardDescription").show(800);
-  //   $("#btnAddRequisitionPT").text("Actualizar");
-
-  //   //Obtener data
-  //   const row = $(this).closest("tr")[0];
-  //   const data = tblRequisitions.fnGetData(row);
-
-  //   sessionStorage.setItem("id_requisition", data.id_requisition_product);
-
-  //   // Seleccionar los valores correspondientes en los campos
-  //   $('#refProduct').append(`<option value='${data.id_product}'> ${data.reference} </option>`);
-  //   $('#selectNameProduct').append(`<option value =${data.id_product}> ${data.product} </option>`);
- 
-  //   $("#referencePName").val(data.reference);
-  //   $("#productName").val(data.description);
-
-  //   // Validación y asignación de fechas
-  //   ["application_date", "delivery_date", "purchase_order"].forEach((field) => {
-  //     if (data[field] && data[field] !== "0000-00-00") {
-  //       $(
-  //         `#${field
-  //           .split("_")
-  //           .map((word, index) =>
-  //             index === 0 ? word : word[0].toUpperCase() + word.slice(1)
-  //           )
-  //           .join("")}`
-  //       ).val(data[field]);
-  //     }
-  //   }); 
-
-  //   let dataStock = JSON.parse(sessionStorage.getItem("PTStock"));
-  //   let arr = dataStock.filter((item) => item.id_product == data.id_product);
-
-  //   setInputClient(arr, 'clientPT');
-
-  //   // Selección del cliente
-  //   $(`#clientPT option[value=${data.id_provider}]`).prop("selected", true);
-
-  //   // Lógica para cantidades mínimas y promedio
-  //   if (arr.length == 1 && data.id_provider != 0) {
-  //     $("#ptAverage").val(arr[0].average);
-  //   } else if (arr.length > 1) {
-  //     arr = arr.sort((a, b) => a.average - b.average);
- 
-  //     $("#rMAverage").val(
-  //       parseFloat(arr[0].max_term) - parseFloat(arr[0].min_term)
-  //     );
-  //   }
-
-  //   // Formateo de cantidad requerida
-  //   let quantity_required = parseFloat(data.quantity_required).toLocaleString(
-  //     "es-CO",
-  //     { minimumFractionDigits: 2, maximumFractionDigits: 2 }
-  //   );
-
-  //   // Formateo de cantidad requerida
-  //   quantity_required =
-  //     data.abbreviation === "UND"
-  //       ? data.quantity_required = data.quantity_required.toLocaleString("es-CO", {
-  //         maximumFractionDigits: 0,
-  //       })
-  //       : data.quantity_required = data.quantity_required.toLocaleString("es-CO", {
-  //         minimumFractionDigits: 2,
-  //         maximumFractionDigits: 2,
-  //       });
-
-  //   //Asignacion
-  //   $("#requiredQuantityPT").val(`${quantity_required} ${data.abbreviation}`);
-
-  //   let quantity_requested = data.quantity_requested;
-
-  //   // Formateo de cantidad solicitada
-  //   quantity_requested =
-  //     data.abbreviation === "UND"
-  //       ? Math.floor(data.quantity_requested)
-  //       : data.quantity_requested;
-
-  //   //Asignacion
-  //   $("#requestedQuantityPT").val(quantity_requested);
-
-  //   // Animación de desplazamiento
-  //   $("html, body").animate(
-  //     {
-  //       scrollTop: 0,
-  //     },
-  //     1000
-  //   );
-  // });
-
   /* Mensaje de exito */
-
   message = (data) => {
     const { success, error, info, message } = data;
     if (success) {
