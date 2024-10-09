@@ -568,6 +568,18 @@ $app->post('/updateMaterials', function (Request $request, Response $response, $
                 $resolution = $inventoryDaysDao->updateInventoryMaterialDays($dataMaterial['idMaterial'], $inventory['days']);
         }
 
+        if ($resolution == null) {
+            $data = [];
+            $data['referenceProduct'] = $dataMaterial['refRawMaterial'];
+            $data['product'] = $dataMaterial['nameRawMaterial'];
+
+            $product = $generalProductsDao->findProduct($data, $id_company);
+
+            if ($product) {
+                $resolution = $generalProductsDao->updateAccumulatedQuantity($product['id_product'], $dataMaterial['quantity'], 2);
+            }
+        }
+
         if ($resolution == null && $materials[0]['unit'] != $dataMaterial['unit']) {
             $dataProducts = $generalProductsDao->findProductByMaterial($dataMaterial['idMaterial'], $id_company);
 
