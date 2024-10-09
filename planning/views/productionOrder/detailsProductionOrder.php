@@ -452,6 +452,7 @@ if (sizeof($_SESSION) == 0)
 		<script src="/planning/js/productionOrder/opPartial.js"></script>
 		<script src="/planning/js/productionOrder/opMaterial.js"></script>
 		<script src="/planning/js/productionOrder/detailsProductionOrder.js"></script>
+		<script src="/planning/js/productionOrder/kpiOP.js"></script>
 		<script src="/global/js/global/companyData.js"></script>
 		<script src="/global/js/global/printPdf.js"></script>
 </body>
