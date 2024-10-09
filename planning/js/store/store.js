@@ -33,7 +33,7 @@ $(document).ready(function () {
           }
 
           let form = new FormData();
-          form.append("idRequisition", data.id_requisition);
+          form.append("idRequisition", data.id_requisition_material);
           form.append("referenceProduct", data.reference);
           form.append("product", data.material);
           form.append("idMaterial", data.id_material);
@@ -61,7 +61,7 @@ $(document).ready(function () {
     const row = $(this).closest("tr")[0];
     let data = tblReceiveOC.fnGetData(row);
 
-    let users = await searchData(`/api/usersRequisitions/${data.id_requisition}`);
+    let users = await searchData(`/api/usersRequisitions/${data.id_requisition_material}`);
     let rows = '';
 
     for (let i = 0; i < users.length; i++) {
