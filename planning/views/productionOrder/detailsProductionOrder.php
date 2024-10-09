@@ -76,11 +76,11 @@ if (sizeof($_SESSION) == 0)
 											</div>
 											<hr> -->
 										<span class="badge badge-warning" id="kpiQualityOP">Calidad: 18%</span>
-										<div class="col-sm-12 col-xl-12 d-flex justify-content-end btnPrintPDF">
+										<!-- <div class="col-sm-12 col-xl-12 d-flex justify-content-end btnPrintPDF">
 											<div class="col-xs-2 mt-2 mr-2" id="btnPdf">
 												<button class="btn btn-success" onclick="printPDF()">Imprimir PDF</button>
 											</div>
-										</div>
+										</div> -->
 
 										<hr>
 										<div class=" row">
