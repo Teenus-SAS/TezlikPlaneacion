@@ -87,6 +87,7 @@ $(document).ready(function () {
 
     tblStore = $("#tblStore").dataTable({
       destroy: true,
+      autoWidth: false,
       fixedHeader: true,
       scrollY: "400px",
       scrollCollapse: true,
