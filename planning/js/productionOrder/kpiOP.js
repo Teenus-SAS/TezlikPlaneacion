@@ -9,6 +9,9 @@ $(document).ready(function () {
         parseFloat(localStorage.getItem("totalDeliveredQuantity")) || 0;
 
       // Realizar otras operaciones o pasar los datos a otras funciones según sea necesario
+
+      console.log("Total Unidades Defectuosas:", totalDefectiveUnits);
+      console.log("Total Cantidad Entregada:", totalDeliveredQuantity);
       let quality = totalDefectiveUnits / totalDeliveredQuantity;
       $("#kpiQualityOP").val(quality);
       // Detener el setInterval ya que el DataTable está listo
