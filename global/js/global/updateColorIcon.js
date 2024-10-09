@@ -43,7 +43,7 @@ $(document).ready(function () {
   links.forEach((item) => {
     if (item.link && item.icon) {
       $(item.link).click(() => {
-        $(item.icon).css("color", "yellow"); // Cambia el color del icono del enlace seleccionado
+        $(item.icon).css("color", "green"); // Cambia el color del icono del enlace seleccionado
 
         // Cambiar el color de los demás iconos a su color original (gris)
         links.forEach((resetItem) => {
