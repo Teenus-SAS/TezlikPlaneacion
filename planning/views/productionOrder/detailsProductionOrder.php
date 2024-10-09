@@ -75,12 +75,12 @@ if (sizeof($_SESSION) == 0)
 												<button class="btn btn-danger mr-2" id="btnNewSend"><i class="fa fa-mail-bulk"></i> Enviar</button>
 											</div>
 											<hr> -->
-										<span class="badge badge-warning" id="kpiQualityOP">Calidad: 18%</span>
-										<!-- <div class="col-sm-12 col-xl-12 d-flex justify-content-end btnPrintPDF">
+										<div class="col-sm-12 col-xl-12 d-flex justify-content-end btnPrintPDF">
 											<div class="col-xs-2 mt-2 mr-2" id="btnPdf">
-												<button class="btn btn-success" onclick="printPDF()">Imprimir PDF</button>
+												<span class="badge badge-warning" id="kpiQualityOP" style="font-size: x-large;">Q: 98,12%</span>
+												<!-- <button class="btn btn-success" onclick="printPDF()">Imprimir PDF</button> -->
 											</div>
-										</div> -->
+										</div>
 
 										<hr>
 										<div class=" row">
