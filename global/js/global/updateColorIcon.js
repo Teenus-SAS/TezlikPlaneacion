@@ -39,19 +39,17 @@ $(document).ready(function () {
     },
   ];
 
-  // Agregar evento click a cada enlace si existe en el DOM
+  // Agregar evento click a cada enlace
   links.forEach((item) => {
-    if (item.link && item.icon) {
-      $(item.link).click(() => {
-        $(item.icon).css("color", "green"); // Cambia el color del icono del enlace seleccionado
+    item.link.addEventListener("click", () => {
+      item.icon.style.color = "green";
 
-        // Cambiar el color de los demás iconos a su color original (gris)
-        links.forEach((resetItem) => {
-          if (resetItem !== item && resetItem.icon) {
-            $(resetItem.icon).css("color", ""); // Restablecer color predeterminado
-          }
-        });
+      // Cambiar el color de los demás iconos a su color original (gris)
+      links.forEach((resetItem) => {
+        if (resetItem !== item) {
+          resetItem.icon.style.color = "";
+        }
       });
-    }
+    });
   });
 });
