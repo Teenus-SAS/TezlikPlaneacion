@@ -1,5 +1,8 @@
 $(document).ready(function () {
-  const kpiQuality = (totalDefectiveUnits, totalDeliveredQuantity) => {
-    const quality = totalDefectiveUnits / totalDeliveredQuantity;
-  };
+  const totalDefectiveUnits = localStorage.getItem("totalDefectiveUnits");
+  const totalDeliveredQuantity = localStorage.getItem("totalDeliveredQuantity");
+
+  let quality = totalDefectiveUnits / totalDeliveredQuantity;
+
+  $("#kpiQualityOP").val(quality);
 });

@@ -1,4 +1,5 @@
 $(document).ready(function () {
+  //Datatable para parciales entregados desde la OP a Almacen
   loadTblPartialsDelivery = (id_programming, visible) => {
     tblPartialsDelivery = $("#tblPartialsDelivery").dataTable({
       destroy: true,
@@ -96,28 +97,31 @@ $(document).ready(function () {
       ],
       footerCallback: function (row, data, start, end, display) {
         // Calcular totales de columnas específicas
-        let totalWaste = 0;
-        let totalQuantity = 0;
+        let totalDefectiveUnits = 0;
+        let totalDeliveredQuantity = 0;
 
         // Iterar a través de todas las filas visibles para sumar los valores de columnas
         data.forEach(function (row) {
-          totalWaste += parseFloat(row.waste) || 0; // Suma de unidades defectuosas
-          totalQuantity += parseFloat(row.partial_quantity) || 0; // Suma de cantidad entregada
+          totalDefectiveUnits += parseFloat(row.waste) || 0; // Suma de unidades defectuosas
+          totalDeliveredQuantity += parseFloat(row.partial_quantity) || 0; // Suma de cantidad entregada
         });
 
         // Actualizar el contenido del footer con los totales calculados
         $(this.api().column(3).footer()).html(
           `${$.fn.dataTable.render
             .number(".", ",", 0, "")
-            .display(totalWaste)} Und`
+            .display(totalDefectiveUnits)} Und`
         );
         $(this.api().column(4).footer()).html(
           `${$.fn.dataTable.render
             .number(".", ",", 0, "")
-            .display(totalQuantity)} Und`
+            .display(totalDeliveredQuantity)} Und`
         );
       },
     });
+    // Retorna el DataTable creado y los valores calculados
+    localStorage.setItem("totalDefectiveUnits", totalDefectiveUnits);
+    localStorage.setItem("totalDeliveredQuantity", totalDeliveredQuantity);
   };
 
   /* Crear OP Parcial */
