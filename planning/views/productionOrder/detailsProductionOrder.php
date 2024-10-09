@@ -348,7 +348,7 @@ if (sizeof($_SESSION) == 0)
 														<input type="number" class="form-control text-center" id="waste" name="waste">
 													</div>
 													<div class="col-sm-2 floating-label enable-floating-label show-label">
-														<label for="quantityProduction">Unidades Totales</label>
+														<label for="quantityProduction">Unidades Producidas</label>
 														<input type="number" class="form-control text-center" id="quantityProduction" name="partialQuantity">
 													</div>
 													<?php if ($_SESSION['flag_products_measure'] == 1) { ?>
