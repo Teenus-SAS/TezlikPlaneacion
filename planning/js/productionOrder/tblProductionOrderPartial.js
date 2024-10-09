@@ -346,6 +346,8 @@ $(document).ready(function () {
           let form = new FormData();
           form.append("idOPM", data.id_prod_order_material);
           form.append("idMaterial", data.id_material);
+          form.append("referenceProduct", data.reference);
+          form.append("product", data.material);
           form.append(
             "quantity",
             parseFloat(data.quantity_material) - parseFloat(data.quantity)

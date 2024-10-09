@@ -2,6 +2,7 @@
 
 use TezlikPlaneacion\dao\AutenticationUserDao;
 use TezlikPlaneacion\dao\GeneralMaterialsDao;
+use TezlikPlaneacion\dao\GeneralProductsDao;
 use TezlikPlaneacion\dao\GeneralProgrammingDao;
 use TezlikPlaneacion\dao\ProductsMaterialsDao;
 use TezlikPlaneacion\dao\StoreDao;
@@ -12,6 +13,7 @@ $autenticationDao = new AutenticationUserDao();
 $programmingDao = new GeneralProgrammingDao();
 $productsMaterialsDao = new ProductsMaterialsDao();
 $generalMaterialsDao = new GeneralMaterialsDao();
+$generalProductsDao = new GeneralProductsDao();
 $usersStoreDao = new UsersStoreDao();
 
 use Psr\Http\Message\ResponseInterface as Response;
@@ -68,6 +70,7 @@ $app->get('/allStore', function (Request $request, Response $response, $args) us
 $app->post('/deliverStore', function (Request $request, Response $response, $args) use (
     $storeDao,
     $autenticationDao,
+    $generalProductsDao,
     $generalMaterialsDao,
     $usersStoreDao
 ) {
@@ -108,6 +111,14 @@ $app->post('/deliverStore', function (Request $request, Response $response, $arg
             $date = date('Y-m-d H:i:s');
 
             $store = $generalMaterialsDao->updateDeliveryDateMaterial($dataStore['idMaterial'], $date);
+        }
+    }
+
+    if ($store == null) {
+        $product = $generalProductsDao->findProduct($dataStore, $id_company);
+
+        if ($product) {
+            $store = $generalProductsDao->updateAccumulatedQuantity($product['id_product'], $dataStore['stored'], 2);
         }
     }
 

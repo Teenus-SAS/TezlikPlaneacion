@@ -100,6 +100,7 @@ $app->post('/saveReceiveOPMPDate', function (Request $request, Response $respons
     $productionOrderMPDao,
     $usersProductionOrderMPDao,
     $generalMaterialsDao,
+    $generalProductsDao
 ) {
     session_start();
     $id_company = $_SESSION['id_company'];
@@ -111,6 +112,14 @@ $app->post('/saveReceiveOPMPDate', function (Request $request, Response $respons
 
     if ($resolution == null) {
         $resolution = $generalMaterialsDao->updateQuantityMaterial($dataOP['idMaterial'], $dataOP['quantity']);
+    }
+
+    if ($resolution == null) {
+        $product = $generalProductsDao->findProduct($dataOP, $id_company);
+
+        if ($product) {
+            $resolution = $generalProductsDao->updateAccumulatedQuantity($product['id_product'], $dataOP['quantity'], 2);
+        }
     }
 
     if ($resolution == null) {

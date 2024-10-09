@@ -34,6 +34,8 @@ $(document).ready(function () {
 
           let form = new FormData();
           form.append("idRequisition", data.id_requisition);
+          form.append("referenceProduct", data.reference);
+          form.append("product", data.material);
           form.append("idMaterial", data.id_material);
           form.append("date", date);
 
@@ -124,6 +126,8 @@ $(document).ready(function () {
     const row = $(this).closest("tr")[0];
     let data = tblDeliverOC.fnGetData(row);
     let id_material = data.id_material;
+    let reference = data.reference;
+    let material = data.material;
     let id_programming = data.id_programming;
 
     let quantity = parseFloat(formatNumber(data.quantity));
@@ -167,6 +171,8 @@ $(document).ready(function () {
           store <= reserved ? (pending = reserved - store) : (pending = 0);
 
           sessionStorage.setItem("idMaterial", id_material);
+          sessionStorage.setItem("referenceProduct", reference);
+          sessionStorage.setItem("product", material);
           sessionStorage.setItem("idProgramming", id_programming);
           sessionStorage.setItem("stored", (quantity - store) < 0 ? 0 : (quantity - store));
           sessionStorage.setItem("pending", pending);
@@ -180,6 +186,8 @@ $(document).ready(function () {
   const saveDeliverMaterial = () => {
     let dataStore = {};
     dataStore["idMaterial"] = sessionStorage.getItem("idMaterial");
+    dataStore["referenceProduct"] = sessionStorage.getItem("reference");
+    dataStore["product"] = sessionStorage.getItem("product");
     dataStore["idProgramming"] = sessionStorage.getItem("idProgramming");
     dataStore["stored"] = sessionStorage.getItem("stored");
     dataStore["pending"] = sessionStorage.getItem("pending");

@@ -323,6 +323,14 @@ $app->post('/saveAdmissionDate', function (Request $request, Response $response,
     }
 
     if ($requisition == null) {
+        $product = $generalProductsDao->findProduct($dataRequisition, $id_company);
+
+        if ($product) {
+            $requisition = $generalProductsDao->updateAccumulatedQuantity($product['id_product'], $material['quantity'], 2);
+        }
+    }
+
+    if ($requisition == null) {
         $requisition = $usersRequisitonsDao->saveUserDeliverRequisitionMaterial($id_company, $dataRequisition['idRequisition'], $id_user);
     }
 
