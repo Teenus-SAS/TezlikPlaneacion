@@ -2,6 +2,7 @@
 
 use TezlikPlaneacion\dao\ClientsDao;
 use TezlikPlaneacion\dao\GeneralClientsDao;
+use TezlikPlaneacion\dao\GeneralMaterialsDao;
 use TezlikPlaneacion\dao\GeneralOfficesDao;
 use TezlikPlaneacion\dao\GeneralOrdersDao;
 use TezlikPlaneacion\dao\GeneralProductsDao;
@@ -23,6 +24,7 @@ $generalClientsDao = new GeneralClientsDao();
 $generalSellersDao = new GeneralSellersDao();
 $generalOfficesDao = new GeneralOfficesDao();
 $productsMaterialsDao = new ProductsMaterialsDao();
+$generalMaterialsDao = new GeneralMaterialsDao();
 $generalProductsDao = new GeneralProductsDao();
 $inventoryDaysDao = new InventoryDaysDao();
 $usersOfficesDao = new UsersOfficesDao();
@@ -102,6 +104,7 @@ $app->post('/changeOffices', function (Request $request, Response $response, $ar
     $generalOrdersDao,
     $generalClientsDao,
     $licenseDao,
+    $generalMaterialsDao,
     $clientsDao,
     $lastDataDao,
     $programmingRoutesDao,
@@ -187,7 +190,22 @@ $app->post('/changeOffices', function (Request $request, Response $response, $ar
             }
         }
 
-        $generalProductsDao->updateAccumulatedQuantity($dataOrder['idProduct'], $dataOrder['quantity'] - $dataOrder['originalQuantity'], 2);
+        $resolution = $generalProductsDao->updateAccumulatedQuantity($dataOrder['idProduct'], $dataOrder['quantity'] - $dataOrder['originalQuantity'], 2);
+    }
+
+    if ($resolution == null && $dataOrder['origin'] == 1) {
+        $product = $generalProductsDao->findProductById($dataOrder['idProduct']);
+
+        if ($product) {
+            $data = [];
+            $data['refRawMaterial'] = $product['reference'];
+            $data['nameRawMaterial'] = $product['product'];
+
+            $material = $generalMaterialsDao->findMaterial($data, $id_company);
+
+            if ($material)
+                $resolution = $generalMaterialsDao->updateQuantityMaterial($material['id_material'], $dataOrder['quantity'] - $dataOrder['originalQuantity']);
+        }
     }
 
     if ($resolution == null) {

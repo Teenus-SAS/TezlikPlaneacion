@@ -99,6 +99,7 @@ $app->post('/saveReceiveOPPTDate', function (Request $request, Response $respons
     $productionOrderPartialDao,
     $usersProductionOrderPartialDao,
     $generalProductsDao,
+    $generalMaterialsDao
 ) {
     session_start();
     $id_company = $_SESSION['id_company'];
@@ -110,6 +111,21 @@ $app->post('/saveReceiveOPPTDate', function (Request $request, Response $respons
 
     if ($resolution == null) {
         $resolution = $generalProductsDao->updateAccumulatedQuantity($dataOP['idProduct'], $dataOP['quantity'], 2);
+    }
+
+    if ($resolution == null && $dataOP['origin'] == 1) {
+        $product = $generalProductsDao->findProductById($dataOP['idProduct']);
+
+        if ($product) {
+            $data = [];
+            $data['refRawMaterial'] = $product['reference'];
+            $data['nameRawMaterial'] = $product['product'];
+
+            $material = $generalMaterialsDao->findMaterial($data, $id_company);
+
+            if ($material)
+                $resolution = $generalMaterialsDao->updateQuantityMaterial($material['id_material'], $dataOP['quantity']);
+        }
     }
 
     if ($resolution == null) {

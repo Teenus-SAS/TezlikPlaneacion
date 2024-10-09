@@ -7,6 +7,7 @@ $(document).ready(function () {
     dataOP["idProgramming"] = data.id_programming;
     dataOP["idOrder"] = data.id_order;
     dataOP["idProduct"] = data.id_product;
+    dataOP["origin"] = data.origin;
     dataOP["quantity"] = data.quantity_programming;
 
     bootbox.confirm({

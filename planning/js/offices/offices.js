@@ -91,6 +91,7 @@ $(document).ready(function () {
           let form = new FormData();
           form.append("idOrder", data.id_order);
           form.append("idProduct", data.id_product);
+          form.append("origin", data.origin);
           form.append("originalQuantity", data.original_quantity);
           form.append("quantity", data.quantity);
           form.append("stock", data.minimum_stock);

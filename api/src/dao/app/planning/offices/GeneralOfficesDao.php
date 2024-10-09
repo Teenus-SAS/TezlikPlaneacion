@@ -20,26 +20,56 @@ class GeneralOfficesDao
     {
         $connection = Connection::getInstance()->getConnection();
 
-        $stmt = $connection->prepare("SELECT o.id_order, o.id_client, p.reference, pi.quantity, pi.minimum_stock, pi.accumulated_quantity, o.id_product, ps.status, o.num_order, o.date_order, o.original_quantity, p.product, c.client, o.min_date, o.max_date, o.delivery_date,
-                                             IFNULL(last_user.id_user_deliver, 0) AS id_user_order, IFNULL(last_user.firstname_deliver, '') AS firstname_order, IFNULL(last_user.lastname_deliver, '') AS lastname_order
-                                      FROM orders o
-                                        INNER JOIN products p ON p.id_product = o.id_product
-                                        INNER JOIN inv_products pi ON pi.id_product = o.id_product
-                                        INNER JOIN third_parties c ON c.id_client = o.id_client
-                                        INNER JOIN orders_status ps ON ps.id_status = o.status
-                                     -- Subconsulta para obtener el último usuario de entrega
-                                        LEFT JOIN (
-                                            SELECT uof.id_order, curd.id_user AS id_user_deliver, curd.firstname AS firstname_deliver, curd.lastname AS lastname_deliver
-                                                FROM offices_users uof
-                                                INNER JOIN users curd ON curd.id_user = uof.id_user_deliver
-                                                WHERE uof.id_order = (
-                                                    SELECT MAX(uof_inner.id_order)
-                                                    FROM offices_users uof_inner
-                                                    WHERE uof_inner.id_order = uof.id_order
+        $stmt = $connection->prepare("SELECT
+                                        -- columnas
+                                            o.id_order,
+                                            o.id_client,
+                                            p.reference,
+                                            pi.quantity,
+                                            pi.minimum_stock,
+                                            pi.accumulated_quantity,
+                                            o.id_product,
+                                            ps.status,
+                                            o.num_order,
+                                            o.date_order,
+                                            o.original_quantity,
+                                            p.product,
+                                            p.origin,
+                                            c.client,
+                                            o.min_date,
+                                            o.max_date,
+                                            o.delivery_date,
+                                            IFNULL(last_user.id_user_deliver, 0) AS id_user_order,
+                                            IFNULL(last_user.firstname_deliver, '') AS firstname_order,
+                                            IFNULL(last_user.lastname_deliver, '') AS lastname_order
+                                        FROM orders o
+                                            INNER JOIN products p ON p.id_product = o.id_product
+                                            INNER JOIN inv_products pi ON pi.id_product = o.id_product
+                                            INNER JOIN third_parties c ON c.id_client = o.id_client
+                                            INNER JOIN orders_status ps ON ps.id_status = o.status
+                                                -- Subconsulta para obtener el último usuario de entrega
+                                            LEFT JOIN(
+                                                SELECT uof.id_order,
+                                                    curd.id_user AS id_user_deliver,
+                                                    curd.firstname AS firstname_deliver,
+                                                    curd.lastname AS lastname_deliver
+                                                FROM
+                                                    offices_users uof
+                                                INNER JOIN users curd ON
+                                                    curd.id_user = uof.id_user_deliver
+                                                WHERE
+                                                    uof.id_order =(
+                                                    SELECT
+                                                        MAX(uof_inner.id_order)
+                                                    FROM
+                                                        offices_users uof_inner
+                                                    WHERE
+                                                        uof_inner.id_order = uof.id_order
                                                 )
-                                        ) AS last_user ON last_user.id_order = o.id_order
-                                      WHERE o.status IN (2, 3) AND o.id_company = :id_company
-                                      AND (o.delivery_date IS NULL OR MONTH(o.delivery_date) = MONTH(CURRENT_DATE)) ORDER BY `o`.`num_order` DESC");
+                                            ) AS last_user ON last_user.id_order = o.id_order
+                                        WHERE o.status IN(2, 3) AND o.id_company = :id_company 
+                                            AND (o.delivery_date IS NULL OR MONTH(o.delivery_date) = MONTH(CURRENT_DATE))
+                                        ORDER BY `o`.`num_order` DESC");
         $stmt->execute(['id_company' => $id_company]);
 
         $this->logger->info(__FUNCTION__, array('query' => $stmt->queryString, 'errors' => $stmt->errorInfo()));

@@ -36,7 +36,8 @@ $app->get('/productionOrder', function (Request $request, Response $response, $a
 
 $app->post('/changeStatusOP', function (Request $request, Response $response, $args) use (
     $generalOrdersDao,
-    $generalProductsDao
+    $generalProductsDao,
+    $generalMaterialsDao
 ) {
     session_start();
     $id_company = $_SESSION['id_company'];
@@ -45,7 +46,22 @@ $app->post('/changeStatusOP', function (Request $request, Response $response, $a
     $result = $generalOrdersDao->changeStatus($dataOP['idOrder'], 8);
 
     if ($result == null) {
-        $generalProductsDao->updateAccumulatedQuantity($dataOP['idProduct'], $dataOP['quantity'], 2);
+        $result = $generalProductsDao->updateAccumulatedQuantity($dataOP['idProduct'], $dataOP['quantity'], 2);
+
+        if ($result == null && $dataOP['origin'] == 1) {
+            $product = $generalProductsDao->findProductById($dataOP['idProduct']);
+
+            if ($product) {
+                $data = [];
+                $data['refRawMaterial'] = $product['reference'];
+                $data['nameRawMaterial'] = $product['product'];
+
+                $material = $generalMaterialsDao->findMaterial($data, $id_company);
+
+                if ($material)
+                    $result = $generalMaterialsDao->updateQuantityMaterial($material['id_material'], $dataOP['quantity']);
+            }
+        }
 
         // Cambiar estado pedidos
         $orders = $generalOrdersDao->findAllOrdersByCompany($id_company);

@@ -43,6 +43,7 @@ class ProductionOrderDao
                                                 p.id_product, 
                                                 p.reference, 
                                                 p.product, 
+                                                p.origin,
                                                 IFNULL(pms.width, 0) AS width, 
                                                 IFNULL(pms.high, 0) AS high, 
                                                 IFNULL(pms.length, 0) AS length, 
