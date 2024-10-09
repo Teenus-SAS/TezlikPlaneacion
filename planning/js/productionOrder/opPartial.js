@@ -100,8 +100,8 @@ $(document).ready(function () {
 
         // Calcular la suma de las columnas específicas
         data.forEach(function (rowData) {
-          totalDefectiveUnits += parseFloat(rowData.defective_units || 0);
-          totalDeliveredQuantity += parseFloat(rowData.delivered_quantity || 0);
+          totalDefectiveUnits += parseFloat(rowData.waste || 0);
+          totalDeliveredQuantity += parseFloat(rowData.partial_quantity || 0);
         });
 
         // Mostrar el total en el pie de la tabla
