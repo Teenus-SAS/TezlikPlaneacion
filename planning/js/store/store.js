@@ -5,7 +5,7 @@ $(document).ready(function () {
 
     let date = new Date().toISOString().split("T")[0];
     const row = $(this).closest("tr")[0];
-    let data = tblStore.fnGetData(row);
+    let data = tblReceiveOC.fnGetData(row);
 
     bootbox.confirm({
       title: "Ingrese Fecha De Ingreso!",
@@ -57,7 +57,7 @@ $(document).ready(function () {
     e.preventDefault();
 
     const row = $(this).closest("tr")[0];
-    let data = tblStore.fnGetData(row);
+    let data = tblReceiveOC.fnGetData(row);
 
     let users = await searchData(`/api/usersRequisitions/${data.id_requisition}`);
     let rows = '';
@@ -122,7 +122,7 @@ $(document).ready(function () {
 
   $(document).on("click", ".deliver", function () {
     const row = $(this).closest("tr")[0];
-    let data = tblStore.fnGetData(row);
+    let data = tblDeliverOC.fnGetData(row);
     let id_material = data.id_material;
     let id_programming = data.id_programming;
 
@@ -199,7 +199,7 @@ $(document).ready(function () {
     e.preventDefault();
 
     const row = $(this).closest("tr")[0];
-    let data = tblStore.fnGetData(row);
+    let data = tblDeliverOC.fnGetData(row);
 
     let users = await searchData(`/api/usersStore/${data.id_programming}/${data.id_material}`);
     let rows = '';

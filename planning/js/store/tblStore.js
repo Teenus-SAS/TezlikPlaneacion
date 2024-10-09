@@ -2,35 +2,33 @@ $(document).ready(function () {
   $("#btnExportStore").hide();
 
   $(".selectNavigation").click(function (e) {
-    e.preventDefault();
+    e.preventDefault(); 
 
-    if ($.fn.dataTable.isDataTable("#tblStore")) {
-      $("#tblStore").DataTable().destroy();
-      $("#tblStore").empty();
-    }
-    $(".cardOC, .cardOP").hide();
+    // $(".cardOC, .cardOP").hide();
 
-    if (this.id == "receiveOC") {
-      $(".cardOC").show();
-      loadTblStoreMaterial(requisitions);
-      $("#btnExportStore").hide();
-    } else if (this.id == "deliverOC") {
-      $(".cardOC").show();
-      $("#btnExportStore").show();
-      loadTblStoreOrder(store);
-    } else if (this.id == "receiveOP") {
-      $(".cardOP").show();
-    }
+    // if (this.id == "receiveOC") {
+    //   $(".cardOC").show();
+    //   loadtblReceiveOC(requisitions);
+    //   $("#btnExportStore").hide();
+    // // } else if (this.id == "deliverOC") {
+    // //   $(".cardOC").show();
+    // //   $("#btnExportStore").show();
+    // //   loadtblDeliverOC(store);
+    // } else if (this.id == "receiveOP") {
+    //   $(".cardOP").show();
+    // }
 
     let tables = document.getElementsByClassName("dataTable");
 
-    for (let table of tables) {
-      table.style.width = "100%";
-      table.firstElementChild.style.width = "100%";
+    for (let i = 0; i < tables.length; i++) {
+      let attr = tables[i];
+      attr.style.width = "100%";
+      attr = tables[i].firstElementChild;
+      attr.style.width = "100%";
     }
   });
 
-  loadAllData = async (op) => {
+  loadAllData = async () => {
     try {
       const [dataRequisitions, dataStore] = await Promise.all([
         searchData("/api/requisitionsMaterials"),
@@ -39,8 +37,10 @@ $(document).ready(function () {
 
       let arr = assignOpToGroups(dataStore, "id_programming");
 
-      if (op == 1) loadTblStoreMaterial(dataRequisitions);
-      else loadTblStoreOrder(arr);
+      // if (op == 1)
+      //   else
+      loadTblReceiveOC(dataRequisitions);
+      loadTblDeliverOC(arr);
 
       requisitions = dataRequisitions;
       store = arr;
@@ -72,7 +72,7 @@ $(document).ready(function () {
   };
 
   // Función para cargar la tabla de materiales a recibir
-  const loadTblStoreMaterial = async (data) => {
+  const loadTblReceiveOC = async (data) => {
     data = data.filter(
       (item) =>
         item.application_date !== "0000-00-00" &&
@@ -80,12 +80,12 @@ $(document).ready(function () {
         item.purchase_order !== ""
     );
 
-    if ($.fn.dataTable.isDataTable("#tblStore")) {
-      $("#tblStore").DataTable().clear().rows.add(data).draw();
+    if ($.fn.dataTable.isDataTable("#tblReceiveOC")) {
+      $("#tblReceiveOC").DataTable().clear().rows.add(data).draw();
       return;
     }
 
-    tblStore = $("#tblStore").dataTable({
+    tblReceiveOC = $("#tblReceiveOC").dataTable({
       destroy: true,
       autoWidth: false,
       fixedHeader: true,
@@ -178,8 +178,8 @@ $(document).ready(function () {
   };
 
   // Función para cargar la tabla de órdenes de almacén
-  const loadTblStoreOrder = (data) => {
-    tblStore = $("#tblStore").dataTable({
+  const loadTblDeliverOC = (data) => {
+    tblDeliverOC = $("#tblDeliverOC").dataTable({
       destroy: true,
       pageLength: 50,
       data: data,
@@ -270,5 +270,5 @@ $(document).ready(function () {
     });
   };
 
-  loadAllData(1);
+  loadAllData();
 });

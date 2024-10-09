@@ -431,8 +431,8 @@ $(document).ready(function () {
   }
 
   // Ajuste de columnas y redibujado tras la inicialización
-  setTimeout(function () {
-    tblPartialsDeliveryMP.columns.adjust().draw();
-    tblPartialsDeliveryPT.columns.adjust().draw();
-  }, 500);
+  // setTimeout(function () {
+  //   tblPartialsDeliveryMP.columns.adjust().draw();
+  //   tblPartialsDeliveryPT.columns.adjust().draw();
+  // }, 500);
 });

@@ -82,9 +82,42 @@ if (sizeof($_SESSION) == 0)
                                     <!-- Ordenes de Compra -->
                                     <div class="tab-pane fade show active" id="paneOC" role="tabpanel" aria-labelledby="tabOC">
                                         <div class="card">
-                                            <div class="card-body">
-                                                <div class="table-responsive">
-                                                    <table class="fixed-table-loading table table-hover" id="tblStore"></table>
+                                            <div class="card-body p-0">
+                                                <!-- Ordenes de Compra -->
+                                                <ul class="nav nav-tabs mt-3 ml-3" id="subTabOC" role="tablist">
+                                                    <li class="nav-item">
+                                                        <a class="nav-link active selectNavigation" id="subTabReceiveOC" data-toggle="pill" href="#paneReceiveOC" role="tab" aria-controls="paneReceiveOC" aria-selected="false">
+                                                            Recibir
+                                                        </a>
+                                                    </li>
+                                                    <li class="nav-item">
+                                                        <a class="nav-link selectNavigation" id="subTabDeliverOC" data-toggle="pill" href="#paneDeliverOC" role="tab" aria-controls="paneDeliverOC" aria-selected="true">
+                                                            Entregar
+                                                        </a>
+                                                    </li>
+                                                </ul>
+                                                <div class="tab-content" id="subTabOCContent">
+                                                    <!-- Recibir -->
+                                                    <div class="tab-pane fade show active" id="paneReceiveOC" role="tabpanel" aria-labelledby="subTabReceiveOC">
+                                                        <div class="card">
+                                                            <div class="card-body">
+                                                                <div class="table-responsive">
+                                                                    <table class="fixed-table-loading table table-hover" id="tblReceiveOC"></table>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+
+                                                    <!-- Entregar -->
+                                                    <div class="tab-pane fade" id="paneDeliverOC" role="tabpanel" aria-labelledby="subTabDeliverOC">
+                                                        <div class="card">
+                                                            <div class="card-body">
+                                                                <div class="table-responsive">
+                                                                    <table class="fixed-table-loading table table-hover" id="tblDeliverOC"></table>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
                                                 </div>
                                             </div>
                                         </div>
@@ -93,9 +126,9 @@ if (sizeof($_SESSION) == 0)
                                     <!-- Ordenes de Producción -->
                                     <div class="tab-pane fade" id="paneOP" role="tabpanel" aria-labelledby="tabOP">
                                         <div class="card">
-                                            <div class="card-body p-0">
+                                            <div class="card-body">
                                                 <!-- Sub-pestañas para Ordenes de Producción -->
-                                                <ul class="nav nav-tabs mt-3 ml-3" id="subTabOP" role="tablist">
+                                                <!-- <ul class="nav nav-tabs mt-3 ml-3" id="subTabOP" role="tablist">
                                                     <li class="nav-item">
                                                         <a class="nav-link active" id="subTabReceiveOP" data-toggle="pill" href="#paneReceiveOP" role="tab" aria-controls="paneReceiveOP" aria-selected="true">
                                                             Entregar
@@ -106,12 +139,12 @@ if (sizeof($_SESSION) == 0)
                                                             Recibir
                                                         </a>
                                                     </li>
-                                                </ul>
+                                                </ul> -->
 
                                                 <!-- Contenido de las sub-pestañas de Ordenes de Producción -->
                                                 <div class="tab-content" id="subTabOPContent">
                                                     <!-- Recibir -->
-                                                    <div class="tab-pane fade show active" id="paneReceiveOP" role="tabpanel" aria-labelledby="subTabReceiveOP">
+                                                    <!-- <div class="tab-pane fade show active" id="paneReceiveOP" role="tabpanel" aria-labelledby="subTabReceiveOP">
                                                         <div class="card">
                                                             <div class="card-body">
                                                                 <div class="table-responsive">
@@ -119,42 +152,42 @@ if (sizeof($_SESSION) == 0)
                                                                 </div>
                                                             </div>
                                                         </div>
-                                                    </div>
+                                                    </div> -->
 
                                                     <!-- Entregar -->
-                                                    <div class="tab-pane fade" id="paneDeliverOP" role="tabpanel" aria-labelledby="subTabDeliverOP">
+                                                    <!-- <div class="tab-pane fade" id="paneDeliverOP" role="tabpanel" aria-labelledby="subTabDeliverOP">
                                                         <div class="card">
-                                                            <div class="card-body">
-                                                                <!-- Sub-pestañas para Entregar -->
-                                                                <ul class="nav nav-tabs" id="subTabDeliver" role="tablist">
-                                                                    <li class="nav-item">
-                                                                        <a class="nav-link active" id="subTabPT" data-toggle="pill" href="#panePT" role="tab" aria-controls="panePT" aria-selected="true">
-                                                                            Productos Terminados
-                                                                        </a>
-                                                                    </li>
-                                                                    <li class="nav-item">
-                                                                        <a class="nav-link" id="subTabMP" data-toggle="pill" href="#paneMP" role="tab" aria-controls="paneMP" aria-selected="false">
-                                                                            Devolución Materia Prima
-                                                                        </a>
-                                                                    </li>
-                                                                </ul>
+                                                            <div class="card-body"> -->
+                                                    <!-- Sub-pestañas para Entregar -->
+                                                    <ul class="nav nav-tabs" id="subTabDeliver" role="tablist">
+                                                        <li class="nav-item">
+                                                            <a class="nav-link active" id="subTabPT" data-toggle="pill" href="#panePT" role="tab" aria-controls="panePT" aria-selected="true">
+                                                                Productos Terminados
+                                                            </a>
+                                                        </li>
+                                                        <li class="nav-item">
+                                                            <a class="nav-link" id="subTabMP" data-toggle="pill" href="#paneMP" role="tab" aria-controls="paneMP" aria-selected="false">
+                                                                Devolución Materia Prima
+                                                            </a>
+                                                        </li>
+                                                    </ul>
 
-                                                                <!-- Contenido de las sub-pestañas de Entregar -->
-                                                                <div class="tab-content mt-3">
-                                                                    <div class="tab-pane fade show active" id="panePT" role="tabpanel" aria-labelledby="subTabPT">
-                                                                        <div class="table-responsive">
-                                                                            <table class="fixed-table-loading table table-hover" id="tblPartialsDeliveryPT"></table>
-                                                                        </div>
-                                                                    </div>
-                                                                    <div class="tab-pane fade" id="paneMP" role="tabpanel" aria-labelledby="subTabMP">
-                                                                        <div class="table-responsive">
-                                                                            <table class="fixed-table-loading table table-hover" id="tblPartialsDeliveryMP"></table>
-                                                                        </div>
-                                                                    </div>
-                                                                </div>
-                                                            </div> <!-- /card-body -->
-                                                        </div> <!-- /card -->
-                                                    </div> <!-- /paneDeliverOP -->
+                                                    <!-- Contenido de las sub-pestañas de Entregar -->
+                                                    <div class="tab-content mt-3">
+                                                        <div class="tab-pane fade show active" id="panePT" role="tabpanel" aria-labelledby="subTabPT">
+                                                            <div class="table-responsive">
+                                                                <table class="fixed-table-loading table table-hover" id="tblPartialsDeliveryPT"></table>
+                                                            </div>
+                                                        </div>
+                                                        <div class="tab-pane fade" id="paneMP" role="tabpanel" aria-labelledby="subTabMP">
+                                                            <div class="table-responsive">
+                                                                <table class="fixed-table-loading table table-hover" id="tblPartialsDeliveryMP"></table>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <!--</div>  /card-body -->
+                                                    <!--</div>  /card -->
+                                                    <!--</div>  /paneDeliverOP -->
                                                 </div> <!-- /subTabOPContent -->
                                             </div> <!-- /card-body -->
                                         </div> <!-- /card -->
