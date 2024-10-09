@@ -63,8 +63,8 @@ $(document).ready(function () {
           selectedIcon.style.color = "gray"; // Restablecer color a gris
         }
 
-        // Cambiar el color del icono actual seleccionado a amarillo
-        item.icon.style.color = "yellow"; // Cambia el color del icono del enlace seleccionado
+        // Cambiar el color del icono actual seleccionado
+        item.icon.style.color = "green"; // Cambia el color del icono del enlace seleccionado
 
         // Guardar el ID del icono seleccionado en localStorage
         localStorage.setItem("selectedIconId", item.icon.id);
