@@ -370,8 +370,8 @@ if (sizeof($_SESSION) == 0)
 															<tfoot>
 																<tr>
 																	<th colspan="3">Totales:</th>
-																	<th class="uniqueClassName dt-head-center"></th>
-																	<th class="uniqueClassName dt-head-center"></th>
+																	<th class="uniqueClassName dt-head-center unitsDefects"></th>
+																	<th class="uniqueClassName dt-head-center unitsProcessing"></th>
 																	<th></th>
 																	<th></th>
 																</tr>
