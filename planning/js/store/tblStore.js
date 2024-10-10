@@ -40,7 +40,7 @@ $(document).ready(function () {
       // if (op == 1)
       //   else
       loadTblReceiveOC(dataRequisitions);
-      loadTblDeliverOC(arr);
+      loadTblDeliverOP(arr);
 
       requisitions = dataRequisitions;
       store = arr;
@@ -178,8 +178,8 @@ $(document).ready(function () {
   };
 
   // Función para cargar la tabla de órdenes de almacén
-  const loadTblDeliverOC = (data) => {
-    tblDeliverOC = $("#tblDeliverOC").dataTable({
+  const loadTblDeliverOP = (data) => {
+    tblDeliverOP = $("#tblDeliverOP").dataTable({
       destroy: true,
       pageLength: 50,
       data: data,

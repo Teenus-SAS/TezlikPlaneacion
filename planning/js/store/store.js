@@ -124,7 +124,7 @@ $(document).ready(function () {
 
   $(document).on("click", ".deliver", function () {
     const row = $(this).closest("tr")[0];
-    let data = tblDeliverOC.fnGetData(row);
+    let data = tblDeliverOP.fnGetData(row);
     let id_material = data.id_material;
     let reference = data.reference;
     let material = data.material;
@@ -207,7 +207,7 @@ $(document).ready(function () {
     e.preventDefault();
 
     const row = $(this).closest("tr")[0];
-    let data = tblDeliverOC.fnGetData(row);
+    let data = tblDeliverOP.fnGetData(row);
 
     let users = await searchData(`/api/usersStore/${data.id_programming}/${data.id_material}`);
     let rows = '';
