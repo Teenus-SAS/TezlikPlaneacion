@@ -1,10 +1,10 @@
 $(document).ready(function () {
   $.ajax({
-    url: "/api/kpis",
+    url: "/api/kpisOP",
     data: "data",
     success: function (data) {
-      let quality = data.totalDefectiveUnits / data.totalDeliveredQuantity;
-      $("#kpiQualityOP").val(quality);
+      if (data) $("#kpiQualityOP").text(`Q: ${data}%`);
+      else $("#kpiQualityOP").hide();
     },
   });
 });

@@ -77,7 +77,7 @@ if (sizeof($_SESSION) == 0)
 											<hr> -->
 										<div class="col-sm-12 col-xl-12 d-flex justify-content-end btnPrintPDF">
 											<div class="col-xs-2 mt-2 mr-2" id="btnPdf">
-												<span class="badge badge-warning" id="kpiQualityOP" style="font-size: x-large;">Q: 98,12%</span>
+												<span class="badge badge-warning" id="kpiQualityOP" style="font-size: x-large;"></span>
 												<!-- <button class="btn btn-success" onclick="printPDF()">Imprimir PDF</button> -->
 											</div>
 										</div>
