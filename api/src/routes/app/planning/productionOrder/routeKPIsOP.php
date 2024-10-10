@@ -12,7 +12,7 @@ use Psr\Http\Message\ServerRequestInterface as Request;
 $app->get('/kpisOP', function (Request $request, Response $response, $args) use ($productionOrderPartialDao) {
     session_start();
     $id_company = $_SESSION['id_company'];
-    $areas = $productionOrderPartialDao->findAllOPPartialByCompany($id_company);
-    $response->getBody()->write(json_encode($areas));
+    $kpi = $productionOrderPartialDao->findAllOPPartialByCompany($id_company);
+    $response->getBody()->write(json_encode($kpi));
     return $response->withHeader('Content-Type', 'application/json');
 });
