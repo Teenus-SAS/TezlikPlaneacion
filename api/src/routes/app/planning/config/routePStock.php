@@ -2,16 +2,22 @@
 
 use TezlikPlaneacion\Dao\CompositeProductsDao;
 use TezlikPlaneacion\dao\GeneralClientsDao;
+use TezlikPlaneacion\dao\GeneralMaterialsDao;
 use TezlikPlaneacion\dao\GeneralProductsDao;
 use TezlikPlaneacion\dao\GeneralProductsMaterialsDao;
 use TezlikPlaneacion\dao\GeneralPStockDao;
+use TezlikPlaneacion\dao\GeneralRMStockDao;
 use TezlikPlaneacion\dao\MinimumStockDao;
 use TezlikPlaneacion\dao\ProductsMaterialsDao;
 use TezlikPlaneacion\dao\PStockDao;
+use TezlikPlaneacion\dao\RMStockDao;
 
 $stockDao = new PStockDao();
+$rMStockDao = new RMStockDao();
 $compositeProductsDao = new CompositeProductsDao();
 $generalStockDao = new GeneralPStockDao();
+$generalRMStockDao = new GeneralRMStockDao();
+$generalMaterialsDao = new GeneralMaterialsDao();
 $generalProductsDao = new GeneralProductsDao();
 $minimumStockDao = new MinimumStockDao();
 $productMaterialsDao = new ProductsMaterialsDao();
@@ -117,9 +123,9 @@ $app->post('/pStockDataValidation', function (Request $request, Response $respon
 $app->post('/addPStock', function (Request $request, Response $response, $args) use (
     $stockDao,
     $generalStockDao,
+    $rMStockDao,
+    $generalRMStockDao,
     $generalMaterialsDao,
-    $generalClientsDao,
-    $compositeProductsDao,
     $generalProductsMaterialsDao,
     $generalProductsDao,
     $minimumStockDao,
@@ -153,7 +159,34 @@ $app->post('/addPStock', function (Request $request, Response $response, $args) 
                     $resolution = $generalProductsDao->updateStockByProduct($dataStock['idProduct'], $arr['stock']);
             }
 
-            // if ($resolution == null) {
+            if ($resolution == null && $dataStock['origin'] == 1) {
+                $data = [];
+                $data['refRawMaterial'] = $product['reference'];
+                $data['nameRawMaterial'] = $product['product'];
+
+                $material = $generalMaterialsDao->findMaterial($data, $id_company);
+
+                if ($material) {
+                    $data['idMaterial'] = $material['id_material'];
+                    $stock = $generalRMStockDao->findAllStockByMaterial($data);
+                    $data['idProvider'] = 0;
+                    $data['quantity'] = 0;
+                    $data['min'] = $dataStock['min'];
+                    $data['max'] = $dataStock['max'];
+
+                    if (sizeof($stock) == 0) {
+                        $resolution = $rMStockDao->insertStockByCompany($data, $id_company);
+                    } else {
+                        foreach ($stock as $arr) {
+                            $data['idStock'] = $arr['id_stock_material'];
+                            $data['idProvider'] = $arr['id_provider'];
+                            $data['quantity'] = $arr['min_quantity'];
+
+                            $resolution = $rMStockDao->updateStock($data);
+                        }
+                    }
+                }
+            }
             //     $compositeProducts = $compositeProductsDao->findAllCompositeProductsByIdProduct($dataStock['idProduct'], $id_company);
 
             //     foreach ($compositeProducts as $k) {
@@ -185,10 +218,10 @@ $app->post('/addPStock', function (Request $request, Response $response, $args) 
         for ($i = 0; $i < sizeof($stock); $i++) {
             if (isset($resolution['info'])) break;
             // Obtener id producto
-            $findMaterial = $generalProductsDao->findProduct($stock[$i], $id_company);
-            $stock[$i]['idProduct'] = $findMaterial['id_product'];
+            $findProduct = $generalProductsDao->findProduct($stock[$i], $id_company);
+            $stock[$i]['idProduct'] = $findProduct['id_product'];
 
-            $findstock = $generalStockDao->findstock($stock[$i], $id_company);
+            $findstock = $generalStockDao->findStock($stock[$i], $id_company);
             if (!$findstock)
                 $resolution = $stockDao->insertStockByCompany($stock[$i], $id_company);
             else {
@@ -197,6 +230,35 @@ $app->post('/addPStock', function (Request $request, Response $response, $args) 
             }
 
             if (isset($resolution['info'])) break;
+
+            if ($findProduct['origin'] == 1) {
+                $data = [];
+                $data['refRawMaterial'] = $stock[$i]['referenceProduct'];
+                $data['nameRawMaterial'] = $stock[$i]['product'];
+                $data['min'] = $stock[$i]['min'];
+                $data['max'] = $stock[$i]['max'];
+
+                $material = $generalMaterialsDao->findMaterial($data, $id_company);
+
+                if ($material) {
+                    $data['idMaterial'] = $material['id_material'];
+                    $stock = $generalRMStockDao->findAllStockByMaterial($data);
+                    $data['idProvider'] = 0;
+                    $data['quantity'] = 0;
+
+                    if (sizeof($stock) == 0) {
+                        $resolution = $rMStockDao->insertStockByCompany($data, $id_company);
+                    } else {
+                        foreach ($stock as $arr) {
+                            $data['idStock'] = $arr['id_stock_material'];
+                            $data['idProvider'] = $arr['id_provider'];
+                            $data['quantity'] = $arr['min_quantity'];
+
+                            $resolution = $rMStockDao->updateStock($data);
+                        }
+                    }
+                }
+            }
 
             $product = $generalProductsDao->findProductById($stock[$i]['idProduct']);
 
@@ -239,13 +301,16 @@ $app->post('/addPStock', function (Request $request, Response $response, $args) 
 
 $app->post('/updatePStock', function (Request $request, Response $response, $args) use (
     $stockDao,
+    $rMStockDao,
     $generalStockDao,
-    $generalProductsMaterialsDao,
+    $generalRMStockDao,
     $generalProductsDao,
     $generalMaterialsDao,
     $compositeProductsDao,
     $minimumStockDao
 ) {
+    session_start();
+    $id_company = $_SESSION['id_company'];
     $dataStock = $request->getParsedBody();
 
     $stock = $generalStockDao->findStock($dataStock);
@@ -270,7 +335,36 @@ $app->post('/updatePStock', function (Request $request, Response $response, $arg
             }
         }
 
-        // if ($resolution == null) {
+        if ($resolution == null && $dataStock['origin'] == 1) {
+            $data = [];
+            $data['refRawMaterial'] = $product['reference'];
+            $data['nameRawMaterial'] = $product['product'];
+
+            $material = $generalMaterialsDao->findMaterial($data, $id_company);
+
+            if ($material) {
+                $data['idMaterial'] = $material['id_material'];
+                $stock = $generalRMStockDao->findAllStockByMaterial($data);
+                $data['idProvider'] = 0;
+                $data['quantity'] = 0;
+                $data['min'] = $dataStock['min'];
+                $data['max'] = $dataStock['max'];
+
+                if (sizeof($stock) == 0) {
+                    $resolution = $rMStockDao->insertStockByCompany($data, $id_company);
+                } else {
+                    foreach ($stock as $arr) {
+                        $data['idStock'] = $arr['id_stock_material'];
+                        $data['idProvider'] = $arr['id_provider'];
+                        $data['quantity'] = $arr['min_quantity'];
+
+                        $resolution = $rMStockDao->updateStock($data);
+                    }
+                }
+            }
+        }
+
+
         //     $compositeProducts = $compositeProductsDao->findAllCompositeProductsByIdProduct($dataStock['idProduct'], $id_company);
 
         //     foreach ($compositeProducts as $k) {

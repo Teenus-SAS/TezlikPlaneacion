@@ -89,13 +89,13 @@ $(document).ready(function () {
   });
 
   const checkDataRMStock = async (url, idStock) => {
-    const material = parseFloat($("#material").val());
+    const idMaterial = parseFloat($("#material").val());
     const provider = parseFloat($("#client").val());
     const min = parseFloat($("#rMMin").val());
     const max = parseFloat($("#rMMax").val());
     const quantity = parseFloat($("#rMQuantity").val());
 
-    let data = material * provider * min * max * quantity;
+    let data = idMaterial * provider * min * max * quantity;
 
     if (!data) {
       toastr.error("Ingrese todos los campos");
@@ -109,8 +109,13 @@ $(document).ready(function () {
       return false;
     }
 
+    let dataMaterials = JSON.parse(sessionStorage.getItem('dataMaterials'));
+    let arr = dataMaterials.find(item => item.id_material == idMaterial);
+
     const dataStock = new FormData(formCreateRMStock);
-    dataStock.append("idMaterial", material);
+    dataStock.append("idMaterial", idMaterial);
+    dataStock.append("refRawMaterial", arr.reference);
+    dataStock.append("nameRawMaterial", arr.material);
 
     if (idStock) dataStock.append("idStock", idStock);
 

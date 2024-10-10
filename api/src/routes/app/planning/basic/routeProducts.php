@@ -277,7 +277,7 @@ $app->post('/addProduct', function (Request $request, Response $response, $args)
                     $material = $generalMaterialsDao->findMaterial($data, $id_company);
 
                     if ($material)
-                        $resolution = $generalMaterialsDao->updateQuantityMaterial($material['id_material'], $dataProduct['quantity']);
+                        $resolution = $generalMaterialsDao->updateQuantityMaterial($material['id_material'], $products[$i]['quantity']);
                 }
             }
 

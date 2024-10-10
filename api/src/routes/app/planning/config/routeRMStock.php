@@ -7,15 +7,19 @@ use TezlikPlaneacion\dao\GeneralExplosionMaterialsDao;
 use TezlikPlaneacion\dao\GeneralMaterialsDao;
 use TezlikPlaneacion\dao\GeneralProductsDao;
 use TezlikPlaneacion\dao\GeneralProductsMaterialsDao;
+use TezlikPlaneacion\dao\GeneralPStockDao;
 use TezlikPlaneacion\dao\GeneralRequisitionsMaterialsDao;
 use TezlikPlaneacion\dao\GeneralRMStockDao;
 use TezlikPlaneacion\dao\MinimumStockDao;
 use TezlikPlaneacion\dao\ProductsMaterialsDao;
+use TezlikPlaneacion\dao\PStockDao;
 use TezlikPlaneacion\dao\RequisitionsMaterialsDao;
 use TezlikPlaneacion\dao\RMStockDao;
 
 $stockDao = new RMStockDao();
+$pStockDao = new PStockDao();
 $generalStockDao = new GeneralRMStockDao();
+$generalPStockDao = new GeneralPStockDao();
 $generalMaterialsDao = new GeneralMaterialsDao();
 $generalProductsDao = new GeneralProductsDao();
 $minimumStockDao = new MinimumStockDao();
@@ -154,8 +158,8 @@ $app->post('/addRMStock', function (Request $request, Response $response, $args)
     $generalStockDao,
     $generalMaterialsDao,
     $generalClientsDao,
-    $productsMaterialsDao,
-    $generalProductsMaterialsDao,
+    $pStockDao,
+    $generalPStockDao,
     $conversionUnitsDao,
     $generalProductsDao,
     $minimumStockDao,
@@ -181,6 +185,26 @@ $app->post('/addRMStock', function (Request $request, Response $response, $args)
 
                 if (isset($arr['stock']))
                     $resolution = $generalMaterialsDao->updateStockMaterial($dataStock['idMaterial'], $arr['stock']);
+            }
+
+            if ($resolution == null) {
+                $data = [];
+                $data['referenceProduct'] = $dataStock['refRawMaterial'];
+                $data['product'] = $dataStock['nameRawMaterial'];
+
+                $product = $generalProductsDao->findProduct($data, $id_company);
+
+                if ($product) {
+                    $dataStock['idProduct'] = $product['id_product'];
+
+                    $findstock = $generalPStockDao->findStock($dataStock, $id_company);
+                    if (!$findstock) {
+                        $resolution = $pStockDao->insertStockByCompany($dataStock, $id_company);
+                    } else {
+                        $dataStock['idStock'] = $findstock['id_stock_product'];
+                        $resolution = $pStockDao->updateStock($dataStock);
+                    }
+                }
             }
 
             if ($resolution == null) {
@@ -292,7 +316,7 @@ $app->post('/addRMStock', function (Request $request, Response $response, $args)
             }
 
             if ($status == true)
-                $findStock = $generalStockDao->findstock($stock[$i], $id_company);
+                $findStock = $generalStockDao->findStock($stock[$i], $id_company);
 
             if (!$findStock) {
                 $resolution = $stockDao->insertStockByCompany($stock[$i], $id_company);
@@ -324,6 +348,24 @@ $app->post('/addRMStock', function (Request $request, Response $response, $args)
                 $resolution = $generalMaterialsDao->updateStockMaterial($stock[$i]['idMaterial'], $arr['stock']);
 
             if (isset($resolution['info'])) break;
+
+            $data = [];
+            $data['referenceProduct'] = $stock[$i]['refRawMaterial'];
+            $data['product'] = $stock[$i]['nameRawMaterial'];
+
+            $product = $generalProductsDao->findProduct($data, $id_company);
+
+            if ($product) {
+                $stock[$i]['idProduct'] = $product['id_product'];
+
+                $findstock = $generalPStockDao->findStock($stock[$i], $id_company);
+                if (!$findstock) {
+                    $resolution = $pStockDao->insertStockByCompany($stock[$i], $id_company);
+                } else {
+                    $dataStock['idStock'] = $findstock['id_stock_product'];
+                    $resolution = $stockDao->updateStock($stock[$i]);
+                }
+            }
         }
 
         if ($resolution == null)
@@ -341,8 +383,8 @@ $app->post('/addRMStock', function (Request $request, Response $response, $args)
 $app->post('/updateRMStock', function (Request $request, Response $response, $args) use (
     $stockDao,
     $generalStockDao,
-    $productsMaterialsDao,
-    $generalProductsMaterialsDao,
+    $pStockDao,
+    $generalPStockDao,
     $generalProductsDao,
     $generalMaterialsDao,
     $minimumStockDao,
@@ -369,6 +411,26 @@ $app->post('/updateRMStock', function (Request $request, Response $response, $ar
 
             if (isset($arr['stock']))
                 $resolution = $generalMaterialsDao->updateStockMaterial($dataStock['idMaterial'], $arr['stock']);
+        }
+
+        if ($resolution == null) {
+            $data = [];
+            $data['referenceProduct'] = $dataStock['refRawMaterial'];
+            $data['product'] = $dataStock['nameRawMaterial'];
+
+            $product = $generalProductsDao->findProduct($data, $id_company);
+
+            if ($product) {
+                $dataStock['idProduct'] = $product['id_product'];
+
+                $findstock = $generalPStockDao->findStock($dataStock, $id_company);
+                if (!$findstock) {
+                    $resolution = $pStockDao->insertStockByCompany($dataStock, $id_company);
+                } else {
+                    $dataStock['idStock'] = $findstock['id_stock_product'];
+                    $resolution = $pStockDao->updateStock($dataStock);
+                }
+            }
         }
 
         if ($resolution == null) {

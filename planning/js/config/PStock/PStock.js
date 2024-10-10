@@ -79,8 +79,14 @@ $(document).ready(function () {
       return false;
     }
 
+    let dataProducts = JSON.parse(sessionStorage.getItem('dataProducts'));
+    let arr = dataProducts.find(item => item.id_product == id_product);
+
     let dataStock = new FormData(formCreatePStock);
     dataStock.append("idProduct", id_product);
+    dataStock.append("reference", arr.reference);
+    dataStock.append("product", arr.product);
+    dataStock.append("origin", arr.origin);
 
     if (idStock) dataStock.append("idStock", idStock);
 

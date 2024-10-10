@@ -241,6 +241,18 @@ $(document).ready(function () {
             return false;
         }
 
+        let materialsAccept = allMaterialsAccept.filter(item => item.id_material == idMaterial);
+
+        let accept = 0;
+        materialsAccept.forEach(item => {
+            accept += parseFloat(item.quantity);
+        });
+
+        if (accept == 0) {
+            toastr.error('Materiales y Componentes no ejecutados');
+            return false;
+        }
+
         let id_programming = sessionStorage.getItem('id_programming');
         
         bootbox.confirm({
