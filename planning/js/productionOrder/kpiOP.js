@@ -1,6 +1,5 @@
 $(document).ready(function () {
   $.ajax({
-    type: "POST",
     url: "/api/kpis",
     data: "data",
     success: function (data) {
