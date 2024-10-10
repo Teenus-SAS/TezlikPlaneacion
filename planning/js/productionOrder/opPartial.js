@@ -106,6 +106,10 @@ $(document).ready(function () {
           totalDeliveredQuantity += parseFloat(row.partial_quantity) || 0; // Suma de cantidad entregada
         });
 
+        // Almacenar los totales en el localStorage
+        localStorage.setItem("totalDefectiveUnits", totalDefectiveUnits);
+        localStorage.setItem("totalDeliveredQuantity", totalDeliveredQuantity);
+
         // Actualizar el contenido del footer con los totales calculados
         $(this.api().column(3).footer()).html(
           `${$.fn.dataTable.render
@@ -120,6 +124,23 @@ $(document).ready(function () {
       },
     });
   };
+
+  // Realizar los cálculos después de que la tabla se haya cargado completamente
+  tblPartialsDelivery.on("xhr.dt", function (e, settings, json, xhr) {
+    // Leer valores de localStorage
+    const unitsDefects =
+      parseFloat(localStorage.getItem("totalDefectiveUnits")) || 0;
+    const unitsProcessing =
+      parseFloat(localStorage.getItem("totalDeliveredQuantity")) || 0;
+
+    // Verificar que los valores sean válidos y mayores a cero
+    if (unitsDefects > 0 && unitsProcessing > 0) {
+      let quality = ((unitsProcessing - unitsDefects) / unitsProcessing) * 100;
+      $("#kpiQualityOP").text(`Q: ${quality.toFixed(2)}%`);
+    } else {
+      $("#kpiQualityOP").hide();
+    }
+  });
 
   /* Crear OP Parcial */
   $("#btnDeliverPartialOP").click(function (e) {
