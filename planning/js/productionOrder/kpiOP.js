@@ -31,7 +31,7 @@ $(document).ready(function () {
 
         // Realizar el cálculo del KPI de calidad
         if (unitsProcessing > 0) {
-          const quality = 1-(unitsDefects / unitsProcessing) * 100;
+          const quality = 1 - unitsDefects / unitsProcessing;
           $("#kpiQualityOP")
             .text(`QC: ${quality.toFixed(2)}%`)
             .show();
