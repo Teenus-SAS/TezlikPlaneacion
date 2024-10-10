@@ -117,14 +117,6 @@ $(document).ready(function () {
             .number(".", ",", 0, "")
             .display(totalDeliveredQuantity)} Und`
         );
-        // Retorna el DataTable creado y los valores calculados
-        localStorage.setItem("totalDefectiveUnits", totalDefectiveUnits);
-        localStorage.setItem("totalDeliveredQuantity", totalDeliveredQuantity);
-      },
-      // Evento que se ejecuta cuando la tabla ha sido completamente inicializada
-      initComplete: function () {
-        // Establecer una bandera en localStorage para indicar que el DataTable está listo
-        localStorage.setItem("dataTableReady", "true");
       },
     });
   };
