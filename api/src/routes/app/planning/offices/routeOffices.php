@@ -1,12 +1,16 @@
 <?php
 
 use TezlikPlaneacion\dao\ClientsDao;
+use TezlikPlaneacion\dao\ExplosionMaterialsDao;
 use TezlikPlaneacion\dao\GeneralClientsDao;
+use TezlikPlaneacion\dao\GeneralExplosionMaterialsDao;
 use TezlikPlaneacion\dao\GeneralMaterialsDao;
 use TezlikPlaneacion\dao\GeneralOfficesDao;
 use TezlikPlaneacion\dao\GeneralOrdersDao;
 use TezlikPlaneacion\dao\GeneralProductsDao;
 use TezlikPlaneacion\dao\GeneralProgrammingRoutesDao;
+use TezlikPlaneacion\dao\GeneralRequisitionsMaterialsDao;
+use TezlikPlaneacion\dao\GeneralRMStockDao;
 use TezlikPlaneacion\dao\GeneralSellersDao;
 use TezlikPlaneacion\dao\InventoryDaysDao;
 use TezlikPlaneacion\dao\LastDataDao;
@@ -22,6 +26,8 @@ $ordersDao = new OrdersDao();
 $generalOrdersDao = new GeneralOrdersDao();
 $generalClientsDao = new GeneralClientsDao();
 $generalSellersDao = new GeneralSellersDao();
+$explosionMaterialsDao = new ExplosionMaterialsDao();
+$generalExMaterialsDao = new GeneralExplosionMaterialsDao();
 $generalOfficesDao = new GeneralOfficesDao();
 $productsMaterialsDao = new ProductsMaterialsDao();
 $generalMaterialsDao = new GeneralMaterialsDao();
@@ -32,6 +38,8 @@ $licenseDao = new LicenseCompanyDao();
 $clientsDao = new ClientsDao();
 $lastDataDao = new LastDataDao();
 $programmingRoutesDao = new ProgrammingRoutesDao();
+$generalRMStockDao = new GeneralRMStockDao();
+$generalRequisitionsMaterialsDao = new GeneralRequisitionsMaterialsDao();
 $generalProgrammingRoutesDao = new GeneralProgrammingRoutesDao();
 
 use Psr\Http\Message\ResponseInterface as Response;
@@ -107,6 +115,10 @@ $app->post('/changeOffices', function (Request $request, Response $response, $ar
     $generalMaterialsDao,
     $clientsDao,
     $lastDataDao,
+    $generalRMStockDao,
+    $generalExMaterialsDao,
+    $explosionMaterialsDao,
+    $generalRequisitionsMaterialsDao,
     $programmingRoutesDao,
     $generalProgrammingRoutesDao,
     $generalSellersDao,
@@ -170,15 +182,15 @@ $app->post('/changeOffices', function (Request $request, Response $response, $ar
                 $data['typeOrder'] = 2;
 
                 $findOrder = $generalOrdersDao->findLastSameOrder($data);
+
                 if (!$findOrder) {
                     $resolution = $ordersDao->insertOrderByCompany($data, $id_company);
 
                     $lastOrder = $lastDataDao->findLastInsertedOrder($id_company);
-
+                    $data['idOrder'] = $lastOrder['id_order'];
                     $programmingRoutes = $generalProgrammingRoutesDao->findProgrammingRoutes($dataOrder['idProduct'], $lastOrder['id_order']);
 
                     if (!$programmingRoutes) {
-                        $data['idOrder'] = $lastOrder['id_order'];
                         $data['route'] = 1;
 
                         $resolution = $programmingRoutesDao->insertProgrammingRoutes($data, $id_company);
@@ -186,6 +198,10 @@ $app->post('/changeOffices', function (Request $request, Response $response, $ar
                 } else {
                     $data['idOrder'] = $findOrder['id_order'];
                     $resolution = $ordersDao->updateOrder($data);
+                }
+
+                if ($dataOrder['origin'] == 1) {
+                    $resolution = $generalOrdersDao->changeStatus($data['idOrder'], 12);
                 }
             }
         }
@@ -205,6 +221,51 @@ $app->post('/changeOffices', function (Request $request, Response $response, $ar
 
             if ($material)
                 $resolution = $generalMaterialsDao->updateQuantityMaterial($material['id_material'], $dataOrder['quantity'] - $dataOrder['originalQuantity']);
+        }
+    }
+
+    if ($resolution == null) {
+        // Materiales
+        $arr = $generalExMaterialsDao->findAllMaterialsConsolidated($id_company);
+        $materials = $generalExMaterialsDao->setDataEXMaterials($arr);
+
+        for ($i = 0; $i < sizeof($materials); $i++) {
+            $findEX = $generalExMaterialsDao->findEXMaterial($materials[$i]['id_material']);
+
+            if (!$findEX)
+                $resolution = $explosionMaterialsDao->insertNewEXMByCompany($materials[$i], $id_company);
+            else {
+                $materials[$i]['id_explosion_material'] = $findEX['id_explosion_material'];
+                $resolution = $explosionMaterialsDao->updateEXMaterials($materials[$i]);
+            }
+
+            if (intval($materials[$i]['available']) < 0) {
+                $data = [];
+                $data['idMaterial'] = $materials[$i]['id_material'];
+
+                $provider = $generalRMStockDao->findProviderByStock($materials[$i]['id_material']);
+
+                $id_provider = 0;
+
+                if (isset($provider['id_provider'])) $id_provider = $provider['id_provider'];
+
+                $data['idProvider'] = $id_provider;
+                $data['numOrder'] = $materials[$i]['num_order'];
+                $data['applicationDate'] = '';
+                $data['deliveryDate'] = '';
+                $data['requiredQuantity'] = abs($materials[$i]['available']);
+                $data['purchaseOrder'] = '';
+                $data['requestedQuantity'] = 0;
+
+                $requisition = $generalRequisitionsMaterialsDao->findRequisitionByApplicationDate($materials[$i]['id_material']);
+
+                if (!$requisition)
+                    $generalRequisitionsMaterialsDao->insertRequisitionAutoByCompany($data, $id_company);
+                else {
+                    $data['idRequisition'] = $requisition['id_requisition_material'];
+                    $generalRequisitionsMaterialsDao->updateRequisitionAuto($data);
+                }
+            }
         }
     }
 

@@ -50,7 +50,7 @@ class GeneralExplosionMaterialsDao
                                             INNER JOIN orders o ON o.id_product = p.id_product
                                            -- LEFT JOIN requisitions r ON r.id_material = pm.id_material
                                            -- LEFT JOIN programming pg ON pg.id_order = o.id_order
-                                        WHERE p.id_company = :id_company AND o.status IN(1, 4, 5, 6)
+                                        WHERE p.id_company = :id_company AND o.status IN(1, 4, 5, 6, 12)
                                         GROUP BY pm.id_product_material, o.id_order");
         $stmt->execute(['id_company' => $id_company]);
 
