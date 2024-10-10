@@ -30,7 +30,7 @@ class MaterialsComponentsUsersDao
         return $materials;
     }
 
-    public function findAllMaterialsComponentsById($id_programming)
+    public function findAllMaterialsComponentsById($id_programming, $id_material)
     {
         $connection = Connection::getInstance()->getConnection();
 
@@ -50,7 +50,8 @@ class MaterialsComponentsUsersDao
                                         INNER JOIN users u ON u.id_user = mcu.id_user_accept
                                       WHERE mcu.id_programming = :id_programming AND mcu.id_material = :id_material");
         $stmt->execute([
-            'id_programming' => $id_programming
+            'id_programming' => $id_programming,
+            'id_material' => $id_material,
         ]);
         $this->logger->info(__FUNCTION__, array('query' => $stmt->queryString, 'errors' => $stmt->errorInfo()));
         $materials = $stmt->fetchAll($connection::FETCH_ASSOC);
@@ -68,7 +69,7 @@ class MaterialsComponentsUsersDao
                 'id_company' => $id_company,
                 'id_programming' => $data['idProgramming'],
                 'id_material' => $data['idMaterial'],
-                'quantity ' => $data['quantity'],
+                'quantity' => $data['quantity'],
                 'id_user_accept' => $id_user
             ]);
         } catch (\Exception $e) {

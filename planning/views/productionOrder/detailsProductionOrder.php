@@ -161,40 +161,42 @@ if (sizeof($_SESSION) == 0)
 											</div>
 
 											<?php if ($_SESSION['flag_products_measure'] == 1) { ?>
-												<div class="col-sm-2 floating-label enable-floating-label show-label">
-													<label for="">Ancho</label>
-													<input type="number" class="form-control text-center" id="width" readonly></input>
-												</div>
-												<div class="col-sm-2 floating-label enable-floating-label show-label">
-													<label for="">Alto</label>
-													<input type="number" class="form-control text-center" id="high" readonly>
-												</div>
-												<div class="col-sm-2 floating-label enable-floating-label show-label">
-													<label for="">Largo</label>
-													<input type="number" class="form-control text-center" id="length" readonly>
-												</div>
-												<div class="col-sm-2 floating-label enable-floating-label show-label">
-													<label for="">Largo Útil</label>
-													<input type="number" class="form-control text-center" id="usefulLength" readonly>
-												</div>
-												<div class="col-sm-2 floating-label enable-floating-label show-label">
-													<label for="">Ancho Total</label>
-													<input type="number" class="form-control text-center" id="totalWidth" readonly>
-												</div>
-												<div class="col-sm-2 floating-label enable-floating-label show-label">
-													<label for="">Ventanilla</label>
-													<input type="number" class="form-control text-center" id="window" readonly>
-												</div>
-												<!-- Planos -->
-												<div class="col-sm-6">
-													<a href="/assets/plano_mecanico" class="form-control text-center" id="link1" style="display: inline-block;">
-														<b>Plano Mecánico</b>
-													</a>
-												</div>
-												<div class="col-sm-6">
-													<a href="/assets/plano_montaje" class="form-control text-center" id="link2" style="display: inline-block;">
-														<b>Plano Montaje</b>
-													</a>
+												<div class="cardMeasure">
+													<div class="col-sm-2 floating-label enable-floating-label show-label">
+														<label for="">Ancho</label>
+														<input type="number" class="form-control text-center" id="width" readonly></input>
+													</div>
+													<div class="col-sm-2 floating-label enable-floating-label show-label">
+														<label for="">Alto</label>
+														<input type="number" class="form-control text-center" id="high" readonly>
+													</div>
+													<div class="col-sm-2 floating-label enable-floating-label show-label">
+														<label for="">Largo</label>
+														<input type="number" class="form-control text-center" id="length" readonly>
+													</div>
+													<div class="col-sm-2 floating-label enable-floating-label show-label">
+														<label for="">Largo Útil</label>
+														<input type="number" class="form-control text-center" id="usefulLength" readonly>
+													</div>
+													<div class="col-sm-2 floating-label enable-floating-label show-label">
+														<label for="">Ancho Total</label>
+														<input type="number" class="form-control text-center" id="totalWidth" readonly>
+													</div>
+													<div class="col-sm-2 floating-label enable-floating-label show-label">
+														<label for="">Ventanilla</label>
+														<input type="number" class="form-control text-center" id="window" readonly>
+													</div>
+													<!-- Planos -->
+													<div class="col-sm-6">
+														<a href="/assets/plano_mecanico" class="form-control text-center" id="link1" style="display: inline-block;">
+															<b>Plano Mecánico</b>
+														</a>
+													</div>
+													<div class="col-sm-6">
+														<a href="/assets/plano_montaje" class="form-control text-center" id="link2" style="display: inline-block;">
+															<b>Plano Montaje</b>
+														</a>
+													</div>
 												</div>
 											<?php } ?>
 										</div>

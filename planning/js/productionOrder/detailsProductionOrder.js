@@ -1,8 +1,9 @@
 $(document).ready(function () {
+    let allStore, allMaterialsAccept;
     let id_programming = sessionStorage.getItem('id_programming');
 
     loadAllDataPO = async () => {
-        const [dataOP, dataFTMaterials, allStore, materialsCM] = await Promise.all([
+        const [dataOP, dataFTMaterials, dataStore, materialsCM] = await Promise.all([
             searchData("/api/productionOrder"),
             searchData("/api/allProductsMaterials"),
             searchData("/api/allStore"),
@@ -11,11 +12,11 @@ $(document).ready(function () {
         // let dataOP = JSON.parse(sessionStorage.getItem('dataOP'));
         // let dataFTMaterials = JSON.parse(sessionStorage.getItem('dataFTMaterials'));
         // let allStore = JSON.parse(sessionStorage.getItem('dataAllStore'));
-        
+        allStore = dataStore;
         
         let data = dataOP.find(item => item.id_programming == id_programming);
         let dataFT = dataFTMaterials.filter(item => item.id_product == data.id_product);
-        let allMaterialsAccept = materialsCM.filter(item => item.id_programming == id_programming); 
+        allMaterialsAccept = materialsCM.filter(item => item.id_programming == id_programming);
 
         let flag_op = data.flag_op;
 
@@ -26,12 +27,16 @@ $(document).ready(function () {
             $('#thActions').hide();
         }
 
+        if (data.origin == 1) {
+            $('.cardMeasure').hide();
+        }
+
         if (data.flag_cancel == 1) $('.cardExcOP').hide();
         else $('.cardExcOP').show();
 
         $('#imgClient').empty();
 
-        if(data.img)
+        if (data.img)
             $('#imgClient').html(`<img src="${data.img}" width="150px">`);
         // Orden Produccion
         $('#txtNumOP').html(data.num_production);
@@ -43,16 +48,16 @@ $(document).ready(function () {
         
         $('#txtEDate').html(
             `<p><b class="font-weight-bold text-dark">Fecha de Emisión:</b>  ${date_order}</p>`
-        ); 
+        );
         
         $('#txtMinDate').val(min_date);
         $('#txtMaxDate').val(max_date);
-        $('#txtQuantityP').val(data.quantity_programming); 
+        $('#txtQuantityP').val(data.quantity_programming);
         $('#nameClient').val(data.client);
 
         // Info Producto
         $('#txtReferenceP').val(data.reference);
-        $('#txtNameP').val(data.product); 
+        $('#txtNameP').val(data.product);
         $('#width').val(data.width);
         $('#high').val(data.high);
         $('#length').val(data.length);
@@ -65,7 +70,7 @@ $(document).ready(function () {
         let body = document.getElementById('tblPOMaterialsBody');
         
         for (let i = 0; i < dataFT.length; i++) {
-            let quantity_ftm = formatQuantity(dataFT[i].quantity_ftm, dataFT[i].abbreviation); 
+            let quantity_ftm = formatQuantity(dataFT[i].quantity_ftm, dataFT[i].abbreviation);
             let quantity_total = parseFloat(dataFT[i].quantity_ftm) * parseFloat(data.quantity_programming);
             quantity_total = formatQuantity(quantity_total, dataFT[i].abbreviation);
 
@@ -83,19 +88,21 @@ $(document).ready(function () {
 
             let accept = 0;
             materialsAccept.forEach(item => {
-                accept += parseFloat(item.quantity); 
+                accept += parseFloat(item.quantity);
             });
 
             pending < 0 ? pending = 0 : pending;
 
             let action = '';
 
-            if (recieve > 0 && receive - accept > 0) {
-                action = `<button class="btn btn-info acceptMaterial" id="accept-${dataFT[i].id_material}">Aceptar MP</button>`;
-            } else if (recieve - accept <= 0) {
-                action = `<a href="javascript:;">
-                            <i class="mdi mdi-playlist-check seeAcceptMP ${id_programming} ${dataFT[i].id_material}" data-toggle="tooltip" title="Ver Usuarios" style="font-size: 30px;color:black"></i>
+            if (recieve > 0) {
+                if (recieve - accept > 0) {
+                    action = `<button class="btn btn-info acceptMaterial" id="accept-${dataFT[i].id_material}">Aceptar MP</button>`;
+                } else if (recieve - accept <= 0) {
+                    action = `<a href="javascript:;">
+                            <i class="mdi mdi-playlist-check seeAcceptMP programming-${id_programming} material-${dataFT[i].id_material}" data-toggle="tooltip" title="Ver Usuarios" style="font-size: 30px;color:black"></i>
                           </a>`;
+                }
             }
 
             body.insertAdjacentHTML('beforeend',
@@ -138,7 +145,7 @@ $(document).ready(function () {
 
     $(document).on('click', '.acceptMaterial', function () {
         // Obtener el ID del elemento
-        let date = new Date().toISOString().split("T")[0];
+        // let date = new Date().toISOString().split("T")[0];
         
         const idMaterial = $(this).attr("id").split("-")[1];
 
@@ -166,16 +173,23 @@ $(document).ready(function () {
 
                     let store = allStore.filter(item => item.id_programming == id_programming && item.id_material == idMaterial);
 
-                    let recieve = 0; 
+                    let recieve = 0;
  
                     store.forEach(item => {
-                        recieve += parseFloat(item.delivery_store); 
+                        recieve += parseFloat(item.delivery_store);
+                    });
+
+                    let materialsAccept = allMaterialsAccept.filter(item => item.id_material == idMaterial);
+
+                    let accept = 0;
+                    materialsAccept.forEach(item => {
+                        accept += parseFloat(item.quantity);
                     });
 
                     let form = new FormData();
                     form.append("idProgramming", id_programming);
                     form.append("idMaterial", idMaterial);
-                    form.append("quantity", recieve);
+                    form.append("quantity", recieve - accept);
                     // form.append("date", date);
 
                     $.ajax({
@@ -214,7 +228,7 @@ $(document).ready(function () {
             });
         
         return quantity;
-    };  
+    };
 
     // Cerrar OP
     $('#btnCloseOP').click(function (e) {
@@ -266,16 +280,17 @@ $(document).ready(function () {
     };
 
     // Materiales aceptados
-    $(document).on('click', '.seeAcceptMP', async function () {
+    $(document).on('click', '.seeAcceptMP', async function (e) {
+        e.preventDefault();
         // Obtiene el elemento que fue clickeado
         const element = $(this)[0];
 
         // Obtiene todas las clases del elemento
         const classList = Array.from(element.classList);
 
-        // Asume que las últimas dos clases son los valores dinámicos
-        const id_programming = classList[classList.length - 2]; // id_programming
-        const id_material = classList[classList.length - 1]; // id_material
+        // Busca las clases que contienen 'programming-' y 'material-'
+        const id_programming = classList.find(cls => cls.startsWith('programming-')).split('-')[1];
+        const id_material = classList.find(cls => cls.startsWith('material-')).split('-')[1];
 
         let users = await searchData(`/api/materialsComponents/${id_programming}/${id_material}`);
         let rows = '';
@@ -289,9 +304,9 @@ $(document).ready(function () {
                     <td>${users[i].email}</td>
                     <td>
                         ${parseFloat(users[i].quantity).toLocaleString("es-CO", {
-                                minimumFractionDigits: 0,
-                                maximumFractionDigits: 2,
-                            })}
+                    minimumFractionDigits: 0,
+                    maximumFractionDigits: 2,
+                })}
                     </td>
                 </tr>`;
         }
