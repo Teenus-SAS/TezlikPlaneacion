@@ -12,8 +12,22 @@ $(document).ready(function () {
         );
 
         // Capturar los nuevos valores
-        const unitsDefects = parseFloat(targetDefects.textContent) || 0;
-        const unitsProcessing = parseFloat(targetProcessing.textContent) || 0;
+        const unitsDefects =
+          parseFloat(
+            $(".unitsDefects")
+              .text()
+              .replace(" Und", "")
+              .replace(".", "")
+              .replace(",", ".")
+          ) || 0;
+        const unitsProcessing =
+          parseFloat(
+            $(".unitsProcessing")
+              .text()
+              .replace(" Und", "")
+              .replace(".", "")
+              .replace(",", ".")
+          ) || 0;
 
         // Realizar el cálculo del KPI de calidad
         if (unitsProcessing > 0) {
