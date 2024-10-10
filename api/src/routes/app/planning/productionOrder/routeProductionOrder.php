@@ -4,6 +4,7 @@ use TezlikPlaneacion\dao\GeneralMaterialsDao;
 use TezlikPlaneacion\dao\GeneralOrdersDao;
 use TezlikPlaneacion\dao\GeneralProductsDao;
 use TezlikPlaneacion\dao\GeneralProgrammingDao;
+use TezlikPlaneacion\dao\MaterialsComponentsUsersDao;
 use TezlikPlaneacion\dao\ProductionOrderDao;
 use TezlikPlaneacion\dao\ProductionOrderMPDao;
 use TezlikPlaneacion\dao\ProductionOrderPartialDao;
@@ -13,6 +14,7 @@ use TezlikPlaneacion\dao\UsersProductionOrderPartialDao;
 $generalProgrammingDao = new GeneralProgrammingDao();
 $productionOrderDao = new ProductionOrderDao();
 $productionOrderPartialDao = new ProductionOrderPartialDao();
+$materialsComponentsUsersDao = new MaterialsComponentsUsersDao();
 $productionOrderMPDao = new ProductionOrderMPDao();
 $usersProductionOrderPartialDao = new UsersProductionOrderPartialDao();
 $usersProductionOrderMPDao = new UsersProductionOrderMPDao();
@@ -143,6 +145,61 @@ $app->get('/changeFlagOP/{id_programming}/{flag}', function (Request $request, R
         $resp = array('error' => true, 'message' => 'Ocurrió un error mientras modificaba los datos. Intente nuevamente');
 
     $response->getBody()->write(json_encode($resp));
+    return $response->withStatus(200)->withHeader('Content-Type', 'application/json');
+});
+
+$app->get('/materialsComponents', function (Request $request, Response $response, $args) use (
+    $materialsComponentsUsersDao
+) {
+    session_start();
+    $id_company = $_SESSION['id_company'];
+
+    $materials = $materialsComponentsUsersDao->findAllMaterialsComponentsByCompany($id_company);
+
+    $response->getBody()->write(json_encode($materials));
+    return $response->withStatus(200)->withHeader('Content-Type', 'application/json');
+});
+
+$app->post('/acceptMaterialReceive', function (Request $request, Response $response, $args) use (
+    $materialsComponentsUsersDao,
+    $generalRequisitionsProductsDao,
+    $generalMaterialsDao,
+    $generalProductsDao,
+    $transitMaterialsDao,
+    $usersRequisitonsDao
+) {
+    session_start();
+    $id_company = $_SESSION['id_company'];
+    $id_user = $_SESSION['idUser'];
+
+    $dataOP = $request->getParsedBody();
+
+    $resolution = null;
+
+    $resolution = $materialsComponentsUsersDao->insertMaterialComponentUser($dataOP, $id_user, $id_company);
+
+    // if ($resolution == null){
+    //     $resolution = $generalMaterialsDao->
+    // }
+
+
+    if ($resolution == null)
+        $resp = array('success' => true, 'message' => 'Material aceptado correctamente');
+    else if (isset($resolution['info']))
+        $resp = array('info' => true, 'message' => $resolution['message']);
+    else
+        $resp = array('error' => true, 'message' => 'Ocurrio un error mientras modificaba la información. Intente nuevamente');
+
+    $response->getBody()->write(json_encode($resp));
+    return $response->withStatus(200)->withHeader('Content-Type', 'application/json');
+});
+
+$app->get('/materialsComponents/{id_programming}/{id_material}', function (Request $request, Response $response, $args) use (
+    $materialsComponentsUsersDao
+) {
+    $materials = $materialsComponentsUsersDao->findAllMaterialsComponentsById($args['id_programming'], $args['id_material']);
+
+    $response->getBody()->write(json_encode($materials));
     return $response->withStatus(200)->withHeader('Content-Type', 'application/json');
 });
 

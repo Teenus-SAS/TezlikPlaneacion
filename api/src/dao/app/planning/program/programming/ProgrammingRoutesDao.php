@@ -68,19 +68,19 @@ class ProgrammingRoutesDao
         }
     }
 
-    public function deleteProgrammingRoute($id_programming_routes)
+    public function deleteProgrammingRoute($id_order)
     {
         try {
             $connection = Connection::getInstance()->getConnection();
 
-            $stmt = $connection->prepare("SELECT * FROM programming_routes WHERE id_programming_routes = :id_programming_routes");
-            $stmt->execute(['id_programming_routes' => $id_programming_routes]);
+            $stmt = $connection->prepare("SELECT * FROM programming_routes WHERE id_order = :id_order");
+            $stmt->execute(['id_order' => $id_order]);
 
             $row = $stmt->rowCount();
 
             if ($row > 0) {
-                $stmt = $connection->prepare("DELETE FROM programming_routes WHERE id_programming_routes = :id_programming_routes");
-                $stmt->execute(['id_programming_routes' => $id_programming_routes]);
+                $stmt = $connection->prepare("DELETE FROM programming_routes WHERE id_order = :id_order");
+                $stmt->execute(['id_order' => $id_order]);
             }
         } catch (\Exception $e) {
             $message = $e->getMessage();

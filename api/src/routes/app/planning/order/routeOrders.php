@@ -1359,6 +1359,10 @@ $app->post('/deleteOrder', function (Request $request, Response $response, $args
     $resolution = $ordersDao->deleteOrder($dataOrder['idOrder']);
 
     if ($resolution == null) {
+        $resolution = $programmingRoutesDao->deleteProgrammingRoute($dataOrder['idOrder']);
+    }
+
+    if ($resolution == null) {
         // Si solo hay un pedido el cual se va a eliminar, entonces borra todos los requerimientos pendientes
         if (sizeof($orders) == 1) {
             $generalRequisitionsMaterialsDao->deleteAllRequisitionPending();

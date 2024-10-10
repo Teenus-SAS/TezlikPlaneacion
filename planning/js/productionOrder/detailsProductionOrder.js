@@ -1,12 +1,21 @@
 $(document).ready(function () {
-    loadAllDataPO = () => {
-        let dataOP = JSON.parse(sessionStorage.getItem('dataOP'));
-        let dataFTMaterials = JSON.parse(sessionStorage.getItem('dataFTMaterials'));
-        let allStore = JSON.parse(sessionStorage.getItem('dataAllStore'));
-        let id_programming = sessionStorage.getItem('id_programming');
+    let id_programming = sessionStorage.getItem('id_programming');
 
+    loadAllDataPO = async () => {
+        const [dataOP, dataFTMaterials, allStore, materialsCM] = await Promise.all([
+            searchData("/api/productionOrder"),
+            searchData("/api/allProductsMaterials"),
+            searchData("/api/allStore"),
+            searchData("/api/materialsComponents"),
+        ]);
+        // let dataOP = JSON.parse(sessionStorage.getItem('dataOP'));
+        // let dataFTMaterials = JSON.parse(sessionStorage.getItem('dataFTMaterials'));
+        // let allStore = JSON.parse(sessionStorage.getItem('dataAllStore'));
+        
+        
         let data = dataOP.find(item => item.id_programming == id_programming);
         let dataFT = dataFTMaterials.filter(item => item.id_product == data.id_product);
+        let allMaterialsAccept = materialsCM.filter(item => item.id_programming == id_programming); 
 
         let flag_op = data.flag_op;
 
@@ -70,7 +79,24 @@ $(document).ready(function () {
                 item.delivery_pending == 0 ? pending = 0 : pending += parseFloat(item.delivery_pending);
             });
 
+            let materialsAccept = allMaterialsAccept.filter(item => item.id_material == dataFT[i].id_material);
+
+            let accept = 0;
+            materialsAccept.forEach(item => {
+                accept += parseFloat(item.quantity); 
+            });
+
             pending < 0 ? pending = 0 : pending;
+
+            let action = '';
+
+            if (recieve > 0 && receive - accept > 0) {
+                action = `<button class="btn btn-info acceptMaterial" id="accept-${dataFT[i].id_material}">Aceptar MP</button>`;
+            } else if (recieve - accept <= 0) {
+                action = `<a href="javascript:;">
+                            <i class="mdi mdi-playlist-check seeAcceptMP ${id_programming} ${dataFT[i].id_material}" data-toggle="tooltip" title="Ver Usuarios" style="font-size: 30px;color:black"></i>
+                          </a>`;
+            }
 
             body.insertAdjacentHTML('beforeend',
                 `<tr>
@@ -81,11 +107,7 @@ $(document).ready(function () {
                     <td>${dataFT[i].abbreviation}</td>
                     <td>${recieve.toLocaleString('es-CO', { minimumFractionDigits: 0, maximumFractionDigits: 2 })}</td>
                     <td>${pending.toLocaleString('es-CO', { minimumFractionDigits: 0, maximumFractionDigits: 2 })}</td> 
-                    ${flag_op == 0 ?
-                        `<td>
-                            ${recieve > 0 ?
-                            `<button class="btn btn-info acceptMaterial" id="accept-${dataFT[i].id_material}">Aceptar MP</button>` : ''}    
-                        </td>` : ''}
+                    ${flag_op == 0 ? `<td>${action}</td>` : ''}
                 </tr>`);
         }
         
@@ -121,11 +143,8 @@ $(document).ready(function () {
         const idMaterial = $(this).attr("id").split("-")[1];
 
         bootbox.confirm({
-            title: "Ingrese Fecha De Ingreso!",
-            message: `<div class="col-sm-12 floating-label enable-floating-label">
-                        <input class="form-control" type="date" name="date" id="dateOPMP" max="${date}"></input>
-                        <label for="date">Fecha</span></label>
-                      </div>`,
+            title: "Aceptar Materia Prima!",
+            message: "¿Desea aceptar la cantidad recibida de este material?.",
             buttons: {
                 confirm: {
                     label: "Guardar",
@@ -138,12 +157,12 @@ $(document).ready(function () {
             },
             callback: function (result) {
                 if (result) {
-                    let date = $("#dateOPMP").val();
+                    // let date = $("#dateOPMP").val();
 
-                    if (!date) {
-                        toastr.error("Ingrese los campos");
-                        return false;
-                    }
+                    // if (!date) {
+                    //     toastr.error("Ingrese los campos");
+                    //     return false;
+                    // }
 
                     let store = allStore.filter(item => item.id_programming == id_programming && item.id_material == idMaterial);
 
@@ -153,23 +172,23 @@ $(document).ready(function () {
                         recieve += parseFloat(item.delivery_store); 
                     });
 
-                    // let form = new FormData();
-                    // form.append("idOPM", data.id_prod_order_material);
-                    // form.append("idMaterial", idMaterial);
-                    // form.append("quantity", recieve);
+                    let form = new FormData();
+                    form.append("idProgramming", id_programming);
+                    form.append("idMaterial", idMaterial);
+                    form.append("quantity", recieve);
                     // form.append("date", date);
 
-                    // $.ajax({
-                    //     type: "POST",
-                    //     url: "/api/saveReceiveOPMPDate",
-                    //     data: form,
-                    //     contentType: false,
-                    //     cache: false,
-                    //     processData: false,
-                    //     success: function (resp) {
-                    //         messagePOD(resp);
-                    //     },
-                    // });
+                    $.ajax({
+                        type: "POST",
+                        url: "/api/acceptMaterialReceive",
+                        data: form,
+                        contentType: false,
+                        cache: false,
+                        processData: false,
+                        success: function (resp) {
+                            messagePOD(resp);
+                        },
+                    });
                 }
             },
         });
@@ -245,4 +264,65 @@ $(document).ready(function () {
         } else if (error) toastr.error(message);
         else if (info) toastr.info(message);
     };
+
+    // Materiales aceptados
+    $(document).on('click', '.seeAcceptMP', async function () {
+        // Obtiene el elemento que fue clickeado
+        const element = $(this)[0];
+
+        // Obtiene todas las clases del elemento
+        const classList = Array.from(element.classList);
+
+        // Asume que las últimas dos clases son los valores dinámicos
+        const id_programming = classList[classList.length - 2]; // id_programming
+        const id_material = classList[classList.length - 1]; // id_material
+
+        let users = await searchData(`/api/materialsComponents/${id_programming}/${id_material}`);
+        let rows = '';
+
+        for (let i = 0; i < users.length; i++) {
+            rows +=
+                `<tr>
+                    <td>${i + 1}</td>
+                    <td>${users[i].firstname}</td>
+                    <td>${users[i].lastname}</td>
+                    <td>${users[i].email}</td>
+                    <td>
+                        ${parseFloat(users[i].quantity).toLocaleString("es-CO", {
+                                minimumFractionDigits: 0,
+                                maximumFractionDigits: 2,
+                            })}
+                    </td>
+                </tr>`;
+        }
+
+        // Mostramos el mensaje con Bootbox
+        bootbox.alert({
+            title: 'Usuarios',
+            message: `
+            <div class="container">
+              <div class="col-12">
+                <div class="table-responsive">
+                  <table class="fixed-table-loading table table-hover">
+                    <thead>
+                      <tr>
+                        <th>No</th>
+                        <th>Nombre</th>
+                        <th>Apellido</th>
+                        <th>Email</th>
+                        <th>Cantidad Aceptada</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      ${rows}
+                    </tbody>
+                  </table>
+                </div>
+              </div> 
+            </div>`,
+            size: 'large',
+            backdrop: true
+        });
+        return false;
+    });
 });
