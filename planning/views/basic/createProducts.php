@@ -104,9 +104,9 @@ if (sizeof($_SESSION) == 0)
                         </div>
                         <div class="row cardMaterials" style="display: none;">
                             <div class="col-sm-7 col-xl-12 mt-4 form-inline justify-content-sm-end">
-                                <div class="col-xs-2 mr-2">
+                                <!-- <div class="col-xs-2 mr-2">
                                     <button class="btn btn-warning" id="btnNewMaterial"><i class="bi bi-plus-circle mr-1"></i>Adicionar</button>
-                                </div>
+                                </div> -->
                                 <div class="col-xs-2 py-2 mr-2">
                                     <button class="btn btn-info" id="btnImportNewMaterials"><i class="bi bi-cloud-arrow-up-fill"></i></button>
                                 </div>
@@ -186,37 +186,22 @@ if (sizeof($_SESSION) == 0)
                                     <div class="card-body">
                                         <form id="formCreateMaterial">
                                             <div class="form-row">
-                                                <?php if ($_SESSION['flag_products_measure'] == '1') { ?>
-                                                    <div class="col-md-2 floating-label enable-floating-label show-label">
-                                                        <label for="materialType">Tipo Material</label>
-                                                        <select class="form-control" id="materialType" name="materialType"></select>
-                                                    </div>
-                                                <?php } ?>
-
-                                                <div class="col-md-2 floating-label enable-floating-label show-label">
-                                                    <label for="refRawMaterial">Referencia</label>
-                                                    <input type="text" class="form-control text-center" id="refRawMaterial" name="refRawMaterial">
+                                                <div class="col-sm-2 floating-label enable-floating-label show-label" style="margin-bottom:20px">
+                                                    <label for="">Referencia</label>
+                                                    <select class="form-control refMaterial" name="refMaterial" id="refMaterial"></select>
                                                 </div>
-
-                                                <div class="col-md-6 floating-label enable-floating-label show-label">
-                                                    <label for="nameRawMaterial">Nombre Materia Prima</label>
-                                                    <input type="text" class="form-control text-center" id="nameRawMaterial" name="nameRawMaterial">
+                                                <div class="col-sm-6 floating-label enable-floating-label show-label" style="margin-bottom:20px">
+                                                    <label for="">Materia Prima</label>
+                                                    <select class="form-control material" name="material" id="material"></select>
                                                 </div>
-
                                                 <?php if ($_SESSION['flag_products_measure'] == '1') { ?>
                                                     <div class="col-sm-2 floating-label enable-floating-label show-label">
                                                         <label for="grammage">Gramaje</label>
                                                         <input type="number" class="form-control text-center" id="grammage" name="grammage">
                                                     </div>
                                                 <?php } ?>
-
-
                                             </div>
                                             <div class="form-row">
-                                                <div class="col-sm-2 floating-label enable-floating-label show-label" style="margin-bottom:20px">
-                                                    <label for="">Magnitud</label>
-                                                    <select class="form-control magnitudes" id="magnitudes" name="magnitude"></select>
-                                                </div>
                                                 <div class="col-sm-2 floating-label enable-floating-label show-label" style="margin-bottom:20px">
                                                     <label for="">Unidad</label>
                                                     <select class="form-control units" id="units" name="unit">
@@ -227,7 +212,6 @@ if (sizeof($_SESSION) == 0)
                                                     <label for="mQuantity">Existencias</label>
                                                     <input type="number" class="form-control text-center" id="mQuantity" name="quantity">
                                                 </div>
-
                                                 <div class="col-sm mt-1">
                                                     <button class="btn btn-info" type="submit" id="btnCreateMaterial" name="btnCreateMaterial">Crear</button>
                                                 </div>
@@ -265,24 +249,6 @@ if (sizeof($_SESSION) == 0)
                     </div>
                 </div>
 
-                <!-- page content -->
-                <!-- <div class="page-content-wrapper mt--45">
-                    <div class="container-fluid">
-                        <div class="row">
-                            <div class="col-12">
-                                <div class="card">
-                                    <div class="card-body">
-                                        <div class="table-responsive">
-                                            <table class="fixed-table-loading table table-hover" id="tblProducts">
-
-                                            </table>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div> -->
                 <div class="page-content-wrapper mt--45">
                     <div class="container-fluid">
                         <div class="row">
@@ -365,18 +331,19 @@ if (sizeof($_SESSION) == 0)
 
     <script>
         flag_products_measure = "<?= $_SESSION['flag_products_measure'] ?>";
+        viewRawMaterial = 1;
     </script>
-    <script src="/global/js/global/configMagnitudes.js"></script>
+    <!-- <script src="/global/js/global/configMagnitudes.js"></script> -->
     <script src="/global/js/global/configUnits.js"></script>
-    <script src="/planning/js/basic/rawMaterials/configMaterialType.js"></script>
-    <script src="/planning/js/basic/rawMaterials/tblRawMaterials.js"></script>
-    <script src="/planning/js/basic/rawMaterials/rawMaterials.js"></script>
+    <script src="/planning/js/basic/rawMaterials/configRawMaterials.js"></script>
+    <script src="/planning/js/basic/invMaterials/tblRawMaterials.js"></script>
+    <script src="/planning/js/basic/invMaterials/invMaterials.js"></script>
     <script src="/planning/js/basic/products/tblProducts.js"></script>
     <script src="/planning/js/basic/products/products.js"></script>
     <script src="/planning/js/basic/products/configProducts.js"></script>
     <script src="../global/js/import/import.js"></script>
     <script src="/planning/js/basic/products/importProducts.js"></script>
-    <script src="/planning/js/basic/rawMaterials/importRawMaterials.js"></script>
+    <script src="/planning/js/basic/invMaterials/importRawMaterials.js"></script>
     <script src="../global/js/import/file.js"></script>
     <script src="../global/js/global/validateImgExt.js"></script>
 

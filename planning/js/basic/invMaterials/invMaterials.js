@@ -8,19 +8,17 @@ $(document).ready(function () {
     e.preventDefault();
     $(".cardImportMaterials").hide(800);
     $(".cardRawMaterials").toggle(800);
+    $("#btnCreateMaterial").text("Crear");
     $("#units").empty();
-
-    sessionStorage.removeItem("id_material");
 
     $("#formCreateMaterial").trigger("reset");
   });
 
   /* Crear producto */
   $("#btnCreateMaterial").click(function (e) {
-    e.preventDefault();
-    let idMaterial = sessionStorage.getItem("id_material") || null;
-    const apiUrl = idMaterial ? "/api/updateMaterials" : "/api/addMaterials";
-    checkDataMaterial(apiUrl, idMaterial);
+    e.preventDefault(); 
+    // const apiUrl = idMaterial ? "/api/updateMaterials" : "/api/addMaterials";
+    checkDataMaterial('/api/addInvMaterials');
   });
 
   /* Actualizar productos */
@@ -29,17 +27,25 @@ $(document).ready(function () {
     $(".cardImportMaterials").hide(800);
     $("#units").empty();
     $(".cardRawMaterials").show(800);
-    // Obtener el ID del elemento
-    let idMaterial = $(this).attr("id").split("-")[1];
+    $("#btnCreateMaterial").text("Actualizar");
 
-    sessionStorage.setItem("id_material", idMaterial);
+    // Obtener el ID del elemento
+    // let idMaterial = $(this).attr("id").split("-")[1];
+
+    // sessionStorage.setItem("id_material", idMaterial);
 
     //obtener data
     const row = $(this).closest("tr")[0];
     let data = tblRawMaterials.fnGetData(row);
-
-    $("#refRawMaterial").val(data.reference);
-    $("#nameRawMaterial").val(data.material);
+ 
+    $(`#refMaterial option[value=${data.id_material}]`).prop(
+      "selected",
+      true
+    );
+    $(`#material option[value=${data.id_material}]`).prop(
+      "selected",
+      true
+    );
     $(`#materialType option[value=${data.id_material_type}]`).prop(
       "selected",
       true
@@ -47,7 +53,9 @@ $(document).ready(function () {
     $(`#magnitudes option[value=${data.id_magnitude}]`).prop("selected", true);
     loadUnitsByMagnitude(data.id_magnitude, 1);
     $(`#units option[value=${data.id_unit}]`).prop("selected", true);
-    $("#costMaterial").val(data.cost);
+ 
+    $("#mQuantity").val(data.quantity); 
+    $("#grammage").val(data.grammage);
 
     //animacion desplazamiento
     $("html, body").animate(
@@ -59,36 +67,48 @@ $(document).ready(function () {
   });
 
   /* Revision data materia prima */
-  const checkDataMaterial = async (url, idMaterial) => {
-    let ref = $("#refRawMaterial").val();
-    let material = $("#nameRawMaterial").val();
-    let materialType = parseInt($("#materialType").val());
+  const checkDataMaterial = async (url) => { 
+    let id_material = parseInt($("#material").val()); 
     let unity = parseInt($("#units").val());
-    let cost = parseFloat($("#costMaterial").val());
+    let quantity = parseFloat($("#mQuantity").val()); 
+    let grammage = parseFloat($("#grammage").val());
 
-    let data = unity * cost;
+    let data = id_material * unity * quantity;
 
-    if (ref == "" || material == "" ||
-      data <= 0 || isNaN(data)
-    ) {
+    if (data <= 0 || isNaN(data)) {
       toastr.error("Ingrese todos los campos");
+      return false;
+    } 
+    
+    if (flag_products_measure == "1") {
+      if (
+        isNaN(grammage) ||
+        grammage <= 0 
+      ) {
+        toastr.error("Ingrese todos los campos");
+        return false;
+      }
+    }
+
+    let dataMaterials = JSON.parse(sessionStorage.getItem('dataMaterials'));
+
+    let arr = dataMaterials.find(item => item.id_material == id_material);
+
+    if (quantity < parseFloat(arr.reserved)) {
+      toastr.error("Existencias con menor cantidad de las reservadas");
       return false;
     }
 
-    let dataMaterial = new FormData(formCreateMaterial);
-    dataMaterial.append("idMaterialType", materialType);
+    let dataMaterial = new FormData(formCreateMaterial); 
 
-    if (idMaterial) {
-      dataMaterial.append("idMaterial", idMaterial);
-    }
+    dataMaterial.append("idMaterial", id_material);
 
     let resp = await sendDataPOST(url, dataMaterial);
 
     messageMaterials(resp);
   };
 
-  /* Eliminar productos */
-
+  /* Eliminar productos 
   deleteMaterialsFunction = () => {
     //obtener data
     const row = $(this.activeElement).closest("tr")[0];
@@ -121,7 +141,7 @@ $(document).ready(function () {
         }
       },
     });
-  };
+  }; */
 
   /* Mensaje de exito */
 
@@ -131,15 +151,9 @@ $(document).ready(function () {
       $(".cardImportMaterials, .cardRawMaterials").hide(800);
       $("#formImportMaterials, #formCreateMaterial").trigger("reset");
       toastr.success(message);
-      updateTable();
+      loadAllData();
       return false;
     } else if (error) toastr.error(message);
     else if (info) toastr.info(message);
   };
-
-  /* Actualizar tabla */
-  function updateTable() {
-    $("#tblRawMaterials").DataTable().clear();
-    $("#tblRawMaterials").DataTable().ajax.reload();
-  }
 });

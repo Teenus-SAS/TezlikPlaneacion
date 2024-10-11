@@ -37,7 +37,8 @@ class MaterialsDao
                                       mi.transit,
                                       mi.days,
                                       m.id_material_type,
-                                      IFNULL(mt.material_type, '') AS material_type
+                                      IFNULL(mt.material_type, '') AS material_type,
+                                      m.cost
                                   FROM materials m
                                     INNER JOIN inv_materials mi ON mi.id_material = m.id_material
                                     LEFT JOIN materials_type mt ON mt.id_material_type = m.id_material_type
@@ -60,14 +61,15 @@ class MaterialsDao
     $connection = Connection::getInstance()->getConnection();
 
     try {
-      $stmt = $connection->prepare("INSERT INTO materials (id_company, id_material_type, reference, material, unit) 
-                                      VALUES(:id_company, :id_material_type, :reference, :material, :unit)");
+      $stmt = $connection->prepare("INSERT INTO materials (id_company, id_material_type, reference, material, unit, cost) 
+                                      VALUES(:id_company, :id_material_type, :reference, :material, :unit, :cost)");
       $stmt->execute([
         'id_company' => $id_company,
         'id_material_type' => $dataMaterial['idMaterialType'],
         'reference' => trim($dataMaterial['refRawMaterial']),
         'material' => strtoupper(trim($dataMaterial['nameRawMaterial'])),
-        'unit' => $dataMaterial['unit']
+        'unit' => $dataMaterial['unit'],
+        'cost' => $dataMaterial['costMaterial'],
       ]);
       $this->logger->info(__FUNCTION__, array('query' => $stmt->queryString, 'errors' => $stmt->errorInfo()));
     } catch (\Exception $e) {
@@ -86,14 +88,15 @@ class MaterialsDao
     $connection = Connection::getInstance()->getConnection();
 
     try {
-      $stmt = $connection->prepare("UPDATE materials SET id_material_type = :id_material_type, reference = :reference, material = :material, unit = :unit
+      $stmt = $connection->prepare("UPDATE materials SET id_material_type = :id_material_type, reference = :reference, material = :material, unit = :unit, cost = :cost
                                     WHERE id_material = :id_material");
       $stmt->execute([
         'id_material' => $dataMaterial['idMaterial'],
         'id_material_type' => $dataMaterial['idMaterialType'],
         'reference' => trim($dataMaterial['refRawMaterial']),
         'material' => strtoupper(trim($dataMaterial['nameRawMaterial'])),
-        'unit' => trim($dataMaterial['unit'])
+        'unit' => $dataMaterial['unit'],
+        'cost' => $dataMaterial['costMaterial']
       ]);
       $this->logger->info(__FUNCTION__, array('query' => $stmt->queryString, 'errors' => $stmt->errorInfo()));
     } catch (\Exception $e) {

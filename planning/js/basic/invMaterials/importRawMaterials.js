@@ -37,11 +37,11 @@ $(document).ready(function () {
 
     importFile(selectedFile)
       .then((data) => {
-        const expectedHeaders = ['referencia', 'material', 'tipo_material', 'magnitud', 'unidad', 'costo'];
+        const expectedHeaders = ['referencia', 'material', 'magnitud', 'unidad', 'existencia', 'gramaje'];
         const actualHeaders = Object.keys(data[0]);
 
-        if (flag_products_measure == '0') { 
-          expectedHeaders.splice(2, 1);
+        if (flag_products_measure == '0') {
+          expectedHeaders.splice(5, 1); 
         }
 
         const missingHeaders = expectedHeaders.filter(header => !actualHeaders.includes(header));
@@ -56,19 +56,19 @@ $(document).ready(function () {
 
         let materialsToImport = data.map((item) => {
           !item.referencia ? item.referencia = '' : item.referencia;
-          !item.material ? item.material = '' : item.material;
-          !item.tipo_material ? item.tipo_material = '' : item.tipo_material;
+          !item.material ? item.material = '' : item.material; 
           !item.magnitud ? item.magnitud = '' : item.magnitud;
           !item.unidad ? item.unidad = '' : item.unidad;
-          !item.costo ? item.costo = '' : item.costo; 
+          !item.existencia ? item.existencia = '' : item.existencia;
+          !item.gramaje ? item.gramaje = '' : item.gramaje;
  
           return {
             refRawMaterial: item.referencia,
-            nameRawMaterial: item.material,
-            materialType: item.tipo_material,
+            nameRawMaterial: item.material, 
             magnitude: item.magnitud,
             unit: item.unidad,
-            quantity: item.existencia, 
+            quantity: item.existencia,
+            grammage: item.gramaje
           };
         });
 
@@ -86,7 +86,7 @@ $(document).ready(function () {
   const checkRawMaterial = (data) => {
     $.ajax({
       type: 'POST',
-      url: '/api/materialsDataValidation',
+      url: '/api/invMaterialsDataValidation',
       data: { importMaterials: data },
       success: function (resp) {
         let arr = resp.import;
@@ -161,7 +161,7 @@ $(document).ready(function () {
   const saveMaterialTable = (data) => {
     $.ajax({
       type: 'POST',
-      url: '../api/addMaterials',
+      url: '/api/addInvMaterials',
       data: { importMaterials: data },
       success: function (r) {
         $('.cardLoading').remove();
@@ -192,7 +192,7 @@ $(document).ready(function () {
 
     let data = [];
 
-    namexlsx = 'Materia_prima.xlsx'; 
+    namexlsx = 'Inventario_materia_prima.xlsx'; 
 
     let dataMaterials = JSON.parse(sessionStorage.getItem('dataMaterials'));
 
@@ -201,11 +201,11 @@ $(document).ready(function () {
         if (flag_products_measure == '1')
           data.push({
             referencia: dataMaterials[i].reference,
-            material: dataMaterials[i].material,
-            tipo_material: dataMaterials[i].material_type,
+            material: dataMaterials[i].material, 
             magnitud: dataMaterials[i].magnitude,
             unidad: dataMaterials[i].unit,
-            costo: dataMaterials[i].cost, 
+            existencia: dataMaterials[i].quantity,
+            gramaje: dataMaterials[i].grammage,
           });
         else
           data.push({
@@ -213,7 +213,7 @@ $(document).ready(function () {
             material: dataMaterials[i].material,
             magnitud: dataMaterials[i].magnitude,
             unidad: dataMaterials[i].unit,
-            costo: dataMaterials[i].cost,
+            existencia: dataMaterials[i].quantity,
           });
       }
 
@@ -222,11 +222,11 @@ $(document).ready(function () {
       XLSX.writeFile(wb, namexlsx);
     } else {
       if (flag_products_measure == '1')
-        url = 'assets/formatsXlsx/Materia_prima(bolsas).xlsx';
+        url = 'assets/formatsXlsx/Inventario_materia_prima(bolsas).xlsx';
       else
-        url = 'assets/formatsXlsx/Materia_prima.xlsx';
+        url = 'assets/formatsXlsx/Inventario_materia_prima.xlsx';
 
-      let newFileName = 'Materia_prima.xlsx';
+      let newFileName = 'Inventario_materia_prima.xlsx';
 
       fetch(url)
         .then(response => response.blob())

@@ -5,22 +5,24 @@ $(document).ready(function () {
     const option = this.id;
     const sections = {
       "link-products": ".cardPMeasure",
-      "link-productsType": ".cardPTypes",
+      "link-materials": ".cardMaterials",
     };
 
     // Ocultar todas las secciones
     $(
-      ".cardPMeasure, .cardCreatePMeasure, .cardImportPMeasure, .cardPTypes, .cardCreatePType"
+      ".cardPMeasure, .cardCreatePMeasure, .cardImportPMeasure, .cardMaterials, .cardRawMaterials, .cardImportMaterials"
     ).hide();
 
     // Mostrar la sección correspondiente según la opción seleccionada
     $(sections[option] || "").show();
 
     // Ajustar el tamaño de todas las tablas con clase 'dataTable'
-    $(".dataTable")
-      .css({ width: "100%" })
-      .children("thead")
-      .css({ width: "100%" });
+    Array.from(document.getElementsByClassName("dataTable")).forEach(
+      (table) => {
+        table.style.width = "1200.55px";
+        table.firstElementChild.style.width = "1200.55px";
+      }
+    );
   });
 
   /* Ocultar panel crear producto */

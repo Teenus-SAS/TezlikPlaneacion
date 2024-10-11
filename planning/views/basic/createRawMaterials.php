@@ -67,30 +67,38 @@ if (sizeof($_SESSION) == 0)
                                     <div class="card-body">
                                         <form id="formCreateMaterial">
                                             <div class="form-row">
-                                                <div class="col-md-4 floating-label enable-floating-label show-label">
+                                                <?php if ($_SESSION['flag_products_measure'] == '1') { ?>
+                                                    <div class="col-md-2 floating-label enable-floating-label show-label">
+                                                        <label for="materialType">Tipo Material</label>
+                                                        <select class="form-control" id="materialType" name="materialType"></select>
+                                                    </div>
+                                                <?php } ?>
+                                                <div class="col-md-2 floating-label enable-floating-label show-label">
                                                     <label for="refRawMaterial">Referencia</label>
                                                     <input type="text" class="form-control" id="refRawMaterial" name="refRawMaterial">
                                                 </div>
-                                                <div class="col-md-8 floating-label enable-floating-label show-label">
+
+                                                <div class="col-md-6 floating-label enable-floating-label show-label">
                                                     <label for="nameRawMaterial">Nombre Materia Prima</label>
                                                     <input type="text" class="form-control" id="nameRawMaterial" name="nameRawMaterial">
                                                 </div>
                                             </div>
                                             <div class="form-row">
-                                                <div class="col-sm-3 floating-label enable-floating-label show-label" style="margin-bottom:20px">
-                                                    <select class="form-control magnitudes" id="magnitudes" name="magnitude"></select>
+                                                <div class="col-sm-2 floating-label enable-floating-label show-label" style="margin-bottom:20px">
                                                     <label for="">Magnitud</label>
+                                                    <select class="form-control magnitudes" id="magnitudes" name="magnitude"></select>
                                                 </div>
-                                                <div class="col-sm-3 floating-label enable-floating-label show-label" style="margin-bottom:20px">
+                                                <div class="col-sm-2 floating-label enable-floating-label show-label" style="margin-bottom:20px">
+                                                    <label for="">Unidad</label>
                                                     <select class="form-control units" id="units" name="unit">
                                                         <option disabled selected>Seleccionar</option>
                                                     </select>
-                                                    <label for="">Unidad</label>
                                                 </div>
                                                 <div class="col-sm-2 floating-label enable-floating-label show-label">
-                                                    <label for="quantity">Existencias</label>
-                                                    <input type="number" class="form-control text-center" id="quantity" name="quantity">
+                                                    <label for="costMaterial">Costo</label>
+                                                    <input type="number" class="form-control text-center" id="costMaterial" name="costMaterial">
                                                 </div>
+
                                                 <div class="col-sm mt-1">
                                                     <button class="btn btn-info" type="submit" id="btnCreateMaterial" name="btnCreateMaterial">Crear</button>
                                                 </div>
@@ -164,6 +172,7 @@ if (sizeof($_SESSION) == 0)
 
     <script src="/global/js/global/configMagnitudes.js"></script>
     <script src="/global/js/global/configUnits.js"></script>
+    <script src="/planning/js/basic/rawMaterials/configMaterialType.js"></script>
     <script src="/planning/js/basic/rawMaterials/tblRawMaterials.js"></script>
     <script src="/planning/js/basic/rawMaterials/rawMaterials.js"></script>
     <script src="../global/js/import/import.js"></script>
