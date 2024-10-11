@@ -290,7 +290,10 @@ $app->post('/saveProgramming', function (Request $request, Response $response, $
         $orders = $ordersDao->findAllOrdersByCompany($id_company);
 
         foreach ($orders as $arr) {
-            if ($arr['status'] != 'EN PRODUCCION' && $arr['status'] != 'ENTREGADO' && $arr['status'] != 'PROGRAMADO' && $arr['id_product'] == $programmings[$i]['id_product']) {
+            if (
+                $arr['status'] != 'FINALIZADO' && $arr['status'] != 'EN PRODUCCION' && $arr['status'] != 'ENTREGADO'
+                && $arr['status'] != 'PROGRAMADO' && $arr['id_product'] == $programmings[$i]['id_product']
+            ) {
                 // Ficha tecnica
                 $productsMaterials = $productsMaterialsDao->findAllProductsMaterials($arr['id_product'], $id_company);
                 $compositeProducts = $compositeProductsDao->findAllCompositeProductsByIdProduct($arr['id_product'], $id_company);
@@ -490,7 +493,10 @@ $app->post('/deleteProgramming', function (Request $request, Response $response,
         $orders = $ordersDao->findAllOrdersByCompany($id_company);
 
         foreach ($orders as $arr) {
-            if ($arr['status'] != 'EN PRODUCCION' && $arr['status'] != 'ENTREGADO' && $arr['status'] != 'PROGRAMADO') {
+            if (
+                $arr['status'] != 'EN PRODUCCION' && $arr['status'] != 'ENTREGADO' &&
+                $arr['status'] != 'PROGRAMADO' && $arr['status'] != 'FINALIZADO'
+            ) {
                 // $result = $generalOrdersDao->changeStatus($arr['id_order'], 'Programar');
 
                 // Ficha tecnica

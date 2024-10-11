@@ -382,7 +382,10 @@ $app->post('/addMaterials', function (Request $request, Response $response, $arg
             $planCicles = $generalPlanCiclesMachinesDao->findAllPlanCiclesMachineByProduct($orders[$i]['id_product'], $id_company);
 
             // if ($orders[$i]['origin'] == 2) {
-            if ($orders[$i]['status'] != 'EN PRODUCCION' && /* $orders[$i]['status'] != 'PROGRAMADO' &&*/  $orders[$i]['status'] != 'FABRICADO' && $orders[$i]['status'] != 'DESPACHO') {
+            if (
+                $orders[$i]['status'] != 'EN PRODUCCION' && $orders[$i]['status'] != 'FINALIZADO' &&
+                $orders[$i]['status'] != 'FABRICADO' && $orders[$i]['status'] != 'DESPACHO'
+            ) {
                 if ($orders[$i]['original_quantity'] > $orders[$i]['accumulated_quantity']) {
                     // Ficha tecnica
 
@@ -751,7 +754,10 @@ $app->post('/updateMaterials', function (Request $request, Response $response, $
             $planCicles = $generalPlanCiclesMachinesDao->findAllPlanCiclesMachineByProduct($orders[$i]['id_product'], $id_company);
 
             // if ($orders[$i]['origin'] == 2) {
-            if ($orders[$i]['status'] != 'EN PRODUCCION' && /* $orders[$i]['status'] != 'PROGRAMADO' &&*/ $orders[$i]['status'] != 'FABRICADO' && $orders[$i]['status'] != 'DESPACHO') {
+            if (
+                $orders[$i]['status'] != 'EN PRODUCCION' &&  $orders[$i]['status'] != 'FINALIZADO' &&
+                $orders[$i]['status'] != 'FABRICADO' && $orders[$i]['status'] != 'DESPACHO'
+            ) {
                 if ($orders[$i]['original_quantity'] > $orders[$i]['accumulated_quantity']) {
 
                     if (sizeof($productsFTM) == 0 || sizeof($planCicles) == 0) {

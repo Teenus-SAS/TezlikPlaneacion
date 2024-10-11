@@ -72,7 +72,7 @@ $app->post('/changeStatusOP', function (Request $request, Response $response, $a
             // Checkear cantidades
             // $order = $generalOrdersDao->checkAccumulatedQuantityOrder($orders[$i]['id_order']);
             if (
-                $orders[$i]['status'] != 'EN PRODUCCION' && /* $orders[$i]['status'] != 'PROGRAMADO' &&*/ $orders[$i]['status'] != 'FABRICADO' &&
+                $orders[$i]['status'] != 'EN PRODUCCION' && $orders[$i]['status'] != 'FINALIZADO' && $orders[$i]['status'] != 'FABRICADO' &&
                 $orders[$i]['status'] != 'DESPACHO' && $orders[$i]['status'] != 'SIN MATERIA PRIMA' && $orders[$i]['status'] != 'SIN FICHA TECNICA'
             ) {
                 if ($orders[$i]['original_quantity'] <= $orders[$i]['accumulated_quantity']) {
