@@ -1,5 +1,5 @@
 $(document).ready(function () {
-    let allStore, allMaterialsAccept;
+    let dataPTOP, allStore, allMaterialsAccept;
     let id_programming = sessionStorage.getItem('id_programming');
 
     loadAllDataPO = async () => {
@@ -15,6 +15,7 @@ $(document).ready(function () {
         allStore = dataStore;
         
         let data = dataOP.find(item => item.id_programming == id_programming);
+        dataPTOP = data;
         let dataFT = dataFTMaterials.filter(item => item.id_product == data.id_product);
         allMaterialsAccept = materialsCM.filter(item => item.id_programming == id_programming);
 
@@ -351,5 +352,18 @@ $(document).ready(function () {
             backdrop: true
         });
         return false;
+    });
+
+    // Descargar PDF
+    $(document).on('click', '.downloadPlaneProduct', function () {
+        let key = this.id;
+        let pdfUrl = dataPTOP[key];
+
+        const link = document.createElement('a');
+        link.href = pdfUrl;
+        link.download = 'plano.pdf'; // Nombre del archivo para descargar
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
     });
 });

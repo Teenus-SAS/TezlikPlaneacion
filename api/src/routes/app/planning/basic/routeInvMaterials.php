@@ -102,36 +102,16 @@ $app->post('/invMaterialsDataValidation', function (Request $request, Response $
 
         for ($i = 0; $i < count($materials); $i++) {
             if (
-                empty($materials[$i]['refRawMaterial']) || empty($materials[$i]['nameRawMaterial']) ||
-                empty($materials[$i]['magnitude']) || empty($materials[$i]['unit']) || empty($materials[$i]['quantity'])
+                empty($materials[$i]['refRawMaterial']) || empty($materials[$i]['nameRawMaterial']) || empty($materials[$i]['quantity'])
             ) {
                 $row = $i + 2;
                 array_push($debugg, array('error' => true, 'message' => "Campos vacios, fila: $row"));
             }
             if (
-                empty(trim($materials[$i]['refRawMaterial'])) || empty(trim($materials[$i]['nameRawMaterial'])) ||
-                empty(trim($materials[$i]['magnitude'])) || empty(trim($materials[$i]['unit'])) || empty(trim($materials[$i]['quantity']))
+                empty(trim($materials[$i]['refRawMaterial'])) || empty(trim($materials[$i]['nameRawMaterial'])) || empty(trim($materials[$i]['quantity']))
             ) {
                 $row = $i + 2;
                 array_push($debugg, array('error' => true, 'message' => "Campos vacios, fila: $row"));
-            }
-
-            // Consultar magnitud
-            $magnitude = $magnitudesDao->findMagnitude($materials[$i]);
-
-            if (!$magnitude) {
-                $row = $i + 2;
-                array_push($debugg, array('error' => true, 'message' => "Magnitud no existe en la base de datos. Fila: $row"));
-            } else {
-                $materials[$i]['idMagnitude'] = $magnitude['id_magnitude'];
-
-                // Consultar unidad
-                $unit = $unitsDao->findUnit($materials[$i]);
-
-                if (!$unit) {
-                    $row = $i + 2;
-                    array_push($debugg, array('error' => true, 'message' => "Unidad no existe en la base de datos. Fila: $row"));
-                }
             }
 
             // Consultar material
@@ -226,15 +206,6 @@ $app->post('/addInvMaterials', function (Request $request, Response $response, $
         $resolution = null;
 
         for ($i = 0; $i < sizeof($materials); $i++) {
-
-            // Consultar magnitud
-            $magnitude = $magnitudesDao->findMagnitude($materials[$i]);
-            $materials[$i]['idMagnitude'] = $magnitude['id_magnitude'];
-
-            // Consultar unidad
-            $unit = $unitsDao->findUnit($materials[$i]);
-            $materials[$i]['unit'] = $unit['id_unit'];
-
             $material = $generalMaterialsDao->findMaterial($materials[$i], $id_company);
             $materials[$i]['idMaterial'] = $material['id_material'];
 
@@ -298,8 +269,6 @@ $app->post('/addInvMaterials', function (Request $request, Response $response, $
 
         for ($i = 0; $i < sizeof($orders); $i++) {
             $status = true;
-            // Checkear cantidades
-            // $order = $generalOrdersDao->checkAccumulatedQuantityOrder($orders[$i]['id_order']);
 
             $productsMaterials = $productsMaterialsDao->findAllProductsMaterials($orders[$i]['id_product'], $id_company);
             $compositeProducts = $compositeProductsDao->findAllCompositeProductsByIdProduct($orders[$i]['id_product'], $id_company);

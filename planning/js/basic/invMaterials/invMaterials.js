@@ -49,10 +49,7 @@ $(document).ready(function () {
     $(`#materialType option[value=${data.id_material_type}]`).prop(
       "selected",
       true
-    );
-    $(`#magnitudes option[value=${data.id_magnitude}]`).prop("selected", true);
-    loadUnitsByMagnitude(data.id_magnitude, 1);
-    $(`#units option[value=${data.id_unit}]`).prop("selected", true);
+    ); 
  
     $("#mQuantity").val(data.quantity); 
     $("#grammage").val(data.grammage);
@@ -68,12 +65,11 @@ $(document).ready(function () {
 
   /* Revision data materia prima */
   const checkDataMaterial = async (url) => { 
-    let id_material = parseInt($("#material").val()); 
-    let unity = parseInt($("#units").val());
+    let id_material = parseInt($("#material").val());  
     let quantity = parseFloat($("#mQuantity").val()); 
     let grammage = parseFloat($("#grammage").val());
 
-    let data = id_material * unity * quantity;
+    let data = id_material * quantity;
 
     if (data <= 0 || isNaN(data)) {
       toastr.error("Ingrese todos los campos");

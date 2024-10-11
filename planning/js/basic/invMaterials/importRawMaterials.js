@@ -37,7 +37,7 @@ $(document).ready(function () {
 
     importFile(selectedFile)
       .then((data) => {
-        const expectedHeaders = ['referencia', 'material', 'magnitud', 'unidad', 'existencia', 'gramaje'];
+        const expectedHeaders = ['referencia', 'material', 'existencia', 'gramaje'];
         const actualHeaders = Object.keys(data[0]);
 
         if (flag_products_measure == '0') {
@@ -56,9 +56,7 @@ $(document).ready(function () {
 
         let materialsToImport = data.map((item) => {
           !item.referencia ? item.referencia = '' : item.referencia;
-          !item.material ? item.material = '' : item.material; 
-          !item.magnitud ? item.magnitud = '' : item.magnitud;
-          !item.unidad ? item.unidad = '' : item.unidad;
+          !item.material ? item.material = '' : item.material;  
           !item.existencia ? item.existencia = '' : item.existencia;
           !item.gramaje ? item.gramaje = '' : item.gramaje;
  
@@ -201,18 +199,14 @@ $(document).ready(function () {
         if (flag_products_measure == '1')
           data.push({
             referencia: dataMaterials[i].reference,
-            material: dataMaterials[i].material, 
-            magnitud: dataMaterials[i].magnitude,
-            unidad: dataMaterials[i].unit,
+            material: dataMaterials[i].material,  
             existencia: dataMaterials[i].quantity,
             gramaje: dataMaterials[i].grammage,
           });
         else
           data.push({
             referencia: dataMaterials[i].reference,
-            material: dataMaterials[i].material,
-            magnitud: dataMaterials[i].magnitude,
-            unidad: dataMaterials[i].unit,
+            material: dataMaterials[i].material, 
             existencia: dataMaterials[i].quantity,
           });
       }

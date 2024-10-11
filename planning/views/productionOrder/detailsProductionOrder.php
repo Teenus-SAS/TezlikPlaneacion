@@ -188,12 +188,12 @@ if (sizeof($_SESSION) == 0)
 													</div>
 													<!-- Planos -->
 													<div class="col-sm-6">
-														<a href="/assets/plano_mecanico" class="form-control text-center" id="link1" style="display: inline-block;">
+														<a href="javascript:;" class="form-control downloadPlaneProduct" id="mechanical_plan" style="display: inline-block;">
 															<b>Plano Mecánico</b>
 														</a>
 													</div>
 													<div class="col-sm-6">
-														<a href="/assets/plano_montaje" class="form-control text-center" id="link2" style="display: inline-block;">
+														<a href="javascript:;" class="form-control downloadPlaneProduct" id="assembly_plan" style="display: inline-block;">
 															<b>Plano Montaje</b>
 														</a>
 													</div>

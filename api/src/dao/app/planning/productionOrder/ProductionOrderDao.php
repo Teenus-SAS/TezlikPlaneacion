@@ -50,6 +50,8 @@ class ProductionOrderDao
                                                 IFNULL(pms.useful_length, 0) AS useful_length, 
                                                 IFNULL(pms.total_width, 0) AS total_width, 
                                                 IFNULL(pms.window, 0) AS window,
+                                                IFNULL(pp.mechanical_plan, '') AS mechanical_plan,
+                                                IFNULL(pp.assembly_plan, '') AS assembly_plan,
                                             -- Maquinas
                                                 m.id_machine, 
                                                 m.machine, 
@@ -64,6 +66,7 @@ class ProductionOrderDao
                                         INNER JOIN orders o ON o.id_order = pg.id_order
                                         INNER JOIN products p ON p.id_product = pg.id_product
                                         LEFT JOIN products_measures pms ON pms.id_product = pg.id_product
+                                        LEFT JOIN products_plans pp ON pp.id_product = pg.id_product
                                         INNER JOIN machines m ON m.id_machine = pg.id_machine
                                         INNER JOIN third_parties c ON c.id_client = o.id_client
                                         INNER JOIN machine_programs pm ON pm.id_machine = pg.id_machine
@@ -71,7 +74,7 @@ class ProductionOrderDao
                                         INNER JOIN process pc ON pc.id_process = pcm.id_process
                                         INNER JOIN orders_status ps ON ps.id_status = o.status
                                       WHERE pg.status = 1 AND pg.id_company = :id_company
-                                        ORDER BY pg.id_programming ASC");
+                                        ORDER BY `o`.`num_order` ASC");
         $stmt->execute([
             'id_company' => $id_company
         ]);

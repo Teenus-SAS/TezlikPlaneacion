@@ -202,12 +202,12 @@ if (sizeof($_SESSION) == 0)
                                                 <?php } ?>
                                             </div>
                                             <div class="form-row">
-                                                <div class="col-sm-2 floating-label enable-floating-label show-label" style="margin-bottom:20px">
+                                                <!-- <div class="col-sm-2 floating-label enable-floating-label show-label" style="margin-bottom:20px">
                                                     <label for="">Unidad</label>
                                                     <select class="form-control units" id="units" name="unit">
                                                         <option disabled selected>Seleccionar</option>
                                                     </select>
-                                                </div>
+                                                </div> -->
                                                 <div class="col-sm-2 floating-label enable-floating-label show-label">
                                                     <label for="mQuantity">Existencias</label>
                                                     <input type="number" class="form-control text-center" id="mQuantity" name="quantity">
@@ -333,8 +333,8 @@ if (sizeof($_SESSION) == 0)
         flag_products_measure = "<?= $_SESSION['flag_products_measure'] ?>";
         viewRawMaterial = 1;
     </script>
-    <!-- <script src="/global/js/global/configMagnitudes.js"></script> -->
-    <script src="/global/js/global/configUnits.js"></script>
+    <!-- <script src="/global/js/global/configMagnitudes.js"></script> 
+    <script src="/global/js/global/configUnits.js"></script>-->
     <script src="/planning/js/basic/rawMaterials/configRawMaterials.js"></script>
     <script src="/planning/js/basic/invMaterials/tblRawMaterials.js"></script>
     <script src="/planning/js/basic/invMaterials/invMaterials.js"></script>
