@@ -2,10 +2,11 @@ $(document).ready(function () {
   // Mostrar Tabla planeacion maquinas
   loadTblRoutes = (idProduct) => {
     tblRoutes = $("#tblRoutes").dataTable({
-      // fixedHeader: true,
+      /* fixedHeader: true,
       scrollY: "400px",
-      scrollCollapse: true,
+      scrollCollapse: true, */
       destroy: true,
+      autoWidth: false,
       pageLength: 50,
       ajax: {
         url: `/api/routesCiclesMachine/${idProduct}`,
