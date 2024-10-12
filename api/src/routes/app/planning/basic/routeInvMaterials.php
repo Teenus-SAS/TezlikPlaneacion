@@ -216,37 +216,37 @@ $app->post('/addInvMaterials', function (Request $request, Response $response, $
             } else {
                 $resolution = $materialsInventoryDao->updateMaterialInventory($materials[$i]);
 
-                if ($material['unit'] != $materials[$i]['unit']) {
-                    $dataProducts = $generalProductsDao->findProductByMaterial($materials[$i]['idMaterial'], $id_company);
+                // if ($material['unit'] != $materials[$i]['unit']) {
+                //     $dataProducts = $generalProductsDao->findProductByMaterial($materials[$i]['idMaterial'], $id_company);
 
-                    foreach ($dataProducts as $j) {
-                        if ($j['id_product'] != 0) {
-                            if (isset($resolution['info'])) break;
+                //     foreach ($dataProducts as $j) {
+                //         if ($j['id_product'] != 0) {
+                //             if (isset($resolution['info'])) break;
 
-                            // Calcular precio total materias
-                            // Consultar todos los datos del producto
-                            $productsMaterial = $productsMaterialsDao->findAllProductsMaterials($j['id_product'], $id_company);
+                //             // Calcular precio total materias
+                //             // Consultar todos los datos del producto
+                //             $productsMaterial = $productsMaterialsDao->findAllProductsMaterials($j['id_product'], $id_company);
 
-                            foreach ($productsMaterial as $k) {
-                                // Obtener materia prima
-                                $material = $generalMaterialsDao->findMaterialAndUnits($k['id_material'], $id_company);
+                //             foreach ($productsMaterial as $k) {
+                //                 // Obtener materia prima
+                //                 $material = $generalMaterialsDao->findMaterialAndUnits($k['id_material'], $id_company);
 
-                                // Convertir unidades
-                                $quantity = $conversionUnitsDao->convertUnits($material, $k, $k['quantity']);
+                //                 // Convertir unidades
+                //                 $quantity = $conversionUnitsDao->convertUnits($material, $k, $k['quantity']);
 
-                                // Guardar Unidad convertida
-                                $generalProductsMaterialsDao->saveQuantityConverted($k['id_product_material'], $quantity);
+                //                 // Guardar Unidad convertida
+                //                 $generalProductsMaterialsDao->saveQuantityConverted($k['id_product_material'], $quantity);
 
-                                $arr = $minimumStockDao->calcStockByMaterial($k['id_material']);
+                //                 $arr = $minimumStockDao->calcStockByMaterial($k['id_material']);
 
-                                if (isset($arr['stock']))
-                                    $resolution = $generalMaterialsDao->updateStockMaterial($k['id_material'], $arr['stock']);
-                            }
+                //                 if (isset($arr['stock']))
+                //                     $resolution = $generalMaterialsDao->updateStockMaterial($k['id_material'], $arr['stock']);
+                //             }
 
-                            if (isset($resolution['info'])) break;
-                        }
-                    }
-                }
+                //             if (isset($resolution['info'])) break;
+                //         }
+                //     }
+                // }
             }
 
             if (isset($resolution['info'])) break;
