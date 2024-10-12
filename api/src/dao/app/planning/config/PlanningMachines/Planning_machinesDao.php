@@ -20,8 +20,31 @@ class Planning_machinesDao
     {
         $connection = Connection::getInstance()->getConnection();
 
-        $stmt = $connection->prepare("SELECT pm.id_program_machine, pm.type_program_machine, pm.id_machine, m.machine, COUNT(py.id_plan_payroll) AS number_workers, pm.hours_day, pm.hour_start, pm.hour_end, pm.year, pm.january, pm.february,
-                                             pm.march, pm.april, pm.may, pm.june, pm.july, pm.august, pm.september, pm.october, pm.november, pm.december, pm.work_shift, pm.status             
+        $stmt = $connection->prepare("SELECT
+                                        -- Columnas
+                                            pm.id_program_machine,
+                                            pm.type_program_machine,
+                                            pm.id_machine,
+                                            m.machine,
+                                            COUNT(py.id_plan_payroll) AS number_workers,
+                                            pm.hours_day,
+                                            pm.hour_start,
+                                            pm.hour_end,
+                                            pm.year,
+                                            pm.january,
+                                            pm.february,
+                                            pm.march,
+                                            pm.april,
+                                            pm.may,
+                                            pm.june,
+                                            pm.july,
+                                            pm.august,
+                                            pm.september,
+                                            pm.october,
+                                            pm.november,
+                                            pm.december,
+                                            pm.work_shift,
+                                            pm.status
                                       FROM machine_programs pm
                                         INNER JOIN machines m ON m.id_machine = pm.id_machine
                                         LEFT JOIN payroll py ON py.id_machine = pm.id_machine
@@ -37,9 +60,9 @@ class Planning_machinesDao
         $connection = Connection::getInstance()->getConnection();
         try {
             $stmt = $connection->prepare("INSERT INTO machine_programs (type_program_machine, id_machine, id_company, number_workers, hours_day, hour_start, hour_end, year, january, 
-                                                        february, march, april, may, june, july, august, september, october, november, december, work_shift)
+                                                        february, march, april, may, june, july, august, september, october, november, december, work_shift, status)
                                       VALUES (:type_program_machine, :id_machine, :id_company, :number_workers, :hours_day, :hour_start, :hour_end, :year, :january, 
-                                              :february, :march, :april, :may, :june, :july, :august, :september, :october, :november, :december, :work_shift)");
+                                              :february, :march, :april, :may, :june, :july, :august, :september, :october, :november, :december, :work_shift, :status)");
             $stmt->execute([
                 'type_program_machine' => $dataPMachines['typePM'],
                 'id_machine' => $dataPMachines['idMachine'],
@@ -62,6 +85,7 @@ class Planning_machinesDao
                 'november' => $dataPMachines['november'],
                 'december' => $dataPMachines['december'],
                 'work_shift' => $dataPMachines['workShift'],
+                'status' => 1,
             ]);
             $this->logger->info(__FUNCTION__, array('query' => $stmt->queryString, 'errors' => $stmt->errorInfo()));
         } catch (\Exception $e) {

@@ -73,6 +73,10 @@ $(document).ready(function () {
         for (let i = 0; i < dataFT.length; i++) {
             let quantity_ftm = formatQuantity(dataFT[i].quantity_ftm, dataFT[i].abbreviation);
             let quantity_total = parseFloat(dataFT[i].quantity_ftm) * parseFloat(data.quantity_programming);
+
+            let cost_ftm = dataFT[i].quantity_ftm * dataFT[i].cost;
+            let cost_total = quantity_total * dataFT[i].cost;
+
             quantity_total = formatQuantity(quantity_total, dataFT[i].abbreviation);
 
             let store = allStore.filter(item => item.id_programming == id_programming && item.id_material == dataFT[i].id_material);
@@ -110,8 +114,10 @@ $(document).ready(function () {
                 `<tr>
                     <td>${dataFT[i].reference_material}</td>
                     <td>${dataFT[i].material}</td>
-                    <td>${quantity_ftm.toLocaleString('es-CO', { minimumFractionDigits: 0, maximumFractionDigits: 2 })}</td>
-                    <td>${quantity_total.toLocaleString('es-CO', { minimumFractionDigits: 0, maximumFractionDigits: 2 })}</td>
+                    <td>${quantity_ftm}</td>
+                    <td>${cost_ftm.toLocaleString('es-CO', { minimumFractionDigits: 0, maximumFractionDigits: 0 })}</td>
+                    <td>${quantity_total}</td>
+                    <td>${cost_total.toLocaleString('es-CO', { minimumFractionDigits: 0, maximumFractionDigits: 0 })}</td>
                     <td>${dataFT[i].abbreviation}</td>
                     <td>${recieve.toLocaleString('es-CO', { minimumFractionDigits: 0, maximumFractionDigits: 2 })}</td>
                     <td>${pending.toLocaleString('es-CO', { minimumFractionDigits: 0, maximumFractionDigits: 2 })}</td> 

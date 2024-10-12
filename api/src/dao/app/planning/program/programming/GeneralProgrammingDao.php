@@ -199,7 +199,7 @@ class GeneralProgrammingDao
                                             o.office_date
                                       FROM orders o
                                         INNER JOIN orders_status ps ON ps.id_status = o.status
-                                      WHERE o.id_company = :id_company AND o.status IN (1, 4) 
+                                      WHERE o.id_company = :id_company AND o.status IN (1, 4, 12) 
                                       AND (o.accumulated_quantity IS NULL OR o.accumulated_quantity != 0)");
         $stmt->execute(['id_company' => $id_company]);
 

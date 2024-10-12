@@ -46,6 +46,7 @@ class GeneralProductsMaterialsDao
                                             m.id_material,
                                             m.reference AS reference_material,
                                             m.material,
+                                            m.cost,
                                             (
                                                 mi.quantity / pm.quantity_converted
                                             ) AS quantity,
