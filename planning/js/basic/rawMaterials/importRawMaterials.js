@@ -60,6 +60,7 @@ $(document).ready(function () {
           !item.tipo_material ? item.tipo_material = '' : item.tipo_material;
           !item.magnitud ? item.magnitud = '' : item.magnitud;
           !item.unidad ? item.unidad = '' : item.unidad;
+          !item.existencia ? item.existencia = '' : item.existencia; 
           !item.costo ? item.costo = '' : item.costo; 
  
           return {
@@ -69,6 +70,7 @@ $(document).ready(function () {
             magnitude: item.magnitud,
             unit: item.unidad,
             quantity: item.existencia, 
+            costMaterial: item.costo
           };
         });
 
@@ -176,76 +178,27 @@ $(document).ready(function () {
   /* Descargar formato */
   $('#btnDownloadImportsMaterials').click(async function (e) {
     e.preventDefault();
-    $('.cardBottons').hide();
-    
-    let form = document.getElementById('formMaterials');
-    form.insertAdjacentHTML(
-      'beforeend',
-      `<div class="col-sm-1 cardLoading" style="margin-top: 7px; margin-left: 15px">
-        <div class="spinner-grow text-dark" role="status">
-            <span class="sr-only">Loading...</span>
-        </div>
-      </div>`
-    );
+          
+    if (flag_products_measure == '1')
+      url = 'assets/formatsXlsx/Materia_prima(bolsas).xlsx';
+    else
+      url = 'assets/formatsXlsx/Materia_prima.xlsx';
 
-    let wb = XLSX.utils.book_new();
+    let newFileName = 'Materia_prima.xlsx';
 
-    let data = [];
+    fetch(url)
+      .then(response => response.blob())
+      .then(blob => {
+        let link = document.createElement('a');
+        link.href = URL.createObjectURL(blob);
+        link.download = newFileName;
 
-    namexlsx = 'Materia_prima.xlsx'; 
+        document.body.appendChild(link);
+        link.click();
 
-    let dataMaterials = JSON.parse(sessionStorage.getItem('dataMaterials'));
-
-    if (dataMaterials.length > 0) {
-      for (i = 0; i < dataMaterials.length; i++) {
-        if (flag_products_measure == '1')
-          data.push({
-            referencia: dataMaterials[i].reference,
-            material: dataMaterials[i].material,
-            tipo_material: dataMaterials[i].material_type,
-            magnitud: dataMaterials[i].magnitude,
-            unidad: dataMaterials[i].unit,
-            costo: dataMaterials[i].cost, 
-          });
-        else
-          data.push({
-            referencia: dataMaterials[i].reference,
-            material: dataMaterials[i].material,
-            magnitud: dataMaterials[i].magnitude,
-            unidad: dataMaterials[i].unit,
-            costo: dataMaterials[i].cost,
-          });
-      }
-
-      let ws = XLSX.utils.json_to_sheet(data);
-      XLSX.utils.book_append_sheet(wb, ws, 'Materiales');
-      XLSX.writeFile(wb, namexlsx);
-    } else {
-      if (flag_products_measure == '1')
-        url = 'assets/formatsXlsx/Materia_prima(bolsas).xlsx';
-      else
-        url = 'assets/formatsXlsx/Materia_prima.xlsx';
-
-      let newFileName = 'Materia_prima.xlsx';
-
-      fetch(url)
-        .then(response => response.blob())
-        .then(blob => {
-          let link = document.createElement('a');
-          link.href = URL.createObjectURL(blob);
-          link.download = newFileName;
-
-          document.body.appendChild(link);
-          link.click();
-
-          document.body.removeChild(link);
-          URL.revokeObjectURL(link.href); // liberar memoria
-        })
-        .catch(console.error);
-    }
-
-    $('.cardLoading').remove();
-    $('.cardBottons').show(400);
-    $('#fileMaterials').val('');
+        document.body.removeChild(link);
+        URL.revokeObjectURL(link.href); // liberar memoria
+      })
+      .catch(console.error);
   });
 });

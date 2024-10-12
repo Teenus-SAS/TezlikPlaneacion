@@ -64,7 +64,7 @@ $(document).ready(function () {
             refRawMaterial: item.referencia,
             nameRawMaterial: item.material, 
             magnitude: item.magnitud,
-            unit: item.unidad,
+            // unit: item.unidad,
             quantity: item.existencia,
             grammage: item.gramaje
           };

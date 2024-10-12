@@ -49,8 +49,52 @@ class PayrollDao
         try {
             $connection = Connection::getInstance()->getConnection();
 
-            $stmt = $connection->prepare("INSERT INTO payroll (id_company, firstname, lastname, position, id_process, id_machine, id_area, status)
-                                          VALUES (:id_company, :firstname, :lastname, :position, :id_process, :id_machine, :id_area, :status)");
+            $stmt = $connection->prepare("INSERT INTO payroll 
+                                            (
+                                                id_company,
+                                                firstname,
+                                                lastname,
+                                                position,
+                                                id_process,
+                                                id_machine,
+                                                id_area,
+                                                -- salary,
+                                                -- transport,
+                                                -- extra_time,
+                                                -- bonification,
+                                                -- endowment,
+                                                -- working_days_month,
+                                                -- hours_day,
+                                                -- factor_benefit,
+                                                -- id_risk,
+                                                -- salary_net,
+                                                -- type_contract,
+                                                -- minute_value,
+                                                status
+                                            )
+                                          VALUES
+                                            (
+                                                :id_company,
+                                                :firstname,
+                                                :lastname,
+                                                :position,
+                                                :id_process,
+                                                :id_machine,
+                                                :id_area,
+                                                -- :salary,
+                                                -- :transport,
+                                                -- :extra_time,
+                                                -- :bonification,
+                                                -- :endowment,
+                                                -- :working_days_month,
+                                                -- :hours_day,
+                                                -- :factor_benefit,
+                                                -- :id_risk,
+                                                -- :salary_net,
+                                                -- :type_contract,
+                                                -- :minute_value,
+                                                :status
+                                            )");
             $stmt->execute([
                 'id_company' => $id_company,
                 'firstname' => strtoupper(trim($dataPayroll['firstname'])),
@@ -59,6 +103,18 @@ class PayrollDao
                 'id_process' => $dataPayroll['idProcess'],
                 'id_machine' => $dataPayroll['idMachine'],
                 'id_area' => $dataPayroll['idArea'],
+                // 'salary' => $dataPayroll['basicSalary'],
+                // 'transport' => $dataPayroll['transport'],
+                // 'extra_time' => $dataPayroll['extraTime'],
+                // 'bonification' => $dataPayroll['bonification'],
+                // 'endowment' => $dataPayroll['endowment'],
+                // 'working_days_month' => $dataPayroll['workingDaysMonth'],
+                // 'hours_day' => $dataPayroll['workingHoursDay'],
+                // 'factor_benefit' => $dataPayroll['factor'],
+                // 'id_risk' => $dataPayroll['typeFactor'],
+                // 'type_contract' => $dataPayroll['risk'],
+                // 'minute_value' => $dataPayroll['minuteValue'],
+                // 'salary_net' => $dataPayroll['salaryNet'],
                 'status' => 1
             ]);
         } catch (\Exception $e) {
@@ -71,8 +127,28 @@ class PayrollDao
         try {
             $connection = Connection::getInstance()->getConnection();
 
-            $stmt = $connection->prepare("UPDATE payroll SET firstname = :firstname, lastname = :lastname, position = :position, id_process = :id_process, id_machine = :id_machine, id_area = :id_area
-                                          WHERE id_plan_payroll = :id_plan_payroll");
+            $stmt = $connection->prepare("UPDATE payroll
+                                          SET
+                                            firstname = :firstname,
+                                            lastname = :lastname,
+                                            POSITION = :position,
+                                            id_process = :id_process,
+                                            id_machine = :id_machine,
+                                            id_area = :id_area
+                                            -- , salary = :salary,
+                                            -- transport = :transport,
+                                            -- extra_time = :extra_time,
+                                            -- bonification = :bonification,
+                                            -- endowment = :endowment,
+                                            -- working_days_month = :working_days_month,
+                                            -- hours_day = :hours_day,
+                                            -- factor_benefit = :factor_benefit,
+                                            -- id_risk = :id_risk,
+                                            -- salary_net = :salary_net,
+                                            -- type_contract = :type_contract,
+                                            -- minute_value = :minute_value
+                                          WHERE
+                                            id_plan_payroll = :id_plan_payroll");
             $stmt->execute([
                 'id_plan_payroll' => $dataPayroll['idPayroll'],
                 'firstname' => strtoupper(trim($dataPayroll['firstname'])),
@@ -80,7 +156,19 @@ class PayrollDao
                 'position' => strtoupper(trim($dataPayroll['position'])),
                 'id_process' => $dataPayroll['idProcess'],
                 'id_machine' => $dataPayroll['idMachine'],
-                'id_area' => $dataPayroll['idArea']
+                'id_area' => $dataPayroll['idArea'],
+                // 'salary' => $dataPayroll['basicSalary'],
+                // 'transport' => $dataPayroll['transport'],
+                // 'extra_time' => $dataPayroll['extraTime'],
+                // 'bonification' => $dataPayroll['bonification'],
+                // 'endowment' => $dataPayroll['endowment'],
+                // 'working_days_month' => $dataPayroll['workingDaysMonth'],
+                // 'hours_day' => $dataPayroll['workingHoursDay'],
+                // 'factor_benefit' => $dataPayroll['factor'],
+                // 'id_risk' => $dataPayroll['typeFactor'],
+                // 'type_contract' => $dataPayroll['risk'],
+                // 'minute_value' => $dataPayroll['minuteValue'],
+                // 'salary_net' => $dataPayroll['salaryNet'],
             ]);
         } catch (\Exception $e) {
             return ['info' => true, 'message' => $e->getMessage()];
