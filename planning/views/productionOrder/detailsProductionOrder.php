@@ -225,15 +225,6 @@ if (sizeof($_SESSION) == 0)
 														</thead>
 														<tbody id="tblPOMaterialsBody">
 														</tbody>
-														<tfoot>
-															<tr>
-																<th colspan="3">Totales:</th>
-																<th class="uniqueClassName dt-head-center"></th>
-																<th class="uniqueClassName dt-head-center"></th>
-																<th></th>
-																<th></th>
-															</tr>
-														</tfoot>
 													</table>
 												</div>
 											</div>
