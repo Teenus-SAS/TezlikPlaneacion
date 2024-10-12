@@ -81,6 +81,10 @@ $(document).ready(function () {
     $("#tblPOMaterialsBody").empty();
     let body = document.getElementById("tblPOMaterialsBody");
 
+    //Inicializa variables para costeo total
+    let totalCostFtm = 0;
+    let totalCostTotal = 0;
+
     for (let i = 0; i < dataFT.length; i++) {
       let quantity_ftm = formatQuantity(
         dataFT[i].quantity_ftm,
@@ -94,8 +98,8 @@ $(document).ready(function () {
       let cost_total = quantity_total * dataFT[i].cost;
 
       // Acumular los costos
-      let totalCostFtm = totalCostFtm + cost_ftm;
-      let totalCostTotal = totalCostTotal + cost_total;
+      totalCostFtm = totalCostFtm + cost_ftm;
+      totalCostTotal = totalCostTotal + cost_total;
 
       quantity_total = formatQuantity(quantity_total, dataFT[i].abbreviation);
 
