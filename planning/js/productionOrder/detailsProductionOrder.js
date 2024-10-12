@@ -115,7 +115,7 @@ $(document).ready(function () {
                     <td>${dataFT[i].reference_material}</td>
                     <td>${dataFT[i].material}</td>
                     <td>${quantity_ftm}</td>
-                    <td>${cost_ftm.toLocaleString('es-CO', { minimumFractionDigits: 0, maximumFractionDigits: 0 })}</td>
+                    <td>${cost_ftm.toLocaleString('es-CO', { minimumFractionDigits: 0, maximumFractionDigits: 2 })}</td>
                     <td>${quantity_total}</td>
                     <td>${cost_total.toLocaleString('es-CO', { minimumFractionDigits: 0, maximumFractionDigits: 0 })}</td>
                     <td>${dataFT[i].abbreviation}</td>
