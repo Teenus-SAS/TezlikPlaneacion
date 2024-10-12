@@ -94,8 +94,8 @@ $(document).ready(function () {
       let cost_total = quantity_total * dataFT[i].cost;
 
       // Acumular los costos
-      totalCostFtm += cost_ftm;
-      totalCostTotal += cost_total;
+      let totalCostFtm = totalCostFtm + cost_ftm;
+      let totalCostTotal = totalCostTotal + cost_total;
 
       quantity_total = formatQuantity(quantity_total, dataFT[i].abbreviation);
 
