@@ -23,6 +23,22 @@ $(document).ready(function () {
         },
       },
       {
+        title: "Disponible",
+        data: null,
+        className: "uniqueClassName dt-head-center ",
+        render: function (data) {
+          return `<a href="javascript:;">
+                    <i id="${data.id_plan_payroll}" class="${
+            data.status == 1 ? "bi bi-person-fill-check" : "bi bi-person-fill-x"
+          } statusPY" data-toggle='tooltip' title='${
+            data.status == 0 ? "Activar" : "Desactivar"
+          } empleado' style="font-size:25px; color: ${
+            data.status == 0 ? "#ff0000" : "#7bb520"
+          };"></i>
+                  </a>`;
+        },
+      },
+      {
         title: "Nombres",
         data: "firstname",
         className: "uniqueClassName dt-head-center ",
@@ -53,21 +69,35 @@ $(document).ready(function () {
         className: "uniqueClassName dt-head-center ",
       },
       {
-        title: "Disponible",
-        data: null,
-        className: "uniqueClassName dt-head-center ",
+        title: "Salario Base",
+        data: 'salary',
+        className: "uniqueClassName dt-head-center",
         render: function (data) {
-          return `<a href="javascript:;">
-                    <i id="${data.id_plan_payroll}" class="${
-            data.status == 1 ? "bi bi-person-fill-check" : "bi bi-person-fill-x"
-          } statusPY" data-toggle='tooltip' title='${
-            data.status == 0 ? "Activar" : "Desactivar"
-          } empleado' style="font-size:25px; color: ${
-            data.status == 0 ? "#ff0000" : "#7bb520"
-          };"></i>
-                  </a>`;
+          return parseFloat(data).toLocaleString("es-CO", {
+            minimumFractionDigits: 0, maximumFractionDigits: 2
+          });
         },
       },
+      {
+        title: "Salario neto",
+        data: 'salary_net',
+        className: "uniqueClassName dt-head-center",
+        render: function (data) {
+          return parseFloat(data).toLocaleString("es-CO", {
+            minimumFractionDigits: 0, maximumFractionDigits: 2
+          });
+        },
+      }, 
+      {
+        title: "Valor Minuto",
+        data: 'minute_value',
+        className: "uniqueClassName dt-head-center",
+        render: function (data) {
+          return parseFloat(data).toLocaleString("es-CO", {
+            minimumFractionDigits: 2, maximumFractionDigits: 2
+          });
+        },
+      },       
       {
         title: "Acciones",
         data: "id_plan_payroll",

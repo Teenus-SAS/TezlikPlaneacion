@@ -1,34 +1,44 @@
 $(document).ready(function () {
   loadDataMachines(2);
-  /* Ocultar panel para crear Nomina */
-  $(".cardCreateEmployee").hide();
+  $('#factor').prop('disabled', true);
 
-  /* Abrir panel para crear Nominas */
-
-  $("#btnNewEmployee").click(function (e) {
+  /* Ocultar modal Nueva nomina */
+  $('#btnCloseCardPayroll').click(function (e) {
     e.preventDefault();
-    $(".cardImportEmployees").hide(800);
-    $(".cardCreateEmployee").toggle(800);
-    $("#btnCreateEmployee").text("Crear");
+    sessionStorage.removeItem('percentage');
+    sessionStorage.removeItem('salary');
+    sessionStorage.removeItem('type_salary');
 
-    sessionStorage.removeItem("id_plan_payroll");
-
-    $("#formCreateEmployee").trigger("reset");
+    $('#createPayroll').modal('hide');
   });
 
-  /* Crear nomina */
-  $("#btnCreateEmployee").click(function (e) {
+  /* Abrir modal crear nomina */
+  $('#btnNewEmployee').click(function (e) {
     e.preventDefault();
 
-    let idPayroll = sessionStorage.getItem("id_plan_payroll") || null;
+    $('.cardImportEmployees').hide(800);
+    $('#createPayroll').modal('show');
+    $('#btnCreatePayroll').html('Crear');
+
+    sessionStorage.removeItem('id_plan_payroll');
+
+    $('#formCreatePayroll').trigger('reset');
+  });
+
+  /* Agregar nueva nomina */
+
+  $('#btnCreatePayroll').click(function (e) {
+    e.preventDefault();
+    let idPayroll = sessionStorage.getItem('id_plan_payroll');
+    
     const url = idPayroll ? "/api/updatePayroll" : "/api/addPayroll";
     checkDataPayroll(url, idPayroll);
   });
-
+  
   /* Actualizar nomina */
   $(document).on("click", ".updatePayroll", function (e) {
     $(".cardImportEmployees").hide(800);
-    $(".cardCreateEmployee").show(800);
+    $('#createPayroll').modal('show');
     $("#btnCreateEmployee").text("Actualizar");
 
     // Obtener el ID del elemento
@@ -46,6 +56,35 @@ $(document).ready(function () {
     $(`#idProcess option[value=${data.id_process}]`).prop("selected", true);
     $(`#idMachine option[value=${data.id_machine}]`).prop("selected", true);
     $("#position").val(data.position);
+
+    $('#basicSalary').val(data.salary);
+    $('#transport').val(data.transport);
+    $('#endowment').val(data.endowment);
+    $('#extraTime').val(data.extra_time);
+    $('#bonification').val(data.bonification);
+
+    $('#workingHoursDay').val(data.hours_day);
+    $('#workingDaysMonth').val(data.working_days_month);
+
+    $(`#risk option[value=${data.id_risk}]`).prop('selected', true);
+    $('#valueRisk').val(
+      data.percentage.toLocaleString('en-US', {
+        minimumFractionDigits: 2,
+        maximumFractionDigits: 2,
+      })
+    );
+
+    sessionStorage.setItem('percentage', data.percentage);
+    sessionStorage.setItem('salary', data.salary);
+
+    if (data.type_contract == 'Nomina')
+      $(`#typeFactor option[value=1]`).prop('selected', true);
+    else if (data.type_contract == 'Servicios')
+      $(`#typeFactor option[value=2]`).prop('selected', true);
+    else if (data.type_contract == 'Manual')
+      $(`#typeFactor option[value=3]`).prop('selected', true);
+
+    $('#typeFactor').change();
 
     // Animar el desplazamiento
     $("html, body").animate({ scrollTop: 0 }, 1000);
@@ -75,12 +114,64 @@ $(document).ready(function () {
       return false;
     }
 
+    let dataPayroll = new FormData(formCreatePayroll);
+
+    let process = parseFloat($('#idProcess').val());
+    let machine = parseFloat($('#idMachine').val());
+    let salary = parseFloat($('#basicSalary').val());
+    let transport = parseFloat($('#transport').val());
+    let endowment = parseFloat($('#endowment').val());
+    let extraTime = parseFloat($('#extraTime').val());
+    let bonification = parseFloat($('#bonification').val());
+    let factor = parseFloat($('#factor').val());
+    let risk = parseFloat($('#risk').val());
+ 
+    basicSalary = salary;
+
+    isNaN(transport) ? (transport = 0) : transport;
+    isNaN(endowment) ? (endowment = 0) : endowment;
+    isNaN(extraTime) ? (extraTime = 0) : extraTime;
+    isNaN(bonification) ? (bonification = 0) : bonification;
+    isNaN(factor) ? (factor = 0) : factor;
+
+    let workingHD = $('#workingHoursDay').val();
+    let workingDM = $('#workingDaysMonth').val();
+    let valueRisk = parseFloat(sessionStorage.getItem('percentage'));
+
+    let data = process * machine * workingDM * workingHD * salary * risk;
+
+    if (isNaN(data) || data <= 0 || factor == '') {
+      toastr.error('Ingrese todos los campos');
+      return false;
+    }
+
+    if (workingDM > 31 || workingHD > 24) {
+      toastr.error(
+        'El campo dias trabajo x mes debe ser menor a 31, y horas trabajo x dia menor a 24'
+      );
+      return false;
+    }
+
+    $('#factor').prop('disabled', false);
+    dataPayroll.append('basicSalary', basicSalary);
+    dataPayroll.append('transport', transport);
+    dataPayroll.append('endowment', endowment);
+    dataPayroll.append('extraTime', extraTime);
+    dataPayroll.append('bonification', bonification);
+    dataPayroll.append('factor', factor);
+    dataPayroll.append('valueRisk', valueRisk);
+
+    salary = parseFloat(
+      sessionStorage.getItem('salary') || $('#basicSalary').val()
+    );
+  
+    dataPayroll.append('salary', salary);
+
     // Preparación de datos
-    let dataArea = new FormData(formCreateEmployee);
-    if (idPayroll) dataArea.append("idPayroll", idPayroll);
+    if (idPayroll) dataPayroll.append("idPayroll", idPayroll);
 
     // Envío de datos y manejo de respuesta
-    let resp = await sendDataPOST(url, dataArea);
+    let resp = await sendDataPOST(url, dataPayroll);
     messagePayroll(resp);
   };
 
@@ -159,9 +250,15 @@ $(document).ready(function () {
   messagePayroll = (data) => {
     const { success, error, info, message } = data;
     if (success) {
-      $(".cardImportEmployees, .cardCreateEmployee").hide(800);
-      $("#formImportEmployees, #formCreateEmployee").trigger("reset");
+      $(".cardImportEmployees").hide(800);
+      $('#createPayroll').modal('hide');
 
+      $("#formImportEmployees, #formCreatePayroll").trigger("reset");
+      sessionStorage.removeItem('percentage');
+      sessionStorage.removeItem('salary');
+      sessionStorage.removeItem('type_salary');
+
+      $('#factor').prop('disabled', true);
       toastr.success(message);
       updateTable();
       return false;

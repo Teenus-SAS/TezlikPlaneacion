@@ -59,8 +59,7 @@ $(document).ready(function () {
           !item.material ? item.material = '' : item.material;
           !item.tipo_material ? item.tipo_material = '' : item.tipo_material;
           !item.magnitud ? item.magnitud = '' : item.magnitud;
-          !item.unidad ? item.unidad = '' : item.unidad;
-          !item.existencia ? item.existencia = '' : item.existencia; 
+          !item.unidad ? item.unidad = '' : item.unidad; 
           !item.costo ? item.costo = '' : item.costo; 
  
           return {
@@ -68,8 +67,7 @@ $(document).ready(function () {
             nameRawMaterial: item.material,
             materialType: item.tipo_material,
             magnitude: item.magnitud,
-            unit: item.unidad,
-            quantity: item.existencia, 
+            unit: item.unidad, 
             costMaterial: item.costo
           };
         });

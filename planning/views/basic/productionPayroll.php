@@ -7,6 +7,7 @@ if (!isset($_SESSION)) {
 if (sizeof($_SESSION) == 0)
     header('location: /');
 ?>
+<?php require_once dirname(dirname(__DIR__)) . '/modals/createPayroll.php'; ?>
 
 <!DOCTYPE html>
 <html lang="es">
@@ -60,7 +61,7 @@ if (sizeof($_SESSION) == 0)
                     </div>
                 </div>
 
-                <div class="page-content-wrapper mt--45 mb-5 cardCreateEmployee">
+                <!-- <div class="page-content-wrapper mt--45 mb-5 cardCreateEmployee">
                     <div class="container-fluid">
                         <div class="row">
                             <div class="col-12">
@@ -92,11 +93,6 @@ if (sizeof($_SESSION) == 0)
                                                     <label for="idMachine">Maquina</label>
                                                     <select type="text" class="form-control idMachine" id="idMachine" name="idMachine"></select>
                                                 </div>
-
-                                                <!-- <div class="col-sm-6 floating-label enable-floating-label show-label drag-area mt-4">
-                                                    <input class="form-control" type="file" id="formFile">
-                                                    <label for="formFile" class="form-label"> Cargar imagen</label>
-                                                </div> -->
                                                 <div class="col-sm mt-3">
                                                     <button class="btn btn-success" id="btnCreateEmployee">Crear</button>
                                                 </div>
@@ -107,7 +103,7 @@ if (sizeof($_SESSION) == 0)
                             </div>
                         </div>
                     </div>
-                </div>
+                </div> -->
 
                 <div class="page-content-wrapper mt--45 mb-5 cardImportEmployees">
                     <div class="container-fluid">
@@ -170,6 +166,9 @@ if (sizeof($_SESSION) == 0)
     <script src="/planning/js/basic/areas/configAreas.js"></script>
     <script src="/planning/js/basic/process/configProcess.js"></script>
     <script src="/planning/js/basic/machines/configMachines.js"></script>
+    <script src="/admin/js/benefits/configBenefits.js"></script>
+    <script src="/admin/js/risks/configRisks.js"></script>
+    <script src="/global/js/general/calcPayroll.js"></script>
     <script src="/planning/js/basic/payroll/tblPayroll.js"></script>
     <script src="/planning/js/basic/payroll/payroll.js"></script>
     <script src="/global/js/import/import.js"></script>

@@ -1,14 +1,20 @@
 <?php
 
+use TezlikPlaneacion\Dao\BenefitsDao;
+use TezlikPlaneacion\dao\FactorBenefitDao;
 use TezlikPlaneacion\dao\GeneralAreaDao;
 use TezlikPlaneacion\dao\GeneralMachinesDao;
 use TezlikPlaneacion\dao\GeneralPayrollDao;
 use TezlikPlaneacion\dao\GeneralProcessDao;
 use TezlikPlaneacion\dao\LastDataDao;
 use TezlikPlaneacion\dao\PayrollDao;
+use TezlikPlaneacion\dao\ValueMinuteDao;
 
 $payrollDao = new PayrollDao();
 $generalPayrollDao = new GeneralPayrollDao();
+$benefitsDao = new BenefitsDao();
+$factorBenefitDao = new FactorBenefitDao();
+$valueMinuteDao = new ValueMinuteDao();
 $generalProcessDao = new GeneralProcessDao();
 $generalMachinesDao = new GeneralMachinesDao();
 $generalAreaDao = new GeneralAreaDao();
@@ -119,6 +125,9 @@ $app->post('/addPayroll', function (Request $request, Response $response, $args)
     $generalProcessDao,
     $generalMachinesDao,
     $generalAreaDao,
+    $benefitsDao,
+    $factorBenefitDao,
+    $valueMinuteDao,
     $lastDataDao
 ) {
     session_start();
@@ -132,6 +141,14 @@ $app->post('/addPayroll', function (Request $request, Response $response, $args)
         $findPayroll = $generalPayrollDao->findPayroll($dataPayroll, $id_company);
 
         if (!$findPayroll) {
+            // Calcular factor benefico
+            $dataBenefits = $benefitsDao->findAllBenefits();
+
+            $dataPayroll = $factorBenefitDao->calcFactorBenefit($dataBenefits, $dataPayroll);
+
+            // Calcular Valor x minuto
+            $dataPayroll = $valueMinuteDao->calculateValueMinute($dataPayroll);
+
             $resolution = $payrollDao->insertPayrollByCompany($dataPayroll, $id_company);
 
             if ($resolution == null)
@@ -192,7 +209,10 @@ $app->post('/addPayroll', function (Request $request, Response $response, $args)
 
 $app->post('/updatePayroll', function (Request $request, Response $response, $args) use (
     $payrollDao,
-    $generalPayrollDao
+    $generalPayrollDao,
+    $benefitsDao,
+    $factorBenefitDao,
+    $valueMinuteDao
 ) {
     session_start();
     $id_company = $_SESSION['id_company'];
@@ -202,6 +222,14 @@ $app->post('/updatePayroll', function (Request $request, Response $response, $ar
     !is_array($payroll) ? $data['id_plan_payroll'] = 0 : $data = $payroll;
 
     if ($data['id_plan_payroll'] == $dataPayroll['idPayroll'] || $data['id_plan_payroll'] == 0) {
+        // Calcular factor benefico
+        $dataBenefits = $benefitsDao->findAllBenefits();
+
+        $dataPayroll = $factorBenefitDao->calcFactorBenefit($dataBenefits, $dataPayroll);
+
+        // Calcular Valor x minuto
+        $dataPayroll = $valueMinuteDao->calculateValueMinute($dataPayroll);
+
         $resolution = $payrollDao->updatePayroll($dataPayroll);
 
         if ($resolution == null)
