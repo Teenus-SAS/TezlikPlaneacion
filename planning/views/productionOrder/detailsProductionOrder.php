@@ -161,7 +161,7 @@ if (sizeof($_SESSION) == 0)
 											</div>
 
 											<?php if ($_SESSION['flag_products_measure'] == 1) { ?>
-												<div class="cardMeasure">
+												<div class="row col-12 cardMeasure">
 													<div class="col-sm-2 floating-label enable-floating-label show-label">
 														<label for="">Ancho</label>
 														<input type="number" class="form-control text-center" id="width" readonly></input>
