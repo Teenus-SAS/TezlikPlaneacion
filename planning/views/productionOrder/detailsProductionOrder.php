@@ -215,9 +215,9 @@ if (sizeof($_SESSION) == 0)
 																<th>Código</th>
 																<th>Descripción</th>
 																<th>Cantidad x Unidad</th>
-																<th>Cantidad Total</th>
+																<th>Cantidad Total OP</th>
 																<th>Costo x Unidad</th>
-																<th>Costo Total</th>
+																<th>Costo Total OP</th>
 																<th>Recibido</th>
 																<th>Pendiente</th>
 																<th id="thActions"></th>
