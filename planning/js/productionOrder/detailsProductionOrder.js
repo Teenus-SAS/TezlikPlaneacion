@@ -160,6 +160,25 @@ $(document).ready(function () {
                     ${flag_op == 0 ? `<td>${action}</td>` : ""}
                 </tr>`
       );
+
+      // Crear el tfoot con las sumas totales
+      body.insertAdjacentHTML(
+        "afterend",
+        `<tfoot>
+      <tr>
+        <td colspan="4"><strong>Total</strong></td>
+        <td><strong>$${totalCostFtm.toLocaleString("es-CO", {
+          minimumFractionDigits: 0,
+          maximumFractionDigits: 2,
+        })}</strong></td>
+        <td><strong>$${totalCostTotal.toLocaleString("es-CO", {
+          minimumFractionDigits: 0,
+          maximumFractionDigits: 0,
+        })}</strong></td>
+        <td colspan="3"></td>
+      </tr>
+    </tfoot>`
+      );
     }
 
     // Procesos
