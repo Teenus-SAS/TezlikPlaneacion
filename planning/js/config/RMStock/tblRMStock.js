@@ -1,6 +1,21 @@
 $(document).ready(function () {
-  /* Cargue tabla de stock */
+  $(".selectMaterial").change(function (e) {
+    e.preventDefault();
+    let id = this.value;
 
+    let dataMaterials = JSON.parse(sessionStorage.getItem('dataMaterials'));
+    let arr = dataMaterials.find(item => item.id_material == id);
+    
+    if (arr.origin != 0) {
+      let dataProducts = JSON.parse(sessionStorage.getItem('dataProducts'));
+      let prod = dataProducts.find(item => item.id_product == arr.origin);
+
+      $("#rMMin").val(prod.min_term);
+      $("#rMMax").val(prod.max_term);
+    }
+  });
+
+  /* Cargue tabla de stock */
   tblRMStock = $("#tblRMStock").dataTable({
     fixedHeader: true,
     scrollY: "400px",
