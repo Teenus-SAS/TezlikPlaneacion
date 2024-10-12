@@ -85,6 +85,7 @@ $(document).ready(function () {
     let totalCostFtm = 0;
     let totalCostTotal = 0;
 
+    // Iterar sobre los datos para generar el body
     for (let i = 0; i < dataFT.length; i++) {
       let quantity_ftm = formatQuantity(
         dataFT[i].quantity_ftm,
@@ -98,8 +99,8 @@ $(document).ready(function () {
       let cost_total = quantity_total * dataFT[i].cost;
 
       // Acumular los costos
-      totalCostFtm = totalCostFtm + cost_ftm;
-      totalCostTotal = totalCostTotal + cost_total;
+      totalCostFtm += cost_ftm;
+      totalCostTotal += cost_total;
 
       quantity_total = formatQuantity(quantity_total, dataFT[i].abbreviation);
 
@@ -168,26 +169,26 @@ $(document).ready(function () {
                     ${flag_op == 0 ? `<td>${action}</td>` : ""}
                 </tr>`
       );
-
-      // Crear el tfoot con las sumas totales
-      body.insertAdjacentHTML(
-        "afterend",
-        `<tfoot>
-      <tr>
-        <td colspan="4"><strong>Total</strong></td>
-        <td><strong>$${totalCostFtm.toLocaleString("es-CO", {
-          minimumFractionDigits: 0,
-          maximumFractionDigits: 2,
-        })}</strong></td>
-        <td><strong>$${totalCostTotal.toLocaleString("es-CO", {
-          minimumFractionDigits: 0,
-          maximumFractionDigits: 0,
-        })}</strong></td>
-        <td colspan="3"></td>
-      </tr>
-    </tfoot>`
-      );
     }
+
+    // Crear el tfoot con las sumas totales
+    body.insertAdjacentHTML(
+      "afterend",
+      `<tfoot>
+          <tr>
+            <td colspan="4"><strong>Total</strong></td>
+            <td><strong>$${totalCostFtm.toLocaleString("es-CO", {
+              minimumFractionDigits: 0,
+              maximumFractionDigits: 2,
+            })}</strong></td>
+            <td><strong>$${totalCostTotal.toLocaleString("es-CO", {
+              minimumFractionDigits: 0,
+              maximumFractionDigits: 0,
+            })}</strong></td>
+            <td colspan="3"></td>
+          </tr>
+        </tfoot>`
+    );
 
     // Procesos
     $("#tblPOProcessBody").empty();
