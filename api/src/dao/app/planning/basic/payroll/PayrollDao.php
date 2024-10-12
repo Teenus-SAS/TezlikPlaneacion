@@ -19,7 +19,18 @@ class PayrollDao
     public function findAllPayrollByCompany($id_company)
     {
         $connection = Connection::getInstance()->getConnection();
-        $stmt = $connection->prepare("SELECT py.id_plan_payroll, py.firstname, py.lastname, py.position, py.status, pc.id_process, pc.process, m.id_machine, m.machine, a.id_plan_area, a.area
+        $stmt = $connection->prepare("SELECT
+                                            py.id_plan_payroll,
+                                            py.firstname,
+                                            py.lastname,
+                                            py.position,
+                                            py.status,
+                                            pc.id_process,
+                                            pc.process,
+                                            m.id_machine,
+                                            m.machine,
+                                            a.id_plan_area,
+                                            a.area
                                       FROM payroll py
                                         INNER JOIN process pc ON pc.id_process = py.id_process
                                         INNER JOIN machines m ON m.id_machine = py.id_machine

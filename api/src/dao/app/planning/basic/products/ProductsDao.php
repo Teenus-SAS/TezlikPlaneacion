@@ -31,18 +31,21 @@ class ProductsDao
                                           IFNULL(pi.accumulated_quantity, 0) AS accumulated_quantity, 
                                           IFNULL(pi.reserved, 0) AS reserved, 
                                           IFNULL(pi.minimum_stock, 0) AS minimum_stock, 
-                                         IFNULL(pi.days, 0) AS days, 
-                                         IFNULL(pi.classification, '') AS classification, 
-                                         'UND' AS abbreviation, 
-                                         IFNULL(pm.length, 0) AS length, 
-                                         IFNULL(pm.total_width, 0) AS total_width, 
-                                         p.id_product_type, 
-                                         IFNULL(pt.product_type, '') AS product_type, 
-                                         p.composite, 
-                                         p.origin,
-                                         IFNULL((SELECT id_composite_product FROM products_composite WHERE id_product = p.id_product LIMIT 1), 0) AS composite_product
+                                          IFNULL(pi.days, 0) AS days, 
+                                          IFNULL(pi.classification, '') AS classification, 
+                                          'UND' AS abbreviation, 
+                                          IFNULL(pm.length, 0) AS length, 
+                                          IFNULL(pm.total_width, 0) AS total_width, 
+                                          p.id_product_type, 
+                                          IFNULL(pt.product_type, '') AS product_type, 
+                                          p.composite, 
+                                          p.origin,
+                                          IFNULL((SELECT id_composite_product FROM products_composite WHERE id_product = p.id_product LIMIT 1), 0) AS composite_product,
+                                          IFNULL(sp.min_term, '') AS min_term, 
+                                          IFNULL(sp.max_term, '') AS max_term
                                   FROM products p
                                     LEFT JOIN inv_products pi ON pi.id_product = p.id_product
+                                    LEFT JOIN inv_stock_products sp ON sp.id_product = p.id_product
                                     LEFT JOIN products_measures pm ON pm.id_product = p.id_product
                                     LEFT JOIN products_type pt ON pt.id_product_type = p.id_product_type
                                   WHERE p.id_company = :id_company");
