@@ -271,7 +271,7 @@ if (sizeof($_SESSION) == 0)
                                     </li>
                                     <li class="nav-item">
                                         <a class="nav-link selectNavigation" id="link-materials" data-toggle="pill" href="javascript:;" role="tab" aria-controls="pills-projects" aria-selected="false">
-                                            <i class="bi bi-diagram-3 mr-1"></i>Materiales
+                                            <i class="bi bi-diagram-3 mr-1"></i>Materias Primas
                                         </a>
                                     </li>
                                 </ul>
