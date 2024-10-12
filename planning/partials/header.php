@@ -67,7 +67,7 @@
                                                 <li class="planProductsM" style="display: none;">
                                                 <?php } ?>
                                                 <i class="fas fa-cube"></i>
-                                                <a href="/planning/products">Productos</a>
+                                                <a href="/planning/products">Productos y Materia Prima</a>
                                                 </li>
 
                                                 <?php if ($_SESSION['planning_product'] == 1) { ?>
