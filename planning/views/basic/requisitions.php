@@ -183,9 +183,13 @@ if (sizeof($_SESSION) == 0)
                                                     <label for="">Materia Prima</label>
                                                     <input type="text" class="form-control" id="materialName" name="materialName" readonly>
                                                 </div>
-                                                <div class="col-sm-8 floating-label enable-floating-label show- mb-3 label">
+                                                <div class="col-sm-6 floating-label enable-floating-label show- mb-3 label">
                                                     <label for="">Proveedor</label>
                                                     <select class="form-control client" name="idProvider" id="clientMP"></select>
+                                                </div>
+                                                <div class="col-sm-2 floating-label enable-floating-label show- mb-3 label">
+                                                    <label for="">Precio de Venta</label>
+                                                    <input class="form-control text-center" type="text" id="priceSaleMP" readonly>
                                                 </div>
                                                 <div class="col-sm-2 floating-label enable-floating-label show- mb-3 label">
                                                     <label for="">Cantidad Min Venta</label>
