@@ -31,6 +31,7 @@ class ProductionOrderDao
                                                 pg.max_date AS max_date_programming, 
                                                 HOUR(pg.max_date) AS max_hour,
                                                 (pg.min_programming * IFNULL(py.minute_value, 0)) AS cost_payroll,
+                                                IFNULL(py.minute_value, 0) AS minute_value,
                                             -- Pedido
                                                 o.id_order, 
                                                 o.num_order, 

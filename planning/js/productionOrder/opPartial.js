@@ -33,8 +33,8 @@ $(document).ready(function () {
             const end_date = full.end_date;
 
             return `Inicio: ${moment(start_date).format(
-              "DD/MM/YYYY HH:mm A"
-            )}<br>Fin: ${moment(end_date).format("DD/MM/YYYY HH:mm A")}`;
+              "DD/MM/YYYY hh:mm A"
+            )}<br>Fin: ${moment(end_date).format("DD/MM/YYYY hh:mm A")}`;
           },
         },
         {
@@ -70,12 +70,34 @@ $(document).ready(function () {
           },
         },
         {
+          title: "Costo Nomina",
+          data: null,
+          className: "uniqueClassName dt-head-center",
+          render: function (data, type, row) {
+            // Convierte las fechas a objetos Date
+            const startDate = new Date(data.start_date);
+            const endDate = new Date(data.end_date);
+
+            // Obtiene la diferencia en milisegundos
+            const differenceInMs = endDate - startDate;
+
+            // Convierte la diferencia de milisegundos a minutos
+            const minutes = Math.floor(differenceInMs / 1000 / 60);
+            let cost_payroll = parseFloat(data.minute_value) * minutes;
+
+            return `$${cost_payroll.toLocaleString("es-CO", {
+              minimumFractionDigits: 0,
+              maximumFractionDigits: 0,
+            })}`;
+          },
+        },
+        {
           title: "Fecha Creacion",
           data: "creation_date",
           className: "uniqueClassName dt-head-center",
           width: "200px",
           render: function (data, type, full, meta) {
-            return moment(data).format("DD/MM/YYYY HH:mm A");
+            return moment(data).format("DD/MM/YYYY hh:mm A");
           },
         },
         {

@@ -36,7 +36,7 @@ $(document).ready(function () {
 
           return `Inicio: ${moment(start_date).format(
             "DD/MM/YYYY HH:mm A"
-          )}<br>Fin: ${moment(end_date).format("DD/MM/YYYY HH:mm A")}`;
+          )}<br>Fin: ${moment(end_date).format("DD/MM/YYYY hh:mm A")}`;
         },
       },
       {

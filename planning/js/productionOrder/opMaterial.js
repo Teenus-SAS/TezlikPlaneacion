@@ -52,7 +52,7 @@ $(document).ready(function () {
           className: "uniqueClassName dt-head-center",
           width: "200px",
           render: function (data, type, full, meta) {
-            return moment(data).format("DD/MM/YYYY HH:mm A");
+            return moment(data).format("DD/MM/YYYY hh:mm A");
           },
         },
         {
