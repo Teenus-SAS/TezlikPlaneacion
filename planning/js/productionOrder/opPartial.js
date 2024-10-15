@@ -139,17 +139,17 @@ $(document).ready(function () {
         });
 
         // Actualizar el contenido del footer con los totales calculados
-        $(this.api().column(3).footer()).html(
+        $(this.api().column(4).footer()).html(
           `${$.fn.dataTable.render
             .number(".", ",", 0, "")
             .display(totalDefectiveUnits)} Und`
         );
-        $(this.api().column(4).footer()).html(
+        $(this.api().column(5).footer()).html(
           `${$.fn.dataTable.render
             .number(".", ",", 0, "")
             .display(totalDeliveredQuantity)} Und`
         );
-        $(this.api().column(5).footer()).html(
+        $(this.api().column(6).footer()).html(
           `${$.fn.dataTable.render
             .number(".", ",", 0, "")
             .display(totalCostPayroll)} Und`
