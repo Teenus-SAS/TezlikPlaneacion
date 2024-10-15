@@ -19,13 +19,24 @@ class MachinesDao
   public function findAllMachinesByCompany($id_company)
   {
     $connection = Connection::getInstance()->getConnection();
-    $stmt = $connection->prepare("SELECT m.id_machine, m.machine, pcm.cicles_hour, COUNT(DISTINCT py.id_plan_payroll) AS employees
+    $stmt = $connection->prepare("SELECT
+                                    -- Columnas
+                                      m.id_machine,
+                                      m.machine,
+                                      m.cost,
+                                      m.years_depreciation,
+                                      m.minute_depreciation,
+                                      m.hours_machine,
+                                      m.days_machine,
+                                      m.cicles_machine,
+                                      pcm.cicles_hour,
+                                      COUNT(DISTINCT py.id_plan_payroll) AS employees
                                   FROM machines m
-                                   LEFT JOIN machine_cicles pcm ON pcm.id_machine = m.id_machine 
-                                   LEFT JOIN payroll py ON py.id_machine = m.id_machine AND py.status = 1
+                                    LEFT JOIN machine_cicles pcm ON pcm.id_machine = m.id_machine
+                                    LEFT JOIN payroll py ON py.id_machine = m.id_machine AND py.status = 1
                                   WHERE m.id_company = :id_company
-                                  GROUP BY m.id_machine
-                                  ORDER BY `m`.`machine`");
+                                    GROUP BY m.id_machine
+                                    ORDER BY `m`.`machine`");
     $stmt->execute(['id_company' => $id_company]);
 
     $this->logger->info(__FUNCTION__, array('query' => $stmt->queryString, 'errors' => $stmt->errorInfo()));
@@ -41,11 +52,15 @@ class MachinesDao
     $connection = Connection::getInstance()->getConnection();
 
     try {
-      $stmt = $connection->prepare("INSERT INTO machines (id_company ,machine) 
-                                    VALUES (:id_company ,:machine)");
+      $stmt = $connection->prepare("INSERT INTO machines (id_company, machine, cost, years_depreciation, hours_machine, days_machine) 
+                                    VALUES (:id_company, :machine, :cost, :years_depreciation, :hours_machine, :days_machine)");
       $stmt->execute([
         'id_company' => $id_company,
-        'machine' => strtoupper(trim($dataMachine['machine']))
+        'machine' => strtoupper(trim($dataMachine['machine'])),
+        'cost' => $dataMachine['cost'],
+        'years_depreciation' => $dataMachine['depreciationYears'],
+        'hours_machine' => $dataMachine['hoursMachine'],
+        'days_machine' => $dataMachine['daysMachine']
       ]);
       $this->logger->info(__FUNCTION__, array('query' => $stmt->queryString, 'errors' => $stmt->errorInfo()));
     } catch (\Exception $e) {
@@ -64,10 +79,15 @@ class MachinesDao
     $connection = Connection::getInstance()->getConnection();
 
     try {
-      $stmt = $connection->prepare("UPDATE machines SET machine = :machine WHERE id_machine = :id_machine");
+      $stmt = $connection->prepare("UPDATE machines SET machine = :machine, cost = :cost, years_depreciation = :years_depreciation, hours_machine = :hours_machine, days_machine = :days_machine
+                                    WHERE id_machine = :id_machine");
       $stmt->execute([
         'id_machine' => $dataMachine['idMachine'],
-        'machine' => strtoupper(trim($dataMachine['machine']))
+        'machine' => strtoupper(trim($dataMachine['machine'])),
+        'cost' => $dataMachine['cost'],
+        'years_depreciation' => $dataMachine['depreciationYears'],
+        'hours_machine' => $dataMachine['hoursMachine'],
+        'days_machine' => $dataMachine['daysMachine']
       ]);
       $this->logger->info(__FUNCTION__, array('query' => $stmt->queryString, 'errors' => $stmt->errorInfo()));
     } catch (\Exception $e) {

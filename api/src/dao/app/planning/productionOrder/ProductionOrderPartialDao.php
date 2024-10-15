@@ -87,6 +87,7 @@ class ProductionOrderPartialDao
                                             po.start_date, 
                                             po.end_date,
                                             IFNULL(py.minute_value, 0) AS minute_value,
+                                            m.minute_depreciation,
                                             po.operator, 
                                             u.firstname, 
                                             u.lastname, 
@@ -100,6 +101,7 @@ class ProductionOrderPartialDao
                                       FROM prod_order_part_deliv po
                                         INNER JOIN users u ON u.id_user = po.operator
                                         INNER JOIN programming pg ON pg.id_programming = po.id_programming
+                                        INNER JOIN machines m ON m.id_machine = pg.id_machine
                                         INNER JOIN machine_cicles pcm ON pcm.id_product = pg.id_product AND pcm.id_machine = pg.id_machine
                                         LEFT JOIN payroll py ON py.id_process = pcm.id_process AND py.id_machine = pg.id_machine
                                         INNER JOIN products p ON p.id_product = pg.id_product

@@ -22,7 +22,7 @@ $(document).ready(function () {
 
     for (let table of tables) { 
       table.style.width = "1217.55px"; 
-      ta.style.width = "1217.55px";
+      table.style.width = "1217.55px";
     }
   });
 
@@ -71,6 +71,12 @@ $(document).ready(function () {
 
     // Asignar valores a los campos del formulario y animar
     $("#machine").val(data.machine);
+    $('#costMachine').val(data.cost); 
+    $('#depreciationYears').val(data.years_depreciation);
+    $('#hoursMachine').val(data.hours_machine);
+    $('#daysMachine').val(data.days_machine);
+    
+    $('#ciclesMachine').val(data.cicles_machine);
     $("html, body").animate(
       {
         scrollTop: 0,
@@ -82,8 +88,14 @@ $(document).ready(function () {
   /* Verificar datos */
   const checkDataMachines = async (url, idMachine) => {
     let machine = $("#machine").val();
+    let costMachine = parseFloat($('#costMachine').val());
+    let depreciationYears = parseFloat($('#depreciationYears').val());
+    let hoursMachine = parseFloat($('#hoursMachine').val());
+    let daysMachine = parseFloat($('#daysMachine').val());
 
-    if (!machine.trim()) {
+    let data = costMachine * depreciationYears * hoursMachine * daysMachine;
+
+    if (!machine.trim() || isNaN(data) || data <= 0) {
       toastr.error("Ingrese todos los campos");
       return false;
     }

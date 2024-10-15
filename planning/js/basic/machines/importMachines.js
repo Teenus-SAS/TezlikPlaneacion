@@ -38,7 +38,7 @@ $(document).ready(function () {
 
     importFile(selectedFile)
       .then((data) => {
-        const expectedHeaders = ['maquina'];
+        const expectedHeaders = ['maquina', 'precio', 'años_depreciacion', 'horas_trabajo_dia', 'dias_trabajo_mes'];
         const actualHeaders = Object.keys(data[0]);
 
         const missingHeaders = expectedHeaders.filter(header => !actualHeaders.includes(header));
@@ -52,8 +52,18 @@ $(document).ready(function () {
         }
 
         let machinesToImport = data.map((item) => {
+          !item.maquina ? item.maquina = '' : item.maquina;
+          !item.precio ? item.precio = '' : item.precio;
+          !item.años_depreciacion ? item.años_depreciacion = '' : item.años_depreciacion;
+          !item.horas_trabajo_dia ? item.horas_trabajo_dia = '' : item.horas_trabajo_dia;
+          !item.dias_trabajo_mes ? item.dias_trabajo_mes = '' : item.dias_trabajo_mes;
+
           return {
             machine: item.maquina,
+            cost: item.precio,
+            depreciationYears: item.años_depreciacion,
+            hoursMachine: item.horas_trabajo_dia,
+            daysMachine: item.dias_trabajo_mes,
           };
         });
         checkMachine(machinesToImport);
@@ -74,7 +84,9 @@ $(document).ready(function () {
       url: '/api/machinesDataValidation',
       data: { importMachines: data },
       success: function (resp) {
-        if (resp.error == true) {
+        let arr = resp.import;
+
+        if (arr.length > 0 && arr.error == true) {
           $('.cardLoading').remove();
           $('.cardBottons').show(400);
           $('#fileMachines').val('');
@@ -83,29 +95,60 @@ $(document).ready(function () {
           return false;
         }
 
-        bootbox.confirm({
-          title: '¿Desea continuar con la importación?',
-          message: `Se han encontrado los siguientes registros:<br><br>Datos a insertar: ${resp.insert} <br>Datos a actualizar: ${resp.update}`,
-          buttons: {
-            confirm: {
-              label: 'Si',
-              className: 'btn-success',
+        if (resp.debugg.length > 0) {
+          $('.cardLoading').remove();
+          $('.cardBottons').show(400);
+          $('#formImportMachines').val('');
+
+          // Generar el HTML para cada mensaje
+          let concatenatedMessages = resp.debugg.map(item =>
+            `<li>
+              <span class="badge text-danger" style="font-size: 16px;">${item.message}</span>
+            </li>`
+          ).join('');
+
+          // Mostramos el mensaje con Bootbox
+          bootbox.alert({
+            title: 'Estado Importación Data',
+            message: `
+            <div class="container">
+              <div class="col-12">
+                <ul>
+                  ${concatenatedMessages}
+                </ul>
+              </div> 
+            </div>`,
+            size: 'large',
+            backdrop: true
+          });
+          return false;
+        }
+        
+        if (typeof arr === 'object' && !Array.isArray(arr) && arr !== null && resp.debugg.length == 0) {
+          bootbox.confirm({
+            title: '¿Desea continuar con la importación?',
+            message: `Se han encontrado los siguientes registros:<br><br>Datos a insertar: ${arr.insert} <br>Datos a actualizar: ${arr.update}`,
+            buttons: {
+              confirm: {
+                label: 'Si',
+                className: 'btn-success',
+              },
+              cancel: {
+                label: 'No',
+                className: 'btn-danger',
+              },
             },
-            cancel: {
-              label: 'No',
-              className: 'btn-danger',
+            callback: function (result) {
+              if (result) {
+                saveMachineTable(data);
+              } else {
+                $('.cardLoading').remove();
+                $('.cardBottons').show(400);
+                $('#fileMachines').val('');
+              }
             },
-          },
-          callback: function (result) {
-            if (result) {
-              saveMachineTable(data);
-            } else {
-              $('.cardLoading').remove();
-              $('.cardBottons').show(400);
-              $('#fileMachines').val('');
-            }
-          },
-        });
+          });
+        }
       },
     });
   };

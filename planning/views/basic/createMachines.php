@@ -185,12 +185,31 @@ if (sizeof($_SESSION) == 0)
                                     <div class="card-body">
                                         <form id="formCreateMachine">
                                             <div class="form-row">
-                                                <div class="col-sm-10 floating-label enable-floating-label show-label">
+                                                <div class="col-sm-6 floating-label enable-floating-label show-label" style="margin-bottom:20px">
                                                     <input type="text" class="form-control" name="machine" id="machine">
-                                                    <label for="">Nombre</label>
+                                                    <label>Nombre</label>
                                                 </div>
-                                                <div class="col-sm mt-1">
-                                                    <button class="btn btn-success" id="btnCreateMachine">Crear</button>
+                                                <div class="col-sm-2 floating-label enable-floating-label show-label" style="margin-bottom:20px">
+                                                    <input type="number" class="form-control text-center" name="cost" id="costMachine" data-toggle="tooltip" title="Ingrese el precio de compra">
+                                                    <label>Precio</label>
+                                                </div>
+                                                <div class="col-sm-2 floating-label enable-floating-label show-label" style="margin-bottom:20px">
+                                                    <input type="number" class="form-control text-center" name="depreciationYears" id="depreciationYears">
+                                                    <label>Años Depreciación</label>
+                                                </div>
+                                            </div>
+                                            <div class="form-row">
+                                                <div class="col-sm-2 floating-label enable-floating-label show-label" style="margin-bottom:20px">
+                                                    <input type="number" class="form-control text-center" name="hoursMachine" id="hoursMachine">
+                                                    <label>Horas de Trabajo (día)</label>
+                                                </div>
+                                                <div class="col-sm-2 floating-label enable-floating-label show-label" style="margin-bottom:5px">
+                                                    <input type="number" class="form-control text-center" name="daysMachine" id="daysMachine">
+                                                    <label>Dias de Trabajo (Mes)</label>
+                                                </div>
+
+                                                <div class="col-xs-2" style="margin-bottom:0px;margin-top:5px;">
+                                                    <button class="btn btn-success" id="btnCreateMachine">Crear Máquina</button>
                                                 </div>
                                             </div>
                                         </form>

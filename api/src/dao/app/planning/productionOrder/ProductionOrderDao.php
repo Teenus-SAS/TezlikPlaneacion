@@ -58,6 +58,7 @@ class ProductionOrderDao
                                                 m.id_machine, 
                                                 m.machine, 
                                                 pm.hour_start,
+                                                (pg.min_programming * m.minute_depreciation) AS cost_machine,
                                             -- Procesos
                                                 pc.id_process, 
                                                 pc.process, 

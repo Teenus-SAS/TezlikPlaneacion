@@ -320,6 +320,7 @@ if (sizeof($_SESSION) == 0)
 																<th>Fecha Inicio</th>
 																<th>Fecha Final</th>
 																<th>Costo Nomina</th>
+																<th>Costo Maquina</th>
 															</tr>
 														</thead>
 														<tbody id="tblPOProcessBody">
@@ -378,6 +379,7 @@ if (sizeof($_SESSION) == 0)
 																	<th class="uniqueClassName dt-head-center unitsDefects"></th>
 																	<th class="uniqueClassName dt-head-center unitsProcessing"></th>
 																	<th class="uniqueClassName dt-head-center costPayroll"></th>
+																	<th></th>
 																	<th></th>
 																</tr>
 															</tfoot>

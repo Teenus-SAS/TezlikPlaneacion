@@ -1,5 +1,15 @@
 $(document).ready(function () {
   /* Cargue tabla de Máquinas */
+  // Función para formatear los numeros
+  const renderNum = (data) => {
+    let num = parseFloat(data);
+    const options = Math.abs(num) < 0.01
+      ? { minimumFractionDigits: 2, maximumFractionDigits: 9 }
+      : { maximumFractionDigits: 2 };
+
+    num = num.toLocaleString('es-CO', options);
+    return num;
+  };
 
   tblMachines = $("#tblMachines").dataTable({
     fixedHeader: true,
@@ -26,6 +36,24 @@ $(document).ready(function () {
         title: "Máquina",
         data: "machine",
         className: "uniqueClassName dt-head-center ",
+      },
+      {
+        title: "Costo",
+        data: "cost",
+        className: "uniqueClassName dt-head-center",
+        render: (data, type, row) => { return `$ ${renderNum(data)}` },
+      },
+      {
+        title: "Años de Depreciación",
+        data: "years_depreciation",
+        className: "uniqueClassName dt-head-center",
+        render: (data, type, row) => renderNum(data),
+      },
+      {
+        title: "Depreciación X Minuto",
+        data: "minute_depreciation",
+        className: "uniqueClassName dt-head-center",
+        render: (data, type, row) => renderNum(data),
       },
       {
         title: "Acciones",

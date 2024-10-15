@@ -77,6 +77,16 @@ class LastDataDao
         $material = $query->fetch($connection::FETCH_ASSOC);
         return $material;
     }
+    /* Maquinas */
+    public function lastInsertedMachineId($id_company)
+    {
+        $connection = Connection::getInstance()->getConnection();
+        $sql = "SELECT MAX(id_machine) AS id_machine FROM machines WHERE id_company = :id_company";
+        $query = $connection->prepare($sql);
+        $query->execute(['id_company' => $id_company]);
+        $material = $query->fetch($connection::FETCH_ASSOC);
+        return $material;
+    }
 
     /* Nomina */
     public function lastInsertedPayrollId($id_company)
