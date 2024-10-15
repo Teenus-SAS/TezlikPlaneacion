@@ -85,7 +85,8 @@ class ProductionOrderPartialDao
                                             p.origin, 
                                             IFNULL(pi.quantity, 0) AS quantity_product, 
                                             po.start_date, 
-                                            po.end_date, 
+                                            po.end_date,
+                                            IFNULL(py.minute_value, 0) AS minute_value,
                                             po.operator, 
                                             u.firstname, 
                                             u.lastname, 
@@ -99,6 +100,8 @@ class ProductionOrderPartialDao
                                       FROM prod_order_part_deliv po
                                         INNER JOIN users u ON u.id_user = po.operator
                                         INNER JOIN programming pg ON pg.id_programming = po.id_programming
+                                        INNER JOIN machine_cicles pcm ON pcm.id_product = pg.id_product AND pcm.id_machine = pg.id_machine
+                                        LEFT JOIN payroll py ON py.id_process = pcm.id_process AND py.id_machine = pg.id_machine
                                         INNER JOIN products p ON p.id_product = pg.id_product
                                         LEFT JOIN inv_products pi ON pi.id_product = pg.id_product
                                         -- Subconsulta para obtener el último usuario de entrega
@@ -115,7 +118,8 @@ class ProductionOrderPartialDao
                                                     WHERE cur_inner.id_part_deliv = cur.id_part_deliv
                                             )
                                         ) AS last_user ON last_user.id_part_deliv = po.id_part_deliv
-                                      WHERE po.id_programming = :id_programming AND po.id_company = :id_company");
+                                      WHERE po.id_programming = :id_programming AND po.id_company = :id_company
+                                        GROUP BY pg.id_programming");
         $stmt->execute([
             'id_programming' => $id_programming,
             'id_company' => $id_company

@@ -339,15 +339,6 @@ if (sizeof($_SESSION) == 0)
 														<label for="endDateTime">Finalización</label>
 														<input type="datetime-local" class="form-control text-center" id="endDateTime" name="endDate">
 													</div>
-													<!-- <div class="col-sm-6 floating-label enable-floating-label show-label" style="margin-bottom:20px">
-														<label for="operator">Operario</label>
-														<?php
-														//$id_user = $_SESSION['idUser'];
-														//$name = $_SESSION['name'];
-														//$lastname = $_SESSION['lastname'];
-														?>
-														<input type="text" class="form-control" name="operator" id="operator" readonly value="<?php echo "$name $lastname" ?>">
-													</div> -->
 													<div class=" col-sm-2 floating-label enable-floating-label show-label">
 														<label for="waste">Unidades Defectuosas</label>
 														<input type="number" class="form-control text-center" id="waste" name="waste">
@@ -376,6 +367,7 @@ if (sizeof($_SESSION) == 0)
 																	<th colspan="3">Totales:</th>
 																	<th class="uniqueClassName dt-head-center unitsDefects"></th>
 																	<th class="uniqueClassName dt-head-center unitsProcessing"></th>
+																	<th></th>
 																	<th></th>
 																	<th></th>
 																</tr>

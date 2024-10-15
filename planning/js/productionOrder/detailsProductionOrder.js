@@ -12,7 +12,7 @@ $(document).ready(function () {
       ]
     );
     // let dataOP = JSON.parse(sessionStorage.getItem('dataOP'));
-    // let dataFTMaterials = JSON.parse(sessionStorage.getItem('dataFTMaterials'));
+    sessionStorage.setItem('dataFTMaterials', JSON.stringify(dataFTMaterials));
     // let allStore = JSON.parse(sessionStorage.getItem('dataAllStore'));
     allStore = dataStore;
 
@@ -194,8 +194,8 @@ $(document).ready(function () {
     $("#tblPOProcessBody").empty();
     body = document.getElementById("tblPOProcessBody");
 
-    min_date = moment(data.min_date_programming).format("DD/MM/YYYY HH:mm A");
-    max_date = moment(data.max_date_programming).format("DD/MM/YYYY HH:mm A");
+    min_date = moment(data.min_date_programming).format("DD/MM/YYYY hh:mm A");
+    max_date = moment(data.max_date_programming).format("DD/MM/YYYY hh:mm A");
 
     body.insertAdjacentHTML(
       "beforeend",
@@ -205,7 +205,7 @@ $(document).ready(function () {
                 <td>${data.machine}</td>
                 <td>${min_date}</td>
                 <td>${max_date}</td>
-                <td>$ ${parseFloat(data.cost_payroll).toLocaleString('es-CO', { minimumFractionDigits: 0, maximumFractionDigits: 0 })}</td>
+                <td>$${parseFloat(data.cost_payroll).toLocaleString('es-CO', { minimumFractionDigits: 0, maximumFractionDigits: 0 })}</td>
             </tr>`
     );
 

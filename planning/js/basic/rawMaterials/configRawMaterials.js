@@ -7,21 +7,23 @@ $(document).ready(function () {
     let dataMaterials = JSON.stringify(data);
     sessionStorage.setItem("dataMaterials", dataMaterials);
 
-    let btnDeliverPartialOP = document.getElementById('btnDeliverPartialOP');
+    setTimeout(() => {
+      let btnDeliverPartialOP = document.getElementById('btnDeliverPartialOP');
 
-    if (btnDeliverPartialOP) {
-      let id_programming = sessionStorage.getItem('id_programming');
-      let dataOP = JSON.parse(sessionStorage.getItem('dataOP'));
+      if (btnDeliverPartialOP) {
+        let id_programming = sessionStorage.getItem('id_programming');
+        let dataOP = JSON.parse(sessionStorage.getItem('dataOP'));
 
-      let arr = dataOP.find(item => item.id_programming == id_programming);
-      let dataFTMaterials = JSON.parse(sessionStorage.getItem('dataFTMaterials'));
+        let arr = dataOP.find(item => item.id_programming == id_programming);
+        let dataFTMaterials = JSON.parse(sessionStorage.getItem('dataFTMaterials'));
 
-      data = dataFTMaterials.filter(item => item.id_product == arr.id_product)
-        .map((item) => ({ ...item, reference: item.reference_material }));
-    }
+        data = dataFTMaterials.filter(item => item.id_product == arr.id_product)
+          .map((item) => ({ ...item, reference: item.reference_material }));
+      }
 
-    setSelectsMaterials('.refMaterial', data, 'reference');
-    setSelectsMaterials('.material', data, 'material');
+      setSelectsMaterials('.refMaterial', data, 'reference');
+      setSelectsMaterials('.material', data, 'material');
+    }, 2000);
   };
 
   // setSelectsMaterials = (data) => {
