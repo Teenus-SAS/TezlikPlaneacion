@@ -84,6 +84,7 @@ $(document).ready(function () {
     //Inicializa variables para costeo total
     let totalCostFtm = 0;
     let totalCostTotal = 0;
+    let totalCostLb = 0;
 
     // Iterar sobre los datos para generar el body
     for (let i = 0; i < dataFT.length; i++) {

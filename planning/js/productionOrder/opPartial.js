@@ -24,7 +24,7 @@ $(document).ready(function () {
           },
         },
         {
-          title: "Fechas",
+          title: "Fechas de Producción",
           data: null,
           className: "uniqueClassName dt-head-center",
           width: "200px",
@@ -35,6 +35,15 @@ $(document).ready(function () {
             return `Inicio: ${moment(start_date).format(
               "DD/MM/YYYY hh:mm A"
             )}<br>Fin: ${moment(end_date).format("DD/MM/YYYY hh:mm A")}`;
+          },
+        },
+        {
+          title: "Fecha Entrega",
+          data: "creation_date",
+          className: "uniqueClassName dt-head-center",
+          width: "200px",
+          render: function (data, type, full, meta) {
+            return moment(data).format("DD/MM/YYYY hh:mm A");
           },
         },
         {
@@ -70,7 +79,7 @@ $(document).ready(function () {
           },
         },
         {
-          title: "Costo Nomina",
+          title: "Costo Mano de Obra",
           data: null,
           className: "uniqueClassName dt-head-center",
           render: function (data, type, row) {
@@ -92,15 +101,6 @@ $(document).ready(function () {
           },
         },
         {
-          title: "Fecha Creacion",
-          data: "creation_date",
-          className: "uniqueClassName dt-head-center",
-          width: "200px",
-          render: function (data, type, full, meta) {
-            return moment(data).format("DD/MM/YYYY hh:mm A");
-          },
-        },
-        {
           title: "Acciones",
           data: null,
           className: "uniqueClassName dt-head-center",
@@ -118,14 +118,24 @@ $(document).ready(function () {
         },
       ],
       footerCallback: function (row, data, start, end, display) {
-        // Calcular totales de columnas específicas
+        //Calcula totales de columnas específicas
         let totalDefectiveUnits = 0;
         let totalDeliveredQuantity = 0;
+        let totalCostPayroll = 0;
 
-        // Iterar a través de todas las filas visibles para sumar los valores de columnas
+        //Suma los valores de columnas
         data.forEach(function (row) {
-          totalDefectiveUnits += parseFloat(row.waste) || 0; // Suma de unidades defectuosas
-          totalDeliveredQuantity += parseFloat(row.partial_quantity) || 0; // Suma de cantidad entregada
+          totalDefectiveUnits += parseFloat(row.waste) || 0;
+          totalDeliveredQuantity += parseFloat(row.partial_quantity) || 0;
+
+          // Calcula el costo de la nómina para cada fila
+          const startDate = new Date(row.start_date);
+          const endDate = new Date(row.end_date);
+          const differenceInMs = endDate - startDate;
+          const minutes = Math.floor(differenceInMs / 1000 / 60);
+          const cost_payroll = parseFloat(row.minute_value) * minutes || 0;
+
+          totalCostPayroll += cost_payroll;
         });
 
         // Actualizar el contenido del footer con los totales calculados
@@ -138,6 +148,11 @@ $(document).ready(function () {
           `${$.fn.dataTable.render
             .number(".", ",", 0, "")
             .display(totalDeliveredQuantity)} Und`
+        );
+        $(this.api().column(5).footer()).html(
+          `${$.fn.dataTable.render
+            .number(".", ",", 0, "")
+            .display(totalCostPayroll)} Und`
         );
       },
     });

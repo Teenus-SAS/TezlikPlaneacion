@@ -2,6 +2,7 @@ $(document).ready(function () {
   // Seleccionar los elementos <th> a observar
   const targetDefects = document.querySelector(".unitsDefects");
   const targetProcessing = document.querySelector(".unitsProcessing");
+  const labourMO = document.querySelector(".labourMO");
 
   // Crear una instancia de MutationObserver
   const observer = new MutationObserver(function (mutationsList, observer) {
