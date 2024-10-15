@@ -79,7 +79,7 @@ $(document).ready(function () {
           },
         },
         {
-          title: "Costo Mano de Obra",
+          title: "Costo MO",
           data: null,
           className: "uniqueClassName dt-head-center",
           render: function (data, type, row) {

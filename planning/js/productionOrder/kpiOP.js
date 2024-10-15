@@ -2,7 +2,7 @@ $(document).ready(function () {
   // Seleccionar los elementos <th> a observar
   const targetDefects = document.querySelector(".unitsDefects");
   const targetProcessing = document.querySelector(".unitsProcessing");
-  const labourMO = document.querySelector(".labourMO");
+  const costPayroll = document.querySelector(".labourMO");
 
   // Crear una instancia de MutationObserver
   const observer = new MutationObserver(function (mutationsList, observer) {
@@ -29,6 +29,14 @@ $(document).ready(function () {
               .replace(".", "")
               .replace(",", ".")
           ) || 0;
+        const costPayroll =
+          parseFloat(
+            $(".unitsProcessing")
+              .text()
+              .replace(" Und", "")
+              .replace(".", "")
+              .replace(",", ".")
+          ) || 0;
 
         // Realizar el cálculo del KPI de calidad
         if (unitsProcessing > 0) {
@@ -37,6 +45,7 @@ $(document).ready(function () {
           $("#kpiQualityOP")
             .text(`QC: ${quality.toFixed(2)}%`)
             .show();
+          $("#costPayroll").val(`CMO: $${costPayroll.toFixed(0)}`);
         } else {
           $("#kpiQualityOP").hide();
         }
