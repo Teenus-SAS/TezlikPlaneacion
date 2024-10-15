@@ -92,6 +92,28 @@ $(document).ready(function () {
           },
         },
         {
+          title: "Costo Maquina",
+          data: null,
+          className: "uniqueClassName dt-head-center",
+          render: function (data, type, row) {
+            // Convierte las fechas a objetos Date
+            const startDate = new Date(data.start_date);
+            const endDate = new Date(data.end_date);
+
+            // Obtiene la diferencia en milisegundos
+            const differenceInMs = endDate - startDate;
+
+            // Convierte la diferencia de milisegundos a minutos
+            const minutes = Math.floor(differenceInMs / 1000 / 60);
+            let cost_machine = parseFloat(data.minute_depreciation) * minutes;
+
+            return `$${cost_machine.toLocaleString("es-CO", {
+              minimumFractionDigits: 0,
+              maximumFractionDigits: 0,
+            })}`;
+          },
+        },
+        {
           title: "Fecha Creacion",
           data: "creation_date",
           className: "uniqueClassName dt-head-center",

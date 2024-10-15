@@ -206,6 +206,7 @@ $(document).ready(function () {
                 <td>${min_date}</td>
                 <td>${max_date}</td>
                 <td>$${parseFloat(data.cost_payroll).toLocaleString('es-CO', { minimumFractionDigits: 0, maximumFractionDigits: 0 })}</td>
+                <td>$${parseFloat(data.cost_machine).toLocaleString('es-CO', { minimumFractionDigits: 0, maximumFractionDigits: 0 })}</td>
             </tr>`
     );
 
