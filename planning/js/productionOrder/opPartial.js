@@ -150,9 +150,9 @@ $(document).ready(function () {
             .display(totalDeliveredQuantity)} Und`
         );
         $(this.api().column(6).footer()).html(
-          `${$.fn.dataTable.render
+          `$${$.fn.dataTable.render
             .number(".", ",", 0, "")
-            .display(totalCostPayroll)} Und`
+            .display(totalCostPayroll)}`
         );
       },
     });
