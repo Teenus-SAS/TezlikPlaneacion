@@ -135,6 +135,11 @@ $app->post('/addPlanMachines', function (Request $request, Response $response, $
         for ($i = 0; $i < sizeof($machines); $i++) {
             $machine = $generalMachinesDao->findMachine($machines[$i], $id_company);
 
+            $machines[$i]['cost'] = str_replace(',', '.', $machines[$i]['cost']);
+            $machines[$i]['depreciationYears'] = str_replace(',', '.', $machines[$i]['depreciationYears']);
+            $machines[$i]['hoursMachine'] = str_replace(',', '.', $machines[$i]['hoursMachine']);
+            $machines[$i]['daysMachine'] = str_replace(',', '.', $machines[$i]['daysMachine']);
+
             if (!$machine) {
                 $resolution = $machinesDao->insertMachinesByCompany($machines[$i], $id_company);
                 $lastMachine = $lastDataDao->lastInsertedMachineId($id_company);

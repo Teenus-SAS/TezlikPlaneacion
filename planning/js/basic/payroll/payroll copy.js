@@ -1,216 +1,209 @@
-$(document).ready(function () { 
-  $('#factor').prop('disabled', true);
+$(document).ready(function () {
+  let selectedFile;
 
-  /* Ocultar modal Nueva nomina */
-  $('#btnCloseCardPayroll').click(function (e) {
+  $('.cardImportPayroll').hide();
+
+  $('#btnImportNewPayroll').click(function (e) {
     e.preventDefault();
-    sessionStorage.removeItem('percentage');
-    sessionStorage.removeItem('salary');
-    sessionStorage.removeItem('type_salary');
-
     $('#createPayroll').modal('hide');
+    $('.cardImportPayroll').toggle(800);
   });
 
-  /* Abrir modal crear nomina */
+  $('#filePayroll').change(function (e) {
+    e.preventDefault();
+    selectedFile = e.target.files[0];
+  });
 
-  $('#btnNewPayroll').click(function (e) {
+  $('#btnImportPayroll').click(function (e) {
     e.preventDefault();
 
-    $('.cardImportPayroll').hide(800);
-    $('#createPayroll').modal('show');
-    $('#btnCreatePayroll').html('Crear');
+    let file = $('#filePayroll').val();
 
-    sessionStorage.removeItem('id_plan_payroll');
-
-    $('#formCreatePayroll').trigger('reset');
-  });
-
-  /* Agregar nueva nomina */
-
-  $('#btnCreatePayroll').click(function (e) {
-    e.preventDefault();
-    let idPayroll = sessionStorage.getItem('id_plan_payroll');
-
-    if (idPayroll == '' || idPayroll == null) {
-      checkDataPayroll('/api/addPayroll', idPayroll);
-    } else {
-      checkDataPayroll('/api/updatePayroll', idPayroll);
-    }
-  });
-
-  /* Actualizar nomina */
-  $(document).on('click', '.updatePayroll', function (e) {
-    $('.cardImportPayroll').hide(800);
-    $('#createPayroll').modal('show');
-    $('#btnCreatePayroll').html('Actualizar');
-
-    let idPayroll = this.id;
-    sessionStorage.setItem('id_plan_payroll', idPayroll);
-    let allPayroll = JSON.parse(sessionStorage.getItem('dataPayroll'));
-
-    let data = allPayroll.find(item => item.id_plan_payroll == idPayroll);
-
-    $('#employee').val(data.employee);
-    // $(`#idProcess option:contains(${data.process})`).prop('selected', true);
-    $(`#idProcess option[value=${data.id_process}]`).prop('selected', true);
-
-    $('#basicSalary').val(data.salary);
-    $('#transport').val(data.transport);
-    $('#endowment').val(data.endowment);
-    $('#extraTime').val(data.extra_time);
-    $('#bonification').val(data.bonification);
-
-    $('#workingHoursDay').val(data.hours_day);
-    $('#workingDaysMonth').val(data.working_days_month);
-
-    $(`#risk option[value=${data.id_risk}]`).prop('selected', true);
-    $('#valueRisk').val(
-      data.percentage.toLocaleString('en-US', {
-        minimumFractionDigits: 2,
-        maximumFractionDigits: 2,
-      })
-    );
-
-    sessionStorage.setItem('percentage', data.percentage);
-    sessionStorage.setItem('salary', data.salary);
-
-    if (data.type_contract == 'Nomina')
-      $(`#typeFactor option[value=1]`).prop('selected', true);
-    else if (data.type_contract == 'Servicios')
-      $(`#typeFactor option[value=2]`).prop('selected', true);
-    else if (data.type_contract == 'Manual')
-      $(`#typeFactor option[value=3]`).prop('selected', true);
-
-    $('#typeFactor').change();
-
-    $('html, body').animate(
-      {
-        scrollTop: 0,
-      },
-      1000
-    );
-  });
-
-  /* Revision data nomina */
-  const checkDataPayroll = async (url, idPayroll) => {
-    let employee = $('#employee').val();
-    let process = $('#idProcess').val();
-    let dataPayroll = new FormData(formCreatePayroll);
-
-    if (type_payroll == '1') {
-      let salary = parseFloat($('#basicSalary').val());
-      let transport = parseFloat($('#transport').val());
-      let endowment = parseFloat($('#endowment').val());
-      let extraTime = parseFloat($('#extraTime').val());
-      let bonification = parseFloat($('#bonification').val());
-      let factor = parseFloat($('#factor').val());
-      let risk = parseFloat($('#risk').val());
- 
-      basicSalary = salary; 
-
-      isNaN(transport) ? (transport = 0) : transport;
-      isNaN(endowment) ? (endowment = 0) : endowment;
-      isNaN(extraTime) ? (extraTime = 0) : extraTime;
-      isNaN(bonification) ? (bonification = 0) : bonification;
-      isNaN(factor) ? (factor = 0) : factor;
-
-      let workingHD = $('#workingHoursDay').val();
-      let workingDM = $('#workingDaysMonth').val();
-      let valueRisk = parseFloat(sessionStorage.getItem('percentage'));
-
-      let data = process * workingDM * workingHD * salary * risk;
-
-      if (isNaN(data) || data <= 0 || employee.trim() == '' || factor == '') {
-        toastr.error('Ingrese todos los campos');
-        return false;
-      }
-
-      if (workingDM > 31 || workingHD > 24) {
-        toastr.error(
-          'El campo dias trabajo x mes debe ser menor a 31, y horas trabajo x dia menor a 24'
-        );
-        return false;
-      }
-
-      $('#factor').prop('disabled', false);
-      dataPayroll.append('basicSalary', basicSalary);
-      dataPayroll.append('transport', transport);
-      dataPayroll.append('endowment', endowment);
-      dataPayroll.append('extraTime', extraTime);
-      dataPayroll.append('bonification', bonification);
-      dataPayroll.append('factor', factor);
-      dataPayroll.append('valueRisk', valueRisk);
-
-      salary = parseFloat(
-        strReplaceNumber(
-          sessionStorage.getItem('salary') || $('#basicSalary').val()
-        )
-      );
-  
-      dataPayroll.append('salary', salary);
-    }
-
-    if (idPayroll != '' || idPayroll != null)
-      dataPayroll.append('idPayroll', idPayroll);
-
-    let resp = await sendDataPOST(url, dataPayroll);
-
-    message(resp);
-  };
-
-  /* Eliminar carga nomina 
-  deleteFunction = async (id) => {
-    let allPayroll = JSON.parse(sessionStorage.getItem('dataPayroll'));
-    let allProductProcess = JSON.parse(sessionStorage.getItem('dataProductProcess'));
-
-    let data = allPayroll.find(item => item.id_plan_payroll == id);
-
-    let pcProcess = allProductProcess.filter(item => item.id_process == data.id_process);
-    let pyProcess = allPayroll.filter(item => item.id_process == data.id_process);
-
-    if (pcProcess.length > 0 && pyProcess.length == 1) {
-      toastr.error('Proceso asociado a Ficha de productos');
+    if (!file) {
+      toastr.error('Seleccione un archivo');
       return false;
     }
 
-    let id_product_process = data.id_product_process.toString().split(",");
-    
-    if (id_product_process[0] != 0) {
-      let status = true;
-      
-      for (let i = 0; i < id_product_process.length; i++) {
-        let dataPProcess = allProductProcess.find(item => item.id_product_process == id_product_process[i]);
-        
-        if (dataPProcess.employee != '') {
-          let employee = dataPProcess.employee.toString().split(",");
-          if (employee.length == 1) {
-            status = false; 
-            break;
-          }
+    $('.cardBottons').hide();
+
+    let form = document.getElementById('formPayroll');
+
+    form.insertAdjacentHTML(
+      'beforeend',
+      `<div class="col-sm-1 cardLoading" style="margin-top: 7px; margin-left: 15px">
+        <div class="spinner-border text-secondary" role="status">
+            <span class="sr-only">Loading...</span>
+        </div>
+      </div>`
+    );
+
+    importFile(selectedFile)
+      .then(async (data) => {
+        let arr = data.rowObject;
+
+         if (arr.length == 0) {
+          $('.cardLoading').remove();
+          $('.cardBottons').show(400);
+          $('#filePayroll').val('');
+          toastr.error('Archivo vacio. Verifique nuevamente');
+          return false;
         }
+
+        const expectedHeaders = ['nombres_y_apellidos', 'proceso', 'salario_basico', 'transporte', 'dotaciones', 'horas_extras', 'otros_ingresos', 'prestacional', 'horas_trabajo_x_dia', 'dias_trabajo_x_mes', 'tipo_riesgo', 'tipo_nomina', 'factor'];
+        const actualHeaders = data.actualHeaders;
+
+        const missingHeaders = expectedHeaders.filter(header => !actualHeaders.includes(header));
+
+        if (missingHeaders.length > 0) {
+          $('.cardLoading').remove();
+          $('.cardBottons').show(400);
+          $('#filePayroll').val('');
+
+          toastr.error('Archivo no corresponde a el formato. Verifique nuevamente');
+          return false;
+        }
+        let resp = await validateDataPy(arr);
+ 
+        if (resp.importStatus == true)
+          checkPayroll(resp.payrollToImport, resp.insert, resp.update);
+      })
+      .catch(() => {
+        console.log('Ocurrio un error. Intente Nuevamente');
+      });
+  });
+
+  /* Validar Data */
+  const validateDataPy = async (data) => {
+    let payrollToImport = [];
+    let importStatus = true;
+    let insert = 0;
+    let update = 0;
+
+    for (let i = 0; i < data.length; i++) {
+      let arr = data[i];
+
+      let basicSalary = '0';
+      let transport = '0';
+      let endowment = '0';
+      let extraTime = '0';
+      let bonification = '0';
+
+      if (arr.salario_basico > 0) {
+        basicSalary = arr.salario_basico.toString();
+      }
+      if (arr.transporte > 0) {
+        transport = arr.transporte.toString();
+      }
+      if (arr.dotaciones > 0) {
+        endowment = arr.dotaciones.toString();
+      }
+      if (arr.horas_extras > 0) {
+        extraTime = arr.horas_extras.toString();
+      }
+      if (arr.otros_ingresos > 0) {
+        bonification = arr.otros_ingresos.toString();
       }
 
-      if (status == false) {// Esa ficha de productos tiene solo a esa nomina asociada, si se elimina pasaria a hacer global el costo de la mano de obra
-        toastr.error('Nomina asociada directamente a ficha de productos.'); 
-        return false;
+      // Validación de campos vacíos o nulos
+      if (
+        !arr.nombres_y_apellidos || !arr.proceso || !arr.prestacional || !arr.horas_trabajo_x_dia ||
+        !arr.dias_trabajo_x_mes || !arr.tipo_riesgo || !arr.tipo_nomina || !arr.factor ||
+        basicSalary.trim() == '' || transport.trim() == '' || endowment.trim() == ''||
+        extraTime.trim() == '' || bonification.trim() == '' 
+      ) {
+        $('.cardLoading').remove();
+        $('.cardBottons').show(400);
+        $('#filePayroll').val('');
+        importStatus = false;
+
+        toastr.error(`Columna vacía en la fila: ${i + 2}`);
+        break;
       }
+
+      // Validación de campos que no están vacíos o nulos pero son solo espacios
+      if (
+        !arr.nombres_y_apellidos.toString().trim() || !arr.proceso.toString().trim() || !arr.prestacional.toString().trim() || !arr.horas_trabajo_x_dia.toString().trim() ||
+        !arr.dias_trabajo_x_mes.toString().trim() || !arr.tipo_riesgo.toString().trim() || !arr.tipo_nomina.toString().trim() || !arr.factor.toString().trim()
+      ) {
+        $('.cardLoading').remove();
+        $('.cardBottons').show(400);
+        $('#filePayroll').val('');
+        importStatus = false;
+
+        toastr.error(`Columna vacía en la fila: ${i + 2}`);
+        break;
+      }
+
+      let valWorkingDaysMonth = parseFloat(arr.dias_trabajo_x_mes.toString().replace(',', '.'));
+      let valWorkingHoursDay = parseFloat(arr.horas_trabajo_x_dia.toString().replace(',', '.'));
+      if (valWorkingDaysMonth > 31 || valWorkingHoursDay > 24) {
+        $('.cardLoading').remove();
+        $('.cardBottons').show(400);
+        $('#filePayroll').val('');
+        importStatus = false;
+
+        toastr.error(`El campo dias trabajo x mes debe ser menor a 31 y horas trabajo x dia menor a 24. Fila: ${i + 2}`);
+        break;
+      }
+
+      // Validar Proceso
+      let dataProcess = JSON.parse(sessionStorage.getItem('dataProcess'));
+      let process = dataProcess.find(item => item.process == arr.proceso.toString().toUpperCase().trim());
+
+      if (!process) {
+        $('.cardLoading').remove();
+        $('.cardBottons').show(400);
+        $('#filePayroll').val('');
+        importStatus = false;
+
+        toastr.error(`Proceso no existe en la base de datos. Fila: ${i + 2}`);
+        break;
+      }
+
+      payrollToImport.push({ idProcess: process.id_process }); 
+
+      // Obtener Data Prestaciones
+      // let dataBenefits = JSON.parse(sessionStorage.getItem('dataBenefits'));
+      
+      // Obtener data segun el nivel de riesgo
+      let dataRisks = JSON.parse(sessionStorage.getItem('dataRisks'));
+      let risk = dataRisks.find(item => item.risk_level == arr.tipo_riesgo.toString().toUpperCase().trim());
+
+      payrollToImport[i].valueRisk = risk.percentage;
+      payrollToImport[i].risk = risk.id_risk;
+
+      // arr.prestacional == 'SI' ? payrollToImport[i].salary =
+
+      // Validar Nomina
+      let dataPayroll = JSON.parse(sessionStorage.getItem('dataPayroll'));
+      let payroll = dataPayroll.find(item => item.employee == arr.nombres_y_apellidos.toString().toUpperCase().trim() &&
+        item.id_process == process.id_process);
+      
+      !payroll ? insert += 1 : update += 1;
+
+      payrollToImport[i].employee = arr.nombres_y_apellidos;
+      payrollToImport[i].process = arr.proceso;
+      payrollToImport[i].basicSalary = arr.salario_basico;
+      payrollToImport[i].transport = arr.transporte;
+      payrollToImport[i].endowment = arr.dotaciones;
+      payrollToImport[i].extraTime = arr.horas_extras;
+      payrollToImport[i].bonification = arr.otros_ingresos;
+      payrollToImport[i].benefit = arr.prestacional;
+      payrollToImport[i].workingHoursDay = arr.horas_trabajo_x_dia;
+      payrollToImport[i].workingDaysMonth = arr.dias_trabajo_x_mes;
+      payrollToImport[i].riskLevel = arr.tipo_riesgo;
+      payrollToImport[i].typeFactor = arr.tipo_nomina;
+      payrollToImport[i].factor = arr.factor;
     }
 
-    dataPayroll['idPayroll'] = data.id_plan_payroll;
-    dataPayroll['idProcess'] = data.id_process;
-    dataPayroll['id_product_process'] = data.id_product_process;
+    return { importStatus, payrollToImport, insert, update};
+  };
 
-    let employee = allPayroll.filter(item => item.employee == data.employee);
-    // dataPayroll['employee'] = data.employee;
-    // let resp = await searchData(`/api/checkEmployee/${data.employee}`);
-
-    employee.length > 1 ? msg = '' : msg = 'Es el unico empleado de nomina.<br>';
-
+  /* Mensaje de advertencia */
+  const checkPayroll = (data, insert, update) => { 
     bootbox.confirm({
-      title: 'Eliminar',
-      message: msg +
-        `Está seguro de eliminar esta nómina? Esta acción no se puede reversar.<br><br>
-        Si elimina el operador, recomendamos revisar los tiempos y procesos en los productos que estaba asociado para concluir si los tiempos consignados son exactos con el numero de operadores que hacen la actividad.`,
+      title: '¿Desea continuar con la importación?',
+      message: `Se han encontrado los siguientes registros:<br><br>Datos a insertar: ${insert} <br>Datos a actualizar: ${update}`,
       buttons: {
         confirm: {
           label: 'Si',
@@ -223,123 +216,40 @@ $(document).ready(function () {
       },
       callback: function (result) {
         if (result == true) {
-          $.post(
-            '/api/deletePayroll',
-            dataPayroll,
-            function (data, textStatus, jqXHR) {
-              message(data);
-            }
-          );
+          savePayroll(data);
+        } else {
+          $('.cardLoading').remove();
+          $('.cardBottons').show(400);
+          $('#filePayroll').val('');
         }
       },
-    });
-  };*/
+    }); 
+  };
 
-  /* Copiar Nomina 
-  copyFunction = async (id, employee) => {
-    var options = ``;
-
-    let allPayroll = JSON.parse(sessionStorage.getItem('dataPayroll'));
-    let allProcess = JSON.parse(sessionStorage.getItem('dataProcess'));
-    // let dataProcess = await searchData(`/api/process/${employee}`);
-    // let process = leaveUniqueKey(allProcess, 'id_process');
-    let processByEmployee = allPayroll.filter(item => item.employee == employee);
-
-    // Filtrar el primer array para eliminar los elementos que están en el segundo array
-    let process = allProcess.filter(item => !processByEmployee.find(p => p.id_process === item.id_process));
-
-    if (process.length == 0) {
-      toastr.info('No hay procesos disponibles para este empleado');
-      return false;
-    }
-
-    for (var i = 0; i < process.length; i++) {
-      options += `<option value="${process[i].id_process}"> ${process[i].process} </option>`;
-    }
-
-    // let row = $(this.activeElement).parent().parent()[0];
-    // let data = tblPayroll.fnGetData(row);
-    let data = allPayroll.find(item => item.id_plan_payroll == id);
-
-    bootbox.confirm({
-      title: 'Clonar Nomina',
-      message: `<div class="row">
-                  <div class="col-12">
-                    <label for="process">Proceso</label>
-                    <select class="form-control" id="process">
-                      <option disabled selected value="0">Seleccionar</option>
-                      ${options}
-                    </select>
-                  </div>
-                </div>`,
-      buttons: {
-        confirm: {
-          label: 'Ok',
-          className: 'btn-success',
-        },
-        cancel: {
-          label: 'Cancel',
-          className: 'btn-danger',
-        },
-      },
-      callback: function (result) {
-        if (result == true) {
-          let process = $('#process').val();
-
-          if (!process || process == '0') {
-            toastr.error('Seleccione proceso');
-            return false;
-          }
-
-          let dataPayroll = {};
-          dataPayroll['idOldPayroll'] = data.id_plan_payroll;
-          dataPayroll['idProcess'] = process;
-          dataPayroll['employee'] = data.employee;
-          dataPayroll['basicSalary'] = data.salary;
-          dataPayroll['transport'] = data.transport;
-          dataPayroll['extraTime'] = data.extra_time;
-          dataPayroll['bonification'] = data.bonification;
-          dataPayroll['endowment'] = data.endowment;
-          dataPayroll['workingDaysMonth'] = data.working_days_month;
-          dataPayroll['workingHoursDay'] = data.hours_day;
-          dataPayroll['factor'] = data.factor_benefit;
-          dataPayroll['typeFactor'] = data.type_contract;
-          dataPayroll['risk'] = data.id_risk;
-          dataPayroll['minuteValue'] = data.minute_value;
-          dataPayroll['salaryNet'] = data.salary_net;
-
-          $.post(
-            '/api/copyPayroll',
-            dataPayroll,
-            function (data, textStatus, jqXHR) {
-              message(data);
-            }
-          );
-        }
+  const savePayroll = (data) => {
+    $.ajax({
+      type: 'POST',
+      url: '/api/addPayroll',
+      data: { importPayroll: data },
+      success: function (r) {
+        message(r);
       },
     });
-  };*/
+  };
 
-  /* Mensaje de exito 
-  message = (data) => {
-    $('#filePayroll').val('');
-    $('.cardLoading').remove();
-    $('.cardBottons').show(400);
-    
-    if (data.success == true) {
-      $('.cardImportPayroll').hide(800);
-      $('#formImportPayroll').trigger('reset');
-      sessionStorage.removeItem('percentage');
-      sessionStorage.removeItem('salary');
-      sessionStorage.removeItem('type_salary');
+  $('#btnDownloadImportsPayroll').click(function (e) {
+    e.preventDefault();
 
-      $('#factor').prop('disabled', true);
-      $('#createPayroll').modal('hide');
-      $('#formCreatePayroll').trigger('reset');
-      loadAllTblData();
-      toastr.success(data.message); 
-      return false;
-    } else if (data.error == true) toastr.error(data.message);
-    else if (data.info == true) toastr.info(data.message);
-  }; */
+    let url = 'assets/formatsXlsx/Carga_Nomina.xlsx';
+
+    let link = document.createElement('a');
+    link.target = '_blank';
+
+    link.href = url;
+    document.body.appendChild(link);
+    link.click();
+
+    document.body.removeChild(link);
+    delete link;
+  });
 });

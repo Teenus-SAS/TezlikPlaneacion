@@ -38,7 +38,8 @@ $(document).ready(function () {
 
     importFile(selectedFile)
       .then((data) => {
-        const expectedHeaders = ['nombre', 'apellido', 'area', 'proceso', 'maquina', 'posicion', 'disponible'];
+        const expectedHeaders = ['nombre', 'apellido', 'area', 'proceso', 'maquina', 'posicion', 'salario_basico', 'horas_trabajo_x_dia', 'dias_trabajo_x_mes', 'tipo_riesgo', 'tipo_nomina', 'disponible'];
+
         const actualHeaders = Object.keys(data[0]);
 
         const missingHeaders = expectedHeaders.filter(header => !actualHeaders.includes(header));
@@ -58,6 +59,17 @@ $(document).ready(function () {
           !item.maquina ? item.maquina = '' : item.maquina;
           !item.proceso ? item.proceso = '' : item.proceso;
           !item.posicion ? item.posicion = '' : item.posicion;
+          !item.salario_basico ? item.salario_basico = '0' : item.salario_basico;
+          !item.transporte ? item.transporte = '0' : item.transporte;
+          !item.dotaciones ? item.dotaciones = '0' : item.dotaciones;
+          !item.horas_extras ? item.horas_extras = '0' : item.horas_extras;
+          !item.otros_ingresos ? item.otros_ingresos = '0' : item.otros_ingresos;
+          // !item.prestacional ? item.prestacional = '' : item.prestacional;
+          !item.horas_trabajo_x_dia ? item.horas_trabajo_x_dia = '0' : item.horas_trabajo_x_dia;
+          !item.dias_trabajo_x_mes ? item.dias_trabajo_x_mes = '0' : item.dias_trabajo_x_mes;
+          !item.tipo_riesgo ? item.tipo_riesgo = '' : item.tipo_riesgo;
+          !item.tipo_nomina ? item.tipo_nomina = '' : item.tipo_nomina;
+          !item.factor ? item.factor = '0' : item.factor;
           !item.disponible ? item.disponible = '' : item.disponible; 
 
           return {
@@ -67,6 +79,17 @@ $(document).ready(function () {
             machine: item.maquina,
             process: item.proceso,
             position: item.posicion,
+            basicSalary: item.salario_basico,
+            transport: item.transporte,
+            endowment: item.dotaciones,
+            extraTime: item.horas_extras,
+            bonification: item.otros_ingresos,
+            // benefit: item.prestacional,
+            workingHoursDay: item.horas_trabajo_x_dia,
+            workingDaysMonth: item.dias_trabajo_x_mes,
+            riskLevel: item.tipo_riesgo,
+            typeFactor: item.tipo_nomina,
+            factor: item.factor,
             active: item.disponible,
           };
         });

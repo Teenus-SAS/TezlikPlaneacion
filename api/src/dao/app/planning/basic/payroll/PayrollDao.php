@@ -128,8 +128,8 @@ class PayrollDao
                 'working_days_month' => $dataPayroll['workingDaysMonth'],
                 'hours_day' => $dataPayroll['workingHoursDay'],
                 'factor_benefit' => $dataPayroll['factor'],
-                'id_risk' => $dataPayroll['typeFactor'],
-                'type_contract' => $dataPayroll['risk'],
+                'id_risk' => $dataPayroll['risk'],
+                'type_contract' => $dataPayroll['typeFactor'],
                 'minute_value' => $dataPayroll['minuteValue'],
                 'salary_net' => $dataPayroll['salaryNet'],
                 'status' => 1
@@ -182,8 +182,8 @@ class PayrollDao
                 'working_days_month' => $dataPayroll['workingDaysMonth'],
                 'hours_day' => $dataPayroll['workingHoursDay'],
                 'factor_benefit' => $dataPayroll['factor'],
-                'id_risk' => $dataPayroll['typeFactor'],
-                'type_contract' => $dataPayroll['risk'],
+                'id_risk' => $dataPayroll['risk'],
+                'type_contract' => $dataPayroll['typeFactor'],
                 'minute_value' => $dataPayroll['minuteValue'],
                 'salary_net' => $dataPayroll['salaryNet'],
             ]);

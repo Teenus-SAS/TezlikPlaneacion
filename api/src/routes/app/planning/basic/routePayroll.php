@@ -8,10 +8,12 @@ use TezlikPlaneacion\dao\GeneralPayrollDao;
 use TezlikPlaneacion\dao\GeneralProcessDao;
 use TezlikPlaneacion\dao\LastDataDao;
 use TezlikPlaneacion\dao\PayrollDao;
+use TezlikPlaneacion\dao\RisksDao;
 use TezlikPlaneacion\dao\ValueMinuteDao;
 
 $payrollDao = new PayrollDao();
 $generalPayrollDao = new GeneralPayrollDao();
+$risksDao = new RisksDao();
 $benefitsDao = new BenefitsDao();
 $factorBenefitDao = new FactorBenefitDao();
 $valueMinuteDao = new ValueMinuteDao();
@@ -53,15 +55,35 @@ $app->post('/payrollDataValidation', function (Request $request, Response $respo
 
         for ($i = 0; $i < count($payroll); $i++) {
             if (
-                empty($payroll[$i]['firstname']) || empty($payroll[$i]['lastname']) || empty($payroll[$i]['position']) ||  empty($payroll[$i]['process']) ||
-                empty($payroll[$i]['machine']) || empty($payroll[$i]['area']) || empty($payroll[$i]['active'])
+                empty($payroll[$i]['firstname']) ||
+                empty($payroll[$i]['lastname']) ||
+                empty($payroll[$i]['position']) ||
+                empty($payroll[$i]['process']) ||
+                empty($payroll[$i]['machine']) ||
+                empty($payroll[$i]['area']) ||
+                empty($payroll[$i]['basicSalary']) ||
+                empty($payroll[$i]['workingHoursDay']) ||
+                empty($payroll[$i]['workingDaysMonth']) ||
+                empty($payroll[$i]['riskLevel']) ||
+                empty($payroll[$i]['typeFactor']) ||
+                empty($payroll[$i]['active'])
             ) {
                 $row = $i + 2;
                 array_push($debugg, array('error' => true, 'message' => "Campos vacios, fila: $row"));
             }
             if (
-                empty(trim($payroll[$i]['firstname'])) || empty(trim($payroll[$i]['lastname'])) || empty(trim($payroll[$i]['position'])) || empty(trim($payroll[$i]['process'])) ||
-                empty(trim($payroll[$i]['machine'])) || empty(trim($payroll[$i]['area'])) || empty(trim($payroll[$i]['active']))
+                empty(trim($payroll[$i]['firstname'])) ||
+                empty(trim($payroll[$i]['lastname'])) ||
+                empty(trim($payroll[$i]['position'])) ||
+                empty(trim($payroll[$i]['process'])) ||
+                empty(trim($payroll[$i]['machine'])) ||
+                empty(trim($payroll[$i]['area'])) ||
+                empty(trim($payroll[$i]['basicSalary'])) ||
+                empty(trim($payroll[$i]['workingHoursDay'])) ||
+                empty(trim($payroll[$i]['workingDaysMonth'])) ||
+                empty(trim($payroll[$i]['riskLevel'])) ||
+                empty(trim($payroll[$i]['typeFactor'])) ||
+                empty(trim($payroll[$i]['active']))
             ) {
                 $row = $i + 2;
                 array_push($debugg, array('error' => true, 'message' => "Campos vacios, fila: $row"));
@@ -125,6 +147,7 @@ $app->post('/addPayroll', function (Request $request, Response $response, $args)
     $generalProcessDao,
     $generalMachinesDao,
     $generalAreaDao,
+    $risksDao,
     $benefitsDao,
     $factorBenefitDao,
     $valueMinuteDao,
@@ -175,6 +198,28 @@ $app->post('/addPayroll', function (Request $request, Response $response, $args)
             // Obtener area
             $findArea = $generalAreaDao->findArea($payroll[$i], $id_company);
             $payroll[$i]['idArea'] = $findArea['id_plan_area'];
+
+            // Obtener nivel de riesgo
+            $dataRisk = $risksDao->findRiskByName($payroll[$i]);
+            $payroll[$i]['valueRisk'] = $dataRisk['percentage'];
+            $payroll[$i]['risk'] = $dataRisk['id_risk'];
+
+            $payroll[$i]['basicSalary'] = floatval(str_replace(',', '.', $payroll[$i]['basicSalary']));
+            $payroll[$i]['salary'] = floatval(str_replace(',', '.', $payroll[$i]['basicSalary']));
+            $payroll[$i]['transport'] = floatval(str_replace(',', '.', $payroll[$i]['transport']));
+            $payroll[$i]['endowment'] = str_replace(',', '.', $payroll[$i]['endowment']);
+            $payroll[$i]['extraTime'] = floatval(str_replace(',', '.', $payroll[$i]['extraTime']));
+            $payroll[$i]['bonification'] = floatval(str_replace(',', '.', $payroll[$i]['bonification']));
+            // $payroll[$i]['benefit'] = str_replace(',', '.', $payroll[$i]['benefit']);
+            $payroll[$i]['factor'] = floatval(str_replace(',', '.', $payroll[$i]['factor']));
+
+            // Calcular factor benefico
+            $dataBenefits = $benefitsDao->findAllBenefits();
+
+            $payroll[$i] = $factorBenefitDao->calcFactorBenefit($dataBenefits, $payroll[$i]);
+
+            // Calcular Valor x minuto
+            $payroll[$i] = $valueMinuteDao->calculateValueMinute($payroll[$i]);
 
             $findPayroll = $generalPayrollDao->findPayrollByEmployee($payroll[$i], $id_company);
             if (!$findPayroll) {
