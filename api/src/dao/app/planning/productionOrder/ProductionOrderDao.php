@@ -30,6 +30,7 @@ class ProductionOrderDao
                                                 HOUR(pg.min_date) AS min_hour, 
                                                 pg.max_date AS max_date_programming, 
                                                 HOUR(pg.max_date) AS max_hour,
+                                                (pg.min_programming * IFNULL(py.minute_value, 0)) AS cost_payroll,
                                             -- Pedido
                                                 o.id_order, 
                                                 o.num_order, 
@@ -71,9 +72,11 @@ class ProductionOrderDao
                                         INNER JOIN third_parties c ON c.id_client = o.id_client
                                         INNER JOIN machine_programs pm ON pm.id_machine = pg.id_machine
                                         INNER JOIN machine_cicles pcm ON pcm.id_product = pg.id_product AND pcm.id_machine = pg.id_machine
+                                        LEFT JOIN payroll py ON py.id_process = pcm.id_process AND py.id_machine = pg.id_machine
                                         INNER JOIN process pc ON pc.id_process = pcm.id_process
                                         INNER JOIN orders_status ps ON ps.id_status = o.status
                                       WHERE pg.status = 1 AND pg.id_company = :id_company
+                                        GROUP BY pg.id_programming
                                         ORDER BY `o`.`num_order` ASC");
         $stmt->execute([
             'id_company' => $id_company

@@ -310,6 +310,7 @@ if (sizeof($_SESSION) == 0)
 																<th>Maquina</th>
 																<th>Fecha Inicio</th>
 																<th>Fecha Final</th>
+																<th>Costo Nomina</th>
 															</tr>
 														</thead>
 														<tbody id="tblPOProcessBody">
