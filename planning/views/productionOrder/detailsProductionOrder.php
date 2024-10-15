@@ -76,13 +76,22 @@ if (sizeof($_SESSION) == 0)
 											</div>
 											<hr> -->
 										<div class="col-sm-12 col-xl-12 d-flex justify-content-end btnPrintPDF">
-											<div class="col-xs-2 mt-2 mr-2" id="btnPdf">
-												<span class="badge badge-warning" id="kpiQualityOP" style="font-size: x-large;"></span>
+											<div class="col-xs-2 mt-2 mr-2" id="">
+												<span class="badge badge-info" id="materials" style="font-size: large;"></span>
+												<span class="badge badge-info" id="labor" style="font-size: large;"></span>
+												<span class="badge badge-info" id="indrectCost" style="font-size: large;"></span>
+												<span class="badge badge-success" id="totalCost" style="font-size: large;"></span>
 												<!-- <button class="btn btn-success" onclick="printPDF()">Imprimir PDF</button> -->
+											</div>
+										</div>
+										<div class="col-sm-12 col-xl-12 d-flex justify-content-end btnPrintPDF">
+											<div class="col-xs-2 mt-2 mr-2" id="">
+												<span class="badge badge-warning" id="kpiQualityOP" style="font-size: large;"></span>
 											</div>
 										</div>
 
 										<hr>
+
 										<div class=" row">
 											<div class="col-sm-3">
 												<img src="" id="logo" alt="logo_company" style="width: -webkit-fill-available;">
