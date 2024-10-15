@@ -2,7 +2,7 @@ $(document).ready(function () {
   // Seleccionar los elementos <th> a observar
   const targetDefects = document.querySelector(".unitsDefects");
   const targetProcessing = document.querySelector(".unitsProcessing");
-  const costPayroll = document.querySelector(".labourMO");
+  const costPayroll = document.querySelector(".costPayroll");
 
   // Crear una instancia de MutationObserver
   const observer = new MutationObserver(function (mutationsList, observer) {
@@ -31,7 +31,7 @@ $(document).ready(function () {
           ) || 0;
         const costPayroll =
           parseFloat(
-            $(".unitsProcessing")
+            $(".costPayroll")
               .text()
               .replace(" Und", "")
               .replace(".", "")
