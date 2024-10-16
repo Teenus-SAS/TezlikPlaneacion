@@ -1,5 +1,5 @@
 $(document).ready(function () {
-  loadTblOPMaterial = (id_programming, visible) => {
+  loadTblOPMaterial = (id_programming) => {
     tblOPMaterial = $("#tblOPMaterial").dataTable({
       destroy: true,
       dom: "t",
@@ -58,8 +58,7 @@ $(document).ready(function () {
         {
           title: "Acciones",
           data: null,
-          className: "uniqueClassName dt-head-center",
-          visible: visible,
+          className: "uniqueClassName dt-head-center", 
           render: function (data) {
             let action;
             if (!data.receive_date || data.receive_date == "0000-00-00") {

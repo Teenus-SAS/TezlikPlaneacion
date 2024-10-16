@@ -24,7 +24,7 @@ $app->get('/checkSessionUser', function (Request $request, Response $response, $
 
 $app->get('/checkLastLoginUsers', function (Request $request, Response $response, $args) use ($lastLoginDao) {
     $users = $lastLoginDao->FindTimeActiveUsers('users');
-    $admins = $lastLoginDao->FindTimeActiveUsers('admins');
+    $admins = $lastLoginDao->FindTimeActiveUsers('admin_users');
 
     if ($users == null && $admins == null)
         $resp = array('success' => true, 'message' => 'Se verificaron los usuarios correctamente');

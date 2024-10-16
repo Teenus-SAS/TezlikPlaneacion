@@ -339,35 +339,37 @@ if (sizeof($_SESSION) == 0)
 												</div>
 											</div>
 											<!-- formAddOPPArtial -->
-											<form id="formAddOPPArtial">
-												<div class="form-row">
-													<div class="col-sm-3 floating-label enable-floating-label show-label">
-														<label for="startDateTime">Inicio</label>
-														<input type="datetime-local" class="form-control text-center" id="startDateTime" name="startDate">
-													</div>
-													<div class="col-sm-3 floating-label enable-floating-label show-label">
-														<label for="endDateTime">Finalización</label>
-														<input type="datetime-local" class="form-control text-center" id="endDateTime" name="endDate">
-													</div>
-													<div class=" col-sm-2 floating-label enable-floating-label show-label">
-														<label for="waste">Unidades Defectuosas</label>
-														<input type="number" class="form-control text-center" id="waste" name="waste">
-													</div>
-													<div class="col-sm-2 floating-label enable-floating-label show-label">
-														<label for="quantityProduction">Unidades Producidas</label>
-														<input type="number" class="form-control text-center" id="quantityProduction" name="partialQuantity">
-													</div>
-													<?php if ($_SESSION['flag_products_measure'] == 1) { ?>
-														<div class="col-sm-2 floating-label enable-floating-label show-label">
-															<label for="quantityKgProduction">Cantidad (Kg)</label>
-															<input type="number" class="form-control text-center" id="quantityKgProduction" name="quantityKgProduction">
+											<?php if ($_SESSION['op_to_store'] == 1) { ?>
+												<form id="formAddOPPArtial">
+													<div class="form-row">
+														<div class="col-sm-3 floating-label enable-floating-label show-label">
+															<label for="startDateTime">Inicio</label>
+															<input type="datetime-local" class="form-control text-center" id="startDateTime" name="startDate">
 														</div>
-													<?php } ?>
-													<div class="col-sm-2 floating-label enable-floating-label show-label">
-														<button class="btn btn-info mt-1" id="btnDeliverPartialOP">Entregar</button>
+														<div class="col-sm-3 floating-label enable-floating-label show-label">
+															<label for="endDateTime">Finalización</label>
+															<input type="datetime-local" class="form-control text-center" id="endDateTime" name="endDate">
+														</div>
+														<div class=" col-sm-2 floating-label enable-floating-label show-label">
+															<label for="waste">Unidades Defectuosas</label>
+															<input type="number" class="form-control text-center" id="waste" name="waste">
+														</div>
+														<div class="col-sm-2 floating-label enable-floating-label show-label">
+															<label for="quantityProduction">Unidades Producidas</label>
+															<input type="number" class="form-control text-center" id="quantityProduction" name="partialQuantity">
+														</div>
+														<?php if ($_SESSION['flag_products_measure'] == 1) { ?>
+															<div class="col-sm-2 floating-label enable-floating-label show-label">
+																<label for="quantityKgProduction">Cantidad (Kg)</label>
+																<input type="number" class="form-control text-center" id="quantityKgProduction" name="quantityKgProduction">
+															</div>
+														<?php } ?>
+														<div class="col-sm-2 floating-label enable-floating-label show-label">
+															<button class="btn btn-info mt-1" id="btnDeliverPartialOP">Entregar</button>
+														</div>
 													</div>
-												</div>
-											</form>
+												</form>
+											<?php } ?>
 											<div class="row">
 												<div class="col-12">
 													<div class="table-responsive">
@@ -379,6 +381,7 @@ if (sizeof($_SESSION) == 0)
 																	<th class="uniqueClassName dt-head-center unitsDefects"></th>
 																	<th class="uniqueClassName dt-head-center unitsProcessing"></th>
 																	<th class="uniqueClassName dt-head-center costPayroll"></th>
+																	<th></th>
 																	<th></th>
 																	<th></th>
 																</tr>
@@ -462,6 +465,7 @@ if (sizeof($_SESSION) == 0)
 		<?php include_once dirname(dirname(dirname(__DIR__))) . '/global/partials/scriptsJS.php'; ?>
 		<script>
 			viewRawMaterial = 3;
+			op_to_store = "<?= $_SESSION['op_to_store'] ?>";
 		</script>
 		<script src="/planning/js/basic/rawMaterials/configRawMaterials.js"></script>
 		<script src="/planning/js/productionOrder/opPartial.js"></script>

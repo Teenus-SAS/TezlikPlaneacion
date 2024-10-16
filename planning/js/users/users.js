@@ -91,24 +91,26 @@ $(document).ready(function () {
 
     let access = {
       planningCreateProduct: data.create_product,
-      planningCreateMaterial: data.create_material,
+      // planningCreateMaterial: data.create_material,
       planningCreateMachine: data.create_machine,
-      requisition: data.requisition,
+      payroll: data.payroll,
       planningProductsMaterial: data.products_material,
       programsMachine: data.programs_machine,
-      ciclesMachine: data.cicles_machine,
       stock: data.stock,
+      calendar: data.calendar,
       client: data.client,
+      seller: data.seller,
       sale: data.sale,
       plannigUser: data.user,
       inventory: data.inventory,
-      inventoryABC: data.inventory_abc,
+      requisition: data.requisition,
       order: data.plan_order,
       program: data.program,
       explosionOfMaterial: data.explosion_of_material,
       productionOrder: data.production_order,
-      office: data.office,
+      opToStore: data.op_to_store,
       store: data.store,
+      office: data.office,
     };
 
     $.each(access, (index, value) => {
@@ -153,24 +155,25 @@ $(document).ready(function () {
 
     let access = {
       planningCreateProduct: 0,
-      planningCreateMaterial: 0,
       planningCreateMachine: 0,
-      requisition: 0,
+      payroll: 0,
       planningProductsMaterial: 0,
       programsMachine: 0,
-      ciclesMachine: 0,
       stock: 0,
+      calendar: 0,
       client: 0,
+      seller: 0,
       sale: 0,
       plannigUser: 0,
       inventory: 0,
-      inventoryABC: 0,
+      requisition: 0,
       order: 0,
       program: 0,
       explosionOfMaterial: 0,
       productionOrder: 0,
-      office: 0,
+      opToStore: 0,
       store: 0,
+      office: 0,
     };
 
     $.each(access, (index, value) => {

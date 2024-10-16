@@ -1,6 +1,6 @@
 $(document).ready(function () {
   //Datatable para parciales entregados desde la OP a Almacen
-  loadTblPartialsDelivery = (id_programming, visible) => {
+  loadTblPartialsDelivery = (id_programming) => {
     tblPartialsDelivery = $("#tblPartialsDelivery").dataTable({
       destroy: true,
       dom: "t",
@@ -135,7 +135,6 @@ $(document).ready(function () {
           title: "Acciones",
           data: null,
           className: "uniqueClassName dt-head-center",
-          visible: visible,
           render: function (data) {
             let action;
             if (!data.receive_date || data.receive_date == "0000-00-00") {

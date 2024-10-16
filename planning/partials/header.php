@@ -45,8 +45,7 @@
                         <div class="col-sm-9">
                             <div class="row" id="nav">
                                 <?php if (
-                                    $_SESSION['requisition'] == 0 && $_SESSION['planning_product'] == 0 && $_SESSION['planning_material'] == 0 &&
-                                    $_SESSION['planning_machine'] == 0 && $_SESSION['planning_process'] == 0
+                                    $_SESSION['planning_product'] == 0 && $_SESSION['planning_machine'] == 0
                                 ) { ?>
                                     <div class="col-md-3" id="navPlanBasics" style="display: none;">
                                     <?php } else { ?>
@@ -54,17 +53,10 @@
                                         <?php } ?>
                                         <h5 class="font-size-14 font-weight-600">Maestros</h5>
                                         <ul class="list-unstyled megamenu-list">
-                                            <?php // if ($_SESSION['create_mold'] == 1) { 
-                                            ?>
-                                            <!-- <li class="invMolds"><a href="/planning/molds">Moldes</a></li> -->
-                                            <?php //} 
-                                            ?>
-                                            <?php if (
-                                                $_SESSION['planning_product'] == 1 // && $_SESSION['flag_products_measure'] == 1
-                                            ) { ?>
-                                                <li class="planProductsM">
+                                            <?php if ($_SESSION['planning_product'] == 1) { ?>
+                                                <li class="planProducts">
                                                 <?php } else { ?>
-                                                <li class="planProductsM" style="display: none;">
+                                                <li class="planProducts" style="display: none;">
                                                 <?php } ?>
                                                 <i class="fas fa-cube"></i>
                                                 <a href="/planning/products">Productos y Materia Prima</a>
@@ -87,16 +79,20 @@
                                                         <i class="fas fa-cogs"></i>
                                                         <a href="/planning/machines">Procesos y Máquinas</a>
                                                         </li>
-                                                        <li class="planClients">
+                                                        <?php if ($_SESSION['payroll'] == 1) { ?>
+                                                            <li class="planPayroll">
+                                                            <?php } else { ?>
+                                                            <li class="planPayroll" style="display: none;">
+                                                            <?php } ?>
                                                             <i class="fas fa-users"></i>
                                                             <a href="/planning/productionPayroll">Nómina Producción</a>
-                                                        </li>
+                                                            </li>
                                         </ul>
                                         </div>
 
                                         <?php if (
                                             $_SESSION['planning_products_material'] == 0 && $_SESSION['stock'] == 0 &&
-                                            $_SESSION['programs_machine'] == 0 && $_SESSION['cicles_machine'] == 0
+                                            $_SESSION['programs_machine'] == 0 && $_SESSION['calendar'] == 0
                                         ) { ?>
                                             <div class="col-md-4" id="navPlanSetting" style="display: none;">
                                             <?php } else { ?>
@@ -128,14 +124,18 @@
                                                                 <i class="fas fa-truck"></i>
                                                                 <a href="/planning/stock">Tiempos Producción y Recepción MP</a>
                                                                 </li>
-                                                                <li class="planCalendar">
+                                                                <?php if ($_SESSION['calendar'] == '1') { ?>
+                                                                    <li class="planCalendar">
+                                                                    <?php } else { ?>
+                                                                    <li class="planCalendar" style="display: none;">
+                                                                    <?php } ?>
                                                                     <i class="fas fa-calendar-alt"></i>
                                                                     <a href="/planning/calendar">Calendario Producción</a>
-                                                                </li>
+                                                                    </li>
                                                 </ul>
                                                 </div>
 
-                                                <?php if ($_SESSION['client'] == 0 && $_SESSION['sale'] == 0) { ?>
+                                                <?php if ($_SESSION['client'] == 0 && $_SESSION['seller'] == 0 && $_SESSION['sale'] == 0) { ?>
                                                     <div class="col-md-3" id="navPlanGeneral" style="display: none;">
                                                     <?php } else { ?>
                                                         <div class="col-md-3" id="navPlanGeneral">
@@ -148,27 +148,26 @@
                                                                 <?php } else { ?>
                                                                 <li class="planClients" style="display: none;">
                                                                 <?php } ?>
-
                                                                 <i class="fas fa-user-tie"></i>
                                                                 <a href="/planning/clients">Clientes y Proveedores</a>
                                                                 </li>
-                                                                <li class="planClients">
+                                                                <?php if ($_SESSION['seller'] == 1) { ?>
+                                                                    <li class="planSellers">
+                                                                    <?php } else { ?>
+                                                                    <li class="planSellers" style="display: none;">
+                                                                    <?php } ?>
                                                                     <i class="fas fa-user-friends"></i>
                                                                     <a href="/planning/sellers">Vendedores</a>
-                                                                </li>
-                                                                <?php if ($_SESSION['sale'] == 1) { ?>
-                                                                    <li class="planSales">
-                                                                    <?php } else { ?>
-                                                                    <li class="planSales" style="display: none;">
-                                                                    <?php } ?>
-                                                                    <i class="fas fa-balance-scale"></i>
-                                                                    <a href="/planning/sales">Ventas Unidades</a>
                                                                     </li>
 
-                                                                    <!-- <li class="inventoryABC">
-                                                                        <i class="fas fa-clipboard-list"></i>
-                                                                        <a href="/planning/inventoryABC">Inventario ABC</a>
-                                                                    </li> -->
+                                                                    <?php if ($_SESSION['sale'] == 1) { ?>
+                                                                        <li class="planSales">
+                                                                        <?php } else { ?>
+                                                                        <li class="planSales" style="display: none;">
+                                                                        <?php } ?>
+                                                                        <i class="fas fa-balance-scale"></i>
+                                                                        <a href="/planning/sales">Ventas Unidades</a>
+                                                                        </li>
                                                         </ul>
                                                         </div>
 

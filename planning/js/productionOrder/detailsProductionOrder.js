@@ -212,9 +212,9 @@ $(document).ready(function () {
     );
 
     if (data.flag_cancel == 0) {
-      flag_op == 1 ? (visible = false) : (visible = true);
-      loadTblPartialsDelivery(id_programming, visible);
-      loadTblOPMaterial(id_programming, visible);
+      // flag_op == 1 ? (visible = false) : (visible = true);
+      loadTblPartialsDelivery(id_programming);
+      loadTblOPMaterial(id_programming);
     }
   };
 

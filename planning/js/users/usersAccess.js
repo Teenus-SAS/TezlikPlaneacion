@@ -4,19 +4,19 @@ $(document).ready(function () {
     let data = await searchData('/api/planningUserAccess');
 
     let access = {
-      planProducts: data.create_product,
-      planMaterials: data.create_material,
+      planProducts: data.create_product, 
       planMachines: data.create_machine,
-      planRequisitions: data.requisition,
+      planPayroll: data.payroll,
       planProductsMaterials: data.products_material,
       planningMachines: data.programs_machine,
-      planCiclesMachine: data.cicles_machine,
       planStock: data.stock,
+      planCalendar: data.calendar,
       planClients: data.client,
-      planSales: data.sale,
-      // inventoryABC: data.inventory_abc,
+      planSellers: data.seller, 
+      planSales: data.sale, 
       planUsers: data.user, 
       planInventories: data.inventory,
+      planRequisitions: data.requisition,
       planOrders: data.plan_order,
       planPrograms: data.program, 
       planExplosionMaterials: data.explosion_of_material,
@@ -33,10 +33,8 @@ $(document).ready(function () {
     });
 
     if (
-      access.planProducts == 0 &&
-      access.planMaterials == 0 &&
-      access.planMachines == 0 &&
-      access.planRequisitions == 0
+      access.planProducts == 0 && 
+      access.planMachines == 0 
     ) {
       $('#navPlanBasics').hide();
     } else
@@ -45,8 +43,8 @@ $(document).ready(function () {
     if (
       access.planProductsMaterials == 0 &&
       access.planningMachines == 0 &&
-      access.planCiclesMachine == 0 &&
-      access.planStock == 0
+      access.planStock == 0 &&
+      access.planCalendar == 0
     ) {
       $('#navPlanSetting').hide();
     } else
@@ -54,6 +52,7 @@ $(document).ready(function () {
 
     if (
       access.planClients == 0 &&
+      access.planSellers == 0 &&
       access.planSales == 0
     ) {
       $('#navPlanGeneral').hide();

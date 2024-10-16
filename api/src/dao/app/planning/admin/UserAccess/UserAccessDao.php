@@ -31,28 +31,29 @@ class UserAccessDao
                                         -- Accesos (Basicos)
                                             IFNULL(usa.create_product, 0) AS create_product, 
                                             IFNULL(usa.create_material, 0) AS create_material, 
-                                            IFNULL(usa.requisition, 0) AS requisition, 
                                             IFNULL(usa.create_machine, 0) AS create_machine,  
+                                            IFNULL(usa.payroll, 0) AS payroll, 
                                         -- Accesos (Configuración)
                                             IFNULL(usa.products_material, 0) AS products_material, 
                                             IFNULL(usa.programs_machine, 0) AS programs_machine, 
-                                            IFNULL(usa.cicles_machine, 0) AS cicles_machine, 
                                             IFNULL(usa.stock, 0) AS stock, 
+                                            IFNULL(usa.calendar, 0) AS calendar, 
                                         -- Accesos (General)
-                                            IFNULL(usa.sale, 0) AS sale, 
-                                            IFNULL(usa.inv_abc, 0) AS inventory_abc, 
                                             IFNULL(usa.client, 0) AS client, 
+                                            IFNULL(usa.seller, 0) AS seller, 
+                                            IFNULL(usa.sale, 0) AS sale, 
                                         -- Accesos (Administrador)
                                             IFNULL(usa.user, 0) AS user, 
                                         -- Accesos (Navegación) 
-                                            IFNULL(usa.inventory, 0) AS inventory, 
+                                            IFNULL(usa.inventory, 0) AS inventory,
+                                            IFNULL(usa.requisition, 0) AS requisition, 
                                             IFNULL(usa.plan_order, 0) AS plan_order, 
                                             IFNULL(usa.program, 0) AS program, 
-                                            IFNULL(usa.plan_load, 0) AS plan_load, 
                                             IFNULL(usa.explosion_of_material, 0) AS explosion_of_material, 
                                             IFNULL(usa.production_order, 0) AS production_order, 
-                                            IFNULL(usa.office, 0) AS office, 
-                                            IFNULL(usa.store, 0) AS store
+                                            IFNULL(usa.op_to_store, 0) AS op_to_store, 
+                                            IFNULL(usa.store, 0) AS store,
+                                            IFNULL(usa.office, 0) AS office
                                         FROM users us
                                             LEFT JOIN users_access usa ON usa.id_user = us.id_user 
                                         WHERE us.id_company = :id_company");
@@ -74,80 +75,82 @@ class UserAccessDao
                                                         -- Informacion Usuario
                                                             id_user,
                                                         -- Accesos (Basicos)
-                                                            create_product, 
-                                                            create_material, 
+                                                            create_product,  
                                                             create_machine,
-                                                            requisition, 
+                                                            payroll, 
                                                         -- Accesos (Configuración)
                                                             products_material, 
                                                             programs_machine, 
-                                                            cicles_machine, 
                                                             stock, 
+                                                            calendar, 
                                                         -- Accesos (General)
-                                                            sale, 
-                                                            inv_abc,
                                                             client,
+                                                            seller,
+                                                            sale, 
                                                         -- Accesos (Administrador)
                                                             user,
                                                         -- Accesos (Navegación)
                                                             inventory, 
+                                                            requisition,
                                                             plan_order, 
                                                             program, 
                                                             explosion_of_material, 
                                                             production_order, 
-                                                            office,                                                         
-                                                            store
+                                                            op_to_store,                                                         
+                                                            store,
+                                                            office                                                         
                                                       ) VALUES
                                                       (
                                                         -- Informacion Usuario
-                                                            :id_user, 
+                                                            :id_user,
                                                         -- Accesos (Basicos)
                                                             :create_product, 
-                                                            :create_material, 
                                                             :create_machine,
-                                                            :requisition,
+                                                            :payroll, 
                                                         -- Accesos (Configuración)
                                                             :products_material, 
                                                             :programs_machine, 
-                                                            :cicles_machine, 
                                                             :stock, 
-                                                        -- Accesos (General) 
-                                                            :sale, 
-                                                            :inventory_abc, 
+                                                            :calendar, 
+                                                        -- Accesos (General)
                                                             :client,
-                                                        -- Accesos (Administrador) 
-                                                            :user, 
+                                                            :seller,
+                                                            :sale, 
+                                                        -- Accesos (Administrador)
+                                                            :user,
                                                         -- Accesos (Navegación)
                                                             :inventory, 
+                                                            :requisition,
                                                             :plan_order, 
                                                             :program, 
                                                             :explosion_of_material, 
                                                             :production_order, 
-                                                            :office,  
-                                                            :store
-                                                      )
-                                        ");
+                                                            :op_to_store,                                                         
+                                                            :store,
+                                                            :office
+                                                      )");
             $stmt->execute([
                 'id_user' => $dataUser['idUser'],
-                'inventory_abc' => $dataUser['inventoryABC'],
                 'create_product' => $dataUser['planningCreateProduct'],
-                'client' => $dataUser['client'],
-                'create_material' => $dataUser['planningCreateMaterial'],
-                'user' => $dataUser['plannigUser'],
                 'create_machine' => $dataUser['planningCreateMachine'],
+                'payroll' => $dataUser['payroll'],
+                'products_material' => $dataUser['planningProductsMaterial'],
+                'programs_machine' => $dataUser['programsMachine'],
+                'stock' => $dataUser['stock'],
+                'calendar' => $dataUser['calendar'],
+                'client' => $dataUser['client'],
+                'seller' => $dataUser['seller'],
+                'sale' => $dataUser['sale'],
+                'user' => $dataUser['plannigUser'],
                 'inventory' => $dataUser['inventory'],
                 'requisition' => $dataUser['requisition'],
                 'plan_order' => $dataUser['order'],
-                'products_material' => $dataUser['planningProductsMaterial'],
                 'program' => $dataUser['program'],
-                'programs_machine' => $dataUser['programsMachine'],
                 'explosion_of_material' => $dataUser['explosionOfMaterial'],
-                'cicles_machine' => $dataUser['ciclesMachine'],
-                'office' => $dataUser['office'],
-                'stock' => $dataUser['stock'],
                 'production_order' => $dataUser['productionOrder'],
-                'sale' => $dataUser['sale'],
+                'op_to_store' => $dataUser['opToStore'],
                 'store' => $dataUser['store'],
+                'office' => $dataUser['office'],
             ]);
             $this->logger->info(__FUNCTION__, array('query' => $stmt->queryString, 'errors' => $stmt->errorInfo()));
         } catch (\Exception $e) {
@@ -171,53 +174,55 @@ class UserAccessDao
 
         if ($rows > 1) {
             try {
-                $stmt = $connection->prepare("UPDATE users_access SET 
+                $stmt = $connection->prepare("UPDATE users_access SET
                                                         -- Accesos (Basicos)
-                                                            create_product = :create_product, 
-                                                            create_material = :create_material, 
-                                                            create_machine = :create_machine, 
-                                                            requisition = :requisition, 
+                                                            create_product = :create_product,
+                                                            create_machine = :create_machine,
+                                                            payroll = :payroll, 
                                                         -- Accesos (Configuración)
                                                             products_material = :products_material, 
                                                             programs_machine = :programs_machine, 
-                                                            cicles_machine = :cicles_machine, 
                                                             stock = :stock, 
+                                                            calendar = :calendar, 
                                                         -- Accesos (General)
+                                                            client = :client,
+                                                            seller = :seller,
                                                             sale = :sale, 
-                                                            inv_abc = :inventory_abc, 
-                                                            client = :client, 
                                                         -- Accesos (Administrador)
                                                             user = :user,
                                                         -- Accesos (Navegación)
                                                             inventory = :inventory, 
+                                                            requisition = :requisition,
                                                             plan_order = :plan_order, 
                                                             program = :program, 
                                                             explosion_of_material = :explosion_of_material, 
                                                             production_order = :production_order, 
-                                                            office = :office, 
-                                                            store = :store
+                                                            op_to_store = :op_to_store,                                                         
+                                                            store = :store,
+                                                            office = :office
                                               WHERE id_user = :id_user");
                 $stmt->execute([
                     'id_user' => $dataUser['idUser'],
-                    'inventory_abc' => $dataUser['inventoryABC'],
                     'create_product' => $dataUser['planningCreateProduct'],
-                    'client' => $dataUser['client'],
-                    'create_material' => $dataUser['planningCreateMaterial'],
-                    'user' => $dataUser['plannigUser'],
                     'create_machine' => $dataUser['planningCreateMachine'],
+                    'payroll' => $dataUser['payroll'],
+                    'products_material' => $dataUser['planningProductsMaterial'],
+                    'programs_machine' => $dataUser['programsMachine'],
+                    'stock' => $dataUser['stock'],
+                    'calendar' => $dataUser['calendar'],
+                    'client' => $dataUser['client'],
+                    'seller' => $dataUser['seller'],
+                    'sale' => $dataUser['sale'],
+                    'user' => $dataUser['plannigUser'],
                     'inventory' => $dataUser['inventory'],
                     'requisition' => $dataUser['requisition'],
                     'plan_order' => $dataUser['order'],
-                    'products_material' => $dataUser['planningProductsMaterial'],
                     'program' => $dataUser['program'],
-                    'programs_machine' => $dataUser['programsMachine'],
                     'explosion_of_material' => $dataUser['explosionOfMaterial'],
-                    'cicles_machine' => $dataUser['ciclesMachine'],
-                    'office' => $dataUser['office'],
-                    'stock' => $dataUser['stock'],
                     'production_order' => $dataUser['productionOrder'],
-                    'sale' => $dataUser['sale'],
+                    'op_to_store' => $dataUser['opToStore'],
                     'store' => $dataUser['store'],
+                    'office' => $dataUser['office'],
                 ]);
                 $this->logger->info(__FUNCTION__, array('query' => $stmt->queryString, 'errors' => $stmt->errorInfo()));
             } catch (\Exception $e) {

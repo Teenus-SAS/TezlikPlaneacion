@@ -1,4 +1,6 @@
 $(document).ready(function () {
+  op_to_store == '1' ? visible = true : visible = false;
+
   // Productos
   tblPartialsDeliveryPT = $("#tblPartialsDeliveryPT").dataTable({
     destroy: true,
@@ -73,6 +75,7 @@ $(document).ready(function () {
         title: "Acción",
         data: null,
         className: "uniqueClassName dt-head-center",
+        visible: visible,
         render: function (data) {
           if (!data.receive_date || data.receive_date == "0000-00-00")
             action = `<button class="btn btn-info changeDateOPPT">Recibir OP</button>`;
