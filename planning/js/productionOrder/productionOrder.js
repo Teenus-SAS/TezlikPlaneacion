@@ -82,7 +82,7 @@ $(document).ready(function () {
   const message = (data) => {
     const { success, error, info, message } = data;
     if (success) {
-      loadData(2);
+      loadData();
       toastr.success(message);
       return false;
     } else if (error) toastr.error(message);

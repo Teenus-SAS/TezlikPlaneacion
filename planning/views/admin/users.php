@@ -90,6 +90,7 @@ if (sizeof($_SESSION) == 0)
     </script>
     <script src="/planning/js/users/usersAccess.js"></script>
     <script src="../planning/js/users/tblUsers.js"></script>
+    <script src="/planning/js/basic/machines/configMachines.js"></script>
     <script src="../planning/js/users/users.js"></script>
 </body>
 

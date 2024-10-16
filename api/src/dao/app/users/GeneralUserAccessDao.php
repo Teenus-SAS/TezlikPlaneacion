@@ -51,6 +51,7 @@ class GeneralUserAccessDao
                                                 IFNULL(usa.explosion_of_material, 0) AS explosion_of_material, 
                                                 IFNULL(usa.office, 0) AS office, 
                                                 IFNULL(usa.production_order, 0) AS production_order, 
+                                                IFNULL(usa.type_machine_op, 0) AS type_machine_op, 
                                                 IFNULL(usa.op_to_store, 0) AS op_to_store, 
                                                 IFNULL(usa.store, 0) AS store
                                       FROM users us
@@ -97,6 +98,7 @@ class GeneralUserAccessDao
                                                 IFNULL(pua.program, 0) AS program, 
                                                 IFNULL(pua.explosion_of_material, 0) AS explosion_of_material, 
                                                 IFNULL(pua.production_order, 0) AS production_order,
+                                                IFNULL(pua.type_machine_op, 0) AS type_machine_op,
                                                 IFNULL(pua.op_to_store, 0) AS op_to_store, 
                                                 IFNULL(pua.store, 0) AS store,
                                                 IFNULL(pua.office, 0) AS office,
@@ -143,6 +145,7 @@ class GeneralUserAccessDao
         $_SESSION['program'] = $userAccess['program'];
         $_SESSION['explosion_of_material'] = $userAccess['explosion_of_material'];
         $_SESSION['production_order'] = $userAccess['production_order'];
+        $_SESSION['type_machine_op'] = $userAccess['type_machine_op'];
         $_SESSION['op_to_store'] = $userAccess['op_to_store'];
         $_SESSION['store'] = $userAccess['store'];
         $_SESSION['office'] = $userAccess['office'];

@@ -74,12 +74,6 @@ $app->post('/updatePlanningUserAccess', function (Request $request, Response $re
 
     $userAccess = $userAccessDao->updateUserAccessByUsers($dataUserAccess);
 
-    // if (isset($dataUserAccess['idUser']))
-    //     $user = $dataUserAccess;
-    // else {
-    //     $user = $lastDataDao->findLastInsertedUser($id_company);
-    // }
-
     /* Modificar accesos */
     if ($id_user == $dataUserAccess['idUser'])
         $generalUAccessDao->setGeneralAccess($dataUserAccess['idUser']);

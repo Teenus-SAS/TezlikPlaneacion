@@ -131,8 +131,13 @@
                                             </div>
                                             <div class="col-sm-4">
                                                 <div class="checkbox checkbox-success checkbox-circle">
-                                                    <input id="checkbox-17" name="productionOrder" type="checkbox">
+                                                    <input class="typeCheckbox" id="checkbox-17" name="productionOrder" type="checkbox">
                                                     <label for="checkbox-17">Ordenes de Producción</label>
+                                                </div>
+                                                <div class="form-group floating-label enable-floating-label show-label my-2 cardTypeMachineOP" style="width: 150px">
+                                                    <select class="form-control idMachine" name="typeMachineOP" id="typeMachineOP"> </select>
+                                                    <label>Maquinas<span class="text-danger">*</span></label>
+                                                    <div class="validation-error d-none font-size-13">Requerido</div>
                                                 </div>
                                             </div>
                                             <div class="col-sm-4">

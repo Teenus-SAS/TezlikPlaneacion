@@ -173,22 +173,23 @@ $(document).ready(function () {
     }
 
     // Crear el tfoot con las sumas totales
-    body.insertAdjacentHTML(
-      "afterend",
-      `<tfoot>
-          <tr>
-            <td colspan="4"><strong>Total</strong></td>
-            <td><strong>$${totalCostFtm.toLocaleString("es-CO", {
-              minimumFractionDigits: 0,
-              maximumFractionDigits: 2,
-            })}</strong></td>
-            <td><strong>$${totalCostTotal.toLocaleString("es-CO", {
-              minimumFractionDigits: 0,
-              maximumFractionDigits: 0,
-            })}</strong></td>
-            <td colspan="3"></td>
-          </tr>
-        </tfoot>`
+    $('#tblPOMaterialsFoot').empty();
+    let foot = document.getElementById("tblPOMaterialsFoot");
+
+    foot.insertAdjacentHTML(
+      "beforeend",
+      `<tr>
+          <td colspan="4"><strong>Total</strong></td>
+          <td><strong>$${totalCostFtm.toLocaleString("es-CO", {
+            minimumFractionDigits: 0,
+            maximumFractionDigits: 2,
+          })}</strong></td>
+          <td><strong>$${totalCostTotal.toLocaleString("es-CO", {
+            minimumFractionDigits: 0,
+            maximumFractionDigits: 0,
+          })}</strong></td>
+          <td colspan="3"></td>
+        </tr>`
     );
 
     // Procesos

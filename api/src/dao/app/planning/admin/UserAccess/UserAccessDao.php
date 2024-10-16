@@ -51,6 +51,7 @@ class UserAccessDao
                                             IFNULL(usa.program, 0) AS program, 
                                             IFNULL(usa.explosion_of_material, 0) AS explosion_of_material, 
                                             IFNULL(usa.production_order, 0) AS production_order, 
+                                            IFNULL(usa.type_machine_op, 0) AS type_machine_op, 
                                             IFNULL(usa.op_to_store, 0) AS op_to_store, 
                                             IFNULL(usa.store, 0) AS store,
                                             IFNULL(usa.office, 0) AS office
@@ -96,6 +97,7 @@ class UserAccessDao
                                                             program, 
                                                             explosion_of_material, 
                                                             production_order, 
+                                                            type_machine_op,
                                                             op_to_store,                                                         
                                                             store,
                                                             office                                                         
@@ -125,6 +127,7 @@ class UserAccessDao
                                                             :program, 
                                                             :explosion_of_material, 
                                                             :production_order, 
+                                                            :type_machine_op,
                                                             :op_to_store,                                                         
                                                             :store,
                                                             :office
@@ -148,6 +151,7 @@ class UserAccessDao
                 'program' => $dataUser['program'],
                 'explosion_of_material' => $dataUser['explosionOfMaterial'],
                 'production_order' => $dataUser['productionOrder'],
+                'type_machine_op' => $dataUser['typeMachineOP'],
                 'op_to_store' => $dataUser['opToStore'],
                 'store' => $dataUser['store'],
                 'office' => $dataUser['office'],
@@ -197,6 +201,7 @@ class UserAccessDao
                                                             program = :program, 
                                                             explosion_of_material = :explosion_of_material, 
                                                             production_order = :production_order, 
+                                                            type_machine_op = :type_machine_op, 
                                                             op_to_store = :op_to_store,                                                         
                                                             store = :store,
                                                             office = :office
@@ -220,6 +225,7 @@ class UserAccessDao
                     'program' => $dataUser['program'],
                     'explosion_of_material' => $dataUser['explosionOfMaterial'],
                     'production_order' => $dataUser['productionOrder'],
+                    'type_machine_op' => $dataUser['typeMachineOP'],
                     'op_to_store' => $dataUser['opToStore'],
                     'store' => $dataUser['store'],
                     'office' => $dataUser['office'],

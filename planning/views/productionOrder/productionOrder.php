@@ -104,12 +104,12 @@ if (sizeof($_SESSION) == 0)
     <!-- Page End -->
 
     <?php include_once dirname(dirname(dirname(__DIR__))) . '/global/partials/scriptsJS.php'; ?>
-    <!-- <script src="/planning/js/users/usersAccess.js"></script> -->
-
+    <script>
+        type_machine_op = "<?= $_SESSION['type_machine_op'] ?>";
+    </script>
     <script src="/planning/js/productionOrder/tblProductionOrders.js"></script>
     <script src="/planning/js/productionOrder/productionOrder.js"></script>
     <script src="/global/js/global/lastText.js"></script>
-    <!-- <script src="/planning/js/explosionMaterials/process/process.js"></script> -->
 </body>
 
 </html>

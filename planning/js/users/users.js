@@ -1,4 +1,6 @@
 $(document).ready(function () {
+  loadDataMachines(3);
+
   // Ocultar Modal Nuevo usuario
   $("#btnCloseUser").click(function (e) {
     e.preventDefault();
@@ -6,7 +8,6 @@ $(document).ready(function () {
   });
 
   /* Abrir panel Nuevo usuario */
-
   $("#btnNewUser").click(function (e) {
     e.preventDefault();
     $("#createUserAccess").modal("show");
@@ -14,6 +15,7 @@ $(document).ready(function () {
 
     sessionStorage.removeItem("id_user");
 
+    $('.cardTypeMachineOP').hide();
     $("#nameUser").prop("disabled", false);
     $("#lastnameUser").prop("disabled", false);
     $("#emailUser").prop("disabled", false);
@@ -21,57 +23,33 @@ $(document).ready(function () {
     $("#formCreateUser").trigger("reset");
   });
 
-  /* Agregar nuevo usuario */
+  $(document).on('click', '.typeCheckbox', function () {
+    let option = this.id;
 
+    switch (option) {
+      case 'checkbox-17':
+        $('.cardTypeMachineOP').toggle(800);
+        break;
+    }
+  });
+
+  /* Agregar nuevo usuario */
   $("#btnCreateUserAndAccess").click(function (e) {
     e.preventDefault();
     let id_user = sessionStorage.getItem("id_user");
 
     if (id_user == "" || id_user == null) {
-      nameUser = $("#nameUser").val();
-      lastnameUser = $("#lastnameUser").val();
-      emailUser = $("#emailUser").val();
-
-      if (
-        nameUser == "" ||
-        nameUser == null ||
-        lastnameUser == "" ||
-        lastnameUser == null ||
-        emailUser == "" ||
-        emailUser == null
-      ) {
-        toastr.error("Ingrese nombre, apellido y/o email");
-        return false;
-      }
-
-      /* Validar que al menos un acceso sea otorgado */
-      if ($("input[type=checkbox]:checked").length === 0) {
-        toastr.error("Debe seleccionar al menos un acceso");
-      }
-
-      /* Obtener los checkbox seleccionados */
-
-      dataUser = {};
-      dataUser["nameUser"] = nameUser;
-      dataUser["lastnameUser"] = lastnameUser;
-      dataUser["emailUser"] = emailUser;
-
-      dataUser = setCheckBoxes(dataUser);
-
-      $.post("/api/addUser", dataUser, function (data, textStatus, jqXHR) {
-        message(data, null);
-      });
+      checkDataUserAcces('/api/addUser', null);
     } else {
-      updateUserAccess();
+      checkDataUserAcces('/api/updatePlanningUserAccess', id_user);
     }
   });
 
   /* Actualizar User */
-
   $(document).on("click", ".updateUser", function (e) {
     $("#createUserAccess").modal("show");
     $("#btnCreateUserAndAccess").text("Actualizar Accesos");
-
+    $('.cardTypeMachineOP').hide();
     $("#nameUser").prop("disabled", true);
     $("#lastnameUser").prop("disabled", true);
     $("#emailUser").prop("disabled", true);
@@ -91,7 +69,6 @@ $(document).ready(function () {
 
     let access = {
       planningCreateProduct: data.create_product,
-      // planningCreateMaterial: data.create_material,
       planningCreateMachine: data.create_machine,
       payroll: data.payroll,
       planningProductsMaterial: data.products_material,
@@ -120,6 +97,11 @@ $(document).ready(function () {
       i++;
     });
 
+    if (data.production_order == 1) {
+      $('.cardTypeMachineOP').show();
+      $(`#typeMachineOP option[value=${data.type_machine_op}]`).prop("selected", true);
+    }
+
     $("html, body").animate(
       {
         scrollTop: 0,
@@ -128,29 +110,64 @@ $(document).ready(function () {
     );
   });
 
-  updateUserAccess = () => {
-    id_user = sessionStorage.getItem("id_user");
+  const checkDataUserAcces = async (url, idUser) => {
+    let nameUser = $("#nameUser").val();
+    let lastnameUser = $("#lastnameUser").val();
+    let emailUser = $("#emailUser").val();
 
-    dataUser = {};
-    dataUser["idUser"] = id_user;
-    dataUser["nameUser"] = $("#nameUser").val();
-    dataUser["lastnameUser"] = $("#lastnameUser").val();
-    dataUser["emailUser"] = $("#emailUser").val();
+    if (
+      nameUser == "" ||
+      nameUser == null ||
+      lastnameUser == "" ||
+      lastnameUser == null ||
+      emailUser == "" ||
+      emailUser == null
+    ) {
+      toastr.error("Ingrese nombre, apellido y/o email");
+      return false;
+    }
 
+    /* Validar que al menos un acceso sea otorgado */
+    if ($("input[type=checkbox]:checked").length === 0) {
+      toastr.error("Debe seleccionar al menos un acceso");
+      return false;
+    }
+    
+    let dataUser = {};
+
+    if ($(`#checkbox-17`).is(':checked')) {
+      let machine = parseFloat($('#typeMachineOP').val());
+
+      if (isNaN(machine)) {
+        toastr.error("Debe seleccionar una maquina");
+        return false;
+      }
+
+      dataUser["typeMachineOP"] = machine;
+    }
+
+    dataUser["nameUser"] = nameUser;
+    dataUser["lastnameUser"] = lastnameUser;
+    dataUser["emailUser"] = emailUser;
+    
+    if (idUser)
+      dataUser['idUser'] = idUser;
+    
+    /* Obtener los checkbox seleccionados */
     dataUser = setCheckBoxes(dataUser);
 
-    $.post(
-      "/api/updatePlanningUserAccess",
-      dataUser,
-      function (data, textStatus, jqXHR) {
-        message(data, id_user);
-        updateTable();
+    await $.ajax({
+      type: "POST",
+      url: url,
+      data: dataUser,
+      success: function (resp) {
+        message(resp)
       }
-    );
+    });
   };
 
   /* Metodo para definir checkboxes */
-  setCheckBoxes = (dataUser) => {
+  const setCheckBoxes = (dataUser) => {
     let i = 1;
 
     let access = {
@@ -227,7 +244,7 @@ $(document).ready(function () {
 
   /* Mensaje de exito */
 
-  message = async (data, id_user) => {
+  const message = async (data, id_user) => {
     const { success, error, info, message } = data;
     if (success) {
       $("#createUserAccess").modal("hide");

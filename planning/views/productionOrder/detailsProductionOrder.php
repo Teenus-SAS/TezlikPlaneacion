@@ -234,6 +234,7 @@ if (sizeof($_SESSION) == 0)
 														</thead>
 														<tbody id="tblPOMaterialsBody">
 														</tbody>
+														<tfoot id="tblPOMaterialsFoot"></tfoot>
 													</table>
 												</div>
 											</div>
