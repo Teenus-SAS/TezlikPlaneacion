@@ -77,10 +77,10 @@ if (sizeof($_SESSION) == 0)
 											<hr> -->
 										<div class="col-sm-12 col-xl-12 d-flex justify-content-end btnPrintPDF">
 											<div class="col-xs-2 mt-2 mr-2" id="">
-												<span class="badge badge-info" id="costMaterials" style="font-size: large;"></span>
-												<span class="badge badge-info" id="costPayroll" style="font-size: large;"></span>
-												<span class="badge badge-info" id="indirectCost" style="font-size: large;"></span>
-												<span class="badge badge-success" id="totalCost" style="font-size: large;"></span>
+												<span class="badge badge-info" id="kpiCostMaterials" style="font-size: large;"></span>
+												<span class="badge badge-info" id="kpiCostPayroll" style="font-size: large;"></span>
+												<span class="badge badge-info" id="kpiIndirectCost" style="font-size: large;"></span>
+												<span class="badge badge-success" id="kpiTotalCost" style="font-size: large;"></span>
 												<!-- <button class="btn btn-success" onclick="printPDF()">Imprimir PDF</button> -->
 											</div>
 										</div>
