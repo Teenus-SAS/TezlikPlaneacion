@@ -320,26 +320,28 @@ $(document).ready(function () {
   // Cerrar OP
   $("#btnCloseOP").click(function (e) {
     e.preventDefault();
-    let dataOPP = tblPartialsDelivery.DataTable().rows().data().toArray();
-    let dataOPM = tblOPMaterial.DataTable().rows().data().toArray();
 
-    if (dataOPP.length == 0 || dataOPM.length == 0) {
-      toastr.error("Ejecucion produccion o devolucion de materiales sin datos");
-      return false;
-    }
+    if (op_to_store == '1') {
+      let dataOPP = tblPartialsDelivery.DataTable().rows().data().toArray();
 
-    let materialsAccept = allMaterialsAccept.filter(
-      (item) => item.id_material == idMaterial
-    );
+      if (dataOPP.length == 0) {
+        toastr.error("Ejecucion produccion o devolucion de materiales sin datos");
+        return false;
+      }
 
-    let accept = 0;
-    materialsAccept.forEach((item) => {
-      accept += parseFloat(item.quantity);
-    });
+      let materialsAccept = allMaterialsAccept.filter(
+        (item) => item.id_material == idMaterial
+      );
 
-    if (accept == 0) {
-      toastr.error("Materiales y Componentes no ejecutados");
-      return false;
+      let accept = 0;
+      materialsAccept.forEach((item) => {
+        accept += parseFloat(item.quantity);
+      });
+
+      if (accept == 0) {
+        toastr.error("Materiales y Componentes no ejecutados");
+        return false;
+      }
     }
 
     let id_programming = sessionStorage.getItem("id_programming");
