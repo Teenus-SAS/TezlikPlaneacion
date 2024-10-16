@@ -59,5 +59,5 @@ $(document).ready(function () {
   // Iniciar la observación en las columnas específicas
   if (targetDefects) observer.observe(targetDefects, config);
   if (targetProcessing) observer.observe(targetProcessing, config);
-  if (targetProcessing) observer.observe(targetProcessing, config);
+  if (costPayroll) observer.observe(costPayroll, config);
 });
