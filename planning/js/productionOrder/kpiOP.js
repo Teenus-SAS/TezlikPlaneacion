@@ -82,7 +82,7 @@ $(document).ready(function () {
 
             $("#kpiCostPayrollUnit").text(
               `MO: $${costPayrollUnit.toLocaleString("es-CO", {
-                minimumFractionDigits: 0,
+                minimumFractionDigits: 2,
               })}`
             );
 
@@ -99,7 +99,7 @@ $(document).ready(function () {
             );
             $("#kpiCostMaterialsUnit").text(
               `MP: $${costMaterialsUnit.toLocaleString("es-CO", {
-                minimumFractionDigits: 0,
+                minimumFractionDigits: 2,
               })}`
             );
 
@@ -110,7 +110,7 @@ $(document).ready(function () {
             );
             $("#kpiIndirectCostUnit").text(
               `CI: $${costIndirectunit.toLocaleString("es-CO", {
-                minimumFractionDigits: 0,
+                minimumFractionDigits: 2,
               })}`
             );
 
@@ -121,7 +121,7 @@ $(document).ready(function () {
             );
             $("#kpiTotalCostUnit").text(
               `CT: $${totalCostUnit.toLocaleString("es-CO", {
-                minimumFractionDigits: 0,
+                minimumFractionDigits: 2,
               })}`
             );
           } else {
