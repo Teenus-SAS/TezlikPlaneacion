@@ -89,7 +89,7 @@ class PStockDao
         }
     }
 
-    public function deletestock($id_stock_product)
+    public function deleteStock($id_stock_product)
     {
         $connection = Connection::getInstance()->getConnection();
 

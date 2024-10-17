@@ -15,37 +15,7 @@ class ProgrammingDao
         $this->logger = new Logger(self::class);
         $this->logger->pushHandler(new RotatingFileHandler(Constants::LOGS_PATH . 'querys.log', 20, Logger::DEBUG));
     }
-    /*
-    public function findProductsAndOrdersByMachine($dataProgramming)
-    {
-        $connection = Connection::getInstance()->getConnection();
 
-        $stmt = $connection->prepare("SELECT p.id_product, p.product, o.id_order, o.num_order
-                                      FROM products p 
-                                      INNER JOIN machine_cicles pcm ON pcm.id_product = p.id_product
-                                      INNER JOIN orders o ON o.id_product = p.id_product 
-                                      WHERE pcm.id_machine = :id_machine");
-        $stmt->execute(['id_machine' => $dataProgramming['idMachine']]);
-        $this->logger->info(__FUNCTION__, array('query' => $stmt->queryString, 'errors' => $stmt->errorInfo()));
-        $productsAndOrders = $stmt->fetchAll($connection::FETCH_ASSOC);
-        return $productsAndOrders;
-    }
-
-    public function findMachinesAndOrdersByProducts($dataProgramming)
-    {
-        $connection = Connection::getInstance()->getConnection();
-
-        $stmt = $connection->prepare("SELECT m.id_machine, m.machine, o.id_order, o.num_order 
-                                      FROM machines m 
-                                      INNER JOIN machine_cicles pcm ON pcm.id_machine = m.id_machine 
-                                      INNER JOIN orders o ON o.id_product = pcm.id_product
-                                      WHERE o.id_product = :id_product");
-        $stmt->execute(['id_product' => $dataProgramming['idProduct']]);
-        $this->logger->info(__FUNCTION__, array('query' => $stmt->queryString, 'errors' => $stmt->errorInfo()));
-        $machinesAndOrders = $stmt->fetchAll($connection::FETCH_ASSOC);
-        return $machinesAndOrders;
-    }
- */
     public function findProductsByOrders($num_order)
     {
         $connection = Connection::getInstance()->getConnection();

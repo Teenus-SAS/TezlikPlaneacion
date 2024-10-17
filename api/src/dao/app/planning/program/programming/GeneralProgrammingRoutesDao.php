@@ -42,4 +42,25 @@ class GeneralProgrammingRoutesDao
         $programming = $stmt->fetch($connection::FETCH_ASSOC);
         return $programming;
     }
+
+    public function deleteProgrammingRouteByProduct($id_product)
+    {
+        try {
+            $connection = Connection::getInstance()->getConnection();
+
+            $stmt = $connection->prepare("SELECT * FROM programming_routes WHERE id_product = :id_product");
+            $stmt->execute(['id_product' => $id_product]);
+
+            $row = $stmt->rowCount();
+
+            if ($row > 0) {
+                $stmt = $connection->prepare("DELETE FROM programming_routes WHERE id_product = :id_product");
+                $stmt->execute(['id_product' => $id_product]);
+            }
+        } catch (\Exception $e) {
+            $message = $e->getMessage();
+            $error = array('info' => true, 'message' => $message);
+            return $error;
+        }
+    }
 }

@@ -121,7 +121,7 @@ class ProductionOrderPartialDao
                                             )
                                         ) AS last_user ON last_user.id_part_deliv = po.id_part_deliv
                                       WHERE po.id_programming = :id_programming AND po.id_company = :id_company
-                                        GROUP BY pg.id_programming");
+                                        GROUP BY pg.id_programming, po.id_part_deliv");
         $stmt->execute([
             'id_programming' => $id_programming,
             'id_company' => $id_company

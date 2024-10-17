@@ -2,11 +2,16 @@
 
 use TezlikPlaneacion\Dao\CompositeProductsDao;
 use TezlikPlaneacion\Dao\GeneralCompositeProductsDao;
+use TezlikPlaneacion\dao\GeneralOrdersDao;
 use TezlikPlaneacion\dao\GeneralPlanCiclesMachinesDao;
 use TezlikPlaneacion\dao\GeneralPMeasuresDao;
 use TezlikPlaneacion\dao\GeneralProductsDao;
 use TezlikPlaneacion\dao\GeneralProductsMaterialsDao;
 use TezlikPlaneacion\dao\GeneralProductsPlansDao;
+use TezlikPlaneacion\dao\GeneralProgrammingDao;
+use TezlikPlaneacion\dao\GeneralProgrammingRoutesDao;
+use TezlikPlaneacion\dao\GeneralPStockDao;
+use TezlikPlaneacion\dao\GeneralUnitSalesDao;
 use TezlikPlaneacion\dao\LastDataDao;
 use TezlikPlaneacion\dao\MaterialsDao;
 use TezlikPlaneacion\dao\MaterialsInventoryDao;
@@ -27,11 +32,18 @@ $productsInventoryDao = new ProductsInventoryDao();
 $productsDao = new ProductsDao();
 $generalProductsDao = new GeneralProductsDao();
 $productMaterialDao = new ProductsMaterialsDao();
+$generalProductsMaterialsDao = new GeneralProductsMaterialsDao();
 $compositeProductsDao = new CompositeProductsDao();
+$generalCompositeProductsDao = new GeneralCompositeProductsDao();
 $planCiclesMachineDao = new PlanCiclesMachineDao();
 $generalPlanCiclesMachinesDao = new GeneralPlanCiclesMachinesDao();
 $productsPlansDao = new ProductsPlansDao();
 $generalProductsPlansDao = new GeneralProductsPlansDao();
+$generalPStockDao = new GeneralPStockDao();
+$generalUnitSalesDao = new GeneralUnitSalesDao();
+$generalOrdersDao = new GeneralOrdersDao();
+$generalProgrammingDao = new GeneralProgrammingDao();
+$generalProgrammingRoutesDao = new GeneralProgrammingRoutesDao();
 $lastDataDao = new LastDataDao();
 $generalCompositeProductsDao = new GeneralCompositeProductsDao();
 
@@ -352,24 +364,49 @@ $app->post('/updateProductMeasure', function (Request $request, Response $respon
 $app->post('/deleteProductMeasure', function (Request $request, Response $response, $args) use (
     $productsDao,
     $productsMeasuresDao,
-    $generalProductsDao
+    $generalProductsDao,
+    $generalProductsMaterialsDao,
+    $generalCompositeProductsDao,
+    $generalPlanCiclesMachinesDao,
+    $generalProductsPlansDao,
+    $generalPStockDao,
+    $generalUnitSalesDao,
+    $generalOrdersDao,
+    $generalProgrammingDao,
+    $generalProgrammingRoutesDao
 ) {
     session_start();
     $dataProduct = $request->getParsedBody();
     $flag_products_measure = $_SESSION['flag_products_measure'];
     $resolution = null;
 
-    if ($flag_products_measure == '1') {
-        $resolution = $productsMeasuresDao->deletePMeasure($dataProduct['idProductMeasure']);
-        if ($resolution == null)
-            $resolution = $productsDao->deleteProduct($dataProduct['idProduct']);
-        if ($resolution == null)
-            $resolution = $generalProductsDao->deleteProductInventoryByProduct($dataProduct['idProduct']);
-    } else {
-        $resolution = $productsDao->deleteProduct($dataProduct['idProduct']);
-        if ($resolution == null)
-            $resolution = $generalProductsDao->deleteProductInventoryByProduct($dataProduct['idProduct']);
+    if ($resolution == null) {
+        $resolution = $generalProductsMaterialsDao->deleteProductMaterialByProduct($dataProduct['idProduct']);
+        $resolution = $generalCompositeProductsDao->deleteCompositeProductByProduct($dataProduct['idProduct']);
+        $resolution = $generalCompositeProductsDao->deleteChildProductByProduct($dataProduct['idProduct']);
+        $resolution = $generalPlanCiclesMachinesDao->deletePlanCiclesMachineByProduct($dataProduct['idProduct']);
+        $resolution = $generalProductsPlansDao->deleteProductPlanByProduct($dataProduct['idProduct']);
+        $resolution = $generalPStockDao->deleteStockByProduct($dataProduct['idProduct']);
+        $resolution = $generalUnitSalesDao->deleteSaleByProduct($dataProduct['idProduct']);
+        $resolution = $generalOrdersDao->deleteOrderByProduct($dataProduct['idProduct']);
+        $resolution = $generalProgrammingDao->deleteProgrammingByProduct($dataProduct['idProduct']);
+        $resolution = $generalProgrammingRoutesDao->deleteProgrammingRouteByProduct($dataProduct['idProduct']);
     }
+
+    if ($resolution == null) {
+        if ($flag_products_measure == '1') {
+            $resolution = $productsMeasuresDao->deletePMeasure($dataProduct['idProductMeasure']);
+            if ($resolution == null)
+                $resolution = $productsDao->deleteProduct($dataProduct['idProduct']);
+            if ($resolution == null)
+                $resolution = $generalProductsDao->deleteProductInventoryByProduct($dataProduct['idProduct']);
+        } else {
+            $resolution = $productsDao->deleteProduct($dataProduct['idProduct']);
+            if ($resolution == null)
+                $resolution = $generalProductsDao->deleteProductInventoryByProduct($dataProduct['idProduct']);
+        }
+    }
+
 
     if ($resolution == null)
         $resp = array('success' => true, 'message' => 'Producto eliminado correctamente');

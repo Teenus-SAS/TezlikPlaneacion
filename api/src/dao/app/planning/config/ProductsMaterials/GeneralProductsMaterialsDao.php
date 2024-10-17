@@ -132,4 +132,20 @@ class GeneralProductsMaterialsDao
             return ['info' => true, 'message' => $e->getMessage()];
         }
     }
+
+    // Borrar productos materia prima general
+    public function deleteProductMaterialByProduct($id_product)
+    {
+        $connection = Connection::getInstance()->getConnection();
+
+        $stmt = $connection->prepare("SELECT * FROM products_materials WHERE id_product = :id_product");
+        $stmt->execute(['id_product' => $id_product]);
+        $rows = $stmt->rowCount();
+
+        if ($rows > 0) {
+            $stmt = $connection->prepare("DELETE FROM products_materials WHERE id_product = :id_product");
+            $stmt->execute(['id_product' => $id_product]);
+            $this->logger->info(__FUNCTION__, array('query' => $stmt->queryString, 'errors' => $stmt->errorInfo()));
+        }
+    }
 }

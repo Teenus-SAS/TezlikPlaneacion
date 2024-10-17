@@ -2,21 +2,7 @@ $(document).ready(function () {
   $("#btnExportStore").hide();
 
   $(".selectNavigation").click(function (e) {
-    e.preventDefault(); 
-
-    // $(".cardOC, .cardOP").hide();
-
-    // if (this.id == "receiveOC") {
-    //   $(".cardOC").show();
-    //   loadtblReceiveOC(requisitions);
-    //   $("#btnExportStore").hide();
-    // // } else if (this.id == "deliverOC") {
-    // //   $(".cardOC").show();
-    // //   $("#btnExportStore").show();
-    // //   loadtblDeliverOC(store);
-    // } else if (this.id == "receiveOP") {
-    //   $(".cardOP").show();
-    // }
+    e.preventDefault();
 
     let tables = document.getElementsByClassName("dataTable");
 
@@ -37,8 +23,6 @@ $(document).ready(function () {
 
       let arr = assignOpToGroups(dataStore, "id_programming");
 
-      // if (op == 1)
-      //   else
       loadTblReceiveOC(dataRequisitions);
       loadTblDeliverOP(arr);
 
@@ -152,11 +136,13 @@ $(document).ready(function () {
 
   // Función para construir las acciones para entregar material
   const buildDeliverAction = (data) => {
-    if (
-      data.delivery_store === 0 ||
-      data.delivery_pending >= 0 ||
-      data.id_user_delivered === 0
-    ) {
+    if (data.id_user_delivered == 0) {
+      return `<button class="btn btn-info deliver" id="delivery">Entregar MP</button>`;      
+    }
+
+    let check_quantity = parseFloat(data.reserved) - parseFloat(data.delivery_pending);
+
+    if (check_quantity > 0) {
       return `<button class="btn btn-info deliver" id="delivery">Entregar MP</button>`;
     }
 

@@ -379,4 +379,25 @@ class GeneralOrdersDao
             return $error;
         }
     }
+
+    public function deleteOrderByProduct($id_product)
+    {
+        $connection = Connection::getInstance()->getConnection();
+
+        try {
+            $stmt = $connection->prepare("SELECT * FROM orders WHERE id_product = :id_product");
+            $stmt->execute(['id_product' => $id_product]);
+            $row = $stmt->rowCount();
+
+            if ($row > 0) {
+                $stmt = $connection->prepare("DELETE FROM orders WHERE id_product = :id_product");
+                $stmt->execute(['id_product' => $id_product]);
+                $this->logger->info(__FUNCTION__, array('query' => $stmt->queryString, 'errors' => $stmt->errorInfo()));
+            }
+        } catch (\Exception $e) {
+            $message = $e->getMessage();
+            $error = array('info' => true, 'message' => $message);
+            return $error;
+        }
+    }
 }

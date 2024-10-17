@@ -30,4 +30,19 @@ class GeneralPStockDao
         $this->logger->notice("stock", array('stock' => $stock));
         return $stock;
     }
+
+    public function deleteStockByProduct($id_product)
+    {
+        $connection = Connection::getInstance()->getConnection();
+
+        $stmt = $connection->prepare("SELECT * FROM inv_stock_products WHERE id_product = :id_product");
+        $stmt->execute(['id_product' => $id_product]);
+        $rows = $stmt->rowCount();
+
+        if ($rows > 0) {
+            $stmt = $connection->prepare("DELETE FROM inv_stock_products WHERE id_product = :id_product");
+            $stmt->execute(['id_product' => $id_product]);
+            $this->logger->info(__FUNCTION__, array('query' => $stmt->queryString, 'errors' => $stmt->errorInfo()));
+        }
+    }
 }

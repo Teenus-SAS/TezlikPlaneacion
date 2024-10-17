@@ -193,4 +193,19 @@ class GeneralPlanCiclesMachinesDao
             return array('info' => true, 'message' => $e->getMessage());
         }
     }
+
+    public function deletePlanCiclesMachineByProduct($id_product)
+    {
+        $connection = Connection::getInstance()->getConnection();
+
+        $stmt = $connection->prepare("SELECT * FROM machine_cicles WHERE id_product = :id_product");
+        $stmt->execute(['id_product' => $id_product]);
+        $rows = $stmt->rowCount();
+
+        if ($rows > 0) {
+            $stmt = $connection->prepare("DELETE FROM machine_cicles WHERE id_product = :id_product");
+            $stmt->execute(['id_product' => $id_product]);
+            $this->logger->info(__FUNCTION__, array('query' => $stmt->queryString, 'errors' => $stmt->errorInfo()));
+        }
+    }
 }

@@ -117,4 +117,24 @@ class GeneralUnitSalesDao
             return array('info' => true, 'message' => $e->getMessage());
         }
     }
+
+    public function deleteSaleByProduct($id_product)
+    {
+        $connection = Connection::getInstance()->getConnection();
+        try {
+            $stmt = $connection->prepare("SELECT * FROM sales_by_units WHERE id_product = :id_product");
+            $stmt->execute(['id_product' => $id_product]);
+            $rows = $stmt->rowCount();
+
+            if ($rows > 0) {
+                $stmt = $connection->prepare("DELETE FROM sales_by_units WHERE id_product = :id_product");
+                $stmt->execute(['id_product' => $id_product]);
+                $this->logger->info(__FUNCTION__, array('query' => $stmt->queryString, 'errors' => $stmt->errorInfo()));
+            }
+        } catch (\Exception $e) {
+            $message = $e->getMessage();
+            $error = array('info' => true, 'message' => $message);
+            return $error;
+        }
+    }
 }

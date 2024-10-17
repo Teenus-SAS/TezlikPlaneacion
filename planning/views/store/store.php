@@ -191,6 +191,9 @@ if (sizeof($_SESSION) == 0)
     <!-- Page End -->
 
     <?php include_once dirname(dirname(dirname(__DIR__))) . '/global/partials/scriptsJS.php'; ?>
+    <script>
+        op_to_store = "<?= $_SESSION['op_to_store'] ?>";
+    </script>
     <script src="/planning/js/store/tblStore.js"></script>
     <script src="/planning/js/store/store.js"></script>
     <script src="/planning/js/store/exportStore.js"></script>

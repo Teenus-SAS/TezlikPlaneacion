@@ -399,7 +399,7 @@ $app->post('/deletePlanStock', function (Request $request, Response $response, $
     $minimumStockDao
 ) {
     $dataStock = $request->getParsedBody();
-    $resolution = $stockDao->deletestock($dataStock['idStock']);
+    $resolution = $stockDao->deleteStock($dataStock['idStock']);
 
     if ($resolution == null) {
         $product = $generalProductsDao->findProductById($dataStock['idProduct']);
