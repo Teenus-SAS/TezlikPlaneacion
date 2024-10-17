@@ -27,7 +27,7 @@ $(document).ready(function () {
     let option = this.id;
 
     switch (option) {
-      case 'checkbox-17':
+      case 'checkbox-18':
         $('.cardTypeMachineOP').toggle(800);
         break;
     }
@@ -83,6 +83,7 @@ $(document).ready(function () {
       requisition: data.requisition,
       order: data.plan_order,
       program: data.program,
+      typeProgram: data.type_program,
       explosionOfMaterial: data.explosion_of_material,
       productionOrder: data.production_order,
       opToStore: data.op_to_store,
@@ -135,7 +136,7 @@ $(document).ready(function () {
     
     let dataUser = {};
 
-    if ($(`#checkbox-17`).is(':checked')) {
+    if ($(`#checkbox-18`).is(':checked')) {
       let machine = parseFloat($('#typeMachineOP').val());
 
       if (isNaN(machine)) {
@@ -186,6 +187,7 @@ $(document).ready(function () {
       requisition: 0,
       order: 0,
       program: 0,
+      typeProgram: 0,
       explosionOfMaterial: 0,
       productionOrder: 0,
       opToStore: 0,

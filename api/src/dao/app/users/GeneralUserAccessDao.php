@@ -96,6 +96,7 @@ class GeneralUserAccessDao
                                                 IFNULL(pua.requisition, 0) AS requisition,
                                                 IFNULL(pua.plan_order, 0) AS plan_order,
                                                 IFNULL(pua.program, 0) AS program, 
+                                                IFNULL(pua.type_program, 0) AS type_program, 
                                                 IFNULL(pua.explosion_of_material, 0) AS explosion_of_material, 
                                                 IFNULL(pua.production_order, 0) AS production_order,
                                                 IFNULL(pua.type_machine_op, 0) AS type_machine_op,
@@ -143,6 +144,7 @@ class GeneralUserAccessDao
         $_SESSION['requisition'] = $userAccess['requisition'];
         $_SESSION['plan_order'] = $userAccess['plan_order'];
         $_SESSION['program'] = $userAccess['program'];
+        $_SESSION['type_program'] = $userAccess['type_program'];
         $_SESSION['explosion_of_material'] = $userAccess['explosion_of_material'];
         $_SESSION['production_order'] = $userAccess['production_order'];
         $_SESSION['type_machine_op'] = $userAccess['type_machine_op'];

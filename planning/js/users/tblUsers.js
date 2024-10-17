@@ -417,6 +417,7 @@ $(document).ready(function () {
             { name: "Compras", icon: data.requisition },
             { name: "Pedidos", icon: data.plan_order },
             { name: "Programar Producción", icon: data.program },
+            { name: "Tipo Programacion", icon: data.type_program },
             { name: "Explosión de MP", icon: data.explosion_of_material },
             { name: "Orden de Producción", icon: data.production_order },
             { name: "Entregas OP a Almacen", icon: data.op_to_store },

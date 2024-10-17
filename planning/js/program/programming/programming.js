@@ -14,15 +14,6 @@ $(document).ready(function () {
 
     // Mostrar la sección correspondiente según la opción seleccionada
     $(sections[option] || "").show();
-
-    /* switch (option) {
-      case "link-table":
-        $(".cardProgramming").show();
-        break;
-      case "link-dashboard":
-        $(".cardDashboardProgramming").show();
-        break;
-    } */
   });
 
   let processProgramming = [];
