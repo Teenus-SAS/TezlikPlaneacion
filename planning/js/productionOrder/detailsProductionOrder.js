@@ -184,7 +184,7 @@ $(document).ready(function () {
             minimumFractionDigits: 0,
             maximumFractionDigits: 2,
           })}</strong></td>
-          <td><strong>$${totalCostTotal.toLocaleString("es-CO", {
+          <td class="costMaterials"><strong>$${totalCostTotal.toLocaleString("es-CO", {
             minimumFractionDigits: 0,
             maximumFractionDigits: 0,
           })}</strong></td>

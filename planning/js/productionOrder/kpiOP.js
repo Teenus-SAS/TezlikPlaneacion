@@ -1,11 +1,17 @@
-$(document).ready(function () { 
+$(document).ready(function () {
   // Seleccionar los elementos <th> a observar
   const targetDefects = document.querySelector(".unitsDefects");
   const targetProcessing = document.querySelector(".unitsProcessing");
   const targetCostPayroll = document.querySelector(".costPayroll");
+  const targetCostMaterials = document.querySelector(".costMaterials");
 
   // Verifica si los elementos existen antes de iniciar el observador
-  if (targetDefects && targetProcessing && targetCostPayroll) {
+  if (
+    targetDefects &&
+    targetProcessing &&
+    targetCostPayroll &&
+    targetCostMaterials
+  ) {
     // Crear una instancia de MutationObserver
     const observer = new MutationObserver(function (mutationsList) {
       mutationsList.forEach((mutation) => {
@@ -47,7 +53,16 @@ $(document).ready(function () {
             $("#kpiQualityOP")
               .text(`QC: ${quality.toFixed(2)}%`)
               .show();
-            $("#kpiCostPayroll").text(`CMO: $${costPayroll.toLocaleString('es-CO', { minimumFractionDigits: 0 })}`);
+            $("#kpiCostPayroll").text(
+              `CMO: $${costPayroll.toLocaleString("es-CO", {
+                minimumFractionDigits: 0,
+              })}`
+            );
+            $("#kpiCostMaterials").text(
+              `CMP: $${costMaterials.toLocaleString("es-CO", {
+                minimumFractionDigits: 0,
+              })}`
+            );
           } else {
             $("#kpiQualityOP").hide();
           }
@@ -62,6 +77,7 @@ $(document).ready(function () {
     observer.observe(targetDefects, config);
     observer.observe(targetProcessing, config);
     observer.observe(targetCostPayroll, config);
+    observer.observe(targetCostMaterials, config);
   } else {
     console.error("No se encontraron los elementos para observar.");
   }
