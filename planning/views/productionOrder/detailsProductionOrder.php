@@ -75,21 +75,32 @@ if (sizeof($_SESSION) == 0)
 												<button class="btn btn-danger mr-2" id="btnNewSend"><i class="fa fa-mail-bulk"></i> Enviar</button>
 											</div>
 											<hr> -->
-										<div class="col-sm-12 col-xl-12 d-flex justify-content-end btnPrintPDF">
-											<div class="col-xs-2 mt-2 mr-2" id="">
-												<span class="badge badge-info" id="kpiCostMaterials" style="font-size: medium;"></span>
-												<span class="badge badge-info" id="kpiCostPayroll" style="font-size: medium;"></span>
-												<span class="badge badge-info" id="kpiIndirectCost" style="font-size: medium;"></span>
-												<span class="badge badge-warning" id="kpiTotalCost" style="font-size: medium;"></span>
-												<!-- <button class="btn btn-success" onclick="printPDF()">Imprimir PDF</button> -->
+										<div class="col-sm-12 col-xl-12 d-flex justify-content-between align-items-start">
+											<!-- Costos por Orden de Producción a la izquierda -->
+											<div class="col-xs-6">
+												<h4>Costos por Orden de Producción</h4>
+												<div class="d-flex flex-column">
+													<span class="badge badge-info mb-2" id="kpiCostMaterials" style="font-size: medium;"></span>
+													<span class="badge badge-info mb-2" id="kpiCostPayroll" style="font-size: medium;"></span>
+													<span class="badge badge-info mb-2" id="kpiIndirectCost" style="font-size: medium;"></span>
+													<span class="badge badge-warning" id="kpiTotalCost" style="font-size: medium;"></span>
+												</div>
+											</div>
+
+											<!-- Costos por Unidad a la derecha -->
+											<div class="col-xs-6 text-right">
+												<h4>Costos por Unidad</h4>
+												<div class="d-flex flex-column align-items-end">
+													<span class="badge badge-info mb-2" id="kpiCostMaterialsUnit" style="font-size: medium;"></span>
+													<span class="badge badge-info mb-2" id="kpiCostPayrollUnit" style="font-size: medium;"></span>
+													<span class="badge badge-info mb-2" id="kpiIndirectCostUnit" style="font-size: medium;"></span>
+													<span class="badge badge-warning" id="kpiTotalCostUnit" style="font-size: medium;"></span>
+												</div>
 											</div>
 										</div>
 										<div class="col-sm-12 col-xl-12 d-flex justify-content-end btnPrintPDF">
 											<div class="col-xs-2 mt-2 mr-2" id="">
-												<span class="badge badge-info" id="kpiCostMaterialsUnit" style="font-size: medium;"></span>
-												<span class="badge badge-info" id="kpiCostPayrollUnit" style="font-size: medium;"></span>
-												<span class="badge badge-info" id="kpiIndirectCostUnit" style="font-size: medium;"></span>
-												<span class="badge badge-warning" id="kpiTotalCostUnit" style="font-size: medium;"></span>
+
 												<!-- <button class="btn btn-success" onclick="printPDF()">Imprimir PDF</button> -->
 											</div>
 										</div>
