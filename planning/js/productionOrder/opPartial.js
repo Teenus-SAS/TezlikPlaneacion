@@ -152,6 +152,7 @@ $(document).ready(function () {
         let totalDefectiveUnits = 0;
         let totalDeliveredQuantity = 0;
         let totalCostPayroll = 0;
+        let totalCostIndirect = 0;
 
         //Suma los valores de columnas
         data.forEach(function (row) {
@@ -163,9 +164,13 @@ $(document).ready(function () {
           const endDate = new Date(row.end_date);
           const differenceInMs = endDate - startDate;
           const minutes = Math.floor(differenceInMs / 1000 / 60);
+
           const cost_payroll = parseFloat(row.minute_value) * minutes || 0;
+          const cost_indirect =
+            parseFloat(row.minute_depreciation) * minutes || 0;
 
           totalCostPayroll += cost_payroll;
+          totalCostIndirect += cost_indirect;
         });
 
         // Actualizar el contenido del footer con los totales calculados
@@ -180,6 +185,11 @@ $(document).ready(function () {
             .display(totalDeliveredQuantity)} Und`
         );
         $(this.api().column(6).footer()).html(
+          `$${$.fn.dataTable.render
+            .number(".", ",", 0, "")
+            .display(totalCostPayroll)}`
+        );
+        $(this.api().column(7).footer()).html(
           `$${$.fn.dataTable.render
             .number(".", ",", 0, "")
             .display(totalCostPayroll)}`

@@ -382,7 +382,7 @@ if (sizeof($_SESSION) == 0)
 																	<th class="uniqueClassName dt-head-center unitsDefects"></th>
 																	<th class="uniqueClassName dt-head-center unitsProcessing"></th>
 																	<th class="uniqueClassName dt-head-center costPayroll"></th>
-																	<th></th>
+																	<th class="uniqueClassName dt-head-center costIndirect"></th>
 																	<th></th>
 																	<th></th>
 																</tr>
