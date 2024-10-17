@@ -142,7 +142,7 @@ $(document).ready(function () {
 
     let check_quantity = parseFloat(data.reserved) - parseFloat(data.delivery_pending);
 
-    if (check_quantity > 0) {
+    if (check_quantity > 0 && data.delivery_pending > 0) {
       return `<button class="btn btn-info deliver" id="delivery">Entregar MP</button>`;
     }
 
