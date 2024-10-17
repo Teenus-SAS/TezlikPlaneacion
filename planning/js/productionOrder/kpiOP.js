@@ -47,7 +47,7 @@ $(document).ready(function () {
             $("#kpiQualityOP")
               .text(`QC: ${quality.toFixed(2)}%`)
               .show();
-            $("#costPayroll").val(`CMO: $${costPayroll.toLocaleString('es-CO', { minimumFractionDigits: 0 })}`);
+            $("#kpiCostPayroll").text(`CMO: $${costPayroll.toLocaleString('es-CO', { minimumFractionDigits: 0 })}`);
           } else {
             $("#kpiQualityOP").hide();
           }
