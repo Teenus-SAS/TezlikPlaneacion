@@ -192,7 +192,7 @@ $(document).ready(function () {
         $(this.api().column(7).footer()).html(
           `$${$.fn.dataTable.render
             .number(".", ",", 0, "")
-            .display(totalCostPayroll)}`
+            .display(totalCostIndirect)}`
         );
       },
     });

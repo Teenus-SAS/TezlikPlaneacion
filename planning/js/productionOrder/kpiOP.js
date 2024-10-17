@@ -4,6 +4,7 @@ $(document).ready(function () {
   const targetProcessing = document.querySelector(".unitsProcessing");
   const targetCostPayroll = document.querySelector(".costPayroll");
   const targetCostMaterials = document.querySelector(".costMaterials");
+  const targetCostIndirect = document.querySelector(".costIndirect");
 
   // Verifica si los elementos existen antes de iniciar el observador
   if (targetDefects && targetProcessing && targetCostPayroll) {
@@ -48,9 +49,20 @@ $(document).ready(function () {
                 .replace(".", "")
                 .replace(",", ".")
             ) || 0;
+          const costIndirect =
+            parseFloat(
+              $(".costIndirect")
+                .text()
+                .replace("$", "")
+                .replace(".", "")
+                .replace(",", ".")
+            ) || 0;
 
           // Realizar el cálculo del KPI de calidad
           if (unitsProcessing > 0) {
+            //Total Cost
+            totalCost = costPayroll + costMaterials + costIndirect;
+            //calc quality
             let quality = 1 - unitsDefects / unitsProcessing;
             quality = quality * 100;
             $("#kpiQualityOP")
@@ -63,6 +75,16 @@ $(document).ready(function () {
             );
             $("#kpiCostMaterials").text(
               `CMP: $${costMaterials.toLocaleString("es-CO", {
+                minimumFractionDigits: 0,
+              })}`
+            );
+            $("#kpiIndirectCost").text(
+              `CI: $${costIndirect.toLocaleString("es-CO", {
+                minimumFractionDigits: 0,
+              })}`
+            );
+            $("#kpiTotalCost").text(
+              `CT: $${totalCost.toLocaleString("es-CO", {
                 minimumFractionDigits: 0,
               })}`
             );
@@ -81,6 +103,7 @@ $(document).ready(function () {
     observer.observe(targetProcessing, config);
     observer.observe(targetCostPayroll, config);
     observer.observe(targetCostMaterials, config);
+    observer.observe(targetCostIndirect, config);
   } else {
     console.error("No se encontraron los elementos para observar.");
   }
