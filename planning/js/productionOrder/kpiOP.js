@@ -70,7 +70,7 @@ $(document).ready(function () {
           if (unitsProcessing > 0) {
             //Total Cost
             let totalCost = costPayroll + costMaterials + costIndirect;
-            let costMPUnit = costMaterialsUnit / unitsProcessing;
+            let costMPUnit = costMaterials / unitsProcessing;
             let costPayrollUnit = costPayroll / unitsProcessing;
             let costIndirectunit = costIndirect / unitsProcessing;
             let totalCostUnit = costPayrollUnit + costIndirectunit;
