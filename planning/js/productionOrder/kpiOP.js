@@ -57,6 +57,14 @@ $(document).ready(function () {
                 .replace(".", "")
                 .replace(",", ".")
             ) || 0;
+          const costMaterialsUnit =
+            parseFloat(
+              $(".costMaterialsUnit")
+                .text()
+                .replace("$", "")
+                .replace(".", "")
+                .replace(",", ".")
+            ) || 0;
 
           // Realizar el cálculo del KPI de calidad
           if (unitsProcessing > 0) {
@@ -64,6 +72,7 @@ $(document).ready(function () {
             let totalCost = costPayroll + costMaterials + costIndirect;
             let costPayrollUnit = costPayroll / unitsProcessing;
             let costIndirectunit = costIndirect / unitsProcessing;
+            let totalCostUnit = costPayrollUnit + costIndirectunit;
             //calc quality
             let quality = 1 - unitsDefects / unitsProcessing;
             quality = quality * 100;
@@ -88,13 +97,18 @@ $(document).ready(function () {
                 minimumFractionDigits: 0,
               })}`
             );
-            
+            $("#kpiCostMaterialsUnit").text(
+              `MP: $${costMaterialsUnit.toLocaleString("es-CO", {
+                minimumFractionDigits: 0,
+              })}`
+            );
+
             $("#kpiIndirectCost").text(
               `CI: $${costIndirect.toLocaleString("es-CO", {
                 minimumFractionDigits: 0,
               })}`
             );
-            $("#kpiIndirectCost").text(
+            $("#kpiIndirectCostUnit").text(
               `CI: $${costIndirectunit.toLocaleString("es-CO", {
                 minimumFractionDigits: 0,
               })}`
@@ -102,6 +116,11 @@ $(document).ready(function () {
 
             $("#kpiTotalCost").text(
               `CT: $${totalCost.toLocaleString("es-CO", {
+                minimumFractionDigits: 0,
+              })}`
+            );
+            $("#kpiTotalCostUnit").text(
+              `CT: $${totalCostUnit.toLocaleString("es-CO", {
                 minimumFractionDigits: 0,
               })}`
             );

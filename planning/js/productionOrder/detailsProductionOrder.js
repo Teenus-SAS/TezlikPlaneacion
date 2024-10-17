@@ -12,7 +12,7 @@ $(document).ready(function () {
       ]
     );
     // let dataOP = JSON.parse(sessionStorage.getItem('dataOP'));
-    sessionStorage.setItem('dataFTMaterials', JSON.stringify(dataFTMaterials));
+    sessionStorage.setItem("dataFTMaterials", JSON.stringify(dataFTMaterials));
     // let allStore = JSON.parse(sessionStorage.getItem('dataAllStore'));
     allStore = dataStore;
 
@@ -173,21 +173,27 @@ $(document).ready(function () {
     }
 
     // Crear el tfoot con las sumas totales
-    $('#tblPOMaterialsFoot').empty();
+    $("#tblPOMaterialsFoot").empty();
     let foot = document.getElementById("tblPOMaterialsFoot");
 
     foot.insertAdjacentHTML(
       "beforeend",
       `<tr>
           <td colspan="4"><strong>Total</strong></td>
-          <td><strong>$${totalCostFtm.toLocaleString("es-CO", {
-            minimumFractionDigits: 0,
-            maximumFractionDigits: 2,
-          })}</strong></td>
-          <td class="costMaterials"><strong>$${totalCostTotal.toLocaleString("es-CO", {
-            minimumFractionDigits: 0,
-            maximumFractionDigits: 0,
-          })}</strong></td>
+          <td class="costMaterialsUnit"><strong>$${totalCostFtm.toLocaleString(
+            "es-CO",
+            {
+              minimumFractionDigits: 0,
+              maximumFractionDigits: 2,
+            }
+          )}</strong></td>
+          <td class="costMaterials"><strong>$${totalCostTotal.toLocaleString(
+            "es-CO",
+            {
+              minimumFractionDigits: 0,
+              maximumFractionDigits: 0,
+            }
+          )}</strong></td>
           <td colspan="3"></td>
         </tr>`
     );
@@ -207,8 +213,14 @@ $(document).ready(function () {
                 <td>${data.machine}</td>
                 <td>${min_date}</td>
                 <td>${max_date}</td>
-                <td>$${parseFloat(data.cost_payroll).toLocaleString('es-CO', { minimumFractionDigits: 0, maximumFractionDigits: 0 })}</td>
-                <td>$${parseFloat(data.cost_machine).toLocaleString('es-CO', { minimumFractionDigits: 0, maximumFractionDigits: 0 })}</td>
+                <td>$${parseFloat(data.cost_payroll).toLocaleString("es-CO", {
+                  minimumFractionDigits: 0,
+                  maximumFractionDigits: 0,
+                })}</td>
+                <td>$${parseFloat(data.cost_machine).toLocaleString("es-CO", {
+                  minimumFractionDigits: 0,
+                  maximumFractionDigits: 0,
+                })}</td>
             </tr>`
     );
 
@@ -322,11 +334,13 @@ $(document).ready(function () {
   $("#btnCloseOP").click(function (e) {
     e.preventDefault();
 
-    if (op_to_store == '1') {
+    if (op_to_store == "1") {
       let dataOPP = tblPartialsDelivery.DataTable().rows().data().toArray();
 
       if (dataOPP.length == 0) {
-        toastr.error("Ejecucion produccion o devolucion de materiales sin datos");
+        toastr.error(
+          "Ejecucion produccion o devolucion de materiales sin datos"
+        );
         return false;
       }
 
