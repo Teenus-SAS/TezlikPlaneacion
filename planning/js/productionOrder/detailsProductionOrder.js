@@ -344,14 +344,21 @@ $(document).ready(function () {
         return false;
       }
 
-      let materialsAccept = allMaterialsAccept.filter(
-        (item) => item.id_material == idMaterial
+      let accept = 0;
+      let dataFTMaterials = JSON.parse(sessionStorage.getItem('dataFTMaterials'));
+      let dataFT = dataFTMaterials.filter(
+        (item) => item.id_product == data.id_product
       );
 
-      let accept = 0;
-      materialsAccept.forEach((item) => {
-        accept += parseFloat(item.quantity);
-      });
+      for (let i = 0; i < dataFT.length; i++) {
+        let materialsAccept = allMaterialsAccept.filter(
+          (item) => item.id_material == dataFT[i].id_material
+        );
+
+        materialsAccept.forEach((item) => {
+          accept += parseFloat(item.quantity);
+        });
+      }
 
       if (accept == 0) {
         toastr.error("Materiales y Componentes no ejecutados");

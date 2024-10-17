@@ -19,15 +19,30 @@ class GeneralCompositeProductsDao
     public function findAllCompositeProductsByCompany($id_company)
     {
         $connection = Connection::getInstance()->getConnection();
-        $stmt = $connection->prepare("SELECT cp.id_composite_product, 0 AS id_product_material, cp.id_product, p.reference AS reference_product, p.product, cp.id_child_product, p.reference AS reference_material, 
-                                             p.product AS material, (pi.quantity / cp.quantity) AS quantity, cp.quantity AS quantity_ftm, 'PRODUCTO' AS type,
-                                             IFNULL(mg.id_magnitude, 0) AS id_magnitude, IFNULL(mg.magnitude, '') AS magnitude, IFNULL(u.id_unit, 0) AS id_unit, IFNULL(u.unit, '') AS unit, IFNULL(u.abbreviation, '') AS abbreviation 
-                                      FROM products p 
-                                        INNER JOIN products_composite cp ON cp.id_child_product = p.id_product 
+        $stmt = $connection->prepare("SELECT
+                                        -- Columnas
+                                            cp.id_composite_product,
+                                            0 AS id_product_material,
+                                            cp.id_product,
+                                            p.reference AS reference_product,
+                                            p.product,
+                                            cp.id_child_product,
+                                            p.reference AS reference_material,
+                                            p.product AS material,
+                                            (pi.quantity / cp.quantity) AS quantity,
+                                            cp.quantity AS quantity_ftm,
+                                            'PRODUCTO' AS TYPE,
+                                            IFNULL(mg.id_magnitude, 0) AS id_magnitude,
+                                            IFNULL(mg.magnitude, '') AS magnitude,
+                                            IFNULL(u.id_unit, 0) AS id_unit,
+                                            IFNULL(u.unit, '') AS unit,
+                                            IFNULL(u.abbreviation, '') AS abbreviation
+                                      FROM products p
+                                        INNER JOIN products_composite cp ON cp.id_child_product = p.id_product
                                         INNER JOIN inv_products pi ON pi.id_product = cp.id_child_product
                                         LEFT JOIN admin_units u ON u.id_unit = cp.id_unit
                                         LEFT JOIN admin_magnitudes mg ON mg.id_magnitude = u.id_magnitude
-                                      WHERE p.id_company = :id_company");
+                                        WHERE p.id_company = :id_company");
         $stmt->execute(['id_company' => $id_company]);
         $compositeProducts = $stmt->fetchAll($connection::FETCH_ASSOC);
         $this->logger->notice("products", array('products' => $compositeProducts));
