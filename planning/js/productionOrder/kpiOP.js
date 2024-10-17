@@ -6,12 +6,7 @@ $(document).ready(function () {
   const targetCostMaterials = document.querySelector(".costMaterials");
 
   // Verifica si los elementos existen antes de iniciar el observador
-  if (
-    targetDefects &&
-    targetProcessing &&
-    targetCostPayroll &&
-    targetCostMaterials
-  ) {
+  if (targetDefects && targetProcessing && targetCostPayroll) {
     // Crear una instancia de MutationObserver
     const observer = new MutationObserver(function (mutationsList) {
       mutationsList.forEach((mutation) => {
