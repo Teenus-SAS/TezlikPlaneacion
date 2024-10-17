@@ -57,7 +57,7 @@ class PlanCiclesMachineDao
     {
         $connection = Connection::getInstance()->getConnection();
 
-        $ciclesHour = str_replace('.', '', $dataCiclesMachine['ciclesHour']);
+        // $ciclesHour = str_replace('.', '', $dataCiclesMachine['ciclesHour']);
 
         try {
             $stmt = $connection->prepare("INSERT INTO machine_cicles (id_product, id_process, id_machine, id_company, cicles_hour) 
@@ -67,7 +67,7 @@ class PlanCiclesMachineDao
                 'id_process' => $dataCiclesMachine['idProcess'],
                 'id_machine' => $dataCiclesMachine['idMachine'],
                 'id_company' => $id_company,
-                'cicles_hour' => $ciclesHour
+                'cicles_hour' => $dataCiclesMachine['ciclesHour']
             ]);
             $this->logger->info(__FUNCTION__, array('query' => $stmt->queryString, 'errors' => $stmt->errorInfo()));
         } catch (\Exception $e) {
@@ -81,7 +81,7 @@ class PlanCiclesMachineDao
     {
         $connection = Connection::getInstance()->getConnection();
 
-        $ciclesHour = str_replace('.', '', $dataCiclesMachine['ciclesHour']);
+        // $ciclesHour = str_replace('.', '', $dataCiclesMachine['ciclesHour']);
 
         try {
             $stmt = $connection->prepare("UPDATE machine_cicles SET id_product = :id_product, id_process = :id_process, id_machine = :id_machine, cicles_hour = :cicles_hour 
@@ -91,7 +91,7 @@ class PlanCiclesMachineDao
                 'id_product' => $dataCiclesMachine['idProduct'],
                 'id_process' => $dataCiclesMachine['idProcess'],
                 'id_machine' => $dataCiclesMachine['idMachine'],
-                'cicles_hour' => $ciclesHour
+                'cicles_hour' => $dataCiclesMachine['ciclesHour']
             ]);
             $this->logger->info(__FUNCTION__, array('query' => $stmt->queryString, 'errors' => $stmt->errorInfo()));
         } catch (\Exception $e) {

@@ -52,7 +52,6 @@ class ProductsMaterialsDao
                                                 0
                                                 )
                                             ) AS total_quantity,
-                                            -- IFNULL(am.id_alternal_material, 0) AS id_alternal_material,
                                             IFNULL(am.id_material, 0) AS id_alternal_material,
                                             IFNULL(am.id_unit, 0) AS id_alternal_unit,
                                             IFNULL(amm.material, '') AS alternal_material,

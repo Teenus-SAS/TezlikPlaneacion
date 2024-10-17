@@ -285,6 +285,70 @@ $(document).ready(function () {
     });
   });
 
+  /* Copiar Producto */
+  copyFunction = () => {
+    let row = $(this.activeElement).parent().parent()[0];
+    let data = tblProducts.fnGetData(row);
+
+    bootbox.confirm({
+      title: 'Clonar producto',
+      message: `<div class="row">
+                  <div class="col-sm-12 floating-label enable-floating-label show-label">
+                    <label for="referenceNewProduct">Referencia</label>
+                    <input type="text" class="form-control mb-2" name="referenceNewProduct" id="referenceNewProduct">
+                  </div>
+                  <div class="col-sm-12 floating-label enable-floating-label show-label">
+                    <label for="newProduct">Nombre Producto</label>
+                    <input type="text" class="form-control" name="newProduct" id="newProduct">
+                  </div>
+                </div>`,
+      buttons: {
+        confirm: {
+          label: 'Ok',
+          className: 'btn-success',
+        },
+        cancel: {
+          label: 'Cancel',
+          className: 'btn-danger',
+        },
+      },
+      callback: function (result) {
+        if (result == true) {
+          let ref = $('#referenceNewProduct').val();
+          let prod = $('#newProduct').val();
+
+          if (!ref.trim() || ref.trim() == '' ||
+            !prod.trim() || prod.trim() == ''
+          ) {
+            toastr.error('Ingrese todos los campos');
+            return false;
+          }
+
+          let dataProduct = {};
+          dataProduct['idOldProduct'] = data.id_product;
+          dataProduct['referenceProduct'] = ref;
+          dataProduct['product'] = prod;
+          dataProduct['origin'] = data.origin;
+          dataProduct['width'] = data.width;
+          dataProduct['high'] = data.high;
+          dataProduct['length'] = data.length;
+          dataProduct['usefulLength'] = data.useful_length;
+          dataProduct['totalWidth'] = data.total_width;
+          dataProduct['window'] = data.window;
+          dataProduct['inks'] = data.inks;
+          
+          $.post(
+            '/api/copyProduct',
+            dataProduct,
+            function (data, textStatus, jqXHR) {
+              messageProducts(data);
+            }
+          );
+        }
+      },
+    });
+  };
+
   /* Mensaje de exito */
   messageProducts = (data) => {
     const { success, error, info, message } = data;

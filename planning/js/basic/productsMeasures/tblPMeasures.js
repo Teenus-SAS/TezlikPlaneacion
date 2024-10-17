@@ -21,6 +21,11 @@ $(document).ready(function () {
         className: "uniqueClassName dt-head-center",
         render: (data) => `
           <a href="javascript:;">
+            <i id="${data.id_product}" class="bx bx-copy-alt" data-toggle='tooltip' title='Clonar Producto' 
+               style="font-size: 30px; color:green" onclick="copyFunction()">
+            </i>
+          </a>
+          <a href="javascript:;">
             <i id="${data.id_product}" class="${
           data.composite == 0
             ? "bi bi-plus-square-fill"

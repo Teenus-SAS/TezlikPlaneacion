@@ -97,7 +97,7 @@ if (sizeof($_SESSION) == 0)
                                 </div>
                             </div>
                         </div>
-                        <?php if ($_SESSION['flag_products_measure']) { ?>
+                        <?php if ($_SESSION['flag_products_measure'] == '1') { ?>
                             <div class="tab-pane cardPlans cardGeneral" style="display: none;">
                                 <div class="row align-items-center">
                                     <div class="col-sm-5 col-xl-6">
@@ -458,7 +458,7 @@ if (sizeof($_SESSION) == 0)
                                             <i class="bi bi-diagram-3 mr-1"></i>Ruta
                                         </a>
                                     </li>
-                                    <?php if ($_SESSION['flag_products_measure']) { ?>
+                                    <?php if ($_SESSION['flag_products_measure'] == '1') { ?>
                                         <li class="nav-item">
                                             <a class="nav-link selectNavigation" id="nav-plans" data-toggle="pill" href="#pills-tasks" role="tab" aria-controls="pills-tasks" aria-selected="false">
                                                 <i class="bi bi-diagram-3 mr-1"></i>Planos

@@ -87,7 +87,7 @@ if (sizeof($_SESSION) == 0)
                                     <div class="card">
                                         <div class="card-body">
                                             <div class="form-row">
-                                                <div class="col-sm-2 floating-label enable-floating-label show- mb-3 label cardSelect">
+                                                <div class="col-sm-2 floating-label enable-floating-label show-label mb-3 cardSelect">
                                                     <label for="prodOrigin">Origen</label>
                                                     <select class="form-control" name="origin" id="prodOrigin">
                                                         <option selected disabled>Seleccionar</option>
@@ -96,7 +96,7 @@ if (sizeof($_SESSION) == 0)
                                                     </select>
                                                 </div>
                                                 <?php if ($_SESSION['flag_products_measure'] == '1') { ?>
-                                                    <div class="col-sm-2 floating-label enable-floating-label show- mb-3 label cardSelect productType">
+                                                    <div class="col-sm-2 floating-label enable-floating-label show-label mb-3 cardSelect productType">
                                                         <label for="idProductType">Tipo</label>
                                                         <select class="form-control" name="idProductType" id="idProductType">
                                                         </select>

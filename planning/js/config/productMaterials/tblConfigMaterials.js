@@ -142,17 +142,19 @@ $(document).ready(function () {
           className: "uniqueClassName dt-head-center",
           visible: visible,
           render: function (data) {
-            return `<a href="javascript:;">
-                    <i id="${data.id_alternal_material}" class="${
-              data.id_alternal_material != 0
-                ? "fas fa-check-square"
-                : "fa fa-window-close"
-            }" data-toggle='tooltip' title='${
-              data.alternal_material
-            }' style="font-size:25px; color: ${
-              data.id_alternal_material == 0 ? "#ff0000" : "#7bb520"
-            };"></i>
+            let alternal_material = '';
+
+            if (data.id_alternal_material >= 0)
+              alternal_material = `<a href="javascript:;">
+                    <i id="${data.id_alternal_material}" class="${data.id_alternal_material != 0
+                  ? "fas fa-check-square"
+                  : "fa fa-window-close"
+                }" data-toggle='tooltip' title='${data.alternal_material
+                }' style="font-size:25px; color: ${data.id_alternal_material == 0 ? "#ff0000" : "#7bb520"
+                };"></i>
                   </a>`;
+            
+            return alternal_material;
           },
         },
         {

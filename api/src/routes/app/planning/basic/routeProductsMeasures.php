@@ -1,14 +1,21 @@
 <?php
 
+use TezlikPlaneacion\Dao\CompositeProductsDao;
 use TezlikPlaneacion\Dao\GeneralCompositeProductsDao;
+use TezlikPlaneacion\dao\GeneralPlanCiclesMachinesDao;
 use TezlikPlaneacion\dao\GeneralPMeasuresDao;
 use TezlikPlaneacion\dao\GeneralProductsDao;
+use TezlikPlaneacion\dao\GeneralProductsMaterialsDao;
+use TezlikPlaneacion\dao\GeneralProductsPlansDao;
 use TezlikPlaneacion\dao\LastDataDao;
 use TezlikPlaneacion\dao\MaterialsDao;
 use TezlikPlaneacion\dao\MaterialsInventoryDao;
+use TezlikPlaneacion\dao\PlanCiclesMachineDao;
 use TezlikPlaneacion\dao\ProductsDao;
 use TezlikPlaneacion\dao\ProductsInventoryDao;
+use TezlikPlaneacion\dao\ProductsMaterialsDao;
 use TezlikPlaneacion\dao\ProductsMeasuresDao;
+use TezlikPlaneacion\dao\ProductsPlansDao;
 use TezlikPlaneacion\dao\ProductsTypeDao;
 
 $productsMeasuresDao = new ProductsMeasuresDao();
@@ -19,6 +26,12 @@ $productsTypeDao = new ProductsTypeDao();
 $productsInventoryDao = new ProductsInventoryDao();
 $productsDao = new ProductsDao();
 $generalProductsDao = new GeneralProductsDao();
+$productMaterialDao = new ProductsMaterialsDao();
+$compositeProductsDao = new CompositeProductsDao();
+$planCiclesMachineDao = new PlanCiclesMachineDao();
+$generalPlanCiclesMachinesDao = new GeneralPlanCiclesMachinesDao();
+$productsPlansDao = new ProductsPlansDao();
+$generalProductsPlansDao = new GeneralProductsPlansDao();
 $lastDataDao = new LastDataDao();
 $generalCompositeProductsDao = new GeneralCompositeProductsDao();
 
@@ -369,6 +382,123 @@ $app->post('/deleteProductMeasure', function (Request $request, Response $respon
     return $response->withStatus(200)->withHeader('Content-Type', 'application/json');
 });
 
+$app->post('/copyProduct', function (Request $request, Response $response, $args) use (
+    $productsMeasuresDao,
+    $productsDao,
+    $generalProductsDao,
+    $lastDataDao,
+    $productsInventoryDao,
+    $productMaterialDao,
+    $compositeProductsDao,
+    $planCiclesMachineDao,
+    $generalPlanCiclesMachinesDao,
+    $productsPlansDao,
+    $generalProductsPlansDao
+) {
+    session_start();
+    $id_company = $_SESSION['id_company'];
+    $flag_products_measure = $_SESSION['flag_products_measure'];
+    $dataProduct = $request->getParsedBody();
+
+    $product = $generalProductsDao->findProductByReferenceOrName($dataProduct, $id_company);
+
+    if (!$product) {
+        $resolution = $productsDao->insertProductByCompany($dataProduct, $id_company);
+
+        if ($resolution == null) {
+            $lastData = $lastDataDao->lastInsertedProductId($id_company);
+            $dataProduct['idProduct'] = $lastData['id_product'];
+        }
+
+        // Inventario
+        if ($resolution == null) {
+            $invProduct = $generalProductsDao->findProductInventory($dataProduct['idOldProduct'], $id_company);
+
+            $dataProduct['quantity'] = $invProduct['quantity'];
+            $dataProduct['accumulated_quantity'] = $invProduct['accumulated_quantity'];
+            $dataProduct['classification'] = $invProduct['classification'];
+            $dataProduct['reserved'] = $invProduct['reserved'];
+            $dataProduct['minimum_stock'] = $invProduct['minimum_stock'];
+            $dataProduct['days'] = $invProduct['days'];
+
+            $resolution = $productsInventoryDao->insertCopyProductsInventory($dataProduct, $id_company);
+        }
+
+        // Medidas
+        if ($resolution == null && $flag_products_measure == '1')
+            $resolution = $productsMeasuresDao->insertPMeasureByCompany($dataProduct, $id_company);
+
+        // Ficha Tecnica Materiales
+        if ($resolution == null) {
+            $findFTPM = $productMaterialDao->findAllProductsMaterials($dataProduct['idOldProduct'], $id_company);
+
+            foreach ($findFTPM as $arr) {
+                $arr['material'] = $arr['id_material'];
+                $arr['unit'] = $arr['id_unit'];
+                $arr['idProduct'] = $dataProduct['idProduct'];
+
+                $resolution = $productMaterialDao->insertProductsMaterialsByCompany($arr, $id_company);
+
+                if (isset($resolution['info'])) break;
+            }
+        }
+
+        // Productos Compuestos
+        if ($resolution == null) {
+            $findFTPCP = $compositeProductsDao->findAllCompositeProductsByIdProduct($dataProduct['idOldProduct'], $id_company);
+
+            foreach ($findFTPCP as $arr) {
+                $arr['idProduct'] = $dataProduct['idProduct'];
+                $arr['compositeProduct'] = $arr['id_child_product'];
+                $arr['unit'] = $arr['id_unit'];
+
+                $resolution = $compositeProductsDao->insertCompositeProductByCompany($arr, $id_company);
+
+                if (isset($resolution['info'])) break;
+            }
+        }
+
+        // Ficha Tecnica Ciclos Maquinas
+        if ($resolution == null) {
+            $findFTPC = $generalPlanCiclesMachinesDao->findAllPlanCiclesMachineByProduct($dataProduct['idOldProduct'], $id_company);
+
+            foreach ($findFTPC as $arr) {
+                $arr['idProduct'] = $dataProduct['idProduct'];
+                $arr['idProcess'] = $arr['id_process'];
+                $arr['idMachine'] = $arr['id_machine'];
+                $arr['ciclesHour'] = $arr['cicles_hour'];
+
+                $resolution = $planCiclesMachineDao->addPlanCiclesMachines($arr, $id_company);
+
+                if (isset($resolution['info'])) break;
+            }
+        }
+
+        // Ficha Tecnica Planos
+        if ($resolution == null && $flag_products_measure == '1') {
+            $findFTPP = $generalProductsPlansDao->findProductPlans($dataProduct['idOldProduct']);
+
+            $data = [];
+
+            $data['idProduct'] = $dataProduct['idProduct'];
+            $data['mechanicalFile'] = $findFTPP['mechanical_plan'];
+            $data['assemblyFile'] = $findFTPP['assembly_plan'];
+
+            $resolution = $productsPlansDao->insertProductPlanByCompany($data, $id_company);
+        }
+
+        if ($resolution == null)
+            $resp = array('success' => true, 'message' => 'Producto clonado correctamente');
+        else if (isset($resolution['info']))
+            $resp = array('info' => true, 'message' => $resolution['message']);
+        else
+            $resp = array('error' => true, 'message' => 'Ocurrió un error mientras guardaba los datos. Intente nuevamente');
+    } else
+        $resp = array('info' => true, 'message' => 'El producto ya existe en la base de datos. Ingrese uno nuevo');
+
+    $response->getBody()->write(json_encode($resp));
+    return $response->withStatus(200)->withHeader('Content-Type', 'application/json');
+});
 
 /* Cambiar Producto Compuesto */
 $app->get('/changeComposite/{id_product}/{op}', function (Request $request, Response $response, $args) use (

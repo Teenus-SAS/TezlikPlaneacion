@@ -36,6 +36,51 @@ class ProductsInventoryDao
         }
     }
 
+    public function insertCopyProductsInventory($dataProduct, $id_company)
+    {
+        $connection = Connection::getInstance()->getConnection();
+
+        try {
+            $stmt = $connection->prepare("INSERT INTO inv_products
+                                                (
+                                                    id_product,
+                                                    id_company,
+                                                    quantity,
+                                                    accumulated_quantity,
+                                                    classification,
+                                                    reserved,
+                                                    minimum_stock,
+                                                    days
+                                                )
+                                                VALUES
+                                                (
+                                                    :id_product,
+                                                    :id_company,
+                                                    :quantity,
+                                                    :accumulated_quantity,
+                                                    :classification,
+                                                    :reserved,
+                                                    :minimum_stock,
+                                                    :days
+                                                )");
+            $stmt->execute([
+                'id_product' => $dataProduct['idProduct'],
+                'id_company' => $id_company,
+                'quantity' => $dataProduct['quantity'],
+                'accumulated_quantity' => $dataProduct['accumulated_quantity'],
+                'classification' => $dataProduct['classification'],
+                'reserved' => $dataProduct['reserved'],
+                'minimum_stock' => $dataProduct['minimum_stock'],
+                'days' => $dataProduct['days'],
+            ]);
+            $this->logger->info(__FUNCTION__, array('query' => $stmt->queryString, 'errors' => $stmt->errorInfo()));
+        } catch (\Exception $e) {
+            $message = $e->getMessage();
+            $error = array('info' => true, 'message' => $message);
+            return $error;
+        }
+    }
+
     public function updateProductsInventory($dataProduct)
     {
         $connection = Connection::getInstance()->getConnection();
