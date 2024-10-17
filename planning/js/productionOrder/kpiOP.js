@@ -70,6 +70,7 @@ $(document).ready(function () {
           if (unitsProcessing > 0) {
             //Total Cost
             let totalCost = costPayroll + costMaterials + costIndirect;
+            let costMPUnit = costMaterialsUnit / unitsProcessing;
             let costPayrollUnit = costPayroll / unitsProcessing;
             let costIndirectunit = costIndirect / unitsProcessing;
             let totalCostUnit = costPayrollUnit + costIndirectunit;
@@ -99,7 +100,7 @@ $(document).ready(function () {
               })}`
             );
             $("#kpiCostMaterialsUnit").text(
-              `MP: $${costMaterialsUnit.toLocaleString("es-CO", {
+              `MP: $${costMPUnit.toLocaleString("es-CO", {
                 minimumFractionDigits: 2,
                 maximumFractionDigits: 2,
               })}`
