@@ -69,12 +69,12 @@ $(document).ready(function () {
               .text(`QC: ${quality.toFixed(2)}%`)
               .show();
             $("#kpiCostPayroll").text(
-              `CMO: $${costPayroll.toLocaleString("es-CO", {
+              `Mano de ObraO: $${costPayroll.toLocaleString("es-CO", {
                 minimumFractionDigits: 0,
               })}`
             );
             $("#kpiCostMaterials").text(
-              `CMP: $${costMaterials.toLocaleString("es-CO", {
+              `MP: $${costMaterials.toLocaleString("es-CO", {
                 minimumFractionDigits: 0,
               })}`
             );

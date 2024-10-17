@@ -77,18 +77,18 @@ if (sizeof($_SESSION) == 0)
 											<hr> -->
 										<div class="col-sm-12 col-xl-12 d-flex justify-content-end btnPrintPDF">
 											<div class="col-xs-2 mt-2 mr-2" id="">
-												<span class="badge badge-info" id="kpiCostMaterials" style="font-size: large;"></span>
-												<span class="badge badge-info" id="kpiCostPayroll" style="font-size: large;"></span>
-												<span class="badge badge-info" id="kpiIndirectCost" style="font-size: large;"></span>
-												<span class="badge badge-success" id="kpiTotalCost" style="font-size: large;"></span>
+												<span class="badge badge-info" id="kpiCostMaterials" style="font-size: medium;"></span>
+												<span class="badge badge-info" id="kpiCostPayroll" style="font-size: medium;"></span>
+												<span class="badge badge-info" id="kpiIndirectCost" style="font-size: medium;"></span>
+												<span class="badge badge-warning" id="kpiTotalCost" style="font-size: medium;"></span>
 												<!-- <button class="btn btn-success" onclick="printPDF()">Imprimir PDF</button> -->
 											</div>
 										</div>
-										<div class="col-sm-12 col-xl-12 d-flex justify-content-end btnPrintPDF">
+										<!-- <div class="col-sm-12 col-xl-12 d-flex justify-content-end btnPrintPDF">
 											<div class="col-xs-2 mt-2 mr-2" id="">
-												<span class="badge badge-warning" id="kpiQualityOP" style="font-size: large;"></span>
+												<span class="badge badge-warning" id="kpiQualityOP" style="font-size: medium;"></span>
 											</div>
-										</div>
+										</div> -->
 
 										<hr>
 
