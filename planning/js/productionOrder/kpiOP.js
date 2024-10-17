@@ -61,18 +61,27 @@ $(document).ready(function () {
           // Realizar el cálculo del KPI de calidad
           if (unitsProcessing > 0) {
             //Total Cost
-            totalCost = costPayroll + costMaterials + costIndirect;
+            let totalCost = costPayroll + costMaterials + costIndirect;
+            let costPayrollUnit = costPayroll / unitsProcessing;
             //calc quality
             let quality = 1 - unitsDefects / unitsProcessing;
             quality = quality * 100;
             $("#kpiQualityOP")
               .text(`QC: ${quality.toFixed(2)}%`)
               .show();
+
+            $("#kpiCostPayrollUnit").text(
+              `MO: $${costPayrollUnit.toLocaleString("es-CO", {
+                minimumFractionDigits: 0,
+              })}`
+            );
+
             $("#kpiCostPayroll").text(
               `MO: $${costPayroll.toLocaleString("es-CO", {
                 minimumFractionDigits: 0,
               })}`
             );
+
             $("#kpiCostMaterials").text(
               `MP: $${costMaterials.toLocaleString("es-CO", {
                 minimumFractionDigits: 0,
