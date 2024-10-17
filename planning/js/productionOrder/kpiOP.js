@@ -63,6 +63,7 @@ $(document).ready(function () {
             //Total Cost
             let totalCost = costPayroll + costMaterials + costIndirect;
             let costPayrollUnit = costPayroll / unitsProcessing;
+            let costIndirectunit = costIndirect / unitsProcessing;
             //calc quality
             let quality = 1 - unitsDefects / unitsProcessing;
             quality = quality * 100;
@@ -87,11 +88,18 @@ $(document).ready(function () {
                 minimumFractionDigits: 0,
               })}`
             );
+            
             $("#kpiIndirectCost").text(
               `CI: $${costIndirect.toLocaleString("es-CO", {
                 minimumFractionDigits: 0,
               })}`
             );
+            $("#kpiIndirectCost").text(
+              `CI: $${costIndirectunit.toLocaleString("es-CO", {
+                minimumFractionDigits: 0,
+              })}`
+            );
+
             $("#kpiTotalCost").text(
               `CT: $${totalCost.toLocaleString("es-CO", {
                 minimumFractionDigits: 0,
