@@ -45,6 +45,14 @@ $(document).ready(function () {
                 .replace(".", "")
                 .replace(",", ".")
             ) || 0;
+          const costMaterials =
+            parseFloat(
+              $(".costMaterials")
+                .text()
+                .replace("$", "")
+                .replace(".", "")
+                .replace(",", ".")
+            ) || 0;
 
           // Realizar el cálculo del KPI de calidad
           if (unitsProcessing > 0) {
