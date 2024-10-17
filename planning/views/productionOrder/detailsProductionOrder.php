@@ -77,24 +77,24 @@ if (sizeof($_SESSION) == 0)
 											<hr> -->
 										<div class="col-sm-12 col-xl-12 d-flex justify-content-between align-items-start">
 											<!-- Costos por Orden de Producción a la izquierda -->
-											<div class="col-xs-6">
+											<div class="col-xs-6 text-center">
 												<h4>Costos por Orden de Producción</h4>
 												<div class="d-flex flex-column">
-													<span class="badge badge-info mb-2" id="kpiCostMaterials" style="font-size: medium;"></span>
-													<span class="badge badge-info mb-2" id="kpiCostPayroll" style="font-size: medium;"></span>
-													<span class="badge badge-info mb-2" id="kpiIndirectCost" style="font-size: medium;"></span>
-													<span class="badge badge-warning" id="kpiTotalCost" style="font-size: medium;"></span>
+													<span class="badge badge-info mb-2 mr-1" id="kpiCostMaterials" style="font-size: medium;"></span>
+													<span class="badge badge-info mb-2 mr-1" id="kpiCostPayroll" style="font-size: medium;"></span>
+													<span class="badge badge-info mb-2 mr-1" id="kpiIndirectCost" style="font-size: medium;"></span>
+													<span class="badge badge-warning mb-2" id="kpiTotalCost" style="font-size: medium;"></span>
 												</div>
 											</div>
 
 											<!-- Costos por Unidad a la derecha -->
-											<div class="col-xs-6 text-right">
+											<div class="col-xs-6 text-center">
 												<h4>Costos por Unidad</h4>
 												<div class="d-flex flex-column align-items-end">
-													<span class="badge badge-info mb-2" id="kpiCostMaterialsUnit" style="font-size: medium;"></span>
-													<span class="badge badge-info mb-2" id="kpiCostPayrollUnit" style="font-size: medium;"></span>
-													<span class="badge badge-info mb-2" id="kpiIndirectCostUnit" style="font-size: medium;"></span>
-													<span class="badge badge-warning" id="kpiTotalCostUnit" style="font-size: medium;"></span>
+													<span class="badge badge-info mb-2 mr-1" id="kpiCostMaterialsUnit" style="font-size: medium;"></span>
+													<span class="badge badge-info mb-2 mr-1" id="kpiCostPayrollUnit" style="font-size: medium;"></span>
+													<span class="badge badge-info mb-2 mr-1" id="kpiIndirectCostUnit" style="font-size: medium;"></span>
+													<span class="badge badge-warning mb-2 mr-1" id="kpiTotalCostUnit" style="font-size: medium;"></span>
 												</div>
 											</div>
 										</div>
