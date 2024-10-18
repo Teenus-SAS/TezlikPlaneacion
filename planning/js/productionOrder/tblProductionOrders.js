@@ -67,14 +67,6 @@ $(document).ready(function () {
     </a>`;
   };
 
-  // Función para formatear fechas
-  const formatDateRange = (minDate, maxDate) => {
-    const format = "DD/MM/YYYY HH:mm A";
-    return `Inicio: ${moment(minDate).format(format)}<br>Fin: ${moment(
-      maxDate
-    ).format(format)}`;
-  };
-
   // Función para cargar pedidos de producción
   const loadTblProductionOrders = (data) => {
     tblProductionOrders = $("#tblProductionOrders").dataTable({
@@ -128,15 +120,20 @@ $(document).ready(function () {
           className: "uniqueClassName dt-head-center",
         },
         {
-          title: "Fechas",
+          title: `${type_program == 0 ? "Fechas" : "Fecha Inicial"}`,
           data: null,
           className: "uniqueClassName dt-head-center",
           width: "200px",
-          render: (data) =>
-            formatDateRange(
-              data.min_date_programming,
-              data.max_date_programming
-            ),
+          render: function (data) {
+            if (type_program == 0) {
+              const format = "DD/MM/YYYY HH:mm A";
+              return `Inicio: ${moment(data.min_date_programming).format(format)}<br>Fin: ${moment(
+                data.max_date_programming
+              ).format(format)}`;
+            } else {
+              return moment(data.min_date_programming).format("DD/MM/YYYY");
+            }
+          },
         },
         {
           title: "Acciones",

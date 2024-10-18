@@ -152,21 +152,21 @@ $(document).ready(function () {
                     <td>${quantity_ftm} ${dataFT[i].abbreviation}</td>
                     <td>${quantity_total} ${dataFT[i].abbreviation}</td>
                     <td>$${cost_ftm.toLocaleString("es-CO", {
-                      minimumFractionDigits: 0,
-                      maximumFractionDigits: 2,
-                    })}</td>
+          minimumFractionDigits: 0,
+          maximumFractionDigits: 2,
+        })}</td>
                     <td>$${cost_total.toLocaleString("es-CO", {
-                      minimumFractionDigits: 0,
-                      maximumFractionDigits: 0,
-                    })}</td>
+          minimumFractionDigits: 0,
+          maximumFractionDigits: 0,
+        })}</td>
                     <td>${recieve.toLocaleString("es-CO", {
-                      minimumFractionDigits: 0,
-                      maximumFractionDigits: 2,
-                    })}</td>
+          minimumFractionDigits: 0,
+          maximumFractionDigits: 2,
+        })}</td>
                     <td>${pending.toLocaleString("es-CO", {
-                      minimumFractionDigits: 0,
-                      maximumFractionDigits: 2,
-                    })}</td> 
+          minimumFractionDigits: 0,
+          maximumFractionDigits: 2,
+        })}</td> 
                     ${flag_op == 0 ? `<td>${action}</td>` : ""}
                 </tr>`
       );
@@ -181,19 +181,19 @@ $(document).ready(function () {
       `<tr>
           <td colspan="4"><strong>Total</strong></td>
           <td class="costMaterialsUnit"><strong>$${totalCostFtm.toLocaleString(
-            "es-CO",
-            {
-              minimumFractionDigits: 0,
-              maximumFractionDigits: 2,
-            }
-          )}</strong></td>
+        "es-CO",
+        {
+          minimumFractionDigits: 0,
+          maximumFractionDigits: 2,
+        }
+      )}</strong></td>
           <td class="costMaterials"><strong>$${totalCostTotal.toLocaleString(
-            "es-CO",
-            {
-              minimumFractionDigits: 0,
-              maximumFractionDigits: 0,
-            }
-          )}</strong></td>
+        "es-CO",
+        {
+          minimumFractionDigits: 0,
+          maximumFractionDigits: 0,
+        }
+      )}</strong></td>
           <td colspan="3"></td>
         </tr>`
     );
@@ -202,8 +202,12 @@ $(document).ready(function () {
     $("#tblPOProcessBody").empty();
     body = document.getElementById("tblPOProcessBody");
 
-    min_date = moment(data.min_date_programming).format("DD/MM/YYYY hh:mm A");
-    max_date = moment(data.max_date_programming).format("DD/MM/YYYY hh:mm A");
+    if (type_program == 0) {
+      min_date = moment(data.min_date_programming).format("DD/MM/YYYY hh:mm A");
+      max_date = moment(data.max_date_programming).format("DD/MM/YYYY hh:mm A");
+    } else {
+      min_date = moment(data.min_date_programming).format("DD/MM/YYYY");
+    }
 
     body.insertAdjacentHTML(
       "beforeend",
@@ -212,15 +216,15 @@ $(document).ready(function () {
                 <td>${data.process}</td>
                 <td>${data.machine}</td>
                 <td>${min_date}</td>
-                <td>${max_date}</td>
+                ${type_program == 0 ? `<td>${max_date}</td>` : ''}
                 <td>$${parseFloat(data.cost_payroll).toLocaleString("es-CO", {
-                  minimumFractionDigits: 0,
-                  maximumFractionDigits: 0,
-                })}</td>
+        minimumFractionDigits: 0,
+        maximumFractionDigits: 0,
+      })}</td>
                 <td>$${parseFloat(data.cost_machine).toLocaleString("es-CO", {
-                  minimumFractionDigits: 0,
-                  maximumFractionDigits: 0,
-                })}</td>
+        minimumFractionDigits: 0,
+        maximumFractionDigits: 0,
+      })}</td>
             </tr>`
     );
 

@@ -339,7 +339,9 @@ if (sizeof($_SESSION) == 0)
 																<th>Proceso</th>
 																<th>Maquina</th>
 																<th>Fecha Inicio</th>
-																<th>Fecha Final</th>
+																<?php if ($_SESSION['type_program'] == 0) { ?>
+																	<th>Fecha Final</th>
+																<?php } ?>
 																<th>Costo Nomina</th>
 																<th>Costo Maquina</th>
 															</tr>
@@ -487,6 +489,7 @@ if (sizeof($_SESSION) == 0)
 		<script>
 			viewRawMaterial = 3;
 			op_to_store = "<?= $_SESSION['op_to_store'] ?>";
+			type_program = "<?= $_SESSION['type_program'] ?>";
 		</script>
 		<script src="/planning/js/basic/rawMaterials/configRawMaterials.js"></script>
 		<script src="/planning/js/productionOrder/opPartial.js"></script>

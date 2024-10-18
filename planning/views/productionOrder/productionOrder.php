@@ -106,6 +106,7 @@ if (sizeof($_SESSION) == 0)
     <?php include_once dirname(dirname(dirname(__DIR__))) . '/global/partials/scriptsJS.php'; ?>
     <script>
         type_machine_op = "<?= $_SESSION['type_machine_op'] ?>";
+        type_program = "<?= $_SESSION['type_program'] ?>";
     </script>
     <script src="/planning/js/productionOrder/tblProductionOrders.js"></script>
     <script src="/planning/js/productionOrder/productionOrder.js"></script>
