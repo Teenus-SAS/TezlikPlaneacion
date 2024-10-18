@@ -132,56 +132,78 @@ if (sizeof($_SESSION) == 0)
                                                         <label for="">MP Disponible</label>
                                                         <button class="form-control text-center" type="number" name="quantityMP" id="quantityMP" data-toggle="tooltip" readonly></button>
                                                     </div>
-
                                                     <div class="col-sm-2 floating-label enable-floating-label show-label mb-2 p-1">
                                                         <label for="">Cantidad a Fabricar</label>
                                                         <input type="number" class="form-control text-center input" id="quantity" name="quantity">
                                                     </div>
+                                                    <?php if ($_SESSION['type_program'] == 1) { ?>
+                                                        <div class="col-sm-3 floating-label enable-floating-label show-label mb-2 p-1 date cardFormProgramming2">
+                                                            <label for="">Fecha Inicial</label>
+                                                            <input type="date" class="form-control text-center" inline="true" id="minDate" name="minDate" readonly min="<?php
+                                                                                                                                                                        date_default_timezone_set('America/Bogota');
+                                                                                                                                                                        echo date('Y-m-d', strtotime('+1 day')); ?>">
+                                                        </div>
+                                                        <div class="col-sm-3 floating-label enable-floating-label show-label" id="process" style="display: none;">
+                                                            <label for="">Proceso</label>
+                                                            <select class="form-control input selects" id="idProcess" name="idProcess">
+                                                            </select>
+                                                        </div>
+                                                        <div class="col-sm-2 floating-label enable-floating-label show-label" id="machines1" style="display: none;">
+                                                            <label for="">Maquina</label>
+                                                            <select class="form-control input selects" id="idMachine" name="idMachine">
+                                                            </select>
+                                                        </div>
+                                                        <div class="col-sm-1 mt-2">
+                                                            <button class="btn btn-info" type="submit" id="btnCreateProgramming" name="btnCreateProgramming">Crear</button>
+                                                        </div>
+                                                    <?php } ?>
                                                 </div>
                                             </div>
                                         </div>
                                     </div>
                                 </div>
                             </div>
-                            <div class="row cardFormProgramming2">
-                                <div class="col-12">
-                                    <div class="card">
-                                        <div class="card-body" style="padding-bottom:0px">
-                                            <div class="form-group mb-3">
-                                                <h5 class="card-title text-secondary fw-bold">Programación de fabricación</h5>
-                                                <hr class="mt-0 mb-2">
-                                                <div class="row mt-3">
-                                                    <div class="col-sm-3 floating-label enable-floating-label show-label" id="process">
-                                                        <label for="">Proceso</label>
-                                                        <select class="form-control input selects" id="idProcess" name="idProcess">
-                                                        </select>
-                                                    </div>
-                                                    <div class="col-sm-2 floating-label enable-floating-label show-label" id="machines1">
-                                                        <label for="">Maquina</label>
-                                                        <select class="form-control input selects" id="idMachine" name="idMachine">
-                                                        </select>
-                                                    </div>
-                                                    <div class="col-sm-3 floating-label enable-floating-label show-label date">
-                                                        <label for="">Fecha Inicial</label>
-                                                        <input type="datetime-local" class="form-control text-center" inline="true" id="minDate" name="minDate" readonly min="<?php
-                                                                                                                                                                                date_default_timezone_set('America/Bogota');
-                                                                                                                                                                                echo date('Y-m-d', strtotime('+1 day')); ?>">
-                                                    </div>
-                                                    <div class="col-sm-3 floating-label enable-floating-label show-label date">
-                                                        <label for="">Fecha Final</label>
-                                                        <input type="datetime-local" class="form-control text-center" id="maxDate" name="maxDate" readonly min="<?php
-                                                                                                                                                                date_default_timezone_set('America/Bogota');
-                                                                                                                                                                echo date('Y-m-d', strtotime('+1 day')); ?>">
-                                                    </div>
-                                                    <div class="col-sm-1 mt-2">
-                                                        <button class="btn btn-info" type="submit" id="btnCreateProgramming" name="btnCreateProgramming">Crear</button>
+                            <?php if ($_SESSION['type_program'] == 0) { ?>
+                                <div class="row cardFormProgramming2">
+                                    <div class="col-12">
+                                        <div class="card">
+                                            <div class="card-body" style="padding-bottom:0px">
+                                                <div class="form-group mb-3">
+                                                    <h5 class="card-title text-secondary fw-bold">Programación de fabricación</h5>
+                                                    <hr class="mt-0 mb-2">
+                                                    <div class="row mt-3">
+                                                        <div class="col-sm-3 floating-label enable-floating-label show-label" id="process">
+                                                            <label for="">Proceso</label>
+                                                            <select class="form-control input selects" id="idProcess" name="idProcess">
+                                                            </select>
+                                                        </div>
+                                                        <div class="col-sm-2 floating-label enable-floating-label show-label" id="machines1">
+                                                            <label for="">Maquina</label>
+                                                            <select class="form-control input selects" id="idMachine" name="idMachine">
+                                                            </select>
+                                                        </div>
+                                                        <div class="col-sm-3 floating-label enable-floating-label show-label date">
+                                                            <label for="">Fecha Inicial</label>
+                                                            <input type="datetime-local" class="form-control text-center" inline="true" id="minDate" name="minDate" readonly min="<?php
+                                                                                                                                                                                    date_default_timezone_set('America/Bogota');
+                                                                                                                                                                                    echo date('Y-m-d', strtotime('+1 day')); ?>">
+                                                        </div>
+                                                        <div class="col-sm-3 floating-label enable-floating-label show-label date">
+                                                            <label for="">Fecha Final</label>
+                                                            <input type="datetime-local" class="form-control text-center" id="maxDate" name="maxDate" readonly min="<?php
+                                                                                                                                                                    date_default_timezone_set('America/Bogota');
+                                                                                                                                                                    echo date('Y-m-d', strtotime('+1 day')); ?>">
+                                                        </div>
+                                                        <div class="col-sm-1 mt-2">
+                                                            <button class="btn btn-info" type="submit" id="btnCreateProgramming" name="btnCreateProgramming">Crear</button>
+                                                        </div>
                                                     </div>
                                                 </div>
                                             </div>
                                         </div>
                                     </div>
                                 </div>
-                            </div>
+                            <?php } ?>
                         </form>
                     </div>
                 </div>
@@ -404,8 +426,6 @@ if (sizeof($_SESSION) == 0)
     </div>
 
     <?php include_once dirname(dirname(dirname(dirname(__DIR__)))) . '/global/partials/scriptsJS.php'; ?>
-    <!-- <script src="/planning/js/users/usersAccess.js"></script> -->
-
     <script src="https://cdn.datatables.net/buttons/2.4.2/js/dataTables.buttons.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.53/pdfmake.min.js"></script>
@@ -413,10 +433,11 @@ if (sizeof($_SESSION) == 0)
     <script src="https://cdn.datatables.net/buttons/2.4.2/js/buttons.html5.min.js"></script>
     <script src="https://cdn.datatables.net/buttons/2.4.2/js/buttons.print.min.js"></script>
     <script src="/global/js/global/lastText.js"></script>
+
+    <script>
+        type_program = "<?= $_SESSION['type_program'] ?>";
+    </script>
     <script src="/planning/js/program/programming/tblProgramming.js"></script>
-    <!-- <script src="/planning/js/orders/configOrders.js"></script> -->
-    <!-- <script src="/planning/js/basic/process/configProcess.js"></script> -->
-    <!-- <script src="/planning/js/basic/machines/configMachines.js"></script> -->
     <script src="/planning/js/program/programming/programming.js"></script>
     <script src="/planning/js/program/programming/configProgramming.js"></script>
     <script src="/planning/js/program/dashboard/dashboard.js"></script>

@@ -73,7 +73,7 @@ $(document).ready(function () {
       "Maquina",
       "Cantidades",
       "Cliente",
-      "Fecha y Hora",
+      `${type_program == 0 ? "Fecha y Hora" : "Fecha Inicial"}`,
       "Acciones",
     ];
 
@@ -159,15 +159,17 @@ $(document).ready(function () {
               "DD/MM/YYYY hh:mm A"
             )}<br>Fin: ${moment(final_date).format("DD/MM/YYYY hh:mm A")}`;
             break;
+          case "Fecha Inicial":
+            let fminDate = new Date(arr.min_date);
+
+            cell.innerHTML = `Inicio: ${moment(fminDate).format("DD/MM/YYYY")}`;
+            break;
           case "Acciones":
-            cell.innerHTML = `<a href="javascript:;" <i id="${
-              arr.id_programming
-            }" class="bx bx-edit-alt updateProgramming" data-toggle='tooltip' title='Actualizar Programa' style="font-size: 30px;"></i></a>
-                <a href="javascript:;" <i id="${
-                  arr.id_programming
-                }" class="mdi mdi-delete-forever" data-toggle='tooltip' title='Eliminar Programa' style="font-size: 30px;color:red" onclick="deleteFunction(${
-              arr.bd_status == 1 ? arr.id_programming : i
-            }, ${arr.bd_status})"></i></a>`;
+            cell.innerHTML = `<a href="javascript:;" <i id="${arr.id_programming
+              }" class="bx bx-edit-alt updateProgramming" data-toggle='tooltip' title='Actualizar Programa' style="font-size: 30px;"></i></a>
+                <a href="javascript:;" <i id="${arr.id_programming
+              }" class="mdi mdi-delete-forever" data-toggle='tooltip' title='Eliminar Programa' style="font-size: 30px;color:red" onclick="deleteFunction(${arr.bd_status == 1 ? arr.id_programming : i
+              }, ${arr.bd_status})"></i></a>`;
             break;
           default:
             cell.textContent = "";

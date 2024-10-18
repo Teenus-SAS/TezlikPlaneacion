@@ -67,11 +67,18 @@ $(document).ready(function () {
     let checkDT1 =
       id_order * id_product * quantityProgramming * id_process * id_machine;
 
-    if (min_date == "" || max_date == "") {
-      $(".cardFormProgramming2").show(800);
+      if (min_date == "" || max_date == "") {
+        $(".cardFormProgramming2").show(800);
+      }
+      
+    if (type_program == 0) {
+      if (max_date == "") {
+        toastr.error("Ingrese todos los campos");
+        return false;
+      }
     }
 
-    if (isNaN(checkDT1) || checkDT1 <= 0 || min_date == "" || max_date == "") {
+    if (isNaN(checkDT1) || checkDT1 <= 0 || min_date == "") {
       toastr.error("Ingrese todos los campos");
       return false;
     }
@@ -151,18 +158,24 @@ $(document).ready(function () {
 
     $("#quantity").val(data.quantity_programming);
 
-    document.getElementById("minDate").type = "datetime-local";
-    document.getElementById("minDate").readOnly = false;
+    $("#minDate").val(data.min_date);
+
+    dataProgramming = {};
+
+    if (type_program == 0) {
+      document.getElementById("minDate").type = "datetime-local";
+      document.getElementById("minDate").readOnly = false;
+
+      max_date = convetFormatDateTime(data.max_date);
+      min_date = convetFormatDateTime(data.min_date);
+      $("#minDate").val(min_date);
+      $("#maxDate").val(max_date);
+    }
+
     $(".date").show(800);
     $("#btnCreateProgramming").show(800);
 
-    max_date = convetFormatDateTime(data.max_date);
-    min_date = convetFormatDateTime(data.min_date);
-
-    $("#minDate").val(min_date);
-    $("#maxDate").val(max_date);
-
-    dataProgramming = {};
+    // dataProgramming = {};
     dataProgramming["id_order"] = data.id_order;
     dataProgramming["num_order"] = data.num_order;
     dataProgramming["client"] = data.client;
@@ -195,6 +208,7 @@ $(document).ready(function () {
     let id_machine = $("#idMachine").val();
     let id_process = $("#idProcess").val();
     let process = $("#idProcess :selected").text().trim();
+    let min_date = $('#minDate').val();
 
     let ciclesMachine = allCiclesMachines.filter(
       (item) => item.id_product == id_product
@@ -220,9 +234,18 @@ $(document).ready(function () {
     dataProgramming["machine"] = machine;
     dataProgramming["id_process"] = id_process;
     dataProgramming["process"] = process;
+    dataProgramming["client"] = order.client;
+    dataProgramming["id_product"] = id_product;
+    dataProgramming["id_machine"] = id_machine;
+    dataProgramming["min_date"] = min_date;
     dataProgramming["quantity_order"] = quantityOrder;
     dataProgramming["quantity_programming"] = quantityProgramming;
     dataProgramming["status"] = "PROGRAMADO";
+
+    if (type_program == 1) {
+      dataProgramming["max_date"] = '';
+      dataProgramming["min_programming"] = '';
+    }
 
     for (let i = 0; i < allOrders.length; i++) {
       if (allOrders[i].id_order == order.id_order) {
@@ -329,42 +352,44 @@ $(document).ready(function () {
       }
     }
 
-    process = allProcess.filter((item) => item.id_product == id_product);
+    if (type_program == 0) {
+      process = allProcess.filter((item) => item.id_product == id_product);
 
-    // Recorre allProcess para actualizar la ruta
-    for (let i = 0; i < allProcess.length; i++) {
-      if (
-        (quantityMissing == 0 || quantityFTM == 0) &&
-        allProcess[i].id_product == id_product
-      ) {
-        allProcess[i].route += 1;
-        if (process[process.length - 1].route >= allProcess[i].route)
-          allProcess[i].status = 1;
+      // Recorre allProcess para actualizar la ruta
+      for (let i = 0; i < allProcess.length; i++) {
+        if (
+          (quantityMissing == 0 || quantityFTM == 0) &&
+          allProcess[i].id_product == id_product
+        ) {
+          allProcess[i].route += 1;
+          if (process[process.length - 1].route >= allProcess[i].route)
+            allProcess[i].status = 1;
+        }
       }
-    }
+    
+      // Recorre allOrders en sentido inverso para evitar problemas con la actualización de índices
+      for (let i = allOrders.length - 1; i >= 0; i--) {
+        if (
+          allOrders[i].id_product == id_product &&
+          quantityMissing == 0 &&
+          process.length === 1
+        ) {
+          allOrders[i].flag_tbl = 0;
 
-    // Recorre allOrders en sentido inverso para evitar problemas con la actualización de índices
-    for (let i = allOrders.length - 1; i >= 0; i--) {
-      if (
-        allOrders[i].id_product == id_product &&
-        quantityMissing == 0 &&
-        process.length === 1
-      ) {
-        allOrders[i].flag_tbl = 0;
-
-        if (allProcess[0].status == 1) allOrders[i].flag_process = 0;
-        else allOrders[i].flag_process = 1;
+          if (allProcess[0].status == 1) allOrders[i].flag_process = 0;
+          else allOrders[i].flag_process = 1;
+        }
       }
-    }
 
-    // Recorre allOrdersProgramming en sentido inverso
-    for (let i = allOrdersProgramming.length - 1; i >= 0; i--) {
-      if (
-        allOrdersProgramming[i].id_product == id_product &&
-        quantityMissing == 0 &&
-        process.length === 1
-      ) {
-        allOrdersProgramming[i].flag_tbl = 0;
+      // Recorre allOrdersProgramming en sentido inverso
+      for (let i = allOrdersProgramming.length - 1; i >= 0; i--) {
+        if (
+          allOrdersProgramming[i].id_product == id_product &&
+          quantityMissing == 0 &&
+          process.length === 1
+        ) {
+          allOrdersProgramming[i].flag_tbl = 0;
+        }
       }
     }
 
@@ -451,43 +476,6 @@ $(document).ready(function () {
 
       sim == 1 ? (key = 0) : (key = 1);
 
-      // for (let i = 0; i < generalMultiArray[key][`sim_${sim}`].length; i++) {
-      //   if (generalMultiArray[key][`sim_${sim}`][i][`process-${id_process}`]) {
-      //     for (
-      //       let j = 0;
-      //       j <
-      //       generalMultiArray[key][`sim_${sim}`][i][`process-${id_process}`]
-      //         .length;
-      //       j++
-      //     ) {
-      //       if (
-      //         generalMultiArray[key][`sim_${sim}`][i][`process-${id_process}`][
-      //           j
-      //         ].id_programming == idProgramming
-      //       ) {
-      //         generalMultiArray[key][`sim_${sim}`][i][`process-${id_process}`][
-      //           j
-      //         ].accumulated_quantity = quantityMissing;
-      //         generalMultiArray[key][`sim_${sim}`][i][`process-${id_process}`][
-      //           j
-      //         ].accumulated_quantity_order = quantityMissing;
-      //         generalMultiArray[key][`sim_${sim}`][i][`process-${id_process}`][
-      //           j
-      //         ].quantity_programming = quantityProgramming;
-      //         generalMultiArray[key][`sim_${sim}`][i][`process-${id_process}`][
-      //           j
-      //         ].min_date = dataProgramming["min_date"];
-      //         generalMultiArray[key][`sim_${sim}`][i][`process-${id_process}`][
-      //           j
-      //         ].max_date = dataProgramming["max_date"];
-      //         generalMultiArray[key][`sim_${sim}`][i][`process-${id_process}`][
-      //           j
-      //         ].min_programming = dataProgramming["min_programming"];
-      //         break;
-      //       }
-      //     }
-      //   }
-      // }
       for (let i = 0; i < generalMultiArray[key][`sim_${sim}`].length; i++) {
         if (generalMultiArray[key][`sim_${sim}`][i][`process-${id_process}`]) {
           // Agregar verificación para la máquina
@@ -538,7 +526,8 @@ $(document).ready(function () {
     // Cargar selects de maquinas por pedidos programados
     $('#quantityMP').html('');
     loadDataMachinesProgramming(uniqueArray);
-    checkProcessMachines(allTblData);
+    if(type_program==0)
+      checkProcessMachines(allTblData);
     loadTblProgramming(allTblData, 1);
 
     dataProgramming = [];
