@@ -89,6 +89,31 @@ class ProductionOrderDao
         return $programming;
     }
 
+    public function findAllProductionOrderByTypePG($id_product)
+    {
+        $connection = Connection::getInstance()->getConnection();
+
+        $stmt = $connection->prepare("SELECT 
+                                        IFNULL(pg.id_programming, 0) AS id_programming, 
+                                        pc.process, 
+                                        m.machine, 
+                                        IFNULL(pg.min_date, '') AS min_date_programming,
+                                        IFNULL(pg.close_op, 0) AS close_op
+                                      FROM products p
+                                        INNER JOIN machine_cicles mc ON mc.id_product = p.id_product
+                                        INNER JOIN process pc ON pc.id_process = mc.id_process
+                                        INNER JOIN machines m ON m.id_machine = mc.id_machine
+                                        LEFT JOIN programming pg ON pg.id_product = p.id_product AND pg.id_machine = mc.id_machine
+                                      WHERE p.id_product = :id_product");
+        $stmt->execute([
+            'id_product' => $id_product
+        ]);
+        $this->logger->info(__FUNCTION__, array('query' => $stmt->queryString, 'errors' => $stmt->errorInfo()));
+
+        $programming = $stmt->fetchAll($connection::FETCH_ASSOC);
+        return $programming;
+    }
+
     public function changeflagOPById($id_programming, $flag)
     {
         $connection = Connection::getInstance()->getConnection();

@@ -202,31 +202,73 @@ $(document).ready(function () {
     $("#tblPOProcessBody").empty();
     body = document.getElementById("tblPOProcessBody");
 
+    let dataPOProcess = [];
+    
     if (type_program == 0) {
-      min_date = moment(data.min_date_programming).format("DD/MM/YYYY hh:mm A");
-      max_date = moment(data.max_date_programming).format("DD/MM/YYYY hh:mm A");
+      dataPOProcess.push(data);
     } else {
-      min_date = moment(data.min_date_programming).format("DD/MM/YYYY");
+      dataPOProcess = await searchData(`/api/productionOrder/${data.id_product}`);
     }
-
-    body.insertAdjacentHTML(
-      "beforeend",
-      `<tr>
+    
+    for (let i = 0; i < dataPOProcess.length; i++) {  
+      let trPC = '';
+      if (type_program == 0) {
+        max_date = moment(dataPOProcess[i].max_date_programming).format("DD/MM/YYYY hh:mm A");
+        min_date = moment(dataPOProcess[i].min_date_programming).format("DD/MM/YYYY hh:mm A");
+        trPC = `<tr>
                 <td>1</td>
-                <td>${data.process}</td>
-                <td>${data.machine}</td>
+                <td>${dataPOProcess[i].process}</td>
+                <td>${dataPOProcess[i].machine}</td>
                 <td>${min_date}</td>
-                ${type_program == 0 ? `<td>${max_date}</td>` : ''}
-                ${type_program == 0 ? `<td>$${parseFloat(data.cost_payroll).toLocaleString("es-CO", {
-        minimumFractionDigits: 0,
-        maximumFractionDigits: 0,
-      })}</td>`: ''}
-                ${type_program == 0 ? `<td>$${parseFloat(data.cost_machine).toLocaleString("es-CO", {
-        minimumFractionDigits: 0,
-        maximumFractionDigits: 0,
-      })}</td>` : ''}
-            </tr>`
-    );
+                <td>${max_date}</td>
+                <td>$${parseFloat(dataPOProcess[i].cost_payroll).toLocaleString("es-CO", {
+          minimumFractionDigits: 0,
+          maximumFractionDigits: 0,
+                })}</td>
+                <td>$${parseFloat(dataPOProcess[i].cost_machine).toLocaleString("es-CO", {
+          minimumFractionDigits: 0,
+          maximumFractionDigits: 0,
+                })}</td>        
+            </tr>`;
+      } else {
+        if (dataPOProcess[i].min_date_programming)
+          min_date = moment(dataPOProcess[i].min_date_programming).format("DD/MM/YYYY");
+        else
+          min_date = '';
+
+        trPC = `<tr>
+                <td>1</td>
+                <td>${dataPOProcess[i].process}</td>
+                <td>${dataPOProcess[i].machine}</td>
+                <td>${min_date}</td>
+                <td>
+                  <i
+                    class="${
+                      dataPOProcess[i].id_programming == 0
+                        ? "bi bi-shield-fill-x"
+                        : dataPOProcess[i].close_op == 0
+                          ? "bi bi-shield-fill-minus"
+                          : "bi bi-shield-fill-check"
+                    }" 
+                    data-toggle="tooltip" 
+                    style="font-size:25px; 
+                    color:${
+                      dataPOProcess[i].id_programming == 0
+                      ? "#ee2020"
+                      : dataPOProcess[i].close_op == 0
+                        ? "#cfcc1d"
+                        : "#2bcf0a"
+                    };">
+                  </i>
+                </td>
+            </tr>`;
+      }
+
+      body.insertAdjacentHTML(
+        "beforeend",
+        trPC
+      );
+    }
 
     if (data.flag_cancel == 0) {
       // flag_op == 1 ? (visible = false) : (visible = true);

@@ -25,13 +25,20 @@ $generalMaterialsDao = new GeneralMaterialsDao();
 use Psr\Http\Message\ResponseInterface as Response;
 use Psr\Http\Message\ServerRequestInterface as Request;
 
-
 $app->get('/productionOrder', function (Request $request, Response $response, $args) use (
     $productionOrderDao,
 ) {
     session_start();
     $id_company = $_SESSION['id_company'];
     $programming = $productionOrderDao->findAllProductionOrder($id_company);
+    $response->getBody()->write(json_encode($programming));
+    return $response->withHeader('Content-Type', 'application/json');
+});
+
+$app->get('/productionOrder/{id_product}', function (Request $request, Response $response, $args) use (
+    $productionOrderDao,
+) {
+    $programming = $productionOrderDao->findAllProductionOrderByTypePG($args['id_product']);
     $response->getBody()->write(json_encode($programming));
     return $response->withHeader('Content-Type', 'application/json');
 });
