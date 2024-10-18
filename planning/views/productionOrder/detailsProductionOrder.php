@@ -341,9 +341,9 @@ if (sizeof($_SESSION) == 0)
 																<th>Fecha Inicio</th>
 																<?php if ($_SESSION['type_program'] == 0) { ?>
 																	<th>Fecha Final</th>
+																	<th>Costo Nomina</th>
+																	<th>Costo Maquina</th>
 																<?php } ?>
-																<th>Costo Nomina</th>
-																<th>Costo Maquina</th>
 															</tr>
 														</thead>
 														<tbody id="tblPOProcessBody">

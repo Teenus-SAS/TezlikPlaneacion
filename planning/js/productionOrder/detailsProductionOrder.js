@@ -217,14 +217,14 @@ $(document).ready(function () {
                 <td>${data.machine}</td>
                 <td>${min_date}</td>
                 ${type_program == 0 ? `<td>${max_date}</td>` : ''}
-                <td>$${parseFloat(data.cost_payroll).toLocaleString("es-CO", {
+                ${type_program == 0 ? `<td>$${parseFloat(data.cost_payroll).toLocaleString("es-CO", {
         minimumFractionDigits: 0,
         maximumFractionDigits: 0,
-      })}</td>
-                <td>$${parseFloat(data.cost_machine).toLocaleString("es-CO", {
+      })}</td>`: ''}
+                ${type_program == 0 ? `<td>$${parseFloat(data.cost_machine).toLocaleString("es-CO", {
         minimumFractionDigits: 0,
         maximumFractionDigits: 0,
-      })}</td>
+      })}</td>` : ''}
             </tr>`
     );
 
