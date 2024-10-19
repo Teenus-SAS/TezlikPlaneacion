@@ -1,8 +1,8 @@
 $(document).ready(function () {
-  let dataPTOP, allStore, allMaterialsAccept;
-  
+  let dataPTOP, allStore, allMaterialsAccept, id_programming;
   loadAllDataPO = async () => {
-    let id_programming = sessionStorage.getItem("id_programming");
+    id_programming = sessionStorage.getItem("id_programming");
+    
     const [dataOP, dataFTMaterials, dataStore, materialsCM] = await Promise.all(
       [
         searchData("/api/productionOrder"),
