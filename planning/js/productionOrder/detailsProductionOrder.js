@@ -380,37 +380,37 @@ $(document).ready(function () {
   $("#btnCloseOP").click(function (e) {
     e.preventDefault();
 
-    // if (op_to_store == "1") {
-    //   let dataOPP = tblPartialsDelivery.DataTable().rows().data().toArray();
+    if (op_to_store == "1") {
+      let dataOPP = tblPartialsDelivery.DataTable().rows().data().toArray();
 
-    //   if (dataOPP.length == 0) {
-    //     toastr.error(
-    //       "Ejecucion produccion o devolucion de materiales sin datos"
-    //     );
-    //     return false;
-    //   }
+      if (dataOPP.length == 0) {
+        toastr.error(
+          "Ejecucion produccion o devolucion de materiales sin datos"
+        );
+        return false;
+      }
 
-    //   let accept = 0;
-    //   let dataFTMaterials = JSON.parse(sessionStorage.getItem('dataFTMaterials'));
-    //   let dataFT = dataFTMaterials.filter(
-    //     (item) => item.id_product == data.id_product
-    //   );
+      let accept = 0;
+      let dataFTMaterials = JSON.parse(sessionStorage.getItem('dataFTMaterials'));
+      let dataFT = dataFTMaterials.filter(
+        (item) => item.id_product == data.id_product
+      );
 
-    //   for (let i = 0; i < dataFT.length; i++) {
-    //     let materialsAccept = allMaterialsAccept.filter(
-    //       (item) => item.id_material == dataFT[i].id_material
-    //     );
+      for (let i = 0; i < dataFT.length; i++) {
+        let materialsAccept = allMaterialsAccept.filter(
+          (item) => item.id_material == dataFT[i].id_material
+        );
 
-    //     materialsAccept.forEach((item) => {
-    //       accept += parseFloat(item.quantity);
-    //     });
-    //   }
+        materialsAccept.forEach((item) => {
+          accept += parseFloat(item.quantity);
+        });
+      }
 
-    //   if (accept == 0) {
-    //     toastr.error("Materiales y Componentes no ejecutados");
-    //     return false;
-    //   }
-    // }
+      if (accept == 0) {
+        toastr.error("Materiales y Componentes no ejecutados");
+        return false;
+      }
+    }
 
     let id_programming = sessionStorage.getItem("id_programming");
  
