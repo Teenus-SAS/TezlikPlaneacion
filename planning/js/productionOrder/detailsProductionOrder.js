@@ -2,7 +2,7 @@ $(document).ready(function () {
   let dataPTOP, allStore, allMaterialsAccept, id_programming;
   loadAllDataPO = async () => {
     id_programming = sessionStorage.getItem("id_programming");
-    
+
     const [dataOP, dataFTMaterials, dataStore, materialsCM] = await Promise.all(
       [
         searchData("/api/productionOrder"),
@@ -393,7 +393,7 @@ $(document).ready(function () {
       let accept = 0;
       let dataFTMaterials = JSON.parse(sessionStorage.getItem('dataFTMaterials'));
       let dataFT = dataFTMaterials.filter(
-        (item) => item.id_product == data.id_product
+        (item) => item.id_product == dataPTOP.id_product
       );
 
       for (let i = 0; i < dataFT.length; i++) {
