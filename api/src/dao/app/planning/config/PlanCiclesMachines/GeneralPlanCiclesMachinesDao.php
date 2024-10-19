@@ -55,6 +55,22 @@ class GeneralPlanCiclesMachinesDao
         return $machines;
     }
 
+    public function findNextRouteByPG($id_product, $route)
+    {
+        $connection = Connection::getInstance()->getConnection();
+
+        $stmt = $connection->prepare("SELECT mc.id_machine, mc.route
+                                      FROM machine_cicles mc  
+                                      WHERE mc.id_product = :id_product AND mc.route = :route
+                                        ORDER BY `mc`.`route` ASC LIMIT 1");
+        $stmt->execute([
+            'id_product' => $id_product,
+            'route' => $route
+        ]);
+        $machine = $stmt->fetch($connection::FETCH_ASSOC);
+        return $machine;
+    }
+
     public function findAllPlanCiclesMachineByProduct($id_product, $id_company)
     {
         $connection = Connection::getInstance()->getConnection();

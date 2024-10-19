@@ -32,6 +32,7 @@ class ProductionOrderDao
                                                 HOUR(pg.max_date) AS max_hour,
                                                 (pg.min_programming * IFNULL(py.minute_value, 0)) AS cost_payroll,
                                                 IFNULL(py.minute_value, 0) AS minute_value,
+                                                pgr.route AS route_programming,
                                             -- Pedido
                                                 o.id_order, 
                                                 o.num_order, 
@@ -59,6 +60,7 @@ class ProductionOrderDao
                                                 m.machine, 
                                                 pm.hour_start,
                                                 (pg.min_programming * m.minute_depreciation) AS cost_machine,
+                                                pcm.route AS route_cicle,
                                             -- Procesos
                                                 pc.id_process, 
                                                 pc.process, 
@@ -70,6 +72,7 @@ class ProductionOrderDao
                                         INNER JOIN products p ON p.id_product = pg.id_product
                                         LEFT JOIN products_measures pms ON pms.id_product = pg.id_product
                                         LEFT JOIN products_plans pp ON pp.id_product = pg.id_product
+                                        INNER JOIN programming_routes pgr ON pgr.id_order = pg.id_order AND pgr.id_product = pg.id_product
                                         INNER JOIN machines m ON m.id_machine = pg.id_machine
                                         INNER JOIN third_parties c ON c.id_client = o.id_client
                                         INNER JOIN machine_programs pm ON pm.id_machine = pg.id_machine
@@ -79,7 +82,7 @@ class ProductionOrderDao
                                         INNER JOIN orders_status ps ON ps.id_status = o.status
                                       WHERE pg.status = 1 AND pg.id_company = :id_company
                                         GROUP BY pg.id_programming
-                                        ORDER BY `o`.`num_order` ASC");
+                                        ORDER BY `pg`.`id_programming` ASC;");
         $stmt->execute([
             'id_company' => $id_company
         ]);
@@ -122,6 +125,24 @@ class ProductionOrderDao
             $stmt = $connection->prepare("UPDATE programming SET flag_op = :flag_op WHERE id_programming = :id_programming");
             $stmt->execute([
                 'flag_op' => $flag,
+                'id_programming' => $id_programming
+            ]);
+        } catch (\Exception $e) {
+            $message = $e->getMessage();
+
+            $error = array('info' => true, 'message' => $message);
+            return $error;
+        }
+    }
+
+    public function closeOPMachine($id_programming, $flag)
+    {
+        $connection = Connection::getInstance()->getConnection();
+
+        try {
+            $stmt = $connection->prepare("UPDATE programming SET close_op = :close_op WHERE id_programming = :id_programming");
+            $stmt->execute([
+                'close_op' => $flag,
                 'id_programming' => $id_programming
             ]);
         } catch (\Exception $e) {

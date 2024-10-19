@@ -39,4 +39,24 @@ $(document).ready(function () {
     // Paso 3: Combinar los resultados en un nuevo array
     return Object.values(grouped).flat();
   };
+
+  // Función para agrupar por una clave específica
+  groupBy = (array, key) => {
+    const groups = array.reduce((result, currentValue) => {
+      const groupKey = currentValue[key];
+
+      // Si no existe el grupo, lo creamos como array vacío
+      if (!result[groupKey]) {
+        result[groupKey] = [];
+      }
+
+      // Añadimos el objeto actual al grupo correspondiente
+      result[groupKey].push(currentValue);
+
+      return result;
+    }, {}); // El valor inicial es un objeto vacío
+
+    // Convertimos el objeto en un array de arrays
+    return Object.values(groups);
+  };
 });

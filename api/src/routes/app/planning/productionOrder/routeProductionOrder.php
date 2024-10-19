@@ -2,18 +2,28 @@
 
 use TezlikPlaneacion\dao\GeneralMaterialsDao;
 use TezlikPlaneacion\dao\GeneralOrdersDao;
+use TezlikPlaneacion\dao\GeneralPlanCiclesMachinesDao;
 use TezlikPlaneacion\dao\GeneralProductsDao;
 use TezlikPlaneacion\dao\GeneralProgrammingDao;
+use TezlikPlaneacion\dao\GeneralProgrammingRoutesDao;
+use TezlikPlaneacion\dao\LastDataDao;
 use TezlikPlaneacion\dao\MaterialsComponentsUsersDao;
 use TezlikPlaneacion\dao\ProductionOrderDao;
 use TezlikPlaneacion\dao\ProductionOrderMPDao;
 use TezlikPlaneacion\dao\ProductionOrderPartialDao;
+use TezlikPlaneacion\dao\ProgrammingDao;
+use TezlikPlaneacion\dao\ProgrammingRoutesDao;
 use TezlikPlaneacion\dao\UsersProductionOrderMPDao;
 use TezlikPlaneacion\dao\UsersProductionOrderPartialDao;
 
 $generalProgrammingDao = new GeneralProgrammingDao();
 $productionOrderDao = new ProductionOrderDao();
 $productionOrderPartialDao = new ProductionOrderPartialDao();
+$programmingDao = new ProgrammingDao();
+$programmingRoutesDao = new ProgrammingRoutesDao();
+$generalProgrammingRoutesDao = new GeneralProgrammingRoutesDao();
+$generalPlanCiclesMachinesDao = new GeneralPlanCiclesMachinesDao();
+$lastDataDao = new LastDataDao();
 $materialsComponentsUsersDao = new MaterialsComponentsUsersDao();
 $productionOrderMPDao = new ProductionOrderMPDao();
 $usersProductionOrderPartialDao = new UsersProductionOrderPartialDao();
@@ -141,11 +151,53 @@ $app->get('/changeFlagCancelOP/{id_programming}/{flag}', function (Request $requ
     return $response->withStatus(200)->withHeader('Content-Type', 'application/json');
 });
 
-$app->get('/changeFlagOP/{id_programming}/{flag}', function (Request $request, Response $response, $args) use ($productionOrderDao) {
-    $resolution = $productionOrderDao->changeflagOPById($args['id_programming'], $args['flag']);
+$app->post('/changeFlagOP', function (Request $request, Response $response, $args) use (
+    $productionOrderDao,
+    $programmingDao,
+    $generalProgrammingDao,
+    $programmingRoutesDao,
+    $lastDataDao,
+    $generalProgrammingRoutesDao,
+    $generalPlanCiclesMachinesDao
+) {
+    session_start();
+    $id_company = $_SESSION['id_company'];
+    $type_program = $_SESSION['type_program'];
+    $dataOP = $request->getParsedBody();
+    $id_programming = $dataOP['id_programming'];
+
+    $resolution = $productionOrderDao->changeflagOPById($dataOP['id_programming'], 1);
+
+    if ($resolution == null && $type_program == 1) {
+        $resolution = $productionOrderDao->closeOPMachine($dataOP['id_programming'], 1);
+        $machine = $generalPlanCiclesMachinesDao->findNextRouteByPG($dataOP['id_product'], $dataOP['route']);
+
+        if ($machine) {
+            $dataOP['id_machine'] = $machine['id_machine'];
+            $dataOP['route'] = $machine['route'];
+            $resolution = $programmingDao->insertProgrammingByCompany($dataOP, $id_company);
+
+            if ($resolution == null) {
+                $arr = $generalProgrammingRoutesDao->findProgrammingRoutes($dataOP['id_product'], $dataOP['id_order']);
+
+                if ($arr) {
+                    $dataOP['idProgrammingRoutes'] = $arr['id_programming_routes'];
+                    $resolution = $programmingRoutesDao->updateProgrammingRoutes($dataOP);
+                }
+            }
+
+            if ($resolution == null) {
+                $lastData = $lastDataDao->findLastInsertedProgramming($id_company);
+
+                $dataOP['id_programming'] = $lastData['id_programming'];
+                $id_programming = $lastData['id_programming'];
+                $resolution = $generalProgrammingDao->changeStatusProgramming($dataOP);
+            }
+        }
+    }
 
     if ($resolution == null)
-        $resp = array('success' => true, 'message' => 'Orden de produccion modificada correctamente');
+        $resp = array('success' => true, 'message' => 'Orden de produccion modificada correctamente', 'id_programming' => $id_programming);
     else if (isset($resolution['info']))
         $resp = array('info' => true, 'message' => $resolution['message']);
     else

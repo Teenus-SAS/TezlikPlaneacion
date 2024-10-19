@@ -19,8 +19,23 @@ $(document).ready(function () {
         dataPO = dataPO.filter(item => item.id_machine == type_machine_op);
       }
 
-      let dataPOP = dataPO.filter((item) => item.flag_op == 0);
-      let dataPON = dataPO.filter((item) => item.flag_op == 1);
+      let dataPOP = [];
+      let dataPON = [];
+
+      if (type_program == 0) {
+        dataPOP = dataPO.filter((item) => item.flag_op == 0);
+        dataPON = dataPO.filter((item) => item.flag_op == 1);
+      } else {
+        const groupedData = groupBy(dataPO, 'num_production');
+        dataPO = [];
+
+        for (let i = 0; i < groupedData.length; i++) {
+          dataPO.push(groupedData[i][groupedData[i].length - 1]);
+        }
+
+        dataPOP = dataPO.filter((item) => item.route_programming != item.route_cicle || item.flag_op == 0);
+        dataPON = dataPO.filter((item) => item.route_programming == item.route_cicle && item.flag_op == 1);
+      }
 
       sessionStorage.setItem("dataPOP", JSON.stringify(dataPOP));
       sessionStorage.setItem("dataPON", JSON.stringify(dataPON));

@@ -1,8 +1,8 @@
 $(document).ready(function () {
   let dataPTOP, allStore, allMaterialsAccept;
-  let id_programming = sessionStorage.getItem("id_programming");
-
+  
   loadAllDataPO = async () => {
+    let id_programming = sessionStorage.getItem("id_programming");
     const [dataOP, dataFTMaterials, dataStore, materialsCM] = await Promise.all(
       [
         searchData("/api/productionOrder"),
@@ -380,39 +380,54 @@ $(document).ready(function () {
   $("#btnCloseOP").click(function (e) {
     e.preventDefault();
 
-    if (op_to_store == "1") {
-      let dataOPP = tblPartialsDelivery.DataTable().rows().data().toArray();
+    // if (op_to_store == "1") {
+    //   let dataOPP = tblPartialsDelivery.DataTable().rows().data().toArray();
 
-      if (dataOPP.length == 0) {
-        toastr.error(
-          "Ejecucion produccion o devolucion de materiales sin datos"
-        );
-        return false;
-      }
+    //   if (dataOPP.length == 0) {
+    //     toastr.error(
+    //       "Ejecucion produccion o devolucion de materiales sin datos"
+    //     );
+    //     return false;
+    //   }
 
-      let accept = 0;
-      let dataFTMaterials = JSON.parse(sessionStorage.getItem('dataFTMaterials'));
-      let dataFT = dataFTMaterials.filter(
-        (item) => item.id_product == data.id_product
-      );
+    //   let accept = 0;
+    //   let dataFTMaterials = JSON.parse(sessionStorage.getItem('dataFTMaterials'));
+    //   let dataFT = dataFTMaterials.filter(
+    //     (item) => item.id_product == data.id_product
+    //   );
 
-      for (let i = 0; i < dataFT.length; i++) {
-        let materialsAccept = allMaterialsAccept.filter(
-          (item) => item.id_material == dataFT[i].id_material
-        );
+    //   for (let i = 0; i < dataFT.length; i++) {
+    //     let materialsAccept = allMaterialsAccept.filter(
+    //       (item) => item.id_material == dataFT[i].id_material
+    //     );
 
-        materialsAccept.forEach((item) => {
-          accept += parseFloat(item.quantity);
-        });
-      }
+    //     materialsAccept.forEach((item) => {
+    //       accept += parseFloat(item.quantity);
+    //     });
+    //   }
 
-      if (accept == 0) {
-        toastr.error("Materiales y Componentes no ejecutados");
-        return false;
-      }
-    }
+    //   if (accept == 0) {
+    //     toastr.error("Materiales y Componentes no ejecutados");
+    //     return false;
+    //   }
+    // }
 
     let id_programming = sessionStorage.getItem("id_programming");
+ 
+    let dataOP = {};
+    dataOP['id_programming'] = id_programming;
+    dataOP['numOP'] = dataPTOP.num_production;
+    dataOP['route'] = parseInt(dataPTOP.route_programming) + 1;
+    dataOP['status'] = 1;
+    dataOP['id_order'] = dataPTOP.id_order;
+    dataOP['id_product'] = dataPTOP.id_product;
+    dataOP['id_machine'] = dataPTOP.id_machine;
+    dataOP['quantity_programming'] = dataPTOP.quantity_programming;
+    dataOP['min_date'] = dataPTOP.min_date_programming;
+    dataOP['max_date'] = '';
+    dataOP['min_programming'] = 0;
+    dataOP['sim'] = 1;
+    dataOP['new_programming'] = 1;
 
     bootbox.confirm({
       title: "Orden de Producción",
@@ -429,11 +444,13 @@ $(document).ready(function () {
       },
       callback: function (result) {
         if (result == true) {
-          $.get(
-            `/api/changeFlagOP/${id_programming}/1`,
+          $.post('/api/changeFlagOP', dataOP,
             function (resp, textStatus, jqXHR) {
-              messagePOD(resp);
-            }
+              if(resp.success)
+                sessionStorage.setItem('id_programming', resp.id_programming);
+
+              messagePOD(resp); 
+            },
           );
         }
       },
