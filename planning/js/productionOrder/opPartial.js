@@ -202,6 +202,22 @@ $(document).ready(function () {
   $("#btnDeliverPartialOP").click(function (e) {
     e.preventDefault();
 
+    // Selecciona los inputs de fecha y hora
+    const startDateTimeInput = document.getElementById("startDateTime");
+    const endDateTimeInput = document.getElementById("endDateTime");
+
+    const startDateTime = new Date(startDateTimeInput.value);
+    const endDateTime = new Date(endDateTimeInput.value);
+
+    if (endDateTime < startDateTime) {
+      // Muestra un mensaje de error o maneja el error
+      alert("La fecha y hora de fin no puede ser anterior a la de inicio.");
+      endDateTimeInput.value = ""; // Opcional: Vacía el campo si la validación falla
+      return false; // Evita el envío del formulario o la ejecución de otras acciones
+    }
+    // Agrega el evento para validar cuando cambie la fecha de fin
+    endDateTimeInput.addEventListener("change", validateDateTime);
+
     const idPartDeliv = sessionStorage.getItem("id_part_deliv") || null;
     const apiUrl = !idPartDeliv ? "/api/addOPPartial" : "/api/updateOPPartial";
 
