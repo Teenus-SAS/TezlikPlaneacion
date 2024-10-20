@@ -117,12 +117,12 @@ if (sizeof($_SESSION) == 0)
                                                 <ul class="nav nav-tabs mt-3 ml-3" id="subTabOP" role="tablist">
                                                     <li class="nav-item">
                                                         <a class="nav-link active" id="subTabReceiveOP" data-toggle="pill" href="#paneReceiveOP" role="tab" aria-controls="paneReceiveOP" aria-selected="false">
-                                                            Recibir
+                                                            Entregar
                                                         </a>
                                                     </li>
                                                     <li class="nav-item">
                                                         <a class="nav-link" id="subTabDeliverOP" data-toggle="pill" href="#paneDeliverOP" role="tab" aria-controls="paneDeliverOP" aria-selected="true">
-                                                            Entregar
+                                                            Recibir
                                                         </a>
                                                     </li>
                                                 </ul>
