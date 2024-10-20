@@ -152,21 +152,21 @@ $(document).ready(function () {
                     <td>${quantity_ftm} ${dataFT[i].abbreviation}</td>
                     <td>${quantity_total} ${dataFT[i].abbreviation}</td>
                     <td>$${cost_ftm.toLocaleString("es-CO", {
-          minimumFractionDigits: 0,
-          maximumFractionDigits: 2,
-        })}</td>
+                      minimumFractionDigits: 0,
+                      maximumFractionDigits: 2,
+                    })}</td>
                     <td>$${cost_total.toLocaleString("es-CO", {
-          minimumFractionDigits: 0,
-          maximumFractionDigits: 0,
-        })}</td>
+                      minimumFractionDigits: 0,
+                      maximumFractionDigits: 0,
+                    })}</td>
                     <td>${recieve.toLocaleString("es-CO", {
-          minimumFractionDigits: 0,
-          maximumFractionDigits: 2,
-        })}</td>
+                      minimumFractionDigits: 0,
+                      maximumFractionDigits: 2,
+                    })}</td>
                     <td>${pending.toLocaleString("es-CO", {
-          minimumFractionDigits: 0,
-          maximumFractionDigits: 2,
-        })}</td> 
+                      minimumFractionDigits: 0,
+                      maximumFractionDigits: 2,
+                    })}</td> 
                     ${flag_op == 0 ? `<td>${action}</td>` : ""}
                 </tr>`
       );
@@ -181,19 +181,19 @@ $(document).ready(function () {
       `<tr>
           <td colspan="4"><strong>Total</strong></td>
           <td class="costMaterialsUnit"><strong>$${totalCostFtm.toLocaleString(
-        "es-CO",
-        {
-          minimumFractionDigits: 0,
-          maximumFractionDigits: 2,
-        }
-      )}</strong></td>
+            "es-CO",
+            {
+              minimumFractionDigits: 0,
+              maximumFractionDigits: 2,
+            }
+          )}</strong></td>
           <td class="costMaterials"><strong>$${totalCostTotal.toLocaleString(
-        "es-CO",
-        {
-          minimumFractionDigits: 0,
-          maximumFractionDigits: 0,
-        }
-      )}</strong></td>
+            "es-CO",
+            {
+              minimumFractionDigits: 0,
+              maximumFractionDigits: 0,
+            }
+          )}</strong></td>
           <td colspan="3"></td>
         </tr>`
     );
@@ -203,71 +203,70 @@ $(document).ready(function () {
     body = document.getElementById("tblPOProcessBody");
 
     let dataPOProcess = [];
-    
+
     if (type_program == 0) {
       dataPOProcess.push(data);
     } else {
-      dataPOProcess = await searchData(`/api/productionOrder/${data.id_product}`);
+      dataPOProcess = await searchData(
+        `/api/productionOrder/${data.id_product}`
+      );
     }
-    
-    for (let i = 0; i < dataPOProcess.length; i++) {  
-      let trPC = '';
+
+    for (let i = 0; i < dataPOProcess.length; i++) {
+      let trPC = "";
       if (type_program == 0) {
-        max_date = moment(dataPOProcess[i].max_date_programming).format("DD/MM/YYYY hh:mm A");
-        min_date = moment(dataPOProcess[i].min_date_programming).format("DD/MM/YYYY hh:mm A");
+        max_date = moment(dataPOProcess[i].max_date_programming).format(
+          "DD/MM/YYYY hh:mm A"
+        );
+        min_date = moment(dataPOProcess[i].min_date_programming).format(
+          "DD/MM/YYYY hh:mm A"
+        );
         trPC = `<tr>
                 <td>1</td>
                 <td>${dataPOProcess[i].process}</td>
                 <td>${dataPOProcess[i].machine}</td>
                 <td>${min_date}</td>
                 <td>${max_date}</td>
-                <td>$${parseFloat(dataPOProcess[i].cost_payroll).toLocaleString("es-CO", {
-          minimumFractionDigits: 0,
-          maximumFractionDigits: 0,
-                })}</td>
-                <td>$${parseFloat(dataPOProcess[i].cost_machine).toLocaleString("es-CO", {
-          minimumFractionDigits: 0,
-          maximumFractionDigits: 0,
-                })}</td>        
+                <td>$${parseFloat(dataPOProcess[i].cost_payroll).toLocaleString(
+                  "es-CO",
+                  {
+                    minimumFractionDigits: 0,
+                    maximumFractionDigits: 0,
+                  }
+                )}</td>
+                <td>$${parseFloat(dataPOProcess[i].cost_machine).toLocaleString(
+                  "es-CO",
+                  {
+                    minimumFractionDigits: 0,
+                    maximumFractionDigits: 0,
+                  }
+                )}</td>        
             </tr>`;
       } else {
         if (dataPOProcess[i].min_date_programming)
-          min_date = moment(dataPOProcess[i].min_date_programming).format("DD/MM/YYYY");
-        else
-          min_date = '';
+          min_date = moment(dataPOProcess[i].min_date_programming).format(
+            "DD/MM/YYYY"
+          );
+        else min_date = "";
 
-        trPC = `<tr>
+        trPC = `<tr> 
                 <td>1</td>
                 <td>${dataPOProcess[i].process}</td>
                 <td>${dataPOProcess[i].machine}</td>
                 <td>${min_date}</td>
                 <td>
-                  <i
-                    class="${
-                      dataPOProcess[i].id_programming == 0
-                        ? "bi bi-shield-fill-x"
-                        : dataPOProcess[i].close_op == 0
-                          ? `<span style="font-size: 25px; color: #febd07;">En proceso</span>`
-                          : "bi bi-check-square-fill"
-                    }" 
-                    data-toggle="tooltip" 
-                    style="font-size:25px; 
-                    color:${
-                      dataPOProcess[i].id_programming == 0
-                      ? "#ee2020"
+                  ${
+                    dataPOProcess[i].id_programming == 0
+                      ? `<i class="bi bi-shield-fill-x" data-toggle="tooltip" style="font-size:25px; color:#ee2020;"></i>`
                       : dataPOProcess[i].close_op == 0
-                        ? "#febd07"
-                        : "#6bcb2e"
-                    };">
-                  </i>
+                      ? `<span style="font-size: 25px; color: #febd07;">En proceso</span>`
+                      : `<i class="bi bi-check-square-fill" data-toggle="tooltip" style="font-size:25px; color:#6bcb2e;"></i>`
+                  }
                 </td>
             </tr>`;
       }
 
-      body.insertAdjacentHTML(
-        "beforeend",
-        trPC
-      );
+      body.insertAdjacentHTML("beforeend", trPC);
     }
 
     if (data.flag_cancel == 0) {
@@ -391,7 +390,9 @@ $(document).ready(function () {
       }
 
       let accept = 0;
-      let dataFTMaterials = JSON.parse(sessionStorage.getItem('dataFTMaterials'));
+      let dataFTMaterials = JSON.parse(
+        sessionStorage.getItem("dataFTMaterials")
+      );
       let dataFT = dataFTMaterials.filter(
         (item) => item.id_product == dataPTOP.id_product
       );
@@ -413,21 +414,21 @@ $(document).ready(function () {
     }
 
     let id_programming = sessionStorage.getItem("id_programming");
- 
+
     let dataOP = {};
-    dataOP['id_programming'] = id_programming;
-    dataOP['numOP'] = dataPTOP.num_production;
-    dataOP['route'] = parseInt(dataPTOP.route_programming) + 1;
-    dataOP['status'] = 1;
-    dataOP['id_order'] = dataPTOP.id_order;
-    dataOP['id_product'] = dataPTOP.id_product;
-    dataOP['id_machine'] = dataPTOP.id_machine;
-    dataOP['quantity_programming'] = dataPTOP.quantity_programming;
-    dataOP['min_date'] = dataPTOP.min_date_programming;
-    dataOP['max_date'] = '';
-    dataOP['min_programming'] = 0;
-    dataOP['sim'] = 1;
-    dataOP['new_programming'] = 1;
+    dataOP["id_programming"] = id_programming;
+    dataOP["numOP"] = dataPTOP.num_production;
+    dataOP["route"] = parseInt(dataPTOP.route_programming) + 1;
+    dataOP["status"] = 1;
+    dataOP["id_order"] = dataPTOP.id_order;
+    dataOP["id_product"] = dataPTOP.id_product;
+    dataOP["id_machine"] = dataPTOP.id_machine;
+    dataOP["quantity_programming"] = dataPTOP.quantity_programming;
+    dataOP["min_date"] = dataPTOP.min_date_programming;
+    dataOP["max_date"] = "";
+    dataOP["min_programming"] = 0;
+    dataOP["sim"] = 1;
+    dataOP["new_programming"] = 1;
 
     bootbox.confirm({
       title: "Orden de Producción",
@@ -444,13 +445,15 @@ $(document).ready(function () {
       },
       callback: function (result) {
         if (result == true) {
-          $.post('/api/changeFlagOP', dataOP,
+          $.post(
+            "/api/changeFlagOP",
+            dataOP,
             function (resp, textStatus, jqXHR) {
-              if(resp.success)
-                sessionStorage.setItem('id_programming', resp.id_programming);
+              if (resp.success)
+                sessionStorage.setItem("id_programming", resp.id_programming);
 
-              messagePOD(resp); 
-            },
+              messagePOD(resp);
+            }
           );
         }
       },
