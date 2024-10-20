@@ -247,8 +247,8 @@ $(document).ready(function () {
                       dataPOProcess[i].id_programming == 0
                         ? "bi bi-shield-fill-x"
                         : dataPOProcess[i].close_op == 0
-                          ? "bi bi-shield-fill-minus"
-                          : "bi bi-shield-fill-check"
+                          ? "bi bi-dash"
+                          : "bi bi-check-square-fill"
                     }" 
                     data-toggle="tooltip" 
                     style="font-size:25px; 
@@ -256,8 +256,8 @@ $(document).ready(function () {
                       dataPOProcess[i].id_programming == 0
                       ? "#ee2020"
                       : dataPOProcess[i].close_op == 0
-                        ? "#cfcc1d"
-                        : "#2bcf0a"
+                        ? "#febd07"
+                        : "#6bcb2e"
                     };">
                   </i>
                 </td>
