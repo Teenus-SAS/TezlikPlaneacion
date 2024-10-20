@@ -133,6 +133,7 @@ $(document).ready(function () {
             $("#kpiQualityOP").hide();
             $("#titleGeneralCost").hide();
             $("#titleUnitCost").hide();
+            $("#lineDivTitleCost").hide();
           }
         }
       });

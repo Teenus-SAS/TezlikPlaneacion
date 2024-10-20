@@ -110,7 +110,7 @@ if (sizeof($_SESSION) == 0)
 											</div>
 										</div> -->
 
-										<hr>
+										<hr id="lineDivTitleCost">
 
 										<div class=" row">
 											<div class="col-sm-3">
