@@ -247,7 +247,7 @@ $(document).ready(function () {
                       dataPOProcess[i].id_programming == 0
                         ? "bi bi-shield-fill-x"
                         : dataPOProcess[i].close_op == 0
-                          ? "bi bi-dash"
+                          ? `<span style="font-size: 25px; color: #febd07;">En proceso</span>`
                           : "bi bi-check-square-fill"
                     }" 
                     data-toggle="tooltip" 
