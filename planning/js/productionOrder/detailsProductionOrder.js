@@ -259,8 +259,8 @@ $(document).ready(function () {
                     dataPOProcess[i].id_programming == 0
                       ? `<i class="bi bi-shield-fill-x" data-toggle="tooltip" style="font-size:25px; color:#ee2020;"></i>`
                       : dataPOProcess[i].close_op == 0
-                      ? `<span class="badge badge-warning"">En proceso</span>`
-                      : `<i class="bi bi-check-square-fill" data-toggle="tooltip" style="font-size:25px; color:#6bcb2e;"></i>`
+                      ? `<span class="badge badge-warning"><i class="bi bi-dash-square-fill" data-toggle="tooltip" style="font-size:25px; color:#6bcb2e;"></i>En proceso</span>`
+                      : `<span class="badge badge-success"><i class="bi bi-check-square-fill" data-toggle="tooltip" style="font-size:25px; color:#6bcb2e;"></i>Finalizado</span>`
                   }
                 </td>
             </tr>`;
