@@ -131,6 +131,8 @@ $(document).ready(function () {
             );
           } else {
             $("#kpiQualityOP").hide();
+            $("#titleGeneralCost").hide();
+            $("#titleUnitCost").hide();
           }
         }
       });
