@@ -259,7 +259,7 @@ $(document).ready(function () {
                     dataPOProcess[i].id_programming == 0
                       ? `<i class="bi bi-shield-fill-x" data-toggle="tooltip" style="font-size:25px; color:#ee2020;"></i>`
                       : dataPOProcess[i].close_op == 0
-                      ? `<span style="font-size: 25px; color: #febd07;">En proceso</span>`
+                      ? `<span class="badge badge-warning"">En proceso</span>`
                       : `<i class="bi bi-check-square-fill" data-toggle="tooltip" style="font-size:25px; color:#6bcb2e;"></i>`
                   }
                 </td>
