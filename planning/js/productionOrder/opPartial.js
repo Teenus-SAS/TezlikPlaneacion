@@ -210,13 +210,16 @@ $(document).ready(function () {
     const endDateTime = new Date(endDateTimeInput.value);
 
     if (endDateTime < startDateTime) {
-      // Muestra un mensaje de error o maneja el error
-      alert("La fecha y hora de fin no puede ser anterior a la de inicio.");
-      endDateTimeInput.value = ""; // Opcional: Vacía el campo si la validación falla
-      return false; // Evita el envío del formulario o la ejecución de otras acciones
+      // Notifica mensaje de error
+      toastr.error(
+        "La fecha y hora de finalización no puede ser menor a la fecha y hora de inicio."
+      );
+
+      // Vacía los campos
+      startDateTimeInput.value = "";
+      endDateTimeInput.value = "";
+      return false;
     }
-    // Agrega el evento para validar cuando cambie la fecha de fin
-    endDateTimeInput.addEventListener("change", validateDateTime);
 
     const idPartDeliv = sessionStorage.getItem("id_part_deliv") || null;
     const apiUrl = !idPartDeliv ? "/api/addOPPartial" : "/api/updateOPPartial";
