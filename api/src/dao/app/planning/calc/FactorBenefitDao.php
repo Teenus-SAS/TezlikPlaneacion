@@ -21,11 +21,11 @@ class FactorBenefitDao
         try {
             if (
                 $dataPayroll['typeFactor'] == '1' || $dataPayroll['typeFactor'] == '2' ||
-                $dataPayroll['typeFactor'] == 'Nomina' || $dataPayroll['typeFactor'] == 'Servicios'
+                $dataPayroll['typeFactor'] == 'NOMINA' || $dataPayroll['typeFactor'] == 'SERVICIOS'
             ) {
                 $valueBenefits = ($dataPayroll['salary'] + $dataPayroll['extraTime']) * (floatval($dataPayroll['valueRisk']) / 100);
 
-                if ($dataPayroll['typeFactor'] == '1' || $dataPayroll['typeFactor'] == 'Nomina')
+                if ($dataPayroll['typeFactor'] == '1' || $dataPayroll['typeFactor'] == 'NOMINA')
                     for ($i = 0; $i < count($dataBenefits); $i++) {
                         $valueBenefit = 0;
 

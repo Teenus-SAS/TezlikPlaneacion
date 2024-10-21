@@ -160,9 +160,7 @@ $(document).ready(function () {
             )}<br>Fin: ${moment(final_date).format("DD/MM/YYYY hh:mm A")}`;
             break;
           case "Fecha Inicial":
-            let fminDate = new Date(arr.min_date);
-
-            cell.innerHTML = `Inicio: ${moment(fminDate).format("DD/MM/YYYY")}`;
+            cell.innerHTML = `Inicio: ${arr.min_date}`;
             break;
           case "Acciones":
             cell.innerHTML = `<a href="javascript:;" <i id="${arr.id_programming
