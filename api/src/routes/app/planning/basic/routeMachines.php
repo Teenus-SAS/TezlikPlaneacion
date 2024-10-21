@@ -57,9 +57,9 @@ $app->post('/machinesDataValidation', function (Request $request, Response $resp
             $machines[$i]['hoursMachine'] = str_replace(',', '.', $machines[$i]['hoursMachine']);
             $machines[$i]['daysMachine'] = str_replace(',', '.', $machines[$i]['daysMachine']);
 
-            $data = floatval($machines[$i]['cost']) * floatval($machines[$i]['depreciationYears']) * floatval($machines[$i]['hoursMachine']) * floatval($machines[$i]['daysMachine']);
+            $validate = floatval($machines[$i]['cost']) * floatval($machines[$i]['depreciationYears']) * floatval($machines[$i]['hoursMachine']) * floatval($machines[$i]['daysMachine']);
 
-            if ($data <= 0 || is_nan($data)) {
+            if ($validate <= 0 || is_nan($validate)) {
                 $row = $i + 2;
                 array_push($debugg, array('error' => true, 'message' => "Campos vacios, fila-$row"));
             }
@@ -74,7 +74,7 @@ $app->post('/machinesDataValidation', function (Request $request, Response $resp
                 $dataImportMachine = array('error' => true, 'message' => "Los dias de trabajo no pueden ser mayor a 31, fila-$row");
             }
 
-            if (sizeof($debugg) > 0) {
+            if (sizeof($debugg) == 0) {
                 $findMachine = $generalMachinesDao->findMachine($machines[$i], $id_company);
                 if (!$findMachine) $insert = $insert + 1;
                 else $update = $update + 1;

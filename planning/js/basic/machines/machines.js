@@ -21,8 +21,8 @@ $(document).ready(function () {
     let tables = document.getElementsByClassName("dataTable");
 
     for (let table of tables) { 
-      table.style.width = "1217.55px"; 
-      table.style.width = "1217.55px";
+      table.style.width = "100%"; 
+      table.style.width = "100%";
     }
   });
 
