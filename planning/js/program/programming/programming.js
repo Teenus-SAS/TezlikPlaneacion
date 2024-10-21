@@ -323,26 +323,26 @@ $(document).ready(function () {
             allOrdersProgramming[i].accumulated_quantity_order =
               allOrdersProgramming[i].accumulated_quantity -
                 quantityProgramming <
-              0
+                0
                 ? 0
                 : allOrdersProgramming[i].accumulated_quantity -
-                  quantityProgramming;
+                quantityProgramming;
             allOrdersProgramming[i].accumulated_quantity =
               ciclesMachine.length == 1
                 ? allOrdersProgramming[i].accumulated_quantity -
-                    quantityProgramming <
+                  quantityProgramming <
                   0
                   ? 0
                   : allOrdersProgramming[i].accumulated_quantity -
-                    quantityProgramming
+                  quantityProgramming
                 : allOrdersProgramming[i].original_quantity;
             allOrdersProgramming[i].quantity_programming =
               allOrdersProgramming[i].accumulated_quantity -
                 quantityProgramming <
-              0
+                0
                 ? 0
                 : allOrdersProgramming[i].accumulated_quantity -
-                  quantityProgramming;
+                quantityProgramming;
             quantityMissing =
               allOrdersProgramming[i].accumulated_quantity_order;
           }
@@ -522,11 +522,13 @@ $(document).ready(function () {
     sessionStorage.setItem('allPlanningMachines', JSON.stringify(allPlanningMachines));
     sessionStorage.setItem('allProductsMaterials', JSON.stringify(allProductsMaterials));
 
-
     // Cargar selects de maquinas por pedidos programados
     $('#quantityMP').html('');
     loadDataMachinesProgramming(uniqueArray);
-    if(type_program==0)
+    
+    // Cargar selects de pedidos que esten por programar
+    loadOrdersProgramming(allOrdersProgramming);
+    if (type_program == 0)
       checkProcessMachines(allTblData);
     loadTblProgramming(allTblData, 1);
 

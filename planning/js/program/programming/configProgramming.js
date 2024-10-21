@@ -193,6 +193,15 @@ $(document).ready(function () {
   };
 
   loadOrdersProgramming = async (data) => {
+    // let orders = allOrders.filter(
+    //   (item) =>
+    //     item.num_order == num_order &&
+    //     (item.status == "PROGRAMAR" || item.status == "PROGRAMADO") &&
+    //     (item.accumulated_quantity_order == null ||
+    //       item.accumulated_quantity_order != 0 ||
+    //       item.flag_process == 0) &&
+    //     item.flag_tbl == 1
+    // );
     data = data.filter((item) => item.flag_tbl == 1);
 
     if (data.length === 0) {

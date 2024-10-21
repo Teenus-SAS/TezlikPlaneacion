@@ -106,11 +106,11 @@ if (sizeof($_SESSION) == 0)
                     <div class="container-fluid">
                         <div class="row">
                             <div class="col-sm-7 col-xl-12 mt-4 form-inline justify-content-sm-end">
-                                <?php if ($_SESSION['inventory_abc'] == '1') { ?>
-                                    <div class="col-xs-4 cardBtnAddMonths  mr-2">
-                                        <button class="btn btn-warning" id="btnInvetoryABC" name="btnInvetoryABC"><i class="bi bi-folder mr-1"></i>Reclasificación Inv ABC</button>
-                                    </div>
-                                <?php } ?>
+                                <!-- < ?php if ($_SESSION['inventory_abc'] == '1') { ?> -->
+                                <div class="col-xs-4 cardBtnAddMonths  mr-2">
+                                    <button class="btn btn-warning" id="btnInvetoryABC" name="btnInvetoryABC"><i class="bi bi-folder mr-1"></i>Reclasificación Inv ABC</button>
+                                </div>
+                                <!-- < ?php } ?> -->
                                 <!-- <div class="col-xs-2">
                                     <button class="btn btn-info" id="btnImportNewInventory"><i class="bi bi-cloud-download mr-1"></i></button>
                                 </div> -->

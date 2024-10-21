@@ -35,7 +35,7 @@ class ProductsMaterialsDao
                                             IFNULL(u.unit, '') AS unit,
                                             IFNULL(u.abbreviation, '') AS abbreviation,
                                             pm.quantity,
-                                            (mi.quantity - mi.reserved) AS quantity_material,
+                                            (IFNULL(mi.quantity, 0) - IFNULL(mi.reserved, 0)) AS quantity_material,
                                             mi.reserved,
                                             (
                                                 (

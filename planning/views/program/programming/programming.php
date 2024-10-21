@@ -140,8 +140,8 @@ if (sizeof($_SESSION) == 0)
                                                         <div class="col-sm-3 floating-label enable-floating-label show-label mb-2 p-1 date cardFormProgramming2">
                                                             <label for="">Fecha Inicial</label>
                                                             <input type="date" class="form-control text-center" inline="true" id="minDate" name="minDate" readonly min="<?php
-                                                                                                                                                                        date_default_timezone_set('America/Bogota');
-                                                                                                                                                                        echo date('Y-m-d', strtotime('+1 day')); ?>">
+                                                                                                                                                                        //date_default_timezone_set('America/Bogota');
+                                                                                                                                                                        echo date('Y-m-d'); ?>">
                                                         </div>
                                                         <div class="col-sm-3 floating-label enable-floating-label show-label" id="process" style="display: none;">
                                                             <label for="">Proceso</label>
@@ -185,14 +185,14 @@ if (sizeof($_SESSION) == 0)
                                                         <div class="col-sm-3 floating-label enable-floating-label show-label date">
                                                             <label for="">Fecha Inicial</label>
                                                             <input type="datetime-local" class="form-control text-center" inline="true" id="minDate" name="minDate" readonly min="<?php
-                                                                                                                                                                                    date_default_timezone_set('America/Bogota');
-                                                                                                                                                                                    echo date('Y-m-d', strtotime('+1 day')); ?>">
+                                                                                                                                                                                    //date_default_timezone_set('America/Bogota');
+                                                                                                                                                                                    echo date('Y-m-d'); ?>">
                                                         </div>
                                                         <div class="col-sm-3 floating-label enable-floating-label show-label date">
                                                             <label for="">Fecha Final</label>
                                                             <input type="datetime-local" class="form-control text-center" id="maxDate" name="maxDate" readonly min="<?php
-                                                                                                                                                                    date_default_timezone_set('America/Bogota');
-                                                                                                                                                                    echo date('Y-m-d', strtotime('+1 day')); ?>">
+                                                                                                                                                                    //date_default_timezone_set('America/Bogota');
+                                                                                                                                                                    echo date('Y-m-d'); ?>">
                                                         </div>
                                                         <div class="col-sm-1 mt-2">
                                                             <button class="btn btn-info" type="submit" id="btnCreateProgramming" name="btnCreateProgramming">Crear</button>
