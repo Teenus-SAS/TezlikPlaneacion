@@ -304,7 +304,7 @@ $(document).ready(function () {
         if (
           quantityProgramming <
           allOrdersProgramming[i]
-            .original_quantity /*&& productsMaterials[0].quantity > allOrders[i].original_quantity*/
+            .original_quantity
         ) {
           quantityMissing =
             allOrdersProgramming[i].original_quantity - quantityProgramming;
@@ -389,6 +389,25 @@ $(document).ready(function () {
           process.length === 1
         ) {
           allOrdersProgramming[i].flag_tbl = 0;
+        }
+      }
+    }
+
+    if (type_program == 1) {
+      if (quantityFTM <= 0) {
+        for (let i = 0; i < allOrders.length; i++) {
+          if (allOrders[i].id_order == order.id_order) {
+            allOrders[i].quantity_programming = 0;
+            allOrders[i].accumulated_quantity_order = 0;
+            allOrders[i].accumulated_quantity = 0;
+          }          
+        }
+        for (let i = 0; i < allOrdersProgramming.length; i++) {
+          if (allOrdersProgramming[i].id_order == order.id_order) {
+            allOrdersProgramming[i].quantity_programming = 0;
+            allOrdersProgramming[i].accumulated_quantity_order = 0;
+            allOrdersProgramming[i].accumulated_quantity = 0;
+          }          
         }
       }
     }
@@ -528,8 +547,10 @@ $(document).ready(function () {
     
     // Cargar selects de pedidos que esten por programar
     loadOrdersProgramming(allOrdersProgramming);
-    if (type_program == 0)
+    if (type_program == 0) {
       checkProcessMachines(allTblData);
+    } 
+
     loadTblProgramming(allTblData, 1);
 
     dataProgramming = [];

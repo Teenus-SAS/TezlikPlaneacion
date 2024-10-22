@@ -20,12 +20,21 @@ class ProgrammingRoutesDao
     {
         $connection = Connection::getInstance()->getConnection();
 
-        $stmt = $connection->prepare("SELECT pr.id_programming_routes, pr.id_order, o.num_order, pr.id_product, pr.route, pcm.route AS route1, p.id_process, p.process
-                                        FROM programming_routes pr
+        $stmt = $connection->prepare("SELECT
+                                        -- Columnas
+                                            pr.id_programming_routes,
+                                            pr.id_order,
+                                            o.num_order,
+                                            pr.id_product,
+                                            pr.route,
+                                            pcm.route AS route1,
+                                            p.id_process,
+                                            p.process
+                                      FROM programming_routes pr
                                         INNER JOIN orders o ON o.id_order = pr.id_order
-                                        INNER JOIN machine_cicles pcm ON pcm.id_product = pr.id_product -- AND FIND_IN_SET(pcm.route, pr.route) > 0
+                                        INNER JOIN machine_cicles pcm ON pcm.id_product = pr.id_product
                                         INNER JOIN process p ON p.id_process = pcm.id_process
-                                        WHERE pr.id_company = :id_company");
+                                      WHERE pr.id_company = :id_company");
         $stmt->execute(['id_company' => $id_company]);
         $programming = $stmt->fetchAll($connection::FETCH_ASSOC);
         return $programming;

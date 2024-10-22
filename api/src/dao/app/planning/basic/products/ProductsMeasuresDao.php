@@ -19,8 +19,24 @@ class ProductsMeasuresDao
     public function findAllProductsMeasuresByCompany($id_company)
     {
         $connection = Connection::getInstance()->getConnection();
-        $sql = "SELECT IFNULL(pm.id_product_measure, 0) AS id_product_measure, p.id_product, p.id_product_type, IFNULL(pt.product_type, '') AS product_type, p.reference, p.product, p.composite, p.origin, p.img, 
-                       IFNULL(pm.width, 0) AS width, IFNULL(pm.high, 0) AS high, IFNULL(pm.length, 0) AS length, IFNULL(pm.useful_length, 0) AS useful_length, IFNULL(pm.total_width, 0) AS total_width, IFNULL(pm.window, 0) AS window, IFNULL(pm.inks, 0) AS inks
+        $sql = "SELECT
+                    -- Columnas
+                        IFNULL(pm.id_product_measure, 0) AS id_product_measure,
+                        p.id_product,
+                        p.id_product_type,
+                        IFNULL(pt.product_type, '') AS product_type,
+                        p.reference,
+                        p.product,
+                        p.composite,
+                        p.origin,
+                        p.img,
+                        IFNULL(pm.width, 0) AS width,
+                        IFNULL(pm.high, 0) AS high,
+                        IFNULL(pm.length, 0) AS length,
+                        IFNULL(pm.useful_length, 0) AS useful_length,
+                        IFNULL(pm.total_width, 0) AS total_width,
+                        IFNULL(pm.window, 0) AS window,
+                        IFNULL(pm.inks, 0) AS inks
                 FROM products p
                     LEFT JOIN products_measures pm ON pm.id_product = p.id_product
                     LEFT JOIN products_type pt ON pt.id_product_type = p.id_product_type

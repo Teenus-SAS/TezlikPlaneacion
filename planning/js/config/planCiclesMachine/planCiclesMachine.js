@@ -47,7 +47,7 @@ $(document).ready(function () {
 
     $(`#idProcess option[value=${data.id_process}]`).prop("selected", true);
     $(`#idMachine option[value=${data.id_machine}]`).prop("selected", true);
-    $("#ciclesHour").val(data.cicles_hour.toLocaleString("es-CO"));
+    $("#ciclesHour").val(data.cicles_hour);
 
     //animacion desplazamiento
     $("html, body").animate(

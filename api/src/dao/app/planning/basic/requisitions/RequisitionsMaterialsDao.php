@@ -20,21 +20,22 @@ class RequisitionsMaterialsDao
     {
         $connection = Connection::getInstance()->getConnection();
         $stmt = $connection->prepare("SELECT
-                                            r.id_requisition_material,
-                                            r.id_material,
-                                            m.reference,
-                                            m.material,
-                                            r.application_date,
-                                            r.delivery_date,
-                                            r.quantity_requested,
-                                            r.quantity_required,
-                                            r.purchase_order,
-                                            r.admission_date,
-                                            IFNULL(r.id_provider, 0) AS id_provider,
-                                            IFNULL(c.client, '') AS provider,
-                                            IFNULL(u.id_user, 0) AS id_user,
-                                            IFNULL(u.firstname, '') AS firstname,
-                                            IFNULL(u.lastname, '') AS lastname
+                                            -- Columnas
+                                                r.id_requisition_material,
+                                                r.id_material,
+                                                m.reference,
+                                                m.material,
+                                                r.application_date,
+                                                r.delivery_date,
+                                                r.quantity_requested,
+                                                r.quantity_required,
+                                                r.purchase_order,
+                                                r.admission_date,
+                                                IFNULL(r.id_provider, 0) AS id_provider,
+                                                IFNULL(c.client, '') AS provider,
+                                                IFNULL(u.id_user, 0) AS id_user,
+                                                IFNULL(u.firstname, '') AS firstname,
+                                                IFNULL(u.lastname, '') AS lastname
                                       FROM requisitions_materials r
                                          INNER JOIN materials m ON m.id_material = r.id_material
                                          LEFT JOIN third_parties c ON c.id_client = r.id_provider

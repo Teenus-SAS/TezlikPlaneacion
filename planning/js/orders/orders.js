@@ -135,6 +135,18 @@ $(document).ready(function () {
 
     let resp = await sendDataPOST(url, dataOrder);
 
+    if(resp.success){
+      let dataProducts = JSON.parse(sessionStorage.getItem('dataProducts'));
+      
+      for (let i = 0; i < dataProducts.length; i++) {
+        if (dataProducts[i].id_product == idProduct) {
+          dataProducts[i].accumulated_quantity = resp.accumulated_quantity;
+        } 
+      } 
+
+      sessionStorage.setItem('dataProducts', JSON.stringify(dataProducts));
+    }
+
     message(resp);
   };
 

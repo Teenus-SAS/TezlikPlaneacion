@@ -435,7 +435,6 @@ $(document).ready(function () {
         $("#btnCreateProgramming").show();
     }
   };
-
   
   if (type_program == 0) {
     checkProcessMachines = (data) => {
