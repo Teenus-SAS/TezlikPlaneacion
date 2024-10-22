@@ -208,7 +208,7 @@ $(document).ready(function () {
       dataPOProcess.push(data);
     } else {
       dataPOProcess = await searchData(
-        `/api/productionOrder/${data.id_product}`
+        `/api/productionOrder/${data.id_order}/${data.id_product}`
       );
     }
 

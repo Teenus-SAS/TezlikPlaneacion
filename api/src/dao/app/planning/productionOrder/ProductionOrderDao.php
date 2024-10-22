@@ -82,7 +82,7 @@ class ProductionOrderDao
                                         INNER JOIN orders_status ps ON ps.id_status = o.status
                                       WHERE pg.status = 1 AND pg.id_company = :id_company
                                         GROUP BY pg.id_programming
-                                        ORDER BY `pg`.`id_programming` ASC;");
+                                        ORDER BY `pg`.`num_production` ASC;");
         $stmt->execute([
             'id_company' => $id_company
         ]);
@@ -92,7 +92,7 @@ class ProductionOrderDao
         return $programming;
     }
 
-    public function findAllProductionOrderByTypePG($id_product)
+    public function findAllProductionOrderByTypePG($id_order, $id_product)
     {
         $connection = Connection::getInstance()->getConnection();
 
@@ -107,8 +107,9 @@ class ProductionOrderDao
                                         INNER JOIN process pc ON pc.id_process = mc.id_process
                                         INNER JOIN machines m ON m.id_machine = mc.id_machine
                                         LEFT JOIN programming pg ON pg.id_product = p.id_product AND pg.id_machine = mc.id_machine
-                                      WHERE p.id_product = :id_product");
+                                      WHERE pg.id_order = :id_order AND p.id_product = :id_product");
         $stmt->execute([
+            'id_order' => $id_order,
             'id_product' => $id_product
         ]);
         $this->logger->info(__FUNCTION__, array('query' => $stmt->queryString, 'errors' => $stmt->errorInfo()));

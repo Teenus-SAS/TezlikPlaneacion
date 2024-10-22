@@ -30,6 +30,7 @@ $(document).ready(function () {
         dataPO = [];
 
         for (let i = 0; i < groupedData.length; i++) {
+          groupedData[i].sort((a, b) => b.id_programming - a.id_programming);
           dataPO.push(groupedData[i][groupedData[i].length - 1]);
         }
 
