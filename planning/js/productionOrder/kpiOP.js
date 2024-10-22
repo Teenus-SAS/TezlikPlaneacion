@@ -129,6 +129,9 @@ $(document).ready(function () {
                 maximumFractionDigits: 2,
               })}`
             );
+            $("#titleGeneralCost").show();
+            $("#titleUnitCost").show();
+            $("#lineDivTitleCost").show();
           } else {
             $("#kpiQualityOP").hide();
             $("#titleGeneralCost").hide();
