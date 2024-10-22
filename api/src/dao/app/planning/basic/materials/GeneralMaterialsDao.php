@@ -19,15 +19,33 @@ class GeneralMaterialsDao
     public function findAllMaterialsStockByCompany($id_company)
     {
         $connection = Connection::getInstance()->getConnection();
-        $stmt = $connection->prepare("SELECT m.id_material, m.reference, m.material, m.material AS descript, mg.id_magnitude, mg.magnitude, u.id_unit, u.unit, u.abbreviation, mi.quantity, mi.reserved, 
-                                             IFNULL(s.min_term, 0) AS min_term, IFNULL(s.max_term, 0) AS max_term, IFNULL(s.min_quantity, 0) AS min_quantity, mi.minimum_stock, IFNULL(s.id_provider, 0) AS id_provider, IFNULL(c.client, '') AS client                               
+        $stmt = $connection->prepare("SELECT
+                                        -- Columnas
+                                            m.id_material,
+                                            m.reference,
+                                            m.material,
+                                            m.material AS descript,
+                                            mg.id_magnitude,
+                                            mg.magnitude,
+                                            u.id_unit,
+                                            u.unit,
+                                            u.abbreviation,
+                                            mi.quantity,
+                                            mi.reserved,
+                                            IFNULL(s.min_term, 0) AS min_term,
+                                            IFNULL(s.max_term, 0) AS max_term,
+                                            IFNULL(s.min_quantity, 0) AS min_quantity,
+                                            mi.minimum_stock,
+                                            IFNULL(s.id_provider, 0) AS id_provider,
+                                            IFNULL(c.client, '') AS client
                                       FROM materials m
-                                          INNER JOIN inv_materials mi ON mi.id_material = m.id_material
-                                          INNER JOIN admin_units u ON u.id_unit = m.unit
-                                          INNER JOIN admin_magnitudes mg ON mg.id_magnitude = u.id_magnitude
-                                          LEFT JOIN inv_stock_materials s ON s.id_material = m.id_material
-                                          LEFT JOIN third_parties c ON c.id_client = s.id_provider
-                                      WHERE m.id_company = :id_company ORDER BY m.material ASC");
+                                        INNER JOIN inv_materials mi ON mi.id_material = m.id_material
+                                        INNER JOIN admin_units u ON u.id_unit = m.unit
+                                        INNER JOIN admin_magnitudes mg ON mg.id_magnitude = u.id_magnitude
+                                        LEFT JOIN inv_stock_materials s ON s.id_material = m.id_material
+                                        LEFT JOIN third_parties c ON c.id_client = s.id_provider
+                                      WHERE m.id_company = :id_company
+                                        ORDER BY m.material ASC");
         $stmt->execute(['id_company' => $id_company]);
 
         $this->logger->info(__FUNCTION__, array('query' => $stmt->queryString, 'errors' => $stmt->errorInfo()));
@@ -100,8 +118,16 @@ class GeneralMaterialsDao
     {
         $connection = Connection::getInstance()->getConnection();
 
-        $stmt = $connection->prepare("SELECT m.id_material, m.reference, m.material, mg.id_magnitude, mg.magnitude, 
-                                             u.id_unit, u.abbreviation, mi.quantity
+        $stmt = $connection->prepare("SELECT 
+                                        -- Columnas
+                                            m.id_material, 
+                                            m.reference, 
+                                            m.material, 
+                                            mg.id_magnitude, 
+                                            mg.magnitude, 
+                                            u.id_unit, 
+                                            u.abbreviation, 
+                                            mi.quantity
                                       FROM materials m
                                         INNER JOIN inv_materials mi ON mi.id_material = m.id_material
                                         INNER JOIN admin_units u ON u.id_unit = m.unit

@@ -58,12 +58,19 @@ class GeneralProductsDao
     public function findAllProductsStockByCompany($id_company)
     {
         $connection = Connection::getInstance()->getConnection();
-        $stmt = $connection->prepare("SELECT p.id_product, p.reference, p.product, pi.quantity, pi.minimum_stock,
-                                             IFNULL(sp.max_term, 0) AS max_term, IFNULL(sp.min_term, 0) AS min_term                              
-                                      FROM products p
-                                          INNER JOIN inv_products pi ON pi.id_product = p.id_product
-                                          LEFT JOIN inv_stock_products sp ON sp.id_product = p.id_product
-                                      WHERE p.id_company = :id_company ORDER BY p.product ASC");
+        $stmt = $connection->prepare("SELECT
+                                            p.id_product,
+                                            p.reference,
+                                            p.product,
+                                            pi.quantity,
+                                            pi.minimum_stock,
+                                            IFNULL(sp.max_term, 0) AS max_term,
+                                            IFNULL(sp.min_term, 0) AS min_term
+                                        FROM products p
+                                        INNER JOIN inv_products pi ON pi.id_product = p.id_product
+                                        LEFT JOIN inv_stock_products sp ON sp.id_product = p.id_product
+                                        WHERE p.id_company = :id_company
+                                        ORDER BY p.product ASC");
         $stmt->execute(['id_company' => $id_company]);
 
         $this->logger->info(__FUNCTION__, array('query' => $stmt->queryString, 'errors' => $stmt->errorInfo()));
