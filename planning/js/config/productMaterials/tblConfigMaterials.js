@@ -81,9 +81,9 @@ $(document).ready(function () {
     tblConfigMaterials = $("#tblConfigMaterials").dataTable({
       destroy: true,
       autoWidth: false,
-      fixedHeader: true,
-      scrollY: "400px",
-      scrollCollapse: true,
+      //fixedHeader: true,
+      //scrollY: "400px",
+      //scrollCollapse: true,
       pageLength: 50,
       data: data,
       dom: '<"datatable-error-console">frtip',
