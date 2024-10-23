@@ -133,27 +133,6 @@ $app->get('/programming', function (Request $request, Response $response, $args)
 
     $programming = $programmingDao->findAllProgrammingByCompany($id_company);
 
-    // $programming1 = $generalProgrammingDao->findAllOrdersByCompany($id_company);
-
-    // for ($i = 0; $i < ($programming1); $i++) {
-    //     $materials = $productsMaterialsDao->findAllProductsMaterials($programming1[$i]['id_product'], $id_company);
-
-    //     $status = true;
-
-    //     for ($j = 0; $j < sizeof($materials); $j++) {
-    //         if ($materials[$j]['status'] == 0) {
-    //             $status = false;
-    //             break;
-    //         }
-    //     }
-
-    //     if ($status == true) {
-    //         $data = [];
-    //         $data['idMaterial'] = $programming1[$i]['id_material'];
-    //         $storeDao->saveDelivery($data, 0);
-    //     }
-    // }
-
     $response->getBody()->write(json_encode($programming, JSON_NUMERIC_CHECK));
     return $response->withHeader('Content-Type', 'application/json');
 });

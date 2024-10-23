@@ -95,8 +95,7 @@ class GeneralUserAccessDao
                                                 IFNULL(pua.inventory, 0) AS inventory, 
                                                 IFNULL(pua.requisition, 0) AS requisition,
                                                 IFNULL(pua.plan_order, 0) AS plan_order,
-                                                IFNULL(pua.program, 0) AS program, 
-                                                IFNULL(pua.type_program, 0) AS type_program, 
+                                                IFNULL(pua.program, 0) AS program,
                                                 IFNULL(pua.explosion_of_material, 0) AS explosion_of_material, 
                                                 IFNULL(pua.production_order, 0) AS production_order,
                                                 IFNULL(pua.type_machine_op, 0) AS type_machine_op,
@@ -111,7 +110,8 @@ class GeneralUserAccessDao
                                                 pa.plan_production_order, 
                                                 pa.plan_store, 
                                                 pa.plan_office AS plan_planning_office,
-                                                cl.flag_products_measure
+                                                cl.flag_products_measure,
+                                                cl.flag_type_program
                                       FROM users u
                                         LEFT JOIN users_access pua ON pua.id_user = u.id_user
                                         INNER JOIN admin_companies_licenses cl ON cl.id_company = u.id_company
@@ -144,7 +144,7 @@ class GeneralUserAccessDao
         $_SESSION['requisition'] = $userAccess['requisition'];
         $_SESSION['plan_order'] = $userAccess['plan_order'];
         $_SESSION['program'] = $userAccess['program'];
-        $_SESSION['type_program'] = $userAccess['type_program'];
+        $_SESSION['flag_type_program'] = $userAccess['flag_type_program'];
         $_SESSION['explosion_of_material'] = $userAccess['explosion_of_material'];
         $_SESSION['production_order'] = $userAccess['production_order'];
         $_SESSION['type_machine_op'] = $userAccess['type_machine_op'];

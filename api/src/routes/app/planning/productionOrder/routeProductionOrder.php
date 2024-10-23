@@ -164,13 +164,13 @@ $app->post('/changeFlagOP', function (Request $request, Response $response, $arg
 ) {
     session_start();
     $id_company = $_SESSION['id_company'];
-    $type_program = $_SESSION['type_program'];
+    $flag_type_program = $_SESSION['flag_type_program'];
     $dataOP = $request->getParsedBody();
     $id_programming = $dataOP['id_programming'];
 
     $resolution = $productionOrderDao->changeflagOPById($dataOP['id_programming'], 1);
 
-    if ($resolution == null && $type_program == 1) {
+    if ($resolution == null && $flag_type_program == 1) {
         $resolution = $productionOrderDao->closeOPMachine($dataOP['id_programming'], 1);
         $machine = $generalPlanCiclesMachinesDao->findNextRouteByPG($dataOP['id_product'], $dataOP['route']);
 

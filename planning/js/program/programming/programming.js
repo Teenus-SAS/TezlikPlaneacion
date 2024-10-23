@@ -71,7 +71,7 @@ $(document).ready(function () {
         $(".cardFormProgramming2").show(800);
       }
       
-    if (type_program == 0) {
+    if (flag_type_program == 0) {
       if (max_date == "") {
         toastr.error("Ingrese todos los campos");
         return false;
@@ -162,7 +162,7 @@ $(document).ready(function () {
 
     dataProgramming = {};
 
-    if (type_program == 0) {
+    if (flag_type_program == 0) {
       document.getElementById("minDate").type = "datetime-local";
       document.getElementById("minDate").readOnly = false;
 
@@ -241,7 +241,7 @@ $(document).ready(function () {
     dataProgramming["quantity_programming"] = quantityProgramming;
     dataProgramming["status"] = "PROGRAMADO";
 
-    if (type_program == 1) {
+    if (flag_type_program == 1) {
       dataProgramming["max_date"] = '';
       dataProgramming["min_programming"] = '';
     }
@@ -457,7 +457,7 @@ $(document).ready(function () {
     });
 
     // Actualizar proceso y órdenes si el type_program es 0
-    if (type_program == 0) {
+    if (flag_type_program == 0) {
       process = allProcess.filter(item => item.id_product == id_product);
 
       allProcess.forEach(proc => {
@@ -484,7 +484,7 @@ $(document).ready(function () {
     }
 
     // Resetear valores si type_program es 1
-    if (type_program == 1 && quantityFTM <= 0) {
+    if (flag_type_program == 1 && quantityFTM <= 0) {
       const resetOrder = (order) => {
         order.quantity_programming = 0;
         order.accumulated_quantity_order = 0;
@@ -639,7 +639,7 @@ $(document).ready(function () {
     
     // Cargar selects de pedidos que esten por programar
     loadOrdersProgramming(allOrdersProgramming);
-    if (type_program == 0) {
+    if (flag_type_program == 0) {
       checkProcessMachines(allTblData);
     }
 

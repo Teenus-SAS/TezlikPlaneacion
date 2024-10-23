@@ -123,34 +123,34 @@
                                                     <label for="checkbox-15">Programar Producción</label>
                                                 </div>
                                             </div>
-                                            <div class="col-sm-4">
+                                            <!-- <div class="col-sm-4">
                                                 <div class="checkbox checkbox-success checkbox-circle">
                                                     <input id="checkbox-16" name="typeProgram" type="checkbox">
                                                     <label for="checkbox-16">Tipo Programar</label>
                                                 </div>
-                                            </div>
+                                            </div> -->
                                             <div class="col-sm-4">
                                                 <div class="checkbox checkbox-success checkbox-circle">
-                                                    <input id="checkbox-17" name="explosionOfMaterials" type="checkbox">
-                                                    <label for="checkbox-17">Explosión de MP</label>
+                                                    <input id="checkbox-16" name="explosionOfMaterials" type="checkbox">
+                                                    <label for="checkbox-16">Explosión de MP</label>
                                                 </div>
                                             </div>
                                             <div class="col-sm-4">
                                                 <div class="checkbox checkbox-success checkbox-circle">
-                                                    <input class="typeCheckbox" id="checkbox-18" name="productionOrder" type="checkbox">
-                                                    <label for="checkbox-18">Ordenes de Producción</label>
+                                                    <input class="typeCheckbox" id="checkbox-17" name="productionOrder" type="checkbox">
+                                                    <label for="checkbox-17">Ordenes de Producción</label>
                                                 </div>
                                             </div>
                                             <div class="col-sm-4">
                                                 <div class="checkbox checkbox-success checkbox-circle">
-                                                    <input id="checkbox-19" name="opToStore" type="checkbox">
-                                                    <label for="checkbox-19">Entregas OP a Almacen</label>
+                                                    <input id="checkbox-18" name="opToStore" type="checkbox">
+                                                    <label for="checkbox-18">Entregas OP a Almacen</label>
                                                 </div>
                                             </div>
                                             <div class="col-sm-4">
                                                 <div class="checkbox checkbox-success checkbox-circle">
-                                                    <input id="checkbox-20" name="store" type="checkbox">
-                                                    <label for="checkbox-20">Almacen</label>
+                                                    <input id="checkbox-19" name="store" type="checkbox">
+                                                    <label for="checkbox-19">Almacen</label>
                                                 </div>
                                             </div>
                                             <div class="col-sm-4">
@@ -162,8 +162,8 @@
                                             </div>
                                             <div class="col-sm-4">
                                                 <div class="checkbox checkbox-success checkbox-circle">
-                                                    <input id="checkbox-21" name="office" type="checkbox">
-                                                    <label for="checkbox-21">Despachos</label>
+                                                    <input id="checkbox-20" name="office" type="checkbox">
+                                                    <label for="checkbox-20">Despachos</label>
                                                 </div>
                                             </div>
                                         </div>

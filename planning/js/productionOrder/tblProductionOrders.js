@@ -22,7 +22,7 @@ $(document).ready(function () {
       let dataPOP = [];
       let dataPON = [];
 
-      if (type_program == 0) {
+      if (flag_type_program == 0) {
         dataPOP = dataPO.filter((item) => item.flag_op == 0);
         dataPON = dataPO.filter((item) => item.flag_op == 1);
       } else {
@@ -136,12 +136,12 @@ $(document).ready(function () {
           className: "uniqueClassName dt-head-center",
         },
         {
-          title: `${type_program == 0 ? "Fechas" : "Fecha Inicial"}`,
+          title: `${flag_type_program == 0 ? "Fechas" : "Fecha Inicial"}`,
           data: null,
           className: "uniqueClassName dt-head-center",
           width: "200px",
           render: function (data) {
-            if (type_program == 0) {
+            if (flag_type_program == 0) {
               const format = "DD/MM/YYYY HH:mm A";
               return `Inicio: ${moment(data.min_date_programming).format(format)}<br>Fin: ${moment(
                 data.max_date_programming

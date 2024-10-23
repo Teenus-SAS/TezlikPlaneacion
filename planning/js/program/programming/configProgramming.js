@@ -138,7 +138,7 @@ $(document).ready(function () {
       allTblData = flattenData(generalMultiArray);
 
       $(".cardBottons").show(800);
-      if(type_program==0)
+      if (flag_type_program == 0)
         checkProcessMachines(allTblData);
 
       allTblData = allTblData.concat(data);
@@ -260,7 +260,7 @@ $(document).ready(function () {
     checkData(2, this.id);
   });
 
-  if (type_program == 0) {
+  if (flag_type_program == 0) {
     $(document).on("click", "#minDate", function () {
       if (
         sessionStorage.getItem("minDate") &&
@@ -436,7 +436,7 @@ $(document).ready(function () {
     }
   };
   
-  if (type_program == 0) {
+  if (flag_type_program == 0) {
     checkProcessMachines = (data) => {
       let conteoClaves = data.reduce((conteo, obj) => {
         conteo[obj.id_product] = (conteo[obj.id_product] || 0) + 1;
@@ -804,7 +804,7 @@ $(document).ready(function () {
     }
   });
 
-  if (type_program == 0) {
+  if (flag_type_program == 0) {
     $("#idMachine").change(function (e) {
       e.preventDefault();
 
@@ -831,8 +831,8 @@ $(document).ready(function () {
               (item) => item.id_machine == machine
             );
             max_date = `${date} ${planningMachine.hour_start < 10
-                ? `0${planningMachine.hour_start}`
-                : planningMachine.hour_start
+              ? `0${planningMachine.hour_start}`
+              : planningMachine.hour_start
               }:00:00`;
           } else {
             let minProgramming = data.reduce(
@@ -864,7 +864,7 @@ $(document).ready(function () {
           document.getElementById("minDate").type = "datetime-local";
           let minDate = document.getElementById("minDate");
 
-          minDate.value = max_date; 
+          minDate.value = max_date;
         } else {
           data = allTblData.filter((item) => item.id_machine == machine);
 
@@ -935,17 +935,15 @@ $(document).ready(function () {
                     </thead>
                     <tbody>
                       <tr>
-                        <td class="text-center">${
-                          productsMaterials[0].reference_material
-                        }</td>
-                        <td class="text-center">${
-                          productsMaterials[0].material
-                        }</td>
+                        <td class="text-center">${productsMaterials[0].reference_material
+          }</td>
+                        <td class="text-center">${productsMaterials[0].material
+          }</td>
                         <td class="text-center">${Math.floor(
-                          productsMaterials[0].quantity
-                        ).toLocaleString("es-CO", {
-                          maximumFractionDigits: 0,
-                        })} ${productsMaterials[0].abbreviation}</td>
+            productsMaterials[0].quantity
+          ).toLocaleString("es-CO", {
+            maximumFractionDigits: 0,
+          })} ${productsMaterials[0].abbreviation}</td>
                       </tr>
                     </tbody>
                   </table>

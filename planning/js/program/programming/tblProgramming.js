@@ -73,7 +73,7 @@ $(document).ready(function () {
       "Maquina",
       "Cantidades",
       "Cliente",
-      `${type_program == 0 ? "Fecha y Hora" : "Fecha Inicial"}`,
+      `${flag_type_program == 0 ? "Fecha y Hora" : "Fecha Inicial"}`,
       "Acciones",
     ];
 

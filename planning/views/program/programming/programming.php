@@ -136,7 +136,7 @@ if (sizeof($_SESSION) == 0)
                                                         <label for="">Cantidad a Fabricar</label>
                                                         <input type="number" class="form-control text-center input" id="quantity" name="quantity">
                                                     </div>
-                                                    <?php if ($_SESSION['type_program'] == 1) { ?>
+                                                    <?php if ($_SESSION['flag_type_program'] == 1) { ?>
                                                         <div class="col-sm-3 floating-label enable-floating-label show-label mb-2 p-1 date cardFormProgramming2">
                                                             <label for="">Fecha Inicial</label>
                                                             <input type="date" class="form-control text-center" inline="true" id="minDate" name="minDate" readonly min="<?php
@@ -163,7 +163,7 @@ if (sizeof($_SESSION) == 0)
                                     </div>
                                 </div>
                             </div>
-                            <?php if ($_SESSION['type_program'] == 0) { ?>
+                            <?php if ($_SESSION['flag_type_program'] == 0) { ?>
                                 <div class="row cardFormProgramming2">
                                     <div class="col-12">
                                         <div class="card">
@@ -435,7 +435,7 @@ if (sizeof($_SESSION) == 0)
     <script src="/global/js/global/lastText.js"></script>
 
     <script>
-        type_program = "<?= $_SESSION['type_program'] ?>";
+        flag_type_program = "<?= $_SESSION['flag_type_program'] ?>";
     </script>
     <script src="/planning/js/program/programming/tblProgramming.js"></script>
     <script src="/planning/js/program/programming/programming.js"></script>

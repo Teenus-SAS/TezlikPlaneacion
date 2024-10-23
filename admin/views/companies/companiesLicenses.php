@@ -125,126 +125,16 @@ if (sizeof($_SESSION) == 0)
                                                         </select>
                                                     </div>
                                                 </div>
-                                                <!-- <div class="col-sm-2 floating-label enable-floating-label show-label">
-                                                            <div class="form-group m-0">
-                                                                <label>Moneda EUR</label>
-                                                                <select name="currencyEUR" id="currencyEUR" class="form-control">
-                                                                    <option selected disabled value="0">Seleccionar</option>
-                                                                    <option value="1">Si</option>
-                                                                    <option value="2">No</option>
-                                                                </select>
-                                                            </div>
-                                                        </div>
-                                                        <div class="col-sm-2 floating-label enable-floating-label show-label">
-                                                            <div class="form-group m-0">
-                                                                <label>Procesos Nomina</label>
-                                                                <select name="payrollEmployee" id="payrollEmployee" class="form-control">
-                                                                    <option selected disabled value="0">Seleccionar</option>
-                                                                    <option value="1">Si</option>
-                                                                    <option value="2">No</option>
-                                                                </select>
-                                                            </div>
-                                                        </div>
-                                                        <div class="col-sm-2 floating-label enable-floating-label show-label">
-                                                            <div class="form-group m-0">
-                                                                <label>Productos Compuestos</label>
-                                                                <select name="compositeProducts" id="compositeProducts" class="form-control">
-                                                                    <option selected disabled value="0">Seleccionar</option>
-                                                                    <option value="1">Si</option>
-                                                                    <option value="2">No</option>
-                                                                </select>
-                                                            </div>
-                                                        </div>
-                                                        <div class="col-sm-2 floating-label enable-floating-label show-label economyScale">
-                                                            <div class="form-group m-0">
-                                                                <label>Negociaciones Eficientes</label>
-                                                                <select name="economyScale" id="economyScale" class="form-control">
-                                                                    <option selected disabled value="0">Seleccionar</option>
-                                                                    <option value="1">Si</option>
-                                                                    <option value="2">No</option>
-                                                                </select>
-                                                            </div>
-                                                        </div>
-                                                        <div class="col-sm-2 floating-label enable-floating-label show-label economyScale">
-                                                            <div class="form-group m-0">
-                                                                <label>Objetivos De Ventas</label>
-                                                                <select name="salesObjective" id="salesObjective" class="form-control">
-                                                                    <option selected disabled value="0">Seleccionar</option>
-                                                                    <option value="1">Si</option>
-                                                                    <option value="2">No</option>
-                                                                </select>
-                                                            </div>
-                                                        </div>
-                                                        <div class="col-sm-2 floating-label enable-floating-label show-label economyScale">
-                                                            <div class="form-group m-0">
-                                                                <label>Objetivos De Precios</label>
-                                                                <select name="priceObjective" id="priceObjective" class="form-control">
-                                                                    <option selected disabled value="0">Seleccionar</option>
-                                                                    <option value="1">Si</option>
-                                                                    <option value="2">No</option>
-                                                                </select>
-                                                            </div>
-                                                        </div>
-                                                        <div class="col-sm-2 floating-label enable-floating-label show-label">
-                                                            <div class="form-group m-0">
-                                                                <label>Historico</label>
-                                                                <select name="historical" id="historical" class="form-control">
-                                                                    <option selected="" disabled value="0">Seleccionar</option>
-                                                                    <option value="1">Si</option>
-                                                                    <option value="2">No</option>
-                                                                </select>
-                                                            </div>
-                                                        </div>
-                                                        <div class="col-sm-2 floating-label enable-floating-label show-label">
-                                                            <div class="form-group m-0">
-                                                                <label>Materiales</label>
-                                                                <select name="indirect" id="indirect" class="form-control">
-                                                                    <option selected disabled value="0">Seleccionar</option>
-                                                                    <option value="1">Si</option>
-                                                                    <option value="2">No</option>
-                                                                </select>
-                                                            </div>
-                                                        </div>
-                                                        <div class="col-sm-2 floating-label enable-floating-label show-label">
-                                                            <div class="form-group m-0">
-                                                                <label>Importar/Nacionalizar</label>
-                                                                <select name="exportImport" id="exportImport" class="form-control">
-                                                                    <option selected disabled value="0">Seleccionar</option>
-                                                                    <option value="1">Si</option>
-                                                                    <option value="2">No</option>
-                                                                </select>
-                                                            </div>
-                                                        </div>
-                                                        <div class="col-sm-2 floating-label enable-floating-label show-label">
-                                                            <div class="form-group m-0">
-                                                                <label>Inyección</label>
-                                                                <select name="inyection" id="inyection" class="form-control">
-                                                                    <option selected disabled value="0">Seleccionar</option>
-                                                                    <option value="1">Si</option>
-                                                                    <option value="2">No</option>
-                                                                </select>
-                                                            </div>
-                                                        </div>
-                                                        <div class="col-sm-2 floating-label enable-floating-label show-label">
-                                                            <div class="form-group m-0">
-                                                                <label>U. Produccion</label>
-                                                                <select name="production" id="production" class="form-control">
-                                                                    <option selected disabled value="0">Seleccionar</option>
-                                                                    <option value="1">Si</option>
-                                                                    <option value="2">No</option>
-                                                                </select>
-                                                            </div>
-                                                        </div>
-                                                        <div class="col-sm-2 floating-label enable-floating-label show-label">
-                                                            <div class="form-group m-0">
-                                                                <label>Gastos Anuales</label>
-                                                                <select name="anualExpenses" id="anualExpenses" class="form-control">
-                                                                    <option selected disabled value="0">Seleccionar</option>
-                                                                    <option value="1">Si</option>
-                                                                    <option value="2">No</option>
-                                                                </select>
-                                                            </div>
-                                                        </div> -->
+                                                <div class="col-sm-2 floating-label enable-floating-label show-label">
+                                                    <div class="form-group m-0">
+                                                        <label>Tipo Programacion</label>
+                                                        <select name="typeProgramming" id="typeProgramming" class="form-control">
+                                                            <option selected disabled value="0">Seleccionar</option>
+                                                            <option value="1">Si</option>
+                                                            <option value="2">No</option>
+                                                        </select>
+                                                    </div>
+                                                </div>
                                                 <div class="col-sm">
                                                     <button class="btn btn-primary" id="btnAddLicense">Actualizar</button>
                                                 </div>

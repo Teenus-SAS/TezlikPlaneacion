@@ -76,19 +76,19 @@ $(document).ready(function () {
         data: null,
         //width: "200px",
         render: function (data, type, row) {
-          const permissions = [];
-
-          // permissions.push({
-          //   name: "Materiales USD",
-          //   icon: data.flag_materials_usd == 1
-          //     ? "bi bi-check-circle-fill text-success"
-          //     : "bi bi-x-circle-fill text-danger",
-          //   color: { text: "black" },
-          // });
+          const permissions = []; 
           
           permissions.push({
             name: "Medidas Producto",
             icon: data.flag_products_measure == 1
+              ? "bi bi-check-circle-fill text-success"
+              : "bi bi-x-circle-fill text-danger",
+            color: { text: "black" },
+          }); 
+
+          permissions.push({
+            name: "Tipo Programacion",
+            icon: data.flag_type_program == 1
               ? "bi bi-check-circle-fill text-success"
               : "bi bi-x-circle-fill text-danger",
             color: { text: "black" },

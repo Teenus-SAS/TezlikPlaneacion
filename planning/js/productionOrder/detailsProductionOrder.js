@@ -204,7 +204,7 @@ $(document).ready(function () {
 
     let dataPOProcess = [];
 
-    if (type_program == 0) {
+    if (flag_type_program == 0) {
       dataPOProcess.push(data);
     } else {
       dataPOProcess = await searchData(
@@ -214,7 +214,7 @@ $(document).ready(function () {
 
     for (let i = 0; i < dataPOProcess.length; i++) {
       let trPC = "";
-      if (type_program == 0) {
+      if (flag_type_program == 0) {
         max_date = moment(dataPOProcess[i].max_date_programming).format(
           "DD/MM/YYYY hh:mm A"
         );
