@@ -3,9 +3,6 @@ $(document).ready(function () {
   loadTblPlanCiclesMachine = (idProduct, visible) => {
     tblPlanCiclesMachine = $("#tblPlanCiclesMachine").dataTable({
       autoWidth: false,
-      /* fixedHeader: true,
-      scrollCollapse: true,
-      scrollY: "400px", */
       destroy: true,
       pageLength: 50,
 

@@ -40,7 +40,8 @@ $app->get('/productionOrder', function (Request $request, Response $response, $a
 ) {
     session_start();
     $id_company = $_SESSION['id_company'];
-    $programming = $productionOrderDao->findAllProductionOrder($id_company);
+    $id_user = $_SESSION['idUser'];
+    $programming = $productionOrderDao->findAllProductionOrder($id_user, $id_company);
     $response->getBody()->write(json_encode($programming));
     return $response->withHeader('Content-Type', 'application/json');
 });

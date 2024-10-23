@@ -1,7 +1,10 @@
 <?php
 
 use TezlikPlaneacion\dao\AutenticationUserDao;
+use TezlikPlaneacion\Dao\CompositeProductsDao;
 use TezlikPlaneacion\dao\GeneralMaterialsDao;
+use TezlikPlaneacion\dao\GeneralOrdersDao;
+use TezlikPlaneacion\dao\GeneralPlanCiclesMachinesDao;
 use TezlikPlaneacion\dao\GeneralProductsDao;
 use TezlikPlaneacion\dao\GeneralProgrammingDao;
 use TezlikPlaneacion\dao\ProductsMaterialsDao;
@@ -11,7 +14,10 @@ use TezlikPlaneacion\dao\UsersStoreDao;
 $storeDao = new StoreDao();
 $autenticationDao = new AutenticationUserDao();
 $programmingDao = new GeneralProgrammingDao();
+$generalOrdersDao = new GeneralOrdersDao();
 $productsMaterialsDao = new ProductsMaterialsDao();
+$compositeProductsDao = new CompositeProductsDao();
+$generalPlanCiclesMachinesDao = new GeneralPlanCiclesMachinesDao();
 $generalMaterialsDao = new GeneralMaterialsDao();
 $generalProductsDao = new GeneralProductsDao();
 $usersStoreDao = new UsersStoreDao();
@@ -70,6 +76,10 @@ $app->get('/allStore', function (Request $request, Response $response, $args) us
 $app->post('/deliverStore', function (Request $request, Response $response, $args) use (
     $storeDao,
     $autenticationDao,
+    $generalOrdersDao,
+    $productsMaterialsDao,
+    $compositeProductsDao,
+    $generalPlanCiclesMachinesDao,
     $generalProductsDao,
     $generalMaterialsDao,
     $usersStoreDao
@@ -79,21 +89,6 @@ $app->post('/deliverStore', function (Request $request, Response $response, $arg
     $id_rol = $_SESSION['rol'];
     $id_user = $_SESSION['idUser'];
     $dataStore = $request->getParsedBody();
-
-    // $user = $autenticationDao->findByEmail($dataStore['email'], 1);
-
-    // if (!$user) {
-    //     $resp = array('error' => true, 'message' => 'Usuario y/o password incorrectos, valide nuevamente');
-    //     $response->getBody()->write(json_encode($resp));
-    //     return $response->withStatus(200)->withHeader('Content-Type', 'application/json');
-    // }
-
-    // /* Valida el password del usuario */
-    // if (!password_verify($dataStore['password'], $user['password'])) {
-    //     $resp = array('error' => true, 'message' => 'Usuario y/o password incorrectos, valide nuevamente');
-    //     $response->getBody()->write(json_encode($resp));
-    //     return $response->withStatus(200)->withHeader('Content-Type', 'application/json');
-    // }
 
     if ($id_rol != 2) {
         $resp = array('error' => true, 'message' => 'Usuario no autorizado, valide nuevamente');
@@ -132,6 +127,87 @@ $app->post('/deliverStore', function (Request $request, Response $response, $arg
 
     if ($store == null)
         $store = $generalMaterialsDao->updateReservedMaterial($dataStore['idMaterial'], $dataStore['pending']);
+
+    if ($store == null) {
+        $orders = $generalOrdersDao->findAllOrdersByCompany($id_company);
+
+        for ($i = 0; $i < sizeof($orders); $i++) {
+            $status = true;
+            if (
+                $orders[$i]['status'] != 'EN PRODUCCION' && $orders[$i]['status'] != 'FINALIZADO' &&
+                $orders[$i]['status'] != 'FABRICADO' && $orders[$i]['status'] != 'DESPACHO'
+            ) {
+                if ($orders[$i]['original_quantity'] > $orders[$i]['accumulated_quantity']) {
+                    // Ficha tecnica 
+                    $productsMaterials = $productsMaterialsDao->findAllProductsMaterials($orders[$i]['id_product'], $id_company);
+                    $compositeProducts = $compositeProductsDao->findAllCompositeProductsByIdProduct($orders[$i]['id_product'], $id_company);
+                    $productsFTM = array_merge($productsMaterials, $compositeProducts);
+
+                    $planCicles = $generalPlanCiclesMachinesDao->findAllPlanCiclesMachineByProduct($orders[$i]['id_product'], $id_company);
+
+                    if (sizeof($productsFTM) == 0 || sizeof($planCicles) == 0) {
+                        $orders[$i]['origin'] == 2 ? $status = 5 : $status = 13;
+                        $generalOrdersDao->changeStatus($orders[$i]['id_order'], $status);
+                        $status = false;
+                    } else {
+                        foreach ($planCicles as $arr) {
+                            // Verificar Maquina Disponible
+                            if ($arr['status'] == 0) {
+                                $generalOrdersDao->changeStatus($orders[$i]['id_order'], 10);
+                                $status = false;
+                                break;
+                            }
+                            // Verificar Empleados
+                            if ($arr['employees'] == 0) {
+                                $generalOrdersDao->changeStatus($orders[$i]['id_order'], 11);
+                                $status = false;
+                                break;
+                            }
+                        }
+
+                        // Verificar Materia Prima
+                        foreach ($productsFTM as $arr) {
+                            if ($arr['quantity_material'] <= 0) {
+                                $generalOrdersDao->changeStatus($orders[$i]['id_order'], 6);
+                                $status = false;
+                                break;
+                            }
+                        }
+                    }
+                }
+
+                if ($status == true) {
+                    if ($orders[$i]['original_quantity'] <= $orders[$i]['accumulated_quantity']) {
+                        $generalOrdersDao->changeStatus($orders[$i]['id_order'], 2);
+                        $accumulated_quantity = $orders[$i]['accumulated_quantity'] - $orders[$i]['original_quantity'];
+                    } else {
+                        $accumulated_quantity = $orders[$i]['accumulated_quantity'];
+                    }
+
+                    if ($orders[$i]['status'] != 'DESPACHO') {
+                        $date = date('Y-m-d');
+
+                        $generalOrdersDao->updateOfficeDate($orders[$i]['id_order'], $date);
+                    }
+
+                    $arr = $generalProductsDao->findProductReserved($orders[$i]['id_product']);
+                    !isset($arr['reserved']) ? $arr['reserved'] = 0 : $arr;
+                    $generalProductsDao->updateReservedByProduct($orders[$i]['id_product'], $arr['reserved']);
+
+                    $generalProductsDao->updateAccumulatedQuantity($orders[$i]['id_product'], $accumulated_quantity, 1);
+                }
+            }
+
+            // Pedidos automaticos
+            if ($orders[$i]['status'] == 'FABRICADO') {
+                $chOrders = $generalOrdersDao->findAllChildrenOrders($orders[$i]['num_order']);
+
+                foreach ($chOrders as $arr) {
+                    $store = $generalOrdersDao->changeStatus($arr['id_order'], 12);
+                }
+            }
+        }
+    }
 
     if ($store == null)
         $resp = array('success' => true, 'message' => 'Materia prima entregada correctamente');

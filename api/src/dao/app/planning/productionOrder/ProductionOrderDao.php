@@ -15,7 +15,7 @@ class ProductionOrderDao
         $this->logger = new Logger(self::class);
         $this->logger->pushHandler(new RotatingFileHandler(Constants::LOGS_PATH . 'querys.log', 20, Logger::DEBUG));
     }
-    public function findAllProductionOrder($id_company)
+    public function findAllProductionOrder($id_user, $id_company)
     {
         $connection = Connection::getInstance()->getConnection();
 
@@ -77,13 +77,15 @@ class ProductionOrderDao
                                         INNER JOIN third_parties c ON c.id_client = o.id_client
                                         INNER JOIN machine_programs pm ON pm.id_machine = pg.id_machine
                                         INNER JOIN machine_cicles pcm ON pcm.id_product = pg.id_product AND pcm.id_machine = pg.id_machine
-                                        LEFT JOIN payroll py ON py.id_process = pcm.id_process AND py.id_machine = pg.id_machine
+                                        INNER JOIN users u ON u.id_user = :id_user
+                                        LEFT JOIN payroll py ON py.id_process = pcm.id_process AND py.id_machine = pg.id_machine AND py.firstname = UPPER(u.firstname) AND py.lastname = UPPER(u.lastname)
                                         INNER JOIN process pc ON pc.id_process = pcm.id_process
                                         INNER JOIN orders_status ps ON ps.id_status = o.status
                                       WHERE pg.status = 1 AND pg.id_company = :id_company
                                         GROUP BY pg.id_programming
-                                        ORDER BY `pg`.`num_production` ASC;");
+                                        ORDER BY `pg`.`num_production` ASC");
         $stmt->execute([
+            'id_user' => $id_user,
             'id_company' => $id_company
         ]);
         $this->logger->info(__FUNCTION__, array('query' => $stmt->queryString, 'errors' => $stmt->errorInfo()));

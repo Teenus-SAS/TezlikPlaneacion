@@ -34,7 +34,14 @@ class UsersStoreDao
     {
         $connection = Connection::getInstance()->getConnection();
 
-        $stmt = $connection->prepare("SELECT stu.id_user_store, u.id_user, u.firstname, u.lastname, u.email, stu.delivery_store
+        $stmt = $connection->prepare("SELECT 
+                                        -- Columnas
+                                            stu.id_user_store, 
+                                            u.id_user, 
+                                            u.firstname, 
+                                            u.lastname, 
+                                            u.email, 
+                                            stu.delivery_store
                                       FROM store_users stu
                                         INNER JOIN users u ON u.id_user = stu.id_user_delivered
                                       WHERE stu.id_programming = :id_programming AND stu.id_material = :id_material");

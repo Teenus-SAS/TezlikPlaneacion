@@ -146,9 +146,9 @@ $(document).ready(function () {
 
       for (let i = 0; i < data.length; i++) {
         for (let j = 0; j < allTblData.length; j++) {
-          if (data[i].id_programming === allTblData[j].id_programming) {
+          if (data[i].id_programming == allTblData[j].id_programming) {
             let arr = data.filter(
-              (item) => item.id_programming === data[i].id_programming
+              (item) => item.id_programming == data[i].id_programming
             );
 
             if (arr.length > 1) data.splice(i, 1);
@@ -209,7 +209,7 @@ $(document).ready(function () {
     }
 
     data = data.reduce((acc, current) => {
-      if (!acc.some((item) => item.num_order === current.num_order)) {
+      if (!acc.some((item) => item.num_order == current.num_order)) {
         acc.push(current);
       }
       return acc;
@@ -687,7 +687,8 @@ $(document).ready(function () {
 
     if (selectProduct == true) {
       let num_order = $("#order :selected").text().trim();
-      // let id_order = $('#order').val();
+
+      // Filtrar producto por numero de pedido
       productOrders = allOrders.filter(
         (item) =>
           item.num_order == num_order &&
@@ -708,21 +709,21 @@ $(document).ready(function () {
         `Clasificación<span class="badge ${badge}" style="font-size: large;">${product.classification}</span>`
       );
 
+      // Creacion data General de programacion
       dataProgramming = {};
       dataProgramming["reference"] = product.reference;
       dataProgramming["product"] = product.product;
       dataProgramming["update"] = 0;
 
-      let id_product;
-
       for (let i = 0; i < productOrders.length; i++) {
         if (this.value == productOrders[i].id_product) {
+          // Filtrar procesos de producto
           let process = allProcess.filter(
             (item) =>
               item.id_product == this.value && item.num_order == num_order
           );
+          // Ordenar siguiente proceso por ruta
           process = process.find((item) => item.route1 == process[0].route);
-          id_product = this.value;
 
           let $select = $(`#idProcess`);
           $select.empty();
@@ -750,13 +751,14 @@ $(document).ready(function () {
 
           $("#quantityMissing").val(accumulated_quantity);
 
+          // Filtrar FTMP por producto
           let productsMaterials = allProductsMaterials.filter(
             (item) => item.id_product == this.value
           );
+          // Ordenar cantidad de FTMP menor
           productsMaterials = productsMaterials.sort(
             (a, b) => a.quantity - b.quantity
           );
-          // let quantity = parseFloat(productsMaterials[0].quantity) / parseFloat(productOrders[i].original_quantity);
           $("#quantityMP").html(
             Math.floor(productsMaterials[0].quantity).toLocaleString("es-CO", {
               maximumFractionDigits: 0,
@@ -817,8 +819,7 @@ $(document).ready(function () {
 
         if (data.length > 0) {
           data.sort((a, b) => a.id_machine - b.id_machine);
-
-          // if (data[data.length - 1].id_machine != this.value) {
+ 
           let arr = data.filter((item) => item.id_machine == machine);
           let arrOM = arr.filter((item) => item.id_order == id_order);
           let min_date, max_date;
@@ -863,8 +864,7 @@ $(document).ready(function () {
           document.getElementById("minDate").type = "datetime-local";
           let minDate = document.getElementById("minDate");
 
-          minDate.value = max_date;
-          // }
+          minDate.value = max_date; 
         } else {
           data = allTblData.filter((item) => item.id_machine == machine);
 

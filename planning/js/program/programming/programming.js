@@ -196,8 +196,7 @@ $(document).ready(function () {
 
   /* Revision data programa de produccion */
   const checkdataProgramming = async (idProgramming) => {
-    // let id_order = $('#order').val();
-    let num_order = $("#order :selected").text().trim();
+    let id_order = $('#order').val();
     let id_product = parseInt($("#selectNameProduct").val());
     let quantityMissing = parseInt(
       $("#quantityMissing").val().replace(".", "")
@@ -214,7 +213,7 @@ $(document).ready(function () {
       (item) => item.id_product == id_product
     );
     let order = allOrders.find(
-      (item) => item.id_product == id_product && item.num_order == num_order
+      (item) => item.id_product == id_product && item.id_order == id_order
     );
     let productsMaterials = allProductsMaterials.filter(
       (item) => item.id_product == id_product
@@ -247,171 +246,264 @@ $(document).ready(function () {
       dataProgramming["min_programming"] = '';
     }
 
-    for (let i = 0; i < allOrders.length; i++) {
-      if (allOrders[i].id_order == order.id_order) {
-        allOrders[i].status = "PROGRAMADO";
+    // for (let i = 0; i < allOrders.length; i++) {
+    //   if (allOrders[i].id_order == id_order) {
+    //     allOrders[i].status = "PROGRAMADO";
 
-        let quantity = 0;
+    //     let quantity = 0;
 
-        if (
-          quantityProgramming <
-          allOrders[i]
-            .original_quantity /*&& productsMaterials[0].quantity > allOrders[i].original_quantity*/
-        ) {
-          quantity = allOrders[i].original_quantity - quantityProgramming;
-          if (
-            allOrders[i].accumulated_quantity == 0 ||
-            allOrders[i].accumulated_quantity == null
-          ) {
-            allOrders[i].quantity_programming = quantity;
-            allOrders[i].accumulated_quantity_order = quantity;
-            allOrders[i].accumulated_quantity =
-              ciclesMachine.length == 1
-                ? quantity
-                : allOrders[i].original_quantity;
-          } else {
-            allOrders[i].accumulated_quantity_order =
-              allOrders[i].accumulated_quantity - quantityProgramming < 0
-                ? 0
-                : allOrders[i].accumulated_quantity - quantityProgramming;
-            allOrders[i].accumulated_quantity =
-              ciclesMachine.length == 1
-                ? allOrders[i].accumulated_quantity - quantityProgramming < 0
-                  ? 0
-                  : allOrders[i].accumulated_quantity - quantityProgramming
-                : allOrders[i].original_quantity;
-            allOrders[i].quantity_programming =
-              allOrders[i].accumulated_quantity - quantityProgramming < 0
-                ? 0
-                : allOrders[i].accumulated_quantity - quantityProgramming;
-          }
-        } else {
-          allOrders[i].accumulated_quantity_order = quantity;
-          allOrders[i].accumulated_quantity =
-            ciclesMachine.length == 1
-              ? quantity
-              : allOrders[i].original_quantity;
-        }
-      }
-    }
+    //     if (
+    //       quantityProgramming <
+    //       allOrders[i]
+    //         .original_quantity
+    //     ) {
+    //       quantity = allOrders[i].original_quantity - quantityProgramming;
+    //       if (
+    //         allOrders[i].accumulated_quantity == 0 ||
+    //         allOrders[i].accumulated_quantity == null
+    //       ) {
+    //         allOrders[i].quantity_programming = quantity;
+    //         allOrders[i].accumulated_quantity_order = quantity;
+    //         allOrders[i].accumulated_quantity =
+    //           ciclesMachine.length == 1
+    //             ? quantity
+    //             : allOrders[i].original_quantity;
+    //       } else {
+    //         allOrders[i].accumulated_quantity_order =
+    //           allOrders[i].accumulated_quantity - quantityProgramming < 0
+    //             ? 0
+    //             : allOrders[i].accumulated_quantity - quantityProgramming;
+    //         allOrders[i].accumulated_quantity =
+    //           ciclesMachine.length == 1
+    //             ? allOrders[i].accumulated_quantity - quantityProgramming < 0
+    //               ? 0
+    //               : allOrders[i].accumulated_quantity - quantityProgramming
+    //             : allOrders[i].original_quantity;
+    //         allOrders[i].quantity_programming =
+    //           allOrders[i].accumulated_quantity - quantityProgramming < 0
+    //             ? 0
+    //             : allOrders[i].accumulated_quantity - quantityProgramming;
+    //       }
+    //     } else {
+    //       allOrders[i].accumulated_quantity_order = quantity;
+    //       allOrders[i].accumulated_quantity =
+    //         ciclesMachine.length == 1
+    //           ? quantity
+    //           : allOrders[i].original_quantity;
+    //     }
+    //   }
+    // }
 
-    for (let i = 0; i < allOrdersProgramming.length; i++) {
-      if (allOrdersProgramming[i].id_order == order.id_order) {
-        allOrdersProgramming[i].status = "PROGRAMADO";
+    // for (let i = 0; i < allOrdersProgramming.length; i++) {
+    //   if (allOrdersProgramming[i].id_order == id_order) {
+    //     allOrdersProgramming[i].status = "PROGRAMADO";
 
-        quantityMissing = 0;
+    //     quantityMissing = 0;
 
-        if (
-          quantityProgramming <
-          allOrdersProgramming[i]
-            .original_quantity
-        ) {
-          quantityMissing =
-            allOrdersProgramming[i].original_quantity - quantityProgramming;
-          if (
-            allOrdersProgramming[i].accumulated_quantity == 0 ||
-            allOrdersProgramming[i].accumulated_quantity == null
-          ) {
-            allOrdersProgramming[i].quantity_programming = quantityMissing;
-            allOrdersProgramming[i].accumulated_quantity =
-              ciclesMachine.length == 1
-                ? quantityMissing
-                : allOrdersProgramming[i].original_quantity;
-            allOrdersProgramming[i].accumulated_quantity_order =
-              quantityMissing;
-          } else {
-            allOrdersProgramming[i].accumulated_quantity_order =
-              allOrdersProgramming[i].accumulated_quantity -
-                quantityProgramming <
-                0
-                ? 0
-                : allOrdersProgramming[i].accumulated_quantity -
-                quantityProgramming;
-            allOrdersProgramming[i].accumulated_quantity =
-              ciclesMachine.length == 1
-                ? allOrdersProgramming[i].accumulated_quantity -
-                  quantityProgramming <
-                  0
-                  ? 0
-                  : allOrdersProgramming[i].accumulated_quantity -
-                  quantityProgramming
-                : allOrdersProgramming[i].original_quantity;
-            allOrdersProgramming[i].quantity_programming =
-              allOrdersProgramming[i].accumulated_quantity -
-                quantityProgramming <
-                0
-                ? 0
-                : allOrdersProgramming[i].accumulated_quantity -
-                quantityProgramming;
-            quantityMissing =
-              allOrdersProgramming[i].accumulated_quantity_order;
-          }
-        } else {
-          allOrdersProgramming[i].accumulated_quantity_order = quantityMissing;
-        }
-      }
-    }
+    //     if (
+    //       quantityProgramming <
+    //       allOrdersProgramming[i]
+    //         .original_quantity
+    //     ) {
+    //       quantityMissing =
+    //         allOrdersProgramming[i].original_quantity - quantityProgramming;
+    //       if (
+    //         allOrdersProgramming[i].accumulated_quantity == 0 ||
+    //         allOrdersProgramming[i].accumulated_quantity == null
+    //       ) {
+    //         allOrdersProgramming[i].quantity_programming = quantityMissing;
+    //         allOrdersProgramming[i].accumulated_quantity =
+    //           ciclesMachine.length == 1
+    //             ? quantityMissing
+    //             : allOrdersProgramming[i].original_quantity;
+    //         allOrdersProgramming[i].accumulated_quantity_order =
+    //           quantityMissing;
+    //       } else {
+    //         allOrdersProgramming[i].accumulated_quantity_order =
+    //           allOrdersProgramming[i].accumulated_quantity -
+    //             quantityProgramming <
+    //             0
+    //             ? 0
+    //             : allOrdersProgramming[i].accumulated_quantity -
+    //             quantityProgramming;
+    //         allOrdersProgramming[i].accumulated_quantity =
+    //           ciclesMachine.length == 1
+    //             ? allOrdersProgramming[i].accumulated_quantity -
+    //               quantityProgramming <
+    //               0
+    //               ? 0
+    //               : allOrdersProgramming[i].accumulated_quantity -
+    //               quantityProgramming
+    //             : allOrdersProgramming[i].original_quantity;
+    //         allOrdersProgramming[i].quantity_programming =
+    //           allOrdersProgramming[i].accumulated_quantity -
+    //             quantityProgramming <
+    //             0
+    //             ? 0
+    //             : allOrdersProgramming[i].accumulated_quantity -
+    //             quantityProgramming;
+    //         quantityMissing =
+    //           allOrdersProgramming[i].accumulated_quantity_order;
+    //       }
+    //     } else {
+    //       allOrdersProgramming[i].accumulated_quantity_order = quantityMissing;
+    //     }
+    //   }
+    // }
 
-    if (type_program == 0) {
-      process = allProcess.filter((item) => item.id_product == id_product);
+    // if (type_program == 0) {
+    //   process = allProcess.filter((item) => item.id_product == id_product);
 
-      // Recorre allProcess para actualizar la ruta
-      for (let i = 0; i < allProcess.length; i++) {
-        if (
-          (quantityMissing == 0 || quantityFTM == 0) &&
-          allProcess[i].id_product == id_product
-        ) {
-          allProcess[i].route += 1;
-          if (process[process.length - 1].route >= allProcess[i].route)
-            allProcess[i].status = 1;
-        }
-      }
+    //   // Recorre allProcess para actualizar la ruta
+    //   for (let i = 0; i < allProcess.length; i++) {
+    //     if (
+    //       (quantityMissing == 0 || quantityFTM == 0) &&
+    //       allProcess[i].id_product == id_product
+    //     ) {
+    //       allProcess[i].route += 1;
+    //       if (process[process.length - 1].route >= allProcess[i].route)
+    //         allProcess[i].status = 1;
+    //     }
+    //   }
     
-      // Recorre allOrders en sentido inverso para evitar problemas con la actualización de índices
-      for (let i = allOrders.length - 1; i >= 0; i--) {
-        if (
-          allOrders[i].id_product == id_product &&
-          quantityMissing == 0 &&
-          process.length === 1
-        ) {
-          allOrders[i].flag_tbl = 0;
+    //   // Recorre allOrders en sentido inverso para evitar problemas con la actualización de índices
+    //   for (let i = allOrders.length - 1; i >= 0; i--) {
+    //     if (
+    //       allOrders[i].id_product == id_product &&
+    //       quantityMissing == 0 &&
+    //       process.length === 1
+    //     ) {
+    //       allOrders[i].flag_tbl = 0;
 
-          if (allProcess[0].status == 1) allOrders[i].flag_process = 0;
-          else allOrders[i].flag_process = 1;
-        }
-      }
+    //       if (allProcess[0].status == 1) allOrders[i].flag_process = 0;
+    //       else allOrders[i].flag_process = 1;
+    //     }
+    //   }
 
-      // Recorre allOrdersProgramming en sentido inverso
-      for (let i = allOrdersProgramming.length - 1; i >= 0; i--) {
-        if (
-          allOrdersProgramming[i].id_product == id_product &&
-          quantityMissing == 0 &&
-          process.length === 1
-        ) {
-          allOrdersProgramming[i].flag_tbl = 0;
+    //   // Recorre allOrdersProgramming en sentido inverso
+    //   for (let i = allOrdersProgramming.length - 1; i >= 0; i--) {
+    //     if (
+    //       allOrdersProgramming[i].id_product == id_product &&
+    //       quantityMissing == 0 &&
+    //       process.length === 1
+    //     ) {
+    //       allOrdersProgramming[i].flag_tbl = 0;
+    //     }
+    //   }
+    // }
+
+    // if (type_program == 1) {
+    //   if (quantityFTM <= 0) {
+    //     for (let i = 0; i < allOrders.length; i++) {
+    //       if (allOrders[i].id_order == order.id_order) {
+    //         allOrders[i].quantity_programming = 0;
+    //         allOrders[i].accumulated_quantity_order = 0;
+    //         allOrders[i].accumulated_quantity = 0;
+    //       }          
+    //     }
+    //     for (let i = 0; i < allOrdersProgramming.length; i++) {
+    //       if (allOrdersProgramming[i].id_order == order.id_order) {
+    //         allOrdersProgramming[i].quantity_programming = 0;
+    //         allOrdersProgramming[i].accumulated_quantity_order = 0;
+    //         allOrdersProgramming[i].accumulated_quantity = 0;
+    //       }          
+    //     }
+    //   }
+    // }
+
+    // Función para actualizar las órdenes
+    function updateOrder(order, quantityProgramming, ciclesMachine) {
+      order.status = "PROGRAMADO";
+      let quantity = 0;
+
+      if (quantityProgramming < order.original_quantity) {
+        quantity = order.original_quantity - quantityProgramming;
+        if (!order.accumulated_quantity) {
+          order.quantity_programming = quantity;
+          order.accumulated_quantity_order = quantity;
+          order.accumulated_quantity = (ciclesMachine.length === 1)
+            ? quantity
+            : order.original_quantity;
+        } else {
+          order.accumulated_quantity_order = Math.max(
+            order.accumulated_quantity - quantityProgramming, 0
+          );
+          order.accumulated_quantity = (ciclesMachine.length === 1)
+            ? Math.max(order.accumulated_quantity - quantityProgramming, 0)
+            : order.original_quantity;
+          order.quantity_programming = Math.max(
+            order.accumulated_quantity - quantityProgramming, 0
+          );
         }
+      } else {
+        order.accumulated_quantity_order = quantity;
+        order.accumulated_quantity = (ciclesMachine.length === 1)
+          ? quantity
+          : order.original_quantity;
       }
     }
 
-    if (type_program == 1) {
-      if (quantityFTM <= 0) {
-        for (let i = 0; i < allOrders.length; i++) {
-          if (allOrders[i].id_order == order.id_order) {
-            allOrders[i].quantity_programming = 0;
-            allOrders[i].accumulated_quantity_order = 0;
-            allOrders[i].accumulated_quantity = 0;
-          }          
-        }
-        for (let i = 0; i < allOrdersProgramming.length; i++) {
-          if (allOrdersProgramming[i].id_order == order.id_order) {
-            allOrdersProgramming[i].quantity_programming = 0;
-            allOrdersProgramming[i].accumulated_quantity_order = 0;
-            allOrdersProgramming[i].accumulated_quantity = 0;
-          }          
-        }
+    // Actualiza todas las órdenes
+    allOrders.forEach(order => {
+      if (order.id_order == id_order) {
+        updateOrder(order, quantityProgramming, ciclesMachine);
       }
+    });
+
+    allOrdersProgramming.forEach(order => {
+      if (order.id_order == id_order) {
+        updateOrder(order, quantityProgramming, ciclesMachine);
+      }
+    });
+
+    // Actualizar proceso y órdenes si el type_program es 0
+    if (type_program == 0) {
+      process = allProcess.filter(item => item.id_product == id_product);
+
+      allProcess.forEach(proc => {
+        if ((quantityMissing == 0 || quantityFTM == 0) && proc.id_product == id_product) {
+          proc.route += 1;
+          if (process[process.length - 1].route >= proc.route) {
+            proc.status = 1;
+          }
+        }
+      });
+
+      allOrders.slice().reverse().forEach(order => {
+        if (order.id_product == id_product && quantityMissing == 0 && process.length === 1) {
+          order.flag_tbl = 0;
+          order.flag_process = (allProcess[0].status == 1) ? 0 : 1;
+        }
+      });
+
+      allOrdersProgramming.slice().reverse().forEach(order => {
+        if (order.id_product == id_product && quantityMissing == 0 && process.length === 1) {
+          order.flag_tbl = 0;
+        }
+      });
     }
 
+    // Resetear valores si type_program es 1
+    if (type_program == 1 && quantityFTM <= 0) {
+      const resetOrder = (order) => {
+        order.quantity_programming = 0;
+        order.accumulated_quantity_order = 0;
+        order.accumulated_quantity = 0;
+      };
+
+      allOrders.forEach(order => {
+        if (order.id_order == order.id_order) {
+          resetOrder(order);
+        }
+      });
+
+      allOrdersProgramming.forEach(order => {
+        if (order.id_order == order.id_order) {
+          resetOrder(order);
+        }
+      });
+    }
+    
     let allTblData = flattenData(generalMultiArray);
     let sim = $("#simulationType").val();
 
@@ -549,7 +641,7 @@ $(document).ready(function () {
     loadOrdersProgramming(allOrdersProgramming);
     if (type_program == 0) {
       checkProcessMachines(allTblData);
-    } 
+    }
 
     loadTblProgramming(allTblData, 1);
 
@@ -602,8 +694,8 @@ $(document).ready(function () {
               for (let i = 0; i < orderList.length; i++) {
                 const order = orderList[i];
                 if (
-                  order.id_product === idProduct &&
-                  order.id_order === allTblData[id].id_order
+                  order.id_product == idProduct &&
+                  order.id_order == allTblData[id].id_order
                 ) {
                   order.flag_tbl = 1;
                   let quantity =
@@ -615,9 +707,9 @@ $(document).ready(function () {
 
                   if (
                     order.hasOwnProperty("quantity_programming") &&
-                    (quantity === 0 ||
-                      quantity === quantityOrder ||
-                      order.accumulated_quantity === quantityOrder)
+                    (quantity == 0 ||
+                      quantity == quantityOrder ||
+                      order.accumulated_quantity == quantityOrder)
                   ) {
                     delete order["quantity_programming"];
                   } else {
@@ -648,7 +740,7 @@ $(document).ready(function () {
             dataProgramming.append("accumulated_quantity_order", "");
 
             for (let i = 0; i < allTblData.length; i++) {
-              if (allTblData[i].id_programming === id) {
+              if (allTblData[i].id_programming == id) {
                 allTblData.splice(i, 1);
               }
             }
