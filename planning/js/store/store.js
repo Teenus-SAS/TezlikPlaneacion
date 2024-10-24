@@ -37,6 +37,7 @@ $(document).ready(function () {
           form.append("referenceProduct", data.reference);
           form.append("product", data.material);
           form.append("idMaterial", data.id_material);
+          form.append("order", data.num_order);
           form.append("date", date);
 
           $.ajax({

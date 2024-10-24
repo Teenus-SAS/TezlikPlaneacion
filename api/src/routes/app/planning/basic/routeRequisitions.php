@@ -4,6 +4,7 @@ use TezlikPlaneacion\dao\ExplosionMaterialsDao;
 use TezlikPlaneacion\dao\GeneralClientsDao;
 use TezlikPlaneacion\dao\GeneralExplosionMaterialsDao;
 use TezlikPlaneacion\dao\GeneralMaterialsDao;
+use TezlikPlaneacion\dao\GeneralOrdersDao;
 use TezlikPlaneacion\dao\GeneralProductsDao;
 use TezlikPlaneacion\dao\GeneralRequisitionsMaterialsDao;
 use TezlikPlaneacion\dao\GeneralRequisitionsProductsDao;
@@ -22,6 +23,7 @@ $usersRequisitonsDao = new UsersRequisitionsDao();
 $transitMaterialsDao = new TransitMaterialsDao();
 $generalMaterialsDao = new GeneralMaterialsDao();
 $generalProductsDao = new GeneralProductsDao();
+$generalOrdersDao = new GeneralOrdersDao();
 $generalClientsDao = new GeneralClientsDao();
 $explosionMaterialsDao = new ExplosionMaterialsDao();
 $generalExMaterialsDao = new GeneralExplosionMaterialsDao();
@@ -32,16 +34,12 @@ use Psr\Http\Message\ResponseInterface as Response;
 use Psr\Http\Message\ServerRequestInterface as Request;
 
 $app->get('/requisitions', function (Request $request, Response $response, $args) use (
-    $generalRequisitionsMaterialsDao,
-    $generalRequisitionsProductsDao
+    $generalRequisitionsMaterialsDao
 ) {
     session_start();
     $id_company = $_SESSION['id_company'];
 
     $materials = $generalRequisitionsMaterialsDao->findAllActualRequisitionByCompany($id_company);
-    // $products = $generalRequisitionsProductsDao->findAllActualRequisitionByCompany($id_company);
-
-    // $requisitions = array_merge($materials, $products);
 
     $response->getBody()->write(json_encode($materials, JSON_NUMERIC_CHECK));
     return $response->withHeader('Content-Type', 'application/json');
@@ -155,8 +153,6 @@ $app->post('/addRequisition', function (Request $request, Response $response, $a
     $count = sizeof($dataRequisition);
 
     if ($count > 1) {
-        // $findRequisition = $generalRequisitionsDao->findRequisition($dataRequisition, $id_company);
-        // if (!$findRequisition) {
         $dataRequisition['idUser'] = $id_user;
         $requisition = $requisitionsMaterialsDao->insertRequisitionManualByCompany($dataRequisition, $id_company);
 
@@ -172,8 +168,6 @@ $app->post('/addRequisition', function (Request $request, Response $response, $a
             $resp = array('info' => true, 'message' => $requisition['message']);
         else
             $resp = array('error' => true, 'message' => 'Ocurrio un error mientras ingresaba la información. Intente nuevamente');
-        // } else
-        // $resp = array('error' => true, 'message' => 'Material ya existente en la requisicion. Ingrese nuevo material');
     } else {
         $requisition = $dataRequisition['importRequisition'];
 
@@ -192,8 +186,6 @@ $app->post('/addRequisition', function (Request $request, Response $response, $a
                 $requisition[$i]['idRequisition'] = $findRequisition['id_requisition_material'];
                 $resolution = $requisitionsMaterialsDao->updateRequisitionManual($requisition[$i]);
             }
-            // $lastData = $lastDataDao->lastInsertedRequisitionId($id_company);
-            // $resolution = $generalRequisitionsDao->saveUserRequisition($lastData['id_requisition'], $id_user);
 
             if (isset($resolution['info'])) break;
 
@@ -271,7 +263,6 @@ $app->post('/updateRequisition', function (Request $request, Response $response,
 
     $requisition = null;
 
-    // if (isset($dataRequisition['idMaterial'])) {
     $requisition = $requisitionsMaterialsDao->updateRequisitionManual($dataRequisition);
 
     if ($requisition == null) {
@@ -280,10 +271,6 @@ $app->post('/updateRequisition', function (Request $request, Response $response,
         if (isset($material['transit']))
             $requisition = $transitMaterialsDao->updateQuantityTransitByMaterial($dataRequisition['idMaterial'], $material['transit']);
     }
-    // }
-
-    // if (isset($dataRequisition['idProduct']))
-    //     $requisition = $requisitionsProductsDao->updateRequisitionManual($dataRequisition);
 
     if ($requisition == null)
         $resp = array('success' => true, 'message' => 'Requisicion modificada correctamente');
@@ -291,8 +278,6 @@ $app->post('/updateRequisition', function (Request $request, Response $response,
         $resp = array('info' => true, 'message' => $requisition['message']);
     else
         $resp = array('error' => true, 'message' => 'Ocurrio un error mientras modificaba la información. Intente nuevamente');
-    // } else
-    // $resp = array('error' => true, 'message' => 'Material ya existente en la requisicion. Ingrese nuevo material');
     $response->getBody()->write(json_encode($resp));
     return $response->withStatus(200)->withHeader('Content-Type', 'application/json');
 });
@@ -303,6 +288,7 @@ $app->post('/saveAdmissionDate', function (Request $request, Response $response,
     $generalMaterialsDao,
     $generalProductsDao,
     $transitMaterialsDao,
+    $generalOrdersDao,
     $usersRequisitonsDao
 ) {
     session_start();
@@ -311,53 +297,48 @@ $app->post('/saveAdmissionDate', function (Request $request, Response $response,
 
     $dataRequisition = $request->getParsedBody();
 
-    $requisition = null;
+    $resolution = null;
 
-    // if (isset($dataRequisition['idMaterial'])) {
-    $requisition = $generalRequisitionsMaterialsDao->updateDateRequisition($dataRequisition);
+    $resolution = $generalRequisitionsMaterialsDao->updateDateRequisition($dataRequisition);
 
-    if ($requisition == null) {
+    if ($resolution == null) {
         $material = $generalMaterialsDao->calcMaterialRecieved($dataRequisition['idMaterial']);
 
-        $requisition = $generalMaterialsDao->updateQuantityMaterial($dataRequisition['idMaterial'], $material['quantity']);
+        $resolution = $generalMaterialsDao->updateQuantityMaterial($dataRequisition['idMaterial'], $material['quantity']);
     }
 
-    if ($requisition == null) {
+    if ($resolution == null) {
         $product = $generalProductsDao->findProduct($dataRequisition, $id_company);
 
         if ($product) {
-            $requisition = $generalProductsDao->updateAccumulatedQuantity($product['id_product'], $material['quantity'], 2);
+            $resolution = $generalProductsDao->updateAccumulatedQuantity($product['id_product'], $material['quantity'], 2);
         }
     }
 
-    if ($requisition == null) {
-        $requisition = $usersRequisitonsDao->saveUserDeliverRequisitionMaterial($id_company, $dataRequisition['idRequisition'], $id_user);
+    if ($resolution == null) {
+        $resolution = $usersRequisitonsDao->saveUserDeliverRequisitionMaterial($id_company, $dataRequisition['idRequisition'], $id_user);
     }
 
-    if ($requisition == null) {
-        // $material = $transitMaterialsDao->calcQuantityTransitByMaterial($dataRequisition['idMaterial']);
-
-        // if (isset($material['transit']))
-        $requisition = $transitMaterialsDao->updateQuantityTransitByMaterial($dataRequisition['idMaterial'], 0);
+    if ($resolution == null) {
+        $resolution = $transitMaterialsDao->updateQuantityTransitByMaterial($dataRequisition['idMaterial'], 0);
     }
-    // } else {
-    //     $requisition = $generalRequisitionsProductsDao->updateDateRequisition($dataRequisition);
 
-    //     if ($requisition == null) {
-    //         $product = $generalProductsDao->calcProductRecieved($dataRequisition['idProduct']);
+    if ($resolution == null) {
+        $orders = explode(',', $dataRequisition['order']);
 
-    //         $requisition = $generalProductsDao->updateAccumulatedQuantity($dataRequisition['idProduct'], $product['quantity'], 2);
-    //     }
+        foreach ($orders as $arr) {
+            $requisitions = $generalRequisitionsMaterialsDao->findRequisitionsByOrder($arr);
 
-    //     if ($requisition == null) {
-    //         $requisition = $usersRequisitonsDao->saveUserDeliverRequisitionproduct($id_company, $dataRequisition['idRequisition'], $id_user);
-    //     }
-    // }
+            if (sizeof($requisitions) == 0) {
+                $resolution = $generalOrdersDao->changeStatusByNumOrder($arr, 12);
+            }
+        }
+    }
 
-    if ($requisition == null)
+    if ($resolution == null)
         $resp = array('success' => true, 'message' => 'Fecha guardada correctamente');
-    else if (isset($requisition['info']))
-        $resp = array('info' => true, 'message' => $requisition['message']);
+    else if (isset($resolution['info']))
+        $resp = array('info' => true, 'message' => $resolution['message']);
     else
         $resp = array('error' => true, 'message' => 'Ocurrio un error mientras modificaba la información. Intente nuevamente');
 
@@ -377,7 +358,6 @@ $app->post('/deleteRequisition', function (Request $request, Response $response,
 
     $requisitions = null;
 
-    // if (isset($dataRequisition['idMaterial'])) {
     if ($dataRequisition['op'] == 1) {
         $requisitions = $requisitionsMaterialsDao->deleteRequisition($dataRequisition['idRequisition']);
     } else {
@@ -390,15 +370,6 @@ $app->post('/deleteRequisition', function (Request $request, Response $response,
                 $requisitions = $transitMaterialsDao->updateQuantityTransitByMaterial($dataRequisition['idMaterial'], $material['transit']);
         }
     }
-    // }
-
-    // if (isset($dataRequisition['idProduct'])) {
-    //     if ($dataRequisition['op'] == 1) {
-    //         $requisitions = $requisitionsProductsDao->deleteRequisition($dataRequisition['idRequisition']);
-    //     } else {
-    //         $requisitions = $generalRequisitionsProductsDao->clearDataRequisition($dataRequisition['idRequisition']);
-    //     }
-    // }
 
     if ($requisitions == null)
         $resp = array('success' => true, 'message' => 'Requisicion eliminada correctamente');

@@ -158,6 +158,17 @@ class GeneralRequisitionsMaterialsDao
         return $molds;
     }
 
+    public function findRequisitionsByOrder($num_order)
+    {
+        $connection = Connection::getInstance()->getConnection();
+
+        $stmt = $connection->prepare("SELECT * FROM requisitions_materials WHERE num_order LIKE '%$num_order%' AND application_date = '0000-00-00'");
+        $stmt->execute();
+        $this->logger->info(__FUNCTION__, array('query' => $stmt->queryString, 'errors' => $stmt->errorInfo()));
+        $requisitions = $stmt->fetchAll($connection::FETCH_ASSOC);
+        return $requisitions;
+    }
+
     /* Insertar requisicion Auto*/
     public function insertRequisitionAutoByCompany($dataRequisition, $id_company)
     {

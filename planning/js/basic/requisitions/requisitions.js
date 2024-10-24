@@ -122,7 +122,6 @@ $(document).ready(function () {
   });
 
   /* Actualizar productos materials */
-
   $(document).on("click", ".updateRequisitionMaterial", async function (e) {
     $(".cardImportRequisitions, .cardSelect, .cardAddRequisitionsProducts").hide(800);
     $(".cardAddRequisitionsMaterials, .cardRequired, .cardDescription").show(800);

@@ -305,29 +305,6 @@ $(document).ready(function () {
     return `<span class="badge ${badge}">${data}</span>`;
   }
 
-  // function renderRequisitionActions(data, visible) {
-  //   let action = "";
-  //   if (data.status != "Recibido" && data.status != "Proceso") { 
-  //     action = `<div style="display: flex; align-items: center; justify-content: center; height: 100%;">
-  //                 <span id="upd-${data.id_requisition_material}" class="badge badge-warning updateRequisitionMaterial btn-action"
-  //                       style="cursor: pointer; font-size: 12px; margin-right: 5px;" 
-  //                       data-toggle='tooltip' title='Ejecutar Requisición'">
-  //                   Ejecutar
-  //                 </span>
-  //                 <a href="javascript:;" <i id="${data.id_requisition_material}" class="mdi mdi-delete-forever" data-toggle='tooltip' title='Eliminar Requisicion' style="font-size: 30px;color:red" onclick="deleteFunction(${
-  //                 visible == true ? "2" : "1"})"></i></a>
-  //               </div>`;
-  //   } else if (data.status == "Proceso") {
-  //     action = `<a href="javascript:;" <i id="upd-${data.id_requisition_material}" class="bx bx-edit-alt updateRequisitionMaterial" data-toggle='tooltip' title='Editar Requisicion' style="font-size: 30px;"></i></a>
-  //             <a href="javascript:;" <i id="${data.id_requisition_material}" class="bi bi-x-circle-fill" data-toggle='tooltip' title='Cancelar Requisicion' style="font-size: 30px;color:red" onclick="cancelRQFunction()"></i></a>`;
-  //   } else if (data.status == "Retrasada") {
-  //     action = `<a href="javascript:;" <i id="${data.id_requisition_material}" class="bi bi-x-circle-fill" data-toggle='tooltip' title='Cancelar Requisicion' style="font-size: 30px;color:red" onclick="cancelRQFunction()"></i></a>`;
-  //   }
-  //   else {
-  //     action = data.admission_date;
-  //   }
-  //   return action;
-  // }
   function renderRequisitionActions(data, visible) {
     const createActionIcon = (id, iconClass, tooltip, color = '', extraAction = '') => {
       return `<a href="javascript:;" <i id="${id}" class="${iconClass}" data-toggle='tooltip' title='${tooltip}' style="font-size: 30px; ${color}" ${extraAction}></i></a>`;
@@ -375,6 +352,4 @@ $(document).ready(function () {
     pendingIcon.style.color = "gray";
     doneIcon.style.color = "green";
   });
-
-
 });

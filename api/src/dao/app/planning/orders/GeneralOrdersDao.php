@@ -306,6 +306,24 @@ class GeneralOrdersDao
         }
     }
 
+    public function changeStatusByNumOrder($num_order, $status)
+    {
+        $connection = Connection::getInstance()->getConnection();
+
+        try {
+            $stmt = $connection->prepare("UPDATE orders SET status = :status WHERE num_order = :num_order");
+            $stmt->execute([
+                'status' => $status,
+                'num_order' => $num_order
+            ]);
+        } catch (\Exception $e) {
+            $message = $e->getMessage();
+
+            $error = array('info' => true, 'message' => $message);
+            return $error;
+        }
+    }
+
     public function changeStatusByProduct($id_product, $status)
     {
         $connection = Connection::getInstance()->getConnection();
