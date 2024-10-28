@@ -192,16 +192,7 @@ $(document).ready(function () {
     });
   };
 
-  loadOrdersProgramming = async (data) => {
-    // let orders = allOrders.filter(
-    //   (item) =>
-    //     item.num_order == num_order &&
-    //     (item.status == "PROGRAMAR" || item.status == "PROGRAMADO") &&
-    //     (item.accumulated_quantity_order == null ||
-    //       item.accumulated_quantity_order != 0 ||
-    //       item.flag_process == 0) &&
-    //     item.flag_tbl == 1
-    // );
+  loadOrdersProgramming = async (data) => { 
     data = data.filter((item) => item.flag_tbl == 1);
 
     if (data.length === 0) {
@@ -386,7 +377,7 @@ $(document).ready(function () {
           return false;
         }
 
-        if (type_program == 0) {
+        if (flag_type_program == 0) {
           if (machines.length > 0) {
             dataProgramming["min_date"] = machines[machines.length - 1].max_date;
 
@@ -431,7 +422,7 @@ $(document).ready(function () {
         }
       }
 
-      if (type_program == 1 && cont == 0)
+      if (flag_type_program == 1 && cont == 0)
         $("#btnCreateProgramming").show();
     }
   };

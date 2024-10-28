@@ -27,7 +27,7 @@ $(document).ready(function () {
     let option = this.id;
 
     switch (option) {
-      case 'checkbox-19':
+      case 'checkbox-17':
         $('.cardTypeMachineOP').toggle(800);
         break;
     }
@@ -135,7 +135,7 @@ $(document).ready(function () {
     
     let dataUser = {};
 
-    if ($(`#checkbox-19`).is(':checked')) {
+    if ($(`#checkbox-17`).is(':checked')) {
       let machine = parseFloat($('#typeMachineOP').val());
 
       if (isNaN(machine)) {
@@ -144,6 +144,8 @@ $(document).ready(function () {
       }
 
       dataUser["typeMachineOP"] = machine;
+    } else {
+      dataUser["typeMachineOP"] = 0;      
     }
 
     dataUser["nameUser"] = nameUser;

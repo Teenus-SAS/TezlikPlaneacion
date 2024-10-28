@@ -76,9 +76,9 @@ $app->post('/addUser', function (Request $request, Response $response, $args) us
             $newPass = $generateCodeDao->GenerateCode();
 
             // Se envia email con usuario(email) y contraseña
-            $dataEmail = $makeEmailDao->SendEmailPassword($dataUser['emailUser'], $newPass);
+            // $dataEmail = $makeEmailDao->SendEmailPassword($dataUser['emailUser'], $newPass);
 
-            $sendEmail = $sendEmailDao->sendEmail($dataEmail, $email, $name);
+            // $sendEmail = $sendEmailDao->sendEmail($dataEmail, $email, $name);
 
             // if ($sendEmail == null) {
             $pass = password_hash($newPass, PASSWORD_DEFAULT);

@@ -270,6 +270,24 @@ class GeneralOrdersDao
         return $order;
     }
 
+    public function findOrderByNumOrder($num_order)
+    {
+        $connection = Connection::getInstance()->getConnection();
+
+        $sql = "SELECT *
+                FROM orders 
+                WHERE num_order = :num_order";
+        $stmt = $connection->prepare($sql);
+        $stmt->execute([
+            'num_order' => $num_order
+        ]);
+
+        $this->logger->info(__FUNCTION__, array('query' => $stmt->queryString, 'errors' => $stmt->errorInfo()));
+
+        $order = $stmt->fetch($connection::FETCH_ASSOC);
+        return $order;
+    }
+
     public function changeStatusOrder($num_order, $id_product)
     {
         $connection = Connection::getInstance()->getConnection();
