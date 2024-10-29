@@ -28,11 +28,17 @@ class ProgrammingRoutesDao
                                             pr.id_product,
                                             pr.route,
                                             pcm.route AS route1,
+                                            
                                             p.id_process,
-                                            p.process
+                                            p.process,
+                                            IFNULL(pgm.status, 0) AS status,
+                                            IFNULL(apgm.status, 0) AS status_alternal_machine
                                       FROM programming_routes pr
                                         INNER JOIN orders o ON o.id_order = pr.id_order
                                         INNER JOIN machine_cicles pcm ON pcm.id_product = pr.id_product
+                                        LEFT JOIN machine_programs pgm ON pgm.id_machine = pcm.id_machine
+                                        LEFT JOIN alternal_machines am ON am.id_cicles_machine = pcm.id_cicles_machine
+                                        LEFT JOIN machine_programs apgm ON apgm.id_machine = am.id_machine 
                                         INNER JOIN process p ON p.id_process = pcm.id_process
                                       WHERE pr.id_company = :id_company");
         $stmt->execute(['id_company' => $id_company]);

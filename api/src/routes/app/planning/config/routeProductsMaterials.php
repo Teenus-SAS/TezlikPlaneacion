@@ -787,7 +787,7 @@ $app->post('/addProductsMaterials', function (Request $request, Response $respon
                     } else {
                         foreach ($planCicles as $arr) {
                             // Verificar Maquina Disponible
-                            if ($arr['status'] == 0) {
+                            if ($arr['status'] == 0 && $arr['status_alternal_machine'] == 0) {
                                 $generalOrdersDao->changeStatus($orders[$i]['id_order'], 10);
                                 $status = false;
                                 break;

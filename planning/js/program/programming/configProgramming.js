@@ -788,9 +788,18 @@ $(document).ready(function () {
       let $select = $(`#idMachine`);
       $select.empty();
       $select.append(`<option disabled value=''>Seleccionar</option>`);
-      $select.append(
-        `<option value ='${arr.id_machine}' selected> ${arr.machine} </option>`
-      );
+
+      if (arr.status == 0) {
+        $select.append(
+          `<option value ='${arr.id_alternal_machine}' selected> ${arr.alternal_machine} </option>`
+        );
+      }
+      else {
+        $select.append(
+          `<option value ='${arr.id_machine}' selected> ${arr.machine} </option>`
+        );
+      }
+
       $(`#idMachine`).change();
     }
   });

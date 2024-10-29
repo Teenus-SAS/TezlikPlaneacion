@@ -125,6 +125,9 @@
   <script src="/global/js/global/inactiveUsers.js"></script>
   <script src="assets/js/app.js"></script>
   <script src="global/js/login/autentication.js"></script>
+  <script>
+    sessionStorage.clear();
+  </script>
   <!-- <script src="app/js/login/code.js"></script> -->
 
   <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/2.0.1/js/toastr.js"></script>

@@ -313,7 +313,7 @@ $app->post('/addPlanningMachines', function (Request $request, Response $respons
                     } else {
                         foreach ($planCicles as $arr) {
                             // Verificar Maquina Disponible
-                            if ($arr['status'] == 0) {
+                            if ($arr['status'] == 0 && $arr['status_alternal_machine'] == 0) {
                                 $generalOrdersDao->changeStatus($orders[$i]['id_order'], 10);
                                 $status = false;
                                 break;
@@ -524,7 +524,7 @@ $app->get('/deletePlanningMachines/{id_program_machine}/{id}', function (Request
                     } else {
                         foreach ($planCicles as $arr) {
                             // Verificar Maquina Disponible
-                            if ($arr['status'] == 0) {
+                            if ($arr['status'] == 0 && $arr['status_alternal_machine'] == 0) {
                                 $generalOrdersDao->changeStatus($orders[$i]['id_order'], 10);
                                 $status = false;
                                 break;
@@ -674,7 +674,7 @@ $app->get('/changeStatusPMachine/{id_program_machine}/{status}', function (Reque
                     } else {
                         foreach ($planCicles as $arr) {
                             // Verificar Maquina Disponible
-                            if ($arr['status'] == 0) {
+                            if ($arr['status'] == 0 && $arr['status_alternal_machine'] == 0) {
                                 $generalOrdersDao->changeStatus($orders[$i]['id_order'], 10);
                                 $status = false;
                                 break;

@@ -34,7 +34,7 @@ class PlanCiclesMachineDao
                                             pcm.units_turn,
                                             pcm.units_month,
                                             pcm.route,
-                                           -- IFNULL(am.id_alternal_machine, 0) AS id_alternal_machine,
+                                            IFNULL(pgm.status, 0) AS status,
                                             IFNULL(am.id_machine, 0) AS id_alternal_machine,
                                             IFNULL(am.cicles_hour, 0) AS alternal_cicles_hour,
                                             IFNULL(amm.machine, '') AS alternal_machine,
@@ -44,6 +44,7 @@ class PlanCiclesMachineDao
                                         INNER JOIN machines m ON m.id_machine = pcm.id_machine
                                         INNER JOIN products p ON p.id_product = pcm.id_product
                                         LEFT JOIN process pc ON pc.id_process = pcm.id_process
+                                        LEFT JOIN machine_programs pgm ON pgm.id_machine = pcm.id_machine
                                         LEFT JOIN alternal_machines am ON am.id_cicles_machine = pcm.id_cicles_machine
                                         LEFT JOIN machines amm ON amm.id_machine = am.id_machine
                                       WHERE pcm.id_company = :id_company
