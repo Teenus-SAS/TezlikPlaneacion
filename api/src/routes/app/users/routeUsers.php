@@ -70,22 +70,22 @@ $app->post('/addUser', function (Request $request, Response $response, $args) us
         $users = $userDao->findUser($dataUser['emailUser']);
 
         if ($users == false) {
-            $email = $_SESSION['email'];
-            $name = $_SESSION['name'];
+            // $email = $_SESSION['email'];
+            // $name = $_SESSION['name'];
 
             $newPass = $generateCodeDao->GenerateCode();
 
-            // Se envia email con usuario(email) y contraseña
-            $dataEmail = $makeEmailDao->SendEmailPassword($dataUser['emailUser'], $newPass);
+            // // Se envia email con usuario(email) y contraseña
+            // $dataEmail = $makeEmailDao->SendEmailPassword($dataUser['emailUser'], $newPass);
 
-            $sendEmail = $sendEmailDao->sendEmail($dataEmail, $email, $name);
+            // $sendEmail = $sendEmailDao->sendEmail($dataEmail, $email, $name);
 
-            if ($sendEmail == null) {
-                $pass = password_hash($newPass, PASSWORD_DEFAULT);
+            // if ($sendEmail == null) {
+            $pass = password_hash($newPass, PASSWORD_DEFAULT);
 
-                /* Almacena el usuario */
-                $users = $userDao->saveUser($dataUser, $pass, $id_company);
-            }
+            /* Almacena el usuario */
+            $users = $userDao->saveUser($dataUser, $pass, $id_company);
+            // }
 
             if ($users == null) {
                 $user = $userDao->findUser($dataUser['emailUser']);
