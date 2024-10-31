@@ -22,6 +22,7 @@ use TezlikPlaneacion\dao\ProductsMaterialsDao;
 use TezlikPlaneacion\dao\ProductsMeasuresDao;
 use TezlikPlaneacion\dao\ProductsPlansDao;
 use TezlikPlaneacion\dao\ProductsTypeDao;
+use TezlikPlaneacion\dao\RMStockDao;
 
 $productsMeasuresDao = new ProductsMeasuresDao();
 $materialsDao = new MaterialsDao();
@@ -45,6 +46,7 @@ $generalOrdersDao = new GeneralOrdersDao();
 $generalProgrammingDao = new GeneralProgrammingDao();
 $generalProgrammingRoutesDao = new GeneralProgrammingRoutesDao();
 $lastDataDao = new LastDataDao();
+$rMStockDao = new RMStockDao();
 $generalCompositeProductsDao = new GeneralCompositeProductsDao();
 
 use Psr\Http\Message\ResponseInterface as Response;
@@ -204,6 +206,8 @@ $app->post('/addProductMeasure', function (Request $request, Response $response,
     $productsDao,
     $materialsInventoryDao,
     $generalPMeasuresDao,
+    $productMaterialDao,
+    $rMStockDao,
     $generalProductsDao
 ) {
     session_start();
@@ -230,11 +234,33 @@ $app->post('/addProductMeasure', function (Request $request, Response $response,
                 $resolution = $materialsDao->insertMaterialsByCompany($data, $id_company);
 
                 if ($resolution == null) {
-                    $lastData = $lastDataDao->lastInsertedMaterialId($id_company);
-                    $dataMaterial['idMaterial'] = $lastData['id_material'];
+                    $lastDataMP = $lastDataDao->lastInsertedMaterialId($id_company);
+                    $dataMaterial['idMaterial'] = $lastDataMP['id_material'];
                     $dataMaterial['quantity'] = 0;
 
                     $resolution = $materialsInventoryDao->insertMaterialInventory($dataMaterial, $id_company);
+                }
+
+                if ($resolution == null) {
+                    $lastDataPT = $lastDataDao->lastInsertedProductId($id_company);
+                    $data = [];
+                    $data['material'] = $lastDataMP['id_material'];
+                    $data['unit'] = 12;
+                    $data['idProduct'] = $lastDataPT['id_product'];
+                    $data['quantity'] = 1;
+
+                    $resolution = $productMaterialDao->insertProductsMaterialsByCompany($data, $id_company);
+                }
+
+                if ($resolution == null) {
+                    $data = [];
+                    $data['idMaterial'] = $lastDataMP['id_material'];
+                    $data['idProvider'] = 0;
+                    $data['min'] = 0;
+                    $data['max'] = 0;
+                    $data['quantity'] = 0;
+
+                    $resolution = $rMStockDao->insertStockByCompany($data, $id_company);
                 }
             }
 
@@ -307,6 +333,48 @@ $app->post('/addProductMeasure', function (Request $request, Response $response,
                 }
             }
             if (isset($resolution['info'])) break;
+
+            if ($products[$i]['origin'] == 1) {
+                $data = [];
+                $data['idMaterialType'] = 0;
+                $data['refRawMaterial'] = $products[$i]['referenceProduct'];
+                $data['nameRawMaterial'] = $products[$i]['product'];
+                $data['unit'] = 12;
+
+                $resolution = $materialsDao->insertMaterialsByCompany($data, $id_company);
+
+                if (isset($resolution['info'])) break;
+
+                $lastDataMP = $lastDataDao->lastInsertedMaterialId($id_company);
+                $products[$i]['idMaterial'] = $lastDataMP['id_material'];
+                $products[$i]['quantity'] = 0;
+
+                $resolution = $materialsInventoryDao->insertMaterialInventory($products[$i], $id_company);
+
+                if (isset($resolution['info'])) break;
+
+                $lastDataPT = $lastDataDao->lastInsertedProductId($id_company);
+                $data = [];
+                $data['material'] = $lastDataMP['id_material'];
+                $data['unit'] = 12;
+                $data['idProduct'] = $lastDataPT['id_product'];
+                $data['quantity'] = 1;
+
+                $resolution = $productMaterialDao->insertProductsMaterialsByCompany($data, $id_company);
+
+                if (isset($resolution['info'])) break;
+
+                $data = [];
+                $data['idMaterial'] = $lastDataMP['id_material'];
+                $data['idProvider'] = 0;
+                $data['min'] = 0;
+                $data['max'] = 0;
+                $data['quantity'] = 0;
+
+                $resolution = $rMStockDao->insertStockByCompany($data, $id_company);
+
+                if (isset($resolution['info'])) break;
+            }
         }
 
         if ($resolution == null)
