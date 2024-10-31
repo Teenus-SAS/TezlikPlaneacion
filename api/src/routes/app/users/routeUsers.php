@@ -66,49 +66,44 @@ $app->post('/addUser', function (Request $request, Response $response, $args) us
             $resp = array('error' => true, 'message' => 'Complete todos los datos');
             exit();
         }
+        $resolution = null;
 
         $users = $userDao->findUser($dataUser['emailUser']);
 
         if ($users == false) {
-            // $email = $_SESSION['email'];
-            // $name = $_SESSION['name'];
+            $email = $_SESSION['email'];
+            $name = $_SESSION['name'];
 
             $newPass = $generateCodeDao->GenerateCode();
 
-            // // Se envia email con usuario(email) y contraseña
-            // $dataEmail = $makeEmailDao->SendEmailPassword($dataUser['emailUser'], $newPass);
+            // Se envia email con usuario(email) y contraseña
+            $dataEmail = $makeEmailDao->SendEmailPassword($dataUser['emailUser'], $newPass);
 
-            // $sendEmail = $sendEmailDao->sendEmail($dataEmail, $email, $name);
+            $resolution = $sendEmailDao->sendEmail($dataEmail, $email, $name);
 
-            // if ($sendEmail == null) {
-            $pass = password_hash($newPass, PASSWORD_DEFAULT);
+            if ($resolution == null) {
+                $pass = password_hash($newPass, PASSWORD_DEFAULT);
 
-            /* Almacena el usuario */
-            $users = $userDao->saveUser($dataUser, $pass, $id_company);
-            // }
+                /* Almacena el usuario */
+                $resolution = $userDao->saveUser($dataUser, $pass, $id_company);
+            }
 
-            if ($users == null) {
+            if ($resolution == null) {
                 $user = $userDao->findUser($dataUser['emailUser']);
                 $dataUser['idUser'] = $user['id_user'];
 
-                /* Almacena los accesos 
-                if (isset($dataUser['factoryLoad']) && isset($dataUser['programsMachine'])) {
-                    $usersAccess = $costAccessUserDao->insertUserAccessByUser($dataUser);
-                    $usersAccess = $planningAccessUserDao->insertUserAccessByUser($dataUser);
-                } else if (isset($dataUser['factoryLoad'])) $usersAccess = $costAccessUserDao->insertUserAccessByUser($dataUser);
-                else if (isset($dataUser['programsMachine'])) */
-                $usersAccess = $planningAccessUserDao->insertUserAccessByUser($dataUser);
+                $resolution = $planningAccessUserDao->insertUserAccessByUser($dataUser);
             }
-        } else $users = 1;
 
-
-        if ($users == 1) {
+            if ($resolution == null) {
+                $resp = array('success' => true, 'message' => 'Usuario creado correctamente');
+            } elseif (isset($resolution['info'])) {
+                $resp = array('info' => true, 'message' => $resolution['message']);
+            } else {
+                $resp = array('error' => true, 'message' => 'Ocurrio un error mientras almacenaba la información. Intente nuevamente');
+            }
+        } else
             $resp = array('error' => true, 'message' => 'El email ya se encuentra registrado. Intente con uno nuevo');
-        } elseif ($users == null && $usersAccess == null) {
-            $resp = array('success' => true, 'message' => 'Usuario creado correctamente');
-        } else {
-            $resp = array('error' => true, 'message' => 'Ocurrio un error mientras almacenaba la información. Intente nuevamente');
-        }
     }
     $response->getBody()->write(json_encode($resp));
     return $response->withStatus(200)->withHeader('Content-Type', 'application/json');
