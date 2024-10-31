@@ -209,63 +209,7 @@ $(document).ready(function () {
         `/api/productionOrder/${data.id_order}/${data.id_product}`
       );
     }
-
-    // for (let i = 0; i < dataPOProcess.length; i++) {
-    //   let trPC = "";
-    //   if (flag_type_program == 0) {
-    //     max_date = moment(dataPOProcess[i].max_date_programming).format(
-    //       "DD/MM/YYYY hh:mm A"
-    //     );
-    //     min_date = moment(dataPOProcess[i].min_date_programming).format(
-    //       "DD/MM/YYYY hh:mm A"
-    //     );
-    //     trPC = `<tr>
-    //             <td>1</td>
-    //             <td>${dataPOProcess[i].process}</td>
-    //             <td>${dataPOProcess[i].machine}</td>
-    //             <td>${min_date}</td>
-    //             <td>${max_date}</td>
-    //             <td>$${parseFloat(dataPOProcess[i].cost_payroll).toLocaleString(
-    //               "es-CO",
-    //               {
-    //                 minimumFractionDigits: 0,
-    //                 maximumFractionDigits: 0,
-    //               }
-    //             )}</td>
-    //             <td>$${parseFloat(dataPOProcess[i].cost_machine).toLocaleString(
-    //               "es-CO",
-    //               {
-    //                 minimumFractionDigits: 0,
-    //                 maximumFractionDigits: 0,
-    //               }
-    //             )}</td>        
-    //         </tr>`;
-    //   } else {
-    //     if (dataPOProcess[i].min_date_programming)
-    //       min_date = moment(dataPOProcess[i].min_date_programming).format(
-    //         "DD/MM/YYYY"
-    //       );
-    //     else min_date = "";
-
-    //     trPC = `<tr> 
-    //             <td>1</td>
-    //             <td>${dataPOProcess[i].process}</td>
-    //             <td>${dataPOProcess[i].machine}</td>
-    //             <td>${min_date}</td>
-    //             <td>
-    //               ${
-    //                 dataPOProcess[i].id_programming == 0
-    //                   ? `<i class="bi bi-shield-fill-x" data-toggle="tooltip" style="font-size:25px; color:#ee2020;"></i>`
-    //                   : dataPOProcess[i].close_op == 0
-    //                   ? `<span class="badge badge-warning" style="font-size:100%">En proceso</span>`
-    //                   : `<span class="badge badge-success" style="font-size:100%">Finalizado</span>`
-    //               }
-    //             </td>
-    //         </tr>`;
-    //   }
-
-    //   body.insertAdjacentHTML("beforeend", trPC);
-    // }
+ 
     dataPOProcess.forEach((process) => {
       const { max_date_programming, min_date_programming, cost_payroll, cost_machine, process: processName, machine, id_programming, close_op } = process;
 

@@ -334,9 +334,17 @@ $(document).ready(function () {
         }
       } else {
         order.accumulated_quantity_order = quantity;
-        order.accumulated_quantity = (ciclesMachine.length === 1)
-          ? quantity
-          : order.original_quantity;
+        order.accumulated_quantity = quantity;
+        quantityMissing = quantity;
+        
+        if (quantity == 0) {
+          order.flag_tbl = 0;
+        }
+        
+        if (flag_type_program == 0)
+          order.accumulated_quantity = (ciclesMachine.length === 1)
+            ? quantity
+            : order.original_quantity;
       }
     }
 
@@ -627,8 +635,33 @@ $(document).ready(function () {
                 "Programa de producción eliminado correctamente"
               );
 
-            allTblData.splice(id, 1);
-            loadTblProgramming(allTblData, 1);
+            // Encontrar el objeto correspondiente en multiarray
+            let sim = allTblData[id].sim;
+            let id_process = allTblData[id].id_process;
+            let id_machine = allTblData[id].id_machine;
+            sim == 1 ? (key = 0) : (key = 1);
+
+            let targetArray = generalMultiArray[key][`sim_${sim}`];
+
+            if (targetArray) {
+              for (let i = 0; i < targetArray.length; i++) {
+                // Verificar si existe el process con el id_process
+                if (targetArray[i][`process-${id_process}`]) {
+                  // Verificar si dentro del process existe la machine con el id_machine
+                  if (
+                    targetArray[i][`process-${id_process}`][`machine-${id_machine}`]
+                  ) {
+                    // Agregar dataProgramming a la máquina correspondiente
+                    targetArray[i][`process-${id_process}`][
+                      `machine-${id_machine}`
+                    ].splice(id, 1);
+                    break; // Salir del bucle después de encontrar y actualizar el proceso
+                  }
+                }
+              }
+            }
+            allTblData.splice(id, 1); 
+            loadTblProgramming(allTblData, 1);            
           } else {
             let data = allTblData.find((item) => item.id_programming == id);
             let dataProgramming = new FormData();
@@ -640,6 +673,35 @@ $(document).ready(function () {
             for (let i = 0; i < allTblData.length; i++) {
               if (allTblData[i].id_programming == id) {
                 allTblData.splice(i, 1);
+              }
+            }
+
+            // Encontrar el objeto correspondiente en multiarray
+            let sim = data.sim;
+            let id_process = data.id_process;
+            let id_machine = data.id_machine;
+            sim == 1 ? (key = 0) : (key = 1);
+
+            let targetArray = generalMultiArray[key][`sim_${sim}`];
+
+            if (targetArray) {
+              for (let i = 0; i < targetArray.length; i++) {
+                // Verificar si existe el process con el id_process
+                if (targetArray[i][`process-${id_process}`]) {
+                  // Verificar si dentro del process existe la machine con el id_machine
+                  if (
+                    targetArray[i][`process-${id_process}`][`machine-${id_machine}`]
+                  ) {
+                    for (let i = 0; i < targetArray[i][`process-${id_process}`][`machine-${id_machine}`].length; i++) {
+                      if (targetArray[i][`process-${id_process}`][`machine-${id_machine}`][i].id_programming == id) {
+                        targetArray[i][`process-${id_process}`][
+                          `machine-${id_machine}`
+                        ].splice(i, 1);
+                        break;
+                      }
+                    }
+                  }
+                }
               }
             }
 
