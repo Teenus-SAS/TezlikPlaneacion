@@ -75,7 +75,6 @@ $(document).ready(function () {
       }));
       allProducts = products;
       allProgramming = programming;
-      // copyAllProgramming = allProgramming;
 
       if (!storProductsMaterials) {
         allProductsMaterials = [...productsMaterials, ...compositeProducts];
@@ -485,7 +484,6 @@ $(document).ready(function () {
   
     const calcMaxDate = async (min_date, last_hour, op) => {
       try {
-        // let id_order = parseFloat($('#order').val());
         let num_order = $("#order :selected").text().trim();
         let product = parseFloat($("#selectNameProduct").val());
         let machine = parseFloat($("#idMachine").val());

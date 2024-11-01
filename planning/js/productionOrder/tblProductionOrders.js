@@ -141,13 +141,23 @@ $(document).ready(function () {
           className: "uniqueClassName dt-head-center",
           width: "200px",
           render: function (data) {
-            if (flag_type_program == 0) {
+            
+            if (flag_type_program == 0) { 
               const format = "DD/MM/YYYY HH:mm A";
-              return `Inicio: ${moment(data.min_date_programming).format(format)}<br>Fin: ${moment(
-                data.max_date_programming
-              ).format(format)}`;
+              let min_date = moment(data.min_date_programming).format(format);
+              let max_date = moment(data.max_date_programming).format(format);
+              
+              !min_date || min_date == 'Invalid date' ? min_date = '' : min_date;
+              !max_date || max_date == "Invalid date" ? max_date = '' : max_date;
+              
+              return `Inicio: ${min_date}<br>Fin: ${max_date}`;
             } else {
-              return moment(data.min_date_programming).format("DD/MM/YYYY");
+              const format = "DD/MM/YYYY";
+              
+              let min_date = moment(data.min_date_programming).format(format); 
+              !min_date || min_date == 'Invalid date' ? min_date = '' : min_date;
+
+              return min_date;
             }
           },
         },

@@ -260,32 +260,31 @@ $(document).ready(function () {
             allProcess[i].status = 1;
         }
       }
-    
-      // Recorre allOrders en sentido inverso para evitar problemas con la actualización de índices
-      for (let i = allOrders.length - 1; i >= 0; i--) {
-        if (
-          allOrders[i].id_product == id_product &&
-          quantityMissing == 0 &&
-          process.length === 1
-        ) {
-          allOrders[i].flag_tbl = 0;
+    }
+    // Recorre allOrders en sentido inverso para evitar problemas con la actualización de índices
+    for (let i = allOrders.length - 1; i >= 0; i--) {
+      if (
+        allOrders[i].id_product == id_product &&
+        quantityMissing == 0 &&
+        process.length === 1
+      ) {
+        allOrders[i].flag_tbl = 0;
 
-          if (allProcess[0].status == 1) allOrders[i].flag_process = 0;
-          else allOrders[i].flag_process = 1;
-        }
-      }
-
-      // Recorre allOrdersProgramming en sentido inverso
-      for (let i = allOrdersProgramming.length - 1; i >= 0; i--) {
-        if (
-          allOrdersProgramming[i].id_product == id_product &&
-          quantityMissing == 0 &&
-          process.length === 1
-        ) {
-          allOrdersProgramming[i].flag_tbl = 0;
-        }
+        if (allProcess[0].status == 1) allOrders[i].flag_process = 0;
+        else allOrders[i].flag_process = 1;
       }
     }
+
+    // Recorre allOrdersProgramming en sentido inverso
+    for (let i = allOrdersProgramming.length - 1; i >= 0; i--) {
+      if (
+        allOrdersProgramming[i].id_product == id_product &&
+        quantityMissing == 0 &&
+        process.length === 1
+      ) {
+        allOrdersProgramming[i].flag_tbl = 0;
+      }
+    }    
 
     // if (flag_type_program == 1) {
     //   if (quantityFTM <= 0) {
@@ -328,11 +327,11 @@ $(document).ready(function () {
 
           flag_type_program == 0
             ?
-              order.accumulated_quantity = (ciclesMachine.length === 1)
-                ? Math.max(order.accumulated_quantity - quantityProgramming, 0)
-                : order.original_quantity
+            order.accumulated_quantity = (ciclesMachine.length === 1)
+              ? Math.max(order.accumulated_quantity - quantityProgramming, 0)
+              : order.original_quantity
             :
-              order.accumulated_quantity = Math.max(order.accumulated_quantity - quantityProgramming, 0);
+            order.accumulated_quantity = Math.max(order.accumulated_quantity - quantityProgramming, 0);
           
           order.quantity_programming = Math.max(
             order.accumulated_quantity - quantityProgramming, 0

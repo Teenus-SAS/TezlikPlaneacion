@@ -217,9 +217,13 @@ $(document).ready(function () {
         ? moment(min_date_programming).format(flag_type_program === 0 ? "DD/MM/YYYY hh:mm A" : "DD/MM/YYYY")
         : "";
 
+      !minDate || minDate == "Invalid date" ? minDate = '' : minDate;
+      
       let maxDate = flag_type_program === 0
         ? moment(max_date_programming).format("DD/MM/YYYY hh:mm A")
         : "";
+      
+      !maxDate || maxDate == "Invalid date" ? maxDate = '' : maxDate;
 
       const payrollCost = parseFloat(cost_payroll).toLocaleString("es-CO", {
         minimumFractionDigits: 0,
@@ -244,11 +248,12 @@ $(document).ready(function () {
           <td>${processName}</td>
           <td>${machine}</td>
           <td>${minDate}</td>
-          ${flag_type_program === 0
-              ? `<td>${maxDate}</td>
-              <td>$${payrollCost}</td>
-              <td>$${machineCost}</td>`
-              : `<td>${statusBadge}</td>`}
+            ${flag_type_program == 0 ?
+          `<td>${maxDate}</td>` : ''}
+          <td>$${payrollCost}</td>
+          <td>$${machineCost}</td>
+          ${flag_type_program == 1 ?
+          `<td>${statusBadge}</td>` : ''} 
         </tr>
       `;
 
@@ -282,13 +287,6 @@ $(document).ready(function () {
       },
       callback: function (result) {
         if (result) {
-          // let date = $("#dateOPMP").val();
-
-          // if (!date) {
-          //     toastr.error("Ingrese los campos");
-          //     return false;
-          // }
-
           let store = allStore.filter(
             (item) =>
               item.id_programming == id_programming &&

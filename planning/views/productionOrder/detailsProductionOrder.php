@@ -341,9 +341,10 @@ if (sizeof($_SESSION) == 0)
 																<th>Fecha Inicio</th>
 																<?php if ($_SESSION['flag_type_program'] == 0) { ?>
 																	<th>Fecha Final</th>
-																	<th>Costo Nomina</th>
-																	<th>Costo Maquina</th>
-																<?php } else { ?>
+																<?php } ?>
+																<th>Costo Nomina</th>
+																<th>Costo Maquina</th>
+																<?php if ($_SESSION['flag_type_program'] == 1) { ?>
 																	<th></th>
 																<?php } ?>
 															</tr>

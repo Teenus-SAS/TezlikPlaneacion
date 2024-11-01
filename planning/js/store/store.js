@@ -107,12 +107,7 @@ $(document).ready(function () {
   // Entregar MP
 
   const itemsToRemove = ["idProgramming", "idMaterial", "stored", "pending", "delivered"];
-  itemsToRemove.forEach((item) => sessionStorage.removeItem(item));
-
-  /*   sessionStorage.removeItem("idMaterial");
-  sessionStorage.removeItem("stored");
-  sessionStorage.removeItem("pending");
-  sessionStorage.removeItem("delivered"); */
+  itemsToRemove.forEach((item) => sessionStorage.removeItem(item)); 
 
   $(".cardAddDelivery").hide();
 
@@ -162,12 +157,7 @@ $(document).ready(function () {
           if (!store || store <= 0) {
             toastr.error("Ingrese todos los campos");
             return false;
-          }
-
-          // if (store > delivery_pending) {
-          //     toastr.error('Cantidad a entregar mayor');
-          //     return false;
-          // }
+          } 
 
           store <= reserved ? (pending = reserved - store) : (pending = 0);
 
