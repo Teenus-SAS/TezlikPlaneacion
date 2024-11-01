@@ -287,26 +287,26 @@ $(document).ready(function () {
       }
     }
 
-    if (flag_type_program == 1) {
-      if (quantityFTM <= 0) {
-        for (let i = 0; i < allOrders.length; i++) {
-          if (allOrders[i].id_order == order.id_order) {
-            allOrders[i].quantity_programming = 0;
-            allOrders[i].accumulated_quantity_order = 0;
-            allOrders[i].accumulated_quantity = 0;
-            allOrders[i].flag_tbl = 0;
-          }          
-        }
-        for (let i = 0; i < allOrdersProgramming.length; i++) {
-          if (allOrdersProgramming[i].id_order == order.id_order) {
-            allOrdersProgramming[i].quantity_programming = 0;
-            allOrdersProgramming[i].accumulated_quantity_order = 0;
-            allOrdersProgramming[i].accumulated_quantity = 0;
-            allOrdersProgramming[i].flag_tbl = 0;
-          }          
-        }
-      }
-    }
+    // if (flag_type_program == 1) {
+    //   if (quantityFTM <= 0) {
+    //     for (let i = 0; i < allOrders.length; i++) {
+    //       if (allOrders[i].id_order == order.id_order) {
+    //         allOrders[i].quantity_programming = 0;
+    //         allOrders[i].accumulated_quantity_order = 0;
+    //         allOrders[i].accumulated_quantity = 0;
+    //         allOrders[i].flag_tbl = 0;
+    //       }          
+    //     }
+    //     for (let i = 0; i < allOrdersProgramming.length; i++) {
+    //       if (allOrdersProgramming[i].id_order == order.id_order) {
+    //         allOrdersProgramming[i].quantity_programming = 0;
+    //         allOrdersProgramming[i].accumulated_quantity_order = 0;
+    //         allOrdersProgramming[i].accumulated_quantity = 0;
+    //         allOrdersProgramming[i].flag_tbl = 0;
+    //       }          
+    //     }
+    //   }
+    // }
 
     // Función para actualizar las órdenes
     function updateOrder(order, quantityProgramming, ciclesMachine) {
@@ -325,9 +325,15 @@ $(document).ready(function () {
           order.accumulated_quantity_order = Math.max(
             order.accumulated_quantity - quantityProgramming, 0
           );
-          order.accumulated_quantity = (ciclesMachine.length === 1)
-            ? Math.max(order.accumulated_quantity - quantityProgramming, 0)
-            : order.original_quantity;
+
+          flag_type_program == 0
+            ?
+              order.accumulated_quantity = (ciclesMachine.length === 1)
+                ? Math.max(order.accumulated_quantity - quantityProgramming, 0)
+                : order.original_quantity
+            :
+              order.accumulated_quantity = Math.max(order.accumulated_quantity - quantityProgramming, 0);
+          
           order.quantity_programming = Math.max(
             order.accumulated_quantity - quantityProgramming, 0
           );
@@ -389,31 +395,31 @@ $(document).ready(function () {
     }
 
     // Resetear valores si type_program es 1
-    if (flag_type_program == 1 && quantityFTM <= 0) {
-      const resetOrder = (order) => {
-        order.quantity_programming = 0;
-        order.accumulated_quantity_order = 0;
-        order.accumulated_quantity = 0;
-        order.flag_tbl = 0;
-      };
+    // if (flag_type_program == 1 && quantityFTM <= 0) {
+    //   const resetOrder = (order) => {
+    //     order.quantity_programming = 0;
+    //     order.accumulated_quantity_order = 0;
+    //     order.accumulated_quantity = 0;
+    //     order.flag_tbl = 0;
+    //   };
 
-      allOrders.forEach(order => {
-        if (order.id_order == id_order) {
-          resetOrder(order);
-        }
-      });
+    //   allOrders.forEach(order => {
+    //     if (order.id_order == id_order) {
+    //       resetOrder(order);
+    //     }
+    //   });
 
-      allOrdersProgramming.forEach(order => {
-        if (order.id_order == id_order) {
-          resetOrder(order);
-        }
-      });
-    }
+    //   allOrdersProgramming.forEach(order => {
+    //     if (order.id_order == id_order) {
+    //       resetOrder(order);
+    //     }
+    //   });
+    // }
     
     let allTblData = flattenData(generalMultiArray);
     let sim = $("#simulationType").val();
 
-    quantityMissing < 0 || quantityFTM <= 0 ? (quantityMissing = 0) : quantityMissing;
+    quantityMissing < 0 ? (quantityMissing = 0) : quantityMissing;
 
     dataProgramming["accumulated_quantity"] = quantityMissing;
     dataProgramming["accumulated_quantity_order"] = quantityMissing;

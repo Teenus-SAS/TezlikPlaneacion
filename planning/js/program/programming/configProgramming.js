@@ -57,6 +57,7 @@ $(document).ready(function () {
         !storProductsMaterials ? searchData("/api/allProductsMaterials") : [],
         !storProductsMaterials ? searchData("/api/allCompositeProducts") : [],
       ]);
+      
       let data = [];
 
       allOrdersProgramming = ordersProgramming.map((item) => ({

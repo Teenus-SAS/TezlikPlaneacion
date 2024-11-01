@@ -49,7 +49,10 @@ $app->get('/productionOrder', function (Request $request, Response $response, $a
 $app->get('/productionOrder/{id_order}/{id_product}', function (Request $request, Response $response, $args) use (
     $productionOrderDao,
 ) {
-    $programming = $productionOrderDao->findAllProductionOrderByTypePG($args['id_order'], $args['id_product']);
+    session_start();
+    $id_user = $_SESSION['idUser'];
+
+    $programming = $productionOrderDao->findAllProductionOrderByTypePG($id_user, $args['id_order'], $args['id_product']);
     $response->getBody()->write(json_encode($programming));
     return $response->withHeader('Content-Type', 'application/json');
 });
