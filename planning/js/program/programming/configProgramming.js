@@ -82,58 +82,94 @@ $(document).ready(function () {
         allProductsMaterials = JSON.parse(storProductsMaterials);
       }
 
+      // data = programming;
+
+      // if (
+      //   !sessionStorage.getItem("dataProgramming") ||
+      //   sessionStorage.getItem("dataProgramming").includes("[object Object]")
+      // ) {
+      //   ciclesMachines.sort((a, b) => a.id_process - b.id_process);
+
+      //   // Crear el mapa único de procesos y máquinas
+      //   let uniquePCMMap = new Map();
+
+      //   ciclesMachines.forEach((item) => {
+      //     // Verificar si el proceso ya existe en el mapa
+      //     if (!uniquePCMMap.has(item.id_process)) {
+      //       // Si no existe, crear el proceso con la primera máquina
+      //       uniquePCMMap.set(item.id_process, {
+      //         [`process-${item.id_process}`]: {
+      //           [`machine-${item.id_machine}`]: [],
+      //         },
+      //       });
+      //     } else {
+      //       // Si ya existe, agregar la nueva máquina al proceso existente
+      //       let processData = uniquePCMMap.get(item.id_process);
+      //       processData[`process-${item.id_process}`][
+      //         `machine-${item.id_machine}`
+      //       ] = [];
+      //       uniquePCMMap.set(item.id_process, processData); // Actualizar el mapa
+      //     }
+      //   });
+
+      //   // Convertir el mapa en un array
+      //   let uniqueArrayPCM = Array.from(uniquePCMMap.values());
+
+      //   // Crear una copia profunda del array para 'sim_2'
+      //   let uniqueArrayPCM2 = uniqueArrayPCM.map((item) =>
+      //     JSON.parse(JSON.stringify(item))
+      //   );
+
+      //   // Agregar los arrays al multiarray
+      //   generalMultiArray.push(
+      //     {
+      //       sim_1: uniqueArrayPCM,
+      //     },
+      //     {
+      //       sim_2: uniqueArrayPCM2,
+      //     }
+      //   );
+      // } else {
+      //   generalMultiArray = JSON.parse(
+      //     sessionStorage.getItem("dataProgramming")
+      //   );
+      // }
       data = programming;
 
       if (
         !sessionStorage.getItem("dataProgramming") ||
         sessionStorage.getItem("dataProgramming").includes("[object Object]")
       ) {
+        // Ordenar los ciclos de las máquinas por `id_process`
         ciclesMachines.sort((a, b) => a.id_process - b.id_process);
 
         // Crear el mapa único de procesos y máquinas
-        let uniquePCMMap = new Map();
+        const uniquePCMMap = new Map();
 
-        ciclesMachines.forEach((item) => {
-          // Verificar si el proceso ya existe en el mapa
-          if (!uniquePCMMap.has(item.id_process)) {
-            // Si no existe, crear el proceso con la primera máquina
-            uniquePCMMap.set(item.id_process, {
-              [`process-${item.id_process}`]: {
-                [`machine-${item.id_machine}`]: [],
-              },
-            });
+        ciclesMachines.forEach(({ id_process, id_machine }) => {
+          // Obtener o inicializar el proceso en el mapa
+          const processKey = `process-${id_process}`;
+          const machineKey = `machine-${id_machine}`;
+
+          if (!uniquePCMMap.has(id_process)) {
+            uniquePCMMap.set(id_process, { [processKey]: { [machineKey]: [] } });
           } else {
-            // Si ya existe, agregar la nueva máquina al proceso existente
-            let processData = uniquePCMMap.get(item.id_process);
-            processData[`process-${item.id_process}`][
-              `machine-${item.id_machine}`
-            ] = [];
-            uniquePCMMap.set(item.id_process, processData); // Actualizar el mapa
+            uniquePCMMap.get(id_process)[processKey][machineKey] = [];
           }
         });
 
-        // Convertir el mapa en un array
-        let uniqueArrayPCM = Array.from(uniquePCMMap.values());
+        // Convertir el mapa en un array y duplicarlo para sim_2
+        const uniqueArrayPCM = Array.from(uniquePCMMap.values());
+        const uniqueArrayPCM2 = JSON.parse(JSON.stringify(uniqueArrayPCM));
 
-        // Crear una copia profunda del array para 'sim_2'
-        let uniqueArrayPCM2 = uniqueArrayPCM.map((item) =>
-          JSON.parse(JSON.stringify(item))
-        );
+        // Agregar las simulaciones al array principal
+        generalMultiArray.push({ sim_1: uniqueArrayPCM }, { sim_2: uniqueArrayPCM2 });
 
-        // Agregar los arrays al multiarray
-        generalMultiArray.push(
-          {
-            sim_1: uniqueArrayPCM,
-          },
-          {
-            sim_2: uniqueArrayPCM2,
-          }
-        );
       } else {
-        generalMultiArray = JSON.parse(
-          sessionStorage.getItem("dataProgramming")
-        );
+        // Recuperar datos de sessionStorage si ya existen
+        generalMultiArray = JSON.parse(sessionStorage.getItem("dataProgramming"));
       }
+
 
       allTblData = flattenData(generalMultiArray);
 

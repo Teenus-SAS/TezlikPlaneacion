@@ -265,68 +265,43 @@ $(document).ready(function () {
       loadTblOPMaterial(id_programming);
     }
   };
-
+ 
   $(document).on("click", ".acceptMaterial", function () {
-    // Obtener el ID del elemento
-    // let date = new Date().toISOString().split("T")[0];
-
     const idMaterial = $(this).attr("id").split("-")[1];
 
     bootbox.confirm({
       title: "Aceptar Materia Prima!",
-      message: "¿Desea aceptar la cantidad recibida de este material?.",
+      message: "¿Desea aceptar la cantidad recibida de este material?",
       buttons: {
-        confirm: {
-          label: "Guardar",
-          className: "btn-success",
-        },
-        cancel: {
-          label: "Cancelar",
-          className: "btn-danger",
-        },
+        confirm: { label: "Guardar", className: "btn-success" },
+        cancel: { label: "Cancelar", className: "btn-danger" }
       },
-      callback: function (result) {
-        if (result) {
-          let store = allStore.filter(
-            (item) =>
-              item.id_programming == id_programming &&
-              item.id_material == idMaterial
-          );
+      callback: (result) => {
+        if (!result) return;
 
-          let recieve = 0;
+        const totalReceived = allStore
+          .filter(item => item.id_programming === id_programming && item.id_material === idMaterial)
+          .reduce((sum, item) => sum + parseFloat(item.delivery_store), 0);
 
-          store.forEach((item) => {
-            recieve += parseFloat(item.delivery_store);
-          });
+        const totalAccepted = allMaterialsAccept
+          .filter(item => item.id_material === idMaterial)
+          .reduce((sum, item) => sum + parseFloat(item.quantity), 0);
 
-          let materialsAccept = allMaterialsAccept.filter(
-            (item) => item.id_material == idMaterial
-          );
+        const form = new FormData();
+        form.append("idProgramming", id_programming);
+        form.append("idMaterial", idMaterial);
+        form.append("quantity", totalReceived - totalAccepted);
 
-          let accept = 0;
-          materialsAccept.forEach((item) => {
-            accept += parseFloat(item.quantity);
-          });
-
-          let form = new FormData();
-          form.append("idProgramming", id_programming);
-          form.append("idMaterial", idMaterial);
-          form.append("quantity", recieve - accept);
-          // form.append("date", date);
-
-          $.ajax({
-            type: "POST",
-            url: "/api/acceptMaterialReceive",
-            data: form,
-            contentType: false,
-            cache: false,
-            processData: false,
-            success: function (resp) {
-              messagePOD(resp);
-            },
-          });
-        }
-      },
+        $.ajax({
+          type: "POST",
+          url: "/api/acceptMaterialReceive",
+          data: form,
+          contentType: false,
+          cache: false,
+          processData: false,
+          success: messagePOD
+        });
+      }
     });
   });
 

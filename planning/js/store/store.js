@@ -130,6 +130,11 @@ $(document).ready(function () {
 
     let reserved = parseFloat(formatNumber(data.reserved1)); 
 
+    if (data.abbreviation == 'UND') {
+      quantity = Math.floor(quantity);
+      reserved = Math.floor(reserved);
+    }
+
     bootbox.confirm({
       title: `<div style="border-bottom: 1px solid #e3e3e3;">Entregar Materia Prima</div>`,
       message: `
@@ -216,6 +221,9 @@ $(document).ready(function () {
             maximumFractionDigits: 2,
           })}
           </td>
+          <td>
+            <a href="javascript:;" <i id="upd-${users[i].id_user_store}" class="bx bx-edit-alt updateDLVS" data-toggle='tooltip' title='Actualizar Entrega' style="font-size: 30px;"></i></a>
+          </td>
         </tr>`;
     }
 
@@ -234,6 +242,7 @@ $(document).ready(function () {
                         <th>Apellido</th>
                         <th>Email</th>
                         <th>Cantidad Entregada</th>
+                        <th>Acciones</th>
                       </tr>
                     </thead>
                     <tbody>
@@ -251,12 +260,7 @@ $(document).ready(function () {
 
   const message = (data, op) => {
     const { success, error, info, message } = data;
-    if (success) {
-      /* sessionStorage.removeItem("idMaterial");
-      sessionStorage.removeItem("stored");
-      sessionStorage.removeItem("pending");
-      sessionStorage.removeItem("delivered"); */
-
+    if (success) { 
       const itemsToRemove = ["idMaterial", "stored", "pending", "delivered"];
       itemsToRemove.forEach((item) => sessionStorage.removeItem(item));
 
