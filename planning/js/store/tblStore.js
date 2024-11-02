@@ -137,13 +137,21 @@ $(document).ready(function () {
   // Función para construir las acciones para entregar material
   const buildDeliverAction = (data) => {
     if (data.id_user_delivered == 0) {
-      return `<button class="btn btn-info deliver" id="delivery">Entregar MP</button>`;      
+      return `<button class="btn btn-info deliver" id="delivery">Entregar MP</button>`;
     }
 
     let check_quantity = parseFloat(data.reserved) - parseFloat(data.delivery_pending);
 
     if (check_quantity > 0 && data.delivery_pending > 0) {
-      return `<button class="btn btn-info deliver" id="delivery">Entregar MP</button>`;
+      if (data.id_materials_component_user != 0)
+        return `<button class="btn btn-info deliver" id="delivery">Entregar MP</button>`;
+      else
+        return `
+          <button class="btn btn-info deliver" id="delivery">Entregar MP</button>
+          <a href="javascript:;">
+            <i id="${data.id_materials_component_user}" class="mdi mdi-playlist-check seeUPDTDeliverOC" data-toggle="tooltip" title="Ver Usuarios" style="font-size: 30px;color:black"></i>
+          </a>
+        `;
     }
 
     let fechaHora = new Date(data.delivery_date);
@@ -157,10 +165,19 @@ $(document).ready(function () {
       hour12: true,
     })}`;
 
-    return `Entregado: ${data.firstname_delivered} ${data.lastname_delivered}<br>${fechaHoraFormateada}
-    <a href="javascript:;">
-      <i id="${data.id_material}" class="mdi mdi-playlist-check seeDeliverOC" data-toggle="tooltip" title="Ver Usuarios" style="font-size: 30px;color:black"></i>
-    </a>`;
+
+    if (data.id_materials_component_user != 0)
+      return `Entregado: ${data.firstname_delivered} ${data.lastname_delivered}<br>${fechaHoraFormateada}
+        <a href="javascript:;">
+          <i id="${data.id_material}" class="mdi mdi-playlist-check seeDeliverOC" data-toggle="tooltip" title="Ver Usuarios" style="font-size: 30px;color:black"></i>
+        </a>`;
+    else
+      return `
+          Entregado: ${data.firstname_delivered} ${data.lastname_delivered}<br>${fechaHoraFormateada}
+          <a href="javascript:;">
+            <i id="${data.id_materials_component_user}" class="mdi mdi-playlist-check seeUPDTDeliverOC" data-toggle="tooltip" title="Ver Usuarios" style="font-size: 30px;color:black"></i>
+          </a>
+        `;
   };
 
   // Función para cargar la tabla de órdenes de almacén

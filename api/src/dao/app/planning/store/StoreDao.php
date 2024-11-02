@@ -35,6 +35,7 @@ class StoreDao
                                                 IFNULL(last_user.id_user_delivered, 0) AS id_user_delivered,
                                                 IFNULL(last_user.firstname_delivered, '') AS firstname_delivered,
                                                 IFNULL(last_user.lastname_delivered, '') AS lastname_delivered,
+                                                IFNULL(mcu.id_materials_component_user, 0) AS id_materials_component_user,
                                             -- Nueva subconsulta para evitar duplicados en la suma de reserved1
                                                 IFNULL(IF(
                                                     -- Subconsulta para obtener el valor de delivery_pending
@@ -84,28 +85,29 @@ class StoreDao
                                         INNER JOIN materials m ON m.id_material = pm.id_material
                                         INNER JOIN inv_materials mi ON mi.id_material = pm.id_material
                                         INNER JOIN admin_units u ON u.id_unit = m.unit
+                                        LEFT JOIN materials_components_users mcu ON mcu.id_programming = pg.id_programming
                                         -- Subconsulta para obtener el último usuario de entrega
-                                        LEFT JOIN (
-                                            SELECT 
-                                                cur.id_user_store,
-                                                cur.id_programming,
-                                                cur.id_material, 
-                                                curd.id_user AS id_user_delivered,
-                                                curd.firstname AS firstname_delivered,
-                                                curd.lastname AS lastname_delivered
-                                            FROM store_users cur
-                                            INNER JOIN users curd ON curd.id_user = cur.id_user_delivered 
-                                            WHERE cur.id_material = (
-                                                    SELECT MAX(cur_inner.id_material)
-                                                    FROM store_users cur_inner
-                                                    WHERE cur_inner.id_material = cur.id_material
-                                            ) 
-                                            AND cur.id_programming = (
-                                                    SELECT MAX(cur_inner.id_programming)
-                                                    FROM store_users cur_inner
-                                                    WHERE cur_inner.id_programming = cur.id_programming
-                                            )
-                                        ) AS last_user ON last_user.id_material = m.id_material AND last_user.id_programming = pg.id_programming
+                                            LEFT JOIN (
+                                                SELECT 
+                                                    cur.id_user_store,
+                                                    cur.id_programming,
+                                                    cur.id_material, 
+                                                    curd.id_user AS id_user_delivered,
+                                                    curd.firstname AS firstname_delivered,
+                                                    curd.lastname AS lastname_delivered
+                                                FROM store_users cur
+                                                INNER JOIN users curd ON curd.id_user = cur.id_user_delivered 
+                                                WHERE cur.id_material = (
+                                                        SELECT MAX(cur_inner.id_material)
+                                                        FROM store_users cur_inner
+                                                        WHERE cur_inner.id_material = cur.id_material
+                                                ) 
+                                                AND cur.id_programming = (
+                                                        SELECT MAX(cur_inner.id_programming)
+                                                        FROM store_users cur_inner
+                                                        WHERE cur_inner.id_programming = cur.id_programming
+                                                )
+                                            ) AS last_user ON last_user.id_material = m.id_material AND last_user.id_programming = pg.id_programming
                                         WHERE pg.id_company = :id_company AND pg.status = 1
                                         GROUP BY
                                             pg.id_programming,

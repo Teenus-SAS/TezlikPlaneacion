@@ -435,7 +435,6 @@ $app->post('/addOrder', function (Request $request, Response $response, $args) u
                         if (!$findOrder) {
                             $cicle = true;
                             $resolution = $ordersDao->insertOrderByCompany($data, $id_company);
-                            // $generalProductsDao->updateAccumulatedQuantity($products[$i]['id_child_product'], abs($products[$i]['available']), 2);
 
                             if (isset($resolution['info'])) break;
                             $lastOrder = $lastDataDao->findLastInsertedOrder($id_company);
@@ -696,30 +695,30 @@ $app->post('/addOrder', function (Request $request, Response $response, $args) u
             }
         }
 
-        $arrayBD = [];
-        for ($i = 0; $i < sizeof($orders); $i++) {
-            array_push($arrayBD, $orders[$i]['concate']);
-        }
+        // $arrayBD = [];
+        // for ($i = 0; $i < sizeof($orders); $i++) {
+        //     array_push($arrayBD, $orders[$i]['concate']);
+        // }
 
-        $tam_arrayBD = sizeof($arrayBD);
-        $tam_result = sizeof($data);
+        // $tam_arrayBD = sizeof($arrayBD);
+        // $tam_result = sizeof($data);
 
-        if ($tam_arrayBD > $tam_result)
-            $array_diff = array_diff($arrayBD, $data);
-        else
-            $array_diff = array_diff($data, $arrayBD);
+        // if ($tam_arrayBD > $tam_result)
+        //     $array_diff = array_diff($arrayBD, $data);
+        // else
+        //     $array_diff = array_diff($data, $arrayBD);
 
-        //reindezar array
-        $array_diff = array_values($array_diff);
+        // //reindezar array
+        // $array_diff = array_values($array_diff);
 
-        if ($array_diff)
-            for ($i = 0; $i < sizeof($array_diff); $i++) {
-                $posicion =  strrpos($array_diff[$i], '-');
-                $id_product = substr($array_diff[$i], $posicion + 1);
-                $order = substr($array_diff[$i], 0, $posicion);
-                $generalOrdersDao->changeStatusOrder($order, $id_product);
-            }
-        // else if (sizeof($array_diff) == 0)
+        // if ($array_diff)
+        //     for ($i = 0; $i < sizeof($array_diff); $i++) {
+        //         $posicion =  strrpos($array_diff[$i], '-');
+        //         $id_product = substr($array_diff[$i], $posicion + 1);
+        //         $order = substr($array_diff[$i], 0, $posicion);
+        //         $generalOrdersDao->changeStatusOrder($order, $id_product);
+        //     }
+        // // else if (sizeof($array_diff) == 0)
     }
 
     if (isset($resp['success'])) {
@@ -757,7 +756,6 @@ $app->post('/updateOrder', function (Request $request, Response $response, $args
     session_start();
     $id_company = $_SESSION['id_company'];
     $dataOrder = $request->getParsedBody();
-
 
     $dataOrder = $convertDataDao->changeDateOrder($dataOrder);
 
@@ -826,7 +824,6 @@ $app->post('/updateOrder', function (Request $request, Response $response, $args
                         if (!$findOrder) {
                             $cicle = true;
                             $resolution = $ordersDao->insertOrderByCompany($data, $id_company);
-                            // $generalProductsDao->updateAccumulatedQuantity($products[$i]['id_child_product'], abs($products[$i]['available']), 2);
 
                             if (isset($resolution['info'])) break;
                             $lastOrder = $lastDataDao->findLastInsertedOrder($id_company);
@@ -1063,7 +1060,6 @@ $app->post('/updateOrder', function (Request $request, Response $response, $args
                         $accumulated_quantity = $orders[$i]['accumulated_quantity'] - $orders[$i]['original_quantity'];
                     } else {
                         $accumulated_quantity = $orders[$i]['accumulated_quantity'];
-                        // $generalOrdersDao->changeStatus($orders[$i]['id_order'], 'Alistamiento');
                     }
 
                     if ($orders[$i]['status'] != 'DESPACHO') {

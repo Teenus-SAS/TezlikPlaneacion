@@ -37,8 +37,9 @@ $app->get('/productionOrderPartial', function (Request $request, Response $respo
 $app->get('/productionOrderPartial/{id_programming}', function (Request $request, Response $response, $args) use ($productionOrderPartialDao) {
     session_start();
     $id_company = $_SESSION['id_company'];
+    $id_user = $_SESSION['idUser'];
 
-    $productionOrder = $productionOrderPartialDao->findAllOPPartialById($args['id_programming'], $id_company);
+    $productionOrder = $productionOrderPartialDao->findAllOPPartialById($args['id_programming'], $id_company, $id_user);
 
     $response->getBody()->write(json_encode($productionOrder));
     return $response->withHeader('Content-Type', 'application/json');

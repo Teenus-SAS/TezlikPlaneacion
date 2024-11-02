@@ -224,3 +224,18 @@ $app->get('/usersStore/{id_programming}/{id_material}', function (Request $reque
     $response->getBody()->write(json_encode($users));
     return $response->withHeader('Content-Type', 'application/json');
 });
+
+$app->post('/saveDLVS', function (Request $request, Response $response, $args) use ($usersStoreDao) {
+    $dataStore = $request->getParsedBody();
+
+    $store = $usersStoreDao->updateUserDeliveredMaterial($dataStore);
+
+    if ($store == null)
+        $resp = array('success' => true, 'message' => 'Materia prima modificada correctamente');
+    else if (isset($store['info']))
+        $resp = array('info' => true, 'message' => $store['message']);
+    else
+        $resp = array('error' => true, 'message' => 'Ocurrio un error al guardar la información. Intente nuevamente');
+    $response->getBody()->write(json_encode($resp));
+    return $response->withStatus(200)->withHeader('Content-Type', 'application/json');
+});

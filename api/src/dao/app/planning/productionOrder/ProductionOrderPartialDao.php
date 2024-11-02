@@ -71,7 +71,7 @@ class ProductionOrderPartialDao
         return $programming;
     }
 
-    public function findAllOPPartialById($id_programming, $id_company)
+    public function findAllOPPartialById($id_programming, $id_company, $id_user)
     {
         $connection = Connection::getInstance()->getConnection();
 
@@ -103,7 +103,8 @@ class ProductionOrderPartialDao
                                         INNER JOIN programming pg ON pg.id_programming = po.id_programming
                                         INNER JOIN machines m ON m.id_machine = pg.id_machine
                                         INNER JOIN machine_cicles pcm ON pcm.id_product = pg.id_product AND pcm.id_machine = pg.id_machine
-                                        LEFT JOIN payroll py ON py.id_process = pcm.id_process AND py.id_machine = pg.id_machine
+                                        INNER JOIN users ul ON ul.id_user = :id_user
+                                        LEFT JOIN payroll py ON py.id_process = pcm.id_process AND py.id_machine = pg.id_machine AND py.firstname = UPPER(ul.firstname) AND py.lastname = UPPER(ul.lastname)
                                         INNER JOIN products p ON p.id_product = pg.id_product
                                         LEFT JOIN inv_products pi ON pi.id_product = pg.id_product
                                         -- Subconsulta para obtener el último usuario de entrega
@@ -124,7 +125,8 @@ class ProductionOrderPartialDao
                                         GROUP BY pg.id_programming, po.id_part_deliv");
         $stmt->execute([
             'id_programming' => $id_programming,
-            'id_company' => $id_company
+            'id_company' => $id_company,
+            'id_user' => $id_user,
         ]);
         $this->logger->info(__FUNCTION__, array('query' => $stmt->queryString, 'errors' => $stmt->errorInfo()));
 

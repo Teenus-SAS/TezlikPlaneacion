@@ -221,11 +221,68 @@ $(document).ready(function () {
             maximumFractionDigits: 2,
           })}
           </td>
+          </tr>`;
+        }
+          // <td>
+          //   <a href="javascript:;" <i id="upd-${users[i].id_user_store}" class="bx bx-edit-alt updateDLVS" data-toggle='tooltip' title='Actualizar Entrega' style="font-size: 30px;"></i></a>
+          // </td>
+
+    // Mostramos el mensaje con Bootbox
+    bootbox.alert({
+      title: 'Usuarios',
+      message: `
+            <div class="container">
+              <div class="col-12">
+                <div class="table-responsive">
+                  <table class="fixed-table-loading table table-hover">
+                    <thead>
+                      <tr>
+                        <th>No</th>
+                        <th>Nombre</th>
+                        <th>Apellido</th>
+                        <th>Email</th>
+                        <th>Cantidad Entregada</th>  
+                      </tr>
+                    </thead>
+                    <tbody>
+                      ${rows}
+                    </tbody>
+                  </table>
+                </div>
+              </div> 
+            </div>`,
+      size: 'large',
+      backdrop: true
+    });
+    return false;
+  });
+
+  $(document).on('click', '.seeUPDTDeliverOC', async function (e) {
+    e.preventDefault();
+
+    const row = $(this).closest("tr")[0];
+    let data = tblDeliverOP.fnGetData(row);
+
+    // sessionStorage.setItem('pending', data.pending)
+
+    let users = await searchData(`/api/usersStore/${data.id_programming}/${data.id_material}`);
+    let rows = '';
+
+    for (let i = 0; i < users.length; i++) {
+      rows +=
+        `<tr>
+          <td>${i + 1}</td>
+          <td>${users[i].firstname}</td>
+          <td>${users[i].lastname}</td>
+          <td>${users[i].email}</td>
+          <td>
+						<input type="number" class="form-control text-center" id="delvStore-${users[i].id_user_store}" value="${users[i].delivery_store}">
+          </td>
           <td>
             <a href="javascript:;" <i id="upd-${users[i].id_user_store}" class="bx bx-edit-alt updateDLVS" data-toggle='tooltip' title='Actualizar Entrega' style="font-size: 30px;"></i></a>
           </td>
-        </tr>`;
-    }
+          </tr>`;
+        }
 
     // Mostramos el mensaje con Bootbox
     bootbox.alert({
@@ -256,6 +313,38 @@ $(document).ready(function () {
       backdrop: true
     });
     return false;
+  });
+
+  $(document).on('click', '.updateDLVS', function () { 
+    let id_user_store = $(this).attr("id").split("-")[1];
+
+    let value = parseFloat($(`#delvStore-${id_user_store}`).val());
+
+    if (isNaN(value) || value <= 0) {
+      toastr.error('Ingrese todos los campos');
+      return false;
+    }
+
+    let data = {};
+
+    // let quantity = parseFloat(formatNumber(data.quantity));
+
+    // let reserved = parseFloat(formatNumber(data.reserved1)); 
+
+    // if (data.abbreviation == 'UND') {
+    //   quantity = Math.floor(quantity);
+    //   reserved = Math.floor(reserved);
+    // }
+    
+    data['idUserStore'] = id_user_store;
+    data['delivered'] = value;
+    // data['pending'] = value;
+
+    $.post('/api/saveDLVS', data,
+      function (resp) {
+        message(resp);
+      }, 
+    );
   });
 
   const message = (data, op) => {

@@ -214,12 +214,12 @@ $(document).ready(function () {
       const { max_date_programming, min_date_programming, cost_payroll, cost_machine, process: processName, machine, id_programming, close_op } = process;
 
       let minDate = min_date_programming
-        ? moment(min_date_programming).format(flag_type_program === 0 ? "DD/MM/YYYY hh:mm A" : "DD/MM/YYYY")
+        ? moment(min_date_programming).format(flag_type_program == 0 ? "DD/MM/YYYY hh:mm A" : "DD/MM/YYYY")
         : "";
 
       !minDate || minDate == "Invalid date" ? minDate = '' : minDate;
       
-      let maxDate = flag_type_program === 0
+      let maxDate = flag_type_program == 0
         ? moment(max_date_programming).format("DD/MM/YYYY hh:mm A")
         : "";
       
@@ -299,7 +299,9 @@ $(document).ready(function () {
           contentType: false,
           cache: false,
           processData: false,
-          success: messagePOD
+          success: function (resp) {
+            messagePOD(resp)
+          }
         });
       }
     });

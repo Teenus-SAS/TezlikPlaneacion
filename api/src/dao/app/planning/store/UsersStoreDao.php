@@ -79,4 +79,26 @@ class UsersStoreDao
             return $error;
         }
     }
+
+    public function updateUserDeliveredMaterial(
+        $dataStore
+    ) {
+        $connection = Connection::getInstance()->getConnection();
+
+        try {
+            // , delivery_pending = :delivery_pending
+            $stmt = $connection->prepare("UPDATE store_users SET delivery_store = :delivery_store
+                                          WHERE id_user_store = :id_user_store");
+            $stmt->execute([
+                'delivery_store' => $dataStore['delivered'],
+                // 'delivery_pending' => $dataStore['pending'],
+                'id_user_store' => $dataStore['idUserStore'],
+            ]);
+            $this->logger->info(__FUNCTION__, array('query' => $stmt->queryString, 'errors' => $stmt->errorInfo()));
+        } catch (\Exception $e) {
+            $message = $e->getMessage();
+            $error = array('info' => true, 'message' => $message);
+            return $error;
+        }
+    }
 }

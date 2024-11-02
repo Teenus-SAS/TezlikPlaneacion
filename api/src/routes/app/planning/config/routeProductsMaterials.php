@@ -170,16 +170,6 @@ $app->post('/productsMaterialsDataValidation', function (Request $request, Respo
                     array_push($debugg, array('error' => true, 'message' => "Fila-$row: Materia prima no Existe"));
                 } else $productMaterials[$i]['material'] = $findMaterial['id_material'];
 
-                // if ($_SESSION['flag_products_measure'] == '1') {
-                //     // Consultar tipo material
-                //     $materialType = $materialsTypeDao->findMaterialsType($productMaterials[$i], $id_company);
-
-                //     if (!$materialType) {
-                //         $row = $i + 2;
-                //         array_push($debugg, array('error' => true, 'message' => "Tipo de material no existe en la base de datos. Fila: $row"));
-                //     }
-                // }
-
                 if (sizeof($debugg) == 0) {
                     $findProductsMaterials = $generalProductsMaterialsDao->findProductMaterial($productMaterials[$i], $id_company);
                     if (!$findProductsMaterials) $insert = $insert + 1;
@@ -349,24 +339,7 @@ $app->post('/addProductsMaterials', function (Request $request, Response $respon
                     $weight = 0;
                     $dataProduct['window'] > 0 ? $window = floatval($dataProduct['window']) : $window = 1;
 
-                    // if ($productMaterials[$i]['materialType'] == 'PAPEL') {
                     $weight = ((floatval($dataMaterial['grammage']) * floatval($dataProduct['length']) * floatval($dataProduct['total_width'])) / 10000000) / $window;
-                    // } else {
-                    //     $quantity = floatval($productMaterials[$i]['quantity']);
-                    //     $quantityFTM = 0;
-
-                    //     $arr = [];
-                    //     $arr['idProduct'] = $productMaterials[$i]['idProduct'];
-
-                    //     $materialType = $materialsTypeDao->findMaterialsType($productMaterials[$i], $id_company);
-                    //     $arr['type'] = $materialType['id_material_type'];
-
-                    //     $dataFTM = $generalProductsMaterialsDao->findProductsMaterialsByCompany($arr, $id_company);
-
-                    //     if ($dataFTM) $quantityFTM = $dataFTM['quantity'];
-
-                    //     $weight = $quantity * $quantityFTM;
-                    // }
 
                     $productMaterials[$i]['quantity'] = $weight;
                 }
@@ -423,20 +396,6 @@ $app->post('/addProductsMaterials', function (Request $request, Response $respon
             }
 
             if (isset($resolution['info'])) break;
-
-            // $compositeProducts = $compositeProductsDao->findAllCompositeProductsByIdProduct($productMaterials[$i]['idProduct'], $id_company);
-
-            // foreach ($compositeProducts as $k) {
-            //     $product = $minimumStockDao->calcStockByProduct($k['id_child_product']);
-
-            //     $arr = $minimumStockDao->calcStockByComposite($k['id_child_product']);
-
-            //     if (isset($arr['stock']) && isset($product['stock'])) {
-            //         $stock = $product['stock'] + $arr['stock'];
-
-            //         $resolution = $generalProductsDao->updateStockByProduct($k['id_child_product'], $stock);
-            //     }
-            // }
         }
 
         if ($resolution == null)
@@ -448,73 +407,6 @@ $app->post('/addProductsMaterials', function (Request $request, Response $respon
             $resp = array('error' => true, 'message' => 'Ocurrio un error mientras importada la información. Intente nuevamente');
     }
 
-    // $products = $productsDao->updateAccumulatedQuantityGeneral($id_company);
-
-    // // Cambiar estado pedidos 
-    // $allOrders = $generalOrdersDao->findAllOrdersWithMaterialsByCompany($id_company);
-
-    // foreach ($allOrders as $arr) {
-    //     $status = true;
-    //     if ($arr['original_quantity'] > $arr['accumulated_quantity']) {
-    //         if ($arr['status_ds'] == 0) {
-    //             $generalOrdersDao->changeStatus($arr['id_order'], 5);
-    //             $status = false;
-    //             // break;
-    //         } else if ($arr['quantity_material'] <= 0) {
-    //             $generalOrdersDao->changeStatus($arr['id_order'], 6);
-    //             $status = false;
-    //             // break;
-    //         }
-    //     }
-
-    //     foreach ($allOrders as &$order) {
-    //         if ((!isset($arr['status_mp']) || $arr['status_mp'] === false) && $order['id_order'] == $arr['id_order']) {
-    //             // if ($order['id_order'] == $arr['id_order']) {
-    //             $order['status_mp'] = $status;
-    //         }
-    //     }
-    //     unset($order);
-
-    //     if ($status == true && $arr['programming'] != 0) {
-    //         $generalOrdersDao->changeStatus($arr['id_order'], 4);
-
-    //         $k = $generalMaterialsDao->findReservedMaterial($arr['id_material']);
-    //         !isset($k['reserved']) ? $k['reserved'] = 0 : $k;
-    //         $generalMaterialsDao->updateReservedMaterial($arr['id_material'], $k['reserved']);
-    //     }
-    // }
-
-    // $orders = $filterDataDao->filterDuplicateArray($allOrders, 'id_order');
-
-    // for ($i = 0; $i < sizeof($orders); $i++) {
-    //     if ($orders[$i]['status_mp'] == true) {
-    //         if ($orders[$i]['original_quantity'] <= $orders[$i]['accumulated_quantity']) {
-    //             $generalOrdersDao->changeStatus(
-    //                 $orders[$i]['id_order'],
-    //                 2
-    //             );
-    //             $accumulated_quantity = $orders[$i]['accumulated_quantity'] - $orders[$i]['original_quantity'];
-    //         } else {
-    //             $accumulated_quantity = $orders[$i]['accumulated_quantity'];
-    //         }
-
-    //         if ($orders[$i]['status'] != 2) {
-    //             $date = date('Y-m-d');
-
-    //             $generalOrdersDao->updateOfficeDate($orders[$i]['id_order'], $date);
-    //         }
-
-    //         $arr = $productsDao->findProductReserved($orders[$i]['id_product']);
-    //         !isset($arr['reserved']) ? $arr['reserved'] = 0 : $arr;
-    //         $productsDao->updateReservedByProduct($orders[$i]['id_product'], $arr['reserved']);
-
-    //         $arr = $generalMaterialsDao->findReservedMaterial($orders[$i]['id_product']);
-    //         !isset($arr['reserved']) ? $arr['reserved'] = 0 : $arr;
-    //         $generalMaterialsDao->updateReservedMaterial($orders[$i]['id_product'], $arr['reserved']);
-
-    //         $generalMaterialsDao->updateQuantityMaterial($orders[$i]['id_product'], $accumulated_quantity, 1);
-    //     }
-    // }
     if ($resolution == null) {
         $cicle = true;
 
@@ -576,7 +468,6 @@ $app->post('/addProductsMaterials', function (Request $request, Response $respon
                         if (!$findOrder) {
                             $cicle = true;
                             $resolution = $ordersDao->insertOrderByCompany($data, $id_company);
-                            // $generalProductsDao->updateAccumulatedQuantity($products[$i]['id_child_product'], abs($products[$i]['available']), 2);
 
                             if (isset($resolution['info'])) break;
                             $lastOrder = $lastDataDao->findLastInsertedOrder($id_company);
@@ -841,37 +732,6 @@ $app->post('/addProductsMaterials', function (Request $request, Response $respon
                     $generalMaterialsDao->updateReservedMaterial($arr['id_material'], $k['reserved']);
                 }
             }
-            // } else if ($orders[$i]['origin'] == 1) {
-            //     if ($orders[$i]['original_quantity'] > $orders[$i]['accumulated_quantity']) {
-            //         $resolution = $generalOrdersDao->changeStatus($orders[$i]['id_order'], 13);
-
-            //         $data = [];
-            //         $data['idProduct'] = $orders[$i]['id_product'];
-
-            //         $provider = $generalClientsDao->findInternalClient($id_company);
-
-            //         $id_provider = 0;
-
-            //         if (isset($provider['id_provider'])) $id_provider = $provider['id_provider'];
-
-            //         $data['idProvider'] = $id_provider;
-            //         $data['numOrder'] = $orders[$i]['num_order'];
-            //         $data['applicationDate'] = '';
-            //         $data['deliveryDate'] = '';
-            //         $data['requiredQuantity'] = $orders[$i]['original_quantity'];
-            //         $data['purchaseOrder'] = '';
-            //         $data['requestedQuantity'] = 0;
-
-            //         $requisition = $generalRequisitionsProductsDao->findRequisitionByApplicationDate($orders[$i]['id_product']);
-
-            //         if (!$requisition)
-            //             $generalRequisitionsProductsDao->insertRequisitionAutoByCompany($data, $id_company);
-            //         else {
-            //             $data['idRequisition'] = $requisition['id_requisition_product'];
-            //             $generalRequisitionsProductsDao->updateRequisitionAuto($data);
-            //         }
-            //     }
-            // }
 
             // Pedidos automaticos
             if ($orders[$i]['status'] == 'FABRICADO') {
@@ -950,22 +810,6 @@ $app->post('/updatePlanProductsMaterials', function (Request $request, Response 
                 if (isset($k['stock']))
                     $resolution = $generalMaterialsDao->updateStockMaterial($arr['id_material'], $k['stock']);
             }
-
-            // if ($resolution == null) {
-            //     $compositeProducts = $compositeProductsDao->findAllCompositeProductsByIdProduct($dataProductMaterial['idProduct'], $id_company);
-
-            //     foreach ($compositeProducts as $k) {
-            //         $product = $minimumStockDao->calcStockByProduct($k['id_child_product']);
-
-            //         $arr = $minimumStockDao->calcStockByComposite($k['id_child_product']);
-
-            //         if (isset($arr['stock']) && isset($product['stock'])) {
-            //             $stock = $product['stock'] + $arr['stock'];
-
-            //             $resolution = $generalProductsDao->updateStockByProduct($k['id_child_product'], $stock);
-            //         }
-            //     }
-            // }
         }
 
         if ($resolution == null) {
@@ -1211,17 +1055,6 @@ $app->post('/updatePlanProductsMaterials', function (Request $request, Response 
                 }
             }
         }
-        // if ($resolution == null) {
-        //     $products = $generalProductsMaterialsDao->findAllProductByMaterial($dataProductMaterial['material']);
-
-        //     foreach ($products as $arr) {
-        //         $product = $minimumStockDao->calcStockByProduct($arr['id_product']);
-        //         if (isset($product['stock']))
-        //             $resolution = $productsDao->updateStockByProduct($arr['id_product'], $product['stock']);
-
-        //         if (isset($resolution['info'])) break;
-        //     }
-        // }
 
         if ($resolution == null)
             $resp = array('success' => true, 'message' => 'Materia prima actualizada correctamente');
@@ -1552,11 +1385,8 @@ $app->post('/calcQuantityFTM', function (Request $request, Response $response, $
     $generalMaterialsDao,
     $generalProductsMaterialsDao
 ) {
-    // session_start();
-    // $id_company = $_SESSION['id_company'];
     $arr = $request->getParsedBody();
 
-    // $type = $arr['type'];
     $dataMaterial = $generalMaterialsDao->findMaterialById($arr['idMaterial']);
     $dataProduct = $generalProductsDao->findProductById($arr['idProduct']);
     $weight = 0;
@@ -1564,21 +1394,6 @@ $app->post('/calcQuantityFTM', function (Request $request, Response $response, $
     $dataProduct['window'] > 0 ? $window = floatval($dataProduct['window']) : $window = 1;
 
     $weight = ((floatval($dataMaterial['grammage']) * floatval($dataProduct['length']) * floatval($dataProduct['total_width'])) / 10000000) / $window;
-    // switch ($type) {
-    //     case '1': // Papel
-
-    //         break;
-    //     default:
-    //         $quantity = floatval($arr['quantityCalc']);
-    //         $quantityFTM = 0;
-
-    //         $dataFTM = $generalProductsMaterialsDao->findProductsMaterialsByCompany($arr, $id_company);
-
-    //         if ($dataFTM) $quantityFTM = $dataFTM['quantity'];
-
-    //         $weight = $quantity * $quantityFTM;
-    //         break;
-    // }
 
     $resp = ['weight' => $weight];
 
