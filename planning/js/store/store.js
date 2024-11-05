@@ -105,7 +105,6 @@ $(document).ready(function () {
   });
 
   // Entregar MP
-
   const itemsToRemove = ["idProgramming", "idMaterial", "stored", "pending", "delivered"];
   itemsToRemove.forEach((item) => sessionStorage.removeItem(item)); 
 
@@ -206,23 +205,20 @@ $(document).ready(function () {
     let data = tblDeliverOP.fnGetData(row);
 
     let users = await searchData(`/api/usersStore/${data.id_programming}/${data.id_material}`);
-    let rows = '';
-
-    for (let i = 0; i < users.length; i++) {
-      rows +=
-        `<tr>
-          <td>${i + 1}</td>
-          <td>${users[i].firstname}</td>
-          <td>${users[i].lastname}</td>
-          <td>${users[i].email}</td>
-          <td>
-          ${parseFloat(users[i].delivery_store).toLocaleString("es-CO", {
-            minimumFractionDigits: 0,
-            maximumFractionDigits: 2,
-          })}
-          </td>
-          </tr>`;
-        } 
+    const rows = users.map((user, index) => `
+                <tr>
+                  <td>${index + 1}</td>
+                  <td>${user.firstname}</td>
+                  <td>${user.lastname}</td>
+                  <td>${user.email}</td>
+                  <td>
+                    ${parseFloat(user.delivery_store).toLocaleString("es-CO", {
+                      minimumFractionDigits: 0,
+                      maximumFractionDigits: 2,
+                    })}
+                  </td>
+                </tr>`
+    ).join('');
 
     // Mostramos el mensaje con Bootbox
     bootbox.alert({
@@ -254,62 +250,109 @@ $(document).ready(function () {
     return false;
   });
 
+  // $(document).on('click', '.seeUPDTDeliverOC', async function (e) {
+  //   e.preventDefault();
+
+  //   const row = $(this).closest("tr")[0];
+  //   let data = tblDeliverOP.fnGetData(row);
+
+  //   let users = await searchData(`/api/usersStore/${data.id_programming}/${data.id_material}`);
+  //   let rows = '';
+
+  //   for (let i = 0; i < users.length; i++) {
+  //     rows +=
+  //       `<tr>
+  //         <td>${i + 1}</td>
+  //         <td>${users[i].firstname}</td>
+  //         <td>${users[i].lastname}</td>
+  //         <td>${users[i].email}</td>
+  //         <td>
+	// 					<input type="number" class="form-control text-center" id="delvStore-${users[i].id_user_store}" value="${users[i].delivery_store}">
+  //         </td>
+  //         <td>
+  //           <a href="javascript:;" <i id="upd-${users[i].id_user_store}" class="bx bx-edit-alt updateDLVS" data-toggle='tooltip' title='Actualizar Entrega' style="font-size: 30px;"></i></a>
+  //         </td>
+  //         </tr>`;
+  //       }
+
+  //   // Mostramos el mensaje con Bootbox
+  //   bootbox.alert({
+  //     title: 'Usuarios',
+  //     message: `
+  //           <div class="container">
+  //             <div class="col-12">
+  //               <div class="table-responsive">
+  //                 <table class="fixed-table-loading table table-hover">
+  //                   <thead>
+  //                     <tr>
+  //                       <th>No</th>
+  //                       <th>Nombre</th>
+  //                       <th>Apellido</th>
+  //                       <th>Email</th>
+  //                       <th>Cantidad Entregada</th>
+  //                       <th>Acciones</th>
+  //                     </tr>
+  //                   </thead>
+  //                   <tbody>
+  //                     ${rows}
+  //                   </tbody>
+  //                 </table>
+  //               </div>
+  //             </div> 
+  //           </div>`,
+  //     size: 'large',
+  //     backdrop: true
+  //   });
+  //   return false;
+  // });
   $(document).on('click', '.seeUPDTDeliverOC', async function (e) {
     e.preventDefault();
 
     const row = $(this).closest("tr")[0];
-    let data = tblDeliverOP.fnGetData(row);
+    const data = tblDeliverOP.fnGetData(row);
 
-    let users = await searchData(`/api/usersStore/${data.id_programming}/${data.id_material}`);
-    let rows = '';
-
-    for (let i = 0; i < users.length; i++) {
-      rows +=
-        `<tr>
-          <td>${i + 1}</td>
-          <td>${users[i].firstname}</td>
-          <td>${users[i].lastname}</td>
-          <td>${users[i].email}</td>
-          <td>
-						<input type="number" class="form-control text-center" id="delvStore-${users[i].id_user_store}" value="${users[i].delivery_store}">
-          </td>
-          <td>
-            <a href="javascript:;" <i id="upd-${users[i].id_user_store}" class="bx bx-edit-alt updateDLVS" data-toggle='tooltip' title='Actualizar Entrega' style="font-size: 30px;"></i></a>
-          </td>
-          </tr>`;
-        }
+    // Obtenemos los usuarios de forma asincrónica
+    const users = await searchData(`/api/usersStore/${data.id_programming}/${data.id_material}`);
+    
+    // Generamos las filas en una sola operación usando .map()
+    const rows = users.map((user, index) => `
+        <tr>
+          <td>${index + 1}</td>
+          <td>${user.firstname}</td>
+          <td>${user.lastname}</td>
+          <td>${user.email}</td>
+          <td><input type="number" class="form-control text-center" id="delvStore-${user.id_user_store}" value="${user.delivery_store}"></td>
+          <td><a href="javascript:;" <i id="upd-${user.id_user_store}" class="bx bx-edit-alt updateDLVS" data-toggle="tooltip" title="Actualizar Entrega" style="font-size: 30px;"></i></a></td>
+        </tr>`).join('');
 
     // Mostramos el mensaje con Bootbox
     bootbox.alert({
       title: 'Usuarios',
       message: `
             <div class="container">
-              <div class="col-12">
-                <div class="table-responsive">
-                  <table class="fixed-table-loading table table-hover">
-                    <thead>
-                      <tr>
-                        <th>No</th>
-                        <th>Nombre</th>
-                        <th>Apellido</th>
-                        <th>Email</th>
-                        <th>Cantidad Entregada</th>
-                        <th>Acciones</th>
-                      </tr>
-                    </thead>
-                    <tbody>
-                      ${rows}
-                    </tbody>
-                  </table>
-                </div>
-              </div> 
+                <div class="col-12">
+                    <div class="table-responsive">
+                        <table class="fixed-table-loading table table-hover">
+                            <thead>
+                                <tr>
+                                    <th>No</th>
+                                    <th>Nombre</th>
+                                    <th>Apellido</th>
+                                    <th>Email</th>
+                                    <th>Cantidad Entregada</th>
+                                    <th>Acciones</th>
+                                </tr>
+                            </thead>
+                            <tbody>${rows}</tbody>
+                        </table>
+                    </div>
+                </div> 
             </div>`,
       size: 'large',
       backdrop: true
     });
-    return false;
   });
-
+  
   $(document).on('click', '.updateDLVS', function () { 
     let id_user_store = $(this).attr("id").split("-")[1];
 

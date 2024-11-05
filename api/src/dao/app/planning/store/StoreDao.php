@@ -85,7 +85,7 @@ class StoreDao
                                         INNER JOIN materials m ON m.id_material = pm.id_material
                                         INNER JOIN inv_materials mi ON mi.id_material = pm.id_material
                                         INNER JOIN admin_units u ON u.id_unit = m.unit
-                                        LEFT JOIN materials_components_users mcu ON mcu.id_programming = pg.id_programming
+                                        LEFT JOIN materials_components_users mcu ON mcu.id_programming = pg.id_programming AND mcu.id_material = pm.id_material
                                         -- Subconsulta para obtener el último usuario de entrega
                                             LEFT JOIN (
                                                 SELECT 

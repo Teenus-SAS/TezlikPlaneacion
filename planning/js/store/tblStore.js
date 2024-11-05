@@ -169,7 +169,7 @@ $(document).ready(function () {
     if (data.id_materials_component_user != 0)
       return `Entregado: ${data.firstname_delivered} ${data.lastname_delivered}<br>${fechaHoraFormateada}
         <a href="javascript:;">
-          <i id="${data.id_material}" class="bx bx-edit-alt seeDeliverOC" data-toggle="tooltip" title="Ver Detalle" style="font-size: 30px;"></i>
+          <i id="${data.id_material}" class="mdi mdi-playlist-check seeDeliverOC" data-toggle="tooltip" title="Ver Detalle" style="font-size: 30px;"></i>
         </a>`;
     else
       return `
