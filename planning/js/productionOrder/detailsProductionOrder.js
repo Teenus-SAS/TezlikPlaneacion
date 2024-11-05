@@ -273,8 +273,8 @@ $(document).ready(function () {
       title: "Aceptar Materia Prima!",
       message: "¿Desea aceptar la cantidad recibida de este material?",
       buttons: {
-        confirm: { label: "Guardar", className: "btn-success" },
-        cancel: { label: "Cancelar", className: "btn-danger" }
+        confirm: { label: "Si", className: "btn-success" },
+        cancel: { label: "No", className: "btn-danger" }
       },
       callback: (result) => {
         if (!result) return;
