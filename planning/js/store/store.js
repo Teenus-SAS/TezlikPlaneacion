@@ -222,10 +222,7 @@ $(document).ready(function () {
           })}
           </td>
           </tr>`;
-        }
-          // <td>
-          //   <a href="javascript:;" <i id="upd-${users[i].id_user_store}" class="bx bx-edit-alt updateDLVS" data-toggle='tooltip' title='Actualizar Entrega' style="font-size: 30px;"></i></a>
-          // </td>
+        } 
 
     // Mostramos el mensaje con Bootbox
     bootbox.alert({
@@ -262,8 +259,6 @@ $(document).ready(function () {
 
     const row = $(this).closest("tr")[0];
     let data = tblDeliverOP.fnGetData(row);
-
-    // sessionStorage.setItem('pending', data.pending)
 
     let users = await searchData(`/api/usersStore/${data.id_programming}/${data.id_material}`);
     let rows = '';
@@ -325,20 +320,10 @@ $(document).ready(function () {
       return false;
     }
 
-    let data = {};
-
-    // let quantity = parseFloat(formatNumber(data.quantity));
-
-    // let reserved = parseFloat(formatNumber(data.reserved1)); 
-
-    // if (data.abbreviation == 'UND') {
-    //   quantity = Math.floor(quantity);
-    //   reserved = Math.floor(reserved);
-    // }
+    let data = {}; 
     
     data['idUserStore'] = id_user_store;
-    data['delivered'] = value;
-    // data['pending'] = value;
+    data['delivered'] = value; 
 
     $.post('/api/saveDLVS', data,
       function (resp) {
