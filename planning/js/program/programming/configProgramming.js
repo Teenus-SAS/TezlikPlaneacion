@@ -81,59 +81,7 @@ $(document).ready(function () {
       } else {
         allProductsMaterials = JSON.parse(storProductsMaterials);
       }
-
-      // data = programming;
-
-      // if (
-      //   !sessionStorage.getItem("dataProgramming") ||
-      //   sessionStorage.getItem("dataProgramming").includes("[object Object]")
-      // ) {
-      //   ciclesMachines.sort((a, b) => a.id_process - b.id_process);
-
-      //   // Crear el mapa único de procesos y máquinas
-      //   let uniquePCMMap = new Map();
-
-      //   ciclesMachines.forEach((item) => {
-      //     // Verificar si el proceso ya existe en el mapa
-      //     if (!uniquePCMMap.has(item.id_process)) {
-      //       // Si no existe, crear el proceso con la primera máquina
-      //       uniquePCMMap.set(item.id_process, {
-      //         [`process-${item.id_process}`]: {
-      //           [`machine-${item.id_machine}`]: [],
-      //         },
-      //       });
-      //     } else {
-      //       // Si ya existe, agregar la nueva máquina al proceso existente
-      //       let processData = uniquePCMMap.get(item.id_process);
-      //       processData[`process-${item.id_process}`][
-      //         `machine-${item.id_machine}`
-      //       ] = [];
-      //       uniquePCMMap.set(item.id_process, processData); // Actualizar el mapa
-      //     }
-      //   });
-
-      //   // Convertir el mapa en un array
-      //   let uniqueArrayPCM = Array.from(uniquePCMMap.values());
-
-      //   // Crear una copia profunda del array para 'sim_2'
-      //   let uniqueArrayPCM2 = uniqueArrayPCM.map((item) =>
-      //     JSON.parse(JSON.stringify(item))
-      //   );
-
-      //   // Agregar los arrays al multiarray
-      //   generalMultiArray.push(
-      //     {
-      //       sim_1: uniqueArrayPCM,
-      //     },
-      //     {
-      //       sim_2: uniqueArrayPCM2,
-      //     }
-      //   );
-      // } else {
-      //   generalMultiArray = JSON.parse(
-      //     sessionStorage.getItem("dataProgramming")
-      //   );
-      // }
+ 
       data = programming;
 
       if (
@@ -228,31 +176,54 @@ $(document).ready(function () {
     });
   };
 
-  loadOrdersProgramming = async (data) => { 
-    data = data.filter((item) => item.flag_tbl == 1);
+  loadOrdersProgramming = async (data) => {
+    // Filtrar datos por `flag_tbl`
+    const filteredData = data
+      .filter(item => item.flag_tbl === 1)
+      .reduce((acc, current) => {
+        // Solo agregar órdenes únicas por `num_order`
+        if (!acc.find(item => item.num_order === current.num_order)) {
+          acc.push(current);
+        }
+        return acc;
+      }, []);
 
-    if (data.length === 0) {
-      return 1;
-    }
+    if (filteredData.length === 0) return 1;
 
-    data = data.reduce((acc, current) => {
-      if (!acc.some((item) => item.num_order == current.num_order)) {
-        acc.push(current);
-      }
-      return acc;
-    }, []);
+    const $select = $('#order');
+    $select.empty().append('<option disabled selected>Seleccionar</option>');
 
-    let $select = $(`#order`);
-    $select.empty();
-
-    $select.append(`<option disabled selected>Seleccionar</option>`);
-
-    $.each(data, function (i, value) {
-      $select.append(
-        `<option value ='${value.id_order}'> ${value.num_order} </option>`
-      );
+    // Crear las opciones del select
+    filteredData.forEach(({ id_order, num_order }) => {
+      $select.append(`<option value="${id_order}">${num_order}</option>`);
     });
   };
+
+  // loadOrdersProgramming = async (data) => { 
+  //   data = data.filter((item) => item.flag_tbl == 1);
+
+  //   if (data.length === 0) {
+  //     return 1;
+  //   }
+
+  //   data = data.reduce((acc, current) => {
+  //     if (!acc.some((item) => item.num_order == current.num_order)) {
+  //       acc.push(current);
+  //     }
+  //     return acc;
+  //   }, []);
+
+  //   let $select = $(`#order`);
+  //   $select.empty();
+
+  //   $select.append(`<option disabled selected>Seleccionar</option>`);
+
+  //   $.each(data, function (i, value) {
+  //     $select.append(
+  //       `<option value ='${value.id_order}'> ${value.num_order} </option>`
+  //     );
+  //   });
+  // };
 
   loadAllDataProgramming();
 
@@ -303,39 +274,29 @@ $(document).ready(function () {
   }
 
   const checkData = async (op, id) => {
-    let inputs = document.getElementsByClassName("input");
-    let cont = 0;
-
-    for (let i = 0; i < inputs.length; i++) {
-      if (inputs[i].value == "" || inputs[i].value == "0") cont += 1;
-    }
+    const inputs = document.getElementsByClassName("input");
+    let cont = Array.from(inputs).filter(input => input.value === "" || input.value === "0").length;
 
     $("#btnCreateProgramming").hide();
 
     if (cont < 5) {
-      if (dataProgramming["update"] == 0) {
-        $("#minDate").val("");
-        $("#maxDate").val("");
-
-        document.getElementById("minDate").readOnly = false;
-        document.getElementById("minDate").type = "date";
+      if (dataProgramming.update === 0) {
+        $("#minDate, #maxDate").val("").prop("readOnly", false);
+        $("#minDate").prop("type", "date");
         $(".date").hide();
       }
 
-      let order = parseFloat($("#order").val());
-      let product = parseFloat($("#selectNameProduct").val());
-      let machine = parseFloat($("#idMachine").val());
-      let quantity = parseFloat($("#quantity").val());
+      const order = parseFloat($("#order").val());
+      const product = parseFloat($("#selectNameProduct").val());
+      const machine = parseFloat($("#idMachine").val());
+      const quantity = parseFloat($("#quantity").val());
 
       if (!isNaN(quantity)) {
-        let productsMaterials = allProductsMaterials.filter(
-          (item) => item.id_product == product
-        );
-        productsMaterials = productsMaterials.sort(
-          (a, b) => a.quantity - b.quantity
-        );
+        const productsMaterials = allProductsMaterials
+          .filter(item => item.id_product === product)
+          .sort((a, b) => a.quantity - b.quantity);
 
-        if (productsMaterials[0].quantity < quantity) {
+        if (productsMaterials.length && productsMaterials[0].quantity < quantity) {
           toastr.error("Cantidad a programar mayor a el inventario de MP");
           return false;
         }
@@ -343,349 +304,603 @@ $(document).ready(function () {
         $(".cardFormProgramming2").show(800);
       }
 
-      if (op == 1 && !isNaN(machine)) {
-        machines = [];
-        let allTblData = flattenData(generalMultiArray);
+      if (op === 1 && !isNaN(machine)) {
+        machines = flattenData(generalMultiArray).filter(
+          item => item.id_machine === machine && item.id_product === product
+        );
 
-        for (let i = 0; i < allTblData.length; i++) {
-          if (
-            allTblData[i].id_machine == machine &&
-            allTblData[i].id_product == product
-          )
-            machines.push(allTblData[i]);
-        }
+        const planningMachine = allPlanningMachines.some(
+          item => item.id_machine === machine
+        );
 
-        let planningMachine = false;
-
-        for (let i = 0; i < allPlanningMachines.length; i++) {
-          if (allPlanningMachines[i].id_machine == machine) {
-            planningMachine = true;
-            break;
-          }
-        }
-
-        if (planningMachine == false) {
-          toastr.error("Programacion de maquina no existe");
+        if (!planningMachine) {
+          toastr.error("Programación de máquina no existe");
           return false;
         }
       }
 
-      if (cont == 0 && !isNaN(machine)) {
-        let productMaterial = false;
+      if (cont === 0 && !isNaN(machine)) {
+        let productMaterial = allProductsMaterials.some(
+          item => item.id_product === product && item.quantity > 0
+        );
 
-        for (let i = 0; i < allProductsMaterials.length; i++) {
-          productMaterial = true;
-          if (
-            allProductsMaterials[i].id_product == product &&
-            allProductsMaterials[i].quantity <= 0
-          ) {
-            productMaterial = false;
-            break;
-          }
-        }
-
-        if (productMaterial == false) {
+        if (!productMaterial) {
           toastr.error("Materia prima no existente o sin cantidad disponible");
           return false;
         }
 
-        if (id == "quantity") {
-          for (let i = 0; i < allProductsMaterials.length; i++) {
-            if (
-              allProductsMaterials[i].id_product == product &&
-              allProductsMaterials[i].quantity < quantity
-            ) {
-              productMaterial = false;
-              break;
-            }
-          }
-
-          if (productMaterial == false) {
-            toastr.error("Materia prima sin cantidad disponible");
-            return false;
-          }
+        if (id === "quantity" && allProductsMaterials.some(
+          item => item.id_product === product && item.quantity < quantity
+        )) {
+          toastr.error("Materia prima sin cantidad disponible");
+          return false;
         }
 
-        let data = order * product * machine * quantity;
-
+        const data = order * product * machine * quantity;
         if (isNaN(data) || data <= 0) {
           toastr.error("Ingrese todos los campos");
           return false;
         }
 
-        if (flag_type_program == 0) {
+        if (flag_type_program === 0) {
           if (machines.length > 0) {
-            dataProgramming["min_date"] = machines[machines.length - 1].max_date;
+            dataProgramming.min_date = machines.at(-1).max_date;
+            const hour = new Date(dataProgramming.min_date).getHours();
+            const minDate = dataProgramming.min_date;
+            const today = new Date().toISOString().split("T")[0];
 
-            hour = new Date(machines[machines.length - 1].max_date).getHours();
-            min_date = machines[machines.length - 1].max_date;
-            let date = new Date();
-            let dateFormat = `${date.getFullYear()}-${(date.getMonth() + 1)
-              .toString()
-              .padStart(2, "0")}-${date.getDate().toString().padStart(2, "0")}`;
-
-            if (min_date < dateFormat) {
-              $("#minDate").val("");
-              $("#maxDate").val("");
-              document.getElementById("minDate").readOnly = false;
-              document.getElementById("minDate").type = "date";
+            if (minDate < today) {
+              $("#minDate, #maxDate").val("").prop("readOnly", false).prop("type", "date");
               $(".date").show();
               return false;
             }
 
-            sessionStorage.setItem("minDate", min_date);
-
-            calcMaxDate(min_date, hour, 1);
+            sessionStorage.setItem("minDate", minDate);
+            calcMaxDate(minDate, hour, 1);
           } else {
-            let date = sessionStorage.getItem("minDate");
+            const storedMinDate = sessionStorage.getItem("minDate");
 
-            if (dataProgramming["update"] == 1) {
-              date = convetFormatDateTime1($("#minDate").val());
-
-              dataProgramming["min_date"] = date;
-              calcMaxDate(date, 0, 2);
-            } else if (!date) {
+            if (dataProgramming.update === 1) {
+              const newDate = convetFormatDateTime1($("#minDate").val());
+              dataProgramming.min_date = newDate;
+              calcMaxDate(newDate, 0, 2);
+            } else if (!storedMinDate) {
               $(".date").show(800);
-              document.getElementById("minDate").readOnly = false;
-              document.getElementById("minDate").type = "date";
+              $("#minDate").prop("readOnly", false).prop("type", "date");
             } else {
-              document.getElementById("minDate").readOnly = true;
-
-              dataProgramming["min_date"] = date;
-              calcMaxDate(date, 0, 2);
+              $("#minDate").prop("readOnly", true);
+              dataProgramming.min_date = storedMinDate;
+              calcMaxDate(storedMinDate, 0, 2);
             }
           }
         }
       }
 
-      if (flag_type_program == 1 && cont == 0)
+      if (flag_type_program === 1 && cont === 0) {
         $("#btnCreateProgramming").show();
+      }
+      // if (dataProgramming["update"] == 0) {
+      //   $("#minDate").val("");
+      //   $("#maxDate").val("");
+
+      //   document.getElementById("minDate").readOnly = false;
+      //   document.getElementById("minDate").type = "date";
+      //   $(".date").hide();
+      // }
+
+      // let order = parseFloat($("#order").val());
+      // let product = parseFloat($("#selectNameProduct").val());
+      // let machine = parseFloat($("#idMachine").val());
+      // let quantity = parseFloat($("#quantity").val());
+
+      // if (!isNaN(quantity)) {
+      //   let productsMaterials = allProductsMaterials.filter(
+      //     (item) => item.id_product == product
+      //   );
+      //   productsMaterials = productsMaterials.sort(
+      //     (a, b) => a.quantity - b.quantity
+      //   );
+
+      //   if (productsMaterials[0].quantity < quantity) {
+      //     toastr.error("Cantidad a programar mayor a el inventario de MP");
+      //     return false;
+      //   }
+
+      //   $(".cardFormProgramming2").show(800);
+      // }
+
+      // if (op == 1 && !isNaN(machine)) {
+      //   machines = [];
+      //   let allTblData = flattenData(generalMultiArray);
+
+      //   for (let i = 0; i < allTblData.length; i++) {
+      //     if (
+      //       allTblData[i].id_machine == machine &&
+      //       allTblData[i].id_product == product
+      //     )
+      //       machines.push(allTblData[i]);
+      //   }
+
+      //   let planningMachine = false;
+
+      //   for (let i = 0; i < allPlanningMachines.length; i++) {
+      //     if (allPlanningMachines[i].id_machine == machine) {
+      //       planningMachine = true;
+      //       break;
+      //     }
+      //   }
+
+      //   if (planningMachine == false) {
+      //     toastr.error("Programacion de maquina no existe");
+      //     return false;
+      //   }
+      // }
+
+      // if (cont == 0 && !isNaN(machine)) {
+      //   let productMaterial = false;
+
+      //   for (let i = 0; i < allProductsMaterials.length; i++) {
+      //     productMaterial = true;
+      //     if (
+      //       allProductsMaterials[i].id_product == product &&
+      //       allProductsMaterials[i].quantity <= 0
+      //     ) {
+      //       productMaterial = false;
+      //       break;
+      //     }
+      //   }
+
+      //   if (productMaterial == false) {
+      //     toastr.error("Materia prima no existente o sin cantidad disponible");
+      //     return false;
+      //   }
+
+      //   if (id == "quantity") {
+      //     for (let i = 0; i < allProductsMaterials.length; i++) {
+      //       if (
+      //         allProductsMaterials[i].id_product == product &&
+      //         allProductsMaterials[i].quantity < quantity
+      //       ) {
+      //         productMaterial = false;
+      //         break;
+      //       }
+      //     }
+
+      //     if (productMaterial == false) {
+      //       toastr.error("Materia prima sin cantidad disponible");
+      //       return false;
+      //     }
+      //   }
+
+      //   let data = order * product * machine * quantity;
+
+      //   if (isNaN(data) || data <= 0) {
+      //     toastr.error("Ingrese todos los campos");
+      //     return false;
+      //   }
+
+      //   if (flag_type_program == 0) {
+      //     if (machines.length > 0) {
+      //       dataProgramming["min_date"] = machines[machines.length - 1].max_date;
+
+      //       hour = new Date(machines[machines.length - 1].max_date).getHours();
+      //       min_date = machines[machines.length - 1].max_date;
+      //       let date = new Date();
+      //       let dateFormat = `${date.getFullYear()}-${(date.getMonth() + 1)
+      //         .toString()
+      //         .padStart(2, "0")}-${date.getDate().toString().padStart(2, "0")}`;
+
+      //       if (min_date < dateFormat) {
+      //         $("#minDate").val("");
+      //         $("#maxDate").val("");
+      //         document.getElementById("minDate").readOnly = false;
+      //         document.getElementById("minDate").type = "date";
+      //         $(".date").show();
+      //         return false;
+      //       }
+
+      //       sessionStorage.setItem("minDate", min_date);
+
+      //       calcMaxDate(min_date, hour, 1);
+      //     } else {
+      //       let date = sessionStorage.getItem("minDate");
+
+      //       if (dataProgramming["update"] == 1) {
+      //         date = convetFormatDateTime1($("#minDate").val());
+
+      //         dataProgramming["min_date"] = date;
+      //         calcMaxDate(date, 0, 2);
+      //       } else if (!date) {
+      //         $(".date").show(800);
+      //         document.getElementById("minDate").readOnly = false;
+      //         document.getElementById("minDate").type = "date";
+      //       } else {
+      //         document.getElementById("minDate").readOnly = true;
+
+      //         dataProgramming["min_date"] = date;
+      //         calcMaxDate(date, 0, 2);
+      //       }
+      //     }
+      //   }
+      // }
+
+      // if (flag_type_program == 1 && cont == 0)
+      //   $("#btnCreateProgramming").show();
     }
   };
   
   if (flag_type_program == 0) {
+    // checkProcessMachines = (data) => {
+    //   let conteoClaves = data.reduce((conteo, obj) => {
+    //     conteo[obj.id_product] = (conteo[obj.id_product] || 0) + 1;
+    //     return conteo;
+    //   }, {});
+  
+    //   // Inicializar un array para almacenar los subarrays
+    //   let subarrays = [];
+  
+    //   // Iterar sobre el objeto de conteo y dividir el array original
+    //   for (let id_product in conteoClaves) {
+    //     let subarray = data.filter((obj) => obj.id_product == id_product);
+    //     subarrays.push(subarray);
+    //   }
+  
+    //   for (let i = 0; i < subarrays.length; i++) {
+    //     let process = allProcess.filter(
+    //       (item) => item.id_product == subarrays[i][0].id_product
+    //     );
+    //     process.sort((a, b) => b.route1 - a.route1);
+  
+    //     if (subarrays[i][subarrays[i].length - 1].route > process[0].route1) {
+    //       allOrdersProgramming = allOrdersProgramming.filter(
+    //         (item) => item.id_product != subarrays[i][0].id_product
+    //       );
+    //       allOrders = allOrders.filter(
+    //         (item) => item.id_product != subarrays[i][0].id_product
+    //       );
+    //     }
+    //   }
+    // };
+
     checkProcessMachines = (data) => {
-      let conteoClaves = data.reduce((conteo, obj) => {
+      // Conteo de productos basado en id_product
+      const conteoClaves = data.reduce((conteo, obj) => {
         conteo[obj.id_product] = (conteo[obj.id_product] || 0) + 1;
         return conteo;
       }, {});
-  
-      // Inicializar un array para almacenar los subarrays
-      let subarrays = [];
-  
-      // Iterar sobre el objeto de conteo y dividir el array original
-      for (let id_product in conteoClaves) {
-        let subarray = data.filter((obj) => obj.id_product == id_product);
-        subarrays.push(subarray);
-      }
-  
-      for (let i = 0; i < subarrays.length; i++) {
-        let process = allProcess.filter(
-          (item) => item.id_product == subarrays[i][0].id_product
-        );
-        process.sort((a, b) => b.route1 - a.route1);
-  
-        if (subarrays[i][subarrays[i].length - 1].route > process[0].route1) {
+
+      // Crear subarrays de productos
+      const subarrays = Object.keys(conteoClaves).map(id_product =>
+        data.filter(obj => obj.id_product == id_product)
+      );
+
+      // Validar y filtrar órdenes según el proceso y ruta
+      subarrays.forEach(subarray => {
+        const process = allProcess
+          .filter(item => item.id_product == subarray[0].id_product)
+          .sort((a, b) => b.route1 - a.route1);
+
+        if (subarray.at(-1).route > process[0]?.route1) {
+          const { id_product } = subarray[0];
           allOrdersProgramming = allOrdersProgramming.filter(
-            (item) => item.id_product != subarrays[i][0].id_product
+            item => item.id_product != id_product
           );
           allOrders = allOrders.filter(
-            (item) => item.id_product != subarrays[i][0].id_product
+            item => item.id_product != id_product
           );
         }
-      }
+      });
     };
+
+    // $("#minDate").change(function (e) {
+    //   e.preventDefault();
+
+    //   let date = this.value;
+
+    //   if (!date) {
+    //     toastr.error("Ingrese fecha inicial");
+    //     return false;
+    //   }
+
+    //   if (date.includes("T")) {
+    //     if (dataProgramming["update"] == 0) {
+    //       date = date.split("T")[0];
+
+    //       min_date = convetFormatDate(date);
+    //     } else min_date = convetFormatDateTime1(date);
+    //   } else min_date = convetFormatDate(date);
+
+    //   sessionStorage.setItem("minDate", min_date);
+    //   dataProgramming["min_date"] = min_date;
+    //   calcMaxDate(min_date, 0, 2);
+    // });
+  
     $("#minDate").change(function (e) {
       e.preventDefault();
 
       let date = this.value;
-
       if (!date) {
         toastr.error("Ingrese fecha inicial");
-        return false;
+        return;
       }
 
-      if (date.includes("T")) {
-        if (dataProgramming["update"] == 0) {
-          date = date.split("T")[0];
+      // Formatear la fecha según si contiene "T" y el valor de dataProgramming["update"]
+      min_date = date.includes("T")
+        ? dataProgramming["update"] === 0
+          ? convetFormatDate(date.split("T")[0])
+          : convetFormatDateTime1(date)
+        : convetFormatDate(date);
 
-          min_date = convetFormatDate(date);
-        } else min_date = convetFormatDateTime1(date);
-      } else min_date = convetFormatDate(date);
-
+      // Guardar la fecha y calcular la fecha máxima
       sessionStorage.setItem("minDate", min_date);
       dataProgramming["min_date"] = min_date;
       calcMaxDate(min_date, 0, 2);
     });
-  
+
+    // const calcMaxDate = async (min_date, last_hour, op) => {
+    //   try {
+    //     let num_order = $("#order :selected").text().trim();
+    //     let product = parseFloat($("#selectNameProduct").val());
+    //     let machine = parseFloat($("#idMachine").val());
+    //     let quantity = parseInt($("#quantity").val());
+    //     let order = allOrders.find(
+    //       (item) => item.id_product == product && item.num_order == num_order
+    //     );
+
+    //     for (let i = 0; i < allCiclesMachines.length; i++) {
+    //       if (
+    //         allCiclesMachines[i].id_machine == machine &&
+    //         allCiclesMachines[i].id_product == product
+    //       ) {
+    //         ciclesMachine = allCiclesMachines[i];
+    //         break;
+    //       }
+    //     }
+
+    //     for (let i = 0; i < allPlanningMachines.length; i++) {
+    //       if (allPlanningMachines[i].id_machine == machine) {
+    //         planningMachine = allPlanningMachines[i];
+    //         break;
+    //       }
+    //     }
+
+    //     if (op == 2) {
+    //       if (dataProgramming["update"] == 0) {
+    //         if (Number.isInteger(planningMachine.hour_start)) {
+    //           min_date = new Date(
+    //             `${min_date} ${planningMachine.hour_start}:00:00`
+    //           );
+    //         } else {
+    //           const hoursInteger = Math.floor(planningMachine.hour_start);
+    //           const minutes = Math.round((planningMachine.hour_start % 1) * 60);
+    //           const formattedMinutes =
+    //             minutes < 10 ? `0${minutes}` : `${minutes}`;
+    //           min_date = new Date(min_date + "T00:00:00");
+    //           min_date.setHours(hoursInteger, formattedMinutes, 0);
+    //         }
+    //       } else {
+    //         min_date = new Date(min_date);
+    //       }
+
+    //       min_date =
+    //         min_date.getFullYear() +
+    //         "-" +
+    //         ("00" + (min_date.getMonth() + 1)).slice(-2) +
+    //         "-" +
+    //         ("00" + min_date.getDate()).slice(-2) +
+    //         " " +
+    //         ("00" + min_date.getHours()).slice(-2) +
+    //         ":" +
+    //         ("00" + min_date.getMinutes()).slice(-2) +
+    //         ":" +
+    //         "00";
+    //     }
+
+    //     let final_date = new Date(min_date);
+
+    //     let days =
+    //       quantity / ciclesMachine.cicles_hour / planningMachine.hours_day;
+
+    //     if (days >= 1) {
+    //       final_date.setDate(final_date.getDate() + Math.floor(days));
+    //     }
+
+    //     let sobDays = days % 1;
+    //     let hours = sobDays * planningMachine.hours_day;
+
+    //     let sobHours = hours % 1;
+    //     let minutes = sobHours * 60;
+    //     let minutes1 =
+    //       Math.floor(days) * 1440 + Math.floor(hours) * 60 + parseInt(minutes);
+
+    //     final_date.setMinutes(final_date.getMinutes() + Math.floor(minutes));
+    //     final_date.setHours(final_date.getHours() + Math.floor(hours));
+
+    //     // Checkear si la hora de la fecha final calculada es mayor a la hora de finalizacion de la maquina
+    //     let hour_check = parseFloat(
+    //       `${final_date.getHours()}.${final_date.getMinutes()}`
+    //     );
+
+    //     if (hour_check > planningMachine.hour_end) {
+    //       hours = Math.floor(planningMachine.hour_start);
+    //       minutes = parseInt(
+    //         planningMachine.hour_start.toFixed(2).toString().split(".")[1]
+    //       );
+
+    //       isNaN(minutes) ? (minutes = 0) : minutes;
+
+    //       final_date.setMinutes(Math.floor(minutes));
+    //       final_date.setHours(Math.floor(hours));
+    //       final_date.setDate(final_date.getDate() + 1);
+    //     }
+
+    //     final_date =
+    //       final_date.getFullYear() +
+    //       "-" +
+    //       ("00" + (final_date.getMonth() + 1)).slice(-2) +
+    //       "-" +
+    //       ("00" + final_date.getDate()).slice(-2) +
+    //       " " +
+    //       ("00" + final_date.getHours()).slice(-2) +
+    //       ":" +
+    //       ("00" + final_date.getMinutes()).slice(-2) +
+    //       ":" +
+    //       "00";
+
+    //     dataProgramming["id_product"] = product;
+    //     dataProgramming["id_machine"] = machine;
+    //     dataProgramming["quantity_programming"] = quantity;
+    //     dataProgramming["min_date"] = min_date;
+    //     dataProgramming["client"] = order.client;
+    //     dataProgramming["max_date"] = final_date;
+    //     dataProgramming["min_programming"] = minutes1;
+
+    //     final_date = convetFormatDateTime(final_date);
+    //     min_date = convetFormatDateTime(min_date);
+
+    //     let maxDate = document.getElementById("maxDate");
+    //     document.getElementById("minDate").type = "datetime-local";
+    //     let minDate = document.getElementById("minDate");
+
+    //     maxDate.value = final_date;
+    //     minDate.value = min_date;
+
+    //     $(".date").show(800);
+    //     $("#btnCreateProgramming").show(800);
+    //   } catch (error) {
+    //     console.log(error);
+    //   }
+    // };
     const calcMaxDate = async (min_date, last_hour, op) => {
       try {
-        let num_order = $("#order :selected").text().trim();
-        let product = parseFloat($("#selectNameProduct").val());
-        let machine = parseFloat($("#idMachine").val());
-        let quantity = parseInt($("#quantity").val());
-        let order = allOrders.find(
-          (item) => item.id_product == product && item.num_order == num_order
+        const num_order = $("#order :selected").text().trim();
+        const product = parseFloat($("#selectNameProduct").val());
+        const machine = parseFloat($("#idMachine").val());
+        const quantity = parseInt($("#quantity").val());
+        const order = allOrders.find(item => item.id_product === product && item.num_order === num_order);
+
+        let ciclesMachine = allCiclesMachines.find(
+          item => item.id_machine === machine && item.id_product === product
         );
+        let planningMachine = allPlanningMachines.find(item => item.id_machine === machine);
 
-        for (let i = 0; i < allCiclesMachines.length; i++) {
-          if (
-            allCiclesMachines[i].id_machine == machine &&
-            allCiclesMachines[i].id_product == product
-          ) {
-            ciclesMachine = allCiclesMachines[i];
-            break;
-          }
-        }
-
-        for (let i = 0; i < allPlanningMachines.length; i++) {
-          if (allPlanningMachines[i].id_machine == machine) {
-            planningMachine = allPlanningMachines[i];
-            break;
-          }
-        }
-
-        if (op == 2) {
-          if (dataProgramming["update"] == 0) {
-            if (Number.isInteger(planningMachine.hour_start)) {
-              min_date = new Date(
-                `${min_date} ${planningMachine.hour_start}:00:00`
-              );
-            } else {
-              const hoursInteger = Math.floor(planningMachine.hour_start);
-              const minutes = Math.round((planningMachine.hour_start % 1) * 60);
-              const formattedMinutes =
-                minutes < 10 ? `0${minutes}` : `${minutes}`;
-              min_date = new Date(min_date + "T00:00:00");
-              min_date.setHours(hoursInteger, formattedMinutes, 0);
-            }
+        if (op === 2) {
+          if (dataProgramming.update === 0) {
+            const startHour = planningMachine.hour_start;
+            min_date = startHour
+              ? new Date(`${min_date} ${startHour}:00:00`)
+              : new Date(min_date);
           } else {
             min_date = new Date(min_date);
           }
 
-          min_date =
-            min_date.getFullYear() +
-            "-" +
-            ("00" + (min_date.getMonth() + 1)).slice(-2) +
-            "-" +
-            ("00" + min_date.getDate()).slice(-2) +
-            " " +
-            ("00" + min_date.getHours()).slice(-2) +
-            ":" +
-            ("00" + min_date.getMinutes()).slice(-2) +
-            ":" +
-            "00";
+          const formatDate = date =>
+            `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, "0")}-${String(date.getDate()).padStart(2, "0")} ${String(date.getHours()).padStart(2, "0")}:${String(date.getMinutes()).padStart(2, "0")}:00`;
+          min_date = formatDate(min_date);
         }
 
         let final_date = new Date(min_date);
 
-        let days =
-          quantity / ciclesMachine.cicles_hour / planningMachine.hours_day;
+        const days = quantity / (ciclesMachine.cicles_hour * planningMachine.hours_day);
+        const sobDays = days % 1;
+        const hours = sobDays * planningMachine.hours_day;
+        const minutes = (hours % 1) * 60;
 
-        if (days >= 1) {
-          final_date.setDate(final_date.getDate() + Math.floor(days));
-        }
-
-        let sobDays = days % 1;
-        let hours = sobDays * planningMachine.hours_day;
-
-        let sobHours = hours % 1;
-        let minutes = sobHours * 60;
-        let minutes1 =
-          Math.floor(days) * 1440 + Math.floor(hours) * 60 + parseInt(minutes);
-
-        final_date.setMinutes(final_date.getMinutes() + Math.floor(minutes));
+        final_date.setDate(final_date.getDate() + Math.floor(days));
         final_date.setHours(final_date.getHours() + Math.floor(hours));
+        final_date.setMinutes(final_date.getMinutes() + Math.floor(minutes));
 
-        // Checkear si la hora de la fecha final calculada es mayor a la hora de finalizacion de la maquina
-        let hour_check = parseFloat(
-          `${final_date.getHours()}.${final_date.getMinutes()}`
-        );
+        const hour_check = parseFloat(`${final_date.getHours()}.${final_date.getMinutes()}`);
 
         if (hour_check > planningMachine.hour_end) {
-          hours = Math.floor(planningMachine.hour_start);
-          minutes = parseInt(
-            planningMachine.hour_start.toFixed(2).toString().split(".")[1]
-          );
-
-          isNaN(minutes) ? (minutes = 0) : minutes;
-
-          final_date.setMinutes(Math.floor(minutes));
-          final_date.setHours(Math.floor(hours));
           final_date.setDate(final_date.getDate() + 1);
+          final_date.setHours(Math.floor(planningMachine.hour_start));
+          final_date.setMinutes(Math.round((planningMachine.hour_start % 1) * 60) || 0);
         }
 
-        final_date =
-          final_date.getFullYear() +
-          "-" +
-          ("00" + (final_date.getMonth() + 1)).slice(-2) +
-          "-" +
-          ("00" + final_date.getDate()).slice(-2) +
-          " " +
-          ("00" + final_date.getHours()).slice(-2) +
-          ":" +
-          ("00" + final_date.getMinutes()).slice(-2) +
-          ":" +
-          "00";
+        final_date = formatDate(final_date);
 
-        dataProgramming["id_product"] = product;
-        dataProgramming["id_machine"] = machine;
-        dataProgramming["quantity_programming"] = quantity;
-        dataProgramming["min_date"] = min_date;
-        dataProgramming["client"] = order.client;
-        dataProgramming["max_date"] = final_date;
-        dataProgramming["min_programming"] = minutes1;
+        Object.assign(dataProgramming, {
+          id_product: product,
+          id_machine: machine,
+          quantity_programming: quantity,
+          min_date,
+          client: order.client,
+          max_date: final_date,
+          min_programming: Math.floor(days) * 1440 + Math.floor(hours) * 60 + parseInt(minutes)
+        });
 
-        final_date = convetFormatDateTime(final_date);
-        min_date = convetFormatDateTime(min_date);
+        const minDateFormatted = convetFormatDateTime(min_date);
+        const maxDateFormatted = convetFormatDateTime(final_date);
 
-        let maxDate = document.getElementById("maxDate");
         document.getElementById("minDate").type = "datetime-local";
-        let minDate = document.getElementById("minDate");
+        document.getElementById("maxDate").value = maxDateFormatted;
+        document.getElementById("minDate").value = minDateFormatted;
 
-        maxDate.value = final_date;
-        minDate.value = min_date;
-
-        $(".date").show(800);
-        $("#btnCreateProgramming").show(800);
+        $(".date, #btnCreateProgramming").show(800);
       } catch (error) {
-        console.log(error);
+        console.error(error);
       }
     };
   }
       
   /* Cargar Productos y Maquinas */
+  // const loadProducts = (num_order) => {
+  //   let orders = allOrders.filter(
+  //     (item) =>
+  //       item.num_order == num_order &&
+  //       (item.status == "PROGRAMAR" || item.status == "PROGRAMADO") &&
+  //       (item.accumulated_quantity_order == null ||
+  //         item.accumulated_quantity_order != 0 ||
+  //         item.flag_process == 0) &&
+  //       item.flag_tbl == 1
+  //   );
+
+  //   $("#quantityOrder").val("");
+
+  //   let $select = $(`#refProduct`);
+  //   $select.empty();
+
+  //   $select.append(`<option disabled selected>Seleccionar</option>`);
+  //   $.each(orders, function (i, value) {
+  //     $select.append(
+  //       `<option value ='${value.id_product}'> ${value.reference} </option>`
+  //     );
+  //   });
+  //   let $select1 = $(`#selectNameProduct`);
+  //   $select1.empty();
+
+  //   $select1.append(`<option disabled selected>Seleccionar</option>`);
+  //   $.each(orders, function (i, value) {
+  //     $select1.append(
+  //       `<option value ='${value.id_product}'> ${value.product} </option>`
+  //     );
+  //   });
+
+  //   selectProduct = true;
+  // };
+
   const loadProducts = (num_order) => {
-    let orders = allOrders.filter(
-      (item) =>
-        item.num_order == num_order &&
-        (item.status == "PROGRAMAR" || item.status == "PROGRAMADO") &&
-        (item.accumulated_quantity_order == null ||
-          item.accumulated_quantity_order != 0 ||
-          item.flag_process == 0) &&
-        item.flag_tbl == 1
+    const orders = allOrders.filter(item =>
+      item.num_order === num_order &&
+      ["PROGRAMAR", "PROGRAMADO"].includes(item.status) &&
+      (item.accumulated_quantity_order == null || item.accumulated_quantity_order !== 0 || item.flag_process === 0) &&
+      item.flag_tbl === 1
     );
 
     $("#quantityOrder").val("");
 
-    let $select = $(`#refProduct`);
-    $select.empty();
+    const createOptions = (selector, key) => {
+      const $select = $(selector);
+      $select.empty();
+      $select.append(`<option disabled selected>Seleccionar</option>`);
+      orders.forEach(order => {
+        $select.append(`<option value='${order.id_product}'>${order[key]}</option>`);
+      });
+    };
 
-    $select.append(`<option disabled selected>Seleccionar</option>`);
-    $.each(orders, function (i, value) {
-      $select.append(
-        `<option value ='${value.id_product}'> ${value.reference} </option>`
-      );
-    });
-    let $select1 = $(`#selectNameProduct`);
-    $select1.empty();
-
-    $select1.append(`<option disabled selected>Seleccionar</option>`);
-    $.each(orders, function (i, value) {
-      $select1.append(
-        `<option value ='${value.id_product}'> ${value.product} </option>`
-      );
-    });
+    createOptions("#refProduct", "reference");
+    createOptions("#selectNameProduct", "product");
 
     selectProduct = true;
   };
@@ -708,135 +923,239 @@ $(document).ready(function () {
     });
   });
 
+  // $(".slctProduct").change(function (e) {
+  //   e.preventDefault();
+
+  //   if (selectProduct == true) {
+  //     let num_order = $("#order :selected").text().trim();
+
+  //     // Filtrar producto por numero de pedido
+  //     productOrders = allOrders.filter(
+  //       (item) =>
+  //         item.num_order == num_order &&
+  //         (item.status == "PROGRAMAR" || item.status == "PROGRAMADO") &&
+  //         (item.accumulated_quantity_order == null ||
+  //           item.accumulated_quantity_order != 0 ||
+  //           item.flag_process == 0) &&
+  //         item.flag_tbl == 1
+  //     );
+
+  //     let product = productOrders.find((item) => item.id_product == this.value);
+
+  //     if (product.classification === "A") badge = "badge-success";
+  //     else if (product.classification === "B") badge = "badge-info";
+  //     else badge = "badge-danger";
+
+  //     $("#classification").html(
+  //       `Clasificación<span class="badge ${badge}" style="font-size: large;">${product.classification}</span>`
+  //     );
+
+  //     // Creacion data General de programacion
+  //     dataProgramming = {};
+  //     dataProgramming["reference"] = product.reference;
+  //     dataProgramming["product"] = product.product;
+  //     dataProgramming["update"] = 0;
+
+  //     for (let i = 0; i < productOrders.length; i++) {
+  //       if (this.value == productOrders[i].id_product) {
+  //         // Filtrar procesos de producto
+  //         let process = allProcess.filter(
+  //           (item) =>
+  //             item.id_product == this.value && item.num_order == num_order
+  //         );
+  //         // Ordenar siguiente proceso por ruta
+  //         process = process.find((item) => item.route1 == process[0].route);
+
+  //         let $select = $(`#idProcess`);
+  //         $select.empty();
+  //         $select.append(`<option value="0" disabled >Seleccionar</option>`);
+
+  //         $select.append(
+  //           `<option class="${process.route1}" value ='${process.id_process}'selected> ${process.process} </option>`
+  //         );
+
+  //         $("#quantityOrder").val(
+  //           parseFloat(productOrders[i].original_quantity).toLocaleString()
+  //         );
+
+  //         if (
+  //           productOrders[i].accumulated_quantity == 0 ||
+  //           productOrders[i].accumulated_quantity == null
+  //         )
+  //           accumulated_quantity = parseFloat(
+  //             productOrders[i].original_quantity
+  //           ).toLocaleString();
+  //         else
+  //           accumulated_quantity = parseFloat(
+  //             productOrders[i].accumulated_quantity
+  //           ).toLocaleString();
+
+  //         $("#quantityMissing").val(accumulated_quantity);
+
+  //         // Filtrar FTMP por producto
+  //         let productsMaterials = allProductsMaterials.filter(
+  //           (item) => item.id_product == this.value
+  //         );
+  //         // Ordenar cantidad de FTMP menor
+  //         productsMaterials = productsMaterials.sort(
+  //           (a, b) => a.quantity - b.quantity
+  //         );
+  //         $("#quantityMP").html(
+  //           Math.floor(productsMaterials[0].quantity).toLocaleString("es-CO", {
+  //             maximumFractionDigits: 0,
+  //           })
+  //         );
+
+  //         dataProgramming["id_order"] = productOrders[i].id_order;
+  //         dataProgramming["num_order"] = num_order;
+
+  //         break;
+  //       }
+  //     }
+
+  //     selectProcess = true;
+  //     checkData(2, this.id);
+  //     $(`#idProcess`).change();
+  //   }
+  // });
+
   $(".slctProduct").change(function (e) {
     e.preventDefault();
 
-    if (selectProduct == true) {
-      let num_order = $("#order :selected").text().trim();
+    if (!selectProduct) return;
 
-      // Filtrar producto por numero de pedido
-      productOrders = allOrders.filter(
-        (item) =>
-          item.num_order == num_order &&
-          (item.status == "PROGRAMAR" || item.status == "PROGRAMADO") &&
-          (item.accumulated_quantity_order == null ||
-            item.accumulated_quantity_order != 0 ||
-            item.flag_process == 0) &&
-          item.flag_tbl == 1
+    const num_order = $("#order :selected").text().trim();
+    const productOrders = allOrders.filter(item =>
+      item.num_order === num_order &&
+      ["PROGRAMAR", "PROGRAMADO"].includes(item.status) &&
+      (item.accumulated_quantity_order === null ||
+        item.accumulated_quantity_order !== 0 ||
+        item.flag_process === 0) &&
+      item.flag_tbl === 1
+    );
+
+    const product = productOrders.find(item => item.id_product == this.value);
+
+    const badge = product.classification === "A"
+      ? "badge-success"
+      : product.classification === "B"
+        ? "badge-info"
+        : "badge-danger";
+
+    $("#classification").html(
+      `Clasificación<span class="badge ${badge}" style="font-size: large;">${product.classification}</span>`
+    );
+
+    // Creación de datos de programación general
+    dataProgramming = {
+      reference: product.reference,
+      product: product.product,
+      update: 0
+    };
+
+    for (const order of productOrders) {
+      if (this.value != order.id_product) continue;
+
+      // Filtrar procesos de producto y ordenarlos por la siguiente ruta
+      const process = allProcess
+        .filter(item => item.id_product == this.value && item.num_order == num_order)
+        .sort((a, b) => a.route1 - b.route1)[0];
+
+      const $select = $("#idProcess");
+      $select.empty().append(`<option value="0" disabled>Seleccionar</option>`);
+      $select.append(
+        `<option class="${process.route1}" value ='${process.id_process}' selected>${process.process}</option>`
       );
 
-      let product = productOrders.find((item) => item.id_product == this.value);
+      $("#quantityOrder").val(parseFloat(order.original_quantity).toLocaleString());
+      const accumulated_quantity = parseFloat(order.accumulated_quantity ?? order.original_quantity).toLocaleString();
+      $("#quantityMissing").val(accumulated_quantity);
 
-      if (product.classification === "A") badge = "badge-success";
-      else if (product.classification === "B") badge = "badge-info";
-      else badge = "badge-danger";
-
-      $("#classification").html(
-        `Clasificación<span class="badge ${badge}" style="font-size: large;">${product.classification}</span>`
+      // Filtrar y ordenar FTMP por producto
+      const productsMaterials = allProductsMaterials
+        .filter(item => item.id_product == this.value)
+        .sort((a, b) => a.quantity - b.quantity);
+        
+      $("#quantityMP").html(
+        Math.floor(productsMaterials[0].quantity).toLocaleString("es-CO", {
+          maximumFractionDigits: 0
+        })
       );
 
-      // Creacion data General de programacion
-      dataProgramming = {};
-      dataProgramming["reference"] = product.reference;
-      dataProgramming["product"] = product.product;
-      dataProgramming["update"] = 0;
+      dataProgramming["id_order"] = order.id_order;
+      dataProgramming["num_order"] = num_order;
 
-      for (let i = 0; i < productOrders.length; i++) {
-        if (this.value == productOrders[i].id_product) {
-          // Filtrar procesos de producto
-          let process = allProcess.filter(
-            (item) =>
-              item.id_product == this.value && item.num_order == num_order
-          );
-          // Ordenar siguiente proceso por ruta
-          process = process.find((item) => item.route1 == process[0].route);
-
-          let $select = $(`#idProcess`);
-          $select.empty();
-          $select.append(`<option value="0" disabled >Seleccionar</option>`);
-
-          $select.append(
-            `<option class="${process.route1}" value ='${process.id_process}'selected> ${process.process} </option>`
-          );
-
-          $("#quantityOrder").val(
-            parseFloat(productOrders[i].original_quantity).toLocaleString()
-          );
-
-          if (
-            productOrders[i].accumulated_quantity == 0 ||
-            productOrders[i].accumulated_quantity == null
-          )
-            accumulated_quantity = parseFloat(
-              productOrders[i].original_quantity
-            ).toLocaleString();
-          else
-            accumulated_quantity = parseFloat(
-              productOrders[i].accumulated_quantity
-            ).toLocaleString();
-
-          $("#quantityMissing").val(accumulated_quantity);
-
-          // Filtrar FTMP por producto
-          let productsMaterials = allProductsMaterials.filter(
-            (item) => item.id_product == this.value
-          );
-          // Ordenar cantidad de FTMP menor
-          productsMaterials = productsMaterials.sort(
-            (a, b) => a.quantity - b.quantity
-          );
-          $("#quantityMP").html(
-            Math.floor(productsMaterials[0].quantity).toLocaleString("es-CO", {
-              maximumFractionDigits: 0,
-            })
-          );
-
-          dataProgramming["id_order"] = productOrders[i].id_order;
-          dataProgramming["num_order"] = num_order;
-
-          break;
-        }
-      }
-
-      selectProcess = true;
-      checkData(2, this.id);
-      $(`#idProcess`).change();
+      break;
     }
+
+    selectProcess = true;
+    checkData(2, this.id);
+    $("#idProcess").change();
   });
+
+  // $("#idProcess").change(function (e) {
+  //   e.preventDefault();
+
+  //   if (selectProcess == true) {
+  //     // Obtener el classname de la opción seleccionada
+  //     var route = parseInt($(this).find("option:selected").attr("class"));
+  //     dataProgramming["route"] = route + 1;
+  //     let id_product = parseInt($("#selectNameProduct").val());
+
+  //     let arr = allCiclesMachines.find(
+  //       (item) =>
+  //         item.id_product == id_product &&
+  //         item.id_process == this.value &&
+  //         item.route == route
+  //     );
+
+  //     let $select = $(`#idMachine`);
+  //     $select.empty();
+  //     $select.append(`<option disabled value=''>Seleccionar</option>`);
+
+  //     if (arr.status == 0) {
+  //       $select.append(
+  //         `<option value ='${arr.id_alternal_machine}' selected> ${arr.alternal_machine} </option>`
+  //       );
+  //     }
+  //     else {
+  //       $select.append(
+  //         `<option value ='${arr.id_machine}' selected> ${arr.machine} </option>`
+  //       );
+  //     }
+
+  //     $(`#idMachine`).change();
+  //   }
+  // });
 
   $("#idProcess").change(function (e) {
     e.preventDefault();
 
-    if (selectProcess == true) {
-      // Obtener el classname de la opción seleccionada
-      var route = parseInt($(this).find("option:selected").attr("class"));
-      dataProgramming["route"] = route + 1;
-      let id_product = parseInt($("#selectNameProduct").val());
+    if (!selectProcess) return;
 
-      let arr = allCiclesMachines.find(
-        (item) =>
-          item.id_product == id_product &&
-          item.id_process == this.value &&
-          item.route == route
-      );
+    // Obtener la clase de la opción seleccionada
+    const route = parseInt($(this).find("option:selected").attr("class"));
+    dataProgramming["route"] = route + 1;
 
-      let $select = $(`#idMachine`);
-      $select.empty();
-      $select.append(`<option disabled value=''>Seleccionar</option>`);
+    const id_product = parseInt($("#selectNameProduct").val());
 
-      if (arr.status == 0) {
-        $select.append(
-          `<option value ='${arr.id_alternal_machine}' selected> ${arr.alternal_machine} </option>`
-        );
-      }
-      else {
-        $select.append(
-          `<option value ='${arr.id_machine}' selected> ${arr.machine} </option>`
-        );
-      }
+    // Buscar el ciclo correspondiente de la máquina
+    const arr = allCiclesMachines.find(
+      item => item.id_product === id_product && item.id_process === this.value && item.route === route
+    );
 
-      $(`#idMachine`).change();
-    }
+    // Vaciar y agregar nuevas opciones en el select de máquinas
+    const $select = $("#idMachine");
+    $select.empty().append("<option disabled value=''>Seleccionar</option>");
+
+    const machineOption = arr.status === 0
+      ? `<option value ='${arr.id_alternal_machine}' selected> ${arr.alternal_machine} </option>`
+      : `<option value ='${arr.id_machine}' selected> ${arr.machine} </option>`;
+
+    $select.append(machineOption);
+
+    // Activar el evento de cambio para el select de máquinas
+    $(`#idMachine`).change();
   });
 
   if (flag_type_program == 0) {
