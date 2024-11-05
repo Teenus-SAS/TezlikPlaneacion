@@ -149,7 +149,7 @@ $(document).ready(function () {
         return `
           <button class="btn btn-info deliver" id="delivery">Entregar MP</button>
           <a href="javascript:;">
-            <i id="${data.id_materials_component_user}" class="mdi mdi-playlist-check seeUPDTDeliverOC" data-toggle="tooltip" title="Ver Usuarios" style="font-size: 30px;color:black"></i>
+            <i id="${data.id_materials_component_user}" class="bx bx-edit-alt seeUPDTDeliverOC" data-toggle="tooltip" title="Ver Detalle" style="font-size: 30px;color:black"></i>
           </a>
         `;
     }
