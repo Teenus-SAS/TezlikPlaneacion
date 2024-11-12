@@ -207,11 +207,11 @@ class GeneralOrdersDao
 
         $stmt = $connection->prepare("SELECT * FROM orders 
                                       WHERE min_date = '0000-00-00' AND max_date = '0000-00-00' 
-                                      AND num_order = :num_order 
+                                      -- AND num_order = :num_order 
                                       AND id_product = :id_product 
                                       AND id_client = :id_client");
         $stmt->execute([
-            'num_order' => $dataOrder['order'],
+            // 'num_order' => $dataOrder['order'],
             'id_product' => $dataOrder['idProduct'],
             'id_client' => $dataOrder['idClient']
         ]);
