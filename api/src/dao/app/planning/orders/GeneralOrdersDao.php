@@ -272,21 +272,23 @@ class GeneralOrdersDao
         return $order;
     }
 
-    public function findOrderByNumOrder($num_order)
+    public function findOrderByProductAndClient($dataOrder)
     {
         $connection = Connection::getInstance()->getConnection();
 
         $sql = "SELECT *
                 FROM orders 
-                WHERE num_order = :num_order";
+                WHERE id_product = :id_product
+                AND id_client = :id_client";
         $stmt = $connection->prepare($sql);
         $stmt->execute([
-            'num_order' => $num_order
+            'id_product' => $dataOrder['idProduct'],
+            'id_client' => $dataOrder['idClient']
         ]);
 
         $this->logger->info(__FUNCTION__, array('query' => $stmt->queryString, 'errors' => $stmt->errorInfo()));
 
-        $order = $stmt->fetch($connection::FETCH_ASSOC);
+        $order = $stmt->fetchAll($connection::FETCH_ASSOC);
         return $order;
     }
 

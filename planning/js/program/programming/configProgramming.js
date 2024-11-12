@@ -17,6 +17,8 @@ $(document).ready(function () {
 
   loadAllDataProgramming = async () => {
     try {
+      $('#btnNewProgramming').hide();
+
       let storOrders = sessionStorage.getItem("allOrders");
       let storOrdersProgramming = sessionStorage.getItem(
         "allOrdersProgramming"
@@ -152,11 +154,13 @@ $(document).ready(function () {
       });
 
       // Cargar selects de maquinas por pedidos programados
-      loadDataMachinesProgramming(uniqueArray);
+      await loadDataMachinesProgramming(uniqueArray);
       // Cargar selects de pedidos que esten por programar
-      loadOrdersProgramming(allOrdersProgramming);
+      await loadOrdersProgramming(allOrdersProgramming);
       // Cargar DataTable con los pedidos programados
-      loadTblProgramming(data, 1);
+      await loadTblProgramming(data, 1);
+
+      $('#btnNewProgramming').show();
     } catch (error) {
       console.error("Error loading data:", error);
     }
@@ -179,16 +183,16 @@ $(document).ready(function () {
   loadOrdersProgramming = async (data) => {
     // Filtrar datos por `flag_tbl`
     const filteredData = data
-      .filter(item => item.flag_tbl === 1)
+      .filter(item => item.flag_tbl == 1)
       .reduce((acc, current) => {
         // Solo agregar órdenes únicas por `num_order`
-        if (!acc.find(item => item.num_order === current.num_order)) {
+        if (!acc.find(item => item.num_order == current.num_order)) {
           acc.push(current);
         }
         return acc;
       }, []);
 
-    if (filteredData.length === 0) return 1;
+    if (filteredData.length == 0) return 1;
 
     const $select = $('#order');
     $select.empty().append('<option disabled selected>Seleccionar</option>');
@@ -275,12 +279,12 @@ $(document).ready(function () {
 
   const checkData = async (op, id) => {
     const inputs = document.getElementsByClassName("input");
-    let cont = Array.from(inputs).filter(input => input.value === "" || input.value === "0").length;
+    let cont = Array.from(inputs).filter(input => input.value == "" || input.value == 0).length;
 
     $("#btnCreateProgramming").hide();
 
     if (cont < 5) {
-      if (dataProgramming.update === 0) {
+      if (dataProgramming.update == 0) {
         $("#minDate, #maxDate").val("").prop("readOnly", false);
         $("#minDate").prop("type", "date");
         $(".date").hide();
@@ -293,7 +297,7 @@ $(document).ready(function () {
 
       if (!isNaN(quantity)) {
         const productsMaterials = allProductsMaterials
-          .filter(item => item.id_product === product)
+          .filter(item => item.id_product == product)
           .sort((a, b) => a.quantity - b.quantity);
 
         if (productsMaterials.length && productsMaterials[0].quantity < quantity) {
@@ -304,13 +308,13 @@ $(document).ready(function () {
         $(".cardFormProgramming2").show(800);
       }
 
-      if (op === 1 && !isNaN(machine)) {
+      if (op == 1 && !isNaN(machine)) {
         machines = flattenData(generalMultiArray).filter(
-          item => item.id_machine === machine && item.id_product === product
+          item => item.id_machine == machine && item.id_product == product
         );
 
         const planningMachine = allPlanningMachines.some(
-          item => item.id_machine === machine
+          item => item.id_machine == machine
         );
 
         if (!planningMachine) {
@@ -319,9 +323,9 @@ $(document).ready(function () {
         }
       }
 
-      if (cont === 0 && !isNaN(machine)) {
+      if (cont == 0 && !isNaN(machine)) {
         let productMaterial = allProductsMaterials.some(
-          item => item.id_product === product && item.quantity > 0
+          item => item.id_product == product && item.quantity > 0
         );
 
         if (!productMaterial) {
@@ -329,8 +333,8 @@ $(document).ready(function () {
           return false;
         }
 
-        if (id === "quantity" && allProductsMaterials.some(
-          item => item.id_product === product && item.quantity < quantity
+        if (id == "quantity" && allProductsMaterials.some(
+          item => item.id_product == product && item.quantity < quantity
         )) {
           toastr.error("Materia prima sin cantidad disponible");
           return false;
@@ -342,7 +346,7 @@ $(document).ready(function () {
           return false;
         }
 
-        if (flag_type_program === 0) {
+        if (flag_type_program == 0) {
           if (machines.length > 0) {
             dataProgramming.min_date = machines.at(-1).max_date;
             const hour = new Date(dataProgramming.min_date).getHours();
@@ -360,7 +364,7 @@ $(document).ready(function () {
           } else {
             const storedMinDate = sessionStorage.getItem("minDate");
 
-            if (dataProgramming.update === 1) {
+            if (dataProgramming.update == 1) {
               const newDate = convetFormatDateTime1($("#minDate").val());
               dataProgramming.min_date = newDate;
               calcMaxDate(newDate, 0, 2);
@@ -376,7 +380,7 @@ $(document).ready(function () {
         }
       }
 
-      if (flag_type_program === 1 && cont === 0) {
+      if (flag_type_program == 1 && cont == 0) {
         $("#btnCreateProgramming").show();
       }
       // if (dataProgramming["update"] == 0) {
@@ -626,7 +630,7 @@ $(document).ready(function () {
 
       // Formatear la fecha según si contiene "T" y el valor de dataProgramming["update"]
       min_date = date.includes("T")
-        ? dataProgramming["update"] === 0
+        ? dataProgramming["update"] == 0
           ? convetFormatDate(date.split("T")[0])
           : convetFormatDateTime1(date)
         : convetFormatDate(date);
@@ -777,15 +781,15 @@ $(document).ready(function () {
         const product = parseFloat($("#selectNameProduct").val());
         const machine = parseFloat($("#idMachine").val());
         const quantity = parseInt($("#quantity").val());
-        const order = allOrders.find(item => item.id_product === product && item.num_order === num_order);
+        const order = allOrders.find(item => item.id_product == product && item.num_order == num_order);
 
         let ciclesMachine = allCiclesMachines.find(
-          item => item.id_machine === machine && item.id_product === product
+          item => item.id_machine == machine && item.id_product == product
         );
-        let planningMachine = allPlanningMachines.find(item => item.id_machine === machine);
+        let planningMachine = allPlanningMachines.find(item => item.id_machine == machine);
 
-        if (op === 2) {
-          if (dataProgramming.update === 0) {
+        if (op == 2) {
+          if (dataProgramming.update == 0) {
             const startHour = planningMachine.hour_start;
             min_date = startHour
               ? new Date(`${min_date} ${startHour}:00:00`)
@@ -882,10 +886,10 @@ $(document).ready(function () {
 
   const loadProducts = (num_order) => {
     const orders = allOrders.filter(item =>
-      item.num_order === num_order &&
+      item.num_order == num_order &&
       ["PROGRAMAR", "PROGRAMADO"].includes(item.status) &&
-      (item.accumulated_quantity_order == null || item.accumulated_quantity_order !== 0 || item.flag_process === 0) &&
-      item.flag_tbl === 1
+      (item.accumulated_quantity_order == null || item.accumulated_quantity_order !== 0 || item.flag_process == 0) &&
+      item.flag_tbl == 1
     );
 
     $("#quantityOrder").val("");
@@ -1026,19 +1030,19 @@ $(document).ready(function () {
 
     const num_order = $("#order :selected").text().trim();
     const productOrders = allOrders.filter(item =>
-      item.num_order === num_order &&
+      item.num_order == num_order &&
       ["PROGRAMAR", "PROGRAMADO"].includes(item.status) &&
-      (item.accumulated_quantity_order === null ||
+      (item.accumulated_quantity_order == null ||
         item.accumulated_quantity_order !== 0 ||
-        item.flag_process === 0) &&
-      item.flag_tbl === 1
+        item.flag_process == 0) &&
+      item.flag_tbl == 1
     );
 
     const product = productOrders.find(item => item.id_product == this.value);
 
-    const badge = product.classification === "A"
+    const badge = product.classification == "A"
       ? "badge-success"
-      : product.classification === "B"
+      : product.classification == "B"
         ? "badge-info"
         : "badge-danger";
 
@@ -1141,14 +1145,14 @@ $(document).ready(function () {
 
     // Buscar el ciclo correspondiente de la máquina
     const arr = allCiclesMachines.find(
-      item => item.id_product === id_product && item.id_process === this.value && item.route === route
+      item => item.id_product == id_product && item.id_process == this.value && item.route == route
     );
 
     // Vaciar y agregar nuevas opciones en el select de máquinas
     const $select = $("#idMachine");
     $select.empty().append("<option disabled value=''>Seleccionar</option>");
 
-    const machineOption = arr.status === 0
+    const machineOption = arr.status == 0
       ? `<option value ='${arr.id_alternal_machine}' selected> ${arr.alternal_machine} </option>`
       : `<option value ='${arr.id_machine}' selected> ${arr.machine} </option>`;
 

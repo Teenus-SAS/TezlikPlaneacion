@@ -58,14 +58,19 @@ $(document).ready(function () {
     e.preventDefault();
 
     // Obtener la fecha actual y los datos de la fila correspondiente
-    let date = new Date().toISOString().split("T")[0];
+    // let date = new Date().toISOString().split("T")[0];
+    let date = new Date();
+    let formattedDate = date.getFullYear() + '-' +
+      String(date.getMonth() + 1).padStart(2, '0') + '-' +
+      String(date.getDate()).padStart(2, '0');
+
     const row = $(this).closest("tr")[0];
     let data = tblOffices.fnGetData(row);
 
     bootbox.confirm({
       title: "Ingrese Fecha De Entrega!",
       message: `<div class="col-sm-12 floating-label enable-floating-label">
-                        <input class="form-control" type="date" name="date" id="dateOFF" max="${date}"></input>
+                        <input class="form-control" type="date" name="date" id="dateOFF" max="${formattedDate}"></input>
                         <label for="date">Fecha</label>
                       </div>`,
       buttons: {

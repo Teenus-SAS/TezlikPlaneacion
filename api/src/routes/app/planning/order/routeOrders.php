@@ -247,6 +247,12 @@ $app->post('/addOrder', function (Request $request, Response $response, $args) u
 
         $findOrder = $generalOrdersDao->findSameOrder($dataOrder);
         if (!$findOrder) {
+            // $orders = $generalOrdersDao->findOrderByProductAndClient($dataOrder);
+
+            // for ($i=0; $i < sizeof($orders); $i++) { 
+            //     # code...
+            // }
+
             $order = $generalOrdersDao->findLastNumOrderByCompany($id_company);
             $dataOrder['order'] = $order['num_order'];
             $dataOrder['typeOrder'] = 1;
