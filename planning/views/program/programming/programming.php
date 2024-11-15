@@ -121,6 +121,10 @@ if (sizeof($_SESSION) == 0)
                                                     <div class="col-sm-1" id="classification" style="display: flex; flex-direction: column; align-items: center;">
                                                     </div>
                                                     <div class="col-sm-2 floating-label enable-floating-label show-label mb-2 p-1">
+                                                        <label for="">Cliente</label>
+                                                        <input type="text" class="form-control text-center" id="client" name="client" readonly>
+                                                    </div>
+                                                    <div class="col-sm-2 floating-label enable-floating-label show-label mb-2 p-1">
                                                         <label for="">Cantidad Requerida</label>
                                                         <input type="text" class="form-control text-center" id="quantityOrder" name="quantityOrder" readonly>
                                                     </div>

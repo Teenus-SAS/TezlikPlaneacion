@@ -1071,6 +1071,7 @@ $(document).ready(function () {
         `<option class="${process.route1}" value ='${process.id_process}' selected>${process.process}</option>`
       );
 
+      $("#client").val(order.client);
       $("#quantityOrder").val(parseFloat(order.original_quantity).toLocaleString());
       const accumulated_quantity = parseFloat(order.accumulated_quantity ?? order.original_quantity).toLocaleString();
       $("#quantityMissing").val(accumulated_quantity);
