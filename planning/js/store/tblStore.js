@@ -149,7 +149,7 @@ $(document).ready(function () {
         return `
           <button class="btn btn-info deliver" id="delivery">Entregar MP</button>
           <a href="javascript:;">
-            <i id="${data.id_materials_component_user}" class="bx bx-edit-alt seeUPDTDeliverOC" data-toggle="tooltip" title="Ver Detalle" style="font-size: 30px;color:black"></i>
+            <i id="${data.id_materials_component_user}" class="bi bi-info-circle seeUPDTDeliverOC" data-toggle="tooltip" title="Ver Detalle" style="font-size: 30px;color:black"></i>
           </a>
         `;
     }
@@ -161,7 +161,7 @@ $(document).ready(function () {
       year: "numeric",
     })}<br>${fechaHora.toLocaleTimeString("es-CO", {
       hour: "2-digit",
-      minute: "2-digit",
+      minute: "2-digit", 
       hour12: true,
     })}`;
 
@@ -175,7 +175,7 @@ $(document).ready(function () {
       return `
           Entregado: ${data.firstname_delivered} ${data.lastname_delivered}<br>${fechaHoraFormateada}
           <a href="javascript:;">
-            <i id="${data.id_materials_component_user}" class="bx bx-edit-alt seeUPDTDeliverOC" data-toggle="tooltip" title="Ver Detalle" style="font-size: 30px;"></i>
+            <i id="${data.id_materials_component_user}" class="bi bi-info-circle seeUPDTDeliverOC" data-toggle="tooltip" title="Ver Detalle" style="font-size: 30px;"></i>
           </a>
         `;
   };
