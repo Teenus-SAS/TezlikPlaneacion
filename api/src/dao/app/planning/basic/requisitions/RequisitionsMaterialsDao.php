@@ -55,7 +55,7 @@ class RequisitionsMaterialsDao
         $connection = Connection::getInstance()->getConnection();
 
         try {
-            $stmt = $connection->prepare("INSERT INTO requisitions_materials (id_company, id_material, id_provider, application_date, delivery_date, , quantity_requested, purchase_order, id_user_requisition) 
+            $stmt = $connection->prepare("INSERT INTO requisitions_materials (id_company, id_material, id_provider, application_date, delivery_date, quantity_requested, purchase_order, id_user_requisition) 
                                           VALUES (:id_company, :id_material, :id_provider, :application_date, :delivery_date, :quantity_requested, :purchase_order, :id_user)");
             $stmt->execute([
                 'id_company' => $id_company,
