@@ -41,10 +41,20 @@ class UsersStoreDao
                                             u.firstname, 
                                             u.lastname, 
                                             u.email, 
-                                            stu.delivery_store
+                                            stu.delivery_store,
+                                            stu.delivery_pending,
+                                            -- Nueva subconsulta para evitar duplicados en la suma de reserved
+                                                IFNULL((
+                                                    SELECT SUM(DISTINCT pg_inner.quantity * pm_inner.quantity)
+                                                    FROM products_materials pm_inner
+                                                    INNER JOIN programming pg_inner ON pg_inner.id_product = pm_inner.id_product
+                                                    WHERE pg_inner.id_programming = stu.id_programming
+                                                    AND pm_inner.id_material = stu.id_material
+                                                ), 0) AS reserved
                                       FROM store_users stu
                                         INNER JOIN users u ON u.id_user = stu.id_user_delivered
-                                      WHERE stu.id_programming = :id_programming AND stu.id_material = :id_material");
+                                      WHERE stu.id_programming = :id_programming AND stu.id_material = :id_material
+                                      GROUP BY stu.id_user_store");
         $stmt->execute([
             'id_programming' => $id_programming,
             'id_material' => $id_material
@@ -86,13 +96,12 @@ class UsersStoreDao
         $connection = Connection::getInstance()->getConnection();
 
         try {
-            // , delivery_pending = :delivery_pending
-            $stmt = $connection->prepare("UPDATE store_users SET delivery_store = :delivery_store
+            $stmt = $connection->prepare("UPDATE store_users SET delivery_store = :delivery_store, delivery_pending = :delivery_pending
                                           WHERE id_user_store = :id_user_store");
             $stmt->execute([
-                'delivery_store' => $dataStore['delivered'],
-                // 'delivery_pending' => $dataStore['pending'],
-                'id_user_store' => $dataStore['idUserStore'],
+                'delivery_store' => $dataStore['delivery_store'],
+                'delivery_pending' => $dataStore['delivery_pending'],
+                'id_user_store' => $dataStore['id_user_store'],
             ]);
             $this->logger->info(__FUNCTION__, array('query' => $stmt->queryString, 'errors' => $stmt->errorInfo()));
         } catch (\Exception $e) {

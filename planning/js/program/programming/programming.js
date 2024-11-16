@@ -127,6 +127,7 @@ $(document).ready(function () {
     !data.accumulated_quantity
       ? (accumulated_quantity = 0)
       : (accumulated_quantity = data.accumulated_quantity);
+    $("#client").val(data.client);
 
     $("#quantityMissing").val(accumulated_quantity.toLocaleString());
     let productsMaterials = allProductsMaterials.filter(
@@ -837,7 +838,11 @@ $(document).ready(function () {
               generalMultiArray = [];
               // allTblData = [];
               sessionStorage.clear();
-              $(".cardAddOP").show(800);
+
+              setTimeout(() => {
+                $(".cardAddOP").show(800);                
+              }, 5000);
+
               message(resp);
             },
           });

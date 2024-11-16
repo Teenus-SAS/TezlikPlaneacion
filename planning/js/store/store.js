@@ -1,4 +1,6 @@
 $(document).ready(function () {
+  let storedDLVS = [];
+
   // Recibir MP
   $(document).on("click", ".changeDateMP", function (e) {
     e.preventDefault();
@@ -250,69 +252,17 @@ $(document).ready(function () {
     return false;
   });
 
-  // $(document).on('click', '.seeUPDTDeliverOC', async function (e) {
-  //   e.preventDefault();
-
-  //   const row = $(this).closest("tr")[0];
-  //   let data = tblDeliverOP.fnGetData(row);
-
-  //   let users = await searchData(`/api/usersStore/${data.id_programming}/${data.id_material}`);
-  //   let rows = '';
-
-  //   for (let i = 0; i < users.length; i++) {
-  //     rows +=
-  //       `<tr>
-  //         <td>${i + 1}</td>
-  //         <td>${users[i].firstname}</td>
-  //         <td>${users[i].lastname}</td>
-  //         <td>${users[i].email}</td>
-  //         <td>
-	// 					<input type="number" class="form-control text-center" id="delvStore-${users[i].id_user_store}" value="${users[i].delivery_store}">
-  //         </td>
-  //         <td>
-  //           <a href="javascript:;" <i id="upd-${users[i].id_user_store}" class="bx bx-edit-alt updateDLVS" data-toggle='tooltip' title='Actualizar Entrega' style="font-size: 30px;"></i></a>
-  //         </td>
-  //         </tr>`;
-  //       }
-
-  //   // Mostramos el mensaje con Bootbox
-  //   bootbox.alert({
-  //     title: 'Usuarios',
-  //     message: `
-  //           <div class="container">
-  //             <div class="col-12">
-  //               <div class="table-responsive">
-  //                 <table class="fixed-table-loading table table-hover">
-  //                   <thead>
-  //                     <tr>
-  //                       <th>No</th>
-  //                       <th>Nombre</th>
-  //                       <th>Apellido</th>
-  //                       <th>Email</th>
-  //                       <th>Cantidad Entregada</th>
-  //                       <th>Acciones</th>
-  //                     </tr>
-  //                   </thead>
-  //                   <tbody>
-  //                     ${rows}
-  //                   </tbody>
-  //                 </table>
-  //               </div>
-  //             </div> 
-  //           </div>`,
-  //     size: 'large',
-  //     backdrop: true
-  //   });
-  //   return false;
-  // });
   $(document).on('click', '.seeUPDTDeliverOC', async function (e) {
     e.preventDefault();
 
+    storedDLVS = [];
     const row = $(this).closest("tr")[0];
     const data = tblDeliverOP.fnGetData(row);
 
     // Obtenemos los usuarios de forma asincrónica
     const users = await searchData(`/api/usersStore/${data.id_programming}/${data.id_material}`);
+
+    storedDLVS = [...users];
     
     // Generamos las filas en una sola operación usando .map()
     const rows = users.map((user, index) => `
@@ -321,12 +271,11 @@ $(document).ready(function () {
           <td>${user.firstname}</td>
           <td>${user.lastname}</td>
           <td>${user.email}</td>
-          <td><input type="number" class="form-control text-center" id="delvStore-${user.id_user_store}" value="${user.delivery_store}"></td>
-          <td><a href="javascript:;" <i id="upd-${user.id_user_store}" class="bx bx-edit-alt updateDLVS" data-toggle="tooltip" title="Actualizar Entrega" style="font-size: 30px;"></i></a></td>
-        </tr>`).join('');
+          <td><input type="number" class="form-control text-center updateDLVS" id="delvStore-${user.id_user_store}" value="${user.delivery_store}"></td>
+          </tr>`).join('');
 
     // Mostramos el mensaje con Bootbox
-    bootbox.alert({
+    bootbox.confirm({
       title: 'Usuarios',
       message: `
             <div class="container">
@@ -340,7 +289,6 @@ $(document).ready(function () {
                                     <th>Apellido</th>
                                     <th>Email</th>
                                     <th>Cantidad Entregada</th>
-                                    <th>Acciones</th>
                                 </tr>
                             </thead>
                             <tbody>${rows}</tbody>
@@ -348,33 +296,95 @@ $(document).ready(function () {
                     </div>
                 </div> 
             </div>`,
+      buttons: {
+        confirm: {
+          label: "OK",
+          className: "btn-success",
+        },
+        cancel: {
+          label: "Cancel",
+          className: "btn-danger",
+        },
+      }, 
+      callback: function (result) { 
+        if (result) {
+          saveDLVS();
+        }
+      },
       size: 'large',
       backdrop: true
-    });
+    }); 
+
   });
   
-  $(document).on('click', '.updateDLVS', function () { 
-    let id_user_store = $(this).attr("id").split("-")[1];
+  $(document).on('keyup', '.updateDLVS', function () {
+    try {
+      let id_user_store = $(this).attr("id").split("-")[1];
 
-    let value = parseFloat($(`#delvStore-${id_user_store}`).val());
+      let value = parseFloat(this.value);
+      let arr = storedDLVS.find(item => item.id_user_store == id_user_store);
+      
+      if (isNaN(value) || value <= 0) {
+        toastr.error('Ingrese todos los campos');
+        $(`#${this.id}`).val(arr.delivery_store);
+        return false;
+      } 
+      
+      let distincArr = storedDLVS.filter(item => item.id_user_store != id_user_store);
+      let stored = value;
+      let reserved = parseFloat(arr.reserved);
 
-    if (isNaN(value) || value <= 0) {
-      toastr.error('Ingrese todos los campos');
-      return false;
+      distincArr.forEach(item => {
+        stored += parseFloat(item.delivery_store);
+      });
+
+      if (value != arr.delivery_store) {
+        for (let i = 0; i < storedDLVS.length; i++) {
+          if (storedDLVS[i].id_user_store == id_user_store) {
+            let pending = stored != reserved ? reserved - stored : reserved - value;
+
+            pending < 0 ? (pending = 0) : (pending);
+
+            storedDLVS[i].delivery_store = value;
+            storedDLVS[i].delivery_pending = pending;
+          }
+        }
+      }
+    } catch (error) {
+      console.log(error);
     }
-
-    let data = {}; 
-    
-    data['idUserStore'] = id_user_store;
-    data['delivered'] = value; 
-
-    $.post('/api/saveDLVS', data,
-      function (resp) {
-        message(resp);
-      }, 
-    );
   });
-
+ 
+  const saveDLVS = () => {
+    bootbox.confirm({
+      title: "Confirmar",
+      message:
+        "¿Esta seguro de modificar la cantidad de MP a Entregar?.",
+      buttons: {
+        confirm: {
+          label: "Si",
+          className: "btn-success",
+        },
+        cancel: {
+          label: "No",
+          className: "btn-danger",
+        },
+      },
+      callback: function (result) {
+        if (result) { 
+          $.ajax({
+            type: "POST",
+            url: "/api/saveDLVS",
+            data: { data: storedDLVS },
+            success: function (resp) {
+              message(resp)
+            }
+          });
+        }
+      },
+    });
+  }
+  
   const message = (data, op) => {
     const { success, error, info, message } = data;
     if (success) { 

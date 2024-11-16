@@ -175,7 +175,7 @@ $(document).ready(function () {
       return `
           Entregado: ${data.firstname_delivered} ${data.lastname_delivered}<br>${fechaHoraFormateada}
           <a href="javascript:;">
-            <i id="${data.id_materials_component_user}" class="bi bi-info-circle seeUPDTDeliverOC" data-toggle="tooltip" title="Ver Detalle" style="font-size: 30px;"></i>
+            <i id="${data.id_materials_component_user}" class="bi bi-info-circle seeUPDTDeliverOC" data-toggle="tooltip" title="Ver Detalle" style="font-size: 30px; color:black"></i>
           </a>
         `;
   };

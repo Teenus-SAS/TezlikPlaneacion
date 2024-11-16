@@ -228,7 +228,11 @@ $app->get('/usersStore/{id_programming}/{id_material}', function (Request $reque
 $app->post('/saveDLVS', function (Request $request, Response $response, $args) use ($usersStoreDao) {
     $dataStore = $request->getParsedBody();
 
-    $store = $usersStoreDao->updateUserDeliveredMaterial($dataStore);
+    $users = $dataStore['data'];
+
+    for ($i = 0; $i < sizeof($users); $i++) {
+        $store = $usersStoreDao->updateUserDeliveredMaterial($users[$i]);
+    }
 
     if ($store == null)
         $resp = array('success' => true, 'message' => 'Materia prima modificada correctamente');
