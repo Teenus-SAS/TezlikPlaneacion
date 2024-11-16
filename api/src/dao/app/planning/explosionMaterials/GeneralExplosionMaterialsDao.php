@@ -159,7 +159,7 @@ class GeneralExplosionMaterialsDao
                         $data[$i]['transit'] = $arr['transit'];
                         $data[$i]['need'] += $arr['need'];
                         $data[$i]['minimum_stock'] = $arr['minimum_stock'];
-                        $data[$i]['available'] = $arr['quantity_material'] + $arr['transit'] - $data[$i]['minimum_stock'] - $data[$i]['need'];
+                        $data[$i]['available'] += $arr['quantity_material'] + $arr['transit'] - $data[$i]['minimum_stock'] - $data[$i]['need'];
                         $repeat = true;
                         break;
                     }

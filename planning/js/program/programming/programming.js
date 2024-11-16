@@ -341,7 +341,6 @@ $(document).ready(function () {
       } else {
         order.accumulated_quantity_order = quantity;
         order.accumulated_quantity = quantity;
-        quantityMissing = quantity;
         
         if (quantity == 0) {
           order.flag_tbl = 0;
@@ -352,6 +351,8 @@ $(document).ready(function () {
             ? quantity
             : order.original_quantity;
       }
+
+      quantityMissing = quantity;
     }
 
     // Actualiza todas las órdenes
