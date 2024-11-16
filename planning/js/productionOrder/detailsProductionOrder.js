@@ -131,11 +131,12 @@ $(document).ready(function () {
       pending < 0 ? (pending = 0) : pending;
 
       let action = "";
+      let value = recieve - accept;
 
       if (recieve > 0) {
-        if (recieve - accept > 0) {
+        if (value > 0) {
           action = `<button class="btn btn-info acceptMaterial" id="accept-${dataFT[i].id_material}">Aceptar MP</button>`;
-        } else if (recieve - accept <= 0) {
+        } else if (value <= 0) {
           action = `<a href="javascript:;">
                             <i class="mdi mdi-playlist-check seeAcceptMP programming-${id_programming} material-${dataFT[i].id_material}" data-toggle="tooltip" title="Ver Usuarios" style="font-size: 30px;color:black"></i>
                           </a>`;
@@ -145,28 +146,28 @@ $(document).ready(function () {
       body.insertAdjacentHTML(
         "beforeend",
         `<tr>
-                    <td>${dataFT[i].reference_material}</td>
-                    <td>${dataFT[i].material}</td>
-                    <td>${quantity_ftm} ${dataFT[i].abbreviation}</td>
-                    <td>${quantity_total} ${dataFT[i].abbreviation}</td>
-                    <td>$${cost_ftm.toLocaleString("es-CO", {
-                      minimumFractionDigits: 0,
-                      maximumFractionDigits: 2,
-                    })}</td>
-                    <td>$${cost_total.toLocaleString("es-CO", {
-                      minimumFractionDigits: 0,
-                      maximumFractionDigits: 0,
-                    })}</td>
-                    <td>${recieve.toLocaleString("es-CO", {
-                      minimumFractionDigits: 0,
-                      maximumFractionDigits: 2,
-                    })}</td>
-                    <td>${pending.toLocaleString("es-CO", {
-                      minimumFractionDigits: 0,
-                      maximumFractionDigits: 2,
-                    })}</td> 
-                    ${flag_op == 0 ? `<td>${action}</td>` : ""}
-                </tr>`
+            <td>${dataFT[i].reference_material}</td>
+            <td>${dataFT[i].material}</td>
+            <td>${quantity_ftm} ${dataFT[i].abbreviation}</td>
+            <td>${quantity_total} ${dataFT[i].abbreviation}</td>
+            <td>$${cost_ftm.toLocaleString("es-CO", {
+              minimumFractionDigits: 0,
+              maximumFractionDigits: 2,
+            })}</td>
+            <td>$${cost_total.toLocaleString("es-CO", {
+              minimumFractionDigits: 0,
+              maximumFractionDigits: 0,
+            })}</td>
+            <td>${recieve.toLocaleString("es-CO", {
+              minimumFractionDigits: 0,
+              maximumFractionDigits: 2,
+            })}</td>
+            <td>${pending.toLocaleString("es-CO", {
+              minimumFractionDigits: 0,
+              maximumFractionDigits: 2,
+            })}</td> 
+            ${flag_op == 0 ? `<td>${action}</td>` : ""}
+         </tr>`
       );
     }
 
@@ -236,9 +237,9 @@ $(document).ready(function () {
       });
 
       const statusBadge =
-        id_programming === 0
+        id_programming == 0
           ? `<i class="bi bi-shield-fill-x" data-toggle="tooltip" style="font-size:25px; color:#ee2020;"></i>`
-          : close_op === 0
+          : close_op == 0
             ? `<span class="badge badge-warning" style="font-size:100%">En proceso</span>`
             : `<span class="badge badge-success" style="font-size:100%">Finalizado</span>`;
 
@@ -280,11 +281,11 @@ $(document).ready(function () {
         if (!result) return;
 
         const totalReceived = allStore
-          .filter(item => item.id_programming === id_programming && item.id_material === idMaterial)
+          .filter(item => item.id_programming == id_programming && item.id_material == idMaterial)
           .reduce((sum, item) => sum + parseFloat(item.delivery_store), 0);
 
         const totalAccepted = allMaterialsAccept
-          .filter(item => item.id_material === idMaterial)
+          .filter(item => item.id_material == idMaterial)
           .reduce((sum, item) => sum + parseFloat(item.quantity), 0);
 
         const form = new FormData();
@@ -322,7 +323,7 @@ $(document).ready(function () {
         maximumFractionDigits: 9,
       });
 
-    if (abbreviation === "UND")
+    if (abbreviation == "UND")
       quantity = Math.floor(quantity).toLocaleString("es-CO", {
         maximumFractionDigits: 0,
       });
