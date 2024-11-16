@@ -143,7 +143,7 @@ $(document).ready(function () {
           render: function (data) {
             
             if (flag_type_program == 0) { 
-              const format = "DD/MM/YYYY HH:mm A";
+              const format = "DD/MM/YYYY hh:mm A";
               let min_date = moment(data.min_date_programming).format(format);
               let max_date = moment(data.max_date_programming).format(format);
               

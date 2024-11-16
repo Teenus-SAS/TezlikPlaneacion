@@ -534,77 +534,77 @@ $(document).ready(function () {
   };
   
   if (flag_type_program == 0) {
-    calcMaxDate = async (min_date, last_hour, op) => {
-      try {
-        const num_order = $("#order :selected").text().trim();
-        const product = parseFloat($("#selectNameProduct").val());
-        const machine = parseFloat($("#idMachine").val());
-        const quantity = parseInt($("#quantity").val());
-        const order = allOrders.find(item => item.id_product == product && item.num_order == num_order);
+    // calcMaxDate = async (min_date, last_hour, op) => {
+    //   try {
+    //     const num_order = $("#order :selected").text().trim();
+    //     const product = parseFloat($("#selectNameProduct").val());
+    //     const machine = parseFloat($("#idMachine").val());
+    //     const quantity = parseInt($("#quantity").val());
+    //     const order = allOrders.find(item => item.id_product == product && item.num_order == num_order);
 
-        let ciclesMachine = allCiclesMachines.find(
-          item => item.id_machine == machine && item.id_product == product
-        );
-        let planningMachine = allPlanningMachines.find(item => item.id_machine == machine);
+    //     let ciclesMachine = allCiclesMachines.find(
+    //       item => item.id_machine == machine && item.id_product == product
+    //     );
+    //     let planningMachine = allPlanningMachines.find(item => item.id_machine == machine);
 
-        if (op == 2) {
-          if (dataProgramming.update == 0) {
-            const startHour = moment(planningMachine.hour_start.toFixed(2), "HH:mm").format("h:mm A");
-            min_date = startHour
-              ? new Date(`${min_date} ${startHour}`)
-              : new Date(min_date);
-          } else {
-            min_date = new Date(min_date);
-          }
+    //     if (op == 2) {
+    //       if (dataProgramming.update == 0) {
+    //         const startHour = moment(planningMachine.hour_start.toFixed(2), "HH:mm").format("h:mm A");
+    //         min_date = startHour
+    //           ? new Date(`${min_date} ${startHour}`)
+    //           : new Date(min_date);
+    //       } else {
+    //         min_date = new Date(min_date);
+    //       }
 
-          const formatDate = date =>
-            `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, "0")}-${String(date.getDate()).padStart(2, "0")} ${String(date.getHours()).padStart(2, "0")}:${String(date.getMinutes()).padStart(2, "0")}:00`;
-          min_date = formatDate(min_date);
-        }
+    //       const formatDate = date =>
+    //         `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, "0")}-${String(date.getDate()).padStart(2, "0")} ${String(date.getHours()).padStart(2, "0")}:${String(date.getMinutes()).padStart(2, "0")}:00`;
+    //       min_date = formatDate(min_date);
+    //     }
 
-        let final_date = new Date(min_date);
+    //     let final_date = new Date(min_date);
 
-        const days = quantity / (ciclesMachine.cicles_hour * planningMachine.hours_day);
-        const sobDays = days % 1;
-        const hours = sobDays * planningMachine.hours_day;
-        const minutes = (hours % 1) * 60;
+    //     const days = quantity / (ciclesMachine.cicles_hour * planningMachine.hours_day);
+    //     const sobDays = days % 1;
+    //     const hours = sobDays * planningMachine.hours_day;
+    //     const minutes = (hours % 1) * 60;
 
-        final_date.setDate(final_date.getDate() + Math.floor(days));
-        final_date.setHours(final_date.getHours() + Math.floor(hours));
-        final_date.setMinutes(final_date.getMinutes() + Math.floor(minutes));
+    //     final_date.setDate(final_date.getDate() + Math.floor(days));
+    //     final_date.setHours(final_date.getHours() + Math.floor(hours));
+    //     final_date.setMinutes(final_date.getMinutes() + Math.floor(minutes));
 
-        const hour_check = parseFloat(`${final_date.getHours()}.${final_date.getMinutes()}`);
+    //     const hour_check = parseFloat(`${final_date.getHours()}.${final_date.getMinutes()}`);
 
-        if (hour_check > planningMachine.hour_end) {
-          final_date.setDate(final_date.getDate() + 1);
-          final_date.setHours(Math.floor(planningMachine.hour_start));
-          final_date.setMinutes(Math.round((planningMachine.hour_start % 1) * 60) || 0);
-        }
+    //     if (hour_check > planningMachine.hour_end) {
+    //       final_date.setDate(final_date.getDate() + 1);
+    //       final_date.setHours(Math.floor(planningMachine.hour_start));
+    //       final_date.setMinutes(Math.round((planningMachine.hour_start % 1) * 60) || 0);
+    //     }
 
-        final_date = formatDate(final_date);
+    //     final_date = formatDate(final_date);
 
-        Object.assign(dataProgramming, {
-          id_product: product,
-          id_machine: machine,
-          quantity_programming: quantity,
-          min_date,
-          client: order.client,
-          max_date: final_date,
-          min_programming: Math.floor(days) * 1440 + Math.floor(hours) * 60 + parseInt(minutes)
-        });
+    //     Object.assign(dataProgramming, {
+    //       id_product: product,
+    //       id_machine: machine,
+    //       quantity_programming: quantity,
+    //       min_date,
+    //       client: order.client,
+    //       max_date: final_date,
+    //       min_programming: Math.floor(days) * 1440 + Math.floor(hours) * 60 + parseInt(minutes)
+    //     });
 
-        const minDateFormatted = convetFormatDateTime(min_date);
-        const maxDateFormatted = convetFormatDateTime(final_date);
+    //     const minDateFormatted = convetFormatDateTime(min_date);
+    //     const maxDateFormatted = convetFormatDateTime(final_date);
 
-        document.getElementById("minDate").type = "datetime-local";
-        document.getElementById("maxDate").value = maxDateFormatted;
-        document.getElementById("minDate").value = minDateFormatted;
+    //     document.getElementById("minDate").type = "datetime-local";
+    //     document.getElementById("maxDate").value = maxDateFormatted;
+    //     document.getElementById("minDate").value = minDateFormatted;
 
-        $(".date, #btnCreateProgramming").show(800);
-      } catch (error) {
-        console.error(error);
-      }
-    };
+    //     $(".date, #btnCreateProgramming").show(800);
+    //   } catch (error) {
+    //     console.error(error);
+    //   }
+    // };
     // checkProcessMachines = (data) => {
     //   let conteoClaves = data.reduce((conteo, obj) => {
     //     conteo[obj.id_product] = (conteo[obj.id_product] || 0) + 1;
@@ -712,140 +712,140 @@ $(document).ready(function () {
       calcMaxDate(min_date, 0, 2);
     });
 
-    // const calcMaxDate = async (min_date, last_hour, op) => {
-    //   try {
-    //     let num_order = $("#order :selected").text().trim();
-    //     let product = parseFloat($("#selectNameProduct").val());
-    //     let machine = parseFloat($("#idMachine").val());
-    //     let quantity = parseInt($("#quantity").val());
-    //     let order = allOrders.find(
-    //       (item) => item.id_product == product && item.num_order == num_order
-    //     );
+    calcMaxDate = async (min_date, last_hour, op) => {
+      try {
+        let num_order = $("#order :selected").text().trim();
+        let product = parseFloat($("#selectNameProduct").val());
+        let machine = parseFloat($("#idMachine").val());
+        let quantity = parseInt($("#quantity").val());
+        let order = allOrders.find(
+          (item) => item.id_product == product && item.num_order == num_order
+        );
 
-    //     for (let i = 0; i < allCiclesMachines.length; i++) {
-    //       if (
-    //         allCiclesMachines[i].id_machine == machine &&
-    //         allCiclesMachines[i].id_product == product
-    //       ) {
-    //         ciclesMachine = allCiclesMachines[i];
-    //         break;
-    //       }
-    //     }
+        for (let i = 0; i < allCiclesMachines.length; i++) {
+          if (
+            allCiclesMachines[i].id_machine == machine &&
+            allCiclesMachines[i].id_product == product
+          ) {
+            ciclesMachine = allCiclesMachines[i];
+            break;
+          }
+        }
 
-    //     for (let i = 0; i < allPlanningMachines.length; i++) {
-    //       if (allPlanningMachines[i].id_machine == machine) {
-    //         planningMachine = allPlanningMachines[i];
-    //         break;
-    //       }
-    //     }
+        for (let i = 0; i < allPlanningMachines.length; i++) {
+          if (allPlanningMachines[i].id_machine == machine) {
+            planningMachine = allPlanningMachines[i];
+            break;
+          }
+        }
 
-    //     if (op == 2) {
-    //       if (dataProgramming["update"] == 0) {
-    //         if (Number.isInteger(planningMachine.hour_start)) {
-    //           min_date = new Date(
-    //             `${min_date} ${planningMachine.hour_start}:00:00`
-    //           );
-    //         } else {
-    //           const hoursInteger = Math.floor(planningMachine.hour_start);
-    //           const minutes = Math.round((planningMachine.hour_start % 1) * 60);
-    //           const formattedMinutes =
-    //             minutes < 10 ? `0${minutes}` : `${minutes}`;
-    //           min_date = new Date(min_date + "T00:00:00");
-    //           min_date.setHours(hoursInteger, formattedMinutes, 0);
-    //         }
-    //       } else {
-    //         min_date = new Date(min_date);
-    //       }
+        if (op == 2) {
+          if (dataProgramming["update"] == 0) {
+            if (Number.isInteger(planningMachine.hour_start)) {
+              min_date = new Date(
+                `${min_date} ${planningMachine.hour_start}:00:00`
+              );
+            } else {
+              const hoursInteger = Math.floor(planningMachine.hour_start);
+              const minutes = Math.round((planningMachine.hour_start % 1) * 60);
+              const formattedMinutes =
+                minutes < 10 ? `0${minutes}` : `${minutes}`;
+              min_date = new Date(min_date + "T00:00:00");
+              min_date.setHours(hoursInteger, formattedMinutes, 0);
+            }
+          } else {
+            min_date = new Date(min_date);
+          }
 
-    //       min_date =
-    //         min_date.getFullYear() +
-    //         "-" +
-    //         ("00" + (min_date.getMonth() + 1)).slice(-2) +
-    //         "-" +
-    //         ("00" + min_date.getDate()).slice(-2) +
-    //         " " +
-    //         ("00" + min_date.getHours()).slice(-2) +
-    //         ":" +
-    //         ("00" + min_date.getMinutes()).slice(-2) +
-    //         ":" +
-    //         "00";
-    //     }
+          min_date =
+            min_date.getFullYear() +
+            "-" +
+            ("00" + (min_date.getMonth() + 1)).slice(-2) +
+            "-" +
+            ("00" + min_date.getDate()).slice(-2) +
+            " " +
+            ("00" + min_date.getHours()).slice(-2) +
+            ":" +
+            ("00" + min_date.getMinutes()).slice(-2) +
+            ":" +
+            "00";
+        }
 
-    //     let final_date = new Date(min_date);
+        let final_date = new Date(min_date);
 
-    //     let days =
-    //       quantity / ciclesMachine.cicles_hour / planningMachine.hours_day;
+        let days =
+          quantity / ciclesMachine.cicles_hour / planningMachine.hours_day;
 
-    //     if (days >= 1) {
-    //       final_date.setDate(final_date.getDate() + Math.floor(days));
-    //     }
+        if (days >= 1) {
+          final_date.setDate(final_date.getDate() + Math.floor(days));
+        }
 
-    //     let sobDays = days % 1;
-    //     let hours = sobDays * planningMachine.hours_day;
+        let sobDays = days % 1;
+        let hours = sobDays * planningMachine.hours_day;
 
-    //     let sobHours = hours % 1;
-    //     let minutes = sobHours * 60;
-    //     let minutes1 =
-    //       Math.floor(days) * 1440 + Math.floor(hours) * 60 + parseInt(minutes);
+        let sobHours = hours % 1;
+        let minutes = sobHours * 60;
+        let minutes1 =
+          Math.floor(days) * 1440 + Math.floor(hours) * 60 + parseInt(minutes);
 
-    //     final_date.setMinutes(final_date.getMinutes() + Math.floor(minutes));
-    //     final_date.setHours(final_date.getHours() + Math.floor(hours));
+        final_date.setMinutes(final_date.getMinutes() + Math.floor(minutes));
+        final_date.setHours(final_date.getHours() + Math.floor(hours));
 
-    //     // Checkear si la hora de la fecha final calculada es mayor a la hora de finalizacion de la maquina
-    //     let hour_check = parseFloat(
-    //       `${final_date.getHours()}.${final_date.getMinutes()}`
-    //     );
+        // Checkear si la hora de la fecha final calculada es mayor a la hora de finalizacion de la maquina
+        let hour_check = parseFloat(
+          `${final_date.getHours()}.${final_date.getMinutes()}`
+        );
 
-    //     if (hour_check > planningMachine.hour_end) {
-    //       hours = Math.floor(planningMachine.hour_start);
-    //       minutes = parseInt(
-    //         planningMachine.hour_start.toFixed(2).toString().split(".")[1]
-    //       );
+        if (hour_check > planningMachine.hour_end) {
+          hours = Math.floor(planningMachine.hour_start);
+          minutes = parseInt(
+            planningMachine.hour_start.toFixed(2).toString().split(".")[1]
+          );
 
-    //       isNaN(minutes) ? (minutes = 0) : minutes;
+          isNaN(minutes) ? (minutes = 0) : minutes;
 
-    //       final_date.setMinutes(Math.floor(minutes));
-    //       final_date.setHours(Math.floor(hours));
-    //       final_date.setDate(final_date.getDate() + 1);
-    //     }
+          final_date.setMinutes(Math.floor(minutes));
+          final_date.setHours(Math.floor(hours));
+          final_date.setDate(final_date.getDate() + 1);
+        }
 
-    //     final_date =
-    //       final_date.getFullYear() +
-    //       "-" +
-    //       ("00" + (final_date.getMonth() + 1)).slice(-2) +
-    //       "-" +
-    //       ("00" + final_date.getDate()).slice(-2) +
-    //       " " +
-    //       ("00" + final_date.getHours()).slice(-2) +
-    //       ":" +
-    //       ("00" + final_date.getMinutes()).slice(-2) +
-    //       ":" +
-    //       "00";
+        final_date =
+          final_date.getFullYear() +
+          "-" +
+          ("00" + (final_date.getMonth() + 1)).slice(-2) +
+          "-" +
+          ("00" + final_date.getDate()).slice(-2) +
+          " " +
+          ("00" + final_date.getHours()).slice(-2) +
+          ":" +
+          ("00" + final_date.getMinutes()).slice(-2) +
+          ":" +
+          "00";
 
-    //     dataProgramming["id_product"] = product;
-    //     dataProgramming["id_machine"] = machine;
-    //     dataProgramming["quantity_programming"] = quantity;
-    //     dataProgramming["min_date"] = min_date;
-    //     dataProgramming["client"] = order.client;
-    //     dataProgramming["max_date"] = final_date;
-    //     dataProgramming["min_programming"] = minutes1;
+        dataProgramming["id_product"] = product;
+        dataProgramming["id_machine"] = machine;
+        dataProgramming["quantity_programming"] = quantity;
+        dataProgramming["min_date"] = min_date;
+        dataProgramming["client"] = order.client;
+        dataProgramming["max_date"] = final_date;
+        dataProgramming["min_programming"] = minutes1;
 
-    //     final_date = convetFormatDateTime(final_date);
-    //     min_date = convetFormatDateTime(min_date);
+        final_date = convetFormatDateTime(final_date);
+        min_date = convetFormatDateTime(min_date);
 
-    //     let maxDate = document.getElementById("maxDate");
-    //     document.getElementById("minDate").type = "datetime-local";
-    //     let minDate = document.getElementById("minDate");
+        let maxDate = document.getElementById("maxDate");
+        document.getElementById("minDate").type = "datetime-local";
+        let minDate = document.getElementById("minDate");
 
-    //     maxDate.value = final_date;
-    //     minDate.value = min_date;
+        maxDate.value = final_date;
+        minDate.value = min_date;
 
-    //     $(".date").show(800);
-    //     $("#btnCreateProgramming").show(800);
-    //   } catch (error) {
-    //     console.log(error);
-    //   }
-    // }; 
+        $(".date").show(800);
+        $("#btnCreateProgramming").show(800);
+      } catch (error) {
+        console.log(error);
+      }
+    }; 
   }
       
   /* Cargar Productos y Maquinas */
