@@ -110,10 +110,12 @@ $(document).ready(function () {
       );
 
       let recieve = 0;
+      let for_recieve = 0;
       let pending = 0;
 
       store.forEach((item) => {
-        recieve += parseFloat(item.delivery_store);
+        recieve += parseFloat(item.quantity_component_user);
+        for_recieve += parseFloat(item.delivery_store) - parseFloat(item.quantity_component_user);
         item.delivery_pending == 0
           ? (pending = 0)
           : (pending += parseFloat(item.delivery_pending));
@@ -131,9 +133,9 @@ $(document).ready(function () {
       pending < 0 ? (pending = 0) : pending;
 
       let action = "";
-      let value = recieve - accept;
+      let value = for_recieve - accept;
 
-      if (recieve > 0) {
+      if (for_recieve > 0 || recieve > 0) {
         if (value > 0) {
           action = `<button class="btn btn-info acceptMaterial" id="accept-${dataFT[i].id_material}">Aceptar MP</button>`;
         } else if (value <= 0) {
@@ -159,6 +161,10 @@ $(document).ready(function () {
               maximumFractionDigits: 0,
             })}</td>
             <td>${recieve.toLocaleString("es-CO", {
+              minimumFractionDigits: 0,
+              maximumFractionDigits: 2,
+            })}</td>
+            <td>${for_recieve.toLocaleString("es-CO", {
               minimumFractionDigits: 0,
               maximumFractionDigits: 2,
             })}</td>
@@ -282,16 +288,16 @@ $(document).ready(function () {
 
         const totalReceived = allStore
           .filter(item => item.id_programming == id_programming && item.id_material == idMaterial)
-          .reduce((sum, item) => sum + parseFloat(item.delivery_store), 0);
+          .reduce((sum, item) => sum + (parseFloat(item.delivery_store) - parseFloat(item.quantity_component_user)), 0);
 
-        const totalAccepted = allMaterialsAccept
-          .filter(item => item.id_material == idMaterial)
-          .reduce((sum, item) => sum + parseFloat(item.quantity), 0);
+        // const totalAccepted = allMaterialsAccept
+        //   .filter(item => item.id_material == idMaterial)
+        //   .reduce((sum, item) => sum + parseFloat(item.quantity), 0);
 
         const form = new FormData();
         form.append("idProgramming", id_programming);
         form.append("idMaterial", idMaterial);
-        form.append("quantity", totalReceived - totalAccepted);
+        form.append("quantity", totalReceived);
 
         $.ajax({
           type: "POST",

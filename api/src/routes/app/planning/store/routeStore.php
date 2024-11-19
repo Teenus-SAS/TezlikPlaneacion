@@ -67,6 +67,7 @@ $app->get('/allStore', function (Request $request, Response $response, $args) us
     session_start();
     $id_company = $_SESSION['id_company'];
 
+    // $store = $usersStoreDao->findAllStoreByCompany($id_company);
     $store = $storeDao->findAllStore($id_company);
 
     $response->getBody()->write(json_encode($store));

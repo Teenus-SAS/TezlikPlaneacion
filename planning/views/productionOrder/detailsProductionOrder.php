@@ -248,6 +248,7 @@ if (sizeof($_SESSION) == 0)
 																<th>Costo x Unidad</th>
 																<th>Costo Total OP</th>
 																<th>Recibido</th>
+																<th>Por Recibir</th>
 																<th>Pendiente</th>
 																<th id="thActions"></th>
 															</tr>

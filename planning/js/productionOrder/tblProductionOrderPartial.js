@@ -37,7 +37,7 @@ $(document).ready(function () {
           const end_date = full.end_date;
 
           return `Inicio: ${moment(start_date).format(
-            "DD/MM/YYYY HH:mm A"
+            "DD/MM/YYYY hh:mm A"
           )}<br>Fin: ${moment(end_date).format("DD/MM/YYYY hh:mm A")}`;
         },
       },
