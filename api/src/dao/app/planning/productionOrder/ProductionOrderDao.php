@@ -96,6 +96,22 @@ class ProductionOrderDao
         return $programming;
     }
 
+    public function findProductionOrder($id_order)
+    {
+        $connection = Connection::getInstance()->getConnection();
+
+        $stmt = $connection->prepare("SELECT * FROM programming 
+                                      WHERE id_order = :id_order
+                                      status = 1 AND flag_op = 0");
+        $stmt->execute([
+            'id_order' => $id_order
+        ]);
+        $this->logger->info(__FUNCTION__, array('query' => $stmt->queryString, 'errors' => $stmt->errorInfo()));
+
+        $programming = $stmt->fetchAll($connection::FETCH_ASSOC);
+        return $programming;
+    }
+
     public function findAllProductionOrderByTypePG($id_user, $id_order, $id_product)
     {
         $connection = Connection::getInstance()->getConnection();

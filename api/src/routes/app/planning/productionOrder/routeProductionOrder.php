@@ -201,6 +201,12 @@ $app->post('/changeFlagOP', function (Request $request, Response $response, $arg
         } else {
             $resolution = $generalOrdersDao->changeStatus($dataOP['id_order'], 12);
         }
+    } else {
+        $programming = $productionOrderDao->findProductionOrder($dataOP['id_order']);
+
+        if (sizeof($programming) == 0) {
+            $resolution = $generalOrdersDao->changeStatus($dataOP['id_order'], 12);
+        }
     }
 
     if ($resolution == null)
