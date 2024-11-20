@@ -746,7 +746,7 @@ $(document).ready(function () {
   };
 
   /* Cambiar estado */
-  $(document).on("click", "#btnAddOP", function () {
+  $(document).on("click", "#btnAddOP", function () { 
     bootbox.confirm({
       title: "Orden de Producción",
       message:
@@ -763,11 +763,26 @@ $(document).ready(function () {
       },
       callback: function (result) {
         if (result) {
+
+          $('.cardBottonsGeneral').hide();
+
+          let form = document.getElementById('divBottons');
+          form.insertAdjacentHTML(
+            'beforeend',
+            `<div class="col-sm-1 cardLoading" style="margin-top: 7px; margin-left: 15px">
+              <div class="spinner-grow text-dark" role="status">
+                  <span class="sr-only">Loading...</span>
+              </div>
+            </div>`
+          );
+
           $.ajax({
             type: "POST",
             url: "/api/changeStatusProgramming",
             data: { data: allProgramming },
             success: function (data) { 
+              $('.cardLoading').remove();
+              $('.cardBottonsGeneral').show(400);
               generalMultiArray = [];
               $(".cardAddOP").hide(800);
 
@@ -821,6 +836,18 @@ $(document).ready(function () {
       },
       callback: function (result) {
         if (result) {
+          $('.cardBottonsGeneral').hide();
+
+          let form = document.getElementById('divBottons');
+          form.insertAdjacentHTML(
+            'beforeend',
+            `<div class="col-sm-1 cardLoading" style="margin-top: 7px; margin-left: 15px">
+              <div class="spinner-grow text-dark" role="status">
+                  <span class="sr-only">Loading...</span>
+              </div>
+            </div>`
+          );
+
           let allTblData = flattenData(generalMultiArray);
 
           if (allTblData.length == 0) {
@@ -836,12 +863,13 @@ $(document).ready(function () {
             url: "/api/saveProgramming",
             data: { data: allTblData },
             success: function (resp) {
-              generalMultiArray = [];
-              // allTblData = [];
+              $('.cardLoading').remove();
+              generalMultiArray = []; 
               sessionStorage.clear();
-
+              
               setTimeout(() => {
-                $(".cardAddOP").show(800);                
+                $('.cardBottonsGeneral').show(400);
+                // $(".cardAddOP").show(800);                
               }, 5000);
 
               message(resp);

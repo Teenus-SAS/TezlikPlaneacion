@@ -48,18 +48,18 @@ if (sizeof($_SESSION) == 0)
                                     </ol>
                                 </div>
                             </div>
-                            <div class="col-sm-7 col-xl-8 form-inline justify-content-sm-end">
-                                <div class="col-sm-7 col-xl-3 form-inline justify-content-sm-end p-0 mr-2">
+                            <div class="col-sm-7 col-xl-8 form-inline justify-content-sm-end" id="divBottons">
+                                <div class="col-sm-7 col-xl-3 form-inline justify-content-sm-end p-0 mr-2 cardBottonsGeneral">
                                     <button class="btn btn-warning w-100" id="btnNewProgramming" name="btnNewProgramming">Programar</button>
                                 </div>
-                                <div class="col-sm-7 col-xl-2 floating-label enable-floating-label show-label form-inline justify-content-sm-end mb-0 p-0 mr-2 cardBottons">
+                                <div class="col-sm-7 col-xl-2 floating-label enable-floating-label show-label form-inline justify-content-sm-end mb-0 p-0 mr-2 cardBottons cardBottonsGeneral">
                                     <div id="machines1" class="w-100">
                                         <label>Máquina</label>
                                         <select class="form-control idMachine w-100" id="searchMachine">
                                         </select>
                                     </div>
                                 </div>
-                                <div class="col-sm-7 col-xl-2 floating-label enable-floating-label show-label form-inline justify-content-sm-end mb-0 p-0 mr-2 cardSimulation" style="display: none;">
+                                <div class="col-sm-7 col-xl-2 floating-label enable-floating-label show-label form-inline justify-content-sm-end mb-0 p-0 mr-2 cardSimulation cardBottonsGeneral" style="display: none;">
                                     <div class="col-xs-4 w-100">
                                         <label for="simulationType">Escenarios</label>
                                         <select name="simulationType" id="simulationType" class="form-control text-center w-100">
@@ -69,14 +69,14 @@ if (sizeof($_SESSION) == 0)
                                         </select>
                                     </div>
                                 </div>
-
-                                <div class="col-sm-7 col-xl-2 form-inline justify-content-sm-end p-0 mr-2 cardSaveBottons">
+                                <div class="col-sm-7 col-xl-2 form-inline justify-content-sm-end p-0 mr-2 cardSaveBottons cardBottonsGeneral">
                                     <button class="btn btn-primary w-100" id="btnSavePrograming" name="btnSavePrograming">Guardar</button>
                                 </div>
-                                <div class="col-sm-7 col-xl-2 form-inline p-0 cardAddOP" style="display: none;">
+                                <div class="col-sm-7 col-xl-2 form-inline p-0 cardAddOP cardBottonsGeneral" style="display: none;">
                                     <button class="btn btn-info w-100" id="btnAddOP" name="btnAddOP">Crear OP</button>
                                 </div>
                             </div>
+
                         </div>
                         <div class="row align-items-center cardDashboardProgramming" style="display: none;">
                             <div class="col-sm-5 col-xl-4">
