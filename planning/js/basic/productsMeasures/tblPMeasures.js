@@ -37,12 +37,12 @@ $(document).ready(function () {
           <a href="javascript:;">
             <i id="upd-${
               data.id_product_measure
-            }" class="bx bx-edit-alt updatePMeasure" data-toggle='tooltip' title='Actualizar Medida' style="font-size: 30px;"></i>
+            }" class="bx bx-edit-alt updatePMeasure" data-toggle='tooltip' title='Actualizar Producto' style="font-size: 30px;"></i>
           </a>
           <a href="javascript:;">
             <i id="${
               data.id_product_measure
-            }" class="mdi mdi-delete-forever" data-toggle='tooltip' title='Eliminar Medida' style="font-size: 30px;color:red" onclick="deletePMeasureFunction()"></i>
+            }" class="mdi mdi-delete-forever" data-toggle='tooltip' title='Eliminar Producto' style="font-size: 30px;color:red" onclick="deletePMeasureFunction()"></i>
           </a>
         `,
       },

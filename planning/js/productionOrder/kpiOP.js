@@ -82,50 +82,46 @@ $(document).ready(function () {
               .show();
 
             $("#kpiCostPayrollUnit").text(
-              `MO: $${costPayrollUnit.toLocaleString("es-CO", {
-                minimumFractionDigits: 2,
+              `MO: $${costPayrollUnit.toLocaleString("es-CO", { 
                 maximumFractionDigits: 2,
               })}`
             );
 
             $("#kpiCostPayroll").text(
-              `MO: $${costPayroll.toLocaleString("es-CO", {
-                minimumFractionDigits: 0,
+              `MO: $${costPayroll.toLocaleString("es-CO", { 
+                maximumFractionDigits: 2,
               })}`
             );
 
             $("#kpiCostMaterials").text(
-              `MP: $${costMaterials.toLocaleString("es-CO", {
-                minimumFractionDigits: 0,
+              `MP: $${costMaterials.toLocaleString("es-CO", { 
+                maximumFractionDigits: 2,
               })}`
             );
             $("#kpiCostMaterialsUnit").text(
-              `MP: $${costMPUnit.toLocaleString("es-CO", {
-                minimumFractionDigits: 2,
+              `MP: $${costMPUnit.toLocaleString("es-CO", { 
                 maximumFractionDigits: 2,
               })}`
             );
 
             $("#kpiIndirectCost").text(
               `CI: $${costIndirect.toLocaleString("es-CO", {
-                minimumFractionDigits: 0,
+                maximumFractionDigits: 2,
               })}`
             );
             $("#kpiIndirectCostUnit").text(
-              `CI: $${costIndirectunit.toLocaleString("es-CO", {
-                minimumFractionDigits: 2,
+              `CI: $${costIndirectunit.toLocaleString("es-CO", { 
                 maximumFractionDigits: 2,
               })}`
             );
 
             $("#kpiTotalCost").text(
               `CT: $${totalCost.toLocaleString("es-CO", {
-                minimumFractionDigits: 0,
+                maximumFractionDigits: 2,
               })}`
             );
             $("#kpiTotalCostUnit").text(
-              `CT: $${totalCostUnit.toLocaleString("es-CO", {
-                minimumFractionDigits: 2,
+              `CT: $${totalCostUnit.toLocaleString("es-CO", { 
                 maximumFractionDigits: 2,
               })}`
             );
