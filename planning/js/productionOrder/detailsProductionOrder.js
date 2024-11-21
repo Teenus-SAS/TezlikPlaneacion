@@ -136,7 +136,7 @@ $(document).ready(function () {
       // let value = for_recieve - accept;
 
       if (for_recieve > 0 || recieve > 0) {
-        if (pending > 0) {
+        if (for_recieve > 0) {
           action = `<button class="btn btn-info acceptMaterial" id="accept-${dataFT[i].id_material}">Aceptar MP</button>`;
         } else if (pending == 0) {
           action = `<a href="javascript:;">
@@ -356,7 +356,10 @@ $(document).ready(function () {
         return false;
       }
 
-      let accept = 0;
+      let recieve = 0;
+      let for_recieve = 0;
+      let pending = 0;
+      
       let dataFTMaterials = JSON.parse(
         sessionStorage.getItem("dataFTMaterials")
       );
@@ -365,16 +368,22 @@ $(document).ready(function () {
       );
 
       for (let i = 0; i < dataFT.length; i++) {
-        let materialsAccept = allMaterialsAccept.filter(
-          (item) => item.id_material == dataFT[i].id_material
-        );
+        let store = allStore.filter(
+          (item) =>
+            item.id_programming == id_programming &&
+            item.id_material == dataFT[i].id_material
+        ); 
 
-        materialsAccept.forEach((item) => {
-          accept += parseFloat(item.quantity);
+        store.forEach((item) => {
+          recieve += parseFloat(item.quantity_component_user);
+          for_recieve += parseFloat(item.delivery_store) - parseFloat(item.quantity_component_user);
+          item.delivery_pending == 0
+            ? (pending = 0)
+            : (pending += parseFloat(item.delivery_pending));
         });
       }
 
-      if (accept == 0) {
+      if (pending > 0) {
         toastr.error("Materiales y Componentes no ejecutados");
         return false;
       }
