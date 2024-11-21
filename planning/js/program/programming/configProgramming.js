@@ -797,7 +797,7 @@ $(document).ready(function () {
         );
 
         // if (hour_check > planningMachine.hour_end) {
-        if (hour_check > hour_end || hour_check < 6) {
+        if (hour_check > planningMachine.hour_end || hour_check < 6) {
           hours = Math.floor(planningMachine.hour_start);
           minutes = parseInt(
             planningMachine.hour_start.toFixed(2).toString().split(".")[1]
