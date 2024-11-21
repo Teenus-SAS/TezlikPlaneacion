@@ -403,7 +403,7 @@ if (sizeof($_SESSION) == 0)
 														<table class="fixed-table-loading table table-hover text-center" id="tblPartialsDelivery">
 															<tfoot>
 																<tr>
-																	<th colspan="3">Totales:</th>
+																	<th colspan="2">Totales:</th>
 																	<th></th>
 																	<th class="uniqueClassName dt-head-center unitsDefects"></th>
 																	<th class="uniqueClassName dt-head-center unitsProcessing"></th>
