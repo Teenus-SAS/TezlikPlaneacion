@@ -136,7 +136,7 @@ $(document).ready(function () {
       // let value = for_recieve - accept;
 
       if (for_recieve > 0 || recieve > 0) {
-        if (for_recieve == 0 || recieve > 0) {
+        if (pending > 0) {
           action = `<button class="btn btn-info acceptMaterial" id="accept-${dataFT[i].id_material}">Aceptar MP</button>`;
         } else if (pending == 0) {
           action = `<a href="javascript:;">
