@@ -241,18 +241,11 @@ $app->post('/addOrder', function (Request $request, Response $response, $args) u
     $dataOrders = sizeof($dataOrder);
 
     if ($dataOrders > 1) {
-        // $import = false;
 
         $dataOrder = $convertDataDao->changeDateOrder($dataOrder);
 
         $findOrder = $generalOrdersDao->findSameOrder($dataOrder);
         if (!$findOrder) {
-            // $orders = $generalOrdersDao->findOrderByProductAndClient($dataOrder);
-
-            // for ($i=0; $i < sizeof($orders); $i++) { 
-            //     # code...
-            // }
-
             $order = $generalOrdersDao->findLastNumOrderByCompany($id_company);
             $dataOrder['order'] = $order['num_order'];
             $dataOrder['typeOrder'] = 1;

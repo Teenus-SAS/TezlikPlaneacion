@@ -71,7 +71,9 @@ const GraphPendingOC = (participacion, totalOC) => {
           },
           ticks: {
             callback: function (value) {
-              return value + "%"; // Agregar el símbolo de porcentaje en el eje Y
+              !value ? value = 0 : value;
+              
+              return value.toLocaleString('es-CO', { minimumFractionDigits: 2, maximumFractionDigits: 2 }) + "%"; // Agregar el símbolo de porcentaje en el eje Y
             },
           },
         },
@@ -90,15 +92,17 @@ const GraphPendingOC = (participacion, totalOC) => {
             weight: "normal",
           },
           formatter: function (value, context) {
+            !value ? value = 0 : value;
+
             if (context.datasetIndex === 0) {
               // Calcula el número de pedidos entregados a tiempo
               const executionsOC = Math.round((participacion / 100) * totalOC);
-              return `${executionsOC} (${value}%)`; // Muestra el número y el porcentaje
+              return `${executionsOC} (${value.toLocaleString('es-CO',{minimumFractionDigits:2,maximumFractionDigits:2})}%)`; // Muestra el número y el porcentaje
             } else {
               // Calcula el número de pedidos no entregados a tiempo
               const notExecutionOC =
                 totalOC - Math.round((participacion / 100) * totalOC);
-              return `${notExecutionOC} (${value}%)`; // Muestra el número y el porcentaje
+              return `${notExecutionOC} (${value.toLocaleString('es-CO',{minimumFractionDigits:2,maximumFractionDigits:2})}%)`; // Muestra el número y el porcentaje
             }
           },
         },

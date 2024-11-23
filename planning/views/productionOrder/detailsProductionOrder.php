@@ -371,7 +371,7 @@ if (sizeof($_SESSION) == 0)
 													<div class="form-row">
 														<div class="col-sm-3 floating-label enable-floating-label show-label">
 															<label for="startDateTime">Inicio</label>
-															<input type="datetime-local" class="form-control text-center" id="startDateTime" name="startDate" max="<?php echo date('Y-m-d', strtotime('+1 day')); ?>">
+															<input type="datetime-local" class="form-control text-center" id="startDateTime" name="startDate" max="<?php echo date('Y-m-d\TH:i', strtotime('+1 day')); ?>">
 														</div>
 														<div class="col-sm-3 floating-label enable-floating-label show-label">
 															<label for="endDateTime">Finalización</label>

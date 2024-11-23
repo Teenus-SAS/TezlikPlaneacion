@@ -20,8 +20,26 @@ class DashboardGeneralDao
     {
         $connection = Connection::getInstance()->getConnection();
 
-        $stmt = $connection->prepare("SELECT SUM(CASE WHEN classification = 'A' THEN 1 ELSE 0 END) AS A, SUM(CASE WHEN classification = 'B' THEN 1 ELSE 0 END) AS B,
-                                             SUM(CASE WHEN classification = 'C' THEN 1 ELSE 0 END) AS C
+        $stmt = $connection->prepare("SELECT 
+                                        -- Columnas
+                                            IFNULL(
+                                                SUM(
+                                                    CASE WHEN classification = 'A' THEN 1 ELSE 0
+                                                    END
+                                                )
+                                            , 0) AS A,
+                                            IFNULL(
+                                                SUM(
+                                                    CASE WHEN classification = 'B' THEN 1 ELSE 0
+                                                    END
+                                                )
+                                            , 0) AS B,
+                                            IFNULL(
+                                                SUM(
+                                                    CASE WHEN classification = 'C' THEN 1 ELSE 0
+                                                    END
+                                                )
+                                            , 0) AS C
                                       FROM inv_products
                                       WHERE id_company = :id_company");
         $stmt->execute([
@@ -34,8 +52,18 @@ class DashboardGeneralDao
     public function findProductsOutOfStock($id_company)
     {
         $connection = Connection::getInstance()->getConnection();
-        $sql = "SELECT (COUNT(CASE WHEN pi.quantity = 0 THEN 1 END) * 100.0 / COUNT(*)) AS productsOutStock,
-                    COUNT(*) AS totalProducts
+        $sql = "SELECT 
+                    -- Columnas
+                        IFNULL(
+                            (
+                                COUNT(
+                                    CASE WHEN pi.quantity = 0 THEN 1
+                                    END
+                                ) * 100.0 / 
+                                COUNT(*)
+                            )
+                        , 0) AS productsOutStock,
+                        COUNT(*) AS totalProducts
                 FROM inv_products pi
                 WHERE id_company = :id_company";
         $stmt = $connection->prepare($sql);
@@ -48,9 +76,22 @@ class DashboardGeneralDao
     {
         $connection = Connection::getInstance()->getConnection();
         $sql = "SELECT 
-                    COUNT(CASE WHEN (mi.quantity - mi.reserved) < mi.minimum_stock THEN 1 END) AS totalMPLowStock,
-                    COUNT(*) AS total_materiales,
-                    (COUNT(CASE WHEN (mi.quantity - mi.reserved) < mi.minimum_stock THEN 1 END) / COUNT(*)) * 100 AS percentageMPLowStock
+                    -- Columnas
+                        IFNULL(
+                            COUNT(
+                                CASE WHEN(mi.quantity - mi.reserved) < mi.minimum_stock THEN 1
+                                END
+                            )
+                        , 0) AS totalMPLowStock,
+                        COUNT(*) AS total_materiales,
+                        IFNULL(
+                            (
+                                COUNT(
+                                    CASE WHEN(mi.quantity - mi.reserved) < mi.minimum_stock THEN 1
+                                    END
+                                ) / COUNT(*)
+                            ) * 100
+                        , 0) AS percentageMPLowStock
                 FROM inv_materials mi
                 INNER JOIN materials m ON mi.id_material = m.id_material
                 WHERE m.id_company = :id_company";
@@ -64,8 +105,19 @@ class DashboardGeneralDao
     {
         $connection = Connection::getInstance()->getConnection();
         $sql = "SELECT 
-                    SUM(CASE WHEN type_order = 1 THEN 1 ELSE 0 END) AS orders_clients, 
-                    SUM(CASE WHEN type_order = 2 THEN 1 ELSE 0 END) AS orders_internalClients
+                    -- Columnas
+                        IFNULL(
+                                SUM(
+                                    CASE WHEN type_order = 1 THEN 1 ELSE 0
+                                    END
+                                )
+                        , 0) AS orders_clients,
+                        IFNULL(
+                                SUM(
+                                    CASE WHEN type_order = 2 THEN 1 ELSE 0
+                                    END
+                                )
+                        , 0) AS orders_internalClients
                 FROM `orders` 
                 WHERE status <> 3 
                     AND id_company = :id_company;";
@@ -78,8 +130,22 @@ class DashboardGeneralDao
     public function findOrdersNoProgramm($id_company)
     {
         $connection = Connection::getInstance()->getConnection();
-        $sql = "SELECT COUNT(CASE WHEN po.status IN (1, 5, 6, 9) THEN 1 END) AS totalOrdersNoProgrammed, 
-                      (COUNT(CASE WHEN po.status IN (1, 5, 6, 9) THEN 1 END) * 100.0 / COUNT(*)) AS ordersNoProgramed 
+        $sql = "SELECT 
+                      -- Columnas
+                        IFNULL(
+                            COUNT(
+                                CASE WHEN po.status IN(1, 5, 6, 9) THEN 1
+                                END
+                            )
+                        , 0) AS totalOrdersNoProgrammed,
+                        IFNULL(
+                            (
+                                COUNT(
+                                    CASE WHEN po.status IN(1, 5, 6, 9) THEN 1
+                                    END
+                                ) * 100.0 / COUNT(*)
+                            )
+                        , 0) AS ordersNoProgramed 
                 FROM orders po
                 WHERE max_date <> '0000-00-00' AND id_company = :id_company";
         $stmt = $connection->prepare($sql);
@@ -91,7 +157,16 @@ class DashboardGeneralDao
     public function findOrdersNoMP($id_company)
     {
         $connection = Connection::getInstance()->getConnection();
-        $sql = "SELECT (COUNT(CASE WHEN po.status IN (6) THEN 1 END) * 100.0 / COUNT(*)) AS OrdersNoMP 
+        $sql = "SELECT 
+                    -- Columnas
+                        IFNULL(
+                            (
+                                COUNT(
+                                    CASE WHEN po.status IN(6) THEN 1
+                                    END
+                                ) * 100.0 / COUNT(*)
+                            )
+                        , 0) AS OrdersNoMP 
                 FROM orders po
                 WHERE id_company = :id_company";
         $stmt = $connection->prepare($sql);
@@ -121,9 +196,19 @@ class DashboardGeneralDao
     public function findOrdersDeliveredOnTime($id_company)
     {
         $connection = Connection::getInstance()->getConnection();
-        $sql = "SELECT COUNT(*) AS totalDeliveredOnTime, 
-                        ROUND( SUM( CASE WHEN delivery_date IS NOT NULL AND delivery_date <= max_date THEN 1 WHEN delivery_date IS NULL AND CURDATE() <= max_date THEN 1 ELSE 0 END ) / COUNT(*) * 100, 2 ) AS deliveredOnTime 
-                FROM orders 
+        $sql = "SELECT
+                    -- Columnas
+                        COUNT(*) AS totalDeliveredOnTime,
+                        IFNULL(
+                            ROUND(
+                                SUM(
+                                    CASE WHEN delivery_date IS NOT NULL AND delivery_date <= max_date THEN 1 WHEN delivery_date IS NULL AND CURDATE() <= max_date THEN 1 ELSE 0
+                                    END) / COUNT(*) * 100,
+                                2
+                            ),
+                            0
+                        ) AS deliveredOnTime
+                FROM orders
                 WHERE max_date <> '0000-00-00' AND status = 3 AND id_company = :id_company";
         $stmt = $connection->prepare($sql);
         $stmt->execute(['id_company' => $id_company]);
@@ -136,11 +221,11 @@ class DashboardGeneralDao
         $connection = Connection::getInstance()->getConnection();
         $sql = "SELECT
                     COUNT(*) AS total_requisiciones,
-                    SUM(CASE WHEN application_date <> '0000-00-00' THEN 1 ELSE 0 END) AS requisiciones_cumplidas,
-                    ROUND((SUM(CASE WHEN application_date <> '0000-00-00' THEN 1 ELSE 0 END) / COUNT(*) * 100), 2) AS participacion
+                    IFNULL(SUM(CASE WHEN application_date <> '0000-00-00' THEN 1 ELSE 0 END), 0) AS requisiciones_cumplidas,
+                    IFNULL(ROUND((SUM(CASE WHEN application_date <> '0000-00-00' THEN 1 ELSE 0 END) / COUNT(*) * 100), 2), 0) AS participacion
                 FROM
                     requisitions_materials
-                WHERE id_company = :id_company;";
+                WHERE id_company = :id_company";
         $stmt = $connection->prepare($sql);
         $stmt->execute(['id_company' => $id_company]);
         $quantityOC = $stmt->fetch($connection::FETCH_ASSOC);

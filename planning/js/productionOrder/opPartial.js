@@ -37,15 +37,15 @@ $(document).ready(function () {
             )}<br>Fin: ${moment(end_date).format("DD/MM/YYYY hh:mm A")}`;
           },
         },
-        // {
-        //   title: "Fecha Entrega",
-        //   data: "creation_date",
-        //   className: "uniqueClassName dt-head-center",
-        //   width: "200px",
-        //   render: function (data, type, full, meta) {
-        //     return moment(data).format("DD/MM/YYYY hh:mm A");
-        //   },
-        // },
+        {
+          title: "Fecha Creacion",
+          data: "creation_date",
+          className: "uniqueClassName dt-head-center",
+          width: "200px",
+          render: function (data, type, full, meta) {
+            return moment(data).format("DD/MM/YYYY hh:mm A");
+          },
+        },
         {
           title: "Operador",
           data: null,
@@ -121,16 +121,7 @@ $(document).ready(function () {
               maximumFractionDigits: 0,
             })}`;
           },
-        },
-        {
-          title: "Fecha Creacion",
-          data: "creation_date",
-          className: "uniqueClassName dt-head-center",
-          width: "200px",
-          render: function (data, type, full, meta) {
-            return moment(data).format("DD/MM/YYYY hh:mm A");
-          },
-        },
+        }, 
         {
           title: "Acciones",
           data: null,

@@ -69,7 +69,9 @@ const GraphDeliverOnTime = (percentageOnTime, totalOrders) => {
           },
           ticks: {
             callback: function (value) {
-              return value + "%"; // Agregar el símbolo de porcentaje en el eje Y
+              !value ? value = 0 : value;
+
+              return value.toLocaleString('es-CO',{minimumFractionDigits:2,maximumFractionDigits:2}) + "%"; // Agregar el símbolo de porcentaje en el eje Y
             },
           },
         },
@@ -88,18 +90,20 @@ const GraphDeliverOnTime = (percentageOnTime, totalOrders) => {
             weight: "normal",
           },
           formatter: function (value, context) {
+            !value ? value = 0 : value;
+
             if (context.datasetIndex === 0) {
               // Calcula el número de pedidos entregados a tiempo
               const onTimeOrders = Math.round(
                 (percentageOnTime / 100) * totalOrders
               );
-              return `${onTimeOrders} (${value}%)`; // Muestra el número y el porcentaje
+              return `${onTimeOrders} (${value.toLocaleString('es-CO',{minimumFractionDigits:2,maximumFractionDigits:2})}%)`; // Muestra el número y el porcentaje
             } else {
               // Calcula el número de pedidos no entregados a tiempo
               const notOnTimeOrders =
                 totalOrders -
                 Math.round((percentageOnTime / 100) * totalOrders);
-              return `${notOnTimeOrders} (${value}%)`; // Muestra el número y el porcentaje
+              return `${notOnTimeOrders} (${value.toLocaleString('es-CO',{minimumFractionDigits:2,maximumFractionDigits:2})}%)`; // Muestra el número y el porcentaje
             }
           },
         },

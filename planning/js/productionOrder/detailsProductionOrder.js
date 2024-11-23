@@ -346,6 +346,8 @@ $(document).ready(function () {
   $("#btnCloseOP").click(function (e) {
     e.preventDefault();
 
+    let id_programming = sessionStorage.getItem("id_programming");
+
     if (op_to_store == "1") {
       let dataOPP = tblPartialsDelivery.DataTable().rows().data().toArray();
 
@@ -388,8 +390,6 @@ $(document).ready(function () {
         return false;
       }
     }
-
-    let id_programming = sessionStorage.getItem("id_programming");
 
     let dataOP = {};
     dataOP["id_programming"] = id_programming;
