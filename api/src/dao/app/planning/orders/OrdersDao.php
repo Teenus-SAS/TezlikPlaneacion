@@ -33,7 +33,7 @@ class OrdersDao
                                             o.original_quantity,
                                             p.reference,
                                             p.product,
-                                            IFNULL(c.client, '') AS client
+                                            IFNULL(c.client, '') AS client,
                                             o.min_date,
                                             o.max_date,
                                             o.delivery_date,
