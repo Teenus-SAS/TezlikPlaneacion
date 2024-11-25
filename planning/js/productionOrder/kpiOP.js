@@ -42,13 +42,14 @@ $(document).ready(function () {
                 .replace(",", ".")
             ) || 0;
           const costMaterials =
-            parseFloat(
-              $(".costMaterials")
-                .text()
-                .replace("$", "")
-                .replace(".", "")
-                .replace(",", ".")
-            ) || 0;
+            parseInt($(".costMaterials").replace(/[\$\.]/g, ""), 10) || 0;
+          /* parseFloat(
+            $(".costMaterials")
+              .text()
+              .replace("$", "")
+              .replace(".", "")
+              .replace(",", ".")
+          ) || 0; */
           const costIndirect =
             parseFloat(
               $(".costIndirect")
@@ -82,24 +83,24 @@ $(document).ready(function () {
               .show();
 
             $("#kpiCostPayrollUnit").text(
-              `MO: $${costPayrollUnit.toLocaleString("es-CO", { 
+              `MO: $${costPayrollUnit.toLocaleString("es-CO", {
                 maximumFractionDigits: 2,
               })}`
             );
 
             $("#kpiCostPayroll").text(
-              `MO: $${costPayroll.toLocaleString("es-CO", { 
+              `MO: $${costPayroll.toLocaleString("es-CO", {
                 maximumFractionDigits: 2,
               })}`
             );
 
             $("#kpiCostMaterials").text(
-              `MP: $${costMaterials.toLocaleString("es-CO", { 
+              `MP: $${costMaterials.toLocaleString("es-CO", {
                 maximumFractionDigits: 2,
               })}`
             );
             $("#kpiCostMaterialsUnit").text(
-              `MP: $${costMPUnit.toLocaleString("es-CO", { 
+              `MP: $${costMPUnit.toLocaleString("es-CO", {
                 maximumFractionDigits: 2,
               })}`
             );
@@ -110,7 +111,7 @@ $(document).ready(function () {
               })}`
             );
             $("#kpiIndirectCostUnit").text(
-              `CI: $${costIndirectunit.toLocaleString("es-CO", { 
+              `CI: $${costIndirectunit.toLocaleString("es-CO", {
                 maximumFractionDigits: 2,
               })}`
             );
@@ -121,7 +122,7 @@ $(document).ready(function () {
               })}`
             );
             $("#kpiTotalCostUnit").text(
-              `CT: $${totalCostUnit.toLocaleString("es-CO", { 
+              `CT: $${totalCostUnit.toLocaleString("es-CO", {
                 maximumFractionDigits: 2,
               })}`
             );
