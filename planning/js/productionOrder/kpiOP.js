@@ -20,11 +20,7 @@ $(document).ready(function () {
 
             // Funciones auxiliares
             const parseCurrency = (value) =>
-              parseFloat(
-                value
-                  .replace(/[\$\.]/g, "")
-                  .replace(",", ".")
-              ) || 0;
+              parseFloat(value.replace(/[\$\.]/g, "").replace(",", ".")) || 0;
 
             const formatCurrency = (value) =>
               `$${value.toLocaleString("es-CO", {
@@ -32,17 +28,11 @@ $(document).ready(function () {
               })}`;
 
             // Obtener valores actualizados
-            const unitsDefects = parseFloat(
-              $(".unitsDefects")
-                .text()
-                .replace(" Und", "")
-            ) || 0;
+            const unitsDefects =
+              parseFloat($(".unitsDefects").text().replace(" Und", "")) || 0;
 
-            const unitsProcessing = parseFloat(
-              $(".unitsProcessing")
-                .text()
-                .replace(" Und", "")
-            ) || 0;
+            const unitsProcessing =
+              parseFloat($(".unitsProcessing").text().replace(" Und", "")) || 0;
 
             const costPayroll = parseCurrency($(".costPayroll").text());
             const costMaterials = parseCurrency($(".costMaterials").text());
@@ -54,19 +44,32 @@ $(document).ready(function () {
               let costPayrollUnit = costPayroll / unitsProcessing;
               let costMaterialsUnit = costMaterials / unitsProcessing;
               let costIndirectUnit = costIndirect / unitsProcessing;
-              let totalCostUnit = costPayrollUnit + costMaterialsUnit + costIndirectUnit;
+              let totalCostUnit =
+                costPayrollUnit + costMaterialsUnit + costIndirectUnit;
               let quality = (1 - unitsDefects / unitsProcessing) * 100;
 
               // Actualizar valores en la interfaz
-              $("#kpiQualityOP").text(`QC: ${quality.toFixed(2)}%`).show();
+              $("#kpiQualityOP")
+                .text(`QC: ${quality.toFixed(2)}%`)
+                .show();
               $("#kpiCostPayroll").text(`MO: ${formatCurrency(costPayroll)}`);
-              $("#kpiCostPayrollUnit").text(`MO: ${formatCurrency(costPayrollUnit)}`);
-              $("#kpiCostMaterials").text(`MP: ${formatCurrency(costMaterials)}`);
-              $("#kpiCostMaterialsUnit").text(`MP: ${formatCurrency(costMaterialsUnit)}`);
+              $("#kpiCostPayrollUnit").text(
+                `MO: ${formatCurrency(costPayrollUnit)}`
+              );
+              $("#kpiCostMaterials").text(
+                `MP: ${formatCurrency(costMaterials)}`
+              );
+              $("#kpiCostMaterialsUnit").text(
+                `MP: ${formatCurrency(costMaterialsUnit)}`
+              );
               $("#kpiIndirectCost").text(`CI: ${formatCurrency(costIndirect)}`);
-              $("#kpiIndirectCostUnit").text(`CI: ${formatCurrency(costIndirectUnit)}`);
+              $("#kpiIndirectCostUnit").text(
+                `CI: ${formatCurrency(costIndirectUnit)}`
+              );
               $("#kpiTotalCost").text(`CT: ${formatCurrency(totalCost)}`);
-              $("#kpiTotalCostUnit").text(`CT: ${formatCurrency(totalCostUnit)}`);
+              $("#kpiTotalCostUnit").text(
+                `CT: ${formatCurrency(totalCostUnit)}`
+              );
 
               // Mostrar títulos y divisores
               $("#titleGeneralCost, #titleUnitCost, #lineDivTitleCost").show();
@@ -83,7 +86,9 @@ $(document).ready(function () {
       const config = { childList: true, subtree: true };
 
       // Iniciar la observación
-      Object.values(targets).forEach((target) => observer.observe(target, config));
+      Object.values(targets).forEach((target) =>
+        observer.observe(target, config)
+      );
     } else {
       console.log("Esperando que los elementos estén disponibles...");
       setTimeout(initObserver, 500); // Reintentar después de 500 ms
@@ -92,5 +97,22 @@ $(document).ready(function () {
 
   // Llamar a la función de inicialización
   initObserver();
-});
 
+  const parseCurrency = (value) => {
+    return (
+      parseFloat(
+        value
+          .replace(/\./g, "") // Elimina separadores de miles
+          .replace(",", ".") // Convierte separador decimal
+          .replace(/[\$]/g, "") // Elimina el símbolo de moneda
+      ) || 0
+    );
+  };
+
+  const formatCurrency = (value) => {
+    return `$${value.toLocaleString("es-CO", {
+      minimumFractionDigits: 2,
+      maximumFractionDigits: 2,
+    })}`;
+  };
+});
