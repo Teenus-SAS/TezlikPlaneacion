@@ -24,6 +24,15 @@ $(document).ready(function () {
           },
         },
         {
+          title: "Fecha Ejecución",
+          data: "creation_date",
+          className: "uniqueClassName dt-head-center",
+          width: "200px",
+          render: function (data, type, full, meta) {
+            return moment(data).format("DD/MM/YYYY hh:mm A");
+          },
+        },
+        {
           title: "Fechas de Producción",
           data: null,
           className: "uniqueClassName dt-head-center",
@@ -35,15 +44,6 @@ $(document).ready(function () {
             return `Inicio: ${moment(start_date).format(
               "DD/MM/YYYY hh:mm A"
             )}<br>Fin: ${moment(end_date).format("DD/MM/YYYY hh:mm A")}`;
-          },
-        },
-        {
-          title: "Fecha Creacion",
-          data: "creation_date",
-          className: "uniqueClassName dt-head-center",
-          width: "200px",
-          render: function (data, type, full, meta) {
-            return moment(data).format("DD/MM/YYYY hh:mm A");
           },
         },
         {
@@ -121,7 +121,7 @@ $(document).ready(function () {
               maximumFractionDigits: 0,
             })}`;
           },
-        }, 
+        },
         {
           title: "Acciones",
           data: null,
