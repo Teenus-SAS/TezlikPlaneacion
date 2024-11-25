@@ -482,6 +482,8 @@ $app->post('/addProductsMaterials', function (Request $request, Response $respon
                             }
                         } else {
                             $data['idOrder'] = $findOrder['id_order'];
+                            $data['originalQuantity'] = $findOrder['original_quantity'] + $data['originalQuantity'];
+
                             $resolution = $ordersDao->updateOrder($data);
                         }
                         if (isset($resolution['info'])) break;
@@ -556,6 +558,8 @@ $app->post('/addProductsMaterials', function (Request $request, Response $respon
                             }
                         } else {
                             $data['idOrder'] = $findOrder['id_order'];
+                            $data['originalQuantity'] = $findOrder['original_quantity'] + $data['originalQuantity'];
+
                             $resolution = $ordersDao->updateOrder($data);
                         }
                         if (isset($resolution['info'])) break;
@@ -888,6 +892,8 @@ $app->post('/updatePlanProductsMaterials', function (Request $request, Response 
                                 }
                             } else {
                                 $data['idOrder'] = $findOrder['id_order'];
+                                $data['originalQuantity'] = $findOrder['original_quantity'] + $data['originalQuantity'];
+
                                 $resolution = $ordersDao->updateOrder($data);
                             }
                             if (isset($resolution['info'])) break;
@@ -962,6 +968,8 @@ $app->post('/updatePlanProductsMaterials', function (Request $request, Response 
                                 }
                             } else {
                                 $data['idOrder'] = $findOrder['id_order'];
+                                $data['originalQuantity'] = $findOrder['original_quantity'] + $data['originalQuantity'];
+
                                 $resolution = $ordersDao->updateOrder($data);
                             }
                             if (isset($resolution['info'])) break;
@@ -1188,6 +1196,8 @@ $app->post('/deletePlanProductMaterial', function (Request $request, Response $r
                             }
                         } else {
                             $data['idOrder'] = $findOrder['id_order'];
+                            $data['originalQuantity'] = $findOrder['original_quantity'] + $data['originalQuantity'];
+
                             $resolution = $ordersDao->updateOrder($data);
                         }
                         if (isset($resolution['info'])) break;
@@ -1262,6 +1272,8 @@ $app->post('/deletePlanProductMaterial', function (Request $request, Response $r
                             }
                         } else {
                             $data['idOrder'] = $findOrder['id_order'];
+                            $data['originalQuantity'] = $findOrder['original_quantity'] + $data['originalQuantity'];
+
                             $resolution = $ordersDao->updateOrder($data);
                         }
                         if (isset($resolution['info'])) break;

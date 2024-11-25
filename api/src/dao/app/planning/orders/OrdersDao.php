@@ -26,29 +26,29 @@ class OrdersDao
                                             o.id_client,
                                             o.id_product,
                                             o.num_order,
-                                            ps.status,
+                                            IFNULL(ps.status, '') AS status,
                                             o.date_order,
                                             IFNULL(pi.accumulated_quantity, 0) AS accumulated_quantity,
                                             o.accumulated_quantity,
                                             o.original_quantity,
                                             p.reference,
                                             p.product,
-                                            c.client,
+                                            IFNULL(c.client, '') AS client
                                             o.min_date,
                                             o.max_date,
                                             o.delivery_date,
                                             o.office_date,
                                             o.type_order,
                                             IFNULL(pi.classification, '') AS classification,
-                                            s.id_seller,
-                                            s.firstname,
-                                            s.lastname
+                                            IFNULL(s.id_seller, 0) AS id_seller,
+                                            IFNULL(s.firstname, '') AS firstname,
+                                            IFNULL(s.lastname, '') AS lastname
                                         FROM orders o
                                         INNER JOIN products p ON p.id_product = o.id_product
                                         LEFT JOIN inv_products pi ON pi.id_product = o.id_product
-                                        INNER JOIN sellers s ON s.id_seller = o.id_seller
-                                        INNER JOIN third_parties c ON c.id_client = o.id_client
-                                        INNER JOIN orders_status ps ON ps.id_status = o.status
+                                        LEFT JOIN sellers s ON s.id_seller = o.id_seller
+                                        LEFT JOIN third_parties c ON c.id_client = o.id_client
+                                        LEFT JOIN orders_status ps ON ps.id_status = o.status
                                         WHERE o.status_order = 0 AND o.id_company = :id_company
                                         ORDER BY o.num_order DESC");
         $stmt->execute(['id_company' => $id_company]);

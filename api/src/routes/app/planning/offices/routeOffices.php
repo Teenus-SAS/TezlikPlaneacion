@@ -197,6 +197,8 @@ $app->post('/changeOffices', function (Request $request, Response $response, $ar
                     }
                 } else {
                     $data['idOrder'] = $findOrder['id_order'];
+                    $data['originalQuantity'] = $findOrder['original_quantity'] + $data['originalQuantity'];
+
                     $resolution = $ordersDao->updateOrder($data);
                 }
 

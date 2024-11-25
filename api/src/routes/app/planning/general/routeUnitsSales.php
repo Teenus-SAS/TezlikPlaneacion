@@ -313,6 +313,8 @@ $app->post('/addUnitSales', function (Request $request, Response $response, $arg
                         }
                     } else {
                         $data['idOrder'] = $findOrder['id_order'];
+                        $data['originalQuantity'] = $findOrder['original_quantity'] + $data['originalQuantity'];
+
                         $resolution = $ordersDao->updateOrder($data);
                     }
                 }
@@ -629,6 +631,8 @@ $app->post('/updateUnitSale', function (Request $request, Response $response, $a
                     }
                 } else {
                     $data['idOrder'] = $findOrder['id_order'];
+                    $data['originalQuantity'] = $findOrder['original_quantity'] + $data['originalQuantity'];
+
                     $resolution = $ordersDao->updateOrder($data);
                 }
             }
@@ -863,6 +867,8 @@ $app->post('/deleteUnitSale', function (Request $request, Response $response, $a
                     }
                 } else {
                     $data['idOrder'] = $findOrder['id_order'];
+                    $data['originalQuantity'] = $findOrder['original_quantity'] + $data['originalQuantity'];
+
                     $resolution = $ordersDao->updateOrder($data);
                 }
             }

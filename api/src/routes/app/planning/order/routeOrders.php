@@ -522,6 +522,7 @@ $app->post('/addOrder', function (Request $request, Response $response, $args) u
                             }
                         } else {
                             $data['idOrder'] = $findOrder['id_order'];
+                            $data['originalQuantity'] = $findOrder['original_quantity'] + $data['originalQuantity'];
                             $resolution = $ordersDao->updateOrder($data);
                         }
                         if (isset($resolution['info'])) break;
@@ -837,6 +838,8 @@ $app->post('/updateOrder', function (Request $request, Response $response, $args
                             }
                         } else {
                             $data['idOrder'] = $findOrder['id_order'];
+                            $data['originalQuantity'] = $findOrder['original_quantity'] + $data['originalQuantity'];
+
                             $resolution = $ordersDao->updateOrder($data);
                         }
                         if (isset($resolution['info'])) break;
@@ -911,6 +914,8 @@ $app->post('/updateOrder', function (Request $request, Response $response, $args
                             }
                         } else {
                             $data['idOrder'] = $findOrder['id_order'];
+                            $data['originalQuantity'] = $findOrder['original_quantity'] + $data['originalQuantity'];
+
                             $resolution = $ordersDao->updateOrder($data);
                         }
                         if (isset($resolution['info'])) break;
@@ -1208,6 +1213,8 @@ $app->post('/deleteOrder', function (Request $request, Response $response, $args
                                 }
                             } else {
                                 $data['idOrder'] = $findOrder['id_order'];
+                                $data['originalQuantity'] = $findOrder['original_quantity'] + $data['originalQuantity'];
+
                                 $resolution = $ordersDao->updateOrder($data);
                             }
                             if (isset($resolution['info'])) break;
@@ -1282,6 +1289,8 @@ $app->post('/deleteOrder', function (Request $request, Response $response, $args
                                 }
                             } else {
                                 $data['idOrder'] = $findOrder['id_order'];
+                                $data['originalQuantity'] = $findOrder['original_quantity'] + $data['originalQuantity'];
+
                                 $resolution = $ordersDao->updateOrder($data);
                             }
                             if (isset($resolution['info'])) break;
