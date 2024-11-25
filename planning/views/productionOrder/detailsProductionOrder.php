@@ -405,12 +405,13 @@ if (sizeof($_SESSION) == 0)
 																<tr>
 																	<th colspan="2">Totales:</th>
 																	<th></th>
+																	<th></th>
 																	<th class="uniqueClassName dt-head-center unitsDefects"></th>
 																	<th class="uniqueClassName dt-head-center unitsProcessing"></th>
 																	<th class="uniqueClassName dt-head-center costPayroll"></th>
 																	<th class="uniqueClassName dt-head-center costIndirect"></th>
 																	<th></th>
-																	<th></th>
+
 																</tr>
 															</tfoot>
 														</table>
