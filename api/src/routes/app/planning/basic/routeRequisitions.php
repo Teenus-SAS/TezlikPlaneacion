@@ -292,6 +292,9 @@ $app->post('/saveAdmissionDate', function (Request $request, Response $response,
     $generalRequisitionsMaterialsDao,
     $generalRequisitionsProductsDao,
     $generalMaterialsDao,
+    $generalExMaterialsDao,
+    $explosionMaterialsDao,
+    $generalRMStockDao,
     $productsMaterialsDao,
     $compositeProductsDao,
     $generalPlanCiclesMachinesDao,
@@ -333,18 +336,92 @@ $app->post('/saveAdmissionDate', function (Request $request, Response $response,
     }
 
     if ($resolution == null) {
-        // $orders = explode(',', $dataRequisition['order']);
+        // Materiales
+        $arr = $generalExMaterialsDao->findAllMaterialsConsolidated($id_company);
+        $materials = $generalExMaterialsDao->setDataEXMaterials($arr);
 
-        // foreach ($orders as $arr) {
-        //     $requisitions = $generalRequisitionsMaterialsDao->findRequisitionsByOrder($arr);
+        for ($i = 0; $i < sizeof($materials); $i++) {
+            $findEX = $generalExMaterialsDao->findEXMaterial($materials[$i]['id_material']);
 
-        //     if (sizeof($requisitions) == 0) {
-        //         $order = $generalOrdersDao->findOrderByNumOrder($arr);
+            if (!$findEX)
+                $resolution = $explosionMaterialsDao->insertNewEXMByCompany($materials[$i], $id_company);
+            else {
+                $materials[$i]['id_explosion_material'] = $findEX['id_explosion_material'];
+                $resolution = $explosionMaterialsDao->updateEXMaterials($materials[$i]);
+            }
 
-        //         if ($order[0]['status'] == 13)
-        //             $resolution = $generalOrdersDao->changeStatus($arr, 12);
-        //     }
-        // }
+            if (intval($materials[$i]['available']) < 0) {
+                $data = [];
+                $data['idMaterial'] = $materials[$i]['id_material'];
+
+                $provider = $generalRMStockDao->findProviderByStock($materials[$i]['id_material']);
+
+                $id_provider = 0;
+
+                if (isset($provider['id_provider'])) $id_provider = $provider['id_provider'];
+
+                $data['idProvider'] = $id_provider;
+                $data['numOrder'] = $materials[$i]['num_order'];
+                $data['applicationDate'] = '';
+                $data['deliveryDate'] = '';
+                $data['requiredQuantity'] = abs($materials[$i]['available']);
+                $data['purchaseOrder'] = '';
+                $data['requestedQuantity'] = 0;
+
+                $requisition = $generalRequisitionsMaterialsDao->findRequisitionByApplicationDate($materials[$i]['id_material']);
+
+                if (!$requisition)
+                    $generalRequisitionsMaterialsDao->insertRequisitionAutoByCompany($data, $id_company);
+                else {
+                    $data['idRequisition'] = $requisition['id_requisition_material'];
+                    $generalRequisitionsMaterialsDao->updateRequisitionAuto($data);
+                }
+            }
+        }
+
+        $arr = $generalExMaterialsDao->findAllChildrenMaterialsConsolidaded($id_company);
+        $materials = $generalExMaterialsDao->setDataEXMaterials($arr);
+
+        for ($i = 0; $i < sizeof($materials); $i++) {
+            $findEX = $generalExMaterialsDao->findEXMaterial($materials[$i]['id_material']);
+
+            if (!$findEX)
+                $resolution = $explosionMaterialsDao->insertNewEXMByCompany($materials[$i], $id_company);
+            else {
+                $materials[$i]['id_explosion_material'] = $findEX['id_explosion_material'];
+                $resolution = $explosionMaterialsDao->updateEXMaterials($materials[$i]);
+            }
+
+            if (intval($materials[$i]['available']) < 0) {
+                $data = [];
+                $data['idMaterial'] = $materials[$i]['id_material'];
+
+                $provider = $generalRMStockDao->findProviderByStock($materials[$i]['id_material']);
+
+                $id_provider = 0;
+
+                if (isset($provider['id_provider'])) $id_provider = $provider['id_provider'];
+
+                $data['idProvider'] = $id_provider;
+                $data['numOrder'] = $materials[$i]['num_order'];
+                $data['applicationDate'] = '';
+                $data['deliveryDate'] = '';
+                $data['requiredQuantity'] = abs($materials[$i]['available']);
+                $data['purchaseOrder'] = '';
+                $data['requestedQuantity'] = 0;
+
+                $requisition = $generalRequisitionsMaterialsDao->findRequisitionByApplicationDate($materials[$i]['id_material']);
+
+                if (!$requisition)
+                    $generalRequisitionsMaterialsDao->insertRequisitionAutoByCompany($data, $id_company);
+                else {
+                    $data['idRequisition'] = $requisition['id_requisition_material'];
+                    $generalRequisitionsMaterialsDao->updateRequisitionAuto($data);
+                }
+            }
+        }
+    }
+    if ($resolution == null) {
         $orders = $generalOrdersDao->findAllOrdersByCompany($id_company);
 
         for ($i = 0; $i < sizeof($orders); $i++) {

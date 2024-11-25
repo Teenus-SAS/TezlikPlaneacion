@@ -150,6 +150,28 @@ $(document).ready(function () {
             final_date.setMinutes(
               minDate.getMinutes() + Math.floor(minProgramming)
             );
+            // Checkear si la hora de la fecha final calculada es mayor a la hora de finalizacion de la maquina
+            let hour_check = parseFloat(
+              `${final_date.getHours()}.${final_date.getMinutes()}`
+            );
+            
+            let planningMachine = allPlanningMachines.find(
+              (item) => item.id_machine == arr.id_machine
+            );
+
+            if (hour_check > planningMachine.hour_end || hour_check < 6) {
+              let hours = Math.floor(planningMachine.hour_start);
+              let minutes = parseInt(
+                planningMachine.hour_start.toFixed(2).toString().split(".")[1]
+              );
+
+              isNaN(minutes) ? (minutes = 0) : minutes;
+
+              final_date.setMinutes(Math.floor(minutes));
+              final_date.setHours(Math.floor(hours));
+              final_date.setDate(final_date.getDate() + 1);
+            }
+            
 
             if (op == 2 && i > 0) {
               minDate.setMinutes(minDate.getMinutes() + Math.floor(min_date1));

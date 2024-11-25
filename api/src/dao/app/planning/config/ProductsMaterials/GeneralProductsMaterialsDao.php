@@ -51,7 +51,7 @@ class GeneralProductsMaterialsDao
                                                 mi.quantity / pm.quantity_converted
                                             ) AS quantity,
                                             pm.quantity AS quantity_ftm,
-                                            'MATERIAL' AS TYPE,
+                                            'MATERIAL' AS type,
                                             IFNULL(mg.id_magnitude, 0) AS id_magnitude,
                                             IFNULL(mg.magnitude, '') AS magnitude,
                                             IFNULL(u.id_unit, 0) AS id_unit,

@@ -287,28 +287,6 @@ $(document).ready(function () {
       }
     }    
 
-    // if (flag_type_program == 1) {
-    //   if (quantityFTM <= 0) {
-    //     for (let i = 0; i < allOrders.length; i++) {
-    //       if (allOrders[i].id_order == order.id_order) {
-    //         allOrders[i].quantity_programming = 0;
-    //         allOrders[i].accumulated_quantity_order = 0;
-    //         allOrders[i].accumulated_quantity = 0;
-    //         allOrders[i].flag_tbl = 0;
-    //       }          
-    //     }
-    //     for (let i = 0; i < allOrdersProgramming.length; i++) {
-    //       if (allOrdersProgramming[i].id_order == order.id_order) {
-    //         allOrdersProgramming[i].quantity_programming = 0;
-    //         allOrdersProgramming[i].accumulated_quantity_order = 0;
-    //         allOrdersProgramming[i].accumulated_quantity = 0;
-    //         allOrdersProgramming[i].flag_tbl = 0;
-    //       }          
-    //     }
-    //   }
-    // }
-
-    // Función para actualizar las órdenes
     function updateOrder(order, quantityProgramming, ciclesMachine) {
       order.status = "PROGRAMADO";
       let quantity = 0;
@@ -781,10 +759,13 @@ $(document).ready(function () {
             url: "/api/changeStatusProgramming",
             data: { data: allProgramming },
             success: function (data) { 
-              $('.cardLoading').remove();
-              $('.cardBottonsGeneral').show(400);
+              setTimeout(() => {
+                $('.cardLoading').remove();
+                $('.cardBottonsGeneral').show(400);                
+                $(".cardAddOP").hide(800);
+              }, 4000);
+
               generalMultiArray = [];
-              $(".cardAddOP").hide(800);
 
               message(data);
             },
@@ -869,7 +850,6 @@ $(document).ready(function () {
               
               setTimeout(() => {
                 $('.cardBottonsGeneral').show(400);
-                // $(".cardAddOP").show(800);                
               }, 5000);
 
               message(resp);
