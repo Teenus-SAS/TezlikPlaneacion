@@ -32,7 +32,12 @@ $(document).ready(function () {
               parseFloat($(".unitsDefects").text().replace(" Und", "")) || 0;
 
             const unitsProcessing =
-              parseFloat($(".unitsProcessing").text().replace(" Und", "")) || 0;
+              parseFloat(
+                $(".unitsProcessing")
+                  .text()
+                  .replace(" Und", "") // Reemplaza " Und"
+                  .replace(/\./g, "") // Reemplaza todos los puntos
+              ) || 0;
 
             const costPayroll = parseCurrency($(".costPayroll").text());
             const costMaterials = parseCurrency($(".costMaterials").text());
