@@ -138,7 +138,7 @@ $(document).ready(function () {
       if (for_recieve > 0 || recieve > 0) {
         if (for_recieve > 0) {
           action = `<button class="btn btn-info acceptMaterial" id="accept-${dataFT[i].id_material}">Aceptar MP</button>`;
-        } else if (pending == 0) {
+        } else if (recieve > 0) {
           action = `<a href="javascript:;">
                             <i class="mdi mdi-playlist-check seeAcceptMP programming-${id_programming} material-${dataFT[i].id_material}" data-toggle="tooltip" title="Ver Usuarios" style="font-size: 30px;color:black"></i>
                           </a>`;
