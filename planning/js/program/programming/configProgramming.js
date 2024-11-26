@@ -61,19 +61,23 @@ $(document).ready(function () {
       
       // let data = [];
 
-      // allOrdersProgramming = ordersProgramming.map((item) => ({
-      //   ...item,
-      //   flag_tbl: 1,
-      // }));
+      // if (!storOrdersProgramming && !storOrders) {
+      //   allOrdersProgramming = ordersProgramming.map((item) => ({
+      //     ...item,
+      //     flag_tbl: 1,
+      //   }));
+      //   allOrders = orders.map((item) => ({
+      //     ...item,
+      //     flag_tbl: 1,
+      //     flag_process: 0,
+      //   }));
+      // }     
+
       // allProcess = process;
       // allMachines = machines;
       // allCiclesMachines = ciclesMachines;
       // allPlanningMachines = planningMachines;
-      // allOrders = orders.map((item) => ({
-      //   ...item,
-      //   flag_tbl: 1,
-      //   flag_process: 0,
-      // }));
+
       // allProducts = products;
       // allProgramming = programming;
 
@@ -124,17 +128,18 @@ $(document).ready(function () {
       ]);
 
       // Mapear y preparar datos
-      allOrdersProgramming = ordersProgramming.map(item => ({
-        ...item,
-        flag_tbl: 1,
-      }));
-
-      allOrders = orders.map(item => ({
-        ...item,
-        flag_tbl: 1,
-        flag_process: 0,
-      }));
-
+      if (!storOrdersProgramming && !storOrders) {
+        allOrdersProgramming = ordersProgramming.map((item) => ({
+          ...item,
+          flag_tbl: 1,
+        }));
+        allOrders = orders.map((item) => ({
+          ...item,
+          flag_tbl: 1,
+          flag_process: 0,
+        }));
+      } 
+      
       allProductsMaterials = storData.productsMaterials
         ? JSON.parse(storData.productsMaterials)
         : [...productsMaterials, ...compositeProducts];

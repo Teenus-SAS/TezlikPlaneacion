@@ -335,6 +335,7 @@ $(document).ready(function () {
         }
       }
     }
+    
     // Recorre allOrders en sentido inverso para evitar problemas con la actualización de índices
     for (let i = allOrders.length - 1; i >= 0; i--) {
       if (

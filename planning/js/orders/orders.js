@@ -113,14 +113,7 @@ $(document).ready(function () {
     if (minDate < date || maxDate < date) {
       toastr.error("Fecha por debajo de la fecha actual");
       return false;
-    }
-
-    // if (idOrder) {
-    //   if (dateOrder < date) {
-    //     toastr.error("Fecha por debajo de la fecha actual");
-    //     return false;
-    //   }
-    // }
+    } 
 
     // if (originalQuantity > accumulated_quantity) {
     //   toastr.error("Inventario de producto por debajo de");
@@ -135,14 +128,14 @@ $(document).ready(function () {
 
     let resp = await sendDataPOST(url, dataOrder);
 
-    if(resp.success){
+    if (resp.success) {
       let dataProducts = JSON.parse(sessionStorage.getItem('dataProducts'));
       
       for (let i = 0; i < dataProducts.length; i++) {
         if (dataProducts[i].id_product == idProduct) {
           dataProducts[i].accumulated_quantity = resp.accumulated_quantity;
-        } 
-      } 
+        }
+      }
 
       sessionStorage.setItem('dataProducts', JSON.stringify(dataProducts));
     }

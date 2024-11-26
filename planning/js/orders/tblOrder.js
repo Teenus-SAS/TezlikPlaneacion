@@ -5,6 +5,24 @@ $(document).ready(function () {
     try {
       const dataOrders = await searchData("/api/orders");
 
+      let allOrders = JSON.parse(sessionStorage.getItem('allOrders'));
+      // let allOrdersProgramming = JSON.parse(sessionStorage.getItem('allOrdersProgramming'));
+        
+      if (allOrders) {
+        for (let i = 0; i < dataOrders.length; i++) {
+          if (dataOrders[i].status == 'PROGRAMAR') {
+            let arr = allOrders.find(item => item.id_order == dataOrders[i].id_order);
+
+            if (!arr) {
+              allOrders.push(dataOrders[i]);
+              allOrders.push(dataOrders[i]);
+            }
+          }
+        }
+        sessionStorage.setItem('allOrders', JSON.stringify(allOrders));
+        sessionStorage.setItem('allOrdersProgramming', JSON.stringify(allOrders));
+      }
+    
       orders = dataOrders;
 
       ordersIndicators(orders);
