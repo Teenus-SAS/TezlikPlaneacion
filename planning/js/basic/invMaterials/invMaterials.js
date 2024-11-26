@@ -44,14 +44,6 @@ $(document).ready(function () {
     $('#material').append(`<option disabled>Seleccionar</option>`);
     $('#refMaterial').append(`<option value="${data.id_material}" selected>${data.reference}</option>`);
     $('#material').append(`<option value="${data.id_material}" selected>${data.material}</option>`);
-    // $(`#refMaterial option[value=${data.id_material}]`).prop(
-    //   "selected",
-    //   true
-    // );
-    // $(`#material option[value=${data.id_material}]`).prop(
-    //   "selected",
-    //   true
-    // );
     $(`#materialType option[value=${data.id_material_type}]`).prop(
       "selected",
       true
