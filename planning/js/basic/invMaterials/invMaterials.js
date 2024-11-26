@@ -25,32 +25,38 @@ $(document).ready(function () {
 
   $(document).on("click", ".updateRawMaterials", function (e) {
     $(".cardImportMaterials").hide(800);
-    $("#units").empty();
     $(".cardRawMaterials").show(800);
     $("#btnCreateMaterial").text("Actualizar");
-
+    
     // Obtener el ID del elemento
     // let idMaterial = $(this).attr("id").split("-")[1];
 
     // sessionStorage.setItem("id_material", idMaterial);
-
+    
     //obtener data
     const row = $(this).closest("tr")[0];
     let data = tblRawMaterials.fnGetData(row);
- 
-    $(`#refMaterial option[value=${data.id_material}]`).prop(
-      "selected",
-      true
-    );
-    $(`#material option[value=${data.id_material}]`).prop(
-      "selected",
-      true
-    );
+    
+    $("#refMaterial").empty();
+    $("#material").empty();
+
+    $('#refMaterial').append(`<option disabled>Seleccionar</option>`);
+    $('#material').append(`<option disabled>Seleccionar</option>`);
+    $('#refMaterial').append(`<option value="${data.id_material}" selected>${data.reference}</option>`);
+    $('#material').append(`<option value="${data.id_material}" selected>${data.material}</option>`);
+    // $(`#refMaterial option[value=${data.id_material}]`).prop(
+    //   "selected",
+    //   true
+    // );
+    // $(`#material option[value=${data.id_material}]`).prop(
+    //   "selected",
+    //   true
+    // );
     $(`#materialType option[value=${data.id_material_type}]`).prop(
       "selected",
       true
     ); 
- 
+    $(`#units`).val(data.unit);
     $("#mQuantity").val(data.quantity); 
     $("#grammage").val(data.grammage);
 
