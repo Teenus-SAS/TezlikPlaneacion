@@ -16,19 +16,91 @@ $(document).ready(function () {
 
   loadAllDataProgramming = async () => {
     try {
+      // $('#btnNewProgramming').hide();
+
+      // let storOrders = sessionStorage.getItem("allOrders");
+      // let storOrdersProgramming = sessionStorage.getItem(
+      //   "allOrdersProgramming"
+      // );
+      // let storProcess = sessionStorage.getItem("allProcess");
+      // let storCiclesMachines = sessionStorage.getItem("allCiclesMachines");
+      // let storPlanningMachines = sessionStorage.getItem("allPlanningMachines");
+      // let storProductsMaterials = sessionStorage.getItem(
+      //   "allProductsMaterials"
+      // );
+
+      // const [
+      //   ordersProgramming,
+      //   process,
+      //   machines,
+      //   ciclesMachines,
+      //   planningMachines,
+      //   orders,
+      //   programming,
+      //   productsMaterials,
+      //   compositeProducts,
+      // ] = await Promise.all([
+      //   !storOrdersProgramming
+      //     ? searchData("/api/ordersProgramming")
+      //     : JSON.parse(storOrdersProgramming),
+      //   !storProcess
+      //     ? searchData("/api/processProgramming")
+      //     : JSON.parse(storProcess),
+      //   searchData("/api/machines"),
+      //   !storCiclesMachines
+      //     ? searchData("/api/planCiclesMachine")
+      //     : JSON.parse(storCiclesMachines),
+      //   !storPlanningMachines
+      //     ? searchData("/api/planningMachines")
+      //     : JSON.parse(storPlanningMachines),
+      //   !storOrders ? searchData("/api/orders") : JSON.parse(storOrders),
+      //   searchData("/api/programming"),
+      //   !storProductsMaterials ? searchData("/api/allProductsMaterials") : [],
+      //   !storProductsMaterials ? searchData("/api/allCompositeProducts") : [],
+      // ]);
+      
+      // let data = [];
+
+      // allOrdersProgramming = ordersProgramming.map((item) => ({
+      //   ...item,
+      //   flag_tbl: 1,
+      // }));
+      // allProcess = process;
+      // allMachines = machines;
+      // allCiclesMachines = ciclesMachines;
+      // allPlanningMachines = planningMachines;
+      // allOrders = orders.map((item) => ({
+      //   ...item,
+      //   flag_tbl: 1,
+      //   flag_process: 0,
+      // }));
+      // allProducts = products;
+      // allProgramming = programming;
+
+      // if (!storProductsMaterials) {
+      //   allProductsMaterials = [...productsMaterials, ...compositeProducts];
+      // } else {
+      //   allProductsMaterials = JSON.parse(storProductsMaterials);
+      // }
+ 
+      // Ocultar botón
       $('#btnNewProgramming').hide();
 
-      let storOrders = sessionStorage.getItem("allOrders");
-      let storOrdersProgramming = sessionStorage.getItem(
-        "allOrdersProgramming"
-      );
-      let storProcess = sessionStorage.getItem("allProcess");
-      let storCiclesMachines = sessionStorage.getItem("allCiclesMachines");
-      let storPlanningMachines = sessionStorage.getItem("allPlanningMachines");
-      let storProductsMaterials = sessionStorage.getItem(
-        "allProductsMaterials"
-      );
+      // Obtener datos almacenados en sessionStorage
+      const storData = {
+        orders: sessionStorage.getItem("allOrders"),
+        ordersProgramming: sessionStorage.getItem("allOrdersProgramming"),
+        process: sessionStorage.getItem("allProcess"),
+        ciclesMachines: sessionStorage.getItem("allCiclesMachines"),
+        planningMachines: sessionStorage.getItem("allPlanningMachines"),
+        productsMaterials: sessionStorage.getItem("allProductsMaterials"),
+      };
 
+      // Función para obtener datos de sessionStorage o realizar una solicitud API
+      const getData = async (key, apiUrl) =>
+        storData[key] ? JSON.parse(storData[key]) : await searchData(apiUrl);
+
+      // Obtener todos los datos de forma concurrente
       const [
         ordersProgramming,
         process,
@@ -40,49 +112,40 @@ $(document).ready(function () {
         productsMaterials,
         compositeProducts,
       ] = await Promise.all([
-        !storOrdersProgramming
-          ? searchData("/api/ordersProgramming")
-          : JSON.parse(storOrdersProgramming),
-        !storProcess
-          ? searchData("/api/processProgramming")
-          : JSON.parse(storProcess),
-        searchData("/api/machines"),
-        !storCiclesMachines
-          ? searchData("/api/planCiclesMachine")
-          : JSON.parse(storCiclesMachines),
-        !storPlanningMachines
-          ? searchData("/api/planningMachines")
-          : JSON.parse(storPlanningMachines),
-        !storOrders ? searchData("/api/orders") : JSON.parse(storOrders),
-        searchData("/api/programming"),
-        !storProductsMaterials ? searchData("/api/allProductsMaterials") : [],
-        !storProductsMaterials ? searchData("/api/allCompositeProducts") : [],
+        getData("ordersProgramming", "/api/ordersProgramming"),
+        getData("process", "/api/processProgramming"),
+        searchData("/api/machines"), // Siempre consulta la API
+        getData("ciclesMachines", "/api/planCiclesMachine"),
+        getData("planningMachines", "/api/planningMachines"),
+        getData("orders", "/api/orders"),
+        searchData("/api/programming"), // Siempre consulta la API
+        getData("productsMaterials", "/api/allProductsMaterials"),
+        getData("productsMaterials", "/api/allCompositeProducts"),
       ]);
-      
-      let data = [];
 
-      allOrdersProgramming = ordersProgramming.map((item) => ({
+      // Mapear y preparar datos
+      allOrdersProgramming = ordersProgramming.map(item => ({
         ...item,
         flag_tbl: 1,
       }));
-      allProcess = process;
-      allMachines = machines;
-      allCiclesMachines = ciclesMachines;
-      allPlanningMachines = planningMachines;
-      allOrders = orders.map((item) => ({
+
+      allOrders = orders.map(item => ({
         ...item,
         flag_tbl: 1,
         flag_process: 0,
       }));
-      allProducts = products;
+
+      allProductsMaterials = storData.productsMaterials
+        ? JSON.parse(storData.productsMaterials)
+        : [...productsMaterials, ...compositeProducts];
+
+      // Asignar datos globales
+      allProcess = process;
+      allMachines = machines;
+      allCiclesMachines = ciclesMachines;
+      allPlanningMachines = planningMachines;
       allProgramming = programming;
 
-      if (!storProductsMaterials) {
-        allProductsMaterials = [...productsMaterials, ...compositeProducts];
-      } else {
-        allProductsMaterials = JSON.parse(storProductsMaterials);
-      }
- 
       data = programming;
 
       if (
