@@ -338,9 +338,10 @@ $(document).ready(function () {
     // Recorre allOrders en sentido inverso para evitar problemas con la actualización de índices
     for (let i = allOrders.length - 1; i >= 0; i--) {
       if (
-        allOrders[i].id_product == id_product &&
-        quantityMissing == 0 &&
-        process.length === 1
+        allOrders[i].id_product == id_product
+        // &&
+        // quantityMissing == 0 &&
+        // process.length === 1
       ) {
         allOrders[i].flag_tbl = 0;
 
@@ -352,9 +353,10 @@ $(document).ready(function () {
     // Recorre allOrdersProgramming en sentido inverso
     for (let i = allOrdersProgramming.length - 1; i >= 0; i--) {
       if (
-        allOrdersProgramming[i].id_product == id_product &&
-        quantityMissing == 0 &&
-        process.length === 1
+        allOrdersProgramming[i].id_product == id_product
+        // &&
+        // quantityMissing == 0 &&
+        // process.length === 1
       ) {
         allOrdersProgramming[i].flag_tbl = 0;
       }
@@ -393,9 +395,9 @@ $(document).ready(function () {
         order.accumulated_quantity_order = quantity;
         order.accumulated_quantity = quantity;
         
-        if (quantity == 0) {
-          order.flag_tbl = 0;
-        }
+        // if (quantity == 0) {
+        //   order.flag_tbl = 0;
+        // }
         
         if (flag_type_program == 0)
           order.accumulated_quantity = (ciclesMachine.length === 1)
