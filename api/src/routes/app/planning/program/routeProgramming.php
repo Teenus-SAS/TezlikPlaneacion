@@ -50,64 +50,6 @@ $requisitionsMaterialsDao = new RequisitionsMaterialsDao();
 use Psr\Http\Message\ResponseInterface as Response;
 use Psr\Http\Message\ServerRequestInterface as Request;
 
-/*  
-    // Consultar fecha inicio maquina
-    $app->post('/dateMachine', function (Request $request, Response $response, $args) use ($datesMachinesDao) {
-        session_start();
-        $id_company = $_SESSION['id_company'];
-        $dataProgramming = $request->getParsedBody();
-
-        $datesMachines = $datesMachinesDao->findDatesMachine($dataProgramming, $id_company);
-        if (!$datesMachines)
-            $resp = array('nonExisting' => true);
-        else
-            $resp = array('existing' => true);
-
-        $response->getBody()->write(json_encode($resp, JSON_NUMERIC_CHECK));
-        return $response->withHeader('Content-Type', 'application/json');
-    });
-
-    // Obtener información
-    $app->post('/getProgrammingInfo', function (Request $request, Response $response, $args) use (
-        $finalDateDao,
-        $economicLotDao,
-        $datesMachinesDao,
-        $generalOrdersDao
-    ) {
-        session_start();
-        $id_company = $_SESSION['id_company'];
-        $dataProgramming = $request->getParsedBody();
-
-        if (isset($dataProgramming['startDate'])) {
-            // Insertar fechas maquina
-            $datesMachinesDao->insertDatesMachine($dataProgramming, $id_company);
-
-            // Calcular fecha final
-            $finalDate = $finalDateDao->calcFinalDate($dataProgramming, $id_company);
-            $dataProgramming['finalDate'] = $finalDate['final_date'];
-
-            // Actualizar fecha final
-            $finalDateDao->updateFinalDate($dataProgramming, $id_company);
-        }
-
-        // Calcular Lote economico
-        $economicLot = $economicLotDao->calcEconomicLot($dataProgramming, $id_company);
-
-        // Obtener fechas maquina
-        $datesMachines = $datesMachinesDao->findDatesMachine($dataProgramming, $id_company);
-
-        // Obtener información producto, pedido y cliente
-        $orders = $generalOrdersDao->findOrdersByCompany($dataProgramming, $id_company);
-
-        $data['economicLot'] = $economicLot['economic_lot'];
-        $data['datesMachines'] = $datesMachines;
-        $data['order'] = $orders;
-
-        $response->getBody()->write(json_encode($data, JSON_NUMERIC_CHECK));
-        return $response->withHeader('Content-Type', 'application/json');
-    }); 
-*/
-
 $app->get('/programming', function (Request $request, Response $response, $args) use (
     $programmingDao,
     $generalProgrammingDao,
@@ -350,84 +292,6 @@ $app->post('/saveProgramming', function (Request $request, Response $response, $
     return $response->withStatus(200)->withHeader('Content-Type', 'application/json');
 });
 
-// $app->post('/updateProgramming', function (Request $request, Response $response, $args) use (
-//     $programmingDao,
-//     $generalProgrammingDao,
-//     $generalOrdersDao,
-//     $productsMaterialsDao,
-//     $generalMaterialsDao,
-//     $ordersDao
-// ) {
-//     session_start();
-//     $id_company = $_SESSION['id_company'];
-//     $dataProgramming = $request->getParsedBody();
-
-//     $result = $programmingDao->updateProgramming($dataProgramming);
-
-//     if ($result == null) {
-//         $order = $generalProgrammingDao->checkAccumulatedQuantityOrder($dataProgramming['order']);
-
-//         if ($order['quantity_programming'] < $order['original_quantity'])
-//             $dataProgramming['accumulatedQuantity'] = $order['original_quantity'] - $order['quantity_programming'];
-//         else
-//             $dataProgramming['accumulatedQuantity'] = 0;
-
-//         $result = $generalOrdersDao->updateAccumulatedOrder($dataProgramming);
-//     }
-//     if ($result == null)
-//         $result = $generalProgrammingDao->addMinutesProgramming($dataProgramming['idProgramming'], $dataProgramming['minutes']);
-
-//     if ($result == null) {
-//         $productsMaterials = $productsMaterialsDao->findAllProductsMaterials($dataProgramming['idProduct'], $id_company);
-
-//         if (sizeof($productsMaterials) == 0) {
-//             $generalOrdersDao->changeStatus($dataProgramming['order'], 'Sin Ficha Tecnica');
-//         } else {
-//             foreach ($productsMaterials as $k) {
-//                 if (isset($result['info'])) break;
-
-//                 $j = $generalMaterialsDao->findReservedMaterial($k['id_material']);
-
-//                 !isset($j['reserved']) ? $j['reserved'] = 0 : $j;
-
-//                 $result = $generalMaterialsDao->updateReservedMaterial($k['id_material'], $j['reserved']);
-//             }
-//         }
-//     }
-
-//     if ($result == null) {
-//         $orders = $ordersDao->findAllOrdersByCompany($id_company);
-
-//         foreach ($orders as $arr) {
-//             if ($arr['status'] != 'En Produccion' && $arr['status'] != 'Entregado' && $arr['status'] != 'Programado' && $arr['id_product'] == $dataProgramming['idProduct']) {
-//                 // Ficha tecnica
-//                 $productsMaterials = $productsMaterialsDao->findAllProductsMaterials($arr['id_product'], $id_company);
-
-//                 if (sizeof($productsMaterials) == 0) {
-//                     $generalOrdersDao->changeStatus($arr['id_order'], 'Sin Ficha Tecnica');
-//                 } else {
-//                     foreach ($productsMaterials as $k) {
-//                         if (($k['quantity_material'] - $k['reserved']) <= 0) {
-//                             $result = $generalOrdersDao->changeStatus($arr['id_order'], 'Sin Materia Prima');
-//                             break;
-//                         }
-//                     }
-//                 }
-//             }
-//         }
-//     }
-
-//     if ($result == null)
-//         $resp = array('success' => true, 'message' => 'Programa de producción actualizado correctamente');
-//     else if (isset($result['info']))
-//         $resp = array('info' => true, 'message' => $result['message']);
-//     else
-//         $resp = array('error' => true, 'message' => 'Ocurrio un error mientras actualizaba la información. Intente nuevamente');
-
-//     $response->getBody()->write(json_encode($resp));
-//     return $response->withStatus(200)->withHeader('Content-Type', 'application/json');
-// });
-
 $app->post('/deleteProgramming', function (Request $request, Response $response, $args) use (
     $programmingDao,
     $generalOrdersDao,
@@ -476,8 +340,6 @@ $app->post('/deleteProgramming', function (Request $request, Response $response,
                 $arr['status'] != 'EN PRODUCCION' && $arr['status'] != 'ENTREGADO' &&
                 $arr['status'] != 'PROGRAMADO' && $arr['status'] != 'FINALIZADO'
             ) {
-                // $result = $generalOrdersDao->changeStatus($arr['id_order'], 'Programar');
-
                 // Ficha tecnica
                 $productsMaterials = $productsMaterialsDao->findAllProductsMaterials($arr['id_product'], $id_company);
                 $compositeProducts = $compositeProductsDao->findAllCompositeProductsByIdProduct($arr['id_product'], $id_company);

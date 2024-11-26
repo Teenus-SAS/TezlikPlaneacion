@@ -13,7 +13,6 @@ $(document).ready(function () {
 
   let selectProduct = false;
   let selectProcess = false;
-  // sessionStorage.removeItem('dataProgramming');
 
   loadAllDataProgramming = async () => {
     try {
@@ -90,6 +89,13 @@ $(document).ready(function () {
         !sessionStorage.getItem("dataProgramming") ||
         sessionStorage.getItem("dataProgramming").includes("[object Object]")
       ) {
+        sessionStorage.setItem('allOrders', JSON.stringify(allOrders));
+        sessionStorage.setItem('allOrdersProgramming', JSON.stringify(allOrdersProgramming));
+        sessionStorage.setItem('allProcess', JSON.stringify(allProcess));
+        sessionStorage.setItem('allCiclesMachines', JSON.stringify(allCiclesMachines));
+        sessionStorage.setItem('allPlanningMachines', JSON.stringify(allPlanningMachines));
+        sessionStorage.setItem('allProductsMaterials', JSON.stringify(allProductsMaterials));
+
         // Ordenar los ciclos de las máquinas por `id_process`
         ciclesMachines.sort((a, b) => a.id_process - b.id_process);
 
@@ -119,7 +125,6 @@ $(document).ready(function () {
         // Recuperar datos de sessionStorage si ya existen
         generalMultiArray = JSON.parse(sessionStorage.getItem("dataProgramming"));
       }
-
 
       allTblData = flattenData(generalMultiArray);
 
@@ -201,33 +206,7 @@ $(document).ready(function () {
     filteredData.forEach(({ id_order, num_order }) => {
       $select.append(`<option value="${id_order}">${num_order}</option>`);
     });
-  };
-
-  // loadOrdersProgramming = async (data) => { 
-  //   data = data.filter((item) => item.flag_tbl == 1);
-
-  //   if (data.length === 0) {
-  //     return 1;
-  //   }
-
-  //   data = data.reduce((acc, current) => {
-  //     if (!acc.some((item) => item.num_order == current.num_order)) {
-  //       acc.push(current);
-  //     }
-  //     return acc;
-  //   }, []);
-
-  //   let $select = $(`#order`);
-  //   $select.empty();
-
-  //   $select.append(`<option disabled selected>Seleccionar</option>`);
-
-  //   $.each(data, function (i, value) {
-  //     $select.append(
-  //       `<option value ='${value.id_order}'> ${value.num_order} </option>`
-  //     );
-  //   });
-  // };
+  }; 
 
   loadAllDataProgramming();
 
@@ -839,41 +818,6 @@ $(document).ready(function () {
     checkData(2, this.id);
     $("#idProcess").change();
   });
-
-  // $("#idProcess").change(function (e) {
-  //   e.preventDefault();
-
-  //   if (selectProcess == true) {
-  //     // Obtener el classname de la opción seleccionada
-  //     var route = parseInt($(this).find("option:selected").attr("class"));
-  //     dataProgramming["route"] = route + 1;
-  //     let id_product = parseInt($("#selectNameProduct").val());
-
-  //     let arr = allCiclesMachines.find(
-  //       (item) =>
-  //         item.id_product == id_product &&
-  //         item.id_process == this.value &&
-  //         item.route == route
-  //     );
-
-  //     let $select = $(`#idMachine`);
-  //     $select.empty();
-  //     $select.append(`<option disabled value=''>Seleccionar</option>`);
-
-  //     if (arr.status == 0) {
-  //       $select.append(
-  //         `<option value ='${arr.id_alternal_machine}' selected> ${arr.alternal_machine} </option>`
-  //       );
-  //     }
-  //     else {
-  //       $select.append(
-  //         `<option value ='${arr.id_machine}' selected> ${arr.machine} </option>`
-  //       );
-  //     }
-
-  //     $(`#idMachine`).change();
-  //   }
-  // });
 
   $("#idProcess").change(function (e) {
     e.preventDefault();

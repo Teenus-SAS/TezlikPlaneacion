@@ -96,8 +96,7 @@ $(document).ready(function () {
     }
   });
 
-  /* Actualizar programa de produccion */
-
+  /* Actualizar programa de produccion 
   $(document).on("click", ".updateProgramming", async function (e) {
     $(".cardCreateProgramming").show(800);
     $('.cardFormProgramming2').show(800);
@@ -193,6 +192,80 @@ $(document).ready(function () {
       },
       1000
     );
+  }); */
+
+  $(document).on("click", ".updateProgramming", async function () {
+    // Mostrar elementos relevantes
+    $(".cardCreateProgramming, .cardFormProgramming2, .date, #btnCreateProgramming").show(800);
+    $("#btnCreateProgramming").text("Actualizar");
+
+    // Obtener datos relevantes
+    const allTblData = flattenData(generalMultiArray);
+    const data = allTblData.find(item => item.id_programming == this.id);
+    const accumulatedQuantity = data.accumulated_quantity || 0;
+
+    // Almacenar y preparar datos en SessionStorage
+    sessionStorage.removeItem("minDate");
+    sessionStorage.setItem("id_programming", data.id_programming);
+
+    // Actualizar elementos seleccionables
+    const populateSelect = (selector, value, text) => {
+      const $select = $(selector).empty();
+      $select.append(`<option value="0" disabled>Seleccionar</option>`);
+      $select.append(`<option value="${value}" selected>${text}</option>`);
+    };
+
+    populateSelect("#order", data.id_order, data.num_order);
+    populateSelect("#refProduct", data.id_product, data.product);
+    populateSelect("#selectNameProduct", data.id_product, data.product);
+    populateSelect("#idMachine", data.id_machine, data.machine);
+    populateSelect("#idProcess", data.id_process, data.process);
+
+    // Actualizar valores directos
+    $("#quantityOrder").val(data.quantity_order.toLocaleString());
+    $("#quantityMissing").val(accumulatedQuantity.toLocaleString());
+    $("#client").val(data.client);
+    $("#quantity").val(data.quantity_programming);
+    $("#minDate").val(data.min_date);
+
+    // Manejo de materiales
+    const productsMaterials = allProductsMaterials
+      .filter(item => item.id_product == data.id_product)
+      .sort((a, b) => a.quantity - b.quantity);
+
+    if (productsMaterials.length > 0) {
+      $("#quantityMP").html(
+        Math.floor(productsMaterials[0].quantity).toLocaleString("es-CO", {
+          maximumFractionDigits: 0,
+        })
+      );
+    }
+
+    // Configuración de fechas y tipo de programación
+    if (flag_type_program === 0) {
+      const minDateFormatted = convetFormatDateTime(data.min_date);
+      const maxDateFormatted = convetFormatDateTime(data.max_date);
+
+      const $minDate = $("#minDate").prop({ type: "datetime-local", readOnly: false });
+      $minDate.val(minDateFormatted);
+      $("#maxDate").val(maxDateFormatted);
+    }
+
+    // Actualizar el objeto `dataProgramming`
+    dataProgramming = {
+      id_order: data.id_order,
+      num_order: data.num_order,
+      client: data.client,
+      reference: data.reference,
+      product: data.product,
+      min_date: data.min_date,
+      max_date: data.max_date,
+      min_programming: data.min_programming,
+      update: 1,
+    };
+
+    // Animación al inicio de la página
+    $("html, body").animate({ scrollTop: 0 }, 1000);
   });
 
   /* Revision data programa de produccion */
@@ -372,28 +445,6 @@ $(document).ready(function () {
         }
       });
     }
-
-    // Resetear valores si type_program es 1
-    // if (flag_type_program == 1 && quantityFTM <= 0) {
-    //   const resetOrder = (order) => {
-    //     order.quantity_programming = 0;
-    //     order.accumulated_quantity_order = 0;
-    //     order.accumulated_quantity = 0;
-    //     order.flag_tbl = 0;
-    //   };
-
-    //   allOrders.forEach(order => {
-    //     if (order.id_order == id_order) {
-    //       resetOrder(order);
-    //     }
-    //   });
-
-    //   allOrdersProgramming.forEach(order => {
-    //     if (order.id_order == id_order) {
-    //       resetOrder(order);
-    //     }
-    //   });
-    // }
     
     let allTblData = flattenData(generalMultiArray);
     let sim = $("#simulationType").val();
