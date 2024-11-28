@@ -310,11 +310,12 @@ $(document).ready(function () {
     const { success, error, info, message } = data;
 
     sessionStorage.removeItem("id_part_deliv");
+    let id_programming = sessionStorage.getItem('id_programming');
 
     if (success) {
       $("#formAddOPPArtial").trigger("reset");
       toastr.success(message);
-      loadAllDataPO();
+      loadTblPartialsDelivery(id_programming);
       return false;
     } else if (error) toastr.error(message);
     else if (info) toastr.info(message);

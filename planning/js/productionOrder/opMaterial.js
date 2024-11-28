@@ -175,7 +175,8 @@ $(document).ready(function () {
     if (success) {
       $("#formAddOPMP").trigger("reset");
       toastr.success(message);
-      loadAllDataPO();
+      let id_programming = sessionStorage.getItem('id_programming');
+      loadTblOPMaterial(id_programming);
       return false;
     } else if (error) toastr.error(message);
     else if (info) toastr.info(message);
