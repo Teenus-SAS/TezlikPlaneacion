@@ -128,7 +128,7 @@ $(document).ready(function () {
       ]);
 
       // Mapear y preparar datos
-      if (!storOrdersProgramming && !storOrders) {
+      if (!storData.orders) {
         allOrdersProgramming = ordersProgramming.map((item) => ({
           ...item,
           flag_tbl: 1,
