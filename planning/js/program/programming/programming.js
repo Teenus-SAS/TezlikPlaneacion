@@ -1,4 +1,4 @@
-$(document).ready(function () {  
+$(document).ready(function () {
   $(".selectNavigation").click(function (e) {
     e.preventDefault();
     $(
@@ -67,9 +67,9 @@ $(document).ready(function () {
     let checkDT1 =
       id_order * id_product * quantityProgramming * id_process * id_machine;
 
-      if (min_date == "" || max_date == "") {
-        $(".cardFormProgramming2").show(800);
-      }
+    if (min_date == "" || max_date == "") {
+      $(".cardFormProgramming2").show(800);
+    }
       
     if (flag_type_program == 0) {
       if (max_date == "") {
@@ -337,31 +337,52 @@ $(document).ready(function () {
     }
     
     // Recorre allOrders en sentido inverso para evitar problemas con la actualización de índices
-    for (let i = allOrders.length - 1; i >= 0; i--) {
-      if (
-        allOrders[i].id_product == id_product
-        // &&
-        // quantityMissing == 0 &&
-        // process.length === 1
-      ) {
-        allOrders[i].flag_tbl = 0;
+    // for (let i = allOrders.length - 1; i >= 0; i--) {
+    //   if (
+    //     allOrders[i].id_product == id_product
+    //     // &&
+    //     // quantityMissing == 0 &&
+    //     // process.length === 1
+    //   ) {
+    //     allOrders[i].flag_tbl = 0;
 
-        if (allProcess[0].status == 1) allOrders[i].flag_process = 0;
-        else allOrders[i].flag_process = 1;
-      }
+    //     if (allProcess[0].status == 1) allOrders[i].flag_process = 0;
+    //     else allOrders[i].flag_process = 1;
+    //   }
+    // }
+
+    // // Recorre allOrdersProgramming en sentido inverso
+    // for (let i = allOrdersProgramming.length - 1; i >= 0; i--) {
+    //   if (
+    //     allOrdersProgramming[i].id_product == id_product
+    //     // &&
+    //     // quantityMissing == 0 &&
+    //     // process.length === 1
+    //   ) {
+    //     allOrdersProgramming[i].flag_tbl = 0;
+    //   }
+    // }    
+
+    function updateFlags(array, id_product, allProcess = null) {
+      array.forEach((item) => {
+        if (item.id_product === id_product) {
+          item.flag_tbl = 0;
+          if (allProcess) {
+            item.flag_process = allProcess[0].status === 1 ? 0 : 1;
+          }
+        }
+      });
     }
 
-    // Recorre allOrdersProgramming en sentido inverso
-    for (let i = allOrdersProgramming.length - 1; i >= 0; i--) {
-      if (
-        allOrdersProgramming[i].id_product == id_product
-        // &&
-        // quantityMissing == 0 &&
-        // process.length === 1
-      ) {
-        allOrdersProgramming[i].flag_tbl = 0;
-      }
-    }    
+    // Actualiza las órdenes
+    if (Array.isArray(allOrders) && allOrders.length > 0) {
+      updateFlags(allOrders, id_product, allProcess);
+    }
+
+    // Actualiza las órdenes de programación
+    if (Array.isArray(allOrdersProgramming) && allOrdersProgramming.length > 0) {
+      updateFlags(allOrdersProgramming, id_product);
+    }
 
     function updateOrder(order, quantityProgramming, ciclesMachine) {
       order.status = "PROGRAMADO";
@@ -699,8 +720,8 @@ $(document).ready(function () {
                 }
               }
             }
-            allTblData.splice(id, 1); 
-            loadTblProgramming(allTblData, 1);            
+            allTblData.splice(id, 1);
+            loadTblProgramming(allTblData, 1);
           } else {
             let data = allTblData.find((item) => item.id_programming == id);
             let dataProgramming = new FormData();
@@ -778,7 +799,7 @@ $(document).ready(function () {
   };
 
   /* Cambiar estado */
-  $(document).on("click", "#btnAddOP", function () { 
+  $(document).on("click", "#btnAddOP", function () {
     bootbox.confirm({
       title: "Orden de Producción",
       message:
@@ -812,10 +833,10 @@ $(document).ready(function () {
             type: "POST",
             url: "/api/changeStatusProgramming",
             data: { data: allProgramming },
-            success: function (data) { 
+            success: function (data) {
               setTimeout(() => {
                 $('.cardLoading').remove();
-                $('.cardBottonsGeneral').show(400);                
+                $('.cardBottonsGeneral').show(400);
                 $(".cardAddOP").hide(800);
               }, 4000);
 
@@ -899,7 +920,7 @@ $(document).ready(function () {
             data: { data: allTblData },
             success: function (resp) {
               $('.cardLoading').remove();
-              generalMultiArray = []; 
+              generalMultiArray = [];
               sessionStorage.clear();
               
               setTimeout(() => {
@@ -917,7 +938,7 @@ $(document).ready(function () {
   /* Mensaje de exito */
   const message = async (data) => {
     try {
-      if (data.success) { 
+      if (data.success) {
         hideCardAndResetForm();
         toastr.success(data.message);
         await loadAllDataProgramming();
@@ -935,7 +956,7 @@ $(document).ready(function () {
   const hideCardAndResetForm = () => {
     $(".cardCreateProgramming").hide(800);
     $("#formCreateProgramming").trigger("reset");
-  }; 
+  };
 
   // Función para aplanar el array considerando id_machine
   flattenData = (data) => {

@@ -44,13 +44,13 @@ class OrdersDao
                                             IFNULL(s.firstname, '') AS firstname,
                                             IFNULL(s.lastname, '') AS lastname
                                         FROM orders o
-                                        INNER JOIN products p ON p.id_product = o.id_product
-                                        LEFT JOIN inv_products pi ON pi.id_product = o.id_product
-                                        LEFT JOIN sellers s ON s.id_seller = o.id_seller
-                                        LEFT JOIN third_parties c ON c.id_client = o.id_client
-                                        LEFT JOIN orders_status ps ON ps.id_status = o.status
+                                            INNER JOIN products p ON p.id_product = o.id_product
+                                            LEFT JOIN inv_products pi ON pi.id_product = o.id_product
+                                            LEFT JOIN sellers s ON s.id_seller = o.id_seller
+                                            LEFT JOIN third_parties c ON c.id_client = o.id_client
+                                            LEFT JOIN orders_status ps ON ps.id_status = o.status
                                         WHERE o.status_order = 0 AND o.id_company = :id_company
-                                        ORDER BY o.num_order DESC");
+                                        ORDER BY o.creation_date DESC");
         $stmt->execute(['id_company' => $id_company]);
 
         $this->logger->info(__FUNCTION__, array('query' => $stmt->queryString, 'errors' => $stmt->errorInfo()));
@@ -83,8 +83,6 @@ class OrdersDao
             $this->logger->info(__FUNCTION__, array('query' => $stmt->queryString, 'errors' => $stmt->errorInfo()));
         } catch (\Exception $e) {
             $message = $e->getMessage();
-            // if ($e->getCode() == 23000)
-            //     $message = 'Pedido duplicado. Ingrese una nuevo pedido';
             $error = array('info' => true, 'message' => $message);
             return $error;
         }

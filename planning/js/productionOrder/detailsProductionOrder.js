@@ -489,6 +489,73 @@ $(document).ready(function () {
   // Genera tabla de procesos
   const loadProcessTable = async (data) => {
     // Similar lógica para los procesos que para materiales
+    $("#tblPOProcessBody").empty();
+    let body = document.getElementById("tblPOProcessBody");
+
+    let dataPOProcess = [];
+
+    if (flag_type_program == 0) {
+      dataPOProcess.push(data);
+    } else {
+      dataPOProcess = await searchData(
+        `/api/productionOrder/${data.id_order}/${data.id_product}`
+      );
+    }
+ 
+    dataPOProcess.forEach((process) => {
+      const { max_date_programming, min_date_programming, cost_payroll, cost_machine, process: processName, machine, id_programming, close_op } = process;
+
+      let minDate = min_date_programming
+        ? moment(min_date_programming).format(flag_type_program == 0 ? "DD/MM/YYYY hh:mm A" : "DD/MM/YYYY")
+        : "";
+
+      !minDate || minDate == "Invalid date" ? minDate = '' : minDate;
+      
+      let maxDate = flag_type_program == 0
+        ? moment(max_date_programming).format("DD/MM/YYYY hh:mm A")
+        : "";
+      
+      !maxDate || maxDate == "Invalid date" ? maxDate = '' : maxDate;
+
+      const payrollCost = parseFloat(cost_payroll).toLocaleString("es-CO", {
+        minimumFractionDigits: 0,
+        maximumFractionDigits: 0,
+      });
+
+      const machineCost = parseFloat(cost_machine).toLocaleString("es-CO", {
+        minimumFractionDigits: 0,
+        maximumFractionDigits: 0,
+      });
+
+      const statusBadge =
+        id_programming == 0
+          ? `<i class="bi bi-shield-fill-x" data-toggle="tooltip" style="font-size:25px; color:#ee2020;"></i>`
+          : close_op == 0
+            ? `<span class="badge badge-warning" style="font-size:100%">En proceso</span>`
+            : `<span class="badge badge-success" style="font-size:100%">Finalizado</span>`;
+
+      const trPC = `
+        <tr>
+          <td>1</td>
+          <td>${processName}</td>
+          <td>${machine}</td>
+          <td>${minDate}</td>
+            ${flag_type_program == 0 ?
+          `<td>${maxDate}</td>` : ''}
+          <td>$${payrollCost}</td>
+          <td>$${machineCost}</td>
+          ${flag_type_program == 1 ?
+          `<td>${statusBadge}</td>` : ''} 
+        </tr>
+      `;
+
+      body.insertAdjacentHTML("beforeend", trPC);
+    });
+
+    if (data.flag_cancel == 0) {
+      loadTblPartialsDelivery(id_programming);
+      loadTblOPMaterial(id_programming);
+    }
   };
 
   // Aceptar Material
@@ -813,78 +880,185 @@ $(document).ready(function () {
   };
 
   // Materiales aceptados
+  // $(document).on("click", ".seeAcceptMP", async function (e) {
+  //   e.preventDefault();
+  //   // Obtiene el elemento que fue clickeado
+  //   const element = $(this)[0];
+
+  //   // Obtiene todas las clases del elemento
+  //   const classList = Array.from(element.classList);
+
+  //   // Busca las clases que contienen 'programming-' y 'material-'
+  //   const id_programming = classList
+  //     .find((cls) => cls.startsWith("programming-"))
+  //     .split("-")[1];
+  //   const id_material = classList
+  //     .find((cls) => cls.startsWith("material-"))
+  //     .split("-")[1];
+
+  //   let users = await searchData(
+  //     `/api/materialsComponents/${id_programming}/${id_material}`
+  //   );
+  //   let rows = "";
+
+  //   for (let i = 0; i < users.length; i++) {
+  //     rows += `<tr>
+  //                   <td>${i + 1}</td>
+  //                   <td>${users[i].firstname}</td>
+  //                   <td>${users[i].lastname}</td>
+  //                   <td>${users[i].email}</td>
+  //                   <td>
+  //                       ${parseFloat(users[i].quantity).toLocaleString(
+  //       "es-CO",
+  //       {
+  //         minimumFractionDigits: 0,
+  //         maximumFractionDigits: 2,
+  //       }
+  //     )}
+  //                   </td>
+  //               </tr>`;
+  //   }
+
+  //   // Mostramos el mensaje con Bootbox
+  //   bootbox.alert({
+  //     title: "Usuarios",
+  //     message: `
+  //           <div class="container">
+  //             <div class="col-12">
+  //               <div class="table-responsive">
+  //                 <table class="fixed-table-loading table table-hover">
+  //                   <thead>
+  //                     <tr>
+  //                       <th>No</th>
+  //                       <th>Nombre</th>
+  //                       <th>Apellido</th>
+  //                       <th>Email</th>
+  //                       <th>Cantidad Aceptada</th>
+  //                     </tr>
+  //                   </thead>
+  //                   <tbody>
+  //                     ${rows}
+  //                   </tbody>
+  //                 </table>
+  //               </div>
+  //             </div> 
+  //           </div>`,
+  //     size: "large",
+  //     backdrop: true,
+  //   });
+  //   return false;
+  // });
+
+  // // Descargar PDF
+  // $(document).on("click", ".downloadPlaneProduct", function () {
+  //   let key = this.id;
+  //   let pdfUrl = dataPTOP[key];
+
+  //   const link = document.createElement("a");
+  //   link.href = pdfUrl;
+  //   link.download = "plano.pdf"; // Nombre del archivo para descargar
+  //   document.body.appendChild(link);
+  //   link.click();
+  //   document.body.removeChild(link);
+  // });
+
   $(document).on("click", ".seeAcceptMP", async function (e) {
     e.preventDefault();
-    // Obtiene el elemento que fue clickeado
-    const element = $(this)[0];
 
-    // Obtiene todas las clases del elemento
+    const element = $(this)[0];
     const classList = Array.from(element.classList);
 
-    // Busca las clases que contienen 'programming-' y 'material-'
     const id_programming = classList
       .find((cls) => cls.startsWith("programming-"))
-      .split("-")[1];
+      ?.split("-")[1];
     const id_material = classList
       .find((cls) => cls.startsWith("material-"))
-      .split("-")[1];
+      ?.split("-")[1];
 
-    let users = await searchData(
-      `/api/materialsComponents/${id_programming}/${id_material}`
-    );
-    let rows = "";
-
-    for (let i = 0; i < users.length; i++) {
-      rows += `<tr>
-                    <td>${i + 1}</td>
-                    <td>${users[i].firstname}</td>
-                    <td>${users[i].lastname}</td>
-                    <td>${users[i].email}</td>
-                    <td>
-                        ${parseFloat(users[i].quantity).toLocaleString(
-        "es-CO",
-        {
-          minimumFractionDigits: 0,
-          maximumFractionDigits: 2,
-        }
-      )}
-                    </td>
-                </tr>`;
+    if (!id_programming || !id_material) {
+      toastr.error("Error al obtener la información del material.");
+      return;
     }
 
-    // Mostramos el mensaje con Bootbox
+    let users = [];
+    try {
+      users = await searchData(
+        `/api/materialsComponents/${id_programming}/${id_material}`
+      );
+    } catch (error) {
+      toastr.error("Error al obtener los datos. Por favor intente de nuevo.");
+      return;
+    }
+
+    if (!users.length) {
+      bootbox.alert({
+        title: "Usuarios",
+        message: "<p class='text-center'>No se encontraron datos para mostrar.</p>",
+        size: "large",
+        backdrop: true,
+      });
+      return;
+    }
+
+    const rows = generateTableRows(users);
+
     bootbox.alert({
       title: "Usuarios",
       message: `
-            <div class="container">
-              <div class="col-12">
-                <div class="table-responsive">
-                  <table class="fixed-table-loading table table-hover">
-                    <thead>
-                      <tr>
-                        <th>No</th>
-                        <th>Nombre</th>
-                        <th>Apellido</th>
-                        <th>Email</th>
-                        <th>Cantidad Aceptada</th>
-                      </tr>
-                    </thead>
-                    <tbody>
-                      ${rows}
-                    </tbody>
-                  </table>
-                </div>
-              </div> 
-            </div>`,
+      <div class="container">
+        <div class="col-12">
+          <div class="table-responsive">
+            <table class="fixed-table-loading table table-hover">
+              <thead>
+                <tr>
+                  <th>No</th>
+                  <th>Nombre</th>
+                  <th>Apellido</th>
+                  <th>Email</th>
+                  <th>Cantidad Aceptada</th>
+                </tr>
+              </thead>
+              <tbody>
+                ${rows}
+              </tbody>
+            </table>
+          </div>
+        </div> 
+      </div>`,
       size: "large",
       backdrop: true,
     });
+
     return false;
   });
+
+  // Generar filas para la tabla
+  function generateTableRows(users) {
+    return users
+      .map(
+        (user, index) => `
+      <tr>
+        <td>${index + 1}</td>
+        <td>${user.firstname}</td>
+        <td>${user.lastname}</td>
+        <td>${user.email}</td>
+        <td>${parseFloat(user.quantity).toLocaleString("es-CO", {
+          minimumFractionDigits: 0,
+          maximumFractionDigits: 2,
+        })}</td>
+      </tr>`
+      )
+      .join("");
+  }
 
   // Descargar PDF
   $(document).on("click", ".downloadPlaneProduct", function () {
     let key = this.id;
+    if (!dataPTOP[key]) {
+      toastr.error("No se encontró el archivo para descargar.");
+      return;
+    }
+
     let pdfUrl = dataPTOP[key];
 
     const link = document.createElement("a");
@@ -894,4 +1068,5 @@ $(document).ready(function () {
     link.click();
     document.body.removeChild(link);
   });
+
 });

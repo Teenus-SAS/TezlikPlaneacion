@@ -48,7 +48,8 @@ class ProductsDao
                                     LEFT JOIN inv_stock_products sp ON sp.id_product = p.id_product
                                     LEFT JOIN products_measures pm ON pm.id_product = p.id_product
                                     LEFT JOIN products_type pt ON pt.id_product_type = p.id_product_type
-                                  WHERE p.id_company = :id_company");
+                                  WHERE p.id_company = :id_company
+                                  ORDER BY p.reference");
     $stmt->execute(['id_company' => $id_company]);
 
     $this->logger->info(__FUNCTION__, array('query' => $stmt->queryString, 'errors' => $stmt->errorInfo()));

@@ -199,13 +199,13 @@ $app->post('/deliverStore', function (Request $request, Response $response, $arg
             }
 
             // Pedidos automaticos
-            // if ($orders[$i]['status'] == 'FABRICADO') {
-            //     $chOrders = $generalOrdersDao->findAllChildrenOrders($orders[$i]['num_order']);
+            if ($orders[$i]['status'] == 'FABRICADO') {
+                $chOrders = $generalOrdersDao->findAllChildrenOrders($orders[$i]['num_order']);
 
-            //     foreach ($chOrders as $arr) {
-            //         $store = $generalOrdersDao->changeStatus($arr['id_order'], 12);
-            //     }
-            // }
+                foreach ($chOrders as $arr) {
+                    $store = $generalOrdersDao->changeStatus($arr['id_order'], 12);
+                }
+            }
         }
     }
 

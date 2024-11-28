@@ -103,21 +103,21 @@ $(document).ready(function () {
   // Llamar a la función de inicialización
   initObserver();
 
-  const parseCurrency = (value) => {
-    return (
-      parseFloat(
-        value
-          .replace(/\./g, "") // Elimina separadores de miles
-          .replace(",", ".") // Convierte separador decimal
-          .replace(/[\$]/g, "") // Elimina el símbolo de moneda
-      ) || 0
-    );
-  };
+  // const parseCurrency = (value) => {
+  //   return (
+  //     parseFloat(
+  //       value
+  //         .replace(/\./g, "") // Elimina separadores de miles
+  //         .replace(",", ".") // Convierte separador decimal
+  //         .replace(/[\$]/g, "") // Elimina el símbolo de moneda
+  //     ) || 0
+  //   );
+  // };
 
-  const formatCurrency = (value) => {
-    return `$${value.toLocaleString("es-CO", {
-      minimumFractionDigits: 2,
-      maximumFractionDigits: 2,
-    })}`;
-  };
+  // const formatCurrency = (value) => {
+  //   return `$${value.toLocaleString("es-CO", {
+  //     minimumFractionDigits: 2,
+  //     maximumFractionDigits: 2,
+  //   })}`;
+  // };
 });
