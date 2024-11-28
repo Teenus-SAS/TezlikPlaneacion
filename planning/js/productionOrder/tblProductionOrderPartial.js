@@ -10,7 +10,6 @@ $(document).ready(function () {
       leftColumns: 1,
       rightColumns: 1,
     },
-
     ajax: {
       url: `/api/productionOrderPartial`,
       dataSrc: "",
@@ -81,9 +80,6 @@ $(document).ready(function () {
             action = `<button class="btn btn-info changeDateOPPT">Recibir OP</button>`;
           else {
             action = `Recibido: <br>${data.firstname_receive} ${data.lastname_receive}<br>${data.receive_date}`;
-            // <a href="javascript:;">
-            //   <i id="${data.id_part_deliv}" class="mdi mdi-playlist-check seeReceiveOP" data-toggle='tooltip' title='Ver Usuarios' style="font-size: 30px;color:black"></i>
-            // </a>`;
           }
 
           return action;
@@ -170,54 +166,6 @@ $(document).ready(function () {
       },
     });
   });
-
-  // $(document).on('click', '.seeReceiveOP', async function (e) {
-  //     e.preventDefault();
-
-  //     const row = $(this).closest("tr")[0];
-  //     let data = tblPartialsDeliveryPT.fnGetData(row);
-
-  //     let users = await searchData(`/api/usersOPMPPT/${data.id_part_deliv}`);
-  //     let rows = '';
-
-  //     for (let i = 0; i < users.length; i++) {
-  //         rows +=
-  //             `<tr>
-  //       <td>${i + 1}</td>
-  //       <td>${users[i].firstname}</td>
-  //       <td>${users[i].lastname}</td>
-  //       <td>${users[i].email}</td>
-  //     </tr>`;
-  //     }
-
-  //     // Mostramos el mensaje con Bootbox
-  //     bootbox.alert({
-  //         title: 'Usuarios',
-  //         message: `
-  //         <div class="container">
-  //           <div class="col-12">
-  //             <div class="table-responsive">
-  //               <table class="fixed-table-loading table table-hover">
-  //                 <thead>
-  //                   <tr>
-  //                     <th>No</th>
-  //                     <th>Nombre</th>
-  //                     <th>Apellido</th>
-  //                     <th>Email</th>
-  //                   </tr>
-  //                 </thead>
-  //                 <tbody>
-  //                   ${rows}
-  //                 </tbody>
-  //               </table>
-  //             </div>
-  //           </div>
-  //         </div>`,
-  //         size: 'large',
-  //         backdrop: true
-  //     });
-  //     return false;
-  // });
 
   const messageOPPT = (data) => {
     const { success, error, info, message } = data;
@@ -373,54 +321,6 @@ $(document).ready(function () {
     });
   });
 
-  // $(document).on('click', '.seeReceiveOPMP', async function (e) {
-  //     e.preventDefault();
-
-  //     const row = $(this).closest("tr")[0];
-  //     let data = tblPartials1Delivery.fnGetData(row);
-
-  //     let users = await searchData(`/api/usersOPPartial/${data.id_part_deliv}`);
-  //     let rows = '';
-
-  //     for (let i = 0; i < users.length; i++) {
-  //         rows +=
-  //             `<tr>
-  //       <td>${i + 1}</td>
-  //       <td>${users[i].firstname}</td>
-  //       <td>${users[i].lastname}</td>
-  //       <td>${users[i].email}</td>
-  //     </tr>`;
-  //     }
-
-  //     // Mostramos el mensaje con Bootbox
-  //     bootbox.alert({
-  //         title: 'Usuarios',
-  //         message: `
-  //         <div class="container">
-  //           <div class="col-12">
-  //             <div class="table-responsive">
-  //               <table class="fixed-table-loading table table-hover">
-  //                 <thead>
-  //                   <tr>
-  //                     <th>No</th>
-  //                     <th>Nombre</th>
-  //                     <th>Apellido</th>
-  //                     <th>Email</th>
-  //                   </tr>
-  //                 </thead>
-  //                 <tbody>
-  //                   ${rows}
-  //                 </tbody>
-  //               </table>
-  //             </div>
-  //           </div>
-  //         </div>`,
-  //         size: 'large',
-  //         backdrop: true
-  //     });
-  //     return false;
-  // });
-
   const messageOPMP = (data) => {
     const { success, error, info, message } = data;
     if (success) {
@@ -435,10 +335,4 @@ $(document).ready(function () {
     $("#tblPartialsDeliveryMP").DataTable().clear();
     $("#tblPartialsDeliveryMP").DataTable().ajax.reload();
   }
-
-  // Ajuste de columnas y redibujado tras la inicialización
-  // setTimeout(function () {
-  //   tblPartialsDeliveryMP.columns.adjust().draw();
-  //   tblPartialsDeliveryPT.columns.adjust().draw();
-  // }, 500);
 });

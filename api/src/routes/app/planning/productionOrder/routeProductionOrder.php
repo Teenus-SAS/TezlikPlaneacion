@@ -90,8 +90,6 @@ $app->post('/changeStatusOP', function (Request $request, Response $response, $a
         $orders = $generalOrdersDao->findAllOrdersByCompany($id_company);
 
         for ($i = 0; $i < sizeof($orders); $i++) {
-            // Checkear cantidades
-            // $order = $generalOrdersDao->checkAccumulatedQuantityOrder($orders[$i]['id_order']);
             if (
                 $orders[$i]['status'] != 'EN PRODUCCION' && $orders[$i]['status'] != 'FINALIZADO' && $orders[$i]['status'] != 'FABRICADO' &&
                 $orders[$i]['status'] != 'DESPACHO' && $orders[$i]['status'] != 'SIN MATERIA PRIMA' && $orders[$i]['status'] != 'SIN FICHA TECNICA'
@@ -127,9 +125,6 @@ $app->post('/changeStatusOP', function (Request $request, Response $response, $a
         }
     }
 
-    // if ($result == null){
-    //     $orders = $generalOrdersDao-
-    // }
     if ($result == null)
         $resp = array('success' => true, 'message' => 'Programa de producción eliminado correctamente');
     else if (isset($result['info']))

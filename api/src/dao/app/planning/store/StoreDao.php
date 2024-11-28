@@ -24,6 +24,7 @@ class StoreDao
                                             -- Columnas originales
                                                 pg.id_programming,
                                                 pg.num_production,
+                                                pg.flag_op,
                                                 o.id_order,
                                                 o.num_order,
                                                 m.id_material,

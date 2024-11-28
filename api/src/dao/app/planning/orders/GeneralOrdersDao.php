@@ -26,23 +26,23 @@ class GeneralOrdersDao
                                                 o.id_client, 
                                                 o.id_product, 
                                                 o.num_order, 
-                                                ps.status, 
+                                                IFNULL(ps.status, '') AS status, 
                                                 o.date_order, 
                                                 o.original_quantity, 
-                                                p.product, 
-                                                p.origin,
-                                                c.client, 
+                                                IFNULL(p.product, '') AS product, 
+                                                IFNULL(p.origin, 0) AS origin,
+                                                IFNULL(c.client, ''), 
                                                 o.min_date, 
                                                 o.max_date, 
                                                 o.delivery_date, 
-                                                pi.quantity AS quantity_pro, 
-                                                pi.accumulated_quantity,
+                                                IFNULL(pi.quantity, 0) AS quantity_pro, 
+                                                IFNULL(pi.accumulated_quantity, 0) AS accumulated_quantity,
                                                 CONCAT(o.num_order, '-' , o.id_product) AS concate                                      
                                       FROM orders o
-                                        INNER JOIN products p ON p.id_product = o.id_product
-                                        INNER JOIN inv_products pi ON pi.id_product = o.id_product
-                                        INNER JOIN third_parties c ON c.id_client = o.id_client  
-                                        INNER JOIN orders_status ps ON ps.id_status = o.status
+                                        LEFT JOIN products p ON p.id_product = o.id_product
+                                        LEFT JOIN inv_products pi ON pi.id_product = o.id_product
+                                        LEFT JOIN third_parties c ON c.id_client = o.id_client  
+                                        LEFT JOIN orders_status ps ON ps.id_status = o.status
                                       WHERE o.status_order = 0 AND o.id_company = :id_company AND o.status NOT IN (3)
                                       ORDER BY o.status ASC");
         $stmt->execute(['id_company' => $id_company]);
