@@ -143,6 +143,7 @@ $(document).ready(function () {
           let form = new FormData();
           form.append("idPartDeliv", data.id_part_deliv);
           form.append("idProduct", data.id_product);
+          form.append("idOrder", data.id_order);
           form.append("origin", data.origin);
           form.append(
             "quantity",

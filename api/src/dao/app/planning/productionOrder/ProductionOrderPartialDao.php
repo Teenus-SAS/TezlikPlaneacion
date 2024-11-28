@@ -23,6 +23,7 @@ class ProductionOrderPartialDao
         $stmt = $connection->prepare("SELECT 
                                         -- Columnas
                                             pg.num_production,
+                                            pg.id_order,
                                             po.id_part_deliv, 
                                             po.id_programming, 
                                             p.id_product, 

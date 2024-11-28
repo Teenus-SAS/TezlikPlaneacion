@@ -146,11 +146,23 @@ $app->post('/saveReceiveOPPTDate', function (Request $request, Response $respons
     if ($resolution == null) {
         $orders = $generalOrdersDao->findAllOrdersByCompany($id_company);
 
+        $id_order = $dataOP['idOrder'];
+
+        usort($order, function ($a, $b) use ($id_order) {
+            // Si alguno coincide con $num_order, colócalo al principio
+            if ($a['id_order'] === $id_order) return -1;
+            if ($b['id_order'] === $id_order) return 1;
+
+            // Si ninguno coincide, no cambies el orden relativo
+            return 0;
+        });
+
         for ($i = 0; $i < sizeof($orders); $i++) {
             $status = true;
             if (
-                $orders[$i]['status'] != 'EN PRODUCCION' && $orders[$i]['status'] != 'FINALIZADO' &&
-                $orders[$i]['status'] != 'FABRICADO' && $orders[$i]['status'] != 'DESPACHO'
+                $orders[$i]['status'] != 'FINALIZADO' &&
+                $orders[$i]['status'] != 'FABRICADO' &&
+                $orders[$i]['status'] != 'DESPACHO'
             ) {
                 if ($orders[$i]['original_quantity'] > $orders[$i]['accumulated_quantity']) {
                     // Ficha tecnica 
