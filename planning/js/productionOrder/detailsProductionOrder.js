@@ -783,12 +783,21 @@ $(document).ready(function () {
 
     if (op_to_store == "1") {
       let dataOPP = tblPartialsDelivery.DataTable().rows().data().toArray();
-
+      
       if (dataOPP.length == 0) {
-        toastr.error("Ejecución de producción o devolución de materiales sin datos");
+        toastr.error("Ejecución de producción sin datos");
         return false;
       }
 
+      let dataOPMT = tblOPMaterial.DataTable().rows().data().toArray();
+
+      let arrOPMT = dataOPMT.filter(item => item.receive_date == "0000-00-00");
+
+      if (arrOPMT.length > 0) {
+        toastr.error("Devolucion de material con pendientes");
+        return false;
+      }
+      
       let recieve = 0,
         for_recieve = 0,
         pending = 0;
@@ -818,8 +827,26 @@ $(document).ready(function () {
         });
 
       if (pending > 0) {
-        toastr.error("Materiales y componentes no ejecutados");
-        return false;
+        bootbox.confirm({
+          title: "Materiales y Componentes",
+          message:
+            "No se han recibido todos los materiales. Desea continuar la accion? Esta acción no se puede reversar.",
+          buttons: {
+            confirm: {
+              label: "Si",
+              className: "btn-success",
+            },
+            cancel: {
+              label: "No",
+              className: "btn-danger",
+            },
+          },
+          callback: function (result) {
+            if (result == false) {
+              return false;              
+            }
+          },
+        });
       }
     }
 
