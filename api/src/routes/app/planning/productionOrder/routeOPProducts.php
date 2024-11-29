@@ -148,7 +148,7 @@ $app->post('/saveReceiveOPPTDate', function (Request $request, Response $respons
 
         $id_order = $dataOP['idOrder'];
 
-        usort($order, function ($a, $b) use ($id_order) {
+        usort($orders, function ($a, $b) use ($id_order) {
             // Si alguno coincide con $num_order, colócalo al principio
             if ($a['id_order'] === $id_order) return -1;
             if ($b['id_order'] === $id_order) return 1;

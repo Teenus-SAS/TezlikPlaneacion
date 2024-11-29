@@ -467,7 +467,7 @@ $(document).ready(function () {
       action = `<button class="btn btn-info acceptMaterial" id="accept-${id_material}">Aceptar MP</button>`;
     } else if (recieve > 0) {
       action = `<a href="javascript:;">
-                <i class="mdi mdi-playlist-check seeAcceptMP" data-toggle="tooltip" title="Ver Usuarios" style="font-size: 30px;color:black"></i>
+                <i class="mdi mdi-playlist-check seeAcceptMP material-${id_material}" data-toggle="tooltip" title="Ver Usuarios" style="font-size: 30px;color:black"></i>
               </a>`;
     }
 
@@ -968,9 +968,7 @@ $(document).ready(function () {
     const element = $(this)[0];
     const classList = Array.from(element.classList);
 
-    const id_programming = classList
-      .find((cls) => cls.startsWith("programming-"))
-      ?.split("-")[1];
+    // const id_programming = sessionStorage.getItem('id_programming');
     const id_material = classList
       .find((cls) => cls.startsWith("material-"))
       ?.split("-")[1];

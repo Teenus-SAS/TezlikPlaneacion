@@ -258,6 +258,16 @@ $(document).ready(function () {
       return false;
     }
 
+    let dataOPP = tblPartialsDelivery.DataTable().rows().data().toArray();
+
+    let objStartDate = dataOPP.find(item=> item.start_date == startDateTime);
+    let objEndDate = dataOPP.find(item=> item.end_date == endDateTime);
+
+    if (objStartDate || objEndDate) {
+      toastr.error("Ingrese todos los campos");
+      return false;
+    }
+
     let id_programming = sessionStorage.getItem("id_programming");
 
     let dataOP = new FormData(formAddOPPArtial);
