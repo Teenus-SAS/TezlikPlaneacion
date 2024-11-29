@@ -15,78 +15,7 @@ $(document).ready(function () {
   let selectProcess = false;
 
   loadAllDataProgramming = async () => {
-    try {
-      // $('#btnNewProgramming').hide();
-
-      // let storOrders = sessionStorage.getItem("allOrders");
-      // let storOrdersProgramming = sessionStorage.getItem(
-      //   "allOrdersProgramming"
-      // );
-      // let storProcess = sessionStorage.getItem("allProcess");
-      // let storCiclesMachines = sessionStorage.getItem("allCiclesMachines");
-      // let storPlanningMachines = sessionStorage.getItem("allPlanningMachines");
-      // let storProductsMaterials = sessionStorage.getItem(
-      //   "allProductsMaterials"
-      // );
-
-      // const [
-      //   ordersProgramming,
-      //   process,
-      //   machines,
-      //   ciclesMachines,
-      //   planningMachines,
-      //   orders,
-      //   programming,
-      //   productsMaterials,
-      //   compositeProducts,
-      // ] = await Promise.all([
-      //   !storOrdersProgramming
-      //     ? searchData("/api/ordersProgramming")
-      //     : JSON.parse(storOrdersProgramming),
-      //   !storProcess
-      //     ? searchData("/api/processProgramming")
-      //     : JSON.parse(storProcess),
-      //   searchData("/api/machines"),
-      //   !storCiclesMachines
-      //     ? searchData("/api/planCiclesMachine")
-      //     : JSON.parse(storCiclesMachines),
-      //   !storPlanningMachines
-      //     ? searchData("/api/planningMachines")
-      //     : JSON.parse(storPlanningMachines),
-      //   !storOrders ? searchData("/api/orders") : JSON.parse(storOrders),
-      //   searchData("/api/programming"),
-      //   !storProductsMaterials ? searchData("/api/allProductsMaterials") : [],
-      //   !storProductsMaterials ? searchData("/api/allCompositeProducts") : [],
-      // ]);
-      
-      // let data = [];
-
-      // if (!storOrdersProgramming && !storOrders) {
-      //   allOrdersProgramming = ordersProgramming.map((item) => ({
-      //     ...item,
-      //     flag_tbl: 1,
-      //   }));
-      //   allOrders = orders.map((item) => ({
-      //     ...item,
-      //     flag_tbl: 1,
-      //     flag_process: 0,
-      //   }));
-      // }     
-
-      // allProcess = process;
-      // allMachines = machines;
-      // allCiclesMachines = ciclesMachines;
-      // allPlanningMachines = planningMachines;
-
-      // allProducts = products;
-      // allProgramming = programming;
-
-      // if (!storProductsMaterials) {
-      //   allProductsMaterials = [...productsMaterials, ...compositeProducts];
-      // } else {
-      //   allProductsMaterials = JSON.parse(storProductsMaterials);
-      // }
- 
+    try { 
       // Ocultar botón
       $('#btnNewProgramming').hide();
 
