@@ -20,21 +20,6 @@ class ProductionOrderMPDao
     {
         $connection = Connection::getInstance()->getConnection();
 
-        /* SELECT 
-                                        -- Columnas
-                                            pom.id_prod_order_material, 
-                                            pom.id_programming, 
-                                            m.id_material, 
-                                            m.reference, 
-                                            m.material, 
-                                            IFNULL(mi.quantity, 0) AS quantity_material,
-                                            pom.quantity
-                                      FROM prod_order_materials pom 
-                                        INNER JOIN programming pg ON pg.id_programming = pom.id_programming
-                                        INNER JOIN materials m ON m.id_material = pom.id_material
-                                        LEFT JOIN inv_materials mi ON mi.id_material = pom.id_material 
-                                      WHERE pom.id_company = :id_company*/
-
         $stmt = $connection->prepare("SELECT 
                                         -- Columnas
                                             pg.num_production,
@@ -94,6 +79,11 @@ class ProductionOrderMPDao
                                             m.id_material, 
                                             m.reference, 
                                             m.material, 
+                                            mg.id_magnitude,
+                                            mg.magnitude,
+                                            unt.id_unit, 
+                                            unt.unit,
+                                            unt.abbreviation,
                                             IFNULL(mi.quantity, 0) AS quantity_material, 
                                             pom.quantity,
                                             pom.creation_date,
@@ -108,6 +98,8 @@ class ProductionOrderMPDao
                                         INNER JOIN users u ON u.id_user = pom.operator
                                         INNER JOIN materials m ON m.id_material = pom.id_material
                                         LEFT JOIN inv_materials mi ON mi.id_material = pom.id_material
+                                        INNER JOIN admin_units unt ON unt.id_unit = m.unit
+                                        INNER JOIN admin_magnitudes mg ON mg.id_magnitude = unt.id_magnitude
                                         INNER JOIN programming pg ON pg.id_programming = pom.id_programming
                                         -- Subconsulta para obtener el último usuario de entrega
                                         LEFT JOIN(

@@ -416,11 +416,7 @@ $(document).ready(function () {
       } else {
         order.accumulated_quantity_order = quantity;
         order.accumulated_quantity = quantity;
-        
-        // if (quantity == 0) {
-        //   order.flag_tbl = 0;
-        // }
-        
+                 
         if (flag_type_program == 0)
           order.accumulated_quantity = (ciclesMachine.length === 1)
             ? quantity
@@ -639,7 +635,7 @@ $(document).ready(function () {
             const idProduct = allTblData[id].id_product;
             const quantityProgramming = allTblData[id].quantity_programming;
             const quantityOrder = allTblData[id].quantity_order;
-            const accumulatedQuantity = allTblData[id].accumulated_quantity;
+            // const accumulatedQuantity = allTblData[id].accumulated_quantity;
 
             let ciclesMachine = allCiclesMachines.filter(
               (item) => item.id_product == idProduct

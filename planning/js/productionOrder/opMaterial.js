@@ -33,6 +33,11 @@ $(document).ready(function () {
           className: "uniqueClassName dt-head-center",
         },
         {
+          title: "Medida",
+          data: "abbreviation",
+          className: "uniqueClassName dt-head-center",
+        },
+        {
           title: "Operador",
           data: null,
           className: "uniqueClassName dt-head-center",

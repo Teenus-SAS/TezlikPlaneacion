@@ -36,7 +36,7 @@ class StoreDao
                                                 IFNULL(last_user.id_user_delivered, 0) AS id_user_delivered,
                                                 IFNULL(last_user.firstname_delivered, '') AS firstname_delivered,
                                                 IFNULL(last_user.lastname_delivered, '') AS lastname_delivered, 
-                                                (SELECT IFNULL(SUM(quantity), 0) FROM materials_components_users WHERE id_programming = pg.id_programming AND id_material = pm.id_material) AS quantity_component_user,
+                                                IFNULL(mcu.id_materials_component_user, '') AS id_materials_component_user, 
                                             -- Nueva subconsulta para evitar duplicados en la suma de reserved1
                                                 IFNULL(IF(
                                                     -- Subconsulta para obtener el valor de delivery_pending
@@ -83,6 +83,7 @@ class StoreDao
                                         FROM programming pg
                                         INNER JOIN orders o ON o.id_order = pg.id_order
                                         INNER JOIN products_materials pm ON pm.id_product = pg.id_product
+                                        LEFT JOIN materials_components_users mcu ON mcu.id_programming = pg.id_programming AND mcu.id_material = pm.id_material
                                         INNER JOIN materials m ON m.id_material = pm.id_material
                                         INNER JOIN inv_materials mi ON mi.id_material = pm.id_material
                                         INNER JOIN admin_units u ON u.id_unit = m.unit
