@@ -97,6 +97,7 @@ $app->post('/deliverStore', function (Request $request, Response $response, $arg
     }
 
     $store = $storeDao->saveDelivery($dataStore, 1);
+
     if ($store == null) {
         $store = $generalMaterialsDao->updateQuantityMaterial($dataStore['idMaterial'], $dataStore['stored']);
 
@@ -225,13 +226,128 @@ $app->get('/usersStore/{id_programming}/{id_material}', function (Request $reque
     return $response->withHeader('Content-Type', 'application/json');
 });
 
-$app->post('/saveDLVS', function (Request $request, Response $response, $args) use ($usersStoreDao) {
+$app->post('/saveDLVS', function (Request $request, Response $response, $args) use (
+    $usersStoreDao,
+    $generalMaterialsDao,
+    $generalProductsDao,
+    $generalOrdersDao,
+    $productsMaterialsDao,
+    $compositeProductsDao,
+    $generalPlanCiclesMachinesDao
+) {
+    session_start();
+    $id_company = $_SESSION['id_company'];
     $dataStore = $request->getParsedBody();
 
     $users = $dataStore['data'];
 
     for ($i = 0; $i < sizeof($users); $i++) {
         $store = $usersStoreDao->updateUserDeliveredMaterial($users[$i]);
+
+        if ($store != null) break;
+
+        $store = $generalMaterialsDao->updateQuantityMaterial($users[$i]['id_material'], $users[$i]['quantity_material']);
+
+        if ($users[$i]['delivery_pending'] == 0) {
+            date_default_timezone_set('America/Bogota');
+
+            $date = date('Y-m-d H:i:s');
+
+            $store = $generalMaterialsDao->updateDeliveryDateMaterial($users[$i]['id_material'], $date);
+        }
+
+        if ($store != null) break;
+
+        // $product = $generalProductsDao->findProduct($users[$i], $id_company);
+
+        // if ($product) {
+        //     $store = $generalProductsDao->updateAccumulatedQuantity($product['id_product'], $users[$i]['stored'], 2);
+        // }
+
+        // if ($store != null) break;
+
+        $store = $generalMaterialsDao->updateReservedMaterial($users[$i]['id_material'], $users[$i]['delivery_pending']);
+    }
+
+    if ($store == null) {
+        $orders = $generalOrdersDao->findAllOrdersByCompany($id_company);
+
+        for ($i = 0; $i < sizeof($orders); $i++) {
+            $status = true;
+            if (
+                $orders[$i]['status'] != 'EN PRODUCCION' && $orders[$i]['status'] != 'FINALIZADO' &&
+                $orders[$i]['status'] != 'FABRICADO' && $orders[$i]['status'] != 'DESPACHO'
+            ) {
+                if ($orders[$i]['original_quantity'] > $orders[$i]['accumulated_quantity']) {
+                    // Ficha tecnica 
+                    $productsMaterials = $productsMaterialsDao->findAllProductsMaterials($orders[$i]['id_product'], $id_company);
+                    $compositeProducts = $compositeProductsDao->findAllCompositeProductsByIdProduct($orders[$i]['id_product'], $id_company);
+                    $productsFTM = array_merge($productsMaterials, $compositeProducts);
+
+                    $planCicles = $generalPlanCiclesMachinesDao->findAllPlanCiclesMachineByProduct($orders[$i]['id_product'], $id_company);
+
+                    if (sizeof($productsFTM) == 0 || sizeof($planCicles) == 0) {
+                        $orders[$i]['origin'] == 2 ? $status = 5 : $status = 13;
+                        $generalOrdersDao->changeStatus($orders[$i]['id_order'], $status);
+                        $status = false;
+                    } else {
+                        foreach ($planCicles as $arr) {
+                            // Verificar Maquina Disponible
+                            if ($arr['status'] == 0 && $arr['status_alternal_machine'] == 0) {
+                                $generalOrdersDao->changeStatus($orders[$i]['id_order'], 10);
+                                $status = false;
+                                break;
+                            }
+                            // Verificar Empleados
+                            if ($arr['employees'] == 0) {
+                                $generalOrdersDao->changeStatus($orders[$i]['id_order'], 11);
+                                $status = false;
+                                break;
+                            }
+                        }
+
+                        // Verificar Materia Prima
+                        foreach ($productsFTM as $arr) {
+                            if ($arr['quantity_material'] <= 0) {
+                                $generalOrdersDao->changeStatus($orders[$i]['id_order'], 6);
+                                $status = false;
+                                break;
+                            }
+                        }
+                    }
+                }
+
+                if ($status == true) {
+                    if ($orders[$i]['original_quantity'] <= $orders[$i]['accumulated_quantity']) {
+                        $generalOrdersDao->changeStatus($orders[$i]['id_order'], 2);
+                        $accumulated_quantity = $orders[$i]['accumulated_quantity'] - $orders[$i]['original_quantity'];
+                    } else {
+                        $accumulated_quantity = $orders[$i]['accumulated_quantity'];
+                    }
+
+                    if ($orders[$i]['status'] != 'DESPACHO') {
+                        $date = date('Y-m-d');
+
+                        $generalOrdersDao->updateOfficeDate($orders[$i]['id_order'], $date);
+                    }
+
+                    $arr = $generalProductsDao->findProductReserved($orders[$i]['id_product']);
+                    !isset($arr['reserved']) ? $arr['reserved'] = 0 : $arr;
+                    $generalProductsDao->updateReservedByProduct($orders[$i]['id_product'], $arr['reserved']);
+
+                    $generalProductsDao->updateAccumulatedQuantity($orders[$i]['id_product'], $accumulated_quantity, 1);
+                }
+            }
+
+            // Pedidos automaticos
+            if ($orders[$i]['status'] == 'FABRICADO') {
+                $chOrders = $generalOrdersDao->findAllChildrenOrders($orders[$i]['num_order']);
+
+                foreach ($chOrders as $arr) {
+                    $store = $generalOrdersDao->changeStatus($arr['id_order'], 12);
+                }
+            }
+        }
     }
 
     if ($store == null)

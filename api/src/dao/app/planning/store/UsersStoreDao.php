@@ -43,6 +43,8 @@ class UsersStoreDao
                                             u.email, 
                                             stu.delivery_store,
                                             stu.delivery_pending,
+                                            mi.id_material,
+                                            mi.quantity AS quantity_material,
                                             -- Nueva subconsulta para evitar duplicados en la suma de reserved
                                                 IFNULL((
                                                     SELECT SUM(DISTINCT pg_inner.quantity * pm_inner.quantity)
@@ -53,6 +55,7 @@ class UsersStoreDao
                                                 ), 0) AS reserved
                                       FROM store_users stu
                                         INNER JOIN users u ON u.id_user = stu.id_user_delivered
+                                        INNER JOIN inv_materials mi ON mi.id_material = stu.id_material
                                       WHERE stu.id_programming = :id_programming AND stu.id_material = :id_material
                                       GROUP BY stu.id_user_store");
         $stmt->execute([

@@ -915,11 +915,11 @@ $(document).ready(function () {
             url: "/api/saveProgramming",
             data: { data: allTblData },
             success: function (resp) {
-              $('.cardLoading').remove();
               generalMultiArray = [];
               sessionStorage.clear();
               
               setTimeout(() => {
+                $('.cardLoading').remove();
                 $('.cardBottonsGeneral').show(400);
               }, 5000);
 

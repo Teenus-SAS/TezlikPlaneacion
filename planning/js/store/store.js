@@ -126,6 +126,7 @@ $(document).ready(function () {
     let reference = data.reference;
     let material = data.material;
     let id_programming = data.id_programming;
+    let delivery_store = parseFloat(data.delivery_store);
 
     let quantity = parseFloat(formatNumber(data.quantity));
 
@@ -169,7 +170,7 @@ $(document).ready(function () {
             toastr.error("Cantidad a entregar mayor a existencias");
             return false;
           }
-
+          
           store <= reserved ? (pending = reserved - store) : (pending = 0);
           let stored = quantity - store;
 
@@ -336,23 +337,37 @@ $(document).ready(function () {
         toastr.error('Ingrese todos los campos');
         $(`#${this.id}`).val(arr.delivery_store);
         return false;
-      } 
+      }  
+
+      if (value > arr.quantity_material) {
+        toastr.error("Cantidad a entregar mayor a existencias");
+        return false;
+      }
       
       let distincArr = storedDLVS.filter(item => item.id_user_store != id_user_store);
-      let stored = value;
+      let sumValue = value;
       let reserved = parseFloat(arr.reserved);
 
       distincArr.forEach(item => {
-        stored += parseFloat(item.delivery_store);
+        sumValue += parseFloat(item.delivery_store);
       });
 
       if (value != arr.delivery_store) {
         for (let i = 0; i < storedDLVS.length; i++) {
           if (storedDLVS[i].id_user_store == id_user_store) {
-            let pending = stored != reserved ? reserved - stored : reserved - value;
+            let store;
+            let store1 = parseFloat(storedDLVS[i].delivery_store) - value;
 
+            store1 < 0 ? store = -1 * store1 : store = store1;
+            // store <= reserved ? (pending = reserved - store) : (pending = 0);
+
+            let stored = parseFloat(storedDLVS[i].quantity_material) + store1;
+            let pending = sumValue != reserved ? reserved - sumValue : reserved - value;
+
+            stored < 0 ? stored = 0 : stored;
             pending < 0 ? (pending = 0) : (pending);
 
+            storedDLVS[i].quantity_material = stored;
             storedDLVS[i].delivery_store = value;
             storedDLVS[i].delivery_pending = pending;
           }

@@ -241,16 +241,20 @@ $(document).ready(function () {
           data: null,
           className: "uniqueClassName dt-head-center",
           render: (data) => {
+            let max;
+
+            data.abbreviation == 'UND' ? max = 0 : max = 2;
+
             const store = parseFloat(data.delivery_store).toLocaleString(
               "es-CO",
-              { minimumFractionDigits: 0, maximumFractionDigits: 2 }
+              { minimumFractionDigits: 0, maximumFractionDigits: max }
             );
             const pending = parseFloat(data.delivery_pending).toLocaleString(
               "es-CO",
-              { minimumFractionDigits: 0, maximumFractionDigits: 2 }
+              { minimumFractionDigits: 0, maximumFractionDigits: max }
             );
 
-            return pending > 0
+            return parseFloat(data.delivery_pending) > 0
               ? `Entregado: ${store}<br><span class="badge badge-warning">Pendiente: ${pending}</span>`
               : `Entregado: ${store}<br>Pendiente: ${pending}`;
           },
