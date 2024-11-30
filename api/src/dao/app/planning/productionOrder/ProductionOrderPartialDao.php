@@ -23,7 +23,8 @@ class ProductionOrderPartialDao
         $stmt = $connection->prepare("SELECT 
                                         -- Columnas
                                             pg.num_production,
-                                            pg.id_order,
+                                            o.id_order,
+                                            o.type_order,
                                             po.id_part_deliv, 
                                             po.id_programming, 
                                             p.id_product, 
@@ -45,6 +46,7 @@ class ProductionOrderPartialDao
                                       FROM prod_order_part_deliv po
                                         INNER JOIN users u ON u.id_user = po.operator
                                         INNER JOIN programming pg ON pg.id_programming = po.id_programming
+                                        INNER JOIN orders o ON o.id_order = pg.id_order
                                         INNER JOIN products p ON p.id_product = pg.id_product
                                         LEFT JOIN inv_products pi ON pi.id_product = pg.id_product
                                             -- Subconsulta para obtener el último usuario de entrega

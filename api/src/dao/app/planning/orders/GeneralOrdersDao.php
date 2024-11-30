@@ -26,6 +26,7 @@ class GeneralOrdersDao
                                                 o.id_client, 
                                                 o.id_product, 
                                                 o.num_order, 
+                                                o.type_order, 
                                                 IFNULL(ps.status, '') AS status, 
                                                 o.date_order, 
                                                 o.original_quantity, 

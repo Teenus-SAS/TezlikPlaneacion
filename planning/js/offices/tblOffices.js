@@ -11,39 +11,77 @@ $(document).ready(function () {
     }
   });
 
-  loadAllData = async (op, min_date, max_date) => {
+  // loadAllData = async (op, min_date, max_date) => {
+  //   try {
+  //     const [dataActualOffices, dataOffices] = await Promise.all([
+  //       searchData("/api/actualOffices"),
+  //       op == 3 ? searchData(`/api/offices/${min_date}/${max_date}`) : null,
+  //     ]);
+
+  //     let card = document.getElementsByClassName("selectNavigation");
+
+  //     if (card[0].className.includes("active")) pending = 1;
+  //     else pending = 0;
+
+  //     pendingStore = dataActualOffices.filter(
+  //       (item) => item.status !== "ENTREGADO"
+  //     );
+  //     deliveredStore = dataActualOffices.filter(
+  //       (item) => item.status === "ENTREGADO"
+  //     );
+
+  //     let visible = true;
+  //     if (op === 1) dataToLoad = pendingStore;
+  //     else if (op === 2) {
+  //       dataToLoad = deliveredStore;
+  //       visible = false;
+  //     } else {
+  //       if (pending == 1)
+  //         dataToLoad = dataOffices.filter(
+  //           (item) => item.status !== "ENTREGADO"
+  //         );
+  //       else
+  //         dataToLoad = dataOffices.filter(
+  //           (item) => item.status === "ENTREGADO"
+  //         );
+  //     }
+
+  //     if (dataToLoad) {
+  //       loadTblOffices(dataToLoad, visible);
+  //       officesIndicators(dataToLoad);
+  //     }
+  //   } catch (error) {
+  //     console.error("Error loading data:", error);
+  //   }
+  // };
+
+  const loadAllData = async (op, min_date, max_date, cardElement) => {
     try {
-      const [dataActualOffices, dataOffices] = await Promise.all([
-        searchData("/api/actualOffices"),
-        op == 3 ? searchData(`/api/offices/${min_date}/${max_date}`) : null,
-      ]);
+      let dataToLoad, visible = true;
 
-      let card = document.getElementsByClassName("selectNavigation");
-
-      if (card[0].className.includes("active")) pending = 1;
-      else pending = 0;
-
-      pendingStore = dataActualOffices.filter(
-        (item) => item.status !== "ENTREGADO"
-      );
-      deliveredStore = dataActualOffices.filter(
-        (item) => item.status === "ENTREGADO"
-      );
-
-      let visible = true;
-      if (op === 1) dataToLoad = pendingStore;
-      else if (op === 2) {
-        dataToLoad = deliveredStore;
-        visible = false;
+      // Fetch data based on `op`
+      if (op === 3) {
+        const dataOffices = await searchData(`/api/offices/${min_date}/${max_date}`);
+        const pending = cardElement.className.includes("active") ? 1 : 0;
+        dataToLoad = pending === 1
+          ? dataOffices.filter(item => item.status !== "ENTREGADO")
+          : dataOffices.filter(item => item.status === "ENTREGADO");
       } else {
-        if (pending == 1)
-          dataToLoad = dataOffices.filter(
-            (item) => item.status !== "ENTREGADO"
-          );
-        else
-          dataToLoad = dataOffices.filter(
-            (item) => item.status === "ENTREGADO"
-          );
+        const dataActualOffices = await searchData("/api/actualOffices");
+        const pendingStore = dataActualOffices.filter(item => item.status !== "ENTREGADO");
+        const deliveredStore = dataActualOffices.filter(item => item.status === "ENTREGADO");
+
+        switch (op) {
+          case 1:
+            dataToLoad = pendingStore;
+            break;
+          case 2:
+            dataToLoad = deliveredStore;
+            visible = false;
+            break;
+          default:
+            throw new Error("Invalid operation");
+        }
       }
 
       if (dataToLoad) {
@@ -54,91 +92,63 @@ $(document).ready(function () {
       console.error("Error loading data:", error);
     }
   };
-  // loadAllData = async (op, min_date, max_date) => {
-  //   try {
-  //     // Cargar los datos de forma condicional con Promise.all
-  //     const [dataActualOffices, dataOffices] = await Promise.all([
-  //       searchData("/api/actualOffices"),
-  //       op === 3
-  //         ? searchData(`/api/offices/${min_date}/${max_date}`)
-  //         : Promise.resolve(null),
-  //     ]);
 
-  //     // Detectar si la pestaña "pendientes" está activa
-  //     const isPendingActive = document
-  //       .getElementsByClassName("selectNavigation")[0]
-  //       .className.includes("active");
-  //     const pending = isPendingActive ? 1 : 0;
+  // const officesIndicators = (data) => {
+  //   let totalQuantity = 0;
+  //   let completed = 0;
+  //   let late = 0;
+  //   let today = formatDate(new Date());
 
-  //     // Filtrar datos según el estado
-  //     pendingStore = dataActualOffices.filter(
-  //       (item) => item.status !== "ENTREGADO"
-  //     );
-  //     deliveredStore = dataActualOffices.filter(
-  //       (item) => item.status === "ENTREGADO"
-  //     );
+  //   if (data.length > 0) {
+  //     let arrCompleted = data.filter((item) => item.max_date > today);
+  //     let arrLate = data.filter((item) => item.max_date < today);
 
-  //     // Definir los datos a cargar y la visibilidad de la columna
-  //     let dataToLoad = [];
-  //     let visible = true;
-
-  //     if (op === 1) {
-  //       // Cargar datos pendientes
-  //       dataToLoad = pendingStore;
-  //     } else if (op === 2) {
-  //       // Cargar datos entregados
-  //       dataToLoad = deliveredStore;
-  //       visible = false;
-  //     } else if (op === 3 && dataOffices) {
-  //       // Filtrar los datos según el estado y la pestaña activa
-  //       dataToLoad = pending
-  //         ? dataOffices.filter((item) => item.status !== "ENTREGADO")
-  //         : dataOffices.filter((item) => item.status === "ENTREGADO");
-  //     }
-
-  //     // Si hay datos para cargar, actualizar la tabla y los indicadores
-  //     if (dataToLoad && dataToLoad.length > 0) {
-  //       loadTblOffices(dataToLoad, visible);
-  //       officesIndicators(dataToLoad);
-  //     }
-  //   } catch (error) {
-  //     console.error("Error loading data:", error);
+  //     totalQuantity = data.length;
+  //     completed = (arrCompleted.length / totalQuantity) * 100;
+  //     late = (arrLate.length / totalQuantity) * 100;
   //   }
+
+  //   $("#lblTotal").html(
+  //     ` Total: ${totalQuantity.toLocaleString("es-CO", {
+  //       maximumFractionDigits: 0,
+  //     })}`
+  //   );
+  //   $("#lblCompleted").html(
+  //     ` A Tiempo: ${completed.toLocaleString("es-CO", {
+  //       maximumFractionDigits: 2,
+  //     })} %`
+  //   );
+  //   $("#lblLate").html(
+  //     ` Atrasados: ${late.toLocaleString("es-CO", {
+  //       maximumFractionDigits: 2,
+  //     })} %`
+  //   );
   // };
 
+  // Cargar Despachos
+  
   const officesIndicators = (data) => {
-    let totalQuantity = 0;
+    let totalQuantity = data.length;
     let completed = 0;
     let late = 0;
     let today = formatDate(new Date());
 
-    if (data.length > 0) {
-      let arrCompleted = data.filter((item) => item.max_date > today);
-      let arrLate = data.filter((item) => item.max_date < today);
+    data.forEach(item => {
+      if (item.max_date > today) {
+        completed++;
+      } else if (item.max_date < today) {
+        late++;
+      }
+    });
 
-      totalQuantity = data.length;
-      completed = (arrCompleted.length / totalQuantity) * 100;
-      late = (arrLate.length / totalQuantity) * 100;
-    }
+    completed = (completed / totalQuantity) * 100;
+    late = (late / totalQuantity) * 100;
 
-    $("#lblTotal").html(
-      ` Total: ${totalQuantity.toLocaleString("es-CO", {
-        maximumFractionDigits: 0,
-      })}`
-    );
-    $("#lblCompleted").html(
-      ` A Tiempo: ${completed.toLocaleString("es-CO", {
-        maximumFractionDigits: 2,
-      })} %`
-    );
-    $("#lblLate").html(
-      ` Atrasados: ${late.toLocaleString("es-CO", {
-        maximumFractionDigits: 2,
-      })} %`
-    );
+    $("#lblTotal").html(`Total: ${totalQuantity.toLocaleString("es-CO", { maximumFractionDigits: 0 })}`);
+    $("#lblCompleted").html(`A Tiempo: ${completed.toLocaleString("es-CO", { maximumFractionDigits: 2 })} %`);
+    $("#lblLate").html(`Atrasados: ${late.toLocaleString("es-CO", { maximumFractionDigits: 2 })} %`);
   };
 
-  // Cargar Despachos
   const loadTblOffices = (data, visible) => {
     if ($.fn.dataTable.isDataTable("#tblOffices")) {
       // Si ya existe, solo actualizamos los datos y columnas visibles

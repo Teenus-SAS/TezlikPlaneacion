@@ -783,16 +783,16 @@ $(document).ready(function () {
     let result = 1;
 
     if (op_to_store == "1") {
-      // let dataOPP = $('#tblPartialsDelivery').DataTable().rows().data().toArray();
+      let dataOPP = $('#tblPartialsDelivery').DataTable().rows().data().toArray();
       
-      // if (dataOPP.length == 0) {
-      //   toastr.error("Ejecución de producción sin datos");
-      //   return false;
-      // }
+      if (dataOPP.length == 0) {
+        toastr.error("Ejecución de producción sin datos");
+        return false;
+      }
 
       let dataOPMT = $('#tblOPMaterial').DataTable().rows().data().toArray();
 
-      let arrOPMT = dataOPMT.filter(item => item.receive_date == "0000-00-00");
+      let arrOPMT = dataOPMT.filter(item => !item.receive_date || item.receive_date == "0000-00-00");
 
       if (arrOPMT.length > 0) {
         toastr.error("Devolucion de material con pendientes");

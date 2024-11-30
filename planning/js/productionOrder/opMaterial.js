@@ -105,9 +105,7 @@ $(document).ready(function () {
 
     sessionStorage.setItem("id_prod_order_material", idOPM);
 
-    // Obtener data
-    // const row = $(this).closest("tr")[0];
-    // const data = tblOPMaterial.fnGetData(row);
+    // Obtener data 
     let row = $(this).closest('tr');
     let data = $('#tblOPMaterial').DataTable().row(row).data();
 

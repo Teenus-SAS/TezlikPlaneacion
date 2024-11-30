@@ -124,7 +124,6 @@ $app->post('/saveReceiveOPPTDate', function (Request $request, Response $respons
         $resolution = $generalProductsDao->updateAccumulatedQuantity($dataOP['idProduct'], $dataOP['quantity'], 2);
     }
 
-
     if ($resolution == null && $dataOP['origin'] == 1) {
         $product = $generalProductsDao->findProductById($dataOP['idProduct']);
         if ($product) {
@@ -205,7 +204,8 @@ $app->post('/saveReceiveOPPTDate', function (Request $request, Response $respons
 
                 if ($status == true) {
                     if ($orders[$i]['original_quantity'] <= $orders[$i]['accumulated_quantity']) {
-                        $generalOrdersDao->changeStatus($orders[$i]['id_order'], 2);
+                        $orders[$i]['type_order'] == 2 ? $status = 12 : $status = 2;
+                        $generalOrdersDao->changeStatus($orders[$i]['id_order'], $status);
                         $accumulated_quantity = $orders[$i]['accumulated_quantity'] - $orders[$i]['original_quantity'];
                     } else {
                         $accumulated_quantity = $orders[$i]['accumulated_quantity'];
@@ -235,7 +235,6 @@ $app->post('/saveReceiveOPPTDate', function (Request $request, Response $respons
             }
         }
     }
-
 
     if ($resolution == null)
         $resp = array('success' => true, 'message' => 'Fecha guardada correctamente');
