@@ -195,7 +195,7 @@ $(document).ready(function () {
       pageLength: 50,
       data: data,
       language: { url: "/assets/plugins/i18n/Spanish.json" },
-      order: [[7, "asc"]],
+      order: [[7, "desc"]],
       columns: [
         {
           title: "No.",
