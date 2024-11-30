@@ -23,8 +23,37 @@ $(document).ready(function () {
 
       let arr = assignOpToGroups(dataStore, "id_programming");
 
-      loadTblReceiveOC(dataRequisitions);
-      loadTblDeliverOP(arr);
+      // Materiales por recibir
+      let filterRCOC = [];
+      const activeRCOC = document.querySelector('.btn-primary.switchRCOC').id;
+
+      if (activeRCOC.includes('active')) {
+        filterRCOC = dataRequisitions.filter(item => !item.admission_date || item.admission_date === "0000-00-00 00:00:00");
+      } else {
+        filterRCOC = dataRequisitions.filter(item => item.admission_date && item.admission_date != "0000-00-00 00:00:00");
+      }
+
+      // Almacen por entregar
+      let filterDLVOP = []; 
+      const activeDLVOP = document.querySelector('.btn-primary.switchDLVOP').id;
+
+      if (activeDLVOP.includes('active')) {
+        for (let i = 0; i < arr.length; i++) {
+          let result = checkDeliverAction(arr[i]);
+
+          if (result == 1)
+            filterDLVOP.push(arr[i]);
+        }
+      } else {
+        for (let i = 0; i < arr.length; i++) {
+          let result = checkDeliverAction(arr[i]);
+          if (result == 2)
+            filterDLVOP.push(arr[i]);
+        }
+      }
+
+      loadTblReceiveOC(filterRCOC);
+      loadTblDeliverOP(filterDLVOP);
 
       requisitions = dataRequisitions;
       store = arr;
@@ -134,9 +163,56 @@ $(document).ready(function () {
     });
   };
 
+  // Filtrar data de materiales a recibir
+  $(document).on('click', '.switchRCOC', function () {
+    let id = this.id;
+    let data;
+
+    if (id == 'active') {
+      document.getElementById('activeRCOC').className = 'btn btn-sm btn-primary switchRCOC';
+      document.getElementById('closedRCOC').className = 'btn btn-sm btn-outline-primary switchRCOC';
+
+      data = requisitions.filter(item => !item.admission_date || item.admission_date === "0000-00-00 00:00:00");
+    } else {
+      document.getElementById('closedRCOC').className = 'btn btn-sm btn-primary switchRCOC';
+      document.getElementById('activeRCOC').className = 'btn btn-sm btn-outline-primary switchRCOC';
+
+      data = requisitions.filter(item => item.admission_date && item.admission_date != "0000-00-00 00:00:00");
+    }
+
+    loadTblReceiveOC(data);
+  });
+
+  // Filtrar data de almacen a entregar
+  $(document).on('click', '.switchDLVOP', function () {
+    let id = this.id;
+    let data = [];
+
+    if (id == 'active') {
+      document.getElementById('activeDLVOP').className = 'btn btn-sm btn-primary switchDLVOP';
+      document.getElementById('closedDLVOP').className = 'btn btn-sm btn-outline-primary switchDLVOP';
+
+      for (let i = 0; i < store.length; i++) {
+        let result = checkDeliverAction(store[i]);
+        if (result == 1)
+          data.push(store[i]);
+      }
+    } else {
+      document.getElementById('closedDLVOP').className = 'btn btn-sm btn-primary switchDLVOP';
+      document.getElementById('activeDLVOP').className = 'btn btn-sm btn-outline-primary switchDLVOP';
+
+      for (let i = 0; i < store.length; i++) {
+        let result = checkDeliverAction(store[i]);
+        if (result == 2)
+          data.push(store[i]);
+      }
+    }
+
+    loadTblDeliverOP(data);
+  });
+
   // Función para construir las acciones para entregar material
   const buildDeliverAction = (data) => {
-    
     if (data.id_user_delivered == 0) {
       if (data.flag_op == 1)
         return '';
@@ -187,6 +263,30 @@ $(document).ready(function () {
           </a>
         `;
   };
+
+  // Función para filtrar data de entrega
+  const checkDeliverAction = (data) => {
+    if (data.id_user_delivered == 0) {
+      if (data.flag_op == 1)
+        return 2;
+      else
+        return 1;
+    }
+
+    let check_quantity = parseFloat(data.reserved) - parseFloat(data.delivery_pending);
+
+    if (check_quantity > 0 && data.delivery_pending > 0) {
+      if (data.id_materials_component_user != 0) {
+        if (data.flag_op == 1)
+          return 2;
+        else
+          return 1;
+      } else
+        return 1;
+    }
+
+    return 2;
+  };
    
   // Función para cargar la tabla de órdenes de almacén
   const loadTblDeliverOP = (data) => {
@@ -195,7 +295,6 @@ $(document).ready(function () {
       pageLength: 50,
       data: data,
       language: { url: "/assets/plugins/i18n/Spanish.json" },
-      order: [[7, "desc"]],
       columns: [
         {
           title: "No.",

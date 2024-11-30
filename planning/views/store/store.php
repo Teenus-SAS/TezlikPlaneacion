@@ -87,24 +87,18 @@ if (sizeof($_SESSION) == 0)
                                                 <div class="tab-pane fade show active" id="paneReceiveOC" role="tabpanel" aria-labelledby="subTabReceiveOC">
                                                     <div class="card">
                                                         <div class="card-body">
+                                                            <div class="d-flex flex-column mb-4">
+                                                                <div class="align-self-end btn-group">
+                                                                    <button class="btn btn-sm btn-primary switchRCOC" id="activeRCOC" value="1">Activas</button>
+                                                                    <button class="btn btn-sm btn-outline-primary switchRCOC" id="closedRCOC" value="2">Cerradas</button>
+                                                                </div>
+                                                            </div>
                                                             <div class="table-responsive">
                                                                 <table class="fixed-table-loading table table-hover" id="tblReceiveOC"></table>
                                                             </div>
                                                         </div>
                                                     </div>
                                                 </div>
-                                                <!-- <ul class="nav nav-tabs mt-3 ml-3" id="subTabOC" role="tablist">
-                                                    <li class="nav-item">
-                                                        <a class="nav-link active selectNavigation" id="subTabReceiveOC" data-toggle="pill" href="#paneReceiveOC" role="tab" aria-controls="paneReceiveOC" aria-selected="false">
-                                                            Recibir
-                                                        </a>
-                                                    </li>
-                                                    <li class="nav-item">
-                                                        <a class="nav-link selectNavigation" id="subTabDeliverOC" data-toggle="pill" href="#paneDeliverOC" role="tab" aria-controls="paneDeliverOC" aria-selected="true">
-                                                            Entregar
-                                                        </a>
-                                                    </li>
-                                                </ul> -->
                                             </div>
                                         </div>
                                     </div>
@@ -133,6 +127,12 @@ if (sizeof($_SESSION) == 0)
                                                     <div class="tab-pane fade show active" id="paneReceiveOP" role="tabpanel" aria-labelledby="subTabReceiveOP">
                                                         <div class="card">
                                                             <div class="card-body">
+                                                                <div class="d-flex flex-column mb-4">
+                                                                    <div class="align-self-end btn-group">
+                                                                        <button class="btn btn-sm btn-primary switchDLVOP" id="activeDLVOP" value="1">Activas</button>
+                                                                        <button class="btn btn-sm btn-outline-primary switchDLVOP" id="closedDLVOP" value="2">Cerradas</button>
+                                                                    </div>
+                                                                </div>
                                                                 <div class="table-responsive">
                                                                     <table class="fixed-table-loading table table-hover" id="tblDeliverOP"></table>
                                                                 </div>
@@ -160,11 +160,23 @@ if (sizeof($_SESSION) == 0)
                                                                 <!-- Contenido de las sub-pestañas de Entregar -->
                                                                 <div class="tab-content mt-3">
                                                                     <div class="tab-pane fade show active" id="panePT" role="tabpanel" aria-labelledby="subTabPT">
+                                                                        <!-- <div class="d-flex flex-column mb-4">
+                                                                            <div class="align-self-end btn-group">
+                                                                                <button class="btn btn-sm btn-primary switchDLVOP" id="active" value="1">Activas</button>
+                                                                                <button class="btn btn-sm btn-outline-primary switchDLVOP" id="closed" value="2">Cerradas</button>
+                                                                            </div>
+                                                                        </div> -->
                                                                         <div class="table-responsive">
                                                                             <table class="fixed-table-loading table table-hover" id="tblPartialsDeliveryPT"></table>
                                                                         </div>
                                                                     </div>
                                                                     <div class="tab-pane fade" id="paneMP" role="tabpanel" aria-labelledby="subTabMP">
+                                                                        <!-- <div class="d-flex flex-column mb-4">
+                                                                            <div class="align-self-end btn-group">
+                                                                                <button class="btn btn-sm btn-primary switchDLVOP" id="active" value="1">Activas</button>
+                                                                                <button class="btn btn-sm btn-outline-primary switchDLVOP" id="closed" value="2">Cerradas</button>
+                                                                            </div>
+                                                                        </div> -->
                                                                         <div class="table-responsive">
                                                                             <table class="fixed-table-loading table table-hover" id="tblPartialsDeliveryMP"></table>
                                                                         </div>
