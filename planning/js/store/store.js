@@ -166,12 +166,15 @@ $(document).ready(function () {
           } 
 
           store <= reserved ? (pending = reserved - store) : (pending = 0);
+          let stored = quantity - store;
+
+          stored < 0 ? stored = 0 : stored;
 
           sessionStorage.setItem("idMaterial", id_material);
           sessionStorage.setItem("referenceProduct", reference);
           sessionStorage.setItem("product", material);
           sessionStorage.setItem("idProgramming", id_programming);
-          sessionStorage.setItem("stored", (quantity - store) < 0 ? 0 : (quantity - store));
+          sessionStorage.setItem("stored", stored);
           sessionStorage.setItem("pending", pending);
           sessionStorage.setItem("delivered", store);
           saveDeliverMaterial();

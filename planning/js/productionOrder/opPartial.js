@@ -227,9 +227,7 @@ $(document).ready(function () {
 
     sessionStorage.setItem("id_part_deliv", idPartDeliv);
 
-    // Obtener data
-    // const row = $(this).closest("tr")[0];
-    // const data = tblPartialsDelivery.fnGetData(row);
+    // Obtener data 
     let row = $(this).closest('tr');
     let data = $('#tblPartialsDelivery').DataTable().row(row).data();
 
@@ -286,9 +284,7 @@ $(document).ready(function () {
   };
 
   /* Eliminar productos */
-  deleteOPPartialFunction = () => {
-    // const row = $(this.activeElement).closest("tr")[0];
-    // const data = tblPartialsDelivery.fnGetData(row);
+  deleteOPPartialFunction = () => {                              
     let row = $(this.activeElement).parent().parent()[0];
     let data = $('#tblPartialsDelivery').DataTable().row(row).data();
 

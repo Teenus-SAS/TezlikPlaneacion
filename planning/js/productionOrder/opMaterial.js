@@ -140,9 +140,7 @@ $(document).ready(function () {
   };
 
   /* Eliminar productos */
-  deleteOPMaterialFunction = () => {
-    // const row = $(this.activeElement).closest("tr")[0];
-    // const data = tblOPMaterial.fnGetData(row);
+  deleteOPMaterialFunction = () => { 
     let row = $(this.activeElement).parent().parent()[0];
     let data = $('#tblOPMaterial').DataTable().row(row).data();
 
