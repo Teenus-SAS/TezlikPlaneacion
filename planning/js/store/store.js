@@ -165,6 +165,11 @@ $(document).ready(function () {
             return false;
           } 
 
+          if (store > quantity) {
+            toastr.error("Cantidad a entregar mayor a existencias");
+            return false;
+          }
+
           store <= reserved ? (pending = reserved - store) : (pending = 0);
           let stored = quantity - store;
 
