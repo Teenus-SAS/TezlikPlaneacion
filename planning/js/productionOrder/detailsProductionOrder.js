@@ -425,11 +425,11 @@ $(document).ready(function () {
       <td>${material.material}</td>
       <td>${quantity_ftm} ${material.abbreviation}</td>
       <td>${quantity_total} ${material.abbreviation}</td>
-      <td>$${cost_ftm.toLocaleString("es-CO", { minimumFractionDigits: 0, maximumFractionDigits: 2 })}</td>
-      <td>$${cost_total.toLocaleString("es-CO", { minimumFractionDigits: 0, maximumFractionDigits: 0 })}</td>
-      <td>${storeData.recieve}</td>
-      <td>${storeData.for_recieve}</td>
-      <td>${storeData.pending}</td>
+      <td>$${parseFloat(cost_ftm).toLocaleString("es-CO", { minimumFractionDigits: 0, maximumFractionDigits: 2 })}</td>
+      <td>$${parseFloat(cost_total).toLocaleString("es-CO", { minimumFractionDigits: 0, maximumFractionDigits: 0 })}</td>
+      <td>${parseFloat(storeData.recieve.toLocaleString("es-CO", { minimumFractionDigits: 0, maximumFractionDigits: 2 }))}</td>
+      <td>${parseFloat(storeData.for_recieve.toLocaleString("es-CO", { minimumFractionDigits: 0, maximumFractionDigits: 2 }))}</td>
+      <td>${parseFloat(storeData.pending.toLocaleString("es-CO", { minimumFractionDigits: 0, maximumFractionDigits: 2 }))}</td>
       ${flag_op == 0 ? `<td>${action}</td>` : ""}
     </tr>
   `;
