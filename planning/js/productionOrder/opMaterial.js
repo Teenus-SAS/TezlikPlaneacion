@@ -1,6 +1,6 @@
 $(document).ready(function () {
   loadTblOPMaterial = (id_programming) => {
-    tblOPMaterial = $("#tblOPMaterial").dataTable({
+    tblOPMaterial = $("#tblOPMaterial").DataTable({
       destroy: true,
       dom: "t",
       paging: false,
@@ -106,8 +106,10 @@ $(document).ready(function () {
     sessionStorage.setItem("id_prod_order_material", idOPM);
 
     // Obtener data
-    const row = $(this).closest("tr")[0];
-    const data = tblOPMaterial.fnGetData(row);
+    // const row = $(this).closest("tr")[0];
+    // const data = tblOPMaterial.fnGetData(row);
+    let row = $(this).closest('tr');
+    let data = $('#tblOPMaterial').DataTable().row(row).data();
 
     // Asignar valores a los campos del formulario y animar
     $(`#refMaterial option[value=${data.id_material}]`).prop("selected", true);
@@ -141,8 +143,10 @@ $(document).ready(function () {
 
   /* Eliminar productos */
   deleteOPMaterialFunction = () => {
-    const row = $(this.activeElement).closest("tr")[0];
-    const data = tblOPMaterial.fnGetData(row);
+    // const row = $(this.activeElement).closest("tr")[0];
+    // const data = tblOPMaterial.fnGetData(row);
+    let row = $(this.activeElement).parent().parent()[0];
+    let data = $('#tblOPMaterial').DataTable().row(row).data();
 
     const { id_prod_order_material } = data;
 

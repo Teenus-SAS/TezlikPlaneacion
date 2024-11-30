@@ -403,15 +403,15 @@ if (sizeof($_SESSION) == 0)
 														<table class="fixed-table-loading table table-hover text-center" id="tblPartialsDelivery">
 															<tfoot>
 																<tr>
-																	<th colspan="2">Totales:</th>
-																	<th></th>
-																	<th></th>
-																	<th class="uniqueClassName dt-head-center unitsDefects"></th>
-																	<th class="uniqueClassName dt-head-center unitsProcessing"></th>
-																	<th class="uniqueClassName dt-head-center costPayroll"></th>
-																	<th class="uniqueClassName dt-head-center costIndirect"></th>
-																	<th></th>
-
+																	<td></td>
+																	<td></td>
+																	<td></td>
+																	<td>Totales:</td>
+																	<td id="totalDefectiveUnits"></td>
+																	<td id="totalDeliveredQuantity"></td>
+																	<td id="totalCostPayroll"></td>
+																	<td id="totalCostIndirect"></td>
+																	<td></td>
 																</tr>
 															</tfoot>
 														</table>
@@ -435,20 +435,15 @@ if (sizeof($_SESSION) == 0)
 														<select class="form-control refMaterial" name="refMaterial" id="refMaterial">
 														</select>
 													</div>
-													<div class="col-sm-7 floating-label enable-floating-label show-label" style="margin-bottom:20px">
+													<div class="col-sm-5 floating-label enable-floating-label show-label" style="margin-bottom:20px">
 														<label for="material">Materia Prima</label>
 														<select class="form-control material" name="idMaterial" id="material">
 														</select>
 													</div>
-													<!-- <div class="col-sm-6 floating-label enable-floating-label show-label" style="margin-bottom:20px">
-														<label for="operator">Operario</label>
-														<?php
-														//$id_user = $_SESSION['idUser'];
-														//$name = $_SESSION['name'];
-														//$lastname = $_SESSION['lastname'];
-														?>
-														<input type="text" class="form-control" name="operator" id="operator" readonly value="<?php echo "$name $lastname" ?>">
-													</div> -->
+													<div class="col-sm-2 floating-label enable-floating-label show-label" style="margin-bottom:20px">
+														<label for="">Unidad</label>
+														<input type="text" class="form-control text-center" id="units" readonly>
+													</div>
 													<div class="col-sm-2 floating-label enable-floating-label show-label">
 														<label for="">Cantidad</label>
 														<input type="number" class="form-control text-center" id="quantityMP" name="quantity">

@@ -1,7 +1,7 @@
 $(document).ready(function () {
   //Datatable para parciales entregados desde la OP a Almacen
   loadTblPartialsDelivery = (id_programming) => {
-    tblPartialsDelivery = $("#tblPartialsDelivery").dataTable({
+    tblPartialsDelivery = $("#tblPartialsDelivery").DataTable({
       destroy: true,
       dom: "t",
       paging: false,
@@ -50,7 +50,7 @@ $(document).ready(function () {
           title: "Operador",
           data: null,
           className: "uniqueClassName dt-head-center",
-          render: function (data) {
+          render: function (data, type, row) {
             return `${data.firstname} ${data.lastname}`;
           },
         },
@@ -165,22 +165,22 @@ $(document).ready(function () {
         });
 
         // Actualizar el contenido del footer con los totales calculados
-        $(this.api().column(4).footer()).html(
+        $('#totalDefectiveUnits').html(
           `${$.fn.dataTable.render
             .number(".", ",", 0, "")
             .display(totalDefectiveUnits)} Und`
         );
-        $(this.api().column(5).footer()).html(
+        $('#totalDeliveredQuantity').html(
           `${$.fn.dataTable.render
             .number(".", ",", 0, "")
             .display(totalDeliveredQuantity)} Und`
         );
-        $(this.api().column(6).footer()).html(
+        $('#totalCostPayroll').html(
           `$${$.fn.dataTable.render
             .number(".", ",", 0, "")
             .display(totalCostPayroll)}`
         );
-        $(this.api().column(7).footer()).html(
+        $('#totalCostIndirect').html(
           `$${$.fn.dataTable.render
             .number(".", ",", 0, "")
             .display(totalCostIndirect)}`
@@ -228,8 +228,10 @@ $(document).ready(function () {
     sessionStorage.setItem("id_part_deliv", idPartDeliv);
 
     // Obtener data
-    const row = $(this).closest("tr")[0];
-    const data = tblPartialsDelivery.fnGetData(row);
+    // const row = $(this).closest("tr")[0];
+    // const data = tblPartialsDelivery.fnGetData(row);
+    let row = $(this).closest('tr');
+    let data = $('#tblPartialsDelivery').DataTable().row(row).data();
 
     // Asignar valores a los campos del formulario y animar
     $("#startDateTime").val(data.start_date);
@@ -258,13 +260,16 @@ $(document).ready(function () {
       return false;
     }
 
-    let dataOPP = tblPartialsDelivery.DataTable().rows().data().toArray();
+    let dataOPP = $('#tblPartialsDelivery').DataTable().rows().data().toArray();
 
-    let objStartDate = dataOPP.find(item=> item.start_date == startDateTime);
-    let objEndDate = dataOPP.find(item=> item.end_date == endDateTime);
+    let formattedStartDate = formatDateTime(startDateTime);
+    let formattedEndDate = formatDateTime(endDateTime);
+
+    let objStartDate = dataOPP.find(item=> item.start_date == formattedStartDate);
+    let objEndDate = dataOPP.find(item=> item.end_date == formattedEndDate);
 
     if (objStartDate || objEndDate) {
-      toastr.error("Ingrese todos los campos");
+      toastr.error("Fecha de inicio o finalizacion ya ingresada");
       return false;
     }
 
@@ -282,8 +287,10 @@ $(document).ready(function () {
 
   /* Eliminar productos */
   deleteOPPartialFunction = () => {
-    const row = $(this.activeElement).closest("tr")[0];
-    const data = tblPartialsDelivery.fnGetData(row);
+    // const row = $(this.activeElement).closest("tr")[0];
+    // const data = tblPartialsDelivery.fnGetData(row);
+    let row = $(this.activeElement).parent().parent()[0];
+    let data = $('#tblPartialsDelivery').DataTable().row(row).data();
 
     const { id_part_deliv } = data;
 
@@ -312,6 +319,24 @@ $(document).ready(function () {
         }
       },
     });
+  };
+
+  const formatDateTime = (date) => {
+    let parsedDate = new Date(date);
+
+    // Formatear la fecha
+    let year = parsedDate.getFullYear();
+    let month = String(parsedDate.getMonth() + 1).padStart(2, "0"); // Meses empiezan en 0
+    let day = String(parsedDate.getDate()).padStart(2, "0");
+
+    // Formatear la hora
+    let hours = String(parsedDate.getHours()).padStart(2, "0");
+    let minutes = String(parsedDate.getMinutes()).padStart(2, "0");
+    let seconds = String(parsedDate.getSeconds()).padStart(2, "0");
+
+    // Combinar en el formato deseado
+    let formattedDate = `${year}-${month}-${day} ${hours}:${minutes}:${seconds}`;
+    return formattedDate;
   };
 
   /* Mensaje de exito */

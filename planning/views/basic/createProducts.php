@@ -205,9 +205,6 @@ if (sizeof($_SESSION) == 0)
                                                 <div class="col-sm-2 floating-label enable-floating-label show-label" style="margin-bottom:20px">
                                                     <label for="">Unidad</label>
                                                     <input type="text" class="form-control text-center" id="units" readonly>
-                                                    <!-- <select class="form-control units" id="units" name="unit">
-                                                        <option disabled selected>Seleccionar</option>
-                                                    </select> -->
                                                 </div>
                                                 <div class="col-sm-2 floating-label enable-floating-label show-label">
                                                     <label for="mQuantity">Existencias</label>

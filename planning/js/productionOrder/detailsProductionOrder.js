@@ -552,10 +552,10 @@ $(document).ready(function () {
       body.insertAdjacentHTML("beforeend", trPC);
     });
 
-    if (data.flag_cancel == 0) {
-      loadTblPartialsDelivery(id_programming);
-      loadTblOPMaterial(id_programming);
-    }
+    // if (data.flag_cancel == 0) {
+    //   loadTblPartialsDelivery(id_programming);
+    //   loadTblOPMaterial(id_programming);
+    // }
   };
 
   // Aceptar Material
@@ -776,20 +776,21 @@ $(document).ready(function () {
   //   });
   // });
 
-  $("#btnCloseOP").click(function (e) {
+  $("#btnCloseOP").click(async function (e) {
     e.preventDefault();
 
     let id_programming = sessionStorage.getItem("id_programming");
+    let result = 1;
 
     if (op_to_store == "1") {
-      let dataOPP = tblPartialsDelivery.DataTable().rows().data().toArray();
+      // let dataOPP = $('#tblPartialsDelivery').DataTable().rows().data().toArray();
       
-      if (dataOPP.length == 0) {
-        toastr.error("Ejecución de producción sin datos");
-        return false;
-      }
+      // if (dataOPP.length == 0) {
+      //   toastr.error("Ejecución de producción sin datos");
+      //   return false;
+      // }
 
-      let dataOPMT = tblOPMaterial.DataTable().rows().data().toArray();
+      let dataOPMT = $('#tblOPMaterial').DataTable().rows().data().toArray();
 
       let arrOPMT = dataOPMT.filter(item => item.receive_date == "0000-00-00");
 
@@ -827,73 +828,103 @@ $(document).ready(function () {
         });
 
       if (pending > 0) {
-        bootbox.confirm({
-          title: "Materiales y Componentes",
-          message:
-            "No se han recibido todos los materiales. Desea continuar la accion? Esta acción no se puede reversar.",
-          buttons: {
-            confirm: {
-              label: "Si",
-              className: "btn-success",
-            },
-            cancel: {
-              label: "No",
-              className: "btn-danger",
-            },
-          },
-          callback: function (result) {
-            if (result == false) {
-              return false;              
-            }
-          },
-        });
+        result = await checkReceiveMaterials();
       }
     }
 
-    let dataOP = {
-      id_programming: id_programming,
-      numOP: dataPTOP.num_production,
-      route: parseInt(dataPTOP.route_programming) + 1,
-      status: 1,
-      id_order: dataPTOP.id_order,
-      id_product: dataPTOP.id_product,
-      id_machine: dataPTOP.id_machine,
-      quantity_programming: dataPTOP.quantity_programming,
-      min_date: dataPTOP.min_date_programming,
-      max_date: "",
-      min_programming: 0,
-      sim: 1,
-      new_programming: 1,
-    };
+    if (result == 1) {
+      let dataOP = {
+        id_programming: id_programming,
+        numOP: dataPTOP.num_production,
+        route: parseInt(dataPTOP.route_programming) + 1,
+        status: 1,
+        id_order: dataPTOP.id_order,
+        id_product: dataPTOP.id_product,
+        id_machine: dataPTOP.id_machine,
+        quantity_programming: dataPTOP.quantity_programming,
+        min_date: dataPTOP.min_date_programming,
+        max_date: "",
+        min_programming: 0,
+        sim: 1,
+        new_programming: 1,
+      };
 
-    bootbox.confirm({
-      title: "Orden de Producción",
-      message: `¿Está seguro de cerrar esta orden de producción? Esta acción no se puede reversar.`,
-      buttons: {
-        confirm: { label: "Sí", className: "btn-success" },
-        cancel: { label: "No", className: "btn-danger" },
-      },
-      callback: function (result) {
-        if (result) {
-          $.post(
-            "/api/changeFlagOP",
-            dataOP,
-            function (resp) {
-              if (resp.success) {
-                sessionStorage.setItem("id_programming", resp.id_programming);
-                toastr.success("Orden de Producción cerrada con éxito.");
-              } else {
-                toastr.error("Error al cerrar la Orden de Producción.");
+      bootbox.confirm({
+        title: "Orden de Producción",
+        message: `¿Está seguro de cerrar esta orden de producción? Esta acción no se puede reversar.`,
+        buttons: {
+          confirm: { label: "Sí", className: "btn-success" },
+          cancel: { label: "No", className: "btn-danger" },
+        },
+        callback: function (result) {
+          if (result) {
+            $.post(
+              "/api/changeFlagOP",
+              dataOP,
+              function (resp) {
+                if (resp.success) {
+                  sessionStorage.setItem("id_programming", resp.id_programming);
+                  toastr.success("Orden de Producción cerrada con éxito.");
+                } else {
+                  toastr.error("Error al cerrar la Orden de Producción.");
+                }
+                messagePOD(resp);
               }
-              messagePOD(resp);
-            }
-          ).fail(function (xhr, status, error) {
-            toastr.error(`Error en la solicitud: ${xhr.responseText || error}`);
-          });
-        }
-      },
-    });
+            ).fail(function (xhr, status, error) {
+              toastr.error(`Error en la solicitud: ${xhr.responseText || error}`);
+            });
+          }
+        },
+      });
+    }
   });
+
+  // const checkReceiveMaterials = () => {
+  //   bootbox.confirm({
+  //     title: "Materiales y Componentes",
+  //     message:
+  //       "No se han recibido todos los materiales. Desea continuar la accion? Esta acción no se puede reversar.",
+  //     buttons: {
+  //       confirm: {
+  //         label: "Si",
+  //         className: "btn-success",
+  //       },
+  //       cancel: {
+  //         label: "No",
+  //         className: "btn-danger",
+  //       },
+  //     },
+  //     callback: function (result) {
+  //       if (result) {
+          
+  //       }
+  //     },
+  //   });
+  // };
+
+  const checkReceiveMaterials = () => {
+    return new Promise((resolve) => {
+      bootbox.confirm({
+        title: "Materiales y Componentes",
+        message:
+          "No se han recibido todos los materiales. Desea continuar la acción? Esta acción no se puede reversar.",
+        buttons: {
+          confirm: {
+            label: "Sí",
+            className: "btn-success",
+          },
+          cancel: {
+            label: "No",
+            className: "btn-danger",
+          },
+        },
+        callback: function (result) {
+          // Resuelve la promesa dependiendo de la decisión del usuario
+          resolve(result ? 1 : 0);
+        },
+      });
+    });
+  };
 
   loadAllDataPO();
 

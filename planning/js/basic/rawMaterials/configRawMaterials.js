@@ -160,6 +160,7 @@ $(document).ready(function () {
       let data = JSON.parse(sessionStorage.getItem("dataMaterials"));
       let arr = data.find((item) => item.id_material == id);
       $("#abbreviation").val(arr.abbreviation);
+      $("#units").val(arr.unit);
     });
 
     $("#material").change(function (e) {
@@ -169,6 +170,7 @@ $(document).ready(function () {
       let data = JSON.parse(sessionStorage.getItem("dataMaterials"));
       let arr = data.find((item) => item.id_material == id);
       $("#abbreviation").val(arr.abbreviation);
+      $("#units").val(arr.unit);
     });
   }
 });
