@@ -287,6 +287,7 @@ $(document).ready(function () {
       } else
         return 1;
     }
+    
     if (data.id_materials_component_user != 0)
       return 2;
     else

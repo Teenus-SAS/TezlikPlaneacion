@@ -36,7 +36,7 @@ class StoreDao
                                                 IFNULL(last_user.id_user_delivered, 0) AS id_user_delivered,
                                                 IFNULL(last_user.firstname_delivered, '') AS firstname_delivered,
                                                 IFNULL(last_user.lastname_delivered, '') AS lastname_delivered, 
-                                                IFNULL(mcu.id_materials_component_user, '') AS id_materials_component_user, 
+                                                IFNULL(mcu.id_materials_component_user, 0) AS id_materials_component_user, 
                                             -- Nueva subconsulta para evitar duplicados en la suma de reserved1
                                                 IFNULL(IF(
                                                     -- Subconsulta para obtener el valor de delivery_pending
@@ -138,109 +138,6 @@ class StoreDao
     {
         $connection = Connection::getInstance()->getConnection();
 
-        // $stmt = $connection->prepare("SELECT
-        //                                     -- Columnas originales
-        //                                         pg.id_programming,
-        //                                         pg.num_production,
-        //                                         o.id_order,
-        //                                         o.num_order,
-        //                                         m.id_material,
-        //                                         m.reference, 
-        //                                         mi.delivery_date,
-        //                                         m.material,
-        //                                         mi.quantity,
-        //                                         u.abbreviation,
-        //                                         IFNULL(last_user.id_user_delivered, 0) AS id_user_delivered,
-        //                                         IFNULL(last_user.firstname_delivered, '') AS firstname_delivered,
-        //                                         IFNULL(last_user.lastname_delivered, '') AS lastname_delivered, 
-        //                                         (SELECT IFNULL(SUM(quantity), 0) FROM materials_components_users WHERE id_programming = pg.id_programming AND id_material = pm.id_material) AS quantity_component_user,
-        //                                     -- Nueva subconsulta para evitar duplicados en la suma de reserved1
-        //                                         IFNULL(IF(
-        //                                             -- Subconsulta para obtener el valor de delivery_pending
-        //                                             IFNULL((SELECT MIN(stu_sub.delivery_pending)
-        //                                             FROM store_users stu_sub
-        //                                             WHERE stu_sub.id_programming = pg.id_programming
-        //                                             AND stu_sub.id_material = m.id_material), 0) = 0,
-        //                                             -- Si delivery_pending es 0, calcular la suma de quantity * pm.quantity
-        //                                             IFNULL((
-        //                                                 SELECT SUM(DISTINCT pg_inner.quantity * pm_inner.quantity)
-        //                                                 FROM products_materials pm_inner
-        //                                                 INNER JOIN programming pg_inner ON pg_inner.id_product = pm_inner.id_product
-        //                                                 WHERE pg_inner.id_programming = pg.id_programming
-        //                                                 AND pm_inner.id_material = m.id_material
-        //                                             ), 0),
-        //                                             -- Si delivery_pending no es 0, usar el valor de delivery_pending
-        //                                             (SELECT MIN(stu_sub.delivery_pending)
-        //                                             FROM store_users stu_sub
-        //                                             WHERE stu_sub.id_programming = pg.id_programming
-        //                                             AND stu_sub.id_material = m.id_material)
-        //                                         ), 0) AS reserved1,
-        //                                     -- Nueva subconsulta para evitar duplicados en la suma de reserved
-        //                                         IFNULL((
-        //                                             SELECT SUM(DISTINCT pg_inner.quantity * pm_inner.quantity)
-        //                                             FROM products_materials pm_inner
-        //                                             INNER JOIN programming pg_inner ON pg_inner.id_product = pm_inner.id_product
-        //                                             WHERE pg_inner.id_programming = pg.id_programming
-        //                                             AND pm_inner.id_material = m.id_material
-        //                                         ), 0) AS reserved,
-        //                                     -- Nueva subconsulta para evitar duplicados en la suma de delivery_store
-        //                                         IFNULL((
-        //                                             SELECT SUM(stu_sub.delivery_store)
-        //                                             FROM store_users stu_sub
-        //                                             WHERE stu_sub.id_programming = pg.id_programming
-        //                                             AND stu_sub.id_material = m.id_material
-        //                                         ), 0) AS delivery_store,
-        //                                     -- Nueva subconsulta para obtener el valor mínimo de delivery_pending
-        //                                         IFNULL((
-        //                                             SELECT MIN(stu_sub.delivery_pending)
-        //                                             FROM store_users stu_sub
-        //                                             WHERE stu_sub.id_programming = pg.id_programming
-        //                                             AND stu_sub.id_material = m.id_material
-        //                                         ), 0) AS delivery_pending
-        //                                 FROM programming pg
-        //                                 INNER JOIN orders o ON o.id_order = pg.id_order
-        //                                 INNER JOIN products_materials pm ON pm.id_product = pg.id_product
-        //                                 INNER JOIN materials m ON m.id_material = pm.id_material
-        //                                 INNER JOIN inv_materials mi ON mi.id_material = pm.id_material
-        //                                 INNER JOIN admin_units u ON u.id_unit = m.unit
-        //                                 -- Subconsulta para obtener el último usuario de entrega
-        //                                     LEFT JOIN (
-        //                                         SELECT 
-        //                                             cur.id_user_store,
-        //                                             cur.id_programming,
-        //                                             cur.id_material, 
-        //                                             curd.id_user AS id_user_delivered,
-        //                                             curd.firstname AS firstname_delivered,
-        //                                             curd.lastname AS lastname_delivered
-        //                                         FROM store_users cur
-        //                                         INNER JOIN users curd ON curd.id_user = cur.id_user_delivered 
-        //                                         WHERE cur.id_material = (
-        //                                                 SELECT MAX(cur_inner.id_material)
-        //                                                 FROM store_users cur_inner
-        //                                                 WHERE cur_inner.id_material = cur.id_material
-        //                                         ) 
-        //                                         AND cur.id_programming = (
-        //                                                 SELECT MAX(cur_inner.id_programming)
-        //                                                 FROM store_users cur_inner
-        //                                                 WHERE cur_inner.id_programming = cur.id_programming
-        //                                         )
-        //                                     ) AS last_user ON last_user.id_material = m.id_material AND last_user.id_programming = pg.id_programming
-        //                                 WHERE pg.id_company = :id_company AND pg.status = 1
-        //                                 GROUP BY
-        //                                     pg.id_programming,
-        //                                     pg.num_production,
-        //                                     o.id_order,
-        //                                     o.num_order,
-        //                                     m.id_material,
-        //                                     m.reference, 
-        //                                     mi.delivery_date,
-        //                                     m.material,
-        //                                     mi.quantity,
-        //                                     u.abbreviation,
-        //                                     last_user.id_user_delivered,
-        //                                     last_user.firstname_delivered,
-        //                                     last_user.lastname_delivered
-        //                                 ORDER BY pg.num_production, mi.delivery_date ASC;");
         $stmt = $connection->prepare("WITH 
                                         store_summary AS (
                                             SELECT 
