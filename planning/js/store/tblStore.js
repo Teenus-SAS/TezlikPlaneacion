@@ -1,4 +1,7 @@
 $(document).ready(function () {
+  let requisitions = [];
+  let store = [];
+  
   $("#btnExportStore").hide();
 
   $(".selectNavigation").click(function (e) {
@@ -166,9 +169,9 @@ $(document).ready(function () {
   // Filtrar data de materiales a recibir
   $(document).on('click', '.switchRCOC', function () {
     let id = this.id;
-    let data;
+    let data = [];
 
-    if (id == 'active') {
+    if (id.includes('active')) {
       document.getElementById('activeRCOC').className = 'btn btn-sm btn-primary switchRCOC';
       document.getElementById('closedRCOC').className = 'btn btn-sm btn-outline-primary switchRCOC';
 
@@ -188,7 +191,7 @@ $(document).ready(function () {
     let id = this.id;
     let data = [];
 
-    if (id == 'active') {
+    if (id.includes('active')) {
       document.getElementById('activeDLVOP').className = 'btn btn-sm btn-primary switchDLVOP';
       document.getElementById('closedDLVOP').className = 'btn btn-sm btn-outline-primary switchDLVOP';
 
