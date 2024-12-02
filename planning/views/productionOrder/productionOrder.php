@@ -79,14 +79,22 @@ if (sizeof($_SESSION) == 0)
                             <div class="col-12">
                                 <div class="card">
                                     <div class="card-body">
-                                        <div class="tab-pane fade show active" role="tabpanel" aria-labelledby="pills-activity-tab">
-                                            <div class="table-responsive">
-                                                <div class="table-responsive">
-                                                    <table class="fixed-table-loading table table-hover" id="tblProductionOrders">
-
-                                                    </table>
-                                                </div>
-                                            </div>
+                                        <div class="table-responsive">
+                                            <table class="fixed-table-loading table table-hover" id="tblProductionOrders">
+                                                <!-- <tfoot>
+                                                    <tr>
+                                                        <td></td>
+                                                        <td></td>
+                                                        <td></td>
+                                                        <td>Total: </td>
+                                                        <td id="totalQuantity"></td>
+                                                        <td></td>
+                                                        <td></td>
+                                                        <td></td>
+                                                        <td></td>
+                                                    </tr>
+                                                </tfoot> -->
+                                            </table>
                                         </div>
                                     </div>
                                 </div>

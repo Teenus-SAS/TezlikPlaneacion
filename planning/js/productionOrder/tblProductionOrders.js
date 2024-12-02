@@ -88,10 +88,7 @@ $(document).ready(function () {
     tblProductionOrders = $("#tblProductionOrders").dataTable({
       fixedHeader: true,
       scrollY: "400px",
-      scrollCollapse: true,
-      dom: "t",
-      paging: false,
-      info: false, 
+      scrollCollapse: true, 
       destroy: true,
       data: data,
       language: { url: "/assets/plugins/i18n/Spanish.json" },
