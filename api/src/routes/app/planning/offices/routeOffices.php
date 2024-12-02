@@ -140,75 +140,83 @@ $app->post('/changeOffices', function (Request $request, Response $response, $ar
     if ($resolution == null) {
         $generalOrdersDao->changeStatus($dataOrder['idOrder'], 3);
         $arr = $generalProductsDao->findProductReserved($dataOrder['idProduct']);
+
         !isset($arr['reserved']) ? $arr['reserved'] = 0 : $arr;
-        $generalProductsDao->updateReservedByProduct($dataOrder['idProduct'], $arr['reserved']);
 
-        if ($dataOrder['stock'] > ($dataOrder['quantity'] - $dataOrder['originalQuantity'])) {
-            $data = [];
-            $arr2 = $generalOrdersDao->findLastNumOrderByCompany($id_company);
-
-            $seller = $generalSellersDao->findInternalSeller($id_company);
-
-            if ($seller) {
-                $client = $generalClientsDao->findInternalClient($id_company);
-
-                if (!$client) {
-                    $company = $licenseDao->findLicenseCompany($id_company);
-                    $dataClient = [];
-
-                    $dataClient['nit'] = $company['nit'];
-                    $dataClient['client'] = $company['company'];
-                    $dataClient['address'] = $company['address'];
-                    $dataClient['phone'] = $company['telephone'];
-                    $dataClient['city'] = $company['city'];
-                    $dataClient['type'] = 1;
-
-                    $resolution = $clientsDao->insertClient($dataClient, $id_company);
-
-                    $client = $lastDataDao->findLastInsertedClient();
-
-                    $resolution = $generalClientsDao->changeStatusClient($client['id_client'], 1);
-                }
-
-                $data['order'] = $arr2['num_order'];
-                $data['dateOrder'] = date('Y-m-d');
-                $data['minDate'] = '';
-                $data['maxDate'] = '';
-                $data['idProduct'] = $dataOrder['idProduct'];
-                $data['idClient'] = $client['id_client'];
-                $data['idSeller'] = $seller['id_seller'];
-                $data['route'] = 1;
-                $data['originalQuantity'] = $dataOrder['stock'] - ($dataOrder['quantity'] - $dataOrder['originalQuantity']);
-                $data['typeOrder'] = 2;
-
-                $findOrder = $generalOrdersDao->findLastSameOrder($data);
-
-                if (!$findOrder) {
-                    $resolution = $ordersDao->insertOrderByCompany($data, $id_company);
-
-                    $lastOrder = $lastDataDao->findLastInsertedOrder($id_company);
-                    $data['idOrder'] = $lastOrder['id_order'];
-                    $programmingRoutes = $generalProgrammingRoutesDao->findProgrammingRoutes($dataOrder['idProduct'], $lastOrder['id_order']);
-
-                    if (!$programmingRoutes) {
-                        $data['route'] = 1;
-
-                        $resolution = $programmingRoutesDao->insertProgrammingRoutes($data, $id_company);
-                    }
-                } else {
-                    $data['idOrder'] = $findOrder['id_order'];
-                    $data['originalQuantity'] = $findOrder['original_quantity'] + $data['originalQuantity'];
-
-                    $resolution = $ordersDao->updateOrder($data);
-                }
-
-                if ($dataOrder['origin'] == 1) {
-                    $resolution = $generalOrdersDao->changeStatus($data['idOrder'], 12);
-                }
-            }
+        if ($arr['reserved'] > $arr['quantity']) {
+            $resolution = ['info' => true, 'message' => 'Reservado mayor cantidad de inventario'];
         }
 
-        $resolution = $generalProductsDao->updateAccumulatedQuantity($dataOrder['idProduct'], $dataOrder['quantity'] - $dataOrder['originalQuantity'], 2);
+        if ($resolution == null) {
+            $generalProductsDao->updateReservedByProduct($dataOrder['idProduct'], $arr['reserved']);
+
+            if ($dataOrder['stock'] > ($dataOrder['quantity'] - $dataOrder['originalQuantity'])) {
+                $data = [];
+                $arr2 = $generalOrdersDao->findLastNumOrderByCompany($id_company);
+
+                $seller = $generalSellersDao->findInternalSeller($id_company);
+
+                if ($seller) {
+                    $client = $generalClientsDao->findInternalClient($id_company);
+
+                    if (!$client) {
+                        $company = $licenseDao->findLicenseCompany($id_company);
+                        $dataClient = [];
+
+                        $dataClient['nit'] = $company['nit'];
+                        $dataClient['client'] = $company['company'];
+                        $dataClient['address'] = $company['address'];
+                        $dataClient['phone'] = $company['telephone'];
+                        $dataClient['city'] = $company['city'];
+                        $dataClient['type'] = 1;
+
+                        $resolution = $clientsDao->insertClient($dataClient, $id_company);
+
+                        $client = $lastDataDao->findLastInsertedClient();
+
+                        $resolution = $generalClientsDao->changeStatusClient($client['id_client'], 1);
+                    }
+
+                    $data['order'] = $arr2['num_order'];
+                    $data['dateOrder'] = date('Y-m-d');
+                    $data['minDate'] = '';
+                    $data['maxDate'] = '';
+                    $data['idProduct'] = $dataOrder['idProduct'];
+                    $data['idClient'] = $client['id_client'];
+                    $data['idSeller'] = $seller['id_seller'];
+                    $data['route'] = 1;
+                    $data['originalQuantity'] = $dataOrder['stock'] - ($dataOrder['quantity'] - $dataOrder['originalQuantity']);
+                    $data['typeOrder'] = 2;
+
+                    $findOrder = $generalOrdersDao->findLastSameOrder($data);
+
+                    if (!$findOrder) {
+                        $resolution = $ordersDao->insertOrderByCompany($data, $id_company);
+
+                        $lastOrder = $lastDataDao->findLastInsertedOrder($id_company);
+                        $data['idOrder'] = $lastOrder['id_order'];
+                        $programmingRoutes = $generalProgrammingRoutesDao->findProgrammingRoutes($dataOrder['idProduct'], $lastOrder['id_order']);
+
+                        if (!$programmingRoutes) {
+                            $data['route'] = 1;
+
+                            $resolution = $programmingRoutesDao->insertProgrammingRoutes($data, $id_company);
+                        }
+                    } else {
+                        $data['idOrder'] = $findOrder['id_order'];
+                        $data['originalQuantity'] = $findOrder['original_quantity'] + $data['originalQuantity'];
+
+                        $resolution = $ordersDao->updateOrder($data);
+                    }
+
+                    if ($dataOrder['origin'] == 1) {
+                        $resolution = $generalOrdersDao->changeStatus($data['idOrder'], 12);
+                    }
+                }
+            }
+
+            $resolution = $generalProductsDao->updateAccumulatedQuantity($dataOrder['idProduct'], $dataOrder['quantity'] - $dataOrder['originalQuantity'], 2);
+        }
     }
 
     if ($resolution == null && $dataOrder['origin'] == 1) {

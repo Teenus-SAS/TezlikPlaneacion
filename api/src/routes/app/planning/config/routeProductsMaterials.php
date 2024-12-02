@@ -721,7 +721,14 @@ $app->post('/addProductsMaterials', function (Request $request, Response $respon
                     }
 
                     $arr = $productsDao->findProductReserved($orders[$i]['id_product']);
+
                     !isset($arr['reserved']) ? $arr['reserved'] = 0 : $arr;
+
+                    if ($arr['reserved'] > $arr['quantity']) {
+                        $resolution = ['info' => true, 'message' => 'Reservado mayor cantidad de inventario'];
+                        break;
+                    }
+
                     $productsDao->updateReservedByProduct($orders[$i]['id_product'], $arr['reserved']);
 
                     $productsDao->updateAccumulatedQuantity($orders[$i]['id_product'], $accumulated_quantity, 1);
@@ -732,7 +739,14 @@ $app->post('/addProductsMaterials', function (Request $request, Response $respon
                 }
                 foreach ($productsMaterials as $arr) {
                     $k = $generalMaterialsDao->findReservedMaterial($arr['id_material']);
+
                     !isset($k['reserved']) ? $k['reserved'] = 0 : $k;
+
+                    if ($k['reserved'] > $k['quantity']) {
+                        $resolution = ['info' => true, 'message' => 'Reservado mayor cantidad de inventario'];
+                        break;
+                    }
+
                     $generalMaterialsDao->updateReservedMaterial($arr['id_material'], $k['reserved']);
                 }
             }
@@ -747,6 +761,9 @@ $app->post('/addProductsMaterials', function (Request $request, Response $respon
             }
         }
     }
+
+    if (isset($resolution['info']))
+        $resp = array('info' => true, 'message' => $resolution['message']);
 
     $response->getBody()->write(json_encode($resp));
     return $response->withStatus(200)->withHeader('Content-Type', 'application/json');

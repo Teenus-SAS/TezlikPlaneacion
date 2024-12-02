@@ -1,5 +1,4 @@
 $(document).ready(function () {
-  // loadClients(2);
   /* Ocultar panel crear stock */
 
   $(".cardCreatePStock").hide();

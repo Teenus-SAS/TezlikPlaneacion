@@ -485,7 +485,14 @@ $app->post('/saveAdmissionDate', function (Request $request, Response $response,
                     }
 
                     $arr = $generalProductsDao->findProductReserved($orders[$i]['id_product']);
+
                     !isset($arr['reserved']) ? $arr['reserved'] = 0 : $arr;
+
+                    if ($arr['reserved'] > $arr['quantity']) {
+                        $resolution = ['info' => true, 'message' => 'Reservado mayor cantidad de inventario'];
+                        break;
+                    }
+
                     $generalProductsDao->updateReservedByProduct($orders[$i]['id_product'], $arr['reserved']);
 
                     $generalProductsDao->updateAccumulatedQuantity($orders[$i]['id_product'], $accumulated_quantity, 1);

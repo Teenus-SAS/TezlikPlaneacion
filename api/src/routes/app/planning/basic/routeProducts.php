@@ -439,56 +439,34 @@ $app->post('/addProduct', function (Request $request, Response $response, $args)
                         }
 
                         $arr = $generalProductsDao->findProductReserved($orders[$i]['id_product']);
+
                         !isset($arr['reserved']) ? $arr['reserved'] = 0 : $arr;
+
+                        if ($arr['reserved'] > $arr['quantity']) {
+                            $resolution = ['info' => true, 'message' => 'Reservado mayor cantidad de inventario'];
+                            break;
+                        }
                         $generalProductsDao->updateReservedByProduct($orders[$i]['id_product'], $arr['reserved']);
 
                         $generalProductsDao->updateAccumulatedQuantity($orders[$i]['id_product'], $accumulated_quantity, 1);
                         $programming = $generalProgrammingDao->findProgrammingByOrder($orders[$i]['id_order']);
                         if (sizeof($programming) > 0) {
                             $generalOrdersDao->changeStatus($orders[$i]['id_order'], 4);
-
-                            // $productsMaterials = $productsMaterialsDao->findAllProductsMaterials($orders[$i]['id_product'], $id_company);
-
                         }
                     }
 
                     foreach ($productsMaterials as $arr) {
                         $k = $generalMaterialsDao->findReservedMaterial($arr['id_material']);
                         !isset($k['reserved']) ? $k['reserved'] = 0 : $k;
+
+                        if ($k['reserved'] > $k['quantity']) {
+                            $resolution = ['info' => true, 'message' => 'Reservado mayor cantidad de inventario'];
+                            break;
+                        }
+
                         $generalMaterialsDao->updateReservedMaterial($arr['id_material'], $k['reserved']);
                     }
                 }
-                // } else if ($orders[$i]['origin'] == 1) {
-                //     if ($orders[$i]['original_quantity'] > $orders[$i]['accumulated_quantity']) {
-                //         $resolution = $generalOrdersDao->changeStatus($orders[$i]['id_order'], 13);
-
-                //         $data = [];
-                //         $data['idProduct'] = $orders[$i]['id_product'];
-
-                //         $provider = $generalClientsDao->findInternalClient($id_company);
-
-                //         $id_provider = 0;
-
-                //         if (isset($provider['id_provider'])) $id_provider = $provider['id_provider'];
-
-                //         $data['idProvider'] = $id_provider;
-                //         $data['numOrder'] = $orders[$i]['num_order'];
-                //         $data['applicationDate'] = '';
-                //         $data['deliveryDate'] = '';
-                //         $data['requiredQuantity'] = $orders[$i]['original_quantity'];
-                //         $data['purchaseOrder'] = '';
-                //         $data['requestedQuantity'] = 0;
-
-                //         $requisition = $generalRequisitionsProductsDao->findRequisitionByApplicationDate($orders[$i]['id_product']);
-
-                //         if (!$requisition)
-                //             $generalRequisitionsProductsDao->insertRequisitionAutoByCompany($data, $id_company);
-                //         else {
-                //             $data['idRequisition'] = $requisition['id_requisition_product'];
-                //             $generalRequisitionsProductsDao->updateRequisitionAuto($data);
-                //         }
-                //     }
-                // }
 
                 // Pedidos automaticos
                 if ($orders[$i]['status'] == 'FABRICADO') {
@@ -501,6 +479,9 @@ $app->post('/addProduct', function (Request $request, Response $response, $args)
             }
         }
     }
+
+    if (isset($resolution['info']))
+        $resp = array('info' => true, 'message' => $resolution['message']);
 
     $response->getBody()->write(json_encode($resp));
     return $response->withStatus(200)->withHeader('Content-Type', 'application/json');
@@ -701,7 +682,14 @@ $app->post('/updatePlanProduct', function (Request $request, Response $response,
                         }
 
                         $arr = $generalProductsDao->findProductReserved($orders[$i]['id_product']);
+
                         !isset($arr['reserved']) ? $arr['reserved'] = 0 : $arr;
+
+                        if ($arr['reserved'] > $arr['quantity']) {
+                            $resolution = ['info' => true, 'message' => 'Reservado mayor cantidad de inventario'];
+                            break;
+                        }
+
                         $generalProductsDao->updateReservedByProduct($orders[$i]['id_product'], $arr['reserved']);
 
                         $generalProductsDao->updateAccumulatedQuantity($orders[$i]['id_product'], $accumulated_quantity, 1);
@@ -713,41 +701,17 @@ $app->post('/updatePlanProduct', function (Request $request, Response $response,
 
                     foreach ($productsMaterials as $arr) {
                         $k = $generalMaterialsDao->findReservedMaterial($arr['id_material']);
+
                         !isset($k['reserved']) ? $k['reserved'] = 0 : $k;
+
+                        if ($k['reserved'] > $k['quantity']) {
+                            $resolution = ['info' => true, 'message' => 'Reservado mayor cantidad de inventario'];
+                            break;
+                        }
+
                         $generalMaterialsDao->updateReservedMaterial($arr['id_material'], $k['reserved']);
                     }
                 }
-                // } else if ($orders[$i]['origin'] == 1) {
-                //     if ($orders[$i]['original_quantity'] > $orders[$i]['accumulated_quantity']) {
-                //         $resolution = $generalOrdersDao->changeStatus($orders[$i]['id_order'], 13);
-
-                //         $data = [];
-                //         $data['idProduct'] = $orders[$i]['id_product'];
-
-                //         $provider = $generalClientsDao->findInternalClient($id_company);
-
-                //         $id_provider = 0;
-
-                //         if (isset($provider['id_provider'])) $id_provider = $provider['id_provider'];
-
-                //         $data['idProvider'] = $id_provider;
-                //         $data['numOrder'] = $orders[$i]['num_order'];
-                //         $data['applicationDate'] = '';
-                //         $data['deliveryDate'] = '';
-                //         $data['requiredQuantity'] = $orders[$i]['original_quantity'];
-                //         $data['purchaseOrder'] = '';
-                //         $data['requestedQuantity'] = 0;
-
-                //         $requisition = $generalRequisitionsProductsDao->findRequisitionByApplicationDate($orders[$i]['id_product']);
-
-                //         if (!$requisition)
-                //             $generalRequisitionsProductsDao->insertRequisitionAutoByCompany($data, $id_company);
-                //         else {
-                //             $data['idRequisition'] = $requisition['id_requisition_product'];
-                //             $generalRequisitionsProductsDao->updateRequisitionAuto($data);
-                //         }
-                //     }
-                // }
                 // Pedidos automaticos
                 if ($orders[$i]['status'] == 'FABRICADO') {
                     $chOrders = $generalOrdersDao->findAllChildrenOrders($orders[$i]['num_order']);
@@ -757,9 +721,6 @@ $app->post('/updatePlanProduct', function (Request $request, Response $response,
                     }
                 }
             }
-        }
-
-        if ($resolution == null) {
         }
 
         // Calcular Dias inventario

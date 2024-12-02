@@ -108,7 +108,14 @@ $app->post('/changeStatusOP', function (Request $request, Response $response, $a
                 }
 
                 $arr = $generalProductsDao->findProductReserved($orders[$i]['id_product']);
+
                 !isset($arr['reserved']) ? $arr['reserved'] = 0 : $arr;
+
+                if ($arr['reserved'] > $arr['quantity']) {
+                    $result = ['info' => true, 'message' => 'Reservado mayor cantidad de inventario'];
+                    break;
+                }
+
                 $generalProductsDao->updateReservedByProduct($orders[$i]['id_product'], $arr['reserved']);
 
                 $generalProductsDao->updateAccumulatedQuantity($orders[$i]['id_product'], $accumulated_quantity, 1);

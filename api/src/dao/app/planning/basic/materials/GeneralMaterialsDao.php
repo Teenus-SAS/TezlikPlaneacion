@@ -60,10 +60,12 @@ class GeneralMaterialsDao
     {
         $connection = Connection::getInstance()->getConnection();
 
-        $stmt = $connection->prepare("SELECT IFNULL(SUM(pg.quantity * pm.quantity), 0) AS reserved
+        $stmt = $connection->prepare("SELECT 
+                                        IFNULL(SUM(pg.quantity * pm.quantity), 0) AS reserved, mi.quantity
                                       FROM programming pg 
                                         LEFT JOIN orders o ON o.id_order = pg.id_order
                                         LEFT JOIN products_materials pm ON pm.id_product = pg.id_product 
+                                        LEFT JOIN inv_materials mi ON mi.id_material = pm.id_material 
                                       WHERE pm.id_material = :id_material AND o.status IN(4,7) AND pg.new_programming = 1");
         $stmt->execute([
             'id_material' => $id_material,

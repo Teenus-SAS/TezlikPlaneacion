@@ -226,6 +226,11 @@ $(document).ready(function () {
         render: $.fn.dataTable.render.number(".", ",", 0, ""),
       },
       {
+        title: "Medida",
+        data: "abbreviation",
+        className: "uniqueClassName dt-head-center",
+      },
+      {
         title: "Acciones",
         data: null,
         className: "uniqueClassName dt-head-center",

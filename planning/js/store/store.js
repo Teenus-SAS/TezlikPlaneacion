@@ -175,6 +175,12 @@ $(document).ready(function () {
           let stored = quantity - store;
 
           stored < 0 ? stored = 0 : stored;
+          pending < 0 ? pending = 0 : pending;
+
+          if (pending > quantity) {
+            toastr.info('Pendiente mayor cantidad de inventario');
+            return false; 
+          }
 
           sessionStorage.setItem("idMaterial", id_material);
           sessionStorage.setItem("referenceProduct", reference);
@@ -366,6 +372,11 @@ $(document).ready(function () {
 
             stored < 0 ? stored = 0 : stored;
             pending < 0 ? (pending = 0) : (pending);
+
+            if (pending > storedDLVS[i].quantity_material) {
+              toastr.info('Pendiente mayor cantidad de inventario');
+              break;
+            }
 
             storedDLVS[i].quantity_material = stored;
             storedDLVS[i].delivery_store = value;

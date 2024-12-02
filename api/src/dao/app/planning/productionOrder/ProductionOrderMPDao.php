@@ -28,6 +28,9 @@ class ProductionOrderMPDao
                                             m.id_material, 
                                             m.reference, 
                                             m.material, 
+                                            unt.id_unit, 
+                                            unt.unit,
+                                            unt.abbreviation,
                                             IFNULL(mi.quantity, 0) AS quantity_material, 
                                             pom.quantity,
                                             pom.receive_date,
@@ -41,6 +44,8 @@ class ProductionOrderMPDao
                                         INNER JOIN users u ON u.id_user = pom.operator
                                         INNER JOIN materials m ON m.id_material = pom.id_material
                                         LEFT JOIN inv_materials mi ON mi.id_material = pom.id_material
+                                        INNER JOIN admin_units unt ON unt.id_unit = m.unit
+                                        INNER JOIN admin_magnitudes mg ON mg.id_magnitude = unt.id_magnitude
                                         INNER JOIN programming pg ON pg.id_programming = pom.id_programming
                                         -- Subconsulta para obtener el último usuario de entrega
                                         LEFT JOIN(

@@ -71,8 +71,8 @@ $(document).ready(function () {
           : dataOffices.filter(item => item.status === "ENTREGADO");
       } else {
         const dataActualOffices = await searchData("/api/actualOffices");
-        const pendingStore = dataActualOffices.filter(item => item.status !== "ENTREGADO");
-        const deliveredStore = dataActualOffices.filter(item => item.status === "ENTREGADO");
+        pendingStore = dataActualOffices.filter(item => item.status !== "ENTREGADO");
+        deliveredStore = dataActualOffices.filter(item => item.status === "ENTREGADO");
 
         switch (op) {
           case 1:
@@ -146,6 +146,9 @@ $(document).ready(function () {
 
     completed = (completed / totalQuantity) * 100;
     late = (late / totalQuantity) * 100;
+
+    isNaN(completed) ? completed = 0 : completed;
+    isNaN(late) ? late = 0 : late;
 
     $("#lblTotal").html(`Total: ${totalQuantity.toLocaleString("es-CO", { maximumFractionDigits: 0 })}`);
     $("#lblCompleted").html(`A Tiempo: ${completed.toLocaleString("es-CO", { maximumFractionDigits: 2 })} %`);

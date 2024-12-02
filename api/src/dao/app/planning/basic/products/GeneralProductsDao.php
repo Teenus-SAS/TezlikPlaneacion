@@ -201,9 +201,11 @@ class GeneralProductsDao
     {
         $connection = Connection::getInstance()->getConnection();
 
-        $stmt = $connection->prepare("SELECT SUM(original_quantity) AS reserved
-                                      FROM orders 
-                                      WHERE id_product = :id_product AND status = 2");
+        $stmt = $connection->prepare("SELECT 
+                                        SUM(o.original_quantity) AS reserved, pi.quantity
+                                      FROM orders o
+                                        LEFT JOIN inv_products pi ON pi.id_product = o.id_product
+                                      WHERE o.id_product = :id_product AND o.status = 2");
         $stmt->execute([
             'id_product' => $id_product
         ]);

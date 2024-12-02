@@ -126,8 +126,9 @@ $app->post('/deliverStore', function (Request $request, Response $response, $arg
         );
     }
 
-    if ($store == null)
+    if ($store == null) {
         $store = $generalMaterialsDao->updateReservedMaterial($dataStore['idMaterial'], $dataStore['pending']);
+    }
 
     if ($store == null) {
         $orders = $generalOrdersDao->findAllOrdersByCompany($id_company);
@@ -192,7 +193,14 @@ $app->post('/deliverStore', function (Request $request, Response $response, $arg
                     }
 
                     $arr = $generalProductsDao->findProductReserved($orders[$i]['id_product']);
+
                     !isset($arr['reserved']) ? $arr['reserved'] = 0 : $arr;
+
+                    if ($arr['reserved'] > $arr['quantity']) {
+                        $store = ['info' => true, 'message' => 'Reservado mayor cantidad de inventario'];
+                        break;
+                    }
+
                     $generalProductsDao->updateReservedByProduct($orders[$i]['id_product'], $arr['reserved']);
 
                     $generalProductsDao->updateAccumulatedQuantity($orders[$i]['id_product'], $accumulated_quantity, 1);
@@ -257,14 +265,6 @@ $app->post('/saveDLVS', function (Request $request, Response $response, $args) u
         }
 
         if ($store != null) break;
-
-        // $product = $generalProductsDao->findProduct($users[$i], $id_company);
-
-        // if ($product) {
-        //     $store = $generalProductsDao->updateAccumulatedQuantity($product['id_product'], $users[$i]['stored'], 2);
-        // }
-
-        // if ($store != null) break;
 
         $store = $generalMaterialsDao->updateReservedMaterial($users[$i]['id_material'], $users[$i]['delivery_pending']);
     }
@@ -332,7 +332,14 @@ $app->post('/saveDLVS', function (Request $request, Response $response, $args) u
                     }
 
                     $arr = $generalProductsDao->findProductReserved($orders[$i]['id_product']);
+
                     !isset($arr['reserved']) ? $arr['reserved'] = 0 : $arr;
+
+                    if ($arr['reserved'] > $arr['quantity']) {
+                        $store = ['info' => true, 'message' => 'Reservado mayor cantidad de inventario'];
+                        break;
+                    }
+
                     $generalProductsDao->updateReservedByProduct($orders[$i]['id_product'], $arr['reserved']);
 
                     $generalProductsDao->updateAccumulatedQuantity($orders[$i]['id_product'], $accumulated_quantity, 1);

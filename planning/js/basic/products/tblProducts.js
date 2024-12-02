@@ -39,66 +39,100 @@ $(document).ready(function () {
     );
   });
 
+  // loadAllData = async () => {
+  //   try {
+  //     const [dataProducts, dataMaterials] = await Promise.all([
+  //       searchData("/api/products"),
+  //       searchData("/api/materials"),
+  //     ]);
+
+  //     let products = dataProducts;
+
+  //     sessionStorage.setItem("dataProducts", JSON.stringify(dataProducts));
+  //     sessionStorage.setItem("dataMaterials", JSON.stringify(dataMaterials));
+
+  //     const card = document.querySelector(".selectNavigation");
+
+  //     if (card.classList.contains("active")) {
+  //       loadTblProduct(products);
+  //       inventoryIndicator(products);
+  //     } else {
+  //       loadTblMaterials(dataMaterials);
+  //       inventoryIndicator(dataMaterials);
+  //     }
+  //   } catch (error) {
+  //     console.error("Error loading data:", error);
+  //   }
+  // };
+
+  // const inventoryIndicator = (data) => {
+  //   let totalQuantity = 0;
+  //   let average = 0;
+  //   let concentration = 0;
+  //   let maxQuantity = 0;
+
+  //   totalQuantity = data.reduce(
+  //     (acc, obj) => acc + parseFloat(obj.quantity),
+  //     0
+  //   );
+  //   maxQuantity = Math.max(...data.map((obj) => parseFloat(obj.quantity)));
+  //   average = totalQuantity / data.length;
+  //   concentration = maxQuantity / totalQuantity;
+
+  //   // $('#totalQuantity').html(totalQuantity.toLocaleString('es-CO', { maximumFractionDigits: 0 }));
+  //   $("#lblTotal").html(
+  //     ` Inv Total: ${totalQuantity.toLocaleString("es-CO", {
+  //       maximumFractionDigits: 0,
+  //     })}`
+  //   );
+  //   $("#lblAverage").html(
+  //     ` Promedio: ${average.toLocaleString("es-CO", {
+  //       maximumFractionDigits: 0,
+  //     })}`
+  //   );
+  //   $("#lblConcentration").html(
+  //     ` Concentracion: ${concentration.toLocaleString("es-CO", {
+  //       maximumFractionDigits: 2,
+  //     })} %`
+  //   );
+  // };
+
   loadAllData = async () => {
     try {
       const [dataProducts, dataMaterials] = await Promise.all([
         searchData("/api/products"),
-        searchData("/api/materials"),
+        searchData("/api/materials")
       ]);
 
-      let products = dataProducts;
-
+      // Cache data in sessionStorage (optional)
       sessionStorage.setItem("dataProducts", JSON.stringify(dataProducts));
       sessionStorage.setItem("dataMaterials", JSON.stringify(dataMaterials));
 
-      // if (flag_products_measure == '1') {
-      //   products = products.filter(item => item.id_product_inventory != 0);
-      // }
-
       const card = document.querySelector(".selectNavigation");
 
+      const dataToLoad = card.classList.contains("active") ? dataProducts : dataMaterials;
       if (card.classList.contains("active")) {
-        loadTblProduct(products);
-        inventoryIndicator(products);
+        loadTblProduct(dataProducts); 
       } else {
-        loadTblMaterials(dataMaterials);
-        inventoryIndicator(dataMaterials);
+        loadTblMaterials(dataMaterials); 
       }
+
+      // loadTbl(dataToLoad, dataToLoad === dataProducts ? "product" : "material"); // Differentiate tables
+      inventoryIndicator(dataToLoad);
     } catch (error) {
       console.error("Error loading data:", error);
     }
   };
 
   const inventoryIndicator = (data) => {
-    let totalQuantity = 0;
-    let average = 0;
-    let concentration = 0;
-    let maxQuantity = 0;
+    const totalQuantity = data.reduce((acc, obj) => acc + parseFloat(obj.quantity), 0);
+    const maxQuantity = Math.max(...data.map(obj => parseFloat(obj.quantity)));
+    const average = totalQuantity / data.length;
+    const concentration = maxQuantity / totalQuantity;
 
-    totalQuantity = data.reduce(
-      (acc, obj) => acc + parseFloat(obj.quantity),
-      0
-    );
-    maxQuantity = Math.max(...data.map((obj) => parseFloat(obj.quantity)));
-    average = totalQuantity / data.length;
-    concentration = maxQuantity / totalQuantity;
-
-    // $('#totalQuantity').html(totalQuantity.toLocaleString('es-CO', { maximumFractionDigits: 0 }));
-    $("#lblTotal").html(
-      ` Inv Total: ${totalQuantity.toLocaleString("es-CO", {
-        maximumFractionDigits: 0,
-      })}`
-    );
-    $("#lblAverage").html(
-      ` Promedio: ${average.toLocaleString("es-CO", {
-        maximumFractionDigits: 0,
-      })}`
-    );
-    $("#lblConcentration").html(
-      ` Concentracion: ${concentration.toLocaleString("es-CO", {
-        maximumFractionDigits: 2,
-      })} %`
-    );
+    $("#lblTotal").html(`Inv Total: ${totalQuantity.toLocaleString("es-CO", { maximumFractionDigits: 0 })}`);
+    $("#lblAverage").html(`Promedio: ${average.toLocaleString("es-CO", { maximumFractionDigits: 0 })}`);
+    $("#lblConcentration").html(`Concentracion: ${concentration.toLocaleString("es-CO", { maximumFractionDigits: 2 })} %`);
   };
 
   /* Cargue tabla de Proyectos */

@@ -202,6 +202,11 @@ $app->post('/saveProgramming', function (Request $request, Response $response, $
 
                 !isset($j['reserved']) ? $j['reserved'] = 0 : $j;
 
+                if ($j['reserved'] > $j['quantity']) {
+                    $result = ['info' => true, 'message' => 'Reservado mayor cantidad de inventario'];
+                    break;
+                }
+
                 $result = $generalMaterialsDao->updateReservedMaterial($k['id_material'], $j['reserved']);
             }
         }
@@ -356,6 +361,11 @@ $app->post('/deleteProgramming', function (Request $request, Response $response,
                         $j = $generalMaterialsDao->findReservedMaterial($k['id_material']);
 
                         !isset($j['reserved']) ? $j['reserved'] = 0 : $j;
+
+                        if ($j['reserved'] > $j['quantity']) {
+                            $result = ['info' => true, 'message' => 'Reservado mayor cantidad de inventario'];
+                            break;
+                        }
 
                         $result = $generalMaterialsDao->updateReservedMaterial($k['id_material'], $j['reserved']);
                     }
