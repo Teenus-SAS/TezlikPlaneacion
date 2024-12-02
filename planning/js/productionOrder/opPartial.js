@@ -1,6 +1,6 @@
 $(document).ready(function () {
   //Datatable para parciales entregados desde la OP a Almacen
-  loadTblPartialsDelivery = (id_programming) => {
+  loadTblPartialsDelivery = (id_programming, visible) => {
     tblPartialsDelivery = $("#tblPartialsDelivery").DataTable({
       destroy: true,
       dom: "t",
@@ -126,6 +126,7 @@ $(document).ready(function () {
           title: "Acciones",
           data: null,
           className: "uniqueClassName dt-head-center",
+          visible: visible,
           render: function (data) {
             let action;
             if (!data.receive_date || data.receive_date == "0000-00-00") {
@@ -346,7 +347,7 @@ $(document).ready(function () {
     if (success) {
       $("#formAddOPPArtial").trigger("reset");
       toastr.success(message);
-      loadTblPartialsDelivery(id_programming);
+      loadTblPartialsDelivery(id_programming, true);
       return false;
     } else if (error) toastr.error(message);
     else if (info) toastr.info(message);
