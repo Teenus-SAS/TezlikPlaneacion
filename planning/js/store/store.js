@@ -177,8 +177,8 @@ $(document).ready(function () {
           stored < 0 ? stored = 0 : stored;
           pending < 0 ? pending = 0 : pending;
 
-          if (pending > quantity) {
-            toastr.info('Pendiente mayor cantidad de inventario');
+          if (pending > stored) {
+            toastr.info('Pendiente mayor a cantidad a entregar');
             return false; 
           }
 
@@ -343,12 +343,7 @@ $(document).ready(function () {
         toastr.error('Ingrese todos los campos');
         $(`#${this.id}`).val(arr.delivery_store);
         return false;
-      }  
-
-      if (value > arr.quantity_material) {
-        toastr.error("Cantidad a entregar mayor a existencias");
-        return false;
-      }
+      }   
       
       let distincArr = storedDLVS.filter(item => item.id_user_store != id_user_store);
       let sumValue = value;
@@ -365,7 +360,6 @@ $(document).ready(function () {
             let store1 = parseFloat(storedDLVS[i].delivery_store) - value;
 
             store1 < 0 ? store = -1 * store1 : store = store1;
-            // store <= reserved ? (pending = reserved - store) : (pending = 0);
 
             let stored = parseFloat(storedDLVS[i].quantity_material) + store1;
             let pending = sumValue != reserved ? reserved - sumValue : reserved - value;
@@ -373,8 +367,8 @@ $(document).ready(function () {
             stored < 0 ? stored = 0 : stored;
             pending < 0 ? (pending = 0) : (pending);
 
-            if (pending > storedDLVS[i].quantity_material) {
-              toastr.info('Pendiente mayor cantidad de inventario');
+            if (pending > stored) {
+              toastr.info('Pendiente mayor a cantidad a entregar');
               break;
             }
 
