@@ -1,4 +1,7 @@
 $(document).ready(function () {
+  let pendingStore = [];
+  let deliveredStore = [];
+
   $(".selectNavigation").click(function (e) {
     e.preventDefault();
 
@@ -55,7 +58,7 @@ $(document).ready(function () {
   //   }
   // };
 
-  const loadAllData = async (op, min_date, max_date, cardElement) => {
+  loadAllData = async (op, min_date, max_date, cardElement) => {
     try {
       let dataToLoad, visible = true;
 

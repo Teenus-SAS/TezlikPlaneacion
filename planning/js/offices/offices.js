@@ -1,89 +1,152 @@
 $(document).ready(function () {
+  $(".cardSearchDate").hide();
+  const $cardSearchDate = $(".cardSearchDate");
+  const $formSearchDate = $("#formSearchDate");
+  const $lastDate = $("#lastDate");
+  const $minDate = $("#firtsDate");
+
+  // $(document).on("click", ".changeDate", function (e) {
+  //   e.preventDefault();
+
+  //   // Obtener la fecha actual y los datos de la fila correspondiente
+  //   let date = new Date();
+  //   let formattedDate = date.getFullYear() + '-' +
+  //     String(date.getMonth() + 1).padStart(2, '0') + '-' +
+  //     String(date.getDate()).padStart(2, '0');
+
+  //   const row = $(this).closest("tr")[0];
+  //   let data = tblOffices.fnGetData(row);
+
+  //   bootbox.confirm({
+  //     title: "Ingrese Fecha De Entrega!",
+  //     message: `<div class="col-sm-12 floating-label enable-floating-label">
+  //                       <input class="form-control" type="date" name="date" id="dateOFF" max="${formattedDate}"></input>
+  //                       <label for="date">Fecha</label>
+  //                     </div>`,
+  //     buttons: {
+  //       confirm: {
+  //         label: "Agregar",
+  //         className: "btn-success",
+  //       },
+  //       cancel: {
+  //         label: "Cancelar",
+  //         className: "btn-danger",
+  //       },
+  //     },
+  //     callback: function (result) {
+  //       if (result) {
+  //         let selectedDate = $("#dateOFF").val();
+
+  //         // Validar que se haya seleccionado una fecha
+  //         if (!selectedDate) {
+  //           toastr.error("Ingrese los campos");
+  //           return false;
+  //         }
+
+  //         let form = new FormData();
+  //         form.append("idOrder", data.id_order);
+  //         form.append("idProduct", data.id_product);
+  //         form.append("origin", data.origin);
+  //         form.append("originalQuantity", data.original_quantity);
+  //         form.append("quantity", data.quantity);
+  //         form.append("stock", data.minimum_stock);
+  //         form.append("date", selectedDate);
+
+  //         $.ajax({
+  //           type: "POST",
+  //           url: "/api/changeOffices",
+  //           data: form,
+  //           contentType: false,
+  //           cache: false,
+  //           processData: false,
+  //           success: function (resp) {
+  //             // Muestra un mensaje de éxito o el mensaje recibido del servidor
+  //             message(resp);
+  //             toastr.success("Fecha de entrega actualizada correctamente");
+  //           },
+  //           error: function (xhr, status, error) {
+  //             // Muestra un mensaje de error si la solicitud falla
+  //             toastr.error("Error al actualizar la fecha de entrega. Intente nuevamente.");
+  //           },
+  //         });
+  //       }
+  //     },
+  //   });
+  // });
+
+  
+  // $("#btnOpenSearchDate").click(function (e) {
+  //   e.preventDefault();
+
+  //   $(".cardSearchDate").toggle(800);
+  //   $("#formSearchDate").trigger("reset");
+  //   let date = new Date().toISOString().split("T")[0];
+
+  //   $("#lastDate").val(date);
+
+  //   let maxDate = document.getElementById("lastDate");
+  //   let minDate = document.getElementById("firtsDate");
+
+  //   maxDate.setAttribute("max", date);
+  //   minDate.setAttribute("max", date);
+  // });
+ 
   $(document).on("click", ".changeDate", function (e) {
     e.preventDefault();
 
-    // Obtener la fecha actual y los datos de la fila correspondiente
-    let date = new Date();
-    let formattedDate = date.getFullYear() + '-' +
-      String(date.getMonth() + 1).padStart(2, '0') + '-' +
-      String(date.getDate()).padStart(2, '0');
-
     const row = $(this).closest("tr")[0];
-    let data = tblOffices.fnGetData(row);
+    const data = tblOffices.fnGetData(row);
+
+    const today = new Date().toLocaleDateString('en-CA'); // Format as YYYY-MM-DD
 
     bootbox.confirm({
       title: "Ingrese Fecha De Entrega!",
       message: `<div class="col-sm-12 floating-label enable-floating-label">
-                        <input class="form-control" type="date" name="date" id="dateOFF" max="${formattedDate}"></input>
-                        <label for="date">Fecha</label>
-                      </div>`,
-      buttons: {
-        confirm: {
-          label: "Agregar",
-          className: "btn-success",
-        },
-        cancel: {
-          label: "Cancelar",
-          className: "btn-danger",
-        },
-      },
-      callback: function (result) {
-        if (result) {
-          let selectedDate = $("#dateOFF").val();
+                  <input class="form-control" type="date" name="date" id="dateOFF" max="${today}">
+                  <label for="date">Fecha</label>
+                </div>`,
+      // ... other bootbox options
+    }).then(result => {
+      if (result) {
+        const selectedDate = $("#dateOFF").val();
 
-          // Validar que se haya seleccionado una fecha
-          if (!selectedDate) {
-            toastr.error("Ingrese los campos");
-            return false;
-          }
-
-          let form = new FormData();
-          form.append("idOrder", data.id_order);
-          form.append("idProduct", data.id_product);
-          form.append("origin", data.origin);
-          form.append("originalQuantity", data.original_quantity);
-          form.append("quantity", data.quantity);
-          form.append("stock", data.minimum_stock);
-          form.append("date", selectedDate);
-
-          $.ajax({
-            type: "POST",
-            url: "/api/changeOffices",
-            data: form,
-            contentType: false,
-            cache: false,
-            processData: false,
-            success: function (resp) {
-              // Muestra un mensaje de éxito o el mensaje recibido del servidor
-              message(resp);
-              toastr.success("Fecha de entrega actualizada correctamente");
-            },
-            error: function (xhr, status, error) {
-              // Muestra un mensaje de error si la solicitud falla
-              toastr.error("Error al actualizar la fecha de entrega. Intente nuevamente.");
-            },
-          });
+        if (!selectedDate) {
+          toastr.error("Ingrese los campos");
+          return;
         }
-      },
+
+        const formData = new FormData();
+        formData.append("idOrder", data.id_order);
+        // ... other form data
+
+        $.ajax({
+          type: "POST",
+          url: "/api/changeOffices",
+          data: formData,
+          contentType: false,
+          processData: false,
+          success: (resp) => {
+            // Handle success response
+            message(resp);
+            toastr.success("Fecha de entrega actualizada correctamente");
+          },
+          error: (xhr, status, error) => {
+            // Handle error response
+            toastr.error("Error al actualizar la fecha de entrega. Intente nuevamente.");
+          }
+        });
+      }
     });
   });
 
-  $(".cardSearchDate").hide();
-
   $("#btnOpenSearchDate").click(function (e) {
     e.preventDefault();
+    $cardSearchDate.toggle(800);
+    $formSearchDate.trigger("reset");
 
-    $(".cardSearchDate").toggle(800);
-    $("#formSearchDate").trigger("reset");
-    let date = new Date().toISOString().split("T")[0];
-
-    $("#lastDate").val(date);
-
-    let maxDate = document.getElementById("lastDate");
-    let minDate = document.getElementById("firtsDate");
-
-    maxDate.setAttribute("max", date);
-    minDate.setAttribute("max", date);
+    const today = new Date().toISOString().split('T')[0];
+    $lastDate.val(today).attr('max', today);
+    $minDate.attr('max', today);
   });
 
   $("#btnSearchDate").click(async function (e) {

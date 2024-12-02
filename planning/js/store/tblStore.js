@@ -284,8 +284,10 @@ $(document).ready(function () {
       } else
         return 1;
     }
-
-    return 2;
+    if (data.id_materials_component_user != 0)
+      return 2;
+    else
+      return 1;
   };
    
   // Función para cargar la tabla de órdenes de almacén

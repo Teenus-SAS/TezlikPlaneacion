@@ -423,8 +423,8 @@ $(document).ready(function () {
     <tr>
       <td>${material.reference_material}</td>
       <td>${material.material}</td>
-      <td>${quantity_ftm} ${material.abbreviation}</td>
-      <td>${quantity_total} ${material.abbreviation}</td>
+      <td>${parseFloat(quantity_ftm).toLocaleString("es-CO", { minimumFractionDigits: 0, maximumFractionDigits: 2 })} ${material.abbreviation}</td>
+      <td>${parseFloat(quantity_total).toLocaleString("es-CO", { minimumFractionDigits: 0, maximumFractionDigits: 2 })} ${material.abbreviation}</td>
       <td>$${parseFloat(cost_ftm).toLocaleString("es-CO", { minimumFractionDigits: 0, maximumFractionDigits: 2 })}</td>
       <td>$${parseFloat(cost_total).toLocaleString("es-CO", { minimumFractionDigits: 0, maximumFractionDigits: 0 })}</td>
       <td>${parseFloat(storeData.recieve.toLocaleString("es-CO", { minimumFractionDigits: 0, maximumFractionDigits: 2 }))}</td>
